@@ -1,7 +1,6 @@
-from django.conf.urls import url
+from django.conf.urls import url, patterns
+from .views import HomeView
 
-from . import views
-
-urlpatterns = [
-    url(r'^$', views.post_list, name='test_app'),
-]
+urlpatterns = patterns('', [
+    url(r'^home$', HomeView.as_view(), name='home'),
+])

@@ -1,6 +1,4 @@
 from django.db import models
-from django.utils import timezone
-
 
 class Profile(models.Model):
     user = models.OneToOneField('auth.User')
@@ -13,4 +11,4 @@ class Profile(models.Model):
     lesson_minimum_speed = models.IntegerField(default=0)
 
     def __str__(self):
-        return self.user
+        return self.user.get_username()
