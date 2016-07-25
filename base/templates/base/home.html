@@ -1,12 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Home</title>
-</head>
-<body>
-<h2>test</h2>
+{% extends "base.html" %}
 
-{#date: {{ date }}#}
-</body>
-</html>
+{% block title %}Home{% endblock %}
+
+{% block content %}
+  <h2>test</h2>
+
+  date: {{ date }}
+
+  {% if profiles %}
+    <ul>
+      {% for profile in profiles %}
+        <li>{{ profile.user.username }}
+          <p>Average errors - {{ profile.text_average_number_errors }}</p>
+          <p>Minimum errors - {{ profile.text_minimum_number_errors }}</p>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    <p>No profiles are available.</p>
+  {% endif %}
+{% endblock %}
+
