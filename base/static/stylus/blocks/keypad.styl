@@ -1,0 +1,77 @@
+.keypad
+   display: flex
+   flex-wrap: wrap
+   justify-content: center
+   margin: 20px 4px 10px;
+   &__key
+      position: relative;
+      float: left;
+      width: 50px;
+      height: 50px;
+      margin: 0 4px 10px;
+      text-align: center;
+      font: 18px / 50px Verdana, Geneva, sans-serif;
+      background: #eee;
+      border-bottom: 3px solid #b2b1b1;
+      border-radius: 2px;
+      border-bottom: 1px solid #7b7b7b;
+      background: linear-gradient(top, #d1d1d1, #afafaf);
+      box-shadow: inset 1px 1px 0 #e3e3e3;
+      transition background-color .1s linear
+      &:before, &:after
+         content: '';
+         position: absolute;
+         left: -1px;
+         right: -1px;
+         top: -1px;
+         bottom: -1px;
+         border: 1px solid #b4b4b4;
+         border-bottom: 1px solid #7b7b7b;
+         border-radius: 3px;
+      &:before
+         bottom: -3px;
+         border-top: 0;
+         border-color: #a5a5a5;
+         box-shadow: 0 1px 1px 0px rgba(0, 0, 0, 0.8);
+      &.keypad__active
+         border: none;
+         top: 2px;
+         border-bottom: 1px solid #afafaf;
+         box-shadow: 1px 1px 0 rgba(0, 0, 0, 0.05), inset 0 1px 0px rgba(0, 0, 0, 0.3);
+         &:before, &:after
+            border: none;
+            box-shadow: none;
+      &.keypad__wrong
+         background: #ffa5a5;
+         background: linear-gradient(top, #ffa5a5, #FF4D4D);
+      &.keypad__to-type
+         background: #b286ff;
+         background: linear-gradient(top, #cfb5ff, #b286ff);
+      &[data-key="Backspace"]
+         width: 66px;
+      &[data-key="Tab"]
+         width: 66px;
+      &[data-key="Caps"]
+         width: 83px;
+      &[data-key="Enter"]
+         width: 91px;
+      &[data-key="Left Shift"], &[data-key="Right Shift"]
+         width: 116px;
+      &[data-key="Space"]
+         width: 340px;
+   &__left-index-finger
+      background: linear-gradient(top, #ffd9b2, #ffc07e);
+   &__right-index-finger
+      background: linear-gradient(top, #fff5b2, #ffef7e);
+   &__middle-finger
+      background: linear-gradient(top, #d0f1a6, #b0e86a);
+   &__ring-finger
+      background: linear-gradient(top, #a1eeff, #63e3ff);
+   &__pinky
+      background: linear-gradient(top, #aeeecc, #78e2aa);
+   &__shift
+      display: block;
+      margin-top: 5px;
+      margin-bottom: -13px;
+      font-size: 12px;
+      line-height: 16px;

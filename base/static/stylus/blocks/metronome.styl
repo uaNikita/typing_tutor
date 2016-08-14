@@ -1,0 +1,20 @@
+.metronome
+   float: left
+   position: relative
+   margin-top: 22px
+   &__btn
+      text-decoration: none
+      color: #000
+   &__range-wrap
+      width: 200px;
+      position: absolute;
+      top: -150px;
+      left: 100%;
+      padding: 10px 10px 20px 10px;
+      transition: top .15s;
+   &:hover .metronome__range-wrap
+      top: -18px;
+   &__title
+      margin-bottom: 12px;
+      font-size: 10px;
+      font-weight: normal;

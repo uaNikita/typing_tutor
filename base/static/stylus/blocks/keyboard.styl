@@ -1,0 +1,46 @@
+.keyboard
+   width: 840px;
+   display: flex
+   margin: 20px auto 0
+   &__types
+      flex: 0 0 190px;
+      padding-left:10px
+   &__item
+      flex: 0 0 650px;
+      display: flex
+      flex-wrap: wrap
+      justify-content: center
+   &__menu-item
+      margin-top: 10px
+      margin-bottom: @margin-top
+   &__key
+      position: relative;
+      width: 40px;
+      height: 40px;
+      margin: 0 2px 4px;
+      text-align: center;
+      font: 14px/40px Verdana, Geneva, sans-serif;
+      background: #eee;
+      border-bottom: 3px solid #b2b1b1;
+      border-radius: 2px;
+      border-bottom: 1px solid #7b7b7b;
+      box-shadow: inset 1px 1px 0 #e3e3e3;
+      -webkit-transition: background-color 0.1s linear;
+      transition: background-color 0.1s linear;
+      &[data-key="Backspace"]
+         width: 56px;
+      &[data-key="Tab"]
+         width: 56px;
+      &[data-key="Caps"]
+         width: 67px;
+      &[data-key="Enter"]
+         width: 73px;
+      &[data-key="Left Shift"], &[data-key="Right Shift"]
+         width: 92px;
+      &[data-key="Space"]
+         width: 260px;
+   &__shift-key
+      display: block;
+      margin-bottom: -12px;
+      font-size: 10px;
+      line-height: 18px;

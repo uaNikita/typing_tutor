@@ -1,0 +1,12 @@
+.letter
+   width: 25px
+   height: 25px
+   display: block
+   margin-right: 1px
+   background-color: rgb(14, 218, 97)
+   line-height: @height
+   text-align: center
+   &__excluded
+      background-color: rgb(182, 25, 11)
+   &:not(.letter__excluded) + .letter__excluded
+      margin-left: 14px;

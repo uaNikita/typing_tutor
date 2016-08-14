@@ -1,12 +1,34 @@
+{% load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>{% block title %}{% endblock %}</title>
+  <link rel="stylesheet" type="text/css" href="{% static 'build/main.css' %}" />
+  <script src="{% static 'build/main.js' %}"></script>
 </head>
 <body>
 
 {% block content %}{% endblock %}
+
+<div class="modal">
+  <div class="modal__content">
+    <form class="log-reg">
+      <div class="log-reg__row">
+        <label class="log-reg__label">Email</label>
+        <input class="control-text" type="text" />
+      </div>
+
+      <div class="log-reg__row">
+        <label class="log-reg__label">Password</label>
+        <input class="control-text" type="password" />
+      </div>
+      
+      <button class="button">Submit</button>
+    </form>
+  </div>
+</div>
 
 </body>
 </html>

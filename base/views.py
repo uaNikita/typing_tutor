@@ -21,8 +21,6 @@ class CreateUserView(CreateAPIView):
     ]
     serializer_class = UserSerializer
 
-
-
 ### next
 class HomeView(TemplateView):
     template_name = "home.html"

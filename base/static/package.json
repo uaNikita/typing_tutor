@@ -1,0 +1,37 @@
+{
+  "name": "typing-tutor",
+  "version": "1.0.0",
+  "description": "",
+  "main": "",
+  "devDependencies": {
+    "webpack": "*",
+    "babel-core": "*",
+    "babel-loader": "*",
+    "babel-preset-es2015": "*",
+    "babel-preset-react": "*",
+    "react": "*",
+    "react-dom": "*",
+    "react-redux": "*",
+    "react-router": "*",
+    "redux": "*",
+    "select2": "*",
+    "classnames": "*",
+    "jquery": "*",
+    "lodash": "*",
+    "nouislider": "leongersen/noUiSlider",
+    "perfect-scrollbar": "*",
+    "css-loader": "*",
+    "style-loader": "*",
+    "stylus-loader": "*",
+    "stylus": "*",
+    "autoprefixer": "*",
+    "autoprefixer-loader": "*",
+    "extract-text-webpack-plugin": "*"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "Nikita Zhukov",
+  "license": "ISC"
+}
