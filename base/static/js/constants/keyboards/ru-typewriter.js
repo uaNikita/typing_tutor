@@ -1,0 +1,364 @@
+export default [{
+  key: '|',
+  shiftKey: '+',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'left',
+  id: '|'
+}, {
+  key: '№',
+  shiftKey: '1',
+  type: 'number',
+  finger: 'pinky',
+  hand: 'left',
+  id: '№'
+}, {
+  key: '-',
+  shiftKey: '2',
+  type: 'number',
+  finger: 'ring-finger',
+  hand: 'left',
+  id: '-'
+}, {
+  key: '/',
+  shiftKey: '3',
+  type: 'number',
+  finger: 'middle-finger',
+  hand: 'left',
+  id: '/'
+}, {
+  key: '"',
+  shiftKey: '4',
+  type: 'number',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: '"'
+}, {
+  key: ':',
+  shiftKey: '5',
+  type: 'number',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: ':'
+}, {
+  key: ',',
+  shiftKey: '6',
+  type: 'number',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: ','
+}, {
+  key: '.',
+  shiftKey: '7',
+  type: 'number',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: '.'
+}, {
+  key: '_',
+  shiftKey: '8',
+  type: 'number',
+  finger: 'middle-finger',
+  hand: 'right',
+  id: '_'
+}, {
+  key: '?',
+  shiftKey: '9',
+  type: 'number',
+  finger: 'ring-finger',
+  hand: 'right',
+  id: '?'
+}, {
+  key: '%',
+  shiftKey: '0',
+  type: 'number',
+  finger: 'pinky',
+  hand: 'right',
+  id: '%'
+}, {
+  key: '!',
+  shiftKey: '=',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: '!'
+}, {
+  key: ';',
+  shiftKey: '\\',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: ';'
+}, {
+  key: '←',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'Backspace'
+}, {
+  key: 'Tab',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'Tab'
+}, {
+  key: 'й',
+  shiftKey: 'Й',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'й'
+}, {
+  key: 'ц',
+  shiftKey: 'Ц',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'left',
+  id: 'ц'
+}, {
+  key: 'у',
+  shiftKey: 'У',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'left',
+  id: 'у'
+}, {
+  key: 'к',
+  shiftKey: 'К',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'к'
+}, {
+  key: 'е',
+  shiftKey: 'Е',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'е'
+}, {
+  key: 'н',
+  shiftKey: 'Н',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'н'
+}, {
+  key: 'г',
+  shiftKey: 'Г',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'г'
+}, {
+  key: 'ш',
+  shiftKey: 'Ш',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'right',
+  id: 'ш'
+}, {
+  key: 'щ',
+  shiftKey: 'Щ',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'right',
+  id: 'щ'
+}, {
+  key: 'з',
+  shiftKey: 'З',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'з'
+}, {
+  key: 'х',
+  shiftKey: 'Х',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'х'
+}, {
+  key: 'ъ',
+  shiftKey: 'Ъ',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'ъ'
+}, {
+  key: ')',
+  shiftKey: '(',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: ')'
+}, {
+  key: 'Caps',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'Caps'
+}, {
+  key: 'ф',
+  shiftKey: 'Ф',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'ф'
+}, {
+  key: 'ы',
+  shiftKey: 'Ы',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'left',
+  id: 'ы'
+}, {
+  key: 'в',
+  shiftKey: 'В',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'left',
+  id: 'в'
+}, {
+  key: 'а',
+  shiftKey: 'А',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'а'
+}, {
+  key: 'п',
+  shiftKey: 'П',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'п'
+}, {
+  key: 'р',
+  shiftKey: 'Р',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'р'
+}, {
+  key: 'о',
+  shiftKey: 'О',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'о'
+}, {
+  key: 'л',
+  shiftKey: 'Л',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'right',
+  id: 'л'
+}, {
+  key: 'д',
+  shiftKey: 'Д',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'right',
+  id: 'д'
+}, {
+  key: 'ж',
+  shiftKey: 'Ж',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'ж'
+}, {
+  key: 'э',
+  shiftKey: 'Э',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'э'
+}, {
+  key: 'Enter',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'Enter'
+}, {
+  key: 'Shift',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'Left Shift'
+}, {
+  key: 'я',
+  shiftKey: 'Я',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'я'
+}, {
+  key: 'ч',
+  shiftKey: 'Ч',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'left',
+  id: 'ч'
+}, {
+  key: 'с',
+  shiftKey: 'С',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'left',
+  id: 'с'
+}, {
+  key: 'м',
+  shiftKey: 'М',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'м'
+}, {
+  key: 'и',
+  shiftKey: 'И',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'и'
+}, {
+  key: 'т',
+  shiftKey: 'Т',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'т'
+}, {
+  key: 'ь',
+  shiftKey: 'Ь',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'ь'
+}, {
+  key: 'б',
+  shiftKey: 'Б',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'right',
+  id: 'б'
+}, {
+  key: 'ю',
+  shiftKey: 'Ю',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'right',
+  id: 'ю'
+}, {
+  key: 'ё',
+  shiftKey: 'Ё',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'ё'
+}, {
+  key: 'Shift',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'Right Shift'
+}, {
+  key: ' ',
+  finger: 'thumb',
+  id: 'Space'
+}];

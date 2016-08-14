@@ -7,7 +7,7 @@ module.exports = {
    context: __dirname,
 
    // The entry point for the bundle.
-   entry: './webpack-entry',
+   entry: './webpack-entry.jsx',
 
    // Options affecting the output.
    output: {
@@ -22,7 +22,7 @@ module.exports = {
       aggregateTimeout: 100
    },
 
-   devtool: 'source-map',
+   // devtool: 'source-map',
 
    plugins: [
       new webpack.NoErrorsPlugin(),
@@ -34,6 +34,22 @@ module.exports = {
       new ExtractTextPlugin("[name].css")
    ],
 
+   // Options affecting the resolving of modules.
+   resolve: {
+      // An array of directory names to be resolved to the current directory as well as its ancestors, and searched for modules.
+      modulesDirectories: ['node_modules'],
+      // An array of extensions that should be used to resolve modules.
+      extensions: ['', '.js']
+   },
+
+   // Like resolve but for loaders.
+   resolveLoader: {
+      modulesDirectories: ['node_modules'],
+      // It describes alternatives for the module name that are tried.
+      moduleTemplates: ['*-loader'],
+      extention: ['', '.js']
+   },
+
    // Options affecting the normal modules
    module: {
 
@@ -41,7 +57,7 @@ module.exports = {
       loaders: [
          {
             test: /\.jsx?$/,
-            loader: 'babel-loader',
+            loader: 'babel',
             exclude: /node_modules/,
             query: {
                presets: ['es2015', 'react']
@@ -49,7 +65,8 @@ module.exports = {
          },
          {
             test: /\.styl$/,
-            loader: ExtractTextPlugin.extract('style', 'css?sourceMap!autoprefixer?{browsers:["> 3%"]}!stylus?sourceMap')
+            loader: ExtractTextPlugin.extract('style', 'css!autoprefixer?{browsers:["> 3%"]}!stylus')
+            // loader: ExtractTextPlugin.extract('style', 'css?sourceMap!autoprefixer?{browsers:["> 3%"]}!stylus?sourceMap')
          },
          {
             test: /\.css$/,

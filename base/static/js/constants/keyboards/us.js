@@ -1,0 +1,364 @@
+export default [{
+  key: '`',
+  shiftKey: '~',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'left',
+  id: '`'
+}, {
+  key: '1',
+  shiftKey: '!',
+  type: 'number',
+  finger: 'pinky',
+  hand: 'left',
+  id: '1'
+}, {
+  key: '2',
+  shiftKey: '@',
+  type: 'number',
+  finger: 'ring-finger',
+  hand: 'left',
+  id: '2'
+}, {
+  key: '3',
+  shiftKey: '#',
+  type: 'number',
+  finger: 'middle-finger',
+  hand: 'left',
+  id: '3'
+}, {
+  key: '4',
+  shiftKey: '$',
+  type: 'number',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: '4'
+}, {
+  key: '5',
+  shiftKey: '%',
+  type: 'number',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: '5'
+}, {
+  key: '6',
+  shiftKey: '^',
+  type: 'number',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: '6'
+}, {
+  key: '7',
+  shiftKey: '&',
+  type: 'number',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: '7'
+}, {
+  key: '8',
+  shiftKey: '*',
+  type: 'number',
+  finger: 'middle-finger',
+  hand: 'right',
+  id: '8'
+}, {
+  key: '9',
+  shiftKey: '(',
+  type: 'number',
+  finger: 'ring-finger',
+  hand: 'right',
+  id: '9'
+}, {
+  key: '0',
+  shiftKey: ')',
+  type: 'number',
+  finger: 'pinky',
+  hand: 'right',
+  id: '0'
+}, {
+  key: '-',
+  shiftKey: '_',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: '-'
+}, {
+  key: '=',
+  shiftKey: '+',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: '='
+}, {
+  key: '←',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'Backspace'
+}, {
+  key: 'Tab',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'Tab'
+}, {
+  key: 'q',
+  shiftKey: 'Q',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'q'
+}, {
+  key: 'w',
+  shiftKey: 'W',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'left',
+  id: 'w'
+}, {
+  key: 'e',
+  shiftKey: 'E',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'left',
+  id: 'e'
+}, {
+  key: 'r',
+  shiftKey: 'R',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'r'
+}, {
+  key: 't',
+  shiftKey: 'T',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 't'
+}, {
+  key: 'y',
+  shiftKey: 'Y',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'y'
+}, {
+  key: 'u',
+  shiftKey: 'U',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'u'
+}, {
+  key: 'i',
+  shiftKey: 'I',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'right',
+  id: 'i'
+}, {
+  key: 'o',
+  shiftKey: 'O',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'right',
+  id: 'o'
+}, {
+  key: 'p',
+  shiftKey: 'P',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'p'
+}, {
+  key: '[',
+  shiftKey: '{',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: '['
+}, {
+  key: ']',
+  shiftKey: '}',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: ']'
+}, {
+  key: '\\',
+  shiftKey: '|',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: '\\'
+}, {
+  key: 'Caps',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'Caps'
+}, {
+  key: 'a',
+  shiftKey: 'A',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'a'
+}, {
+  key: 's',
+  shiftKey: 'S',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'left',
+  id: 's'
+}, {
+  key: 'd',
+  shiftKey: 'D',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'left',
+  id: 'd'
+}, {
+  key: 'f',
+  shiftKey: 'F',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'f'
+}, {
+  key: 'g',
+  shiftKey: 'G',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'g'
+}, {
+  key: 'h',
+  shiftKey: 'H',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'h'
+}, {
+  key: 'j',
+  shiftKey: 'J',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'j'
+}, {
+  key: 'k',
+  shiftKey: 'K',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'right',
+  id: 'k'
+}, {
+  key: 'l',
+  shiftKey: 'L',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'right',
+  id: 'l'
+}, {
+  key: ';',
+  shiftKey: ':',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: ';'
+}, {
+  key: "'",
+  shiftKey: '"',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: "'"
+}, {
+  key: 'Enter',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'Enter'
+}, {
+  key: 'Shift',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'Left Shift'
+}, {
+  key: 'z',
+  shiftKey: 'Z',
+  type: 'letter',
+  finger: 'pinky',
+  hand: 'left',
+  id: 'z'
+}, {
+  key: 'x',
+  shiftKey: 'X',
+  type: 'letter',
+  finger: 'ring-finger',
+  hand: 'left',
+  id: 'x'
+}, {
+  key: 'c',
+  shiftKey: 'C',
+  type: 'letter',
+  finger: 'middle-finger',
+  hand: 'left',
+  id: 'c'
+}, {
+  key: 'v',
+  shiftKey: 'V',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'v'
+}, {
+  key: 'b',
+  shiftKey: 'B',
+  type: 'letter',
+  finger: 'left-index-finger',
+  hand: 'left',
+  id: 'b'
+}, {
+  key: 'n',
+  shiftKey: 'N',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'n'
+}, {
+  key: 'm',
+  shiftKey: 'M',
+  type: 'letter',
+  finger: 'right-index-finger',
+  hand: 'right',
+  id: 'm'
+}, {
+  key: ',',
+  shiftKey: '<',
+  type: 'non-alphanumeric',
+  finger: 'middle-finger',
+  hand: 'right',
+  id: ','
+}, {
+  key: '.',
+  shiftKey: '>',
+  type: 'non-alphanumeric',
+  finger: 'ring-finger',
+  hand: 'right',
+  id: '.'
+}, {
+  key: '/',
+  shiftKey: '?',
+  type: 'non-alphanumeric',
+  finger: 'pinky',
+  hand: 'right',
+  id: '/'
+}, {
+  key: 'Shift',
+  finger: 'pinky',
+  hand: 'right',
+  id: 'Right Shift'
+}, {
+  key: ' ',
+  finger: 'thumb',
+  id: 'Space'
+}];
