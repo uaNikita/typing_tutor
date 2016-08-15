@@ -1,5 +1,6 @@
 import * as types from '../constants/action_types';
 import {
+  forEach,
   assign,
   clone,
   cloneDeep,
@@ -304,6 +305,25 @@ export default (state, action) => {
     case types.SET_KEYBOARD:
       return assign({}, state, {
         keyboardName: action.name
+      });
+
+    case types.OPEN_MODAL:
+      return (() => {
+        let closable = true;
+
+        if (action.closable) {
+          closable = action.closable;
+        }
+
+        return assign({}, state, {
+          modal: action.name,
+          closable
+        });
+      })()
+
+    case types.CLOSE_MODAL:
+      return assign({}, state, {
+        modal: ''
       });
 
     default:

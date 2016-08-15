@@ -7,6 +7,7 @@
    overflow auto
    text-align center
    white-space nowrap
+   z-index: 1
    &:before
       position fixed
       top: 0
@@ -32,3 +33,16 @@
          padding 20px
          white-space normal
          text-align left
+      &close
+         width: 25px;
+         height: 25px;
+         position: absolute;
+         top: -15px;
+         right: -15px;
+         background: #fff;
+         border-radius: 50%;
+         line-height: 25px;
+         font-size: 18px;
+         text-align: center;
+         text-decoration: none
+         color #000

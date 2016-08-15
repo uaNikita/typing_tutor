@@ -9,4 +9,6 @@ export const SET_LESSON_MAX_WORD_LENGTH = 'SET_LESSON_MAX_WORD_LENGTH';
 export const SET_MODE = 'SET_MODE';
 export const ACTION_METRONOME = 'ACTION_METRONOME';
 export const SET_KEYBOARD = 'SET_KEYBOARD';
+export const OPEN_MODAL = 'OPEN_MODAL';
+export const CLOSE_MODAL = 'CLOSE_MODAL';
 

@@ -77,3 +77,17 @@ export function setKeyboard(name) {
     name
   };
 }
+
+export function openModal(name, closable) {
+  return {
+    type: types.OPEN_MODAL,
+    name,
+    closable
+  };
+}
+
+export function closeModal() {
+  return {
+    type: types.CLOSE_MODAL
+  };
+}

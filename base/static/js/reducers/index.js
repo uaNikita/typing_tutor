@@ -28,6 +28,10 @@ const initialState = {
   // 1 - Text, 2 - Learning
   mode: 2,
 
+  modal: 'Login',
+
+  modalClosable: true,
+
   textEntities: {
     1: {
       title: 'First',

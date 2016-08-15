@@ -40,6 +40,8 @@ export default class App extends Component {
   }
 
   render() {
+    // console.log(browserHistory);
+window.bh = browserHistory;
     return (
       <Provider store={ store }>
         <Router history={ browserHistory }>
