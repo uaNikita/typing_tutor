@@ -4,7 +4,7 @@ import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
 import $ from 'jquery';
 
-import Container from '../components/Container.jsx';
+import Layout from '../containers/Layout.jsx';
 import Home from './Home.jsx';
 import Settings from '../components/Settings.jsx';
 import Mode from '../components/Mode.jsx';
@@ -45,7 +45,7 @@ window.bh = browserHistory;
     return (
       <Provider store={ store }>
         <Router history={ browserHistory }>
-          <Route path="/" component={ Container }>
+          <Route path="/" component={ Layout }>
             <IndexRoute component={ Home } onEnter={ this._onKeyboardEnter } />
             <Route path="settings" component={ Settings }>
               <IndexRoute onEnter={this._enterDependOnMode} />

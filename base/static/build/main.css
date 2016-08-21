@@ -938,7 +938,7 @@ input[type="radio"] {
   height: 13px;
 }
 body {
-  font: 14px/1.3 Verdana, Geneva, sans-serif;
+  font: 14px/1.3 'Open Sans', sans-serif;
 }
 input[type="text"],
 input[type="password"] {
@@ -946,7 +946,16 @@ input[type="password"] {
   border-radius: 4px;
   border: 1px solid #ddd;
   background: #fff;
-  font: 14px/32px Verdana, Geneva, sans-serif;
+  font: 16px/36px 'Open Sans', sans-serif;
+}
+input[type="text"][disabled],
+input[type="password"][disabled] {
+  background-color: #f4f4f4;
+}
+a {
+  text-decoration: none;
+  border-bottom: 1px solid rgba(28,136,212,0.3);
+  color: #1c88d4;
 }
 .noUi-target {
   background-color: #20b426;
@@ -1133,6 +1142,15 @@ input[type="password"] {
   width: 840px;
   margin: 0 auto;
 }
+.home__auth {
+  margin: 20px 20px 0 0;
+  float: left;
+}
+.home__auth-or {
+  margin: 0 10px;
+  font-size: 12px;
+  color: #656565;
+}
 .home__nav {
   height: 64px;
   margin-bottom: 30px;
@@ -1140,13 +1158,17 @@ input[type="password"] {
 }
 .home__settings {
   display: inline-block;
+  border-bottom: none;
   margin-top: 20px;
   font-size: 16px;
   text-decoration: none;
-  color: #000;
 }
 .home__settings .fa {
+  margin-right: 5px;
   font-size: 14px;
+}
+.home__settings span {
+  border-bottom: 1px solid rgba(28,136,212,0.3);
 }
 .home__typing-info {
   display: -webkit-box;
@@ -1369,14 +1391,70 @@ input[type="password"] {
 .letter:not(.letter__excluded) + .letter__excluded {
   margin-left: 14px;
 }
-.auth-form__row {
+.auth {
+  padding: 50px 170px 40px;
+  text-align: center;
+}
+.auth__title {
+  font-size: 28px;
+  margin-bottom: 30px;
+}
+.auth__row {
   margin-bottom: 15px;
 }
-.auth-form__label {
+.auth__label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 2px;
+}
+.auth__control {
+  width: 260px;
+}
+.auth__fp-wrap {
+  margin-top: 5px;
+  font-size: 11px;
+  text-align: left;
+}
+.auth__fp {
+  border-bottom: 1px dotted rgba(171,171,171,0.3);
+  text-decoration: none;
+  color: #ababab;
+}
+.auth__cp {
+  display: block;
+  margin-top: 5px;
+  font-size: 11px;
+  text-align: left;
+  color: #ababab;
+}
+.auth__cp-control {
+  margin-right: 5px;
+}
+.auth__hint {
+  margin-top: 30px;
+  color: #706e70;
+}
+.auth__link1,
+.auth__link2 {
+  border-bottom-width: 1px;
+  border-bottom-style: dotted;
+  text-decoration: none;
+}
+.auth__link1 {
+  border-bottom-color: rgba(28,136,212,0.3);
+  color: #1c88d4;
+}
+.auth__link2 {
+  border-bottom-color: rgba(112,110,112,0.3);
+  color: #706e70;
+}
+.auth .menu__item {
+  margin: 0 5px;
+}
+.auth .button {
+  margin-top: 5px;
 }
 .menu__item {
+  border-bottom: none;
   cursor: pointer;
   display: inline-block;
   padding: 4px 6px;
@@ -1395,6 +1473,7 @@ input[type="password"] {
   margin-top: 22px;
 }
 .metronome__btn {
+  border-bottom: none;
   text-decoration: none;
   color: #000;
 }
@@ -1432,7 +1511,7 @@ input[type="password"] {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(0,0,0,0.5);
+  background-color: rgba(0,0,0,0.3);
   content: '';
 }
 .modal:after {
@@ -1441,6 +1520,10 @@ input[type="password"] {
   width: 0;
   height: 100%;
   content: '';
+}
+.modal__open {
+  -webkit-filter: blur(10px);
+          filter: blur(10px);
 }
 .modal__content {
   position: relative;
@@ -1457,10 +1540,10 @@ input[type="password"] {
   width: 25px;
   height: 25px;
   position: absolute;
-  top: -15px;
-  right: -15px;
+  top: 0;
+  right: 0;
   background: #fff;
-  border-radius: 50%;
+  border-bottom: none;
   line-height: 25px;
   font-size: 18px;
   text-align: center;
@@ -1600,10 +1683,15 @@ input[type="password"] {
   font-size: 16px;
   text-decoration: none;
   margin-right: 50px;
+  border-bottom: none;
   color: #fff;
 }
 .settings__home .fa {
+  margin-right: 5px;
   font-size: 14px;
+}
+.settings__home span {
+  border-bottom: 1px solid #fff;
 }
 .settings__nav {
   margin-bottom: 30px;

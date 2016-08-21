@@ -1,11 +1,9 @@
-import { connect } from 'react-redux'
-import { map } from 'lodash';
-import Textarea from '../components/AddTextForm.jsx'
-import { addNewText } from '../actions/actions.js'
+import {connect} from 'react-redux'
+import Login from '../../components/auth/Login.jsx'
+import {openModal} from '../../actions/actions.js'
 
 const mapStateToProps = (state) => {
-  return {
-  }
+  return {}
 }
 
 const mapDispatchToProps = (dispatch) => {
@@ -16,8 +14,7 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(Textarea)
+)(Login)

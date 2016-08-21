@@ -15,7 +15,7 @@ class ModalFrame extends Component {
     const {modalName, closable} = this.props;
 
     if (!modalName) {
-      return '';
+      return <div></div>;
     }
 
     let content = '';

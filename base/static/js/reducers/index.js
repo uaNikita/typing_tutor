@@ -28,7 +28,7 @@ const initialState = {
   // 1 - Text, 2 - Learning
   mode: 2,
 
-  modal: 'Login',
+  modal: '',
 
   modalClosable: true,
 

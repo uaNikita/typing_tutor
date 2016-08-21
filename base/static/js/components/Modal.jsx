@@ -24,7 +24,7 @@ class Modal extends Component {
 
   _onCloseHandler(e) {
     e.preventDefault();
-
+    
     this.props.closeModal();
   }
 }

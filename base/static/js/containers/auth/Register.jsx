@@ -1,23 +1,20 @@
-import React, {Component} from 'react'
+import {connect} from 'react-redux'
+import Register from '../../components/auth/Register.jsx'
+import {openModal} from '../../actions/actions.js'
 
-class Register extends Component {
-  render() {
-    return (
-      <form className="auth-form">
-        <div className="auth-form__row">
-          <label className="auth-form__label">Email</label>
-          <input type="text" />
-        </div>
+const mapStateToProps = (state) => {
+  return {}
+}
 
-        <div className="auth-form__row">
-          <label className="auth-form__label">Password</label>
-          <input type="password" />
-        </div>
-
-        <button className="button">Submit</button>
-      </form>
-    )
+const mapDispatchToProps = (dispatch) => {
+  return {
+    openModal: (name) => {
+      dispatch(openModal(name))
+    }
   }
 }
 
-export default Register
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(Register)

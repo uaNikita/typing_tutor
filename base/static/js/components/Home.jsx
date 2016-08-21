@@ -25,14 +25,21 @@ class Home extends Component {
         area = <Learningarea />
         break
     }
-    
+
     return (
       <div className="home">
+        <div className="home__auth">
+          <a className="home__auth-link" href onClick={this._onLogInClick.bind(this)}>Log In</a>
+          <span className="home__auth-or">or</span>
+          <a className="home__auth-link" href onClick={this._onSignUpClick.bind(this)}>Sign Up</a>
+        </div>
+
         <Metronome />
 
         <nav className="home__nav">
           <Link className="home__settings" to="/settings">
-            <i className="fa fa-bars"></i> Settings
+            <i className="fa fa-bars"></i>
+            <span>Settings</span>
           </Link>
         </nav>
 
@@ -58,6 +65,19 @@ class Home extends Component {
         <Keypad />
       </div>
     )
+  }
+
+
+  _onLogInClick(e) {
+    e.preventDefault();
+
+    this.props.openModal('Login');
+  }
+
+  _onSignUpClick(e) {
+    e.preventDefault();
+
+    this.props.openModal('Registration');
   }
 }
 

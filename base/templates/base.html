@@ -3,13 +3,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
   <meta charset="UTF-8">
   <title>{% block title %}{% endblock %}</title>
+  <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i&subset=cyrillic,cyrillic-ext,latin-ext" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="{% static 'plugins/font-awesome-4.6.3/css/font-awesome.min.css' %}" />
   <link rel="stylesheet" type="text/css" href="{% static 'build/main.css' %}" />
 </head>
 <body>
 <div id="root"></div>
 <script src="{% static 'build/main.js' %}"></script>
+<div class="test">
+  <div class="test__m"></div>
+</div>
 </body>
 </html>
