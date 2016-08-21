@@ -3,6 +3,7 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const autoprefixer = require('autoprefixer');
 
 module.exports = {
   context: __dirname,
@@ -71,7 +72,7 @@ module.exports = {
       },
       {
         test: /\.styl$/,
-        loader: ExtractTextPlugin.extract('style', 'css!autoprefixer?{browsers:["> 3%"]}!stylus')
+        loader: ExtractTextPlugin.extract('style', 'css!postcss!stylus')
         // loader: ExtractTextPlugin.extract('style', 'css?sourceMap!autoprefixer?{browsers:["> 3%"]}!stylus?sourceMap')
       },
       {
@@ -80,6 +81,9 @@ module.exports = {
       }
     ]
 
+  },
+  postcss: function () {
+    return [autoprefixer({browsers: ["> 3%"]})];
   }
 
 };

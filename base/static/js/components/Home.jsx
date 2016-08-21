@@ -37,10 +37,7 @@ class Home extends Component {
         <Metronome />
 
         <nav className="home__nav">
-          <Link className="home__settings" to="/settings">
-            <i className="fa fa-bars"></i>
-            <span>Settings</span>
-          </Link>
+          <Link className="home__settings fa fa-bars" to="/settings" />
         </nav>
 
         <div className="home__typing-info">

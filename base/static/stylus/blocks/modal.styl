@@ -8,14 +8,6 @@
    text-align center
    white-space nowrap
    z-index: 1
-   &:before
-      position fixed
-      top: 0
-      left: 0
-      right: 0
-      bottom: 0
-      background-color rgba(0, 0, 0, 0.3)
-      content ''
    &:after
       display inline-block
       vertical-align middle
@@ -24,7 +16,16 @@
       content ''
    &__
       &open
-         filter: blur(10px);
+         overflow: hidden;
+         &-content
+            filter: blur(10px);
+      &overlay
+         position fixed
+         top: 0
+         left: 0
+         right: 0
+         bottom: 0
+         background-color rgba(0, 0, 0, 0.3)
       &content
          position: relative
          display inline-block
@@ -48,3 +49,23 @@
          text-align: center;
          text-decoration: none
          color #000
+   &-enter, &-appear
+      opacity: 0.01;
+      .modal__overlay
+         opacity: 1;
+      &-active
+         opacity: 1;
+         transition: opacity .1s ease-in;
+         .modal__overlay
+            opacity: 1;
+            transition: opacity .1s ease-in;
+   &-leave
+      opacity: 1;
+      .modal__overlay
+         opacity: 1;
+   &-leave-active
+      opacity: 0.01;
+      transition: opacity .1s ease-out;
+      .modal__overlay
+         opacity: 0.01;
+         transition: opacity .1s ease-out;

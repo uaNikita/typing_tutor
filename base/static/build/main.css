@@ -957,6 +957,10 @@ a {
   border-bottom: 1px solid rgba(28,136,212,0.3);
   color: #1c88d4;
 }
+a:hover {
+  border-bottom-color: rgba(255,86,101,0.3);
+  color: #ff5665;
+}
 .noUi-target {
   background-color: #20b426;
   border: none;
@@ -1159,16 +1163,10 @@ a {
 .home__settings {
   display: inline-block;
   border-bottom: none;
-  margin-top: 20px;
-  font-size: 16px;
+  margin-top: 14px;
+  margin-right: 10px;
+  font-size: 36px;
   text-decoration: none;
-}
-.home__settings .fa {
-  margin-right: 5px;
-  font-size: 14px;
-}
-.home__settings span {
-  border-bottom: 1px solid rgba(28,136,212,0.3);
 }
 .home__typing-info {
   display: -webkit-box;
@@ -1265,7 +1263,7 @@ a {
   border-radius: 2px;
   border-bottom: 1px solid #7b7b7b;
   background: -webkit-linear-gradient(top, #d1d1d1, #afafaf);
-  background: linear-gradient(top, #d1d1d1, #afafaf);
+  background: linear-gradient(to bottom, #d1d1d1, #afafaf);
   box-shadow: inset 1px 1px 0 #e3e3e3;
   -webkit-transition: background-color 0.1s linear;
   transition: background-color 0.1s linear;
@@ -1302,12 +1300,12 @@ a {
 .keypad__key.keypad__wrong {
   background: #ffa5a5;
   background: -webkit-linear-gradient(top, #ffa5a5, #ff4d4d);
-  background: linear-gradient(top, #ffa5a5, #ff4d4d);
+  background: linear-gradient(to bottom, #ffa5a5, #ff4d4d);
 }
 .keypad__key.keypad__to-type {
   background: #b286ff;
   background: -webkit-linear-gradient(top, #cfb5ff, #b286ff);
-  background: linear-gradient(top, #cfb5ff, #b286ff);
+  background: linear-gradient(to bottom, #cfb5ff, #b286ff);
 }
 .keypad__key[data-key="Backspace"] {
   width: 66px;
@@ -1330,23 +1328,23 @@ a {
 }
 .keypad__left-index-finger {
   background: -webkit-linear-gradient(top, #ffd9b2, #ffc07e);
-  background: linear-gradient(top, #ffd9b2, #ffc07e);
+  background: linear-gradient(to bottom, #ffd9b2, #ffc07e);
 }
 .keypad__right-index-finger {
   background: -webkit-linear-gradient(top, #fff5b2, #ffef7e);
-  background: linear-gradient(top, #fff5b2, #ffef7e);
+  background: linear-gradient(to bottom, #fff5b2, #ffef7e);
 }
 .keypad__middle-finger {
   background: -webkit-linear-gradient(top, #d0f1a6, #b0e86a);
-  background: linear-gradient(top, #d0f1a6, #b0e86a);
+  background: linear-gradient(to bottom, #d0f1a6, #b0e86a);
 }
 .keypad__ring-finger {
   background: -webkit-linear-gradient(top, #a1eeff, #63e3ff);
-  background: linear-gradient(top, #a1eeff, #63e3ff);
+  background: linear-gradient(to bottom, #a1eeff, #63e3ff);
 }
 .keypad__pinky {
   background: -webkit-linear-gradient(top, #aeeecc, #78e2aa);
-  background: linear-gradient(top, #aeeecc, #78e2aa);
+  background: linear-gradient(to bottom, #aeeecc, #78e2aa);
 }
 .keypad__shift {
   display: block;
@@ -1505,15 +1503,6 @@ a {
   white-space: nowrap;
   z-index: 1;
 }
-.modal:before {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0,0,0,0.3);
-  content: '';
-}
 .modal:after {
   display: inline-block;
   vertical-align: middle;
@@ -1522,8 +1511,19 @@ a {
   content: '';
 }
 .modal__open {
+  overflow: hidden;
+}
+.modal__open-content {
   -webkit-filter: blur(10px);
           filter: blur(10px);
+}
+.modal__overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.3);
 }
 .modal__content {
   position: relative;
@@ -1549,6 +1549,42 @@ a {
   text-align: center;
   text-decoration: none;
   color: #000;
+}
+.modal-enter,
+.modal-appear {
+  opacity: 0.01;
+}
+.modal-enter .modal__overlay,
+.modal-appear .modal__overlay {
+  opacity: 1;
+}
+.modal-enter-active,
+.modal-appear-active {
+  opacity: 1;
+  -webkit-transition: opacity 0.1s ease-in;
+  transition: opacity 0.1s ease-in;
+}
+.modal-enter-active .modal__overlay,
+.modal-appear-active .modal__overlay {
+  opacity: 1;
+  -webkit-transition: opacity 0.1s ease-in;
+  transition: opacity 0.1s ease-in;
+}
+.modal-leave {
+  opacity: 1;
+}
+.modal-leave .modal__overlay {
+  opacity: 1;
+}
+.modal-leave-active {
+  opacity: 0.01;
+  -webkit-transition: opacity 0.1s ease-out;
+  transition: opacity 0.1s ease-out;
+}
+.modal-leave-active .modal__overlay {
+  opacity: 0.01;
+  -webkit-transition: opacity 0.1s ease-out;
+  transition: opacity 0.1s ease-out;
 }
 .mode {
   width: 840px;
@@ -1680,18 +1716,13 @@ a {
   color: #008000;
 }
 .settings__home {
-  font-size: 16px;
-  text-decoration: none;
   margin-right: 50px;
+  margin-left: 10px;
   border-bottom: none;
+  font-size: 36px;
+  line-height: 65px;
+  text-decoration: none;
   color: #fff;
-}
-.settings__home .fa {
-  margin-right: 5px;
-  font-size: 14px;
-}
-.settings__home span {
-  border-bottom: 1px solid #fff;
 }
 .settings__nav {
   margin-bottom: 30px;
@@ -1699,10 +1730,12 @@ a {
 }
 .settings__nav-in {
   width: 840px;
+  display: -webkit-box;
+  display: flex;
+  align-content: center;
   margin: 0 auto;
 }
 .settings__nav-item {
-  display: inline-block;
   margin: 0 10px;
   font-size: 14px;
   line-height: 64px;
