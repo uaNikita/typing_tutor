@@ -3,7 +3,7 @@ import Layout from '../components/Layout.jsx'
 
 const mapStateToProps = (state) => {
   return {
-    modalName: state.modal
+    modalName: state.keyboard.modal
   }
 }
 

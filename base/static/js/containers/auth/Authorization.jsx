@@ -4,7 +4,7 @@ import { openModal } from '../../actions/actions.js'
 
 const mapStateToProps = (state) => {
   return {
-    modalName: state.modal
+    modalName: state.keyboard.modal
   }
 }
 

@@ -14,7 +14,7 @@ class Register extends Component {
 
   render() {
     return (
-      <form className="auth__form">
+      <form className="auth__form" onSubmit={ this._onSubmit.bind(this)}>
         <div className="auth__row">
           <input className="auth__control" type="text" placeholder="Email" />
         </div>
@@ -68,6 +68,12 @@ class Register extends Component {
     e.preventDefault();
 
     this.props.openModal('Login')
+  }
+
+  _onSubmit(e) {
+    e.preventDefault();
+
+    console.log('_onSubmit');
   }
 }
 

@@ -26,6 +26,7 @@
     "react-router": "*",
     "react-addons-css-transition-group": "*",
     "redux": "*",
+    "redux-form": "*",
     "classnames": "*",
     "extract-text-webpack-plugin": "*",
     "jquery": "*",

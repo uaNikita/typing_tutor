@@ -8,6 +8,9 @@ class UserSerializer(serializers.ModelSerializer):
             username=validated_data['username']
         )
 
+
+        print(validated_data)
+
         # ensures that the password is not stored in clear text, but as a hash
         user.set_password(validated_data['password'])
         user.save()

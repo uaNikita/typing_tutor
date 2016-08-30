@@ -5,10 +5,10 @@ import { setLessonAlphabetSize, setLessonMaxWordLength } from '../actions/action
 const mapStateToProps = (state) => {
 
   return {
-    alphabetSize: state.learningAlphabetSize,
-    maxWordLength: state.learningMaxWordLength,
-    lesson: state.learningLesson.typed + state.learningLesson.last,
-    keyboardName: state.keyboardName
+    alphabetSize: state.keyboard.learningAlphabetSize,
+    maxWordLength: state.keyboard.learningMaxWordLength,
+    lesson: state.keyboard.learningLesson.typed + state.keyboard.learningLesson.last,
+    keyboardName: state.keyboard.keyboardName
   }
 }
 

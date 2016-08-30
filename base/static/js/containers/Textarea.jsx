@@ -3,7 +3,7 @@ import Textarea from '../components/Textarea.jsx'
 
 const mapStateToProps = (state) => {
 
- let text = state.textEntities[state.currentTextId];
+ let text = state.keyboard.textEntities[state.keyboard.currentTextId];
 
   return {
     typed: text.typed,

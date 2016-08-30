@@ -3,8 +3,8 @@ import ModalFrame from '../components/ModalFrame.jsx';
 
 const mapStateToProps = (state) => {
   return {
-    modalName: state.modal,
-    closable: state.modalClosable
+    modalName: state.keyboard.modal,
+    closable: state.keyboard.modalClosable
   }
 }
 

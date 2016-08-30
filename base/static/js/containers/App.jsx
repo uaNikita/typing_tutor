@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Router, Route, Redirect, IndexRoute, browserHistory} from 'react-router'
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
+import {reducer as reduxFormReducer} from 'redux-form'
 import $ from 'jquery';
 
 import Layout from '../containers/Layout.jsx';
@@ -15,7 +16,10 @@ import Keyboard from './Keyboard.jsx';
 import reducer from '../reducers';
 import {pressKey, stopBeenPressedKey, updateStartVariables, setMode} from '../actions/actions'
 
-let store = createStore(reducer)
+let store = createStore(combineReducers({
+  form: reduxFormReducer,
+  keyboard: reducer
+}))
 
 export default class App extends Component {
 
@@ -40,8 +44,6 @@ export default class App extends Component {
   }
 
   render() {
-    // console.log(browserHistory);
-window.bh = browserHistory;
     return (
       <Provider store={ store }>
         <Router history={ browserHistory }>

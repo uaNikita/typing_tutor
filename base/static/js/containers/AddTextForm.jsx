@@ -6,7 +6,7 @@ import { addNewText } from '../actions/actions.js'
 
 const mapStateToProps = (state) => {
 
-  var texts = map(state.textEntities, (obj, key) => {
+  var texts = map(state.keyboard.textEntities, (obj, key) => {
     return {
       id: key,
       title: obj.title,
@@ -16,7 +16,7 @@ const mapStateToProps = (state) => {
 
   return {
     texts,
-    currentTextId: state.currentTextId
+    currentTextId: state.keyboard.currentTextId
   }
 }
 
