@@ -14,15 +14,45 @@ const validate = values => {
   return errors
 }
 
+// var t = new Promise((resolve, reject) => {
+//
+//   setTimeout(function () {
+//
+//     reject({
+//       email: 'That email is taken'
+//     });
+//
+//   }, 1000);
+//
+// }).catch(function () {
+//
+// })
+//
+//
+// const asyncValidate = () => {
+//   var p = new Promise((resolve, reject) => {
+//
+//     setTimeout(function () {
+//
+//       reject({
+//         email: 'That email is taken'
+//       });
+//
+//     }, 1000);
+//
+//   });
+//
+//   return p;
+// }
+
+
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
-const asyncValidate = (values) => {
-  return sleep(1000)
+const asyncValidate = (values/*, dispatch */) => {
+  return sleep(1000) // simulate server latency
     .then(() => {
-      if (!['test@test.test'].includes(values.email)) {
-        throw {
-          email: 'That email is taken'
-        }
+      if (!['john', 'paul', 'george', 'ringo'].includes(values.email)) {
+        return {email: 'That username is taken'}
       }
     })
 }
@@ -55,15 +85,19 @@ class renderField extends Component {
   }
 }
 
+
 class Login extends Component {
 
   render() {
-    const {pristine, submitting} = this.props
 
-    console.log(pristine, submitting);
+    const {
+            handleSubmit,
+            submitting,
+            valid
+          } = this.props;
 
     return (
-      <form className="auth__form" onSubmit={ this._onSubmit.bind(this) }>
+      <form className="auth__form" onSubmit={ handleSubmit }>
 
         <Field name="email" component={renderField} type="text" label="Email" />
 
@@ -71,9 +105,8 @@ class Login extends Component {
         <p className="auth__fp-wrap">
           <a className="auth__fp" href onClick={ this._onForgotClickHandler.bind(this) }>Forgot password?</a>
         </p>
-        {pristine}
-        {submitting}
-        <button className="button" type="submit" disabled={pristine || submitting}>Log In</button>
+
+        <button className="button" type="submit" disabled={!valid || submitting}>Log In</button>
 
         <p className="auth__hint">Not yet registered? <a className="auth__link1" href onClick={ this._onRegClickHandler.bind(this) }>Registration</a></p>
       </form>
@@ -90,18 +123,6 @@ class Login extends Component {
     e.preventDefault();
 
     this.props.openModal('Registration')
-  }
-
-  _onSubmit(e) {
-    e.preventDefault();
-
-    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-    return sleep(1000)
-      .then(() => {
-
-        console.log('_onSubmit');
-      })
   }
 }
 

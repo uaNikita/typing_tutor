@@ -12,7 +12,7 @@ class Authorization extends Component {
     switch (this.props.modalName) {
       case 'Login':
         title = 'Log In'
-        content = <Login />
+        content = <Login onSubmit={this._onSubmit.bind(this)} />
         break;
       case 'Registration':
         title = 'Registration';
@@ -36,6 +36,17 @@ class Authorization extends Component {
     e.preventDefault();
 
     this.props.openModal(tab);
+  }
+
+
+  _onSubmit() {
+
+    const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+
+    return sleep(1000)
+
+
   }
 }
 

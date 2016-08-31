@@ -1101,6 +1101,45 @@ a:hover {
   color: #fff;
   cursor: pointer;
 }
+.button[disabled] {
+  opacity: 0.5;
+}
+.async-validating:after {
+  width: 15px;
+  height: 15px;
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  margin-top: -7.5px;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  border-top-color: #000;
+  border-bottom-color: #000;
+  content: '';
+  -webkit-animation: spin 1s infinite linear;
+          animation: spin 1s infinite linear;
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
 .ctrl {
   padding: 5px 7px;
   border-radius: 4px;
@@ -1400,6 +1439,7 @@ a:hover {
   margin-bottom: 30px;
 }
 .auth__row {
+  position: relative;
   margin-bottom: 15px;
 }
 .auth__label {
@@ -1452,6 +1492,11 @@ a:hover {
 }
 .auth .button {
   margin-top: 20px;
+}
+.auth .error {
+  position: absolute;
+  top: -13px;
+  text-align: left;
 }
 .menu__item {
   border-bottom: none;

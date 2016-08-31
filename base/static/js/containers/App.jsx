@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 import {Router, Route, Redirect, IndexRoute, browserHistory} from 'react-router'
 import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
-import {reducer as reduxFormReducer} from 'redux-form'
 import $ from 'jquery';
 
 import Layout from '../containers/Layout.jsx';
@@ -13,13 +12,10 @@ import TextMode from './TextMode.jsx';
 import LearningMode from './LearningMode.jsx';
 import Keyboard from './Keyboard.jsx';
 
-import reducer from '../reducers';
+import reducers from '../reducers';
 import {pressKey, stopBeenPressedKey, updateStartVariables, setMode} from '../actions/actions'
 
-let store = createStore(combineReducers({
-  form: reduxFormReducer,
-  keyboard: reducer
-}))
+let store = createStore(reducers)
 
 export default class App extends Component {
 
