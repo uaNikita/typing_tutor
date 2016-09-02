@@ -46,23 +46,7 @@ const INITIAL_STATE = {
 };
 
 // slice char from chars array and return new chars array
-const sliceChar = (chars, idChars) => {
-  let newChars = chars.slice();
 
-  forEach(idChars, id => {
-    let index = newChars.indexOf(id);
-
-    if (index + 1) {
-      newChars = [
-        ...newChars.slice(0, index),
-        ...newChars.slice(index + 1)
-      ]
-    }
-
-  });
-
-  return newChars;
-}
 
 const getIdsFromChar = (keys, char) => {
   let charsToType = [];

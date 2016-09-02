@@ -92,6 +92,20 @@ export default (state = INITIAL_STATE, action) => {
         })
       });
 
+    case types.TYPE_ON_ENTITIE:
+      return (() => {
+        let entities = cloneDeep(state.entities);
+        let text = entities[action.textId];
+
+        text.typed += text.last[0];
+        text.last = text.last.substring(1);
+
+        return assign({}, state, {
+          entities
+        });
+
+      })()
+
     case types.TYPE_TEXT_MODE:
       return (() => {
         let textEntities = cloneDeep(state.entities);
@@ -99,11 +113,11 @@ export default (state = INITIAL_STATE, action) => {
         let charToType = textEntities[textId].last[0];
         let idCharsToType = getIdsFromChar(keys, charToType);
 
-        if (charToType ===  action.char) {
+        if (charToType === action.char) {
 
           pressedRightIds = pressedRightIds.concat(idChars);
 
-          textEntities[textId].typed +=  action.char;
+          textEntities[textId].typed += action.char;
 
           textEntities[textId].last = textEntities[textId].last.substring(1);
 

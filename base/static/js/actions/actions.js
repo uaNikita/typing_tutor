@@ -107,7 +107,7 @@ export function setPressedWrongIds(ids) {
   };
 }
 
-export function setCharIdToType(id) {
+export function setIdsCharToType(id) {
   return {
     type: types.SET_CHAR_ID_TO_TYPE,
     id
@@ -133,18 +133,84 @@ export function typeCharTextEntitie(textId) {
   };
 }
 
-function typeTextMode(char) {
+
+export function typeOnEntitie(textId) {
   return {
-    type: types.TYPE_TEXT_MODE,
-    char
+    type: types.TYPE_ON_ENTITIE,
+    textId
   };
 }
 
-function typeLearningMode(char) {
-  return {
-    type: types.TYPE_LEARNING_MODE,
-    char
-  };
+const getIdsFromChar = (keys, char) => {
+  let charsToType = [];
+
+  keys.forEach(obj => {
+
+    // check if it upper case letter
+    if (obj.shiftKey === char) {
+      charsToType.push(obj.id);
+
+      if (obj.hand === 'left') {
+        charsToType.push('Right Shift');
+      } else if (obj.hand === 'right') {
+        charsToType.push('Left Shift');
+      }
+
+    } else if (obj.key === char) {
+      charsToType.push(obj.id)
+    }
+
+  });
+
+  return charsToType;
+}
+
+const sliceChar = (chars, idChars) => {
+  let newChars = chars.slice();
+
+  forEach(idChars, id => {
+    let index = newChars.indexOf(id);
+
+    if (index + 1) {
+      newChars = [
+        ...newChars.slice(0, index),
+        ...newChars.slice(index + 1)
+      ]
+    }
+
+  });
+
+  return newChars;
+}
+
+function typeTextMode(char, dispatch, getState) {
+  var textModeState = state.textMode;
+
+  let textId = textModeState.currentTextId;
+  let idsChar = getIdsFromChar(keys, char);
+
+  if (textModeState.entitie[textId].last[0] === char) {
+    let pressedRightIds = sliceChar(state.pressedRightIds, idsChar);
+
+    dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
+
+    dispatch(typeOnEntitie(textId));
+
+    dispatch(addSuccesType());
+
+    dispatch(setIdsCharToType(getIdsFromChar(keys, textModeState.entities[textId].last[0])));
+
+  } else {
+    let pressedWrongIds = sliceChar(state.pressedWrongIds, idChars)
+
+    dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
+
+    dispatch(addErrorType());
+  }
+}
+
+function typeLearningMode(char, dispatch, getState) {
+
 }
 
 
@@ -158,7 +224,9 @@ export function typeChar(char) {
 
     switch (getState().keyboard.mode) {
       case 1:
-        dispatch(typeTextMode(char))
+
+
+        typeTextMode(char, dispatch, getState)
         break
       case 2:
         dispatch(typeLearningMode(char))

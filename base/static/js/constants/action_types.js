@@ -13,4 +13,5 @@ export const OPEN_MODAL = 'OPEN_MODAL';
 export const CLOSE_MODAL = 'CLOSE_MODAL';
 export const TYPE_TEXT_MODE = 'TYPE_TEXT_MODE';
 export const TYPE_LEARNING_MODE = 'TYPE_LEARNING_MODE';
+export const TYPE_ON_ENTITIE = 'TYPE_ON_ENTITIE';
 
