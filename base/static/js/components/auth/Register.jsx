@@ -1,5 +1,117 @@
 import React, {Component} from 'react'
+import {Field, reduxForm} from 'redux-form'
+import classNames from 'classNames';
 import generatePassword from 'password-generator';
+
+
+const validate = values => {
+  const errors = {}
+  if (!values.email) {
+    errors.email = 'Required'
+  }
+  if (!values.password) {
+    errors.password = 'Required'
+  }
+
+  return errors
+}
+
+const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
+
+const asyncValidate = (values/*, dispatch */) => {
+  return sleep(1000) // simulate server latency
+    .then(() => {
+      if (!['john', 'paul', 'george', 'ringo'].includes(values.email)) {
+        return {email: 'That username is taken'}
+      }
+    })
+}
+
+class RenderField extends Component {
+
+  render() {
+    const {
+            input,
+            label,
+            type,
+            meta: {
+              asyncValidating,
+              touched,
+              error
+            }
+          } = this.props;
+
+    let rowClass = 'auth__row';
+
+    if (asyncValidating) {
+      rowClass = classNames(rowClass, 'async-validating')
+    }
+
+    return (
+      <div className={rowClass}>
+        {touched && error && <p className="error">{error}</p>}
+        <input
+          className="auth__control"
+          {...input}
+          type={type}
+          placeholder={label}
+        />
+      </div>
+    )
+  }
+}
+
+class RenderPasswordField extends Component {
+
+  componentDidUpdate(prevProps) {
+    let currentPassword = this.props.generatedPassword;
+    let prevPassword = prevProps.generatedPassword;
+
+    if (currentPassword && prevPassword === '') {
+      this.props.input.onChange(currentPassword)
+    }
+  }
+
+  render() {
+    const {
+            input,
+            label,
+            type,
+            meta: {
+              asyncValidating,
+              touched,
+              error
+            }
+          } = this.props;
+
+    let rowClass = 'auth__row';
+
+    if (asyncValidating) {
+      rowClass = classNames(rowClass, 'async-validating')
+    }
+
+    return (
+      <div className={rowClass}>
+        {touched && error && <p className="error">{error}</p>}
+        <input
+          className="auth__control"
+          {...input}
+          type={type}
+          placeholder={label}
+          onChange={this._onChange.bind(this)}
+        />
+      </div>
+    )
+  }
+
+  _onChange(e) {
+    this.props.input.onChange(e);
+
+    if (e.isTrusted) {
+      this.props.onPasswordChange(e);
+    }
+  }
+}
 
 class Register extends Component {
 
@@ -13,41 +125,58 @@ class Register extends Component {
   }
 
   render() {
+    const {
+            handleSubmit,
+            submitting,
+            valid
+          } = this.props;
+
+
     return (
-      <form className="auth__form" onSubmit={ this._onSubmit.bind(this)}>
-        <div className="auth__row">
-          <input className="auth__control" type="text" placeholder="Email" />
-        </div>
+      <form className="auth__form" onSubmit={ handleSubmit }>
+        <Field
+          name="email"
+          component={RenderField}
+          type="email"
+          label="Email"
+        />
 
-        <div className="auth__row">
+        <Field
+          ref="password"
+          name="password"
+          component={RenderPasswordField}
+          type="password"
+          label="Password"
+          generatedPassword={this.state.password}
+          onPasswordChange={this._passwordChange.bind(this)}
+        />
+
+        <label className="auth__cp">
           <input
-            className="auth__control"
-            type="password"
-            placeholder="Password"
-            value={this.state.password}
-            disabled={this.state.createPassword}
-            onChange={this._onPasswordChange.bind(this)} />
-          <label className="auth__cp">
-            <input
-              className="auth__cp-control"
-              type="checkbox"
-              checked={this.state.createPassword}
-              onChange={this._onCreatePasswordChange.bind(this)} />
-            Create a password for me
-          </label>
-        </div>
+            className="auth__cp-control"
+            type="checkbox"
+            checked={this.state.createPassword}
+            onChange={this._onCreatePasswordChange.bind(this)} />
+          Create a password for me
+        </label>
 
-        <button className="button">Sign Up</button>
+        <button className="button" type="submit" disabled={!valid || submitting}>Sign Up</button>
 
         <p className="auth__hint">Already registered? <a className="auth__link1" href onClick={ this._onLoginClick.bind(this) }>Log in now</a></p>
       </form>
     )
   }
 
-  _onPasswordChange(e) {
-    this.setState({
-      password: e.target.value
-    });
+
+  _passwordChange(e) {
+
+    if (this.state.createPassword) {
+      this.setState({
+        createPassword: false,
+        password: ''
+      });
+    }
+
   }
 
   _onCreatePasswordChange() {
@@ -61,7 +190,6 @@ class Register extends Component {
       createPassword: !this.state.createPassword,
       password
     });
-
   }
 
   _onLoginClick(e) {
@@ -69,12 +197,11 @@ class Register extends Component {
 
     this.props.openModal('Login')
   }
-
-  _onSubmit(e) {
-    e.preventDefault();
-
-    console.log('_onSubmit');
-  }
 }
 
-export default Register
+export default reduxForm({
+  form: 'registration',
+  validate,
+  asyncValidate,
+  asyncBlurFields: ['email']
+})(Register)

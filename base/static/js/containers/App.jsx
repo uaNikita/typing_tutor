@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import {Router, Route, Redirect, IndexRoute, browserHistory} from 'react-router'
-import {createStore, combineReducers} from 'redux';
 import {Provider} from 'react-redux';
 import $ from 'jquery';
 
@@ -12,36 +11,28 @@ import TextMode from './TextMode.jsx';
 import LearningMode from './LearningMode.jsx';
 import Keyboard from './Keyboard.jsx';
 
-import reducers from '../reducers';
-import {pressKey, stopBeenPressedKey, updateStartVariables, setMode} from '../actions/actions'
-
-let store = createStore(reducers)
+import store from './../store';
+import {typeChar, updateStartVariables, setMode} from '../actions/actions'
 
 export default class App extends Component {
 
   componentDidMount() {
 
-    $(document).on('keypress', function (e) {
-
+    $(document).on('keypress', (e) => {
       if (location.pathname !== '/') {
         return;
       }
 
-      let char = String.fromCharCode(e.which);
-
-      store.dispatch(pressKey(char));
-
-      setTimeout(() => {
-        store.dispatch(stopBeenPressedKey(char));
-      }, 100);
-
+      store.dispatch(typeChar(String.fromCharCode(e.which)));
     });
 
   }
 
   render() {
+    window.qqq = browserHistory
+
     return (
-      <Provider store={ store }>
+      <Provider store={store}>
         <Router history={ browserHistory }>
           <Route path="/" component={ Layout }>
             <IndexRoute component={ Home } onEnter={ this._onKeyboardEnter } />
@@ -67,7 +58,7 @@ export default class App extends Component {
   _enterDependOnMode(nextState, replace) {
     let path = '/settings/mode/';
 
-    switch (store.getState().mode) {
+    switch (store.getState().keyboard.mode) {
       case 1:
         path += 'text';
         break

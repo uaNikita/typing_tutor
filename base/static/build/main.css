@@ -1434,6 +1434,15 @@ a:hover {
   padding: 50px 170px 40px;
   text-align: center;
 }
+.auth__form_password-reset {
+  margin-top: 40px;
+}
+.auth__form_password-reset .auth__hint {
+  margin-top: 50px;
+}
+.auth__form_password-reset .button {
+  margin-top: 0 !important;
+}
 .auth__title {
   font-size: 28px;
   margin-bottom: 30px;
@@ -1450,7 +1459,7 @@ a:hover {
   width: 260px;
 }
 .auth__fp-wrap {
-  margin-top: -10px;
+  margin: -10px 0 10px;
   font-size: 11px;
   text-align: left;
 }
@@ -1461,7 +1470,7 @@ a:hover {
 }
 .auth__cp {
   display: block;
-  margin-top: 5px;
+  margin: -10px 0 10px;
   font-size: 11px;
   text-align: left;
   color: #ababab;
@@ -1491,7 +1500,7 @@ a:hover {
   margin: 0 5px;
 }
 .auth .button {
-  margin-top: 20px;
+  margin-top: 10px;
 }
 .auth .error {
   position: absolute;

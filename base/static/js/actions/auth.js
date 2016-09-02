@@ -5,7 +5,6 @@ export const RECEIVE_REG_ANSWER = 'SEND_REG_REQUEST'
 export const SEND_PASS_RESET_REQUEST = 'SEND_REG_REQUEST'
 export const RECEIVE_PASS_RESET_ANSWER = 'SEND_REG_REQUEST'
 
-
 function sendLoginRequest(login, pass) {
   return {
     type: SEND_LOGIN_REQUEST,

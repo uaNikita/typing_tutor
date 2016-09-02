@@ -91,3 +91,79 @@ export function closeModal() {
     type: types.CLOSE_MODAL
   };
 }
+
+
+export function setPressedRightIds(ids) {
+  return {
+    type: types.SET_PRESSED_RIGHT_IDS,
+    ids
+  };
+}
+
+export function setPressedWrongIds(ids) {
+  return {
+    type: types.SET_PRESSED_WRONG_IDS,
+    ids
+  };
+}
+
+export function setCharIdToType(id) {
+  return {
+    type: types.SET_CHAR_ID_TO_TYPE,
+    id
+  };
+}
+
+export function addSuccesType() {
+  return {
+    type: types.ADD_RIGHT_TYPED_CHARS
+  };
+}
+
+export function addErrorType() {
+  return {
+    type: types.ADD_ERROR
+  };
+}
+
+export function typeCharTextEntitie(textId) {
+  return {
+    type: types.TYPE_CHAR_TEXT_ENTITIE,
+    textId
+  };
+}
+
+function typeTextMode(char) {
+  return {
+    type: types.TYPE_TEXT_MODE,
+    char
+  };
+}
+
+function typeLearningMode(char) {
+  return {
+    type: types.TYPE_LEARNING_MODE,
+    char
+  };
+}
+
+
+export function typeChar(char) {
+  return (dispatch, getState) => {
+    dispatch(pressKey(char));
+
+    setTimeout(() => {
+      dispatch(stopBeenPressedKey(char));
+    }, 100);
+
+    switch (getState().keyboard.mode) {
+      case 1:
+        dispatch(typeTextMode(char))
+        break
+      case 2:
+        dispatch(typeLearningMode(char))
+        break
+    }
+
+  }
+}

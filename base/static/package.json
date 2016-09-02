@@ -27,6 +27,8 @@
     "react-addons-css-transition-group": "*",
     "redux": "*",
     "redux-form": "*",
+    "redux-logger": "*",
+    "redux-thunk": "*",
     "classnames": "*",
     "extract-text-webpack-plugin": "*",
     "jquery": "*",

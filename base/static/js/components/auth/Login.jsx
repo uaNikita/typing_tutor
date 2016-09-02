@@ -14,38 +14,6 @@ const validate = values => {
   return errors
 }
 
-// var t = new Promise((resolve, reject) => {
-//
-//   setTimeout(function () {
-//
-//     reject({
-//       email: 'That email is taken'
-//     });
-//
-//   }, 1000);
-//
-// }).catch(function () {
-//
-// })
-//
-//
-// const asyncValidate = () => {
-//   var p = new Promise((resolve, reject) => {
-//
-//     setTimeout(function () {
-//
-//       reject({
-//         email: 'That email is taken'
-//       });
-//
-//     }, 1000);
-//
-//   });
-//
-//   return p;
-// }
-
-
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
 const asyncValidate = (values/*, dispatch */) => {
@@ -99,7 +67,7 @@ class Login extends Component {
     return (
       <form className="auth__form" onSubmit={ handleSubmit }>
 
-        <Field name="email" component={renderField} type="text" label="Email" />
+        <Field name="email" component={renderField} type="email" label="Email" />
 
         <Field name="password" component={renderField} type="password" label="Password" />
         <p className="auth__fp-wrap">
@@ -128,7 +96,7 @@ class Login extends Component {
 
 
 export default reduxForm({
-  form: 'simple',
+  form: 'login',
   validate,
   asyncValidate,
   asyncBlurFields: ['email']
