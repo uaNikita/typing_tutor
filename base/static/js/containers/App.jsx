@@ -12,11 +12,13 @@ import LearningMode from './LearningMode.jsx';
 import Keyboard from './Keyboard.jsx';
 
 import store from './../store';
-import {typeChar, updateStartVariables, setMode} from '../actions/actions'
+import {typeChar, updateStartVariables, setMode, updateCharToType} from '../actions/actions'
 
 export default class App extends Component {
 
   componentDidMount() {
+
+    store.dispatch(updateCharToType());
 
     $(document).on('keypress', (e) => {
       if (location.pathname !== '/') {
@@ -55,7 +57,7 @@ export default class App extends Component {
 
   _enterDependOnMode(nextState, replace) {
     let path = '/settings/mode/' + store.getState().keyboard.mode;
-    
+
     replace({
       pathname: path
     })

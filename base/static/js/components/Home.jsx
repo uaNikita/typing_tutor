@@ -11,12 +11,12 @@ class Home extends Component {
     let area;
 
     const {
-            typedChars,
+            successTypes,
+            errorTypes,
             speed,
-            errors,
             mode
           } = this.props
-    
+
     switch (mode) {
       case 'text':
         area = <Textarea />
@@ -43,7 +43,7 @@ class Home extends Component {
         <div className="home__typing-info">
           <p className="num-chars">
             <i className="fa fa-file-text-o num-chars__icon"></i>
-            {typedChars}
+            {successTypes}
           </p>
 
           <p className="speed">
@@ -53,7 +53,7 @@ class Home extends Component {
 
           <p className="error-key">
             <i className="fa fa-minus-square-o error-key__icon"></i>
-            {errors}
+            {errorTypes}
           </p>
         </div>
 

@@ -22,11 +22,11 @@ const INITIAL_STATE = {
 
   startTypingTime: 1461228933292,
 
-  successType: 0,
+  successTypes: 0,
 
-  errorsTypes: 0,
+  errorTypes: 0,
 
-  idCharsToType: 'b',
+  idCharsToType: '',
 
   metronomeStatus: 0,
 
@@ -273,12 +273,6 @@ export default (state = INITIAL_STATE, action) => {
       })()
 
     case types.SET_PRESSED_RIGHT_IDS:
-
-      if (action.ids === undefined) {
-        debugger;
-      }
-
-      console.log('action.ids', action.ids);
       return assign({}, state, {
         pressedRightIds: action.ids
       });
@@ -295,20 +289,20 @@ export default (state = INITIAL_STATE, action) => {
 
     case types.ADD_SUCCESS_TYPE:
       return assign({}, state, {
-        successType: state.successType + 1
+        successTypes: state.successTypes + 1
       });
 
     case types.ADD_ERROR_TYPE:
       return assign({}, state, {
-        errors: state.errors + 1
+        errorTypes: state.errorTypes + 1
       });
 
 
     case types.UPDATE_START_VARIABLES:
       return assign({}, state, {
         startTypingTime: Date.now(),
-        rightTypedChars: 0,
-        errors: 0,
+        successTypes: 0,
+        errorTypes: 0,
       });
 
     case types.SET_LESSON_ALPHABET_SIZE:

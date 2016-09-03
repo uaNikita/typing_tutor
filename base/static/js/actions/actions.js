@@ -184,28 +184,49 @@ const sliceChar = (chars, idChars) => {
   return newChars;
 }
 
+
+export function updateCharToType(char) {
+  return (dispatch, getState) => {
+    let state = getState();
+
+    switch (getState().keyboard.mode) {
+      // text mode
+      case 'text':
+        let keys = find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys
+        let textId = getState().textMode.currentTextId;
+        let entities = getState().textMode.entities;
+
+        let idsCharToType = getIdsFromChar(keys, entities[textId].last[0]);
+
+        dispatch(setIdsCharToType(idsCharToType));
+
+        break
+      case 'learing':
+        dispatch(typeLearningMode(char))
+        break
+    }
+
+  }
+}
+
 function textTypeMode(char, dispatch, getState) {
   let state = getState();
   let keyboardState = getState().keyboard;
-  let keys = find(state.keyboard.keyboards, {'name': keyboardState.keyboardName}).keys
+  let keys = find(keyboardState.keyboards, {'name': keyboardState.keyboardName}).keys
   var textModeState = state.textMode;
   let textId = textModeState.currentTextId;
   let idsChar = getIdsFromChar(keys, char);
 
   if (textModeState.entities[textId].last[0] === char) {
     let pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
-    
+
     dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
 
     dispatch(typeOnEntitie(textId));
 
     dispatch(addSuccesType());
 
-    // get char from new state
-    let idsCharToType = getIdsFromChar(keys, getState().textMode.entities[textId].last[0]);
-
-    dispatch(setIdsCharToType(idsCharToType));
-
+    dispatch(updateCharToType());
   } else {
     let pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar)
 
