@@ -29,8 +29,6 @@ export default class App extends Component {
   }
 
   render() {
-    window.qqq = browserHistory
-
     return (
       <Provider store={store}>
         <Router history={ browserHistory }>
@@ -56,17 +54,8 @@ export default class App extends Component {
   }
 
   _enterDependOnMode(nextState, replace) {
-    let path = '/settings/mode/';
-
-    switch (store.getState().keyboard.mode) {
-      case 1:
-        path += 'text';
-        break
-      case 2:
-        path += 'learning';
-        break
-    }
-
+    let path = '/settings/mode/' + store.getState().keyboard.mode;
+    
     replace({
       pathname: path
     })

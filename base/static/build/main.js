@@ -21434,8 +21434,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      window.qqq = _reactRouter.browserHistory;
-
 	      return _react2.default.createElement(
 	        _reactRedux.Provider,
 	        { store: _store2.default },
@@ -21471,16 +21469,7 @@
 	  }, {
 	    key: '_enterDependOnMode',
 	    value: function _enterDependOnMode(nextState, replace) {
-	      var path = '/settings/mode/';
-
-	      switch (_store2.default.getState().keyboard.mode) {
-	        case 1:
-	          path += 'text';
-	          break;
-	        case 2:
-	          path += 'learning';
-	          break;
-	      }
+	      var path = '/settings/mode/' + _store2.default.getState().keyboard.mode;
 
 	      replace({
 	        pathname: path
@@ -39996,17 +39985,22 @@
 	exports.closeModal = closeModal;
 	exports.setPressedRightIds = setPressedRightIds;
 	exports.setPressedWrongIds = setPressedWrongIds;
-	exports.setCharIdToType = setCharIdToType;
+	exports.setIdsCharToType = setIdsCharToType;
 	exports.addSuccesType = addSuccesType;
 	exports.addErrorType = addErrorType;
 	exports.typeCharTextEntitie = typeCharTextEntitie;
+	exports.typeOnEntitie = typeOnEntitie;
 	exports.typeChar = typeChar;
 
 	var _action_types = __webpack_require__(275);
 
 	var types = _interopRequireWildcard(_action_types);
 
+	var _lodash = __webpack_require__(508);
+
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function pressKey(char) {
 	  return {
@@ -40114,22 +40108,22 @@
 	  };
 	}
 
-	function setCharIdToType(id) {
+	function setIdsCharToType(id) {
 	  return {
-	    type: types.SET_CHAR_ID_TO_TYPE,
+	    type: types.SET_IDS_CHAR_TO_TYPE,
 	    id: id
 	  };
 	}
 
 	function addSuccesType() {
 	  return {
-	    type: types.ADD_RIGHT_TYPED_CHARS
+	    type: types.ADD_SUCCESS_TYPE
 	  };
 	}
 
 	function addErrorType() {
 	  return {
-	    type: types.ADD_ERROR
+	    type: types.ADD_ERROR_TYPE
 	  };
 	}
 
@@ -40140,19 +40134,80 @@
 	  };
 	}
 
-	function typeTextMode(char) {
+	function typeOnEntitie(textId) {
 	  return {
-	    type: types.TYPE_TEXT_MODE,
-	    char: char
+	    type: types.TYPE_ON_ENTITIE,
+	    textId: textId
 	  };
 	}
 
-	function typeLearningMode(char) {
-	  return {
-	    type: types.TYPE_LEARNING_MODE,
-	    char: char
-	  };
+	var getIdsFromChar = function getIdsFromChar(keys, char) {
+	  var charsToType = [];
+
+	  keys.forEach(function (obj) {
+
+	    // check if it upper case letter
+	    if (obj.shiftKey === char) {
+	      charsToType.push(obj.id);
+
+	      if (obj.hand === 'left') {
+	        charsToType.push('Right Shift');
+	      } else if (obj.hand === 'right') {
+	        charsToType.push('Left Shift');
+	      }
+	    } else if (obj.key === char) {
+	      charsToType.push(obj.id);
+	    }
+	  });
+
+	  return charsToType;
+	};
+
+	var sliceChar = function sliceChar(chars, idChars) {
+	  var newChars = chars.slice();
+
+	  (0, _lodash.forEach)(idChars, function (id) {
+	    var index = newChars.indexOf(id);
+
+	    if (index + 1) {
+	      newChars = [].concat(_toConsumableArray(newChars.slice(0, index)), _toConsumableArray(newChars.slice(index + 1)));
+	    }
+	  });
+
+	  return newChars;
+	};
+
+	function textTypeMode(char, dispatch, getState) {
+	  var state = getState();
+	  var keyboardState = getState().keyboard;
+	  var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': keyboardState.keyboardName }).keys;
+	  var textModeState = state.textMode;
+	  var textId = textModeState.currentTextId;
+	  var idsChar = getIdsFromChar(keys, char);
+
+	  if (textModeState.entities[textId].last[0] === char) {
+	    var pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
+
+	    dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
+
+	    dispatch(typeOnEntitie(textId));
+
+	    dispatch(addSuccesType());
+
+	    // get char from new state
+	    var idsCharToType = getIdsFromChar(keys, getState().textMode.entities[textId].last[0]);
+
+	    dispatch(setIdsCharToType(idsCharToType));
+	  } else {
+	    var pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar);
+
+	    dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
+
+	    dispatch(addErrorType());
+	  }
 	}
+
+	function typeLearningMode(char, dispatch, getState) {}
 
 	function typeChar(char) {
 	  return function (dispatch, getState) {
@@ -40163,10 +40218,11 @@
 	    }, 100);
 
 	    switch (getState().keyboard.mode) {
-	      case 1:
-	        dispatch(typeTextMode(char));
+	      // text mode
+	      case 'text':
+	        textTypeMode(char, dispatch, getState);
 	        break;
-	      case 2:
+	      case 'learing':
 	        dispatch(typeLearningMode(char));
 	        break;
 	    }
@@ -40195,8 +40251,14 @@
 	var SET_KEYBOARD = exports.SET_KEYBOARD = 'SET_KEYBOARD';
 	var OPEN_MODAL = exports.OPEN_MODAL = 'OPEN_MODAL';
 	var CLOSE_MODAL = exports.CLOSE_MODAL = 'CLOSE_MODAL';
-	var TYPE_TEXT_MODE = exports.TYPE_TEXT_MODE = 'TYPE_TEXT_MODE';
-	var TYPE_LEARNING_MODE = exports.TYPE_LEARNING_MODE = 'TYPE_LEARNING_MODE';
+
+	var SET_PRESSED_RIGHT_IDS = exports.SET_PRESSED_RIGHT_IDS = 'SET_PRESSED_RIGHT_IDS';
+	var SET_PRESSED_WRONG_IDS = exports.SET_PRESSED_WRONG_IDS = 'SET_PRESSED_WRONG_IDS';
+	var SET_IDS_CHAR_TO_TYPE = exports.SET_IDS_CHAR_TO_TYPE = 'SET_IDS_CHAR_TO_TYPE';
+	var ADD_SUCCESS_TYPE = exports.ADD_SUCCESS_TYPE = 'ADD_SUCCESS_TYPE';
+	var ADD_ERROR_TYPE = exports.ADD_ERROR_TYPE = 'ADD_ERROR_TYPE';
+	var TYPE_CHAR_TEXT_ENTITIE = exports.TYPE_CHAR_TEXT_ENTITIE = 'TYPE_CHAR_TEXT_ENTITIE';
+	var TYPE_ON_ENTITIE = exports.TYPE_ON_ENTITIE = 'TYPE_ON_ENTITIE';
 
 /***/ },
 /* 276 */
@@ -54175,10 +54237,10 @@
 
 
 	      switch (mode) {
-	        case 1:
+	        case 'text':
 	          area = _react2.default.createElement(_Textarea2.default, null);
 	          break;
-	        case 2:
+	        case 'learning':
 	          area = _react2.default.createElement(_Learningarea2.default, null);
 	          break;
 	      }
@@ -54279,7 +54341,7 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 
-	  var text = state.textMode.entities[state.keyboard.currentTextId];
+	  var text = state.textMode.entities[state.textMode.currentTextId];
 
 	  return {
 	    typed: text.typed,
@@ -77921,28 +77983,6 @@
 	  }
 	};
 
-	var getIdsFromChar = function getIdsFromChar(keys, char) {
-	  var charsToType = [];
-
-	  keys.forEach(function (obj) {
-
-	    // check if it upper case letter
-	    if (obj.shiftKey === char) {
-	      charsToType.push(obj.id);
-
-	      if (obj.hand === 'left') {
-	        charsToType.push('Right Shift');
-	      } else if (obj.hand === 'right') {
-	        charsToType.push('Left Shift');
-	      }
-	    } else if (obj.key === char) {
-	      charsToType.push(obj.id);
-	    }
-	  });
-
-	  return charsToType;
-	};
-
 	var nextTextId = 10;
 
 	exports.default = function () {
@@ -77977,37 +78017,17 @@
 	        }))
 	      });
 
-	    case types.TYPE_TEXT_MODE:
+	    case types.TYPE_ON_ENTITIE:
 	      return function () {
-	        var textEntities = cloneDeep(state.entities);
-	        var textId = state.currentTextId;
-	        var charToType = textEntities[textId].last[0];
-	        var idCharsToType = getIdsFromChar(keys, charToType);
+	        var entities = (0, _lodash.cloneDeep)(state.entities);
 
-	        if (charToType === action.char) {
+	        var text = entities[action.textId];
 
-	          pressedRightIds = pressedRightIds.concat(idChars);
-
-	          textEntities[textId].typed += action.char;
-
-	          textEntities[textId].last = textEntities[textId].last.substring(1);
-
-	          rightTypedChars += 1;
-
-	          idCharsToType = getIdsFromChar(keys, textEntities[textId].last[0]);
-	        } else {
-	          pressedWrongIds = pressedWrongIds.concat(idChars);
-
-	          errors += 1;
-	        }
+	        text.typed += text.last[0];
+	        text.last = text.last.substring(1);
 
 	        return (0, _lodash.assign)({}, state, {
-	          pressedRightIds: pressedRightIds,
-	          pressedWrongIds: pressedWrongIds,
-	          idCharsToType: idCharsToType,
-	          textEntities: textEntities,
-	          rightTypedChars: rightTypedChars,
-	          errors: errors
+	          entities: entities
 	        });
 	      }();
 
@@ -78058,14 +78078,14 @@
 
 	  errorsTypes: 0,
 
-	  idCharsToType: 'f',
+	  idCharsToType: 'b',
 
 	  metronomeStatus: 0,
 
 	  metronomeInterval: 800,
 
 	  // 1 - Text, 2 - Learning
-	  mode: 2,
+	  mode: 'text',
 
 	  learningAlphabetSize: 9,
 
@@ -78078,19 +78098,7 @@
 	};
 
 	// slice char from chars array and return new chars array
-	var sliceChar = function sliceChar(chars, idChars) {
-	  var newChars = chars.slice();
 
-	  (0, _lodash.forEach)(idChars, function (id) {
-	    var index = newChars.indexOf(id);
-
-	    if (index + 1) {
-	      newChars = [].concat(_toConsumableArray(newChars.slice(0, index)), _toConsumableArray(newChars.slice(index + 1)));
-	    }
-	  });
-
-	  return newChars;
-	};
 
 	var getIdsFromChar = function getIdsFromChar(keys, char) {
 	  var charsToType = [];
@@ -78194,6 +78202,20 @@
 	  return state;
 	};
 
+	var sliceChar = function sliceChar(chars, idChars) {
+	  var newChars = chars.slice();
+
+	  (0, _lodash.forEach)(idChars, function (id) {
+	    var index = newChars.indexOf(id);
+
+	    if (index + 1) {
+	      newChars = [].concat(_toConsumableArray(newChars.slice(0, index)), _toConsumableArray(newChars.slice(index + 1)));
+	    }
+	  });
+
+	  return newChars;
+	};
+
 	var generateLesson = function () {
 	  var minWordLength = 3;
 	  var maxChars = 50;
@@ -78276,8 +78298,8 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
-	    case types.PRESS_KEY:
-	      return pressKey(state, action.char);
+	    /*case types.PRESS_KEY:
+	      return pressKey(state, action.char);*/
 
 	    case types.STOP_BEEN_PRESSED_KEY:
 	      return function () {
@@ -78294,6 +78316,12 @@
 	      }();
 
 	    case types.SET_PRESSED_RIGHT_IDS:
+
+	      if (action.ids === undefined) {
+	        debugger;
+	      }
+
+	      console.log('action.ids', action.ids);
 	      return (0, _lodash.assign)({}, state, {
 	        pressedRightIds: action.ids
 	      });
@@ -78303,17 +78331,17 @@
 	        pressedWrongIds: action.ids
 	      });
 
-	    case types.SET_CHAR_ID_TO_TYPE:
+	    case types.SET_IDS_CHAR_TO_TYPE:
 	      return (0, _lodash.assign)({}, state, {
-	        pressedWrongIds: action.id
+	        idCharsToType: action.id
 	      });
 
-	    case types.ADD_RIGHT_TYPED_CHARS:
+	    case types.ADD_SUCCESS_TYPE:
 	      return (0, _lodash.assign)({}, state, {
 	        successType: state.successType + 1
 	      });
 
-	    case types.ADD_ERROR:
+	    case types.ADD_ERROR_TYPE:
 	      return (0, _lodash.assign)({}, state, {
 	        errors: state.errors + 1
 	      });

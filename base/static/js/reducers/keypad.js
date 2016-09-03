@@ -26,14 +26,14 @@ const INITIAL_STATE = {
 
   errorsTypes: 0,
 
-  idCharsToType: 'f',
+  idCharsToType: 'b',
 
   metronomeStatus: 0,
 
   metronomeInterval: 800,
 
   // 1 - Text, 2 - Learning
-  mode: 2,
+  mode: 'text',
 
   learningAlphabetSize: 9,
 
@@ -97,7 +97,6 @@ const pressKey = (state, char) => {
       rightTypedChars += 1;
 
       idCharsToType = getIdsFromChar(keys, textEntities[textId].last[0]);
-
     } else {
       pressedWrongIds = pressedWrongIds.concat(idChars);
 
@@ -154,6 +153,24 @@ const pressKey = (state, char) => {
   }
 
   return state;
+}
+
+const sliceChar = (chars, idChars) => {
+  let newChars = chars.slice();
+
+  forEach(idChars, id => {
+    let index = newChars.indexOf(id);
+
+    if (index + 1) {
+      newChars = [
+        ...newChars.slice(0, index),
+        ...newChars.slice(index + 1)
+      ]
+    }
+
+  });
+
+  return newChars;
 }
 
 const generateLesson = (() => {
@@ -238,8 +255,8 @@ const actionMetronome = (state, action, value) => {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case types.PRESS_KEY:
-      return pressKey(state, action.char);
+    /*case types.PRESS_KEY:
+      return pressKey(state, action.char);*/
 
     case types.STOP_BEEN_PRESSED_KEY:
       return (() => {
@@ -256,6 +273,12 @@ export default (state = INITIAL_STATE, action) => {
       })()
 
     case types.SET_PRESSED_RIGHT_IDS:
+
+      if (action.ids === undefined) {
+        debugger;
+      }
+
+      console.log('action.ids', action.ids);
       return assign({}, state, {
         pressedRightIds: action.ids
       });
@@ -265,17 +288,17 @@ export default (state = INITIAL_STATE, action) => {
         pressedWrongIds: action.ids
       });
 
-    case types.SET_CHAR_ID_TO_TYPE:
+    case types.SET_IDS_CHAR_TO_TYPE:
       return assign({}, state, {
-        pressedWrongIds: action.id
+        idCharsToType: action.id
       });
 
-    case types.ADD_RIGHT_TYPED_CHARS:
+    case types.ADD_SUCCESS_TYPE:
       return assign({}, state, {
         successType: state.successType + 1
       });
 
-    case types.ADD_ERROR:
+    case types.ADD_ERROR_TYPE:
       return assign({}, state, {
         errors: state.errors + 1
       });

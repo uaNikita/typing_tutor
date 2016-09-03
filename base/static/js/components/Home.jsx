@@ -16,12 +16,12 @@ class Home extends Component {
             errors,
             mode
           } = this.props
-
+    
     switch (mode) {
-      case 1:
+      case 'text':
         area = <Textarea />
         break
-      case 2:
+      case 'learning':
         area = <Learningarea />
         break
     }

@@ -1,4 +1,5 @@
 import * as types from '../constants/action_types';
+import {find, forEach} from 'lodash';
 
 export function pressKey(char) {
   return {
@@ -109,20 +110,20 @@ export function setPressedWrongIds(ids) {
 
 export function setIdsCharToType(id) {
   return {
-    type: types.SET_CHAR_ID_TO_TYPE,
+    type: types.SET_IDS_CHAR_TO_TYPE,
     id
   };
 }
 
 export function addSuccesType() {
   return {
-    type: types.ADD_RIGHT_TYPED_CHARS
+    type: types.ADD_SUCCESS_TYPE
   };
 }
 
 export function addErrorType() {
   return {
-    type: types.ADD_ERROR
+    type: types.ADD_ERROR_TYPE
   };
 }
 
@@ -183,25 +184,30 @@ const sliceChar = (chars, idChars) => {
   return newChars;
 }
 
-function typeTextMode(char, dispatch, getState) {
+function textTypeMode(char, dispatch, getState) {
+  let state = getState();
+  let keyboardState = getState().keyboard;
+  let keys = find(state.keyboard.keyboards, {'name': keyboardState.keyboardName}).keys
   var textModeState = state.textMode;
-
   let textId = textModeState.currentTextId;
   let idsChar = getIdsFromChar(keys, char);
 
-  if (textModeState.entitie[textId].last[0] === char) {
-    let pressedRightIds = sliceChar(state.pressedRightIds, idsChar);
-
+  if (textModeState.entities[textId].last[0] === char) {
+    let pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
+    
     dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
 
     dispatch(typeOnEntitie(textId));
 
     dispatch(addSuccesType());
 
-    dispatch(setIdsCharToType(getIdsFromChar(keys, textModeState.entities[textId].last[0])));
+    // get char from new state
+    let idsCharToType = getIdsFromChar(keys, getState().textMode.entities[textId].last[0]);
+
+    dispatch(setIdsCharToType(idsCharToType));
 
   } else {
-    let pressedWrongIds = sliceChar(state.pressedWrongIds, idChars)
+    let pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar)
 
     dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
 
@@ -213,7 +219,6 @@ function typeLearningMode(char, dispatch, getState) {
 
 }
 
-
 export function typeChar(char) {
   return (dispatch, getState) => {
     dispatch(pressKey(char));
@@ -223,12 +228,11 @@ export function typeChar(char) {
     }, 100);
 
     switch (getState().keyboard.mode) {
-      case 1:
-
-
-        typeTextMode(char, dispatch, getState)
+      // text mode
+      case 'text':
+        textTypeMode(char, dispatch, getState)
         break
-      case 2:
+      case 'learing':
         dispatch(typeLearningMode(char))
         break
     }

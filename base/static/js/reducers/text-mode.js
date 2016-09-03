@@ -1,5 +1,5 @@
 import * as types from '../constants/action_types';
-import {assign} from 'lodash';
+import {assign, cloneDeep} from 'lodash';
 
 const INITIAL_STATE = {
   currentTextId: 2,
@@ -32,30 +32,6 @@ const INITIAL_STATE = {
     }
   }
 };
-
-const getIdsFromChar = (keys, char) => {
-  let charsToType = [];
-
-  keys.forEach(obj => {
-
-    // check if it upper case letter
-    if (obj.shiftKey === char) {
-      charsToType.push(obj.id);
-
-      if (obj.hand === 'left') {
-        charsToType.push('Right Shift');
-      } else if (obj.hand === 'right') {
-        charsToType.push('Left Shift');
-      }
-
-    } else if (obj.key === char) {
-      charsToType.push(obj.id)
-    }
-
-  });
-
-  return charsToType;
-}
 
 let nextTextId = 10
 
@@ -95,6 +71,7 @@ export default (state = INITIAL_STATE, action) => {
     case types.TYPE_ON_ENTITIE:
       return (() => {
         let entities = cloneDeep(state.entities);
+
         let text = entities[action.textId];
 
         text.typed += text.last[0];
@@ -104,41 +81,6 @@ export default (state = INITIAL_STATE, action) => {
           entities
         });
 
-      })()
-
-    case types.TYPE_TEXT_MODE:
-      return (() => {
-        let textEntities = cloneDeep(state.entities);
-        let textId = state.currentTextId;
-        let charToType = textEntities[textId].last[0];
-        let idCharsToType = getIdsFromChar(keys, charToType);
-
-        if (charToType === action.char) {
-
-          pressedRightIds = pressedRightIds.concat(idChars);
-
-          textEntities[textId].typed += action.char;
-
-          textEntities[textId].last = textEntities[textId].last.substring(1);
-
-          rightTypedChars += 1;
-
-          idCharsToType = getIdsFromChar(keys, textEntities[textId].last[0]);
-
-        } else {
-          pressedWrongIds = pressedWrongIds.concat(idChars);
-
-          errors += 1;
-        }
-
-        return assign({}, state, {
-          pressedRightIds,
-          pressedWrongIds,
-          idCharsToType,
-          textEntities,
-          rightTypedChars,
-          errors
-        })
       })()
 
     default:
