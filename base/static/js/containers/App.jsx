@@ -12,7 +12,12 @@ import LearningMode from './LearningMode.jsx';
 import Keyboard from './Keyboard.jsx';
 
 import store from './../store';
-import {typeChar, updateStartVariables, setMode, updateCharToType} from '../actions/actions'
+import {
+  typeChar,
+  updateStartVariables,
+  setMode,
+  updateCharToType
+} from '../actions/main'
 
 export default class App extends Component {
 
@@ -65,9 +70,13 @@ export default class App extends Component {
 
   _onTextEnter() {
     store.dispatch(setMode('text'));
+
+    store.dispatch(updateCharToType());
   }
 
   _onLearningEnter() {
     store.dispatch(setMode('learning'));
+
+    store.dispatch(updateCharToType());
   }
 }

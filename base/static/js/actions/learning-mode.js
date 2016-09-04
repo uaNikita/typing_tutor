@@ -1,0 +1,161 @@
+import {find, random, times} from 'lodash';
+import {
+  setIdsCharToType,
+  setPressedRightIds,
+  setPressedWrongIds,
+  addSuccesType,
+  addErrorType,
+  updateCharToType
+} from "./main";
+import { getIdsFromChar, sliceChar } from "../utils";
+
+export const SET_LESSON_ALPHABET_SIZE = 'SET_LESSON_ALPHABET_SIZE';
+export const SET_LESSON_MAX_WORD_LENGTH = 'SET_LESSON_MAX_WORD_LENGTH';
+export const TYPE_ON_LESSON = 'TYPE_ON_LESSON';
+export const SET_LESSON = 'SET_LESSON';
+
+const generateLesson = (() => {
+  let minWordLength = 3;
+  let maxChars = 50;
+
+  return (alphabetRange, maxWordLength, keys) => {
+    let lesson = '';
+
+    let charset = keys.reduce((charset, key) => {
+
+      if (key.type === 'letter') {
+        charset.push(key.id)
+      }
+
+      return charset
+
+    }, []);
+
+    let wordLength;
+
+    while (lesson.length <= maxChars) {
+      wordLength = random(minWordLength, maxWordLength);
+
+      if (lesson.length + wordLength > maxChars) {
+        wordLength = maxChars - lesson.length;
+
+        if (wordLength < 3) {
+          break;
+        }
+      }
+
+      times(wordLength, function () {
+        let idxLetter = random(0, alphabetRange - 1);
+
+        lesson += charset[idxLetter];
+      });
+
+      lesson += ' ';
+
+    }
+
+    lesson = lesson.slice(0, -1)
+
+    return lesson;
+  }
+})();
+
+export function setLessonAlphabetSize(size) {
+  return {
+    type: SET_LESSON_ALPHABET_SIZE,
+    size
+  };
+}
+
+export function setLessonMaxWordLength(length) {
+  return {
+    type: SET_LESSON_MAX_WORD_LENGTH,
+    length
+  };
+}
+
+export function typeOnLesson() {
+  return {
+    type: TYPE_ON_LESSON
+  };
+}
+
+export function setLesson(lesson) {
+  return {
+    type: SET_LESSON,
+    lesson
+  };
+}
+
+export function updateFromLearningModeCharToType() {
+  return (dispatch, getState) => {
+    let state = getState();
+    let keys = find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys;
+    let idsCharToType = getIdsFromChar(keys, state.learningMode.lesson.last[0]);
+
+    dispatch(setIdsCharToType(idsCharToType));
+  }
+}
+
+export function updateLesson() {
+  return (dispatch, getState) => {
+    let state = getState();
+    let keys = find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys
+    let lesson = generateLesson(state.learningMode.alphabetSize, state.learningMode.maxWordLength, keys);
+
+    dispatch(setLesson(lesson));
+
+    dispatch(updateFromLearningModeCharToType());
+  }
+}
+
+export function updateLessonAlphabetSize(size) {
+  return (dispatch, getState) => {
+    dispatch(setLessonAlphabetSize(size));
+
+    dispatch(updateLesson());
+  }
+}
+
+export function updateLessonMaxWordLength(length) {
+  return (dispatch, getState) => {
+    dispatch(setLessonMaxWordLength(length));
+
+    dispatch(updateLesson());
+  }
+}
+
+
+
+export function typeLearningMode(char) {
+  return (dispatch, getState) => {
+    let state = getState();
+    let keyboardState = state.keyboard;
+    var learningModeState = state.learningMode;
+    let keys = find(keyboardState.keyboards, {'name': keyboardState.keyboardName}).keys
+    let idsChar = getIdsFromChar(keys, char);
+
+    if (learningModeState.lesson.last[0] === char) {
+      let pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
+
+      dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
+
+      dispatch(typeOnLesson());
+
+      if (getState().learningMode.lesson.last.length === 0) {
+        dispatch(updateLesson());
+      }
+
+      dispatch(addSuccesType());
+
+      dispatch(updateCharToType());
+
+    } else {
+      let pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar)
+
+      dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
+
+      dispatch(addErrorType());
+    }
+  }
+}

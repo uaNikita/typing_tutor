@@ -1,9 +1,6 @@
 import {connect} from 'react-redux'
 import LearningMode from '../components/LearningMode.jsx'
-import {updateLessonAlphabetSize, updateLessonMaxWordLength} from '../actions/actions.js'
-
-
-
+import {updateLessonAlphabetSize, updateLessonMaxWordLength} from '../actions/learning-mode'
 
 const mapStateToProps = (state) => {
   return {

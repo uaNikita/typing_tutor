@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import Login from '../../components/auth/Login.jsx'
-import {openModal} from '../../actions/actions.js'
+import {openModal} from '../../actions/main'
 
 const mapStateToProps = (state) => {
   return {}

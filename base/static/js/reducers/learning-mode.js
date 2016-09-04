@@ -1,4 +1,9 @@
-import * as types from '../constants/action_types';
+import {
+  TYPE_ON_LESSON,
+  SET_LESSON,
+  SET_LESSON_ALPHABET_SIZE,
+  SET_LESSON_MAX_WORD_LENGTH
+} from '../actions/learning-mode';
 import {assign, cloneDeep} from 'lodash';
 
 const INITIAL_STATE = {
@@ -61,7 +66,7 @@ const generateLesson = (() => {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case types.TYPE_ON_LESSON:
+    case TYPE_ON_LESSON:
       return assign({}, state, {
         lesson: {
           typed: state.lesson.typed + state.lesson.last[0],
@@ -69,7 +74,7 @@ export default (state = INITIAL_STATE, action) => {
         }
       })
 
-    case types.SET_LESSON:
+    case SET_LESSON:
       return assign({}, state, {
         lesson: {
           typed: '',
@@ -77,13 +82,13 @@ export default (state = INITIAL_STATE, action) => {
         }
       })
 
-    case types.SET_LESSON_ALPHABET_SIZE:
+    case SET_LESSON_ALPHABET_SIZE:
       return assign({}, state, {
         alphabetSize: action.size
       });
 
 
-    case types.SET_LESSON_MAX_WORD_LENGTH:
+    case SET_LESSON_MAX_WORD_LENGTH:
       return assign({}, state, {
         maxWordLength: action.length
       });

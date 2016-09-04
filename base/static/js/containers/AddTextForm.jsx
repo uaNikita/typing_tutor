@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { map } from 'lodash';
 import Textarea from '../components/AddTextForm.jsx'
-import { addNewText } from '../actions/actions.js'
+import { addNewText } from '../actions/text-mode'
 
 
 const mapStateToProps = (state) => {

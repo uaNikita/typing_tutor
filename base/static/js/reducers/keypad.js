@@ -32,185 +32,9 @@ const INITIAL_STATE = {
 
   metronomeInterval: 800,
 
-  // 1 - Text, 2 - Learning
-  mode: 'learning',
+  // text, learning
+  mode: 'text',
 };
-
-// slice char from chars array and return new chars array
-
-const generateLesson = (() => {
-  let minWordLength = 3;
-  let maxChars = 50;
-
-  return (alphabetRange, maxWordLength, keys) => {
-    let lesson = '';
-
-    let charset = keys.reduce((charset, key) => {
-
-      if (key.type === 'letter') {
-        charset.push(key.id)
-      }
-
-      return charset
-
-    }, []);
-
-    let wordLength;
-
-    while (lesson.length <= maxChars) {
-      wordLength = random(minWordLength, maxWordLength);
-
-      if (lesson.length + wordLength > maxChars) {
-        wordLength = maxChars - lesson.length;
-
-        if (wordLength < 3) {
-          break;
-        }
-      }
-
-      times(wordLength, function () {
-        let idxLetter = random(0, alphabetRange - 1);
-
-        lesson += charset[idxLetter];
-      });
-
-      lesson += ' ';
-
-    }
-
-    lesson = lesson.slice(0, -1)
-
-    return lesson;
-
-  }
-})();
-
-const getIdsFromChar = (keys, char) => {
-  let charsToType = [];
-
-  keys.forEach(obj => {
-
-    // check if it upper case letter
-    if (obj.shiftKey === char) {
-      charsToType.push(obj.id);
-
-      if (obj.hand === 'left') {
-        charsToType.push('Right Shift');
-      } else if (obj.hand === 'right') {
-        charsToType.push('Left Shift');
-      }
-
-    } else if (obj.key === char) {
-      charsToType.push(obj.id)
-    }
-
-  });
-
-  return charsToType;
-}
-
-const pressKey = (state, char) => {
-  let rightTypedChars = state.rightTypedChars;
-  let errors = state.errors;
-  let keys = find(state.keyboards, {'name': state.keyboardName}).keys
-  let idChars = getIdsFromChar(keys, char)
-  let pressedRightIds = sliceChar(state.pressedRightIds, idChars)
-  let pressedWrongIds = sliceChar(state.pressedWrongIds, idChars)
-
-  if (state.mode === 1) {
-    let textEntities = cloneDeep(state.textEntities);
-    let textId = state.currentTextId;
-    let charToType = textEntities[textId].last[0];
-    let idCharsToType = getIdsFromChar(keys, charToType);
-
-    if (charToType === char) {
-
-      pressedRightIds = pressedRightIds.concat(idChars);
-
-      textEntities[textId].typed += char;
-
-      textEntities[textId].last = textEntities[textId].last.substring(1);
-
-      rightTypedChars += 1;
-
-      idCharsToType = getIdsFromChar(keys, textEntities[textId].last[0]);
-    } else {
-      pressedWrongIds = pressedWrongIds.concat(idChars);
-
-      errors += 1;
-    }
-
-    return assign({}, state, {
-      pressedRightIds,
-      pressedWrongIds,
-      idCharsToType,
-      textEntities,
-      rightTypedChars,
-      errors
-    })
-
-  } else if (state.mode === 2) {
-    let learningLesson = clone(state.learningLesson);
-    let charToType = state.learningLesson.last[0];
-    let idCharsToType = getIdsFromChar(keys, charToType);
-
-    if (charToType === char) {
-
-      pressedRightIds = pressedRightIds.concat(idChars);
-
-      learningLesson.typed += char;
-
-      learningLesson.last = learningLesson.last.substring(1);
-
-      rightTypedChars += 1;
-
-      if (learningLesson.last.length === 0) {
-        let keys = find(state.keyboards, {'name': state.keyboardName}).keys
-
-        learningLesson = generateLesson(state.learningAlphabetSize, state.learningMaxWordLength, keys);
-      }
-
-      idCharsToType = getIdsFromChar(keys, learningLesson.last[0]);
-
-    } else {
-      pressedWrongIds = pressedWrongIds.concat(idChars);
-
-      errors += 1;
-    }
-
-    return assign({}, state, {
-      pressedRightIds,
-      pressedWrongIds,
-      idCharsToType,
-      learningLesson,
-      rightTypedChars,
-      errors
-    })
-
-  }
-
-  return state;
-}
-
-const sliceChar = (chars, idChars) => {
-  let newChars = chars.slice();
-
-  forEach(idChars, id => {
-    let index = newChars.indexOf(id);
-
-    if (index + 1) {
-      newChars = [
-        ...newChars.slice(0, index),
-        ...newChars.slice(index + 1)
-      ]
-    }
-
-  });
-
-  return newChars;
-}
-
-
 
 const actionMetronome = (state, action, value) => {
   let newState;
@@ -244,23 +68,6 @@ const actionMetronome = (state, action, value) => {
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    /*case types.PRESS_KEY:
-      return pressKey(state, action.char);*/
-
-    case types.STOP_BEEN_PRESSED_KEY:
-      return (() => {
-        let keys = find(state.keyboards, {'name': state.keyboardName}).keys;
-
-        let sliceCurrentChar = pressed => {
-          return sliceChar(pressed, getIdsFromChar(keys, action.char))
-        }
-
-        return assign({}, state, {
-          pressedRightIds: sliceCurrentChar(state.pressedRightIds),
-          pressedWrongIds: sliceCurrentChar(state.pressedWrongIds)
-        });
-      })()
-
     case types.SET_PRESSED_RIGHT_IDS:
       return assign({}, state, {
         pressedRightIds: action.ids
@@ -285,7 +92,6 @@ export default (state = INITIAL_STATE, action) => {
       return assign({}, state, {
         errorTypes: state.errorTypes + 1
       });
-
 
     case types.UPDATE_START_VARIABLES:
       return assign({}, state, {

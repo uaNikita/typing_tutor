@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import Keyboard from '../components/Keyboard.jsx'
-import {setKeyboard} from '../actions/actions.js'
+import {setKeyboard} from '../actions/main'
 
 const mapStateToProps = (state) => {
   return {

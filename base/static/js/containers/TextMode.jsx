@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { map } from 'lodash';
 import TextMode from '../components/TextMode.jsx'
-import { selectText, refreshText } from '../actions/actions.js'
+import { selectText, refreshText } from '../actions/text-mode'
 
 const mapStateToProps = (state) => {
 
