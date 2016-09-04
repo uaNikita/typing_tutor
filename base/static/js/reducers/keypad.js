@@ -33,20 +33,57 @@ const INITIAL_STATE = {
   metronomeInterval: 800,
 
   // 1 - Text, 2 - Learning
-  mode: 'text',
-
-  learningAlphabetSize: 9,
-
-  learningMaxWordLength: 5,
-
-  learningLesson: {
-    typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
-    last: 'da'
-  }
+  mode: 'learning',
 };
 
 // slice char from chars array and return new chars array
 
+const generateLesson = (() => {
+  let minWordLength = 3;
+  let maxChars = 50;
+
+  return (alphabetRange, maxWordLength, keys) => {
+    let lesson = '';
+
+    let charset = keys.reduce((charset, key) => {
+
+      if (key.type === 'letter') {
+        charset.push(key.id)
+      }
+
+      return charset
+
+    }, []);
+
+    let wordLength;
+
+    while (lesson.length <= maxChars) {
+      wordLength = random(minWordLength, maxWordLength);
+
+      if (lesson.length + wordLength > maxChars) {
+        wordLength = maxChars - lesson.length;
+
+        if (wordLength < 3) {
+          break;
+        }
+      }
+
+      times(wordLength, function () {
+        let idxLetter = random(0, alphabetRange - 1);
+
+        lesson += charset[idxLetter];
+      });
+
+      lesson += ' ';
+
+    }
+
+    lesson = lesson.slice(0, -1)
+
+    return lesson;
+
+  }
+})();
 
 const getIdsFromChar = (keys, char) => {
   let charsToType = [];
@@ -173,55 +210,7 @@ const sliceChar = (chars, idChars) => {
   return newChars;
 }
 
-const generateLesson = (() => {
-  let minWordLength = 3;
-  let maxChars = 50;
 
-  return (alphabetRange, maxWordLength, keys) => {
-    let lesson = '';
-
-    let charset = keys.reduce((charset, key) => {
-
-      if (key.type === 'letter') {
-        charset.push(key.id)
-      }
-
-      return charset
-
-    }, []);
-
-    let wordLength;
-
-    while (lesson.length <= maxChars) {
-      wordLength = random(minWordLength, maxWordLength);
-
-      if (lesson.length + wordLength > maxChars) {
-        wordLength = maxChars - lesson.length;
-
-        if (wordLength < 3) {
-          break;
-        }
-      }
-
-      times(wordLength, function () {
-        let idxLetter = random(0, alphabetRange - 1);
-
-        lesson += charset[idxLetter];
-      });
-
-      lesson += ' ';
-
-    }
-
-    lesson = lesson.slice(0, -1)
-
-    return {
-      typed: '',
-      last: lesson
-    };
-
-  }
-})();
 
 const actionMetronome = (state, action, value) => {
   let newState;
@@ -304,26 +293,6 @@ export default (state = INITIAL_STATE, action) => {
         successTypes: 0,
         errorTypes: 0,
       });
-
-    case types.SET_LESSON_ALPHABET_SIZE:
-      return (() => {
-        let keys = find(state.keyboards, {'name': state.keyboardName}).keys;
-
-        return assign({}, state, {
-          learningAlphabetSize: action.alphabetSize,
-          learningLesson: generateLesson(action.alphabetSize, state.learningMaxWordLength, keys),
-        });
-      })()
-
-    case types.SET_LESSON_MAX_WORD_LENGTH:
-      return (() => {
-        let keys = find(state.keyboards, {'name': state.keyboardName}).keys;
-
-        return assign({}, state, {
-          learningMaxWordLength: action.maxWordLength,
-          learningLesson: generateLesson(state.learningAlphabetSize, action.maxWordLength, keys),
-        })
-      })()
 
     case types.SET_MODE:
       return assign({}, state, {

@@ -64,10 +64,10 @@ export default class App extends Component {
   }
 
   _onTextEnter() {
-    store.dispatch(setMode(1));
+    store.dispatch(setMode('text'));
   }
 
   _onLearningEnter() {
-    store.dispatch(setMode(2));
+    store.dispatch(setMode('learning'));
   }
 }

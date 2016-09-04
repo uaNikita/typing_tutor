@@ -9,7 +9,7 @@ import Metronome from '../containers/Metronome.jsx';
 class Home extends Component {
   render() {
     let area;
-
+    
     const {
             successTypes,
             errorTypes,

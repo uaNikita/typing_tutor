@@ -30,7 +30,7 @@ class Learningarea extends Component {
   }
 
   _getCharsMarkup(string) {
-
+    
     return string.split('').map((char, idx) => {
 
       if (char === ' ') {

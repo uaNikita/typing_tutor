@@ -60,7 +60,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(535);
+	__webpack_require__(536);
 
 	_reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById('root'));
 
@@ -21480,12 +21480,12 @@
 	  }, {
 	    key: '_onTextEnter',
 	    value: function _onTextEnter() {
-	      _store2.default.dispatch((0, _actions.setMode)(1));
+	      _store2.default.dispatch((0, _actions.setMode)('text'));
 	    }
 	  }, {
 	    key: '_onLearningEnter',
 	    value: function _onLearningEnter() {
-	      _store2.default.dispatch((0, _actions.setMode)(2));
+	      _store2.default.dispatch((0, _actions.setMode)('learning'));
 	    }
 	  }]);
 
@@ -39990,9 +39990,13 @@
 	exports.setIdsCharToType = setIdsCharToType;
 	exports.addSuccesType = addSuccesType;
 	exports.addErrorType = addErrorType;
-	exports.typeCharTextEntitie = typeCharTextEntitie;
 	exports.typeOnEntitie = typeOnEntitie;
+	exports.typeOnLesson = typeOnLesson;
+	exports.setLesson = setLesson;
 	exports.updateCharToType = updateCharToType;
+	exports.updateLesson = updateLesson;
+	exports.updateLessonAlphabetSize = updateLessonAlphabetSize;
+	exports.updateLessonMaxWordLength = updateLessonMaxWordLength;
 	exports.typeChar = typeChar;
 
 	var _action_types = __webpack_require__(275);
@@ -40047,17 +40051,17 @@
 	  };
 	}
 
-	function setLessonAlphabetSize(alphabetSize) {
+	function setLessonAlphabetSize(size) {
 	  return {
 	    type: types.SET_LESSON_ALPHABET_SIZE,
-	    alphabetSize: alphabetSize
+	    size: size
 	  };
 	}
 
-	function setLessonMaxWordLength(maxWordLength) {
+	function setLessonMaxWordLength(length) {
 	  return {
 	    type: types.SET_LESSON_MAX_WORD_LENGTH,
-	    maxWordLength: maxWordLength
+	    length: length
 	  };
 	}
 
@@ -40130,17 +40134,23 @@
 	  };
 	}
 
-	function typeCharTextEntitie(textId) {
-	  return {
-	    type: types.TYPE_CHAR_TEXT_ENTITIE,
-	    textId: textId
-	  };
-	}
-
 	function typeOnEntitie(textId) {
 	  return {
 	    type: types.TYPE_ON_ENTITIE,
 	    textId: textId
+	  };
+	}
+
+	function typeOnLesson() {
+	  return {
+	    type: types.TYPE_ON_LESSON
+	  };
+	}
+
+	function setLesson(lesson) {
+	  return {
+	    type: types.SET_LESSON,
+	    lesson: lesson
 	  };
 	}
 
@@ -40180,57 +40190,163 @@
 	  return newChars;
 	};
 
-	function updateCharToType(char) {
+	var generateLesson = function () {
+	  var minWordLength = 3;
+	  var maxChars = 50;
+
+	  return function (alphabetRange, maxWordLength, keys) {
+	    var lesson = '';
+
+	    var charset = keys.reduce(function (charset, key) {
+
+	      if (key.type === 'letter') {
+	        charset.push(key.id);
+	      }
+
+	      return charset;
+	    }, []);
+
+	    var wordLength = void 0;
+
+	    while (lesson.length <= maxChars) {
+	      wordLength = (0, _lodash.random)(minWordLength, maxWordLength);
+
+	      if (lesson.length + wordLength > maxChars) {
+	        wordLength = maxChars - lesson.length;
+
+	        if (wordLength < 3) {
+	          break;
+	        }
+	      }
+
+	      (0, _lodash.times)(wordLength, function () {
+	        var idxLetter = (0, _lodash.random)(0, alphabetRange - 1);
+
+	        lesson += charset[idxLetter];
+	      });
+
+	      lesson += ' ';
+	    }
+
+	    lesson = lesson.slice(0, -1);
+
+	    return lesson;
+	  };
+	}();
+
+	function updateCharToType() {
 	  return function (dispatch, getState) {
 	    var state = getState();
+	    var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
+	    var idsCharToType = void 0;
 
-	    switch (getState().keyboard.mode) {
+	    switch (state.keyboard.mode) {
 	      // text mode
 	      case 'text':
-	        var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
-	        var textId = getState().textMode.currentTextId;
-	        var entities = getState().textMode.entities;
+	        var textId = state.textMode.currentTextId;
+	        var entities = state.textMode.entities;
 
-	        var idsCharToType = getIdsFromChar(keys, entities[textId].last[0]);
+	        idsCharToType = getIdsFromChar(keys, entities[textId].last[0]);
 
 	        dispatch(setIdsCharToType(idsCharToType));
 
 	        break;
-	      case 'learing':
-	        dispatch(typeLearningMode(char));
+	      case 'learning':
+	        idsCharToType = getIdsFromChar(keys, state.learningMode.lesson.last[0]);
+
+	        dispatch(setIdsCharToType(idsCharToType));
+
 	        break;
 	    }
 	  };
 	}
 
-	function textTypeMode(char, dispatch, getState) {
-	  var state = getState();
-	  var keyboardState = getState().keyboard;
-	  var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboardName }).keys;
-	  var textModeState = state.textMode;
-	  var textId = textModeState.currentTextId;
-	  var idsChar = getIdsFromChar(keys, char);
+	function updateLesson() {
+	  return function (dispatch, getState) {
+	    var state = getState();
+	    var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
+	    var lesson = generateLesson(state.learningMode.alphabetSize, state.learningMode.maxWordLength, keys);
 
-	  if (textModeState.entities[textId].last[0] === char) {
-	    var pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
-
-	    dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
-
-	    dispatch(typeOnEntitie(textId));
-
-	    dispatch(addSuccesType());
-
-	    dispatch(updateCharToType());
-	  } else {
-	    var pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar);
-
-	    dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
-
-	    dispatch(addErrorType());
-	  }
+	    dispatch(setLesson(lesson));
+	  };
 	}
 
-	function typeLearningMode(char, dispatch, getState) {}
+	function updateLessonAlphabetSize(size) {
+	  return function (dispatch, getState) {
+	    dispatch(setLessonAlphabetSize(size));
+
+	    dispatch(updateLesson());
+	  };
+	}
+
+	function updateLessonMaxWordLength(length) {
+	  return function (dispatch, getState) {
+	    dispatch(setLessonMaxWordLength(length));
+
+	    dispatch(updateLesson());
+	  };
+	}
+
+	function textTypeMode(char) {
+	  return function (dispatch, getState) {
+	    var state = getState();
+	    var keyboardState = state.keyboard;
+	    var textModeState = state.textMode;
+	    var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboardName }).keys;
+	    var textId = textModeState.currentTextId;
+	    var idsChar = getIdsFromChar(keys, char);
+
+	    if (textModeState.entities[textId].last[0] === char) {
+	      var pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
+
+	      dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
+
+	      dispatch(typeOnEntitie(textId));
+
+	      dispatch(addSuccesType());
+
+	      dispatch(updateCharToType());
+	    } else {
+	      var pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar);
+
+	      dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
+
+	      dispatch(addErrorType());
+	    }
+	  };
+	}
+
+	function typeLearningMode(char) {
+	  return function (dispatch, getState) {
+	    var state = getState();
+	    var keyboardState = state.keyboard;
+	    var learningModeState = state.learningMode;
+	    var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboardName }).keys;
+	    var idsChar = getIdsFromChar(keys, char);
+
+	    if (learningModeState.lesson.last[0] === char) {
+	      var pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
+
+	      dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
+
+	      dispatch(typeOnLesson());
+
+	      if (getState().learningMode.lesson.last.length === 0) {
+	        dispatch(updateLesson());
+	      }
+
+	      dispatch(addSuccesType());
+
+	      dispatch(updateCharToType());
+	    } else {
+	      var pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar);
+
+	      dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
+
+	      dispatch(addErrorType());
+	    }
+	  };
+	}
 
 	function typeChar(char) {
 	  return function (dispatch, getState) {
@@ -40241,11 +40357,10 @@
 	    }, 100);
 
 	    switch (getState().keyboard.mode) {
-	      // text mode
 	      case 'text':
-	        textTypeMode(char, dispatch, getState);
+	        dispatch(textTypeMode(char));
 	        break;
-	      case 'learing':
+	      case 'learning':
 	        dispatch(typeLearningMode(char));
 	        break;
 	    }
@@ -40280,8 +40395,10 @@
 	var SET_IDS_CHAR_TO_TYPE = exports.SET_IDS_CHAR_TO_TYPE = 'SET_IDS_CHAR_TO_TYPE';
 	var ADD_SUCCESS_TYPE = exports.ADD_SUCCESS_TYPE = 'ADD_SUCCESS_TYPE';
 	var ADD_ERROR_TYPE = exports.ADD_ERROR_TYPE = 'ADD_ERROR_TYPE';
-	var TYPE_CHAR_TEXT_ENTITIE = exports.TYPE_CHAR_TEXT_ENTITIE = 'TYPE_CHAR_TEXT_ENTITIE';
+
 	var TYPE_ON_ENTITIE = exports.TYPE_ON_ENTITIE = 'TYPE_ON_ENTITIE';
+	var TYPE_ON_LESSON = exports.TYPE_ON_LESSON = 'TYPE_ON_LESSON';
+	var SET_LESSON = exports.SET_LESSON = 'SET_LESSON';
 
 /***/ },
 /* 276 */
@@ -72830,10 +72947,9 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
-
 	  return {
-	    lessonTyped: state.keyboard.learningLesson.typed,
-	    lessonLast: state.keyboard.learningLesson.last
+	    lessonTyped: state.learningMode.lesson.typed,
+	    lessonLast: state.learningMode.lesson.last
 	  };
 	};
 
@@ -77187,22 +77303,21 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
-
 	  return {
-	    alphabetSize: state.keyboard.learningAlphabetSize,
-	    maxWordLength: state.keyboard.learningMaxWordLength,
-	    lesson: state.keyboard.learningLesson.typed + state.keyboard.learningLesson.last,
+	    alphabetSize: state.learningMode.alphabetSize,
+	    maxWordLength: state.learningMode.maxWordLength,
+	    lesson: state.learningMode.lesson.typed + state.learningMode.lesson.last,
 	    keyboardName: state.keyboard.keyboardName
 	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    setAlphabetSize: function setAlphabetSize(alphabetSize) {
-	      dispatch((0, _actions.setLessonAlphabetSize)(alphabetSize));
+	    setAlphabetSize: function setAlphabetSize(size) {
+	      dispatch((0, _actions.updateLessonAlphabetSize)(size));
 	    },
-	    setMaxWordLength: function setMaxWordLength(maxWordLength) {
-	      dispatch((0, _actions.setLessonMaxWordLength)(maxWordLength));
+	    setMaxWordLength: function setMaxWordLength(length) {
+	      dispatch((0, _actions.updateLessonMaxWordLength)(length));
 	    }
 	  };
 	};
@@ -77295,8 +77410,9 @@
 
 	      (0, _jquery2.default)(this._alphabetRange).find('.noUi-handle').append($noUiValueAlphabet);
 
-	      this._alphabetRange.noUiSlider.on('update', function (values, handle) {
+	      this._alphabetRange.noUiSlider.on('slide', function (values, handle) {
 	        var val = parseInt(values[handle], 10);
+	        console.log('update');
 
 	        self.props.setAlphabetSize(val);
 
@@ -77316,7 +77432,7 @@
 
 	      (0, _jquery2.default)(this._maxWordLengthRange).find('.noUi-handle').append($noUiValueMaxWordLength);
 
-	      this._maxWordLengthRange.noUiSlider.on('update', function (values, handle) {
+	      this._maxWordLengthRange.noUiSlider.on('slide', function (values, handle) {
 	        var val = parseInt(values[handle], 10);
 
 	        self.props.setMaxWordLength(val);
@@ -77886,7 +78002,11 @@
 
 	var _textMode2 = _interopRequireDefault(_textMode);
 
-	var _keypad = __webpack_require__(534);
+	var _learningMode = __webpack_require__(534);
+
+	var _learningMode2 = _interopRequireDefault(_learningMode);
+
+	var _keypad = __webpack_require__(535);
 
 	var _keypad2 = _interopRequireDefault(_keypad);
 
@@ -77896,7 +78016,8 @@
 	  form: _reduxForm.reducer,
 	  keyboard: _keypad2.default,
 	  modal: _modal2.default,
-	  textMode: _textMode2.default
+	  textMode: _textMode2.default,
+	  learningMode: _learningMode2.default
 	});
 
 /***/ },
@@ -78074,6 +78195,116 @@
 
 	var types = _interopRequireWildcard(_action_types);
 
+	var _lodash = __webpack_require__(276);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	var INITIAL_STATE = {
+	  alphabetSize: 9,
+
+	  maxWordLength: 5,
+
+	  lesson: {
+	    typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
+	    last: 'da'
+	  }
+	};
+
+	var generateLesson = function () {
+	  var minWordLength = 3;
+	  var maxChars = 50;
+
+	  return function (alphabetRange, maxWordLength, keys) {
+	    var lesson = '';
+
+	    var charset = keys.reduce(function (charset, key) {
+
+	      if (key.type === 'letter') {
+	        charset.push(key.id);
+	      }
+
+	      return charset;
+	    }, []);
+
+	    var wordLength = void 0;
+
+	    while (lesson.length <= maxChars) {
+	      wordLength = random(minWordLength, maxWordLength);
+
+	      if (lesson.length + wordLength > maxChars) {
+	        wordLength = maxChars - lesson.length;
+
+	        if (wordLength < 3) {
+	          break;
+	        }
+	      }
+
+	      times(wordLength, function () {
+	        var idxLetter = random(0, alphabetRange - 1);
+
+	        lesson += charset[idxLetter];
+	      });
+
+	      lesson += ' ';
+	    }
+
+	    lesson = lesson.slice(0, -1);
+
+	    return lesson;
+	  };
+	}();
+
+	exports.default = function () {
+	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
+	  var action = arguments[1];
+
+	  switch (action.type) {
+	    case types.TYPE_ON_LESSON:
+	      return (0, _lodash.assign)({}, state, {
+	        lesson: {
+	          typed: state.lesson.typed + state.lesson.last[0],
+	          last: state.lesson.last.substring(1)
+	        }
+	      });
+
+	    case types.SET_LESSON:
+	      return (0, _lodash.assign)({}, state, {
+	        lesson: {
+	          typed: '',
+	          last: action.lesson
+	        }
+	      });
+
+	    case types.SET_LESSON_ALPHABET_SIZE:
+	      return (0, _lodash.assign)({}, state, {
+	        alphabetSize: action.size
+	      });
+
+	    case types.SET_LESSON_MAX_WORD_LENGTH:
+	      return (0, _lodash.assign)({}, state, {
+	        maxWordLength: action.length
+	      });
+
+	    default:
+	      return state;
+
+	  }
+	};
+
+/***/ },
+/* 535 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _action_types = __webpack_require__(275);
+
+	var types = _interopRequireWildcard(_action_types);
+
 	var _keyboards = __webpack_require__(509);
 
 	var _keyboards2 = _interopRequireDefault(_keyboards);
@@ -78108,20 +78339,54 @@
 	  metronomeInterval: 800,
 
 	  // 1 - Text, 2 - Learning
-	  mode: 'text',
-
-	  learningAlphabetSize: 9,
-
-	  learningMaxWordLength: 5,
-
-	  learningLesson: {
-	    typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
-	    last: 'da'
-	  }
+	  mode: 'learning'
 	};
 
 	// slice char from chars array and return new chars array
 
+	var generateLesson = function () {
+	  var minWordLength = 3;
+	  var maxChars = 50;
+
+	  return function (alphabetRange, maxWordLength, keys) {
+	    var lesson = '';
+
+	    var charset = keys.reduce(function (charset, key) {
+
+	      if (key.type === 'letter') {
+	        charset.push(key.id);
+	      }
+
+	      return charset;
+	    }, []);
+
+	    var wordLength = void 0;
+
+	    while (lesson.length <= maxChars) {
+	      wordLength = (0, _lodash.random)(minWordLength, maxWordLength);
+
+	      if (lesson.length + wordLength > maxChars) {
+	        wordLength = maxChars - lesson.length;
+
+	        if (wordLength < 3) {
+	          break;
+	        }
+	      }
+
+	      (0, _lodash.times)(wordLength, function () {
+	        var idxLetter = (0, _lodash.random)(0, alphabetRange - 1);
+
+	        lesson += charset[idxLetter];
+	      });
+
+	      lesson += ' ';
+	    }
+
+	    lesson = lesson.slice(0, -1);
+
+	    return lesson;
+	  };
+	}();
 
 	var getIdsFromChar = function getIdsFromChar(keys, char) {
 	  var charsToType = [];
@@ -78239,53 +78504,6 @@
 	  return newChars;
 	};
 
-	var generateLesson = function () {
-	  var minWordLength = 3;
-	  var maxChars = 50;
-
-	  return function (alphabetRange, maxWordLength, keys) {
-	    var lesson = '';
-
-	    var charset = keys.reduce(function (charset, key) {
-
-	      if (key.type === 'letter') {
-	        charset.push(key.id);
-	      }
-
-	      return charset;
-	    }, []);
-
-	    var wordLength = void 0;
-
-	    while (lesson.length <= maxChars) {
-	      wordLength = (0, _lodash.random)(minWordLength, maxWordLength);
-
-	      if (lesson.length + wordLength > maxChars) {
-	        wordLength = maxChars - lesson.length;
-
-	        if (wordLength < 3) {
-	          break;
-	        }
-	      }
-
-	      (0, _lodash.times)(wordLength, function () {
-	        var idxLetter = (0, _lodash.random)(0, alphabetRange - 1);
-
-	        lesson += charset[idxLetter];
-	      });
-
-	      lesson += ' ';
-	    }
-
-	    lesson = lesson.slice(0, -1);
-
-	    return {
-	      typed: '',
-	      last: lesson
-	    };
-	  };
-	}();
-
 	var actionMetronome = function actionMetronome(state, action, value) {
 	  var newState = void 0;
 	  var status = void 0;
@@ -78370,26 +78588,6 @@
 	        errorTypes: 0
 	      });
 
-	    case types.SET_LESSON_ALPHABET_SIZE:
-	      return function () {
-	        var keys = (0, _lodash.find)(state.keyboards, { 'name': state.keyboardName }).keys;
-
-	        return (0, _lodash.assign)({}, state, {
-	          learningAlphabetSize: action.alphabetSize,
-	          learningLesson: generateLesson(action.alphabetSize, state.learningMaxWordLength, keys)
-	        });
-	      }();
-
-	    case types.SET_LESSON_MAX_WORD_LENGTH:
-	      return function () {
-	        var keys = (0, _lodash.find)(state.keyboards, { 'name': state.keyboardName }).keys;
-
-	        return (0, _lodash.assign)({}, state, {
-	          learningMaxWordLength: action.maxWordLength,
-	          learningLesson: generateLesson(state.learningAlphabetSize, action.maxWordLength, keys)
-	        });
-	      }();
-
 	    case types.SET_MODE:
 	      return (0, _lodash.assign)({}, state, {
 	        mode: action.mode
@@ -78410,7 +78608,7 @@
 	};
 
 /***/ },
-/* 535 */
+/* 536 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

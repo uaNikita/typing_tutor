@@ -4,7 +4,7 @@ import {openModal} from '../actions/actions.js'
 
 const mapStateToProps = (state) => {
   let spendTime = (Date.now() - state.keyboard.startTypingTime) / (1000 * 60);
-  
+
   return {
     successTypes: state.keyboard.successTypes,
     errorTypes: state.keyboard.errorTypes,

@@ -11,7 +11,7 @@ class LearningMode extends Component {
 
   constructor(props) {
     super(props);
-
+    
     let keys = find(keyboards, {'name': props.keyboardName}).keys;
 
     this.charset = keys.reduce((charset, key) => {
@@ -44,8 +44,9 @@ class LearningMode extends Component {
 
     $(this._alphabetRange).find('.noUi-handle').append($noUiValueAlphabet);
 
-    this._alphabetRange.noUiSlider.on('update', function (values, handle) {
+    this._alphabetRange.noUiSlider.on('slide', function (values, handle) {
       let val = parseInt(values[handle], 10);
+      console.log('update');
 
       self.props.setAlphabetSize(val);
 
@@ -65,7 +66,7 @@ class LearningMode extends Component {
 
     $(this._maxWordLengthRange).find('.noUi-handle').append($noUiValueMaxWordLength);
 
-    this._maxWordLengthRange.noUiSlider.on('update', function (values, handle) {
+    this._maxWordLengthRange.noUiSlider.on('slide', function (values, handle) {
       let val = parseInt(values[handle], 10);
 
       self.props.setMaxWordLength(val);
