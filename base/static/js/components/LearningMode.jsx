@@ -11,12 +11,12 @@ class LearningMode extends Component {
 
   constructor(props) {
     super(props);
-    
+
     let keys = find(keyboards, {'name': props.keyboardName}).keys;
 
     this.charset = keys.reduce((charset, key) => {
 
-      if ( key.type === 'letter' ) {
+      if (key.type === 'letter') {
         charset.push(key.id)
       }
 
@@ -78,27 +78,30 @@ class LearningMode extends Component {
     let self = this;
 
     let chars = self.charset.map((letter, i) => {
-      let className = 'letter';
+      let className = 'settings-learning__letter';
 
       if (i >= self.props.alphabetSize) {
-        className = classNames(className, 'letter__excluded');
+        className = classNames(className, 'settings-learning__letter_excluded');
       }
 
       return <span key={i} className={className}>{letter}</span>;
     });
 
+    let lessonKeys = this.props.lesson.split('').map((char, idx) => {
+      if (char === ' ') {
+        char = <span key={idx} className="learningarea__space">␣</span>
+      }
+
+      return char;
+    });
+    
     return (
-      <div className="mode__tab-content">
-        <div className="mode__item">
-          <label htmlFor="" className="mode__label">
-            Generated lesson example:
-          </label>
-          <div className="mode__item-ctrl mode__item-generated-lesson">
-            <div className="mode__generated-lesson">
-              {this.props.lesson}
-            </div>
-          </div>
+      <div className="settings-learning">
+
+        <div className='learningarea'>
+          {lessonKeys}
         </div>
+
         <div className="mode__item">
           <label htmlFor="" className="mode__label">
             Lesson's key set
@@ -111,16 +114,16 @@ class LearningMode extends Component {
           <label htmlFor="" className="mode__label">
             Extend alphabet size:
           </label>
-          <div className="mode__item-ctrl mode__item-ctrl-range">
-            <div className="mode__range" ref={(c) => this._alphabetRange = c }></div>
+          <div className="mode__item-ctrl settings-learning__item-ctrl-range">
+            <div className="settings-learning__range" ref={(c) => this._alphabetRange = c }></div>
           </div>
         </div>
         <div className="mode__item">
           <label htmlFor="" className="mode__label">
             Max word length:
           </label>
-          <div className="mode__item-ctrl mode__item-ctrl-range">
-            <div className="mode__range mode__max-word-length" ref={(c) => this._maxWordLengthRange = c }></div>
+          <div className="mode__item-ctrl settings-learning__item-ctrl-range">
+            <div className="settings-learning__range settings-learning__max-word-length" ref={(c) => this._maxWordLengthRange = c }></div>
           </div>
         </div>
       </div>

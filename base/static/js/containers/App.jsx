@@ -43,11 +43,8 @@ export default class App extends Component {
             <IndexRoute component={ Home } onEnter={ this._onKeyboardEnter } />
             <Route path="settings" component={ Settings }>
               <IndexRoute onEnter={this._enterDependOnMode} />
-              <Route path="mode" component={ Mode }>
-                <IndexRoute onEnter={this._enterDependOnMode} />
-                <Route path="text" component={ TextMode } onEnter={ this._onTextEnter } />
-                <Route path="learning" component={ LearningMode } onEnter={ this._onLearningEnter } />
-              </Route>
+              <Route path="text" component={ TextMode } onEnter={ this._onTextEnter } />
+              <Route path="learning" component={ LearningMode } onEnter={ this._onLearningEnter } />
               <Route path="keyboard" component={ Keyboard } />
             </Route>
           </Route>
@@ -63,7 +60,7 @@ export default class App extends Component {
   }
 
   _enterDependOnMode(nextState, replace) {
-    let path = '/settings/mode/' + store.getState().keyboard.mode;
+    let path = '/settings/' + store.getState().keyboard.mode;
 
     replace({
       pathname: path

@@ -48,7 +48,7 @@ class TextMode extends Component {
     })
 
     return (
-      <div className="mode__tab-content">
+      <div className="settings-text">
         <div className="mode__item">
           <label htmlFor="" className="mode__label">
             Current text
