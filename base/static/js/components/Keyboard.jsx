@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import classNames from 'classNames';
 import keyboards from '../constants/keyboards';
-import {find} from 'lodash';
+
 import Key from './Key.jsx';
 
 class Keyboard extends Component {
 
   render() {
 
-    const {keyboardName} = this.props;
+    const {keys, keyboardName} = this.props;
 
-    let keys = find(keyboards, {'name': keyboardName}).keys.map(obj => {
+    let keyNodes = keys.map(obj => {
 
       return <Key
         key={obj.id}
@@ -49,7 +49,7 @@ class Keyboard extends Component {
         </menu>
 
         <div className='keyboard__item'>
-          {keys}
+          {keyNodes}
         </div>
 
       </div>

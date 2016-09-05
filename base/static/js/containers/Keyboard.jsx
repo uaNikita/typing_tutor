@@ -1,10 +1,12 @@
 import {connect} from 'react-redux'
+import {find} from 'lodash';
 import Keyboard from '../components/Keyboard.jsx'
 import {setKeyboard} from '../actions/main'
 
 const mapStateToProps = (state) => {
   return {
-    keyboardName: state.keyboardName
+    keys: find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys,
+    keyboardName: state.keyboard.keyboardName
   }
 }
 

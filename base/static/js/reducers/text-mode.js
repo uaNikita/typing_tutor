@@ -56,6 +56,8 @@ export default (state = INITIAL_STATE, action) => {
       });
 
     case SELECT_TEXT:
+      console.log('action.textId', action.textId);
+      
       return assign({}, state, {
         currentTextId: action.textId
       });

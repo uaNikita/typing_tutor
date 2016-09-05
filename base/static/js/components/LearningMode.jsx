@@ -46,7 +46,6 @@ class LearningMode extends Component {
 
     this._alphabetRange.noUiSlider.on('slide', function (values, handle) {
       let val = parseInt(values[handle], 10);
-      console.log('update');
 
       self.props.setAlphabetSize(val);
 

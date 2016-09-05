@@ -16,13 +16,16 @@ const mapStateToProps = (state) => {
 
   return {
     texts,
-    currentTextId: state.currentTextId
+    currentTextId: state.textMode.currentTextId
   }
 }
+
+
 
 const mapDispatchToProps = (dispatch) => {
   return {
     onSelectText: (textId) => {
+      console.log('onSelectText');
       dispatch(selectText(textId))
     },
     refreshText: (textId) => {

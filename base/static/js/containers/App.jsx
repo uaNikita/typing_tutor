@@ -58,6 +58,8 @@ export default class App extends Component {
 
   _onKeyboardEnter() {
     store.dispatch(updateStartVariables());
+
+    store.dispatch(updateCharToType());
   }
 
   _enterDependOnMode(nextState, replace) {
@@ -70,13 +72,9 @@ export default class App extends Component {
 
   _onTextEnter() {
     store.dispatch(setMode('text'));
-
-    store.dispatch(updateCharToType());
   }
 
   _onLearningEnter() {
     store.dispatch(setMode('learning'));
-
-    store.dispatch(updateCharToType());
   }
 }
