@@ -91,13 +91,22 @@ class LearningMode extends Component {
       <div className="mode__tab-content">
         <div className="mode__item">
           <label htmlFor="" className="mode__label">
+            Generated lesson example:
+          </label>
+          <div className="mode__item-ctrl mode__item-generated-lesson">
+            <div className="mode__generated-lesson">
+              {this.props.lesson}
+            </div>
+          </div>
+        </div>
+        <div className="mode__item">
+          <label htmlFor="" className="mode__label">
             Lesson's key set
           </label>
           <div className="mode__item-ctrl">
             {chars}
           </div>
         </div>
-
         <div className="mode__item">
           <label htmlFor="" className="mode__label">
             Extend alphabet size:
@@ -114,17 +123,6 @@ class LearningMode extends Component {
             <div className="mode__range mode__max-word-length" ref={(c) => this._maxWordLengthRange = c }></div>
           </div>
         </div>
-        <div className="mode__item">
-          <label htmlFor="" className="mode__label">
-            Generated lesson example:
-          </label>
-          <div className="mode__item-ctrl mode__item-generated-lesson">
-            <div className="mode__generated-lesson">
-              {this.props.lesson}
-            </div>
-          </div>
-        </div>
-
       </div>
 
     )
