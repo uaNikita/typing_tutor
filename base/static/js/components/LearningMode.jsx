@@ -94,7 +94,7 @@ class LearningMode extends Component {
 
       return char;
     });
-    
+
     return (
       <div className="settings-learning">
 
@@ -102,30 +102,41 @@ class LearningMode extends Component {
           {lessonKeys}
         </div>
 
-        <div className="mode__item">
-          <label htmlFor="" className="mode__label">
-            Lesson's key set
-          </label>
-          <div className="mode__item-ctrl">
-            {chars}
+        <div className="settings-learning__methods-wrap">
+
+          <div className="settings-learning__methods-menu">
+            <a className="menu__item">Test</a>
+            <a className="menu__item">Test</a>
+          </div>
+
+          <div className="settings-learning__methods-content">
+            <div className="mode__item">
+              <label htmlFor="" className="mode__label">
+                Lesson's key set
+              </label>
+              <div className="mode__item-ctrl">
+                {chars}
+              </div>
+            </div>
+            <div className="mode__item">
+              <label htmlFor="" className="mode__label">
+                Extend alphabet size:
+              </label>
+              <div className="mode__item-ctrl settings-learning__item-ctrl-range">
+                <div className="settings-learning__range" ref={(c) => this._alphabetRange = c }></div>
+              </div>
+            </div>
+            <div className="mode__item">
+              <label htmlFor="" className="mode__label">
+                Max word length:
+              </label>
+              <div className="mode__item-ctrl settings-learning__item-ctrl-range">
+                <div className="settings-learning__range settings-learning__max-word-length" ref={(c) => this._maxWordLengthRange = c }></div>
+              </div>
+            </div>
           </div>
         </div>
-        <div className="mode__item">
-          <label htmlFor="" className="mode__label">
-            Extend alphabet size:
-          </label>
-          <div className="mode__item-ctrl settings-learning__item-ctrl-range">
-            <div className="settings-learning__range" ref={(c) => this._alphabetRange = c }></div>
-          </div>
-        </div>
-        <div className="mode__item">
-          <label htmlFor="" className="mode__label">
-            Max word length:
-          </label>
-          <div className="mode__item-ctrl settings-learning__item-ctrl-range">
-            <div className="settings-learning__range settings-learning__max-word-length" ref={(c) => this._maxWordLengthRange = c }></div>
-          </div>
-        </div>
+
       </div>
 
     )

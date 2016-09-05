@@ -7,9 +7,10 @@
    &__range
       flex-basis: 100%;
    &__max-word-length
-      flex-basis 40%
+      display: flex
+      align-items: center;
    &__letter
-      width: 25px
+      width: 100%
       height: 25px
       display: block
       margin-right: 1px
@@ -20,3 +21,11 @@
          background-color: rgb(182, 25, 11)
       &:not(.settings-learning__letter_excluded) + .settings-learning__letter_excluded
          margin-left: 14px;
+   &__methods
+      &-wrap
+         display: flex;
+      &-menu
+         flex: 0 0 140px;
+      &-content
+         flex: 0 0 700px;
+
