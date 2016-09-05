@@ -2,22 +2,29 @@
    width: 840px;
    margin: 0 auto;
    &__
+      &head
+         height:64px;
+         display: flex
+         justify-content: space-between;
+         align-items center
       &auth
-         margin: 20px 20px 0 0;
-         float: left
+         white-space: nowrap
          &-or
-            margin: 0 10px;
+            margin: 0 8px;
             font-size: 12px;
             color: #656565;
+      &buttons
+         display: flex
+         > *
+            margin:0 5px;
+            &:last-child
+               margin-right: 0
       &nav
          height: 64px
          margin-bottom: 30px
          text-align: right
       &settings
-         display: inline-block;
          border-bottom: none
-         margin-top: 14px;
-         margin-right: 10px
          font-size: 36px;
          text-decoration: none;
       &typing-info

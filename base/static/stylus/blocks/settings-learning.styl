@@ -1,6 +1,14 @@
 .settings-learning
    width: 840px;
    margin: 0 auto;
+   &__
+      &item
+         margin: 30px 0 50px;
+      &label
+         display: block
+         margin-bottom: 28px;
+      &item-ctrl
+         width: 100%;
    &__item-ctrl-range
       display: flex
       align-items: center;
@@ -9,6 +17,8 @@
    &__max-word-length
       display: flex
       align-items: center;
+   &__letters
+      display: flex
    &__letter
       width: 100%
       height: 25px
@@ -28,4 +38,6 @@
          flex: 0 0 140px;
       &-content
          flex: 0 0 700px;
+   .learningarea
+      margin-bottom: 20px
 

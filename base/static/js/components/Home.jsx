@@ -9,7 +9,7 @@ import Metronome from '../containers/Metronome.jsx';
 class Home extends Component {
   render() {
     let area;
-    
+
     const {
             successTypes,
             errorTypes,
@@ -28,17 +28,19 @@ class Home extends Component {
 
     return (
       <div className="home">
-        <div className="home__auth">
-          <a className="home__auth-link" href onClick={this._onLogInClick.bind(this)}>Log In</a>
-          <span className="home__auth-or">or</span>
-          <a className="home__auth-link" href onClick={this._onSignUpClick.bind(this)}>Sign Up</a>
-        </div>
-
-        <Metronome />
-
-        <nav className="home__nav">
+        <div className="home__head">
           <Link className="home__settings fa fa-bars" to="/settings" />
-        </nav>
+
+          <div className="home__buttons">
+            <Metronome />
+            <div className="home__auth">
+              <a className="home__auth-link" href onClick={this._onLogInClick.bind(this)}>Log In</a>
+              <span className="home__auth-or">or</span>
+              <a className="home__auth-link" href onClick={this._onSignUpClick.bind(this)}>Sign Up</a>
+            </div>
+          </div>
+
+        </div>
 
         <div className="home__typing-info">
           <p className="num-chars">
