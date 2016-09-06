@@ -57435,11 +57435,12 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.SET_LESSON = exports.TYPE_ON_LESSON = exports.SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_ALPHABET_SIZE = undefined;
+	exports.SET_LEARNING_MODE = exports.SET_LESSON = exports.TYPE_ON_LESSON = exports.SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_ALPHABET_SIZE = undefined;
 	exports.setLessonAlphabetSize = setLessonAlphabetSize;
 	exports.setLessonMaxWordLength = setLessonMaxWordLength;
 	exports.typeOnLesson = typeOnLesson;
 	exports.setLesson = setLesson;
+	exports.setLearningMode = setLearningMode;
 	exports.updateFromLearningModeCharToType = updateFromLearningModeCharToType;
 	exports.updateLesson = updateLesson;
 	exports.updateLessonAlphabetSize = updateLessonAlphabetSize;
@@ -57456,6 +57457,7 @@
 	var SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_MAX_WORD_LENGTH = 'SET_LESSON_MAX_WORD_LENGTH';
 	var TYPE_ON_LESSON = exports.TYPE_ON_LESSON = 'TYPE_ON_LESSON';
 	var SET_LESSON = exports.SET_LESSON = 'SET_LESSON';
+	var SET_LEARNING_MODE = exports.SET_LEARNING_MODE = 'SET_LEARNING_MODE';
 
 	var generateLesson = function () {
 	  var minWordLength = 3;
@@ -57525,6 +57527,13 @@
 	  return {
 	    type: SET_LESSON,
 	    lesson: lesson
+	  };
+	}
+
+	function setLearningMode(mode) {
+	  return {
+	    type: SET_LEARNING_MODE,
+	    mode: mode
 	  };
 	}
 
@@ -57693,7 +57702,6 @@
 	        case 'Registration':
 	          title = 'Registration';
 	          content = _react2.default.createElement(_Register2.default, null);
-	          console.log(_Register2.default);
 	          break;
 	        case 'ForgotPassword':
 	          title = 'Password reset';
@@ -77769,8 +77777,6 @@
 
 	      var select;
 
-	      console.log(id, currentTextId);
-
 	      if (id === currentTextId) {
 	        select = _react2.default.createElement(
 	          'span',
@@ -77847,20 +77853,19 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    alphabetSize: state.learningMode.alphabetSize,
 	    maxWordLength: state.learningMode.maxWordLength,
 	    lesson: state.learningMode.lesson.typed + state.learningMode.lesson.last,
-	    keyboardName: state.keyboard.keyboardName
+	    mode: state.learningMode.mode
 	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    setAlphabetSize: function setAlphabetSize(size) {
-	      dispatch((0, _learningMode.updateLessonAlphabetSize)(size));
-	    },
 	    setMaxWordLength: function setMaxWordLength(length) {
 	      dispatch((0, _learningMode.updateLessonMaxWordLength)(length));
+	    },
+	    setLearningMode: function setLearningMode(mode) {
+	      dispatch((0, _learningMode.setLearningMode)(mode));
 	    }
 	  };
 	};
@@ -77885,6 +77890,8 @@
 
 	var _reactRouter = __webpack_require__(196);
 
+	var _lodash = __webpack_require__(281);
+
 	var _jquery = __webpack_require__(264);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
@@ -77897,11 +77904,13 @@
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
-	var _lodash = __webpack_require__(281);
+	var _LearningKeyboardTab = __webpack_require__(552);
 
-	var _keyboards = __webpack_require__(517);
+	var _LearningKeyboardTab2 = _interopRequireDefault(_LearningKeyboardTab);
 
-	var _keyboards2 = _interopRequireDefault(_keyboards);
+	var _LearningLettersSetTab = __webpack_require__(553);
+
+	var _LearningLettersSetTab2 = _interopRequireDefault(_LearningLettersSetTab);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -77917,49 +77926,14 @@
 	  function LearningMode(props) {
 	    _classCallCheck(this, LearningMode);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LearningMode).call(this, props));
-
-	    var keys = (0, _lodash.find)(_keyboards2.default, { 'name': props.keyboardName }).keys;
-
-	    _this.charset = keys.reduce(function (charset, key) {
-
-	      if (key.type === 'letter') {
-	        charset.push(key.id);
-	      }
-
-	      return charset;
-	    }, []);
-
-	    return _this;
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(LearningMode).call(this, props));
 	  }
 
 	  _createClass(LearningMode, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      var self = this;
-	      var $noUiValueAlphabet = (0, _jquery2.default)('<span class="noUi-value" />');
 	      var $noUiValueMaxWordLength = (0, _jquery2.default)('<span class="noUi-value" />');
-
-	      // alphabet range
-	      _nouislider2.default.create(this._alphabetRange, {
-	        start: [9],
-	        step: 1,
-	        connect: 'lower',
-	        range: {
-	          'min': 1,
-	          'max': this.charset.length
-	        }
-	      });
-
-	      (0, _jquery2.default)(this._alphabetRange).find('.noUi-handle').append($noUiValueAlphabet);
-
-	      this._alphabetRange.noUiSlider.on('slide', function (values, handle) {
-	        var val = parseInt(values[handle], 10);
-
-	        self.props.setAlphabetSize(val);
-
-	        $noUiValueAlphabet.text(val);
-	      });
 
 	      // max word length range
 	      _nouislider2.default.create(this._maxWordLengthRange, {
@@ -77987,23 +77961,43 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      var self = this;
+	      var _props = this.props;
+	      var mode = _props.mode;
+	      var lesson = _props.lesson;
 
-	      var chars = self.charset.map(function (letter, i) {
-	        var className = 'settings-learning__letter';
+	      var tabContent = void 0;
 
-	        if (i >= self.props.alphabetSize) {
-	          className = (0, _classNames2.default)(className, 'settings-learning__letter_excluded');
+	      console.log('mode', mode);
+
+	      switch (mode) {
+	        case 'letters set':
+	          tabContent = _react2.default.createElement(_LearningLettersSetTab2.default, null);
+	          break;
+	        case 'keyboard':
+	          tabContent = _react2.default.createElement(_LearningKeyboardTab2.default, null);
+	          break;
+	      }
+
+	      var menuItems = ['Letters set', 'Keyboard'].map(function (name, i) {
+	        var linkClass = 'menu__item';
+	        var nameLc = name.toLowerCase();
+
+	        if (nameLc === mode) {
+	          linkClass = (0, _classNames2.default)(linkClass, 'menu__item_selected');
 	        }
 
 	        return _react2.default.createElement(
-	          'span',
-	          { key: i, className: className },
-	          letter
+	          'div',
+	          { key: i, className: 'settings-learning__menu-item' },
+	          _react2.default.createElement(
+	            'a',
+	            { className: linkClass, onClick: _this2._onClickMenu.bind(_this2, nameLc) },
+	            name
+	          )
 	        );
 	      });
 
-	      var lessonKeys = this.props.lesson.split('').map(function (char, idx) {
+	      var lessonKeys = lesson.split('').map(function (char, idx) {
 	        if (char === ' ') {
 	          char = _react2.default.createElement(
 	            'span',
@@ -78025,45 +78019,15 @@
 	        ),
 	        _react2.default.createElement(
 	          'div',
-	          { className: 'settings-learning__methods-wrap' },
+	          { className: 'settings-learning__modes' },
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'settings-learning__methods-menu' },
-	            _react2.default.createElement(
-	              'a',
-	              { className: 'menu__item' },
-	              'Test'
-	            ),
-	            _react2.default.createElement(
-	              'a',
-	              { className: 'menu__item' },
-	              'Test'
-	            )
+	            { className: 'settings-learning__modes-menu' },
+	            menuItems
 	          ),
 	          _react2.default.createElement(
 	            'div',
-	            { className: 'settings-learning__methods-content' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'settings-learning__letters' },
-	              chars
-	            ),
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'settings-learning__item' },
-	              _react2.default.createElement(
-	                'label',
-	                { htmlFor: '', className: 'settings-learning__label' },
-	                'Extend alphabet size:'
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
-	                _react2.default.createElement('div', { className: 'settings-learning__range', ref: function ref(c) {
-	                    return _this2._alphabetRange = c;
-	                  } })
-	              )
-	            ),
+	            { className: 'settings-learning__modes-content' },
 	            _react2.default.createElement(
 	              'div',
 	              { className: 'settings-learning__item' },
@@ -78079,10 +78043,27 @@
 	                    return _this2._maxWordLengthRange = c;
 	                  } })
 	              )
-	            )
+	            ),
+	            tabContent
 	          )
 	        )
 	      );
+	    }
+	  }, {
+	    key: '_onClickMenu',
+	    value: function _onClickMenu(selectedMode, e) {
+	      var _props2 = this.props;
+	      var mode = _props2.mode;
+	      var setLearningMode = _props2.setLearningMode;
+
+
+	      e.preventDefault();
+
+	      if (selectedMode === mode) {
+	        return;
+	      }
+
+	      setLearningMode(selectedMode);
 	    }
 	  }]);
 
@@ -78761,7 +78742,10 @@
 	  lesson: {
 	    typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
 	    last: 'da'
-	  }
+	  },
+
+	  // letters set, keyboard,
+	  mode: 'letters set'
 	};
 
 	var generateLesson = function () {
@@ -78819,6 +78803,12 @@
 	          typed: state.lesson.typed + state.lesson.last[0],
 	          last: state.lesson.last.substring(1)
 	        }
+	      });
+
+	    case _learningMode.SET_LEARNING_MODE:
+	      console.log('SET_LEARNING_MODE', action.mode);
+	      return (0, _lodash.assign)({}, state, {
+	        mode: action.mode
 	      });
 
 	    case _learningMode.SET_LESSON:
@@ -78985,6 +78975,267 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 546 */,
+/* 547 */,
+/* 548 */,
+/* 549 */,
+/* 550 */,
+/* 551 */,
+/* 552 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _reactRedux = __webpack_require__(173);
+
+	var _LearningKeyboardTab = __webpack_require__(554);
+
+	var _LearningKeyboardTab2 = _interopRequireDefault(_LearningKeyboardTab);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    keys: find(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {};
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningKeyboardTab2.default);
+
+/***/ },
+/* 553 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _reactRedux = __webpack_require__(173);
+
+	var _lodash = __webpack_require__(281);
+
+	var _LearningLettersSetTab = __webpack_require__(555);
+
+	var _LearningLettersSetTab2 = _interopRequireDefault(_LearningLettersSetTab);
+
+	var _learningMode = __webpack_require__(285);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    alphabetSize: state.learningMode.alphabetSize,
+	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    setAlphabetSize: function setAlphabetSize(size) {
+	      dispatch((0, _learningMode.updateLessonAlphabetSize)(size));
+	    }
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningLettersSetTab2.default);
+
+/***/ },
+/* 554 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(166);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LearningKeyboardTab = function (_Component) {
+	  _inherits(LearningKeyboardTab, _Component);
+
+	  function LearningKeyboardTab() {
+	    _classCallCheck(this, LearningKeyboardTab);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(LearningKeyboardTab).apply(this, arguments));
+	  }
+
+	  _createClass(LearningKeyboardTab, [{
+	    key: "render",
+	    value: function render() {
+	      return _react2.default.createElement(
+	        "div",
+	        { className: "settings-learning__keyboard" },
+	        "learning__keyboard"
+	      );
+	    }
+	  }]);
+
+	  return LearningKeyboardTab;
+	}(_react.Component);
+
+	exports.default = LearningKeyboardTab;
+
+/***/ },
+/* 555 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(166);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(196);
+
+	var _jquery = __webpack_require__(264);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _nouislider = __webpack_require__(524);
+
+	var _nouislider2 = _interopRequireDefault(_nouislider);
+
+	var _classNames = __webpack_require__(459);
+
+	var _classNames2 = _interopRequireDefault(_classNames);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LearningLettersSetTab = function (_Component) {
+	  _inherits(LearningLettersSetTab, _Component);
+
+	  function LearningLettersSetTab(props) {
+	    _classCallCheck(this, LearningLettersSetTab);
+
+	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LearningLettersSetTab).call(this, props));
+
+	    _this.charset = _this.props.keys.reduce(function (charset, key) {
+	      if (key.type === 'letter') {
+	        charset.push(key.id);
+	      }
+
+	      return charset;
+	    }, []);
+	    return _this;
+	  }
+
+	  _createClass(LearningLettersSetTab, [{
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      var self = this;
+	      var $noUiValueAlphabet = (0, _jquery2.default)('<span class="noUi-value" />');
+
+	      // alphabet range
+	      _nouislider2.default.create(this._alphabetRange, {
+	        start: [9],
+	        step: 1,
+	        connect: 'lower',
+	        range: {
+	          'min': 1,
+	          'max': this.charset.length
+	        }
+	      });
+
+	      (0, _jquery2.default)(this._alphabetRange).find('.noUi-handle').append($noUiValueAlphabet);
+
+	      this._alphabetRange.noUiSlider.on('slide', function (values, handle) {
+	        var val = parseInt(values[handle], 10);
+
+	        self.props.setAlphabetSize(val);
+
+	        $noUiValueAlphabet.text(val);
+	      });
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var self = this;
+
+	      var chars = self.charset.map(function (letter, i) {
+	        var className = 'settings-learning__letter';
+
+	        if (i >= self.props.alphabetSize) {
+	          className = (0, _classNames2.default)(className, 'settings-learning__letter_excluded');
+	        }
+
+	        return _react2.default.createElement(
+	          'span',
+	          { key: i, className: className },
+	          letter
+	        );
+	      });
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'settings-learning__letters-set' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'settings-learning__item' },
+	          _react2.default.createElement(
+	            'label',
+	            { htmlFor: '', className: 'settings-learning__label' },
+	            'Extend alphabet size:'
+	          ),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
+	            _react2.default.createElement('div', { className: 'settings-learning__range', ref: function ref(c) {
+	                return _this2._alphabetRange = c;
+	              } })
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'settings-learning__letters' },
+	          chars
+	        )
+	      );
+	    }
+	  }]);
+
+	  return LearningLettersSetTab;
+	}(_react.Component);
+
+	exports.default = LearningLettersSetTab;
 
 /***/ }
 /******/ ]);

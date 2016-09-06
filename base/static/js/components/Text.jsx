@@ -21,9 +21,6 @@ class Texts extends Component {
 
     var select;
 
-
-    console.log(id, currentTextId);
-
     if (id === currentTextId) {
       select = <span className="text__select text__select_selected">This text is selected</span>
     } else {
@@ -32,12 +29,9 @@ class Texts extends Component {
 
     return (
       <div className="text">
-
         <div className="text__buttons">
           {refresh}
-
           {select}
-
         </div>
 
         <h3 className="text__title">

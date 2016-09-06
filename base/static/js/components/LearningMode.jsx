@@ -1,56 +1,21 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router'
+import {forEach, find} from 'lodash';
 import $ from 'jquery';
 import noUiSlider from 'nouislider';
 import classNames from 'classNames';
-import {forEach, find} from 'lodash';
-import keyboards from '../constants/keyboards';
-
+import LearningKeyboardTab from '../containers/LearningKeyboardTab.jsx'
+import LearningLettersSetTab from '../containers/LearningLettersSetTab.jsx'
 
 class LearningMode extends Component {
 
   constructor(props) {
     super(props);
-
-    let keys = find(keyboards, {'name': props.keyboardName}).keys;
-
-    this.charset = keys.reduce((charset, key) => {
-
-      if (key.type === 'letter') {
-        charset.push(key.id)
-      }
-
-      return charset
-
-    }, []);
-
   }
 
   componentDidMount() {
     let self = this;
-    let $noUiValueAlphabet = $('<span class="noUi-value" />');
     let $noUiValueMaxWordLength = $('<span class="noUi-value" />');
-
-    // alphabet range
-    noUiSlider.create(this._alphabetRange, {
-      start: [9],
-      step: 1,
-      connect: 'lower',
-      range: {
-        'min': 1,
-        'max': this.charset.length
-      }
-    });
-
-    $(this._alphabetRange).find('.noUi-handle').append($noUiValueAlphabet);
-
-    this._alphabetRange.noUiSlider.on('slide', function (values, handle) {
-      let val = parseInt(values[handle], 10);
-
-      self.props.setAlphabetSize(val);
-
-      $noUiValueAlphabet.text(val);
-    });
 
     // max word length range
     noUiSlider.create(this._maxWordLengthRange, {
@@ -75,19 +40,36 @@ class LearningMode extends Component {
   }
 
   render() {
-    let self = this;
+    const {mode, lesson} = this.props;
+    let tabContent;
 
-    let chars = self.charset.map((letter, i) => {
-      let className = 'settings-learning__letter';
+    console.log('mode', mode);
+    
+    switch (mode) {
+      case 'letters set':
+        tabContent = <LearningLettersSetTab />
+        break;
+      case 'keyboard':
+        tabContent = <LearningKeyboardTab />
+        break;
+    }
 
-      if (i >= self.props.alphabetSize) {
-        className = classNames(className, 'settings-learning__letter_excluded');
+    let menuItems = ['Letters set', 'Keyboard'].map((name, i) => {
+      let linkClass = 'menu__item';
+      let nameLc = name.toLowerCase();
+
+      if (nameLc === mode) {
+        linkClass = classNames(linkClass, 'menu__item_selected');
       }
 
-      return <span key={i} className={className}>{letter}</span>;
-    });
+      return (
+        <div key={i} className='settings-learning__menu-item'>
+          <a className={linkClass} onClick={ this._onClickMenu.bind(this, nameLc) }>{name}</a>
+        </div>
+      )
+    })
 
-    let lessonKeys = this.props.lesson.split('').map((char, idx) => {
+    let lessonKeys = lesson.split('').map((char, idx) => {
       if (char === ' ') {
         char = <span key={idx} className="learningarea__space">␣</span>
       }
@@ -97,31 +79,16 @@ class LearningMode extends Component {
 
     return (
       <div className="settings-learning">
-
         <div className='learningarea'>
           {lessonKeys}
         </div>
 
-        <div className="settings-learning__methods-wrap">
-
-          <div className="settings-learning__methods-menu">
-            <a className="menu__item">Test</a>
-            <a className="menu__item">Test</a>
+        <div className="settings-learning__modes">
+          <div className="settings-learning__modes-menu">
+            {menuItems}
           </div>
 
-          <div className="settings-learning__methods-content">
-            <div className="settings-learning__letters">
-              {chars}
-            </div>
-
-            <div className="settings-learning__item">
-              <label htmlFor="" className="settings-learning__label">
-                Extend alphabet size:
-              </label>
-              <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-                <div className="settings-learning__range" ref={(c) => this._alphabetRange = c }></div>
-              </div>
-            </div>
+          <div className="settings-learning__modes-content">
             <div className="settings-learning__item">
               <label htmlFor="" className="settings-learning__label">
                 Max word length:
@@ -130,14 +97,27 @@ class LearningMode extends Component {
                 <div className="settings-learning__range settings-learning__max-word-length" ref={(c) => this._maxWordLengthRange = c }></div>
               </div>
             </div>
+
+            {tabContent}
+
           </div>
         </div>
 
       </div>
-
     )
   }
 
+  _onClickMenu(selectedMode, e) {
+    const {mode, setLearningMode} = this.props;
+
+    e.preventDefault()
+
+    if (selectedMode === mode) {
+      return;
+    }
+
+    setLearningMode(selectedMode);
+  }
 }
 
 export default LearningMode

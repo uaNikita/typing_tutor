@@ -1686,7 +1686,7 @@ a:hover {
   margin: 0 auto;
 }
 .settings-learning__item {
-  margin: 30px 0 50px;
+  margin: 0 0 50px;
 }
 .settings-learning__label {
   display: block;
@@ -1729,15 +1729,15 @@ a:hover {
 .settings-learning__letter:not(.settings-learning__letter_excluded) + .settings-learning__letter_excluded {
   margin-left: 14px;
 }
-.settings-learning__methods-wrap {
+.settings-learning__modes {
   display: -webkit-box;
   display: flex;
 }
-.settings-learning__methods-menu {
+.settings-learning__modes-menu {
   -webkit-box-flex: 0;
           flex: 0 0 140px;
 }
-.settings-learning__methods-content {
+.settings-learning__modes-content {
   -webkit-box-flex: 0;
           flex: 0 0 700px;
 }

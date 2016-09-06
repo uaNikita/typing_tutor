@@ -1,23 +1,22 @@
 import {connect} from 'react-redux'
 import LearningMode from '../components/LearningMode.jsx'
-import {updateLessonAlphabetSize, updateLessonMaxWordLength} from '../actions/learning-mode'
+import {updateLessonMaxWordLength, setLearningMode} from '../actions/learning-mode'
 
 const mapStateToProps = (state) => {
   return {
-    alphabetSize: state.learningMode.alphabetSize,
     maxWordLength: state.learningMode.maxWordLength,
     lesson: state.learningMode.lesson.typed + state.learningMode.lesson.last,
-    keyboardName: state.keyboard.keyboardName
+    mode: state.learningMode.mode
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    setAlphabetSize: (size) => {
-      dispatch(updateLessonAlphabetSize(size))
-    },
     setMaxWordLength: (length) => {
       dispatch(updateLessonMaxWordLength(length))
+    },
+    setLearningMode: (mode) => {
+      dispatch(setLearningMode(mode))
     }
   }
 }

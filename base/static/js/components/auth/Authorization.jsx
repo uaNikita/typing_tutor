@@ -17,7 +17,6 @@ class Authorization extends Component {
       case 'Registration':
         title = 'Registration';
         content = <Register />
-        console.log(Register);
         break;
       case 'ForgotPassword':
         title = 'Password reset';

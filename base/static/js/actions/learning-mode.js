@@ -13,6 +13,7 @@ export const SET_LESSON_ALPHABET_SIZE = 'SET_LESSON_ALPHABET_SIZE';
 export const SET_LESSON_MAX_WORD_LENGTH = 'SET_LESSON_MAX_WORD_LENGTH';
 export const TYPE_ON_LESSON = 'TYPE_ON_LESSON';
 export const SET_LESSON = 'SET_LESSON';
+export const SET_LEARNING_MODE = 'SET_LEARNING_MODE';
 
 const generateLesson = (() => {
   let minWordLength = 3;
@@ -87,6 +88,13 @@ export function setLesson(lesson) {
   };
 }
 
+export function setLearningMode(mode) {
+  return {
+    type: SET_LEARNING_MODE,
+    mode
+  };
+}
+
 export function updateFromLearningModeCharToType() {
   return (dispatch, getState) => {
     let state = getState();
@@ -124,8 +132,6 @@ export function updateLessonMaxWordLength(length) {
     dispatch(updateLesson());
   }
 }
-
-
 
 export function typeLearningMode(char) {
   return (dispatch, getState) => {

@@ -2,7 +2,8 @@ import {
   TYPE_ON_LESSON,
   SET_LESSON,
   SET_LESSON_ALPHABET_SIZE,
-  SET_LESSON_MAX_WORD_LENGTH
+  SET_LESSON_MAX_WORD_LENGTH,
+  SET_LEARNING_MODE
 } from '../actions/learning-mode';
 import {assign, cloneDeep} from 'lodash';
 
@@ -14,7 +15,10 @@ const INITIAL_STATE = {
   lesson: {
     typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
     last: 'da'
-  }
+  },
+
+  // letters set, keyboard,
+  mode: 'letters set'
 };
 
 const generateLesson = (() => {
@@ -73,6 +77,12 @@ export default (state = INITIAL_STATE, action) => {
           last: state.lesson.last.substring(1)
         }
       })
+
+    case SET_LEARNING_MODE:
+      console.log('SET_LEARNING_MODE', action.mode);
+      return assign({}, state, {
+        mode: action.mode
+      });
 
     case SET_LESSON:
       return assign({}, state, {
