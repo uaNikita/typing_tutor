@@ -11,10 +11,10 @@ class Settings extends Component {
         <nav className="settings__nav">
           <div className="settings__nav-in">
             <Link className="settings__home fa fa-keyboard-o" to="/" />
-            <Link className="settings__nav-item" activeClassName="settings__nav-item--selected" to="/settings/learning">
+            <Link className="settings__nav-item" activeClassName="settings__nav-item--selected" to="/settings/learning-mode">
               Learning mode
             </Link>
-            <Link className="settings__nav-item" activeClassName="settings__nav-item--selected" to="/settings/text">
+            <Link className="settings__nav-item" activeClassName="settings__nav-item--selected" to="/settings/text-mode">
               Text mode
             </Link>
             <Link className="settings__nav-item" activeClassName="settings__nav-item--selected" to="/settings/keyboard">

@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import {Router, Route, Redirect, IndexRoute, browserHistory} from 'react-router'
 import {Provider} from 'react-redux';
+import {Router, Route, Redirect, IndexRoute, browserHistory} from 'react-router'
+import {syncHistoryWithStore} from 'react-router-redux'
 import $ from 'jquery';
 
 import Layout from '../containers/Layout.jsx';
 import Home from './Home.jsx';
 import Settings from '../components/Settings.jsx';
-import Mode from '../components/Mode.jsx';
 import TextMode from './TextMode.jsx';
+import Text from './Text.jsx';
 import LearningMode from './LearningMode.jsx';
 import Keyboard from './Keyboard.jsx';
 
@@ -18,6 +19,8 @@ import {
   setMode,
   updateCharToType
 } from '../actions/main'
+
+const history = syncHistoryWithStore(browserHistory, store)
 
 export default class App extends Component {
 
@@ -38,13 +41,14 @@ export default class App extends Component {
   render() {
     return (
       <Provider store={store}>
-        <Router history={ browserHistory }>
+        <Router history={ history }>
           <Route path="/" component={ Layout }>
             <IndexRoute component={ Home } onEnter={ this._onKeyboardEnter } />
             <Route path="settings" component={ Settings }>
               <IndexRoute onEnter={this._enterDependOnMode} />
-              <Route path="text" component={ TextMode } onEnter={ this._onTextEnter } />
-              <Route path="learning" component={ LearningMode } onEnter={ this._onLearningEnter } />
+              <Route path="text-mode" component={ TextMode } onEnter={ this._onTextEnter } />
+              <Route path="text/:textId" component={ Text } />
+              <Route path="learning-mode" component={ LearningMode } onEnter={ this._onLearningEnter } />
               <Route path="keyboard" component={ Keyboard } />
             </Route>
           </Route>
@@ -63,7 +67,7 @@ export default class App extends Component {
     let path = '/settings/' + store.getState().keyboard.mode;
 
     replace({
-      pathname: path
+      pathname: path + '-mode'
     })
   }
 

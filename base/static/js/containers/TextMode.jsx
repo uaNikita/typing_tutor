@@ -1,16 +1,16 @@
-import { connect } from 'react-redux'
-import { map } from 'lodash';
+import {connect} from 'react-redux'
+import {map} from 'lodash';
 import TextMode from '../components/TextMode.jsx'
-import { selectText, refreshText } from '../actions/text-mode'
+import {selectText, refreshText} from '../actions/text-mode'
 
 const mapStateToProps = (state) => {
-
   var texts = map(state.textMode.entities, (obj, key) => {
+    let text = obj.typed + obj.last;
+
     return {
-      id: key,
+      textId: key,
       title: obj.title,
-      typed: obj.typed,
-      last: obj.last
+      text: text.substring(0, 230),
     }
   })
 
@@ -20,16 +20,10 @@ const mapStateToProps = (state) => {
   }
 }
 
-
-
 const mapDispatchToProps = (dispatch) => {
   return {
-    onSelectText: (textId) => {
-      console.log('onSelectText');
+    selectText: (textId) => {
       dispatch(selectText(textId))
-    },
-    refreshText: (textId) => {
-      dispatch(refreshText(textId))
     }
   }
 }

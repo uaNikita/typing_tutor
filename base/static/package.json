@@ -29,6 +29,7 @@
     "redux-form": "*",
     "redux-logger": "*",
     "redux-thunk": "*",
+    "react-router-redux": "*",
     "classnames": "*",
     "extract-text-webpack-plugin": "*",
     "jquery": "*",
