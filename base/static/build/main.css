@@ -1655,15 +1655,31 @@ a:hover {
   background-color: rgba(255,255,255,0.8);
   box-shadow: 0 0 5px rgba(255,255,255,0.9);
   border-radius: 50%;
-  position: absolute;
-  right: 0;
-  top: 0;
   font-size: 20px;
   line-height: 25px;
   text-align: center;
   color: #33c3f0;
   cursor: pointer;
   z-index: 1;
+}
+.text__buttons {
+  height: 30px;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+          align-items: center;
+  margin-bottom: 10px;
+}
+.text__buttons > * {
+  margin: 0 5px;
+}
+.text__buttons > *:last-child {
+  margin-right: 0;
+}
+.text__select_selected {
+  opacity: 0.4;
 }
 .settings-learning {
   width: 840px;

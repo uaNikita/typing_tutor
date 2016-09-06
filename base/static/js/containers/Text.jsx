@@ -1,22 +1,26 @@
 import {connect} from 'react-redux'
 import {map} from 'lodash';
 import Text from '../components/Text.jsx'
-import {refreshText} from '../actions/text-mode'
+import {selectText, refreshText} from '../actions/text-mode'
 
 const mapStateToProps = (state, ownProps) => {
   let textId = ownProps.params.textId;
   let text = state.textMode.entities[textId];
 
   return {
-    id: textId,
+    id: parseInt(textId, 10),
     title: text.title,
     typed: text.typed,
-    last: text.last
+    last: text.last,
+    currentTextId: state.textMode.currentTextId
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    selectText: (textId) => {
+      dispatch(selectText(textId))
+    },
     refreshText: (textId) => {
       dispatch(refreshText(textId))
     }

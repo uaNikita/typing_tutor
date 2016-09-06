@@ -77688,15 +77688,19 @@
 	  var text = state.textMode.entities[textId];
 
 	  return {
-	    id: textId,
+	    id: parseInt(textId, 10),
 	    title: text.title,
 	    typed: text.typed,
-	    last: text.last
+	    last: text.last,
+	    currentTextId: state.textMode.currentTextId
 	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
+	    selectText: function selectText(textId) {
+	      dispatch((0, _textMode.selectText)(textId));
+	    },
 	    refreshText: function refreshText(textId) {
 	      dispatch((0, _textMode.refreshText)(textId));
 	    }
@@ -77752,6 +77756,8 @@
 	      var title = _props.title;
 	      var typed = _props.typed;
 	      var last = _props.last;
+	      var currentTextId = _props.currentTextId;
+	      var selectText = _props.selectText;
 	      var refreshText = _props.refreshText;
 
 
@@ -77761,10 +77767,33 @@
 	          }, className: 'text__reload fa fa-refresh' });
 	      }
 
+	      var select;
+
+	      console.log(id, currentTextId);
+
+	      if (id === currentTextId) {
+	        select = _react2.default.createElement(
+	          'span',
+	          { className: 'text__select text__select_selected' },
+	          'This text is selected'
+	        );
+	      } else {
+	        select = _react2.default.createElement(
+	          'a',
+	          { onClick: this._onClickSelectText.bind(this, id), className: 'text__select', href: true },
+	          'Select this text to type'
+	        );
+	      }
+
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'text' },
-	        refresh,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'text__buttons' },
+	          refresh,
+	          select
+	        ),
 	        _react2.default.createElement(
 	          'h3',
 	          { className: 'text__title' },
@@ -77781,6 +77810,13 @@
 	          last
 	        )
 	      );
+	    }
+	  }, {
+	    key: '_onClickSelectText',
+	    value: function _onClickSelectText(id, e) {
+	      e.preventDefault();
+
+	      this.props.selectText(id);
 	    }
 	  }]);
 

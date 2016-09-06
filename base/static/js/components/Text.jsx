@@ -10,16 +10,36 @@ class Texts extends Component {
             title,
             typed,
             last,
+            currentTextId,
+            selectText,
             refreshText
-          } = this.props
-    
+          } = this.props;
+
     if (typed) {
       var refresh = <span onClick={() => refreshText(id)} className="text__reload fa fa-refresh" />
     }
 
+    var select;
+
+
+    console.log(id, currentTextId);
+
+    if (id === currentTextId) {
+      select = <span className="text__select text__select_selected">This text is selected</span>
+    } else {
+      select = <a onClick={this._onClickSelectText.bind(this, id)} className="text__select" href>Select this text to type</a>
+    }
+
     return (
       <div className="text">
-        {refresh}
+
+        <div className="text__buttons">
+          {refresh}
+
+          {select}
+
+        </div>
+
         <h3 className="text__title">
           {title}
         </h3>
@@ -28,6 +48,12 @@ class Texts extends Component {
         <span className="text__last">{last}</span>
       </div>
     )
+  }
+
+  _onClickSelectText(id, e) {
+    e.preventDefault();
+
+    this.props.selectText(id);
   }
 }
 
