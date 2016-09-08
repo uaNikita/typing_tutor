@@ -18,7 +18,7 @@ const INITIAL_STATE = {
   },
 
   // letters set, keyboard,
-  mode: 'letters set'
+  mode: 'keyboard'
 };
 
 const generateLesson = (() => {

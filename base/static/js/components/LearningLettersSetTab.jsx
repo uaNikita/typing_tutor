@@ -3,6 +3,7 @@ import {Link} from 'react-router'
 import $ from 'jquery';
 import noUiSlider from 'nouislider';
 import classNames from 'classNames';
+import Key from './Key.jsx';
 
 class LearningLettersSetTab extends Component {
 
@@ -45,16 +46,30 @@ class LearningLettersSetTab extends Component {
   }
 
   render() {
-    let self = this;
+    const {keys} = this.props;
 
-    let chars = self.charset.map((letter, i) => {
+    let chars = this.charset.map((letter, i) => {
       let className = 'settings-learning__letter';
 
-      if (i >= self.props.alphabetSize) {
+      if (i >= this.props.alphabetSize) {
         className = classNames(className, 'settings-learning__letter_excluded');
       }
 
       return <span key={i} className={className}>{letter}</span>;
+    });
+
+    let keyNodes = keys.map(obj => {
+
+      return <Key
+        key={obj.id}
+        id={obj.id}
+        type={obj.type}
+        char={obj.key}
+        shiftChar={obj.shiftKey}
+        className='keyboard__key'
+        classNameShift='keyboard__shift-key'
+      />
+
     });
 
     return (
@@ -70,6 +85,9 @@ class LearningLettersSetTab extends Component {
 
         <div className="settings-learning__letters">
           {chars}
+        </div>
+        <div className="keyboard">
+          {keyNodes}
         </div>
       </div>
     )

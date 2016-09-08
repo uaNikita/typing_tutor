@@ -1232,19 +1232,7 @@ a:hover {
   margin: 0 20px;
 }
 .keyboard {
-  width: 840px;
-  display: -webkit-box;
-  display: flex;
-  margin: 20px auto 0;
-}
-.keyboard__types {
-  -webkit-box-flex: 0;
-          flex: 0 0 190px;
-  padding-left: 10px;
-}
-.keyboard__item {
-  -webkit-box-flex: 0;
-          flex: 0 0 650px;
+  width: 650px;
   display: -webkit-box;
   display: flex;
   flex-wrap: wrap;
@@ -1294,6 +1282,21 @@ a:hover {
   margin-bottom: -12px;
   font-size: 10px;
   line-height: 18px;
+}
+.keyboard-layout {
+  width: 840px;
+  display: -webkit-box;
+  display: flex;
+  margin: 20px auto 0;
+}
+.keyboard-layout__types {
+  -webkit-box-flex: 0;
+          flex: 0 0 190px;
+  padding-left: 10px;
+}
+.keyboard-layout__item {
+  -webkit-box-flex: 0;
+          flex: 0 0 650px;
 }
 .keypad {
   display: -webkit-box;

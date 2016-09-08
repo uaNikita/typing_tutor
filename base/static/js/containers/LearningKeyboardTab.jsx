@@ -1,4 +1,5 @@
 import {connect} from 'react-redux'
+import {find} from 'lodash';
 import LearningKeyboardTab from '../components/LearningKeyboardTab.jsx'
 
 const mapStateToProps = (state) => {

@@ -33,7 +33,7 @@ class Keyboard extends Component {
       }
 
       return (
-        <div key={i} className='keyboard__menu-item'>
+        <div key={i} className='keyboard-layout__menu-item'>
           <a className={linkClass} onClick={ this._onClickNameHandler.bind(this, name) }>{name}</a>
         </div>
       )
@@ -42,13 +42,13 @@ class Keyboard extends Component {
 
 
     return (
-      <div className='keyboard'>
+      <div className='keyboard-layout'>
 
-        <menu className='keyboard__types menu'>
+        <menu className='keyboard-layout__types menu'>
           {menuItems}
         </menu>
 
-        <div className='keyboard__item'>
+        <div className='keyboard'>
           {keyNodes}
         </div>
 
