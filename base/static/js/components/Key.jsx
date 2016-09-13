@@ -4,18 +4,17 @@ class Key extends Component {
   render() {
 
     const {
-            id,
+            keyProps,
             type,
             char,
             shiftChar,
-            className,
             classNameShift
           } = this.props
 
     if (type === 'number' || type === 'non-alphanumeric') {
 
       return (
-        <span className={className} data-key={id}>
+        <span {...keyProps}>
           <span className={classNameShift}>{shiftChar}</span>
           {char}
         </span>
@@ -25,15 +24,15 @@ class Key extends Component {
     else if (type === 'letter') {
 
       return (
-        <span className={className} data-key={id}>
+        <span {...keyProps}>
           {char.toUpperCase()}
         </span>
       )
 
     }
-
+    
     return (
-      <span className={className} data-key={id}>
+      <span {...keyProps}>
         {char}
       </span>
     )

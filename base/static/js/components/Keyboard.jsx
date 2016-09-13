@@ -11,14 +11,17 @@ class Keyboard extends Component {
     const {keys, keyboardName} = this.props;
 
     let keyNodes = keys.map(obj => {
+      let keyProps = {
+        className: 'keyboard__key',
+        'data-key': obj.id
+      };
 
       return <Key
         key={obj.id}
-        id={obj.id}
+        keyProps={keyProps}
         type={obj.type}
         char={obj.key}
         shiftChar={obj.shiftKey}
-        className='keyboard__key'
         classNameShift='keyboard__shift-key'
       />
 

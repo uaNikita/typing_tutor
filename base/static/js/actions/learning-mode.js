@@ -11,6 +11,8 @@ import { getIdsFromChar, sliceChar } from "../utils";
 
 export const SET_LESSON_ALPHABET_SIZE = 'SET_LESSON_ALPHABET_SIZE';
 export const SET_LESSON_MAX_WORD_LENGTH = 'SET_LESSON_MAX_WORD_LENGTH';
+export const ADD_LETTER_TO_LESSON = 'ADD_LETTER_TO_LESSON';
+export const REMOVE_LETTER_FROM_LESSON = 'REMOVE_LETTER_FROM_LESSON';
 export const TYPE_ON_LESSON = 'TYPE_ON_LESSON';
 export const SET_LESSON = 'SET_LESSON';
 export const SET_LEARNING_MODE = 'SET_LEARNING_MODE';
@@ -19,19 +21,8 @@ const generateLesson = (() => {
   let minWordLength = 3;
   let maxChars = 50;
 
-  return (alphabetRange, maxWordLength, keys) => {
+  return (maxWordLength, letters) => {
     let lesson = '';
-
-    let charset = keys.reduce((charset, key) => {
-
-      if (key.type === 'letter') {
-        charset.push(key.id)
-      }
-
-      return charset
-
-    }, []);
-
     let wordLength;
 
     while (lesson.length <= maxChars) {
@@ -46,9 +37,9 @@ const generateLesson = (() => {
       }
 
       times(wordLength, function () {
-        let idxLetter = random(0, alphabetRange - 1);
+        let idxLetter = random(0, letters.length - 1);
 
-        lesson += charset[idxLetter];
+        lesson += letters[idxLetter];
       });
 
       lesson += ' ';
@@ -75,11 +66,27 @@ export function setLessonMaxWordLength(length) {
   };
 }
 
+export function addLetterToLesson(letter) {
+  return {
+    type: ADD_LETTER_TO_LESSON,
+    letter
+  };
+}
+
+export function removeLetterFromLesson(letter) {
+  return {
+    type: REMOVE_LETTER_FROM_LESSON,
+    letter
+  };
+}
+
 export function typeOnLesson() {
   return {
     type: TYPE_ON_LESSON
   };
 }
+
+
 
 export function setLesson(lesson) {
   return {
@@ -108,28 +115,12 @@ export function updateFromLearningModeCharToType() {
 export function updateLesson() {
   return (dispatch, getState) => {
     let state = getState();
-    let keys = find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys
-    let lesson = generateLesson(state.learningMode.alphabetSize, state.learningMode.maxWordLength, keys);
+
+    let lesson = generateLesson(state.learningMode.maxWordLength, state.learningMode.letters);
 
     dispatch(setLesson(lesson));
 
     dispatch(updateFromLearningModeCharToType());
-  }
-}
-
-export function updateLessonAlphabetSize(size) {
-  return (dispatch, getState) => {
-    dispatch(setLessonAlphabetSize(size));
-
-    dispatch(updateLesson());
-  }
-}
-
-export function updateLessonMaxWordLength(length) {
-  return (dispatch, getState) => {
-    dispatch(setLessonMaxWordLength(length));
-
-    dispatch(updateLesson());
   }
 }
 

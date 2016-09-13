@@ -43,8 +43,6 @@ class LearningMode extends Component {
     const {mode, lesson} = this.props;
     let tabContent;
 
-    console.log('mode', mode);
-    
     switch (mode) {
       case 'letters set':
         tabContent = <LearningLettersSetTab />

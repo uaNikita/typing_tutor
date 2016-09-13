@@ -1277,6 +1277,12 @@ a:hover {
 .keyboard__key[data-key="Space"] {
   width: 260px;
 }
+.keyboard__key_selected {
+  background-color: #33c3f0;
+}
+.keyboard__key_disabled {
+  opacity: 0.4;
+}
 .keyboard__shift-key {
   display: block;
   margin-bottom: -12px;
@@ -1743,6 +1749,9 @@ a:hover {
 .settings-learning__modes-content {
   -webkit-box-flex: 0;
           flex: 0 0 700px;
+}
+.settings-learning__keyboard .keyboard__key:not(.keyboard__key_disabled) {
+  cursor: pointer;
 }
 .settings-learning .learningarea {
   margin-bottom: 20px;

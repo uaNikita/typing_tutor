@@ -57435,16 +57435,16 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.SET_LEARNING_MODE = exports.SET_LESSON = exports.TYPE_ON_LESSON = exports.SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_ALPHABET_SIZE = undefined;
+	exports.SET_LEARNING_MODE = exports.SET_LESSON = exports.TYPE_ON_LESSON = exports.REMOVE_LETTER_FROM_LESSON = exports.ADD_LETTER_TO_LESSON = exports.SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_ALPHABET_SIZE = undefined;
 	exports.setLessonAlphabetSize = setLessonAlphabetSize;
 	exports.setLessonMaxWordLength = setLessonMaxWordLength;
+	exports.addLetterToLesson = addLetterToLesson;
+	exports.removeLetterFromLesson = removeLetterFromLesson;
 	exports.typeOnLesson = typeOnLesson;
 	exports.setLesson = setLesson;
 	exports.setLearningMode = setLearningMode;
 	exports.updateFromLearningModeCharToType = updateFromLearningModeCharToType;
 	exports.updateLesson = updateLesson;
-	exports.updateLessonAlphabetSize = updateLessonAlphabetSize;
-	exports.updateLessonMaxWordLength = updateLessonMaxWordLength;
 	exports.typeLearningMode = typeLearningMode;
 
 	var _lodash = __webpack_require__(281);
@@ -57455,6 +57455,8 @@
 
 	var SET_LESSON_ALPHABET_SIZE = exports.SET_LESSON_ALPHABET_SIZE = 'SET_LESSON_ALPHABET_SIZE';
 	var SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_MAX_WORD_LENGTH = 'SET_LESSON_MAX_WORD_LENGTH';
+	var ADD_LETTER_TO_LESSON = exports.ADD_LETTER_TO_LESSON = 'ADD_LETTER_TO_LESSON';
+	var REMOVE_LETTER_FROM_LESSON = exports.REMOVE_LETTER_FROM_LESSON = 'REMOVE_LETTER_FROM_LESSON';
 	var TYPE_ON_LESSON = exports.TYPE_ON_LESSON = 'TYPE_ON_LESSON';
 	var SET_LESSON = exports.SET_LESSON = 'SET_LESSON';
 	var SET_LEARNING_MODE = exports.SET_LEARNING_MODE = 'SET_LEARNING_MODE';
@@ -57463,18 +57465,8 @@
 	  var minWordLength = 3;
 	  var maxChars = 50;
 
-	  return function (alphabetRange, maxWordLength, keys) {
+	  return function (maxWordLength, letters) {
 	    var lesson = '';
-
-	    var charset = keys.reduce(function (charset, key) {
-
-	      if (key.type === 'letter') {
-	        charset.push(key.id);
-	      }
-
-	      return charset;
-	    }, []);
-
 	    var wordLength = void 0;
 
 	    while (lesson.length <= maxChars) {
@@ -57489,9 +57481,9 @@
 	      }
 
 	      (0, _lodash.times)(wordLength, function () {
-	        var idxLetter = (0, _lodash.random)(0, alphabetRange - 1);
+	        var idxLetter = (0, _lodash.random)(0, letters.length - 1);
 
-	        lesson += charset[idxLetter];
+	        lesson += letters[idxLetter];
 	      });
 
 	      lesson += ' ';
@@ -57514,6 +57506,20 @@
 	  return {
 	    type: SET_LESSON_MAX_WORD_LENGTH,
 	    length: length
+	  };
+	}
+
+	function addLetterToLesson(letter) {
+	  return {
+	    type: ADD_LETTER_TO_LESSON,
+	    letter: letter
+	  };
+	}
+
+	function removeLetterFromLesson(letter) {
+	  return {
+	    type: REMOVE_LETTER_FROM_LESSON,
+	    letter: letter
 	  };
 	}
 
@@ -57550,28 +57556,12 @@
 	function updateLesson() {
 	  return function (dispatch, getState) {
 	    var state = getState();
-	    var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
-	    var lesson = generateLesson(state.learningMode.alphabetSize, state.learningMode.maxWordLength, keys);
+
+	    var lesson = generateLesson(state.learningMode.maxWordLength, state.learningMode.letters);
 
 	    dispatch(setLesson(lesson));
 
 	    dispatch(updateFromLearningModeCharToType());
-	  };
-	}
-
-	function updateLessonAlphabetSize(size) {
-	  return function (dispatch, getState) {
-	    dispatch(setLessonAlphabetSize(size));
-
-	    dispatch(updateLesson());
-	  };
-	}
-
-	function updateLessonMaxWordLength(length) {
-	  return function (dispatch, getState) {
-	    dispatch(setLessonMaxWordLength(length));
-
-	    dispatch(updateLesson());
 	  };
 	}
 
@@ -73610,13 +73600,17 @@
 	          'keypad__to-type': needToType
 	        });
 
+	        var keyProps = {
+	          className: className,
+	          'data-key': obj.id
+	        };
+
 	        return _react2.default.createElement(_Key2.default, {
 	          key: obj.id,
-	          id: obj.id,
+	          keyProps: keyProps,
 	          type: obj.type,
 	          char: obj.key,
 	          shiftChar: obj.shiftKey,
-	          className: className,
 	          classNameShift: 'keypad__shift'
 	        });
 	      });
@@ -74828,11 +74822,10 @@
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
-	      var id = _props.id;
+	      var keyProps = _props.keyProps;
 	      var type = _props.type;
 	      var char = _props.char;
 	      var shiftChar = _props.shiftChar;
-	      var className = _props.className;
 	      var classNameShift = _props.classNameShift;
 
 
@@ -74840,7 +74833,7 @@
 
 	        return _react2.default.createElement(
 	          'span',
-	          { className: className, 'data-key': id },
+	          keyProps,
 	          _react2.default.createElement(
 	            'span',
 	            { className: classNameShift },
@@ -74852,14 +74845,14 @@
 
 	        return _react2.default.createElement(
 	          'span',
-	          { className: className, 'data-key': id },
+	          keyProps,
 	          char.toUpperCase()
 	        );
 	      }
 
 	      return _react2.default.createElement(
 	        'span',
-	        { className: className, 'data-key': id },
+	        keyProps,
 	        char
 	      );
 	    }
@@ -77862,7 +77855,9 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    setMaxWordLength: function setMaxWordLength(length) {
-	      dispatch((0, _learningMode.updateLessonMaxWordLength)(length));
+	      dispatch((0, _learningMode.setLessonMaxWordLength)(length));
+
+	      dispatch((0, _learningMode.updateLesson)());
 	    },
 	    setLearningMode: function setLearningMode(mode) {
 	      dispatch((0, _learningMode.setLearningMode)(mode));
@@ -77966,8 +77961,6 @@
 	      var lesson = _props.lesson;
 
 	      var tabContent = void 0;
-
-	      console.log('mode', mode);
 
 	      switch (mode) {
 	        case 'letters set':
@@ -78090,16 +78083,30 @@
 
 	var _LearningKeyboardTab2 = _interopRequireDefault(_LearningKeyboardTab);
 
+	var _learningMode = __webpack_require__(285);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys
+	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys,
+	    letters: state.learningMode.letters
 	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {};
+	  return {
+	    addLetter: function addLetter(letter) {
+	      dispatch((0, _learningMode.addLetterToLesson)(letter));
+
+	      dispatch((0, _learningMode.updateLesson)());
+	    },
+	    removeLetter: function removeLetter(letter) {
+	      dispatch((0, _learningMode.removeLetterFromLesson)(letter));
+
+	      dispatch((0, _learningMode.updateLesson)());
+	    }
+	  };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningKeyboardTab2.default);
@@ -78119,6 +78126,12 @@
 	var _react = __webpack_require__(166);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _classNames = __webpack_require__(459);
+
+	var _classNames2 = _interopRequireDefault(_classNames);
+
+	var _lodash = __webpack_require__(281);
 
 	var _Key = __webpack_require__(521);
 
@@ -78144,18 +78157,40 @@
 	  _createClass(LearningKeyboardTab, [{
 	    key: 'render',
 	    value: function render() {
-	      var keys = this.props.keys;
+	      var _this2 = this;
+
+	      var _props = this.props;
+	      var keys = _props.keys;
+	      var letters = _props.letters;
 
 
 	      var keyNodes = keys.map(function (obj) {
+	        var className = 'keyboard__key';
+
+	        var keyProps = {
+	          'data-key': obj.id
+	        };
+
+	        if (obj.type === 'letter') {
+
+	          if (letters.indexOf(obj.key) + 1) {
+	            keyProps.onClick = _this2._onClickSelectedKey.bind(_this2, obj.key);
+	            className = (0, _classNames2.default)(className, 'keyboard__key_selected');
+	          } else {
+	            keyProps.onClick = _this2._onClickNonSelectedKey.bind(_this2, obj.key);
+	          }
+	        } else {
+	          className = (0, _classNames2.default)(className, 'keyboard__key_disabled');
+	        }
+
+	        keyProps.className = className;
 
 	        return _react2.default.createElement(_Key2.default, {
 	          key: obj.id,
-	          id: obj.id,
+	          keyProps: keyProps,
 	          type: obj.type,
 	          char: obj.key,
 	          shiftChar: obj.shiftKey,
-	          className: 'keyboard__key',
 	          classNameShift: 'keyboard__shift-key'
 	        });
 	      });
@@ -78169,6 +78204,16 @@
 	          keyNodes
 	        )
 	      );
+	    }
+	  }, {
+	    key: '_onClickNonSelectedKey',
+	    value: function _onClickNonSelectedKey(key) {
+	      this.props.addLetter(key);
+	    }
+	  }, {
+	    key: '_onClickSelectedKey',
+	    value: function _onClickSelectedKey(key) {
+	      this.props.removeLetter(key);
 	    }
 	  }]);
 
@@ -78209,7 +78254,9 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    setAlphabetSize: function setAlphabetSize(size) {
-	      dispatch((0, _learningMode.updateLessonAlphabetSize)(size));
+	      dispatch((0, _learningMode.setLessonAlphabetSize)(size));
+
+	      dispatch((0, _learningMode.updateLesson)());
 	    }
 	  };
 	};
@@ -78471,14 +78518,17 @@
 
 
 	      var keyNodes = keys.map(function (obj) {
+	        var keyProps = {
+	          className: 'keyboard__key',
+	          'data-key': obj.id
+	        };
 
 	        return _react2.default.createElement(_Key2.default, {
 	          key: obj.id,
-	          id: obj.id,
+	          keyProps: keyProps,
 	          type: obj.type,
 	          char: obj.key,
 	          shiftChar: obj.shiftKey,
-	          className: 'keyboard__key',
 	          classNameShift: 'keyboard__shift-key'
 	        });
 	      });
@@ -79043,6 +79093,8 @@
 
 	  maxWordLength: 5,
 
+	  letters: ["y", "h", "f", "e", "w"],
+
 	  lesson: {
 	    typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
 	    last: 'da'
@@ -79051,50 +79103,6 @@
 	  // letters set, keyboard,
 	  mode: 'keyboard'
 	};
-
-	var generateLesson = function () {
-	  var minWordLength = 3;
-	  var maxChars = 50;
-
-	  return function (alphabetRange, maxWordLength, keys) {
-	    var lesson = '';
-
-	    var charset = keys.reduce(function (charset, key) {
-
-	      if (key.type === 'letter') {
-	        charset.push(key.id);
-	      }
-
-	      return charset;
-	    }, []);
-
-	    var wordLength = void 0;
-
-	    while (lesson.length <= maxChars) {
-	      wordLength = random(minWordLength, maxWordLength);
-
-	      if (lesson.length + wordLength > maxChars) {
-	        wordLength = maxChars - lesson.length;
-
-	        if (wordLength < 3) {
-	          break;
-	        }
-	      }
-
-	      times(wordLength, function () {
-	        var idxLetter = random(0, alphabetRange - 1);
-
-	        lesson += charset[idxLetter];
-	      });
-
-	      lesson += ' ';
-	    }
-
-	    lesson = lesson.slice(0, -1);
-
-	    return lesson;
-	  };
-	}();
 
 	exports.default = function () {
 	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
@@ -79110,7 +79118,6 @@
 	      });
 
 	    case _learningMode.SET_LEARNING_MODE:
-	      console.log('SET_LEARNING_MODE', action.mode);
 	      return (0, _lodash.assign)({}, state, {
 	        mode: action.mode
 	      });
@@ -79132,6 +79139,34 @@
 	      return (0, _lodash.assign)({}, state, {
 	        maxWordLength: action.length
 	      });
+
+	    case _learningMode.ADD_LETTER_TO_LESSON:
+	      return function () {
+	        var letters = (0, _lodash.clone)(state.letters);
+
+	        _.remove(letters, function (letter) {
+	          return letter === action.letter;
+	        });
+
+	        letters.push(action.letter);
+
+	        return (0, _lodash.assign)({}, state, {
+	          letters: letters
+	        });
+	      }();
+
+	    case _learningMode.REMOVE_LETTER_FROM_LESSON:
+	      return function () {
+	        var letters = (0, _lodash.clone)(state.letters);
+
+	        _.remove(letters, function (letter) {
+	          return letter === action.letter;
+	        });
+
+	        return (0, _lodash.assign)({}, state, {
+	          letters: letters
+	        });
+	      }();
 
 	    default:
 	      return state;

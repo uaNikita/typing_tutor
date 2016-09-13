@@ -3,14 +3,18 @@ import {
   SET_LESSON,
   SET_LESSON_ALPHABET_SIZE,
   SET_LESSON_MAX_WORD_LENGTH,
+  ADD_LETTER_TO_LESSON,
+  REMOVE_LETTER_FROM_LESSON,
   SET_LEARNING_MODE
 } from '../actions/learning-mode';
-import {assign, cloneDeep} from 'lodash';
+import {assign, clone, cloneDeep, remove} from 'lodash';
 
 const INITIAL_STATE = {
   alphabetSize: 9,
 
   maxWordLength: 5,
+
+  letters: ["y", "h", "f", "e", "w"],
 
   lesson: {
     typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
@@ -20,53 +24,6 @@ const INITIAL_STATE = {
   // letters set, keyboard,
   mode: 'keyboard'
 };
-
-const generateLesson = (() => {
-  let minWordLength = 3;
-  let maxChars = 50;
-
-  return (alphabetRange, maxWordLength, keys) => {
-    let lesson = '';
-
-    let charset = keys.reduce((charset, key) => {
-
-      if (key.type === 'letter') {
-        charset.push(key.id)
-      }
-
-      return charset
-
-    }, []);
-
-    let wordLength;
-
-    while (lesson.length <= maxChars) {
-      wordLength = random(minWordLength, maxWordLength);
-
-      if (lesson.length + wordLength > maxChars) {
-        wordLength = maxChars - lesson.length;
-
-        if (wordLength < 3) {
-          break;
-        }
-      }
-
-      times(wordLength, function () {
-        let idxLetter = random(0, alphabetRange - 1);
-
-        lesson += charset[idxLetter];
-      });
-
-      lesson += ' ';
-
-    }
-
-    lesson = lesson.slice(0, -1)
-
-    return lesson;
-
-  }
-})();
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
@@ -79,7 +36,6 @@ export default (state = INITIAL_STATE, action) => {
       })
 
     case SET_LEARNING_MODE:
-      console.log('SET_LEARNING_MODE', action.mode);
       return assign({}, state, {
         mode: action.mode
       });
@@ -97,11 +53,38 @@ export default (state = INITIAL_STATE, action) => {
         alphabetSize: action.size
       });
 
-
     case SET_LESSON_MAX_WORD_LENGTH:
       return assign({}, state, {
         maxWordLength: action.length
       });
+
+    case ADD_LETTER_TO_LESSON:
+      return (() => {
+        let letters = clone(state.letters);
+
+        _.remove(letters, function (letter) {
+          return letter === action.letter;
+        });
+
+        letters.push(action.letter)
+
+        return assign({}, state, {
+          letters: letters
+        });
+      })();
+
+    case REMOVE_LETTER_FROM_LESSON:
+      return (() => {
+        let letters = clone(state.letters);
+
+        _.remove(letters, function (letter) {
+          return letter === action.letter
+        });
+
+        return assign({}, state, {
+          letters: letters
+        });
+      })();
 
     default:
       return state;

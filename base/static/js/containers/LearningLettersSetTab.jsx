@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import {find} from 'lodash';
 import LearningLettersSetTab from '../components/LearningLettersSetTab.jsx'
-import {updateLessonAlphabetSize} from '../actions/learning-mode'
+import {setLessonAlphabetSize, updateLesson} from '../actions/learning-mode'
 
 const mapStateToProps = (state) => {
   return {
@@ -13,7 +13,9 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     setAlphabetSize: (size) => {
-      dispatch(updateLessonAlphabetSize(size))
+      dispatch(setLessonAlphabetSize(size));
+
+      dispatch(updateLesson());
     }
   }
 }

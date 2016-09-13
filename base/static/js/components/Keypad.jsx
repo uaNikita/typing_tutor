@@ -27,19 +27,23 @@ class KeyPad extends Component {
         }
       });
 
-      var className = classNames('keypad__key', 'keypad__' + obj.finger, {
+      let className = classNames('keypad__key', 'keypad__' + obj.finger, {
         'keypad__active': isPressedRight || isPressedWrong,
         'keypad__wrong': isPressedWrong,
         'keypad__to-type': needToType
       });
 
+      let keyProps = {
+        className: className,
+        'data-key': obj.id
+      };
+
       return <Key
         key={obj.id}
-        id={obj.id}
+        keyProps={keyProps}
         type={obj.type}
         char={obj.key}
         shiftChar={obj.shiftKey}
-        className={className}
         classNameShift='keypad__shift'
       />
 

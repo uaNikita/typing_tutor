@@ -5,6 +5,7 @@ import noUiSlider from 'nouislider';
 import classNames from 'classNames';
 import Key from './Key.jsx';
 
+
 class LearningLettersSetTab extends Component {
 
   constructor(props) {
@@ -69,11 +70,12 @@ class LearningLettersSetTab extends Component {
         className='keyboard__key'
         classNameShift='keyboard__shift-key'
       />
-
+      
     });
 
     return (
       <div className="settings-learning__letters-set">
+
         <div className="settings-learning__item">
           <label htmlFor="" className="settings-learning__label">
             Extend alphabet size:
@@ -94,5 +96,6 @@ class LearningLettersSetTab extends Component {
   }
 
 }
+
 
 export default LearningLettersSetTab
