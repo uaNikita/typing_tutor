@@ -57435,16 +57435,19 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.SET_LEARNING_MODE = exports.SET_LESSON = exports.TYPE_ON_LESSON = exports.REMOVE_LETTER_FROM_LESSON = exports.ADD_LETTER_TO_LESSON = exports.SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_ALPHABET_SIZE = undefined;
-	exports.setLessonAlphabetSize = setLessonAlphabetSize;
+	exports.SET_LETTERS_FREE_LEARNING_MODE = exports.SET_LETTERS_FINGERS_LEARNING_MODE = exports.SET_LEARNING_MODE = exports.SET_LESSON = exports.TYPE_ON_LESSON = exports.REMOVE_LETTER_FROM_LESSON = exports.ADD_LETTER_TO_LESSON = exports.SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_FINGERS_SET_SIZE = undefined;
+	exports.setLessonFingersSetSize = setLessonFingersSetSize;
 	exports.setLessonMaxWordLength = setLessonMaxWordLength;
 	exports.addLetterToLesson = addLetterToLesson;
 	exports.removeLetterFromLesson = removeLetterFromLesson;
 	exports.typeOnLesson = typeOnLesson;
 	exports.setLesson = setLesson;
 	exports.setLearningMode = setLearningMode;
+	exports.setLettersFingersLearningMode = setLettersFingersLearningMode;
 	exports.updateFromLearningModeCharToType = updateFromLearningModeCharToType;
-	exports.updateLesson = updateLesson;
+	exports.generateLessonFromFingersMode = generateLessonFromFingersMode;
+	exports.generateLessonFromFreeMode = generateLessonFromFreeMode;
+	exports.generateLesson = generateLesson;
 	exports.typeLearningMode = typeLearningMode;
 
 	var _lodash = __webpack_require__(281);
@@ -57453,15 +57456,17 @@
 
 	var _utils = __webpack_require__(284);
 
-	var SET_LESSON_ALPHABET_SIZE = exports.SET_LESSON_ALPHABET_SIZE = 'SET_LESSON_ALPHABET_SIZE';
+	var SET_LESSON_FINGERS_SET_SIZE = exports.SET_LESSON_FINGERS_SET_SIZE = 'SET_LESSON_FINGERS_SET_SIZE';
 	var SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_MAX_WORD_LENGTH = 'SET_LESSON_MAX_WORD_LENGTH';
 	var ADD_LETTER_TO_LESSON = exports.ADD_LETTER_TO_LESSON = 'ADD_LETTER_TO_LESSON';
 	var REMOVE_LETTER_FROM_LESSON = exports.REMOVE_LETTER_FROM_LESSON = 'REMOVE_LETTER_FROM_LESSON';
 	var TYPE_ON_LESSON = exports.TYPE_ON_LESSON = 'TYPE_ON_LESSON';
 	var SET_LESSON = exports.SET_LESSON = 'SET_LESSON';
 	var SET_LEARNING_MODE = exports.SET_LEARNING_MODE = 'SET_LEARNING_MODE';
+	var SET_LETTERS_FINGERS_LEARNING_MODE = exports.SET_LETTERS_FINGERS_LEARNING_MODE = 'SET_LETTERS_FINGERS_LEARNING_MODE';
+	var SET_LETTERS_FREE_LEARNING_MODE = exports.SET_LETTERS_FREE_LEARNING_MODE = 'SET_LETTERS_FREE_LEARNING_MODE';
 
-	var generateLesson = function () {
+	var createLesson = function () {
 	  var minWordLength = 3;
 	  var maxChars = 50;
 
@@ -57495,9 +57500,9 @@
 	  };
 	}();
 
-	function setLessonAlphabetSize(size) {
+	function setLessonFingersSetSize(size) {
 	  return {
-	    type: SET_LESSON_ALPHABET_SIZE,
+	    type: SET_LESSON_FINGERS_SET_SIZE,
 	    size: size
 	  };
 	}
@@ -57543,6 +57548,13 @@
 	  };
 	}
 
+	function setLettersFingersLearningMode(letters) {
+	  return {
+	    type: SET_LETTERS_FINGERS_LEARNING_MODE,
+	    letters: letters
+	  };
+	}
+
 	function updateFromLearningModeCharToType() {
 	  return function (dispatch, getState) {
 	    var state = getState();
@@ -57553,13 +57565,70 @@
 	  };
 	}
 
-	function updateLesson() {
+	function generateLessonFromFingersMode() {
 	  return function (dispatch, getState) {
 	    var state = getState();
 
-	    var lesson = generateLesson(state.learningMode.maxWordLength, state.learningMode.letters);
+	    var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
+	    var fingers = ['index', 'middle', 'ring', 'pinky'];
+	    var rows = ['middle', 'top', 'bottom'];
+	    var hands = ['left', 'right'];
+
+	    var selectedLetters = [];
+
+	    rows.forEach(function (row) {
+
+	      fingers.forEach(function (finger) {
+
+	        hands.forEach(function (hand) {
+
+	          var key = filter(keys, {
+	            row: row,
+	            finger: finger,
+	            hand: hand,
+	            type: 'letter'
+	          });
+
+	          key = key.map(function (obj) {
+	            return obj.key;
+	          });
+
+	          if (key) {
+	            selectedLetters.push(key);
+	          }
+	        });
+	      });
+	    });
+
+	    selectedLetters.splice(state.learningMode.fingersSetSize);
+
+	    selectedLetters = _lodash.concat.apply(null, selectedLetters);
+
+	    var lesson = createLesson(state.learningMode.maxWordLength, selectedLetters);
 
 	    dispatch(setLesson(lesson));
+	  };
+	}
+
+	function generateLessonFromFreeMode() {
+	  return function (dispatch, getState) {
+	    var state = getState();
+
+	    var lesson = createLesson(state.learningMode.maxWordLength, state.learningMode.lettersFreeMode);
+
+	    dispatch(setLesson(lesson));
+	  };
+	}
+
+	function generateLesson() {
+	  return function (dispatch, getState) {
+	    var state = getState();
+
+	    if (state.learningMode === 'letters set') {
+	      dispatch(generateLessonFromFingersMode());
+	    } else if (state.learningMode === 'keyboard') {
+	      dispatch(generateLessonFromFreeMode());
+	    }
 
 	    dispatch(updateFromLearningModeCharToType());
 	  };
@@ -57581,7 +57650,7 @@
 	      dispatch(typeOnLesson());
 
 	      if (getState().learningMode.lesson.last.length === 0) {
-	        dispatch(updateLesson());
+	        dispatch(generateLesson());
 	      }
 
 	      dispatch((0, _main.addSuccesType)());
@@ -73507,6 +73576,8 @@
 
 	var _reactRedux = __webpack_require__(173);
 
+	var _lodash = __webpack_require__(281);
+
 	var _Keypad = __webpack_require__(516);
 
 	var _Keypad2 = _interopRequireDefault(_Keypad);
@@ -73516,7 +73587,7 @@
 	var mapStateToProps = function mapStateToProps(state) {
 
 	  return {
-	    keyboardName: state.keyboard.keyboardName,
+	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys,
 	    pressedRightIds: state.keyboard.pressedRightIds,
 	    pressedWrongIds: state.keyboard.pressedWrongIds,
 	    idCharsToType: state.keyboard.idCharsToType
@@ -73576,13 +73647,13 @@
 	    key: 'render',
 	    value: function render() {
 	      var _props = this.props;
-	      var keyboardName = _props.keyboardName;
+	      var keys = _props.keys;
 	      var pressedRightIds = _props.pressedRightIds;
 	      var pressedWrongIds = _props.pressedWrongIds;
 	      var idCharsToType = _props.idCharsToType;
 
 
-	      var keys = (0, _lodash.find)(_keyboards2.default, { 'name': keyboardName }).keys.map(function (obj) {
+	      var keysNode = keys.map(function (obj) {
 	        var isPressedRight = pressedRightIds.indexOf(obj.id) + 1;
 	        var isPressedWrong = pressedWrongIds.indexOf(obj.id) + 1;
 	        var needToType = false;
@@ -73594,15 +73665,22 @@
 	          }
 	        });
 
-	        var className = (0, _classNames2.default)('keypad__key', 'keypad__' + obj.finger, {
+	        var className = (0, _classNames2.default)('keypad__key', {
 	          'keypad__active': isPressedRight || isPressedWrong,
 	          'keypad__wrong': isPressedWrong,
 	          'keypad__to-type': needToType
 	        });
 
+	        var finger = obj.finger;
+
+	        if (finger === 'index') {
+	          finger = obj.hand + '-' + finger;
+	        }
+
 	        var keyProps = {
 	          className: className,
-	          'data-key': obj.id
+	          'data-key': obj.id,
+	          'data-finger': finger
 	        };
 
 	        return _react2.default.createElement(_Key2.default, {
@@ -73618,7 +73696,7 @@
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'keypad' },
-	        keys
+	        keysNode
 	      );
 	    }
 	  }]);
@@ -73690,56 +73768,56 @@
 	  key: '2',
 	  shiftKey: '@',
 	  type: 'number',
-	  finger: 'ring-finger',
+	  finger: 'ring',
 	  hand: 'left',
 	  id: '2'
 	}, {
 	  key: '3',
 	  shiftKey: '#',
 	  type: 'number',
-	  finger: 'middle-finger',
+	  finger: 'middle',
 	  hand: 'left',
 	  id: '3'
 	}, {
 	  key: '4',
 	  shiftKey: '$',
 	  type: 'number',
-	  finger: 'left-index-finger',
+	  finger: 'index',
 	  hand: 'left',
 	  id: '4'
 	}, {
 	  key: '5',
 	  shiftKey: '%',
 	  type: 'number',
-	  finger: 'left-index-finger',
+	  finger: 'index',
 	  hand: 'left',
 	  id: '5'
 	}, {
 	  key: '6',
 	  shiftKey: '^',
 	  type: 'number',
-	  finger: 'right-index-finger',
+	  finger: 'index',
 	  hand: 'right',
 	  id: '6'
 	}, {
 	  key: '7',
 	  shiftKey: '&',
 	  type: 'number',
-	  finger: 'right-index-finger',
+	  finger: 'index',
 	  hand: 'right',
 	  id: '7'
 	}, {
 	  key: '8',
 	  shiftKey: '*',
 	  type: 'number',
-	  finger: 'middle-finger',
+	  finger: 'middle',
 	  hand: 'right',
 	  id: '8'
 	}, {
 	  key: '9',
 	  shiftKey: '(',
 	  type: 'number',
-	  finger: 'ring-finger',
+	  finger: 'ring',
 	  hand: 'right',
 	  id: '9'
 	}, {
@@ -73777,6 +73855,7 @@
 	  key: 'q',
 	  shiftKey: 'Q',
 	  type: 'letter',
+	  row: 'top',
 	  finger: 'pinky',
 	  hand: 'left',
 	  id: 'q'
@@ -73784,62 +73863,71 @@
 	  key: 'w',
 	  shiftKey: 'W',
 	  type: 'letter',
-	  finger: 'ring-finger',
+	  row: 'top',
+	  finger: 'ring',
 	  hand: 'left',
 	  id: 'w'
 	}, {
 	  key: 'e',
 	  shiftKey: 'E',
 	  type: 'letter',
-	  finger: 'middle-finger',
+	  row: 'top',
+	  finger: 'middle',
 	  hand: 'left',
 	  id: 'e'
 	}, {
 	  key: 'r',
 	  shiftKey: 'R',
 	  type: 'letter',
-	  finger: 'left-index-finger',
+	  row: 'top',
+	  finger: 'index',
 	  hand: 'left',
 	  id: 'r'
 	}, {
 	  key: 't',
 	  shiftKey: 'T',
 	  type: 'letter',
-	  finger: 'left-index-finger',
+	  row: 'top',
+	  finger: 'index',
 	  hand: 'left',
 	  id: 't'
 	}, {
 	  key: 'y',
 	  shiftKey: 'Y',
 	  type: 'letter',
-	  finger: 'right-index-finger',
+	  row: 'top',
+	  finger: 'index',
 	  hand: 'right',
 	  id: 'y'
 	}, {
 	  key: 'u',
 	  shiftKey: 'U',
 	  type: 'letter',
-	  finger: 'right-index-finger',
+	  row: 'top',
+	  finger: 'index',
 	  hand: 'right',
 	  id: 'u'
 	}, {
 	  key: 'i',
 	  shiftKey: 'I',
 	  type: 'letter',
-	  finger: 'middle-finger',
+	  row: 'top',
+	  finger: 'middle',
 	  hand: 'right',
 	  id: 'i'
 	}, {
 	  key: 'o',
 	  shiftKey: 'O',
 	  type: 'letter',
-	  finger: 'ring-finger',
+	  row: 'top',
+	  finger: 'ring',
 	  hand: 'right',
 	  id: 'o'
 	}, {
 	  key: 'p',
 	  shiftKey: 'P',
 	  type: 'letter',
+	  row: 'top',
 	  finger: 'pinky',
 	  hand: 'right',
 	  id: 'p'
@@ -73873,6 +73961,7 @@
 	  key: 'a',
 	  shiftKey: 'A',
 	  type: 'letter',
+	  row: 'middle',
 	  finger: 'pinky',
 	  hand: 'left',
 	  id: 'a'
@@ -73880,56 +73969,64 @@
 	  key: 's',
 	  shiftKey: 'S',
 	  type: 'letter',
-	  finger: 'ring-finger',
+	  row: 'middle',
+	  finger: 'ring',
 	  hand: 'left',
 	  id: 's'
 	}, {
 	  key: 'd',
 	  shiftKey: 'D',
 	  type: 'letter',
-	  finger: 'middle-finger',
+	  row: 'middle',
+	  finger: 'middle',
 	  hand: 'left',
 	  id: 'd'
 	}, {
 	  key: 'f',
 	  shiftKey: 'F',
 	  type: 'letter',
-	  finger: 'left-index-finger',
+	  row: 'middle',
+	  finger: 'index',
 	  hand: 'left',
 	  id: 'f'
 	}, {
 	  key: 'g',
 	  shiftKey: 'G',
 	  type: 'letter',
-	  finger: 'left-index-finger',
+	  row: 'middle',
+	  finger: 'index',
 	  hand: 'left',
 	  id: 'g'
 	}, {
 	  key: 'h',
 	  shiftKey: 'H',
 	  type: 'letter',
-	  finger: 'right-index-finger',
+	  row: 'middle',
+	  finger: 'index',
 	  hand: 'right',
 	  id: 'h'
 	}, {
 	  key: 'j',
 	  shiftKey: 'J',
 	  type: 'letter',
-	  finger: 'right-index-finger',
+	  row: 'middle',
+	  finger: 'index',
 	  hand: 'right',
 	  id: 'j'
 	}, {
 	  key: 'k',
 	  shiftKey: 'K',
 	  type: 'letter',
-	  finger: 'middle-finger',
+	  row: 'middle',
+	  finger: 'middle',
 	  hand: 'right',
 	  id: 'k'
 	}, {
 	  key: 'l',
 	  shiftKey: 'L',
 	  type: 'letter',
-	  finger: 'ring-finger',
+	  row: 'middle',
+	  finger: 'ring',
 	  hand: 'right',
 	  id: 'l'
 	}, {
@@ -73960,6 +74057,7 @@
 	  key: 'z',
 	  shiftKey: 'Z',
 	  type: 'letter',
+	  row: 'bottom',
 	  finger: 'pinky',
 	  hand: 'left',
 	  id: 'z'
@@ -73967,56 +74065,62 @@
 	  key: 'x',
 	  shiftKey: 'X',
 	  type: 'letter',
-	  finger: 'ring-finger',
+	  row: 'bottom',
+	  finger: 'ring',
 	  hand: 'left',
 	  id: 'x'
 	}, {
 	  key: 'c',
 	  shiftKey: 'C',
 	  type: 'letter',
-	  finger: 'middle-finger',
+	  row: 'bottom',
+	  finger: 'middle',
 	  hand: 'left',
 	  id: 'c'
 	}, {
 	  key: 'v',
 	  shiftKey: 'V',
 	  type: 'letter',
-	  finger: 'left-index-finger',
+	  row: 'bottom',
+	  finger: 'index',
 	  hand: 'left',
 	  id: 'v'
 	}, {
 	  key: 'b',
 	  shiftKey: 'B',
 	  type: 'letter',
-	  finger: 'left-index-finger',
+	  row: 'bottom',
+	  finger: 'index',
 	  hand: 'left',
 	  id: 'b'
 	}, {
 	  key: 'n',
 	  shiftKey: 'N',
 	  type: 'letter',
-	  finger: 'right-index-finger',
+	  row: 'bottom',
+	  finger: 'index',
 	  hand: 'right',
 	  id: 'n'
 	}, {
 	  key: 'm',
 	  shiftKey: 'M',
 	  type: 'letter',
-	  finger: 'right-index-finger',
+	  row: 'bottom',
+	  finger: 'index',
 	  hand: 'right',
 	  id: 'm'
 	}, {
 	  key: ',',
 	  shiftKey: '<',
 	  type: 'non-alphanumeric',
-	  finger: 'middle-finger',
+	  finger: 'middle',
 	  hand: 'right',
 	  id: ','
 	}, {
 	  key: '.',
 	  shiftKey: '>',
 	  type: 'non-alphanumeric',
-	  finger: 'ring-finger',
+	  finger: 'ring',
 	  hand: 'right',
 	  id: '.'
 	}, {
@@ -77857,7 +77961,7 @@
 	    setMaxWordLength: function setMaxWordLength(length) {
 	      dispatch((0, _learningMode.setLessonMaxWordLength)(length));
 
-	      dispatch((0, _learningMode.updateLesson)());
+	      dispatch((0, _learningMode.generateLesson)());
 	    },
 	    setLearningMode: function setLearningMode(mode) {
 	      dispatch((0, _learningMode.setLearningMode)(mode));
@@ -77971,21 +78075,28 @@
 	          break;
 	      }
 
-	      var menuItems = ['Letters set', 'Keyboard'].map(function (name, i) {
-	        var linkClass = 'menu__item';
-	        var nameLc = name.toLowerCase();
+	      var menuItemsData = [{
+	        name: 'By fingers',
+	        id: 'letters set'
+	      }, {
+	        name: 'Free',
+	        id: 'keyboard'
+	      }];
 
-	        if (nameLc === mode) {
+	      var menuItems = menuItemsData.map(function (item, i) {
+	        var linkClass = 'menu__item';
+
+	        if (item.id === mode) {
 	          linkClass = (0, _classNames2.default)(linkClass, 'menu__item_selected');
 	        }
 
 	        return _react2.default.createElement(
 	          'div',
-	          { key: i, className: 'settings-learning__menu-item' },
+	          { key: i, className: 'settings-learning__modes-menu-item' },
 	          _react2.default.createElement(
 	            'a',
-	            { className: linkClass, onClick: _this2._onClickMenu.bind(_this2, nameLc) },
-	            name
+	            { className: linkClass, onClick: _this2._onClickMenu.bind(_this2, item.id) },
+	            item.name
 	          )
 	        );
 	      });
@@ -78016,6 +78127,11 @@
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'settings-learning__modes-menu' },
+	            _react2.default.createElement(
+	              'h4',
+	              { className: 'settings-learning__modes-menu-title' },
+	              'Keys set'
+	            ),
 	            menuItems
 	          ),
 	          _react2.default.createElement(
@@ -78099,12 +78215,12 @@
 	    addLetter: function addLetter(letter) {
 	      dispatch((0, _learningMode.addLetterToLesson)(letter));
 
-	      dispatch((0, _learningMode.updateLesson)());
+	      dispatch((0, _learningMode.generateLesson)());
 	    },
 	    removeLetter: function removeLetter(letter) {
 	      dispatch((0, _learningMode.removeLetterFromLesson)(letter));
 
-	      dispatch((0, _learningMode.updateLesson)());
+	      dispatch((0, _learningMode.generateLesson)());
 	    }
 	  };
 	};
@@ -78246,17 +78362,27 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    alphabetSize: state.learningMode.alphabetSize,
-	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys
+	    fingersSetSize: state.learningMode.fingersSetSize,
+	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys,
+	    letters: state.learningMode.lettersFingersMode
 	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
-	    setAlphabetSize: function setAlphabetSize(size) {
-	      dispatch((0, _learningMode.setLessonAlphabetSize)(size));
+	    setFingersSetSize: function setFingersSetSize(size) {
+	      dispatch((0, _learningMode.setLessonFingersSetSize)(size));
 
-	      dispatch((0, _learningMode.updateLesson)());
+	      dispatch((0, _learningMode.generateLessonFromFingersMode)());
+
+	      dispatch((0, _learningMode.updateFromLearningModeCharToType)());
+	    },
+	    setLetters: function setLetters(letters) {
+	      dispatch((0, _learningMode.setLettersFingersLearningMode)(letters));
+
+	      dispatch((0, _learningMode.generateLessonFromFingersMode)());
+
+	      dispatch((0, _learningMode.updateFromLearningModeCharToType)());
 	    }
 	  };
 	};
@@ -78280,6 +78406,8 @@
 	var _react2 = _interopRequireDefault(_react);
 
 	var _reactRouter = __webpack_require__(196);
+
+	var _lodash = __webpack_require__(281);
 
 	var _jquery = __webpack_require__(264);
 
@@ -78313,13 +78441,36 @@
 
 	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LearningLettersSetTab).call(this, props));
 
-	    _this.charset = _this.props.keys.reduce(function (charset, key) {
-	      if (key.type === 'letter') {
-	        charset.push(key.id);
-	      }
+	    var fingers = ['index', 'middle', 'ring', 'pinky'];
+	    var rows = ['middle', 'top', 'bottom'];
+	    var hands = ['left', 'right'];
 
-	      return charset;
-	    }, []);
+	    _this.fingersLetters = [];
+
+	    rows.forEach(function (row) {
+
+	      fingers.forEach(function (finger) {
+
+	        hands.forEach(function (hand) {
+
+	          var key = (0, _lodash.filter)(_this.props.keys, {
+	            row: row,
+	            finger: finger,
+	            hand: hand,
+	            type: 'letter'
+	          });
+
+	          key = key.map(function (obj) {
+	            return obj.key;
+	          });
+
+	          if (key) {
+	            _this.fingersLetters.push(key);
+	          }
+	        });
+	      });
+	    });
+
 	    return _this;
 	  }
 
@@ -78327,27 +78478,30 @@
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
 	      var self = this;
-	      var $noUiValueAlphabet = (0, _jquery2.default)('<span class="noUi-value" />');
+	      var $noUiValueFingersSet = (0, _jquery2.default)('<span class="noUi-value" />');
 
-	      // alphabet range
-	      _nouislider2.default.create(this._alphabetRange, {
-	        start: [9],
+	      var start = this.props.fingersSetSize;
+
+	      _nouislider2.default.create(this._fingersRange, {
+	        start: [start],
 	        step: 1,
 	        connect: 'lower',
 	        range: {
 	          'min': 1,
-	          'max': this.charset.length
+	          'max': this.fingersLetters.length
 	        }
 	      });
 
-	      (0, _jquery2.default)(this._alphabetRange).find('.noUi-handle').append($noUiValueAlphabet);
+	      $noUiValueFingersSet.text(start);
 
-	      this._alphabetRange.noUiSlider.on('slide', function (values, handle) {
+	      (0, _jquery2.default)(this._fingersRange).find('.noUi-handle').append($noUiValueFingersSet);
+
+	      this._fingersRange.noUiSlider.on('slide', function (values, handle) {
 	        var val = parseInt(values[handle], 10);
 
-	        self.props.setAlphabetSize(val);
+	        self.props.setFingersSetSize(val);
 
-	        $noUiValueAlphabet.text(val);
+	        $noUiValueFingersSet.text(val);
 	      });
 	    }
 	  }, {
@@ -78355,32 +78509,46 @@
 	    value: function render() {
 	      var _this2 = this;
 
-	      var keys = this.props.keys;
+	      var _props = this.props;
+	      var keys = _props.keys;
+	      var fingersSetSize = _props.fingersSetSize;
 
 
-	      var chars = this.charset.map(function (letter, i) {
-	        var className = 'settings-learning__letter';
+	      var selectedLetters = (0, _lodash.clone)(this.fingersLetters);
 
-	        if (i >= _this2.props.alphabetSize) {
-	          className = (0, _classNames2.default)(className, 'settings-learning__letter_excluded');
-	        }
+	      selectedLetters.splice(fingersSetSize);
 
-	        return _react2.default.createElement(
-	          'span',
-	          { key: i, className: className },
-	          letter
-	        );
-	      });
+	      selectedLetters = _lodash.concat.apply(null, selectedLetters);
 
 	      var keyNodes = keys.map(function (obj) {
+	        var className = 'keyboard__key';
+
+	        if (obj.type === 'letter') {
+	          if (selectedLetters.indexOf(obj.key) + 1) {
+	            className = (0, _classNames2.default)(className, 'keyboard__key_selected');
+	          }
+	        } else {
+	          className = (0, _classNames2.default)(className, 'keyboard__key_disabled');
+	        }
+
+	        var finger = obj.finger;
+
+	        if (finger === 'index') {
+	          finger = obj.hand + '-' + finger;
+	        }
+
+	        var keyProps = {
+	          className: className,
+	          'data-key': obj.id,
+	          'data-finger': finger
+	        };
 
 	        return _react2.default.createElement(_Key2.default, {
 	          key: obj.id,
-	          id: obj.id,
+	          keyProps: keyProps,
 	          type: obj.type,
 	          char: obj.key,
 	          shiftChar: obj.shiftKey,
-	          className: 'keyboard__key',
 	          classNameShift: 'keyboard__shift-key'
 	        });
 	      });
@@ -78394,20 +78562,15 @@
 	          _react2.default.createElement(
 	            'label',
 	            { htmlFor: '', className: 'settings-learning__label' },
-	            'Extend alphabet size:'
+	            'Extend fingers set:'
 	          ),
 	          _react2.default.createElement(
 	            'div',
 	            { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
 	            _react2.default.createElement('div', { className: 'settings-learning__range', ref: function ref(c) {
-	                return _this2._alphabetRange = c;
+	                return _this2._fingersRange = c;
 	              } })
 	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'settings-learning__letters' },
-	          chars
 	        ),
 	        _react2.default.createElement(
 	          'div',
@@ -78416,6 +78579,9 @@
 	        )
 	      );
 	    }
+	  }, {
+	    key: '_setLetters',
+	    value: function _setLetters(letterKeys) {}
 	  }]);
 
 	  return LearningLettersSetTab;
@@ -79089,19 +79255,21 @@
 	var _lodash = __webpack_require__(281);
 
 	var INITIAL_STATE = {
-	  alphabetSize: 9,
+	  fingersSetSize: 9,
 
 	  maxWordLength: 5,
 
-	  letters: ["y", "h", "f", "e", "w"],
+	  lettersFingersMode: [],
+
+	  lettersFreeMode: [],
+
+	  // letters set, keyboard,
+	  mode: 'letters set',
 
 	  lesson: {
 	    typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
 	    last: 'da'
-	  },
-
-	  // letters set, keyboard,
-	  mode: 'keyboard'
+	  }
 	};
 
 	exports.default = function () {
@@ -79130,14 +79298,24 @@
 	        }
 	      });
 
-	    case _learningMode.SET_LESSON_ALPHABET_SIZE:
-	      return (0, _lodash.assign)({}, state, {
-	        alphabetSize: action.size
-	      });
-
 	    case _learningMode.SET_LESSON_MAX_WORD_LENGTH:
 	      return (0, _lodash.assign)({}, state, {
 	        maxWordLength: action.length
+	      });
+
+	    case _learningMode.SET_LETTERS_FINGERS_LEARNING_MODE:
+	      return (0, _lodash.assign)({}, state, {
+	        lettersFingersMode: action.letters
+	      });
+
+	    case _learningMode.SET_LESSON_FINGERS_SET_SIZE:
+	      return (0, _lodash.assign)({}, state, {
+	        fingersSetSize: action.size
+	      });
+
+	    case _learningMode.SET_LETTERS_FREE_LEARNING_MODE:
+	      return (0, _lodash.assign)({}, state, {
+	        lettersFreeMode: action.letters
 	      });
 
 	    case _learningMode.ADD_LETTER_TO_LESSON:
@@ -79220,7 +79398,7 @@
 	  metronomeInterval: 800,
 
 	  // text, learning
-	  mode: 'text'
+	  mode: 'learning'
 	};
 
 	var actionMetronome = function actionMetronome(state, action, value) {

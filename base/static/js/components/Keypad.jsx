@@ -9,13 +9,13 @@ class KeyPad extends Component {
   render() {
 
     const {
-            keyboardName,
+            keys,
             pressedRightIds,
             pressedWrongIds,
             idCharsToType
           } = this.props
 
-    let keys = find(keyboards, {'name': keyboardName}).keys.map(obj => {
+    let keysNode = keys.map(obj => {
       let isPressedRight = pressedRightIds.indexOf(obj.id) + 1;
       let isPressedWrong = pressedWrongIds.indexOf(obj.id) + 1;
       let needToType = false;
@@ -27,15 +27,22 @@ class KeyPad extends Component {
         }
       });
 
-      let className = classNames('keypad__key', 'keypad__' + obj.finger, {
+      let className = classNames('keypad__key', {
         'keypad__active': isPressedRight || isPressedWrong,
         'keypad__wrong': isPressedWrong,
         'keypad__to-type': needToType
       });
 
+      let finger = obj.finger;
+
+      if (finger === 'index') {
+        finger = obj.hand + '-' + finger;
+      }
+
       let keyProps = {
         className: className,
-        'data-key': obj.id
+        'data-key': obj.id,
+        'data-finger': finger
       };
 
       return <Key
@@ -51,7 +58,7 @@ class KeyPad extends Component {
 
     return (
       <div className='keypad'>
-        {keys}
+        {keysNode}
       </div>
     )
 

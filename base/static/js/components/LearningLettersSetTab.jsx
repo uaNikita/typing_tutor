@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router'
+import {filter, isArray, concat, clone} from 'lodash';
 import $ from 'jquery';
 import noUiSlider from 'nouislider';
 import classNames from 'classNames';
@@ -11,89 +12,138 @@ class LearningLettersSetTab extends Component {
   constructor(props) {
     super(props);
 
-    this.charset = this.props.keys.reduce((charset, key) => {
-      if (key.type === 'letter') {
-        charset.push(key.id)
-      }
+    var fingers = ['index', 'middle', 'ring', 'pinky'];
+    var rows = ['middle', 'top', 'bottom'];
+    var hands = ['left', 'right'];
 
-      return charset
-    }, []);
+    this.fingersLetters = [];
+
+    rows.forEach(row=> {
+
+      fingers.forEach(finger => {
+
+        hands.forEach(hand => {
+
+          var key = filter(this.props.keys, {
+            row: row,
+            finger: finger,
+            hand: hand,
+            type: 'letter'
+          });
+
+          key = key.map(obj=> {
+            return obj.key;
+          })
+
+          if (key) {
+            this.fingersLetters.push(key)
+          }
+
+        });
+
+      });
+
+    });
+
   }
 
   componentDidMount() {
     let self = this;
-    let $noUiValueAlphabet = $('<span class="noUi-value" />');
+    let $noUiValueFingersSet = $('<span class="noUi-value" />');
 
-    // alphabet range
-    noUiSlider.create(this._alphabetRange, {
-      start: [9],
+    let start = this.props.fingersSetSize;
+
+    noUiSlider.create(this._fingersRange, {
+      start: [start],
       step: 1,
       connect: 'lower',
       range: {
         'min': 1,
-        'max': this.charset.length
+        'max': this.fingersLetters.length
       }
     });
 
-    $(this._alphabetRange).find('.noUi-handle').append($noUiValueAlphabet);
+    $noUiValueFingersSet.text(start);
 
-    this._alphabetRange.noUiSlider.on('slide', function (values, handle) {
+    $(this._fingersRange).find('.noUi-handle').append($noUiValueFingersSet);
+
+    this._fingersRange.noUiSlider.on('slide', function (values, handle) {
       let val = parseInt(values[handle], 10);
 
-      self.props.setAlphabetSize(val);
+      self.props.setFingersSetSize(val);
 
-      $noUiValueAlphabet.text(val);
+      $noUiValueFingersSet.text(val);
     });
   }
 
   render() {
-    const {keys} = this.props;
+    const {keys, fingersSetSize} = this.props;
 
-    let chars = this.charset.map((letter, i) => {
-      let className = 'settings-learning__letter';
+    let selectedLetters = clone(this.fingersLetters);
 
-      if (i >= this.props.alphabetSize) {
-        className = classNames(className, 'settings-learning__letter_excluded');
-      }
+    selectedLetters.splice(fingersSetSize);
 
-      return <span key={i} className={className}>{letter}</span>;
-    });
+    selectedLetters = concat.apply(null, selectedLetters);
 
     let keyNodes = keys.map(obj => {
+      let className = 'keyboard__key';
+
+      if (obj.type === 'letter') {
+        if (selectedLetters.indexOf(obj.key) + 1) {
+          className = classNames(className, 'keyboard__key_selected')
+        }
+      } else {
+        className = classNames(className, 'keyboard__key_disabled')
+      }
+
+      let finger = obj.finger;
+
+      if (finger === 'index') {
+        finger = obj.hand + '-' + finger;
+      }
+
+      let keyProps = {
+        className: className,
+        'data-key': obj.id,
+        'data-finger': finger
+      };
 
       return <Key
         key={obj.id}
-        id={obj.id}
+        keyProps={keyProps}
         type={obj.type}
         char={obj.key}
         shiftChar={obj.shiftKey}
-        className='keyboard__key'
         classNameShift='keyboard__shift-key'
       />
-      
+
     });
+
 
     return (
       <div className="settings-learning__letters-set">
 
         <div className="settings-learning__item">
           <label htmlFor="" className="settings-learning__label">
-            Extend alphabet size:
+            Extend fingers set:
           </label>
           <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-            <div className="settings-learning__range" ref={(c) => this._alphabetRange = c }></div>
+            <div className="settings-learning__range" ref={(c) => this._fingersRange = c }></div>
           </div>
         </div>
 
-        <div className="settings-learning__letters">
-          {chars}
-        </div>
         <div className="keyboard">
           {keyNodes}
         </div>
+
       </div>
     )
   }
+
+
+  _setLetters(letterKeys) {
+
+  };
 
 }
 

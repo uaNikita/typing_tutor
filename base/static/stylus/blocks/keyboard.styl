@@ -32,8 +32,18 @@
          width: 92px;
       &[data-key="Space"]
          width: 260px;
+      &[data-finger="left-index"]
+         background-image: linear-gradient(to bottom, #ffd9b2, #ffc07e);
+      &[data-finger="right-index"]
+         background-image: linear-gradient(to bottom, #fff5b2, #ffef7e);
+      &[data-finger="middle"]
+         background-image: linear-gradient(to bottom, #d0f1a6, #b0e86a);
+      &[data-finger="ring"]
+         background-image: linear-gradient(to bottom, #a1eeff, #63e3ff);
+      &[data-finger="pinky"]
+         background-image: linear-gradient(to bottom, #aeeecc, #78e2aa);
       &_selected
-         background-color: #33c3f0;
+         background: #33c3f0 !important;
       &_disabled
          opacity: 0.4
    &__shift-key

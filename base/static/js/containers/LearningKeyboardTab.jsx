@@ -4,7 +4,7 @@ import LearningKeyboardTab from '../components/LearningKeyboardTab.jsx'
 import {
   addLetterToLesson,
   removeLetterFromLesson,
-  updateLesson
+  generateLesson
 } from '../actions/learning-mode'
 
 const mapStateToProps = (state) => {
@@ -19,12 +19,12 @@ const mapDispatchToProps = (dispatch) => {
     addLetter: (letter) => {
       dispatch(addLetterToLesson(letter))
 
-      dispatch(updateLesson())
+      dispatch(generateLesson())
     },
     removeLetter: (letter) => {
       dispatch(removeLetterFromLesson(letter))
 
-      dispatch(updateLesson())
+      dispatch(generateLesson())
     }
   }
 }

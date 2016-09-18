@@ -52,17 +52,26 @@ class LearningMode extends Component {
         break;
     }
 
-    let menuItems = ['Letters set', 'Keyboard'].map((name, i) => {
-      let linkClass = 'menu__item';
-      let nameLc = name.toLowerCase();
+    let menuItemsData = [
+      {
+        name: 'By fingers',
+        id: 'letters set'
+      }, {
+        name: 'Free',
+        id: 'keyboard'
+      }
+    ];
 
-      if (nameLc === mode) {
+    let menuItems = menuItemsData.map((item, i) => {
+      let linkClass = 'menu__item';
+
+      if (item.id === mode) {
         linkClass = classNames(linkClass, 'menu__item_selected');
       }
 
       return (
-        <div key={i} className='settings-learning__menu-item'>
-          <a className={linkClass} onClick={ this._onClickMenu.bind(this, nameLc) }>{name}</a>
+        <div key={i} className='settings-learning__modes-menu-item'>
+          <a className={linkClass} onClick={ this._onClickMenu.bind(this, item.id) }>{item.name}</a>
         </div>
       )
     })
@@ -83,6 +92,7 @@ class LearningMode extends Component {
 
         <div className="settings-learning__modes">
           <div className="settings-learning__modes-menu">
+            <h4 className="settings-learning__modes-menu-title">Keys set</h4>
             {menuItems}
           </div>
 

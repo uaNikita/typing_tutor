@@ -1277,8 +1277,28 @@ a:hover {
 .keyboard__key[data-key="Space"] {
   width: 260px;
 }
+.keyboard__key[data-finger="left-index"] {
+  background-image: -webkit-linear-gradient(top, #ffd9b2, #ffc07e);
+  background-image: linear-gradient(to bottom, #ffd9b2, #ffc07e);
+}
+.keyboard__key[data-finger="right-index"] {
+  background-image: -webkit-linear-gradient(top, #fff5b2, #ffef7e);
+  background-image: linear-gradient(to bottom, #fff5b2, #ffef7e);
+}
+.keyboard__key[data-finger="middle"] {
+  background-image: -webkit-linear-gradient(top, #d0f1a6, #b0e86a);
+  background-image: linear-gradient(to bottom, #d0f1a6, #b0e86a);
+}
+.keyboard__key[data-finger="ring"] {
+  background-image: -webkit-linear-gradient(top, #a1eeff, #63e3ff);
+  background-image: linear-gradient(to bottom, #a1eeff, #63e3ff);
+}
+.keyboard__key[data-finger="pinky"] {
+  background-image: -webkit-linear-gradient(top, #aeeecc, #78e2aa);
+  background-image: linear-gradient(to bottom, #aeeecc, #78e2aa);
+}
 .keyboard__key_selected {
-  background-color: #33c3f0;
+  background: #33c3f0 !important;
 }
 .keyboard__key_disabled {
   opacity: 0.4;
@@ -1320,12 +1340,12 @@ a:hover {
   margin: 0 4px 10px;
   text-align: center;
   font: 18px/50px Verdana, Geneva, sans-serif;
-  background: #eee;
   border-bottom: 3px solid #b2b1b1;
   border-radius: 2px;
   border-bottom: 1px solid #7b7b7b;
-  background: -webkit-linear-gradient(top, #d1d1d1, #afafaf);
-  background: linear-gradient(to bottom, #d1d1d1, #afafaf);
+  background-color: #eee;
+  background-image: -webkit-linear-gradient(top, #d1d1d1, #afafaf);
+  background-image: linear-gradient(to bottom, #d1d1d1, #afafaf);
   box-shadow: inset 1px 1px 0 #e3e3e3;
   -webkit-transition: background-color 0.1s linear;
   transition: background-color 0.1s linear;
@@ -1359,16 +1379,6 @@ a:hover {
   border: none;
   box-shadow: none;
 }
-.keypad__key.keypad__wrong {
-  background: #ffa5a5;
-  background: -webkit-linear-gradient(top, #ffa5a5, #ff4d4d);
-  background: linear-gradient(to bottom, #ffa5a5, #ff4d4d);
-}
-.keypad__key.keypad__to-type {
-  background: #b286ff;
-  background: -webkit-linear-gradient(top, #cfb5ff, #b286ff);
-  background: linear-gradient(to bottom, #cfb5ff, #b286ff);
-}
 .keypad__key[data-key="Backspace"] {
   width: 66px;
 }
@@ -1388,25 +1398,35 @@ a:hover {
 .keypad__key[data-key="Space"] {
   width: 340px;
 }
-.keypad__left-index-finger {
-  background: -webkit-linear-gradient(top, #ffd9b2, #ffc07e);
-  background: linear-gradient(to bottom, #ffd9b2, #ffc07e);
+.keypad__key[data-finger="left-index"] {
+  background-image: -webkit-linear-gradient(top, #ffd9b2, #ffc07e);
+  background-image: linear-gradient(to bottom, #ffd9b2, #ffc07e);
 }
-.keypad__right-index-finger {
-  background: -webkit-linear-gradient(top, #fff5b2, #ffef7e);
-  background: linear-gradient(to bottom, #fff5b2, #ffef7e);
+.keypad__key[data-finger="right-index"] {
+  background-image: -webkit-linear-gradient(top, #fff5b2, #ffef7e);
+  background-image: linear-gradient(to bottom, #fff5b2, #ffef7e);
 }
-.keypad__middle-finger {
-  background: -webkit-linear-gradient(top, #d0f1a6, #b0e86a);
-  background: linear-gradient(to bottom, #d0f1a6, #b0e86a);
+.keypad__key[data-finger="middle"] {
+  background-image: -webkit-linear-gradient(top, #d0f1a6, #b0e86a);
+  background-image: linear-gradient(to bottom, #d0f1a6, #b0e86a);
 }
-.keypad__ring-finger {
-  background: -webkit-linear-gradient(top, #a1eeff, #63e3ff);
-  background: linear-gradient(to bottom, #a1eeff, #63e3ff);
+.keypad__key[data-finger="ring"] {
+  background-image: -webkit-linear-gradient(top, #a1eeff, #63e3ff);
+  background-image: linear-gradient(to bottom, #a1eeff, #63e3ff);
 }
-.keypad__pinky {
-  background: -webkit-linear-gradient(top, #aeeecc, #78e2aa);
-  background: linear-gradient(to bottom, #aeeecc, #78e2aa);
+.keypad__key[data-finger="pinky"] {
+  background-image: -webkit-linear-gradient(top, #aeeecc, #78e2aa);
+  background-image: linear-gradient(to bottom, #aeeecc, #78e2aa);
+}
+.keypad__key.keypad__wrong {
+  background-image: #ffa5a5;
+  background-image: -webkit-linear-gradient(top, #ffa5a5, #ff4d4d);
+  background-image: linear-gradient(to bottom, #ffa5a5, #ff4d4d);
+}
+.keypad__key.keypad__to-type {
+  background-image: #b286ff;
+  background-image: -webkit-linear-gradient(top, #cfb5ff, #b286ff);
+  background-image: linear-gradient(to bottom, #cfb5ff, #b286ff);
 }
 .keypad__shift {
   display: block;
@@ -1526,6 +1546,10 @@ a:hover {
   background: linear-gradient(to bottom, #f7a700 0%, #ffe100 100%);
   border-radius: 4px;
   box-shadow: inset 0 1px 3px 1px rgba(0,0,0,0.3);
+  cursor: default;
+}
+.menu__item_selected:hover {
+  color: #000;
 }
 .metronome {
   position: relative;
@@ -1719,25 +1743,6 @@ a:hover {
   -webkit-box-align: center;
           align-items: center;
 }
-.settings-learning__letters {
-  display: -webkit-box;
-  display: flex;
-}
-.settings-learning__letter {
-  width: 100%;
-  height: 25px;
-  display: block;
-  margin-right: 1px;
-  background-color: #0eda61;
-  line-height: 25px;
-  text-align: center;
-}
-.settings-learning__letter_excluded {
-  background-color: #b6190b;
-}
-.settings-learning__letter:not(.settings-learning__letter_excluded) + .settings-learning__letter_excluded {
-  margin-left: 14px;
-}
 .settings-learning__modes {
   display: -webkit-box;
   display: flex;
@@ -1745,6 +1750,12 @@ a:hover {
 .settings-learning__modes-menu {
   -webkit-box-flex: 0;
           flex: 0 0 140px;
+}
+.settings-learning__modes-menu-item {
+  margin-bottom: 5px;
+}
+.settings-learning__modes-menu-title {
+  margin-bottom: 15px;
 }
 .settings-learning__modes-content {
   -webkit-box-flex: 0;

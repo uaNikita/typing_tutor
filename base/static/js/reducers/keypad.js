@@ -33,7 +33,7 @@ const INITIAL_STATE = {
   metronomeInterval: 800,
 
   // text, learning
-  mode: 'text',
+  mode: 'learning',
 };
 
 const actionMetronome = (state, action, value) => {

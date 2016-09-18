@@ -16,56 +16,56 @@ export default [{
   key: '2',
   shiftKey: '@',
   type: 'number',
-  finger: 'ring-finger',
+  finger: 'ring',
   hand: 'left',
   id: '2'
 }, {
   key: '3',
   shiftKey: '#',
   type: 'number',
-  finger: 'middle-finger',
+  finger: 'middle',
   hand: 'left',
   id: '3'
 }, {
   key: '4',
   shiftKey: '$',
   type: 'number',
-  finger: 'left-index-finger',
+  finger: 'index',
   hand: 'left',
   id: '4'
 }, {
   key: '5',
   shiftKey: '%',
   type: 'number',
-  finger: 'left-index-finger',
+  finger: 'index',
   hand: 'left',
   id: '5'
 }, {
   key: '6',
   shiftKey: '^',
   type: 'number',
-  finger: 'right-index-finger',
+  finger: 'index',
   hand: 'right',
   id: '6'
 }, {
   key: '7',
   shiftKey: '&',
   type: 'number',
-  finger: 'right-index-finger',
+  finger: 'index',
   hand: 'right',
   id: '7'
 }, {
   key: '8',
   shiftKey: '*',
   type: 'number',
-  finger: 'middle-finger',
+  finger: 'middle',
   hand: 'right',
   id: '8'
 }, {
   key: '9',
   shiftKey: '(',
   type: 'number',
-  finger: 'ring-finger',
+  finger: 'ring',
   hand: 'right',
   id: '9'
 }, {
@@ -103,6 +103,7 @@ export default [{
   key: 'q',
   shiftKey: 'Q',
   type: 'letter',
+  row:'top',
   finger: 'pinky',
   hand: 'left',
   id: 'q'
@@ -110,62 +111,71 @@ export default [{
   key: 'w',
   shiftKey: 'W',
   type: 'letter',
-  finger: 'ring-finger',
+  row:'top',
+  finger: 'ring',
   hand: 'left',
   id: 'w'
 }, {
   key: 'e',
   shiftKey: 'E',
   type: 'letter',
-  finger: 'middle-finger',
+  row:'top',
+  finger: 'middle',
   hand: 'left',
   id: 'e'
 }, {
   key: 'r',
   shiftKey: 'R',
   type: 'letter',
-  finger: 'left-index-finger',
+  row:'top',
+  finger: 'index',
   hand: 'left',
   id: 'r'
 }, {
   key: 't',
   shiftKey: 'T',
   type: 'letter',
-  finger: 'left-index-finger',
+  row:'top',
+  finger: 'index',
   hand: 'left',
   id: 't'
 }, {
   key: 'y',
   shiftKey: 'Y',
   type: 'letter',
-  finger: 'right-index-finger',
+  row:'top',
+  finger: 'index',
   hand: 'right',
   id: 'y'
 }, {
   key: 'u',
   shiftKey: 'U',
   type: 'letter',
-  finger: 'right-index-finger',
+  row:'top',
+  finger: 'index',
   hand: 'right',
   id: 'u'
 }, {
   key: 'i',
   shiftKey: 'I',
   type: 'letter',
-  finger: 'middle-finger',
+  row:'top',
+  finger: 'middle',
   hand: 'right',
   id: 'i'
 }, {
   key: 'o',
   shiftKey: 'O',
   type: 'letter',
-  finger: 'ring-finger',
+  row:'top',
+  finger: 'ring',
   hand: 'right',
   id: 'o'
 }, {
   key: 'p',
   shiftKey: 'P',
   type: 'letter',
+  row:'top',
   finger: 'pinky',
   hand: 'right',
   id: 'p'
@@ -199,6 +209,7 @@ export default [{
   key: 'a',
   shiftKey: 'A',
   type: 'letter',
+  row:'middle',
   finger: 'pinky',
   hand: 'left',
   id: 'a'
@@ -206,56 +217,64 @@ export default [{
   key: 's',
   shiftKey: 'S',
   type: 'letter',
-  finger: 'ring-finger',
+  row:'middle',
+  finger: 'ring',
   hand: 'left',
   id: 's'
 }, {
   key: 'd',
   shiftKey: 'D',
   type: 'letter',
-  finger: 'middle-finger',
+  row:'middle',
+  finger: 'middle',
   hand: 'left',
   id: 'd'
 }, {
   key: 'f',
   shiftKey: 'F',
   type: 'letter',
-  finger: 'left-index-finger',
+  row:'middle',
+  finger: 'index',
   hand: 'left',
   id: 'f'
 }, {
   key: 'g',
   shiftKey: 'G',
   type: 'letter',
-  finger: 'left-index-finger',
+  row:'middle',
+  finger: 'index',
   hand: 'left',
   id: 'g'
 }, {
   key: 'h',
   shiftKey: 'H',
   type: 'letter',
-  finger: 'right-index-finger',
+  row:'middle',
+  finger: 'index',
   hand: 'right',
   id: 'h'
 }, {
   key: 'j',
   shiftKey: 'J',
   type: 'letter',
-  finger: 'right-index-finger',
+  row:'middle',
+  finger: 'index',
   hand: 'right',
   id: 'j'
 }, {
   key: 'k',
   shiftKey: 'K',
   type: 'letter',
-  finger: 'middle-finger',
+  row:'middle',
+  finger: 'middle',
   hand: 'right',
   id: 'k'
 }, {
   key: 'l',
   shiftKey: 'L',
   type: 'letter',
-  finger: 'ring-finger',
+  row:'middle',
+  finger: 'ring',
   hand: 'right',
   id: 'l'
 }, {
@@ -286,6 +305,7 @@ export default [{
   key: 'z',
   shiftKey: 'Z',
   type: 'letter',
+  row:'bottom',
   finger: 'pinky',
   hand: 'left',
   id: 'z'
@@ -293,56 +313,62 @@ export default [{
   key: 'x',
   shiftKey: 'X',
   type: 'letter',
-  finger: 'ring-finger',
+  row:'bottom',
+  finger: 'ring',
   hand: 'left',
   id: 'x'
 }, {
   key: 'c',
   shiftKey: 'C',
   type: 'letter',
-  finger: 'middle-finger',
+  row:'bottom',
+  finger: 'middle',
   hand: 'left',
   id: 'c'
 }, {
   key: 'v',
   shiftKey: 'V',
   type: 'letter',
-  finger: 'left-index-finger',
+  row:'bottom',
+  finger: 'index',
   hand: 'left',
   id: 'v'
 }, {
   key: 'b',
   shiftKey: 'B',
   type: 'letter',
-  finger: 'left-index-finger',
+  row:'bottom',
+  finger: 'index',
   hand: 'left',
   id: 'b'
 }, {
   key: 'n',
   shiftKey: 'N',
   type: 'letter',
-  finger: 'right-index-finger',
+  row:'bottom',
+  finger: 'index',
   hand: 'right',
   id: 'n'
 }, {
   key: 'm',
   shiftKey: 'M',
   type: 'letter',
-  finger: 'right-index-finger',
+  row:'bottom',
+  finger: 'index',
   hand: 'right',
   id: 'm'
 }, {
   key: ',',
   shiftKey: '<',
   type: 'non-alphanumeric',
-  finger: 'middle-finger',
+  finger: 'middle',
   hand: 'right',
   id: ','
 }, {
   key: '.',
   shiftKey: '>',
   type: 'non-alphanumeric',
-  finger: 'ring-finger',
+  finger: 'ring',
   hand: 'right',
   id: '.'
 }, {
