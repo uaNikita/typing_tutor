@@ -1298,7 +1298,8 @@ a:hover {
   background-image: linear-gradient(to bottom, #aeeecc, #78e2aa);
 }
 .keyboard__key_selected {
-  background: #33c3f0 !important;
+  background-image: -webkit-linear-gradient(top, #9be7ff, #0095ff) !important;
+  background-image: linear-gradient(to bottom, #9be7ff, #0095ff) !important;
 }
 .keyboard__key_disabled {
   opacity: 0.4;

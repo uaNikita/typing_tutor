@@ -57381,49 +57381,126 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
+	exports.createLesson = undefined;
 	exports.getIdsFromChar = getIdsFromChar;
 	exports.sliceChar = sliceChar;
+	exports.getLearningLettersSet = getLearningLettersSet;
+
+	var _store = __webpack_require__(541);
+
+	var _store2 = _interopRequireDefault(_store);
 
 	var _lodash = __webpack_require__(281);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	function getIdsFromChar(keys, char) {
-	  var charsToType = [];
+	   var charsToType = [];
 
-	  keys.forEach(function (obj) {
+	   keys.forEach(function (obj) {
 
-	    // check if it upper case letter
-	    if (obj.shiftKey === char) {
-	      charsToType.push(obj.id);
+	      // check if it upper case letter
+	      if (obj.shiftKey === char) {
+	         charsToType.push(obj.id);
 
-	      if (obj.hand === 'left') {
-	        charsToType.push('Right Shift');
-	      } else if (obj.hand === 'right') {
-	        charsToType.push('Left Shift');
+	         if (obj.hand === 'left') {
+	            charsToType.push('Right Shift');
+	         } else if (obj.hand === 'right') {
+	            charsToType.push('Left Shift');
+	         }
+	      } else if (obj.key === char) {
+	         charsToType.push(obj.id);
 	      }
-	    } else if (obj.key === char) {
-	      charsToType.push(obj.id);
-	    }
-	  });
+	   });
 
-	  return charsToType;
+	   return charsToType;
 	}
 
 	function sliceChar(chars, idChars) {
-	  var newChars = chars.slice();
+	   var newChars = chars.slice();
 
-	  (0, _lodash.forEach)(idChars, function (id) {
-	    var index = newChars.indexOf(id);
+	   (0, _lodash.forEach)(idChars, function (id) {
+	      var index = newChars.indexOf(id);
 
-	    if (index + 1) {
-	      newChars = [].concat(_toConsumableArray(newChars.slice(0, index)), _toConsumableArray(newChars.slice(index + 1)));
-	    }
-	  });
+	      if (index + 1) {
+	         newChars = [].concat(_toConsumableArray(newChars.slice(0, index)), _toConsumableArray(newChars.slice(index + 1)));
+	      }
+	   });
 
-	  return newChars;
+	   return newChars;
+	}
+
+	var createLesson = exports.createLesson = function () {
+	   var minWordLength = 3;
+	   var maxChars = 50;
+
+	   return function (maxWordLength, letters) {
+	      var lesson = '';
+	      var wordLength = void 0;
+
+	      while (lesson.length <= maxChars) {
+	         wordLength = (0, _lodash.random)(minWordLength, maxWordLength);
+
+	         if (lesson.length + wordLength > maxChars) {
+	            wordLength = maxChars - lesson.length;
+
+	            if (wordLength < 3) {
+	               break;
+	            }
+	         }
+
+	         (0, _lodash.times)(wordLength, function () {
+	            var idxLetter = (0, _lodash.random)(0, letters.length - 1);
+
+	            lesson += letters[idxLetter];
+	         });
+
+	         lesson += ' ';
+	      }
+
+	      lesson = lesson.slice(0, -1);
+
+	      return lesson;
+	   };
+	}();
+
+	function getLearningLettersSet() {
+	   var state = _store2.default.getState();
+
+	   var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
+	   var fingers = ['index', 'middle', 'ring', 'pinky'];
+	   var rows = ['middle', 'top', 'bottom'];
+	   var hands = ['left', 'right'];
+
+	   var lettersSet = [];
+
+	   rows.forEach(function (row) {
+
+	      fingers.forEach(function (finger) {
+
+	         hands.forEach(function (hand) {
+
+	            var keysArr = (0, _lodash.filter)(keys, {
+	               row: row,
+	               finger: finger,
+	               hand: hand,
+	               type: 'letter'
+	            }).map(function (obj) {
+	               return obj.key;
+	            });
+
+	            if (keysArr.length) {
+	               lettersSet.push(keysArr);
+	            }
+	         });
+	      });
+	   });
+
+	   return lettersSet;
 	}
 
 /***/ },
@@ -57433,7 +57510,7 @@
 	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 	exports.SET_LETTERS_FREE_LEARNING_MODE = exports.SET_LETTERS_FINGERS_LEARNING_MODE = exports.SET_LEARNING_MODE = exports.SET_LESSON = exports.TYPE_ON_LESSON = exports.REMOVE_LETTER_FROM_LESSON = exports.ADD_LETTER_TO_LESSON = exports.SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_FINGERS_SET_SIZE = undefined;
 	exports.setLessonFingersSetSize = setLessonFingersSetSize;
@@ -57466,204 +57543,141 @@
 	var SET_LETTERS_FINGERS_LEARNING_MODE = exports.SET_LETTERS_FINGERS_LEARNING_MODE = 'SET_LETTERS_FINGERS_LEARNING_MODE';
 	var SET_LETTERS_FREE_LEARNING_MODE = exports.SET_LETTERS_FREE_LEARNING_MODE = 'SET_LETTERS_FREE_LEARNING_MODE';
 
-	var createLesson = function () {
-	  var minWordLength = 3;
-	  var maxChars = 50;
-
-	  return function (maxWordLength, letters) {
-	    var lesson = '';
-	    var wordLength = void 0;
-
-	    while (lesson.length <= maxChars) {
-	      wordLength = (0, _lodash.random)(minWordLength, maxWordLength);
-
-	      if (lesson.length + wordLength > maxChars) {
-	        wordLength = maxChars - lesson.length;
-
-	        if (wordLength < 3) {
-	          break;
-	        }
-	      }
-
-	      (0, _lodash.times)(wordLength, function () {
-	        var idxLetter = (0, _lodash.random)(0, letters.length - 1);
-
-	        lesson += letters[idxLetter];
-	      });
-
-	      lesson += ' ';
-	    }
-
-	    lesson = lesson.slice(0, -1);
-
-	    return lesson;
-	  };
-	}();
-
 	function setLessonFingersSetSize(size) {
-	  return {
-	    type: SET_LESSON_FINGERS_SET_SIZE,
-	    size: size
-	  };
+	   return {
+	      type: SET_LESSON_FINGERS_SET_SIZE,
+	      size: size
+	   };
 	}
 
 	function setLessonMaxWordLength(length) {
-	  return {
-	    type: SET_LESSON_MAX_WORD_LENGTH,
-	    length: length
-	  };
+	   return {
+	      type: SET_LESSON_MAX_WORD_LENGTH,
+	      length: length
+	   };
 	}
 
 	function addLetterToLesson(letter) {
-	  return {
-	    type: ADD_LETTER_TO_LESSON,
-	    letter: letter
-	  };
+	   return {
+	      type: ADD_LETTER_TO_LESSON,
+	      letter: letter
+	   };
 	}
 
 	function removeLetterFromLesson(letter) {
-	  return {
-	    type: REMOVE_LETTER_FROM_LESSON,
-	    letter: letter
-	  };
+	   return {
+	      type: REMOVE_LETTER_FROM_LESSON,
+	      letter: letter
+	   };
 	}
 
 	function typeOnLesson() {
-	  return {
-	    type: TYPE_ON_LESSON
-	  };
+	   return {
+	      type: TYPE_ON_LESSON
+	   };
 	}
 
 	function setLesson(lesson) {
-	  return {
-	    type: SET_LESSON,
-	    lesson: lesson
-	  };
+	   return {
+	      type: SET_LESSON,
+	      lesson: lesson
+	   };
 	}
 
 	function setLearningMode(mode) {
-	  return {
-	    type: SET_LEARNING_MODE,
-	    mode: mode
-	  };
+	   return {
+	      type: SET_LEARNING_MODE,
+	      mode: mode
+	   };
 	}
 
 	function setLettersFingersLearningMode(letters) {
-	  return {
-	    type: SET_LETTERS_FINGERS_LEARNING_MODE,
-	    letters: letters
-	  };
+	   return {
+	      type: SET_LETTERS_FINGERS_LEARNING_MODE,
+	      letters: letters
+	   };
 	}
 
 	function updateFromLearningModeCharToType() {
-	  return function (dispatch, getState) {
-	    var state = getState();
-	    var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
-	    var idsCharToType = (0, _utils.getIdsFromChar)(keys, state.learningMode.lesson.last[0]);
+	   return function (dispatch, getState) {
+	      var state = getState();
+	      var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
+	      var idsCharToType = (0, _utils.getIdsFromChar)(keys, state.learningMode.lesson.last[0]);
 
-	    dispatch((0, _main.setIdsCharToType)(idsCharToType));
-	  };
+	      dispatch((0, _main.setIdsCharToType)(idsCharToType));
+	   };
 	}
 
 	function generateLessonFromFingersMode() {
-	  return function (dispatch, getState) {
-	    var state = getState();
+	   return function (dispatch, getState) {
+	      var state = getState();
 
-	    var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
-	    var fingers = ['index', 'middle', 'ring', 'pinky'];
-	    var rows = ['middle', 'top', 'bottom'];
-	    var hands = ['left', 'right'];
+	      var lettersSet = (0, _utils.getLearningLettersSet)();
 
-	    var selectedLetters = [];
+	      lettersSet.splice(state.learningMode.fingersSetSize);
 
-	    rows.forEach(function (row) {
+	      lettersSet = _lodash.concat.apply(null, lettersSet);
 
-	      fingers.forEach(function (finger) {
+	      var lesson = (0, _utils.createLesson)(state.learningMode.maxWordLength, lettersSet);
 
-	        hands.forEach(function (hand) {
-
-	          var key = filter(keys, {
-	            row: row,
-	            finger: finger,
-	            hand: hand,
-	            type: 'letter'
-	          });
-
-	          key = key.map(function (obj) {
-	            return obj.key;
-	          });
-
-	          if (key) {
-	            selectedLetters.push(key);
-	          }
-	        });
-	      });
-	    });
-
-	    selectedLetters.splice(state.learningMode.fingersSetSize);
-
-	    selectedLetters = _lodash.concat.apply(null, selectedLetters);
-
-	    var lesson = createLesson(state.learningMode.maxWordLength, selectedLetters);
-
-	    dispatch(setLesson(lesson));
-	  };
+	      dispatch(setLesson(lesson));
+	   };
 	}
 
 	function generateLessonFromFreeMode() {
-	  return function (dispatch, getState) {
-	    var state = getState();
+	   return function (dispatch, getState) {
+	      var state = getState();
 
-	    var lesson = createLesson(state.learningMode.maxWordLength, state.learningMode.lettersFreeMode);
+	      var lesson = (0, _utils.createLesson)(state.learningMode.maxWordLength, state.learningMode.lettersFreeMode);
 
-	    dispatch(setLesson(lesson));
-	  };
+	      dispatch(setLesson(lesson));
+	   };
 	}
 
 	function generateLesson() {
-	  return function (dispatch, getState) {
-	    var state = getState();
+	   return function (dispatch, getState) {
+	      var state = getState();
 
-	    if (state.learningMode === 'letters set') {
-	      dispatch(generateLessonFromFingersMode());
-	    } else if (state.learningMode === 'keyboard') {
-	      dispatch(generateLessonFromFreeMode());
-	    }
+	      if (state.learningMode === 'letters set') {
+	         dispatch(generateLessonFromFingersMode());
+	      } else if (state.learningMode === 'keyboard') {
+	         dispatch(generateLessonFromFreeMode());
+	      }
 
-	    dispatch(updateFromLearningModeCharToType());
-	  };
+	      dispatch(updateFromLearningModeCharToType());
+	   };
 	}
 
 	function typeLearningMode(char) {
-	  return function (dispatch, getState) {
-	    var state = getState();
-	    var keyboardState = state.keyboard;
-	    var learningModeState = state.learningMode;
-	    var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboardName }).keys;
-	    var idsChar = (0, _utils.getIdsFromChar)(keys, char);
+	   return function (dispatch, getState) {
+	      var state = getState();
+	      var keyboardState = state.keyboard;
+	      var learningModeState = state.learningMode;
+	      var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboardName }).keys;
+	      var idsChar = (0, _utils.getIdsFromChar)(keys, char);
 
-	    if (learningModeState.lesson.last[0] === char) {
-	      var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
+	      if (learningModeState.lesson.last[0] === char) {
+	         var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
 
-	      dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
+	         dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
 
-	      dispatch(typeOnLesson());
+	         dispatch(typeOnLesson());
 
-	      if (getState().learningMode.lesson.last.length === 0) {
-	        dispatch(generateLesson());
+	         if (getState().learningMode.lesson.last.length === 0) {
+	            dispatch(generateLesson());
+	         }
+
+	         dispatch((0, _main.addSuccesType)());
+
+	         dispatch((0, _main.updateCharToType)());
+	      } else {
+	         var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
+
+	         dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
+
+	         dispatch((0, _main.addErrorType)());
 	      }
-
-	      dispatch((0, _main.addSuccesType)());
-
-	      dispatch((0, _main.updateCharToType)());
-	    } else {
-	      var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
-
-	      dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
-
-	      dispatch((0, _main.addErrorType)());
-	    }
-	  };
+	   };
 	}
 
 /***/ },
@@ -77978,7 +77992,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -78020,163 +78034,165 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var LearningMode = function (_Component) {
-	  _inherits(LearningMode, _Component);
+	   _inherits(LearningMode, _Component);
 
-	  function LearningMode(props) {
-	    _classCallCheck(this, LearningMode);
+	   function LearningMode(props) {
+	      _classCallCheck(this, LearningMode);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(LearningMode).call(this, props));
-	  }
+	      return _possibleConstructorReturn(this, Object.getPrototypeOf(LearningMode).call(this, props));
+	   }
 
-	  _createClass(LearningMode, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var self = this;
-	      var $noUiValueMaxWordLength = (0, _jquery2.default)('<span class="noUi-value" />');
+	   _createClass(LearningMode, [{
+	      key: 'componentDidMount',
+	      value: function componentDidMount() {
+	         var self = this;
+	         var $noUiValueMaxWordLength = (0, _jquery2.default)('<span class="noUi-value" />');
 
-	      // max word length range
-	      _nouislider2.default.create(this._maxWordLengthRange, {
-	        start: [this.props.maxWordLength],
-	        step: 1,
-	        connect: 'lower',
-	        range: {
-	          'min': 3,
-	          'max': 10
-	        }
-	      });
+	         // max word length range
+	         _nouislider2.default.create(this._maxWordLengthRange, {
+	            start: [this.props.maxWordLength],
+	            step: 1,
+	            connect: 'lower',
+	            range: {
+	               'min': 3,
+	               'max': 10
+	            }
+	         });
 
-	      (0, _jquery2.default)(this._maxWordLengthRange).find('.noUi-handle').append($noUiValueMaxWordLength);
+	         $noUiValueMaxWordLength.text(this.props.maxWordLength);
 
-	      this._maxWordLengthRange.noUiSlider.on('slide', function (values, handle) {
-	        var val = parseInt(values[handle], 10);
+	         (0, _jquery2.default)(this._maxWordLengthRange).find('.noUi-handle').append($noUiValueMaxWordLength);
 
-	        self.props.setMaxWordLength(val);
+	         this._maxWordLengthRange.noUiSlider.on('slide', function (values, handle) {
+	            var val = parseInt(values[handle], 10);
 
-	        $noUiValueMaxWordLength.text(val);
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
+	            self.props.setMaxWordLength(val);
 
-	      var _props = this.props;
-	      var mode = _props.mode;
-	      var lesson = _props.lesson;
-
-	      var tabContent = void 0;
-
-	      switch (mode) {
-	        case 'letters set':
-	          tabContent = _react2.default.createElement(_LearningLettersSetTab2.default, null);
-	          break;
-	        case 'keyboard':
-	          tabContent = _react2.default.createElement(_LearningKeyboardTab2.default, null);
-	          break;
+	            $noUiValueMaxWordLength.text(val);
+	         });
 	      }
+	   }, {
+	      key: 'render',
+	      value: function render() {
+	         var _this2 = this;
 
-	      var menuItemsData = [{
-	        name: 'By fingers',
-	        id: 'letters set'
-	      }, {
-	        name: 'Free',
-	        id: 'keyboard'
-	      }];
+	         var _props = this.props;
+	         var mode = _props.mode;
+	         var lesson = _props.lesson;
 
-	      var menuItems = menuItemsData.map(function (item, i) {
-	        var linkClass = 'menu__item';
+	         var tabContent = void 0;
 
-	        if (item.id === mode) {
-	          linkClass = (0, _classNames2.default)(linkClass, 'menu__item_selected');
-	        }
+	         switch (mode) {
+	            case 'letters set':
+	               tabContent = _react2.default.createElement(_LearningLettersSetTab2.default, null);
+	               break;
+	            case 'keyboard':
+	               tabContent = _react2.default.createElement(_LearningKeyboardTab2.default, null);
+	               break;
+	         }
 
-	        return _react2.default.createElement(
-	          'div',
-	          { key: i, className: 'settings-learning__modes-menu-item' },
-	          _react2.default.createElement(
-	            'a',
-	            { className: linkClass, onClick: _this2._onClickMenu.bind(_this2, item.id) },
-	            item.name
-	          )
-	        );
-	      });
+	         var menuItemsData = [{
+	            name: 'By fingers',
+	            id: 'letters set'
+	         }, {
+	            name: 'Free',
+	            id: 'keyboard'
+	         }];
 
-	      var lessonKeys = lesson.split('').map(function (char, idx) {
-	        if (char === ' ') {
-	          char = _react2.default.createElement(
-	            'span',
-	            { key: idx, className: 'learningarea__space' },
-	            '␣'
-	          );
-	        }
+	         var menuItems = menuItemsData.map(function (item, i) {
+	            var linkClass = 'menu__item';
 
-	        return char;
-	      });
+	            if (item.id === mode) {
+	               linkClass = (0, _classNames2.default)(linkClass, 'menu__item_selected');
+	            }
 
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'settings-learning' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'learningarea' },
-	          lessonKeys
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'settings-learning__modes' },
-	          _react2.default.createElement(
+	            return _react2.default.createElement(
+	               'div',
+	               { key: i, className: 'settings-learning__modes-menu-item' },
+	               _react2.default.createElement(
+	                  'a',
+	                  { className: linkClass, onClick: _this2._onClickMenu.bind(_this2, item.id) },
+	                  item.name
+	               )
+	            );
+	         });
+
+	         var lessonKeys = lesson.split('').map(function (char, idx) {
+	            if (char === ' ') {
+	               char = _react2.default.createElement(
+	                  'span',
+	                  { key: idx, className: 'learningarea__space' },
+	                  '␣'
+	               );
+	            }
+
+	            return char;
+	         });
+
+	         return _react2.default.createElement(
 	            'div',
-	            { className: 'settings-learning__modes-menu' },
+	            { className: 'settings-learning' },
 	            _react2.default.createElement(
-	              'h4',
-	              { className: 'settings-learning__modes-menu-title' },
-	              'Keys set'
+	               'div',
+	               { className: 'learningarea' },
+	               lessonKeys
 	            ),
-	            menuItems
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'settings-learning__modes-content' },
 	            _react2.default.createElement(
-	              'div',
-	              { className: 'settings-learning__item' },
-	              _react2.default.createElement(
-	                'label',
-	                { htmlFor: '', className: 'settings-learning__label' },
-	                'Max word length:'
-	              ),
-	              _react2.default.createElement(
-	                'div',
-	                { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
-	                _react2.default.createElement('div', { className: 'settings-learning__range settings-learning__max-word-length', ref: function ref(c) {
-	                    return _this2._maxWordLengthRange = c;
-	                  } })
-	              )
-	            ),
-	            tabContent
-	          )
-	        )
-	      );
-	    }
-	  }, {
-	    key: '_onClickMenu',
-	    value: function _onClickMenu(selectedMode, e) {
-	      var _props2 = this.props;
-	      var mode = _props2.mode;
-	      var setLearningMode = _props2.setLearningMode;
-
-
-	      e.preventDefault();
-
-	      if (selectedMode === mode) {
-	        return;
+	               'div',
+	               { className: 'settings-learning__modes' },
+	               _react2.default.createElement(
+	                  'div',
+	                  { className: 'settings-learning__modes-menu' },
+	                  _react2.default.createElement(
+	                     'h4',
+	                     { className: 'settings-learning__modes-menu-title' },
+	                     'Keys set'
+	                  ),
+	                  menuItems
+	               ),
+	               _react2.default.createElement(
+	                  'div',
+	                  { className: 'settings-learning__modes-content' },
+	                  _react2.default.createElement(
+	                     'div',
+	                     { className: 'settings-learning__item' },
+	                     _react2.default.createElement(
+	                        'label',
+	                        { htmlFor: '', className: 'settings-learning__label' },
+	                        'Max word length:'
+	                     ),
+	                     _react2.default.createElement(
+	                        'div',
+	                        { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
+	                        _react2.default.createElement('div', { className: 'settings-learning__range settings-learning__max-word-length', ref: function ref(c) {
+	                              return _this2._maxWordLengthRange = c;
+	                           } })
+	                     )
+	                  ),
+	                  tabContent
+	               )
+	            )
+	         );
 	      }
+	   }, {
+	      key: '_onClickMenu',
+	      value: function _onClickMenu(selectedMode, e) {
+	         var _props2 = this.props;
+	         var mode = _props2.mode;
+	         var setLearningMode = _props2.setLearningMode;
 
-	      setLearningMode(selectedMode);
-	    }
-	  }]);
 
-	  return LearningMode;
+	         e.preventDefault();
+
+	         if (selectedMode === mode) {
+	            return;
+	         }
+
+	         setLearningMode(selectedMode);
+	      }
+	   }]);
+
+	   return LearningMode;
 	}(_react.Component);
 
 	exports.default = LearningMode;
@@ -78396,7 +78412,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -78425,6 +78441,8 @@
 
 	var _Key2 = _interopRequireDefault(_Key);
 
+	var _utils = __webpack_require__(284);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -78434,157 +78452,137 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var LearningLettersSetTab = function (_Component) {
-	  _inherits(LearningLettersSetTab, _Component);
+	   _inherits(LearningLettersSetTab, _Component);
 
-	  function LearningLettersSetTab(props) {
-	    _classCallCheck(this, LearningLettersSetTab);
+	   function LearningLettersSetTab(props) {
+	      _classCallCheck(this, LearningLettersSetTab);
 
-	    var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LearningLettersSetTab).call(this, props));
+	      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LearningLettersSetTab).call(this, props));
 
-	    var fingers = ['index', 'middle', 'ring', 'pinky'];
-	    var rows = ['middle', 'top', 'bottom'];
-	    var hands = ['left', 'right'];
+	      _this.fingersLetters = (0, _utils.getLearningLettersSet)();
 
-	    _this.fingersLetters = [];
+	      console.log('this.fingersLetters', _this.fingersLetters);
+	      return _this;
+	   }
 
-	    rows.forEach(function (row) {
+	   _createClass(LearningLettersSetTab, [{
+	      key: 'componentDidMount',
+	      value: function componentDidMount() {
+	         var _this2 = this;
 
-	      fingers.forEach(function (finger) {
+	         var self = this;
+	         this.$noUiValueFingersSet = (0, _jquery2.default)('<span class="noUi-value" />');
 
-	        hands.forEach(function (hand) {
+	         var start = this.props.fingersSetSize;
 
-	          var key = (0, _lodash.filter)(_this.props.keys, {
-	            row: row,
-	            finger: finger,
-	            hand: hand,
-	            type: 'letter'
-	          });
+	         _nouislider2.default.create(this._fingersRange, {
+	            start: [start],
+	            step: 1,
+	            connect: 'lower',
+	            range: {
+	               'min': 1,
+	               'max': this.fingersLetters.length
+	            }
+	         });
 
-	          key = key.map(function (obj) {
-	            return obj.key;
-	          });
+	         this.$noUiValueFingersSet.text(start);
 
-	          if (key) {
-	            _this.fingersLetters.push(key);
-	          }
-	        });
-	      });
-	    });
+	         (0, _jquery2.default)(this._fingersRange).find('.noUi-handle').append(this.$noUiValueFingersSet);
 
-	    return _this;
-	  }
+	         this._fingersRange.noUiSlider.on('slide', function (values, handle) {
+	            var val = parseInt(values[handle], 10);
 
-	  _createClass(LearningLettersSetTab, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      var self = this;
-	      var $noUiValueFingersSet = (0, _jquery2.default)('<span class="noUi-value" />');
+	            self.props.setFingersSetSize(val);
 
-	      var start = this.props.fingersSetSize;
+	            _this2.$noUiValueFingersSet.text(val);
+	         });
+	      }
+	   }, {
+	      key: 'componentDidUpdate',
+	      value: function componentDidUpdate() {
+	         this.$noUiValueFingersSet.text(this.props.fingersSetSize);
+	      }
+	   }, {
+	      key: 'render',
+	      value: function render() {
+	         var _this3 = this;
 
-	      _nouislider2.default.create(this._fingersRange, {
-	        start: [start],
-	        step: 1,
-	        connect: 'lower',
-	        range: {
-	          'min': 1,
-	          'max': this.fingersLetters.length
-	        }
-	      });
-
-	      $noUiValueFingersSet.text(start);
-
-	      (0, _jquery2.default)(this._fingersRange).find('.noUi-handle').append($noUiValueFingersSet);
-
-	      this._fingersRange.noUiSlider.on('slide', function (values, handle) {
-	        var val = parseInt(values[handle], 10);
-
-	        self.props.setFingersSetSize(val);
-
-	        $noUiValueFingersSet.text(val);
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var _props = this.props;
-	      var keys = _props.keys;
-	      var fingersSetSize = _props.fingersSetSize;
+	         var _props = this.props;
+	         var keys = _props.keys;
+	         var fingersSetSize = _props.fingersSetSize;
 
 
-	      var selectedLetters = (0, _lodash.clone)(this.fingersLetters);
+	         var selectedLetters = (0, _lodash.clone)(this.fingersLetters);
 
-	      selectedLetters.splice(fingersSetSize);
+	         selectedLetters.splice(fingersSetSize);
 
-	      selectedLetters = _lodash.concat.apply(null, selectedLetters);
+	         selectedLetters = _lodash.concat.apply(null, selectedLetters);
 
-	      var keyNodes = keys.map(function (obj) {
-	        var className = 'keyboard__key';
+	         var keyNodes = keys.map(function (obj) {
+	            var className = 'keyboard__key';
 
-	        if (obj.type === 'letter') {
-	          if (selectedLetters.indexOf(obj.key) + 1) {
-	            className = (0, _classNames2.default)(className, 'keyboard__key_selected');
-	          }
-	        } else {
-	          className = (0, _classNames2.default)(className, 'keyboard__key_disabled');
-	        }
+	            if (obj.type === 'letter') {
+	               if (selectedLetters.indexOf(obj.key) + 1) {
+	                  className = (0, _classNames2.default)(className, 'keyboard__key_selected');
+	               }
+	            } else {
+	               className = (0, _classNames2.default)(className, 'keyboard__key_disabled');
+	            }
 
-	        var finger = obj.finger;
+	            var finger = obj.finger;
 
-	        if (finger === 'index') {
-	          finger = obj.hand + '-' + finger;
-	        }
+	            if (finger === 'index') {
+	               finger = obj.hand + '-' + finger;
+	            }
 
-	        var keyProps = {
-	          className: className,
-	          'data-key': obj.id,
-	          'data-finger': finger
-	        };
+	            var keyProps = {
+	               className: className,
+	               'data-key': obj.id,
+	               'data-finger': finger
+	            };
 
-	        return _react2.default.createElement(_Key2.default, {
-	          key: obj.id,
-	          keyProps: keyProps,
-	          type: obj.type,
-	          char: obj.key,
-	          shiftChar: obj.shiftKey,
-	          classNameShift: 'keyboard__shift-key'
-	        });
-	      });
+	            return _react2.default.createElement(_Key2.default, {
+	               key: obj.id,
+	               keyProps: keyProps,
+	               type: obj.type,
+	               char: obj.key,
+	               shiftChar: obj.shiftKey,
+	               classNameShift: 'keyboard__shift-key'
+	            });
+	         });
 
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'settings-learning__letters-set' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'settings-learning__item' },
-	          _react2.default.createElement(
-	            'label',
-	            { htmlFor: '', className: 'settings-learning__label' },
-	            'Extend fingers set:'
-	          ),
-	          _react2.default.createElement(
+	         return _react2.default.createElement(
 	            'div',
-	            { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
-	            _react2.default.createElement('div', { className: 'settings-learning__range', ref: function ref(c) {
-	                return _this2._fingersRange = c;
-	              } })
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'keyboard' },
-	          keyNodes
-	        )
-	      );
-	    }
-	  }, {
-	    key: '_setLetters',
-	    value: function _setLetters(letterKeys) {}
-	  }]);
+	            { className: 'settings-learning__letters-set' },
+	            _react2.default.createElement(
+	               'div',
+	               { className: 'settings-learning__item' },
+	               _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: '', className: 'settings-learning__label' },
+	                  'Extend fingers set:'
+	               ),
+	               _react2.default.createElement(
+	                  'div',
+	                  { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
+	                  _react2.default.createElement('div', { className: 'settings-learning__range', ref: function ref(c) {
+	                        return _this3._fingersRange = c;
+	                     } })
+	               )
+	            ),
+	            _react2.default.createElement(
+	               'div',
+	               { className: 'keyboard' },
+	               keyNodes
+	            )
+	         );
+	      }
+	   }, {
+	      key: '_setLetters',
+	      value: function _setLetters(letterKeys) {}
+	   }]);
 
-	  return LearningLettersSetTab;
+	   return LearningLettersSetTab;
 	}(_react.Component);
 
 	exports.default = LearningLettersSetTab;

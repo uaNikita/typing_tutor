@@ -6,144 +6,119 @@ import noUiSlider from 'nouislider';
 import classNames from 'classNames';
 import Key from './Key.jsx';
 
+import {getLearningLettersSet} from "../utils";
 
 class LearningLettersSetTab extends Component {
 
-  constructor(props) {
-    super(props);
+   constructor(props) {
+      super(props);
 
-    var fingers = ['index', 'middle', 'ring', 'pinky'];
-    var rows = ['middle', 'top', 'bottom'];
-    var hands = ['left', 'right'];
+      this.fingersLetters = getLearningLettersSet();
+      
+      console.log('this.fingersLetters', this.fingersLetters);
+   }
 
-    this.fingersLetters = [];
+   componentDidMount() {
+      let self = this;
+      this.$noUiValueFingersSet = $('<span class="noUi-value" />');
 
-    rows.forEach(row=> {
+      let start = this.props.fingersSetSize;
 
-      fingers.forEach(finger => {
+      noUiSlider.create(this._fingersRange, {
+         start  : [start],
+         step   : 1,
+         connect: 'lower',
+         range  : {
+            'min': 1,
+            'max': this.fingersLetters.length
+         }
+      });
 
-        hands.forEach(hand => {
+      this.$noUiValueFingersSet.text(start);
 
-          var key = filter(this.props.keys, {
-            row: row,
-            finger: finger,
-            hand: hand,
-            type: 'letter'
-          });
+      $(this._fingersRange).find('.noUi-handle').append(this.$noUiValueFingersSet);
 
-          key = key.map(obj=> {
-            return obj.key;
-          })
+      this._fingersRange.noUiSlider.on('slide', (values, handle) => {
+         let val = parseInt(values[handle], 10);
+         
+         self.props.setFingersSetSize(val);
 
-          if (key) {
-            this.fingersLetters.push(key)
-          }
+         this.$noUiValueFingersSet.text(val);
+      });
+   }
 
-        });
+   componentDidUpdate() {
+      this.$noUiValueFingersSet.text(this.props.fingersSetSize);
+   }
+
+   render() {
+      const {keys, fingersSetSize} = this.props;
+
+      let selectedLetters = clone(this.fingersLetters);
+
+      selectedLetters.splice(fingersSetSize);
+
+      selectedLetters = concat.apply(null, selectedLetters);
+      
+      let keyNodes = keys.map(obj => {
+         let className = 'keyboard__key';
+
+         if (obj.type === 'letter') {
+            if (selectedLetters.indexOf(obj.key) + 1) {
+               className = classNames(className, 'keyboard__key_selected')
+            }
+         } else {
+            className = classNames(className, 'keyboard__key_disabled')
+         }
+
+         let finger = obj.finger;
+
+         if (finger === 'index') {
+            finger = obj.hand + '-' + finger;
+         }
+
+         let keyProps = {
+            className    : className,
+            'data-key'   : obj.id,
+            'data-finger': finger
+         };
+
+         return <Key
+           key={obj.id}
+           keyProps={keyProps}
+           type={obj.type}
+           char={obj.key}
+           shiftChar={obj.shiftKey}
+           classNameShift='keyboard__shift-key'
+         />
 
       });
 
-    });
 
-  }
+      return (
+        <div className="settings-learning__letters-set">
 
-  componentDidMount() {
-    let self = this;
-    let $noUiValueFingersSet = $('<span class="noUi-value" />');
+           <div className="settings-learning__item">
+              <label htmlFor="" className="settings-learning__label">
+                 Extend fingers set:
+              </label>
+              <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+                 <div className="settings-learning__range" ref={(c) => this._fingersRange = c }></div>
+              </div>
+           </div>
 
-    let start = this.props.fingersSetSize;
+           <div className="keyboard">
+              {keyNodes}
+           </div>
 
-    noUiSlider.create(this._fingersRange, {
-      start: [start],
-      step: 1,
-      connect: 'lower',
-      range: {
-        'min': 1,
-        'max': this.fingersLetters.length
-      }
-    });
-
-    $noUiValueFingersSet.text(start);
-
-    $(this._fingersRange).find('.noUi-handle').append($noUiValueFingersSet);
-
-    this._fingersRange.noUiSlider.on('slide', function (values, handle) {
-      let val = parseInt(values[handle], 10);
-
-      self.props.setFingersSetSize(val);
-
-      $noUiValueFingersSet.text(val);
-    });
-  }
-
-  render() {
-    const {keys, fingersSetSize} = this.props;
-
-    let selectedLetters = clone(this.fingersLetters);
-
-    selectedLetters.splice(fingersSetSize);
-
-    selectedLetters = concat.apply(null, selectedLetters);
-
-    let keyNodes = keys.map(obj => {
-      let className = 'keyboard__key';
-
-      if (obj.type === 'letter') {
-        if (selectedLetters.indexOf(obj.key) + 1) {
-          className = classNames(className, 'keyboard__key_selected')
-        }
-      } else {
-        className = classNames(className, 'keyboard__key_disabled')
-      }
-
-      let finger = obj.finger;
-
-      if (finger === 'index') {
-        finger = obj.hand + '-' + finger;
-      }
-
-      let keyProps = {
-        className: className,
-        'data-key': obj.id,
-        'data-finger': finger
-      };
-
-      return <Key
-        key={obj.id}
-        keyProps={keyProps}
-        type={obj.type}
-        char={obj.key}
-        shiftChar={obj.shiftKey}
-        classNameShift='keyboard__shift-key'
-      />
-
-    });
-
-
-    return (
-      <div className="settings-learning__letters-set">
-
-        <div className="settings-learning__item">
-          <label htmlFor="" className="settings-learning__label">
-            Extend fingers set:
-          </label>
-          <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-            <div className="settings-learning__range" ref={(c) => this._fingersRange = c }></div>
-          </div>
         </div>
-
-        <div className="keyboard">
-          {keyNodes}
-        </div>
-
-      </div>
-    )
-  }
+      )
+   }
 
 
-  _setLetters(letterKeys) {
+   _setLetters(letterKeys) {
 
-  };
+   };
 
 }
 
