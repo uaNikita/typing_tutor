@@ -2,7 +2,7 @@ import {connect} from 'react-redux'
 import LearningMode from '../components/LearningMode.jsx'
 import {
   setLessonMaxWordLength,
-  generateLesson,
+  generateLessonFromCurrentMode,
   setLearningMode
 } from '../actions/learning-mode'
 
@@ -19,7 +19,7 @@ const mapDispatchToProps = (dispatch) => {
     setMaxWordLength: (length) => {
       dispatch(setLessonMaxWordLength(length));
 
-      dispatch(generateLesson());
+      dispatch(generateLessonFromCurrentMode());
     },
     setLearningMode: (mode) => {
       dispatch(setLearningMode(mode))

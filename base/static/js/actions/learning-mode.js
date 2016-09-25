@@ -22,7 +22,6 @@ export const REMOVE_LETTER_FROM_LESSON = 'REMOVE_LETTER_FROM_LESSON';
 export const TYPE_ON_LESSON = 'TYPE_ON_LESSON';
 export const SET_LESSON = 'SET_LESSON';
 export const SET_LEARNING_MODE = 'SET_LEARNING_MODE';
-export const SET_LETTERS_FINGERS_LEARNING_MODE = 'SET_LETTERS_FINGERS_LEARNING_MODE';
 export const SET_LETTERS_FREE_LEARNING_MODE = 'SET_LETTERS_FREE_LEARNING_MODE';
 
 
@@ -75,13 +74,6 @@ export function setLearningMode(mode) {
    };
 }
 
-export function setLettersFingersLearningMode(letters) {
-   return {
-      type: SET_LETTERS_FINGERS_LEARNING_MODE,
-      letters
-   };
-}
-
 export function updateFromLearningModeCharToType() {
    return (dispatch, getState) => {
       let state = getState();
@@ -118,13 +110,13 @@ export function generateLessonFromFreeMode() {
    }
 }
 
-export function generateLesson() {
+export function generateLessonFromCurrentMode() {
    return (dispatch, getState) => {
       let state = getState();
 
-      if (state.learningMode === 'letters set') {
+      if (state.learningMode.mode === 'fingers') {
          dispatch(generateLessonFromFingersMode());
-      } else if (state.learningMode === 'keyboard') {
+      } else if (state.learningMode.mode === 'free') {
          dispatch(generateLessonFromFreeMode());
       }
 
@@ -148,7 +140,7 @@ export function typeLearningMode(char) {
          dispatch(typeOnLesson());
 
          if (getState().learningMode.lesson.last.length === 0) {
-            dispatch(generateLesson());
+            dispatch(generateLessonFromCurrentMode());
          }
 
          dispatch(addSuccesType());

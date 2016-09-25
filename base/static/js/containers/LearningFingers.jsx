@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import {find} from 'lodash';
-import LearningLettersSetTab from '../components/LearningLettersSetTab.jsx'
+import LearningFingers from '../components/LearningFingers.jsx'
 import {
   setLessonFingersSetSize,
   setLettersFingersLearningMode,
@@ -11,8 +11,7 @@ import {
 const mapStateToProps = (state) => {
   return {
     fingersSetSize: state.learningMode.fingersSetSize,
-    keys: find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys,
-    letters: state.learningMode.lettersFingersMode
+    keys: find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys
   }
 }
 
@@ -39,4 +38,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LearningLettersSetTab)
+)(LearningFingers)

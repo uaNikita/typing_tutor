@@ -8,7 +8,7 @@ import Key from './Key.jsx';
 
 import {getLearningLettersSet} from "../utils";
 
-class LearningLettersSetTab extends Component {
+class LearningFingers extends Component {
 
    constructor(props) {
       super(props);
@@ -123,4 +123,4 @@ class LearningLettersSetTab extends Component {
 }
 
 
-export default LearningLettersSetTab
+export default LearningFingers

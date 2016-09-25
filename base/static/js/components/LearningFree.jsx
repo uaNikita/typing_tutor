@@ -3,7 +3,7 @@ import classNames from 'classNames';
 import {assign} from 'lodash';
 import Key from './Key.jsx';
 
-class LearningKeyboardTab extends Component {
+class LearningFree extends Component {
 
   render() {
     const {keys, letters} = this.props;
@@ -59,4 +59,4 @@ class LearningKeyboardTab extends Component {
   }
 }
 
-export default LearningKeyboardTab
+export default LearningFree

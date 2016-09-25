@@ -4,8 +4,8 @@ import {forEach, find} from 'lodash';
 import $ from 'jquery';
 import noUiSlider from 'nouislider';
 import classNames from 'classNames';
-import LearningKeyboardTab from '../containers/LearningKeyboardTab.jsx'
-import LearningLettersSetTab from '../containers/LearningLettersSetTab.jsx'
+import LearningFree from '../containers/LearningFree.jsx'
+import LearningFingers from '../containers/LearningFingers.jsx'
 
 class LearningMode extends Component {
 
@@ -46,21 +46,21 @@ class LearningMode extends Component {
       let tabContent;
 
       switch (mode) {
-         case 'letters set':
-            tabContent = <LearningLettersSetTab />
+         case 'fingers':
+            tabContent = <LearningFingers />
             break;
-         case 'keyboard':
-            tabContent = <LearningKeyboardTab />
+         case 'free':
+            tabContent = <LearningFree />
             break;
       }
 
       let menuItemsData = [
          {
             name: 'By fingers',
-            id  : 'letters set'
+            id  : 'fingers'
          }, {
             name: 'Free',
-            id  : 'keyboard'
+            id  : 'free'
          }
       ];
 

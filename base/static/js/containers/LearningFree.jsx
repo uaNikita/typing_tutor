@@ -1,16 +1,16 @@
 import {connect} from 'react-redux'
 import {find} from 'lodash';
-import LearningKeyboardTab from '../components/LearningKeyboardTab.jsx'
+import LearningFree from '../components/LearningFree.jsx'
 import {
   addLetterToLesson,
   removeLetterFromLesson,
-  generateLesson
+  generateLessonFromCurrentMode
 } from '../actions/learning-mode'
 
 const mapStateToProps = (state) => {
   return {
     keys: find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys,
-    letters: state.learningMode.letters
+    letters: state.learningMode.lettersFreeMode
   }
 }
 
@@ -19,12 +19,12 @@ const mapDispatchToProps = (dispatch) => {
     addLetter: (letter) => {
       dispatch(addLetterToLesson(letter))
 
-      dispatch(generateLesson())
+      dispatch(generateLessonFromCurrentMode())
     },
     removeLetter: (letter) => {
       dispatch(removeLetterFromLesson(letter))
 
-      dispatch(generateLesson())
+      dispatch(generateLessonFromCurrentMode())
     }
   }
 }
@@ -32,4 +32,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LearningKeyboardTab)
+)(LearningFree)
