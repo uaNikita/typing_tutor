@@ -21351,7 +21351,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -21394,6 +21394,14 @@
 
 	var _LearningMode2 = _interopRequireDefault(_LearningMode);
 
+	var _LearningFingers = __webpack_require__(545);
+
+	var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
+
+	var _LearningFree = __webpack_require__(543);
+
+	var _LearningFree2 = _interopRequireDefault(_LearningFree);
+
 	var _Keyboard = __webpack_require__(547);
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
@@ -21415,83 +21423,93 @@
 	var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.browserHistory, _store2.default);
 
 	var App = function (_Component) {
-	  _inherits(App, _Component);
+	   _inherits(App, _Component);
 
-	  function App() {
-	    _classCallCheck(this, App);
+	   function App() {
+	      _classCallCheck(this, App);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
-	  }
+	      return _possibleConstructorReturn(this, Object.getPrototypeOf(App).apply(this, arguments));
+	   }
 
-	  _createClass(App, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
+	   _createClass(App, [{
+	      key: 'componentDidMount',
+	      value: function componentDidMount() {
 
-	      _store2.default.dispatch((0, _main.updateCharToType)());
+	         _store2.default.dispatch((0, _main.updateCharToType)());
 
-	      (0, _jquery2.default)(document).on('keypress', function (e) {
-	        if (location.pathname !== '/') {
-	          return;
-	        }
+	         (0, _jquery2.default)(document).on('keypress', function (e) {
+	            if (location.pathname !== '/') {
+	               return;
+	            }
 
-	        _store2.default.dispatch((0, _main.typeChar)(String.fromCharCode(e.which)));
-	      });
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      return _react2.default.createElement(
-	        _reactRedux.Provider,
-	        { store: _store2.default },
-	        _react2.default.createElement(
-	          _reactRouter.Router,
-	          { history: history },
-	          _react2.default.createElement(
-	            _reactRouter.Route,
-	            { path: '/', component: _Layout2.default },
-	            _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default, onEnter: this._onKeyboardEnter }),
+	            _store2.default.dispatch((0, _main.typeChar)(String.fromCharCode(e.which)));
+	         });
+	      }
+	   }, {
+	      key: 'render',
+	      value: function render() {
+	         return _react2.default.createElement(
+	            _reactRedux.Provider,
+	            { store: _store2.default },
 	            _react2.default.createElement(
-	              _reactRouter.Route,
-	              { path: 'settings', component: _Settings2.default },
-	              _react2.default.createElement(_reactRouter.IndexRoute, { onEnter: this._enterDependOnMode }),
-	              _react2.default.createElement(_reactRouter.Route, { path: 'text-mode', component: _TextMode2.default, onEnter: this._onTextEnter }),
-	              _react2.default.createElement(_reactRouter.Route, { path: 'text/:textId', component: _Text2.default }),
-	              _react2.default.createElement(_reactRouter.Route, { path: 'learning-mode', component: _LearningMode2.default, onEnter: this._onLearningEnter }),
-	              _react2.default.createElement(_reactRouter.Route, { path: 'keyboard', component: _Keyboard2.default })
+	               _reactRouter.Router,
+	               { history: history },
+	               _react2.default.createElement(
+	                  _reactRouter.Route,
+	                  { path: '/', component: _Layout2.default },
+	                  _react2.default.createElement(_reactRouter.IndexRoute, { component: _Home2.default, onEnter: this._onKeyboardEnter }),
+	                  _react2.default.createElement(
+	                     _reactRouter.Route,
+	                     { path: 'settings', component: _Settings2.default },
+	                     _react2.default.createElement(_reactRouter.IndexRoute, { onEnter: this._enterDependOnMode }),
+	                     _react2.default.createElement(_reactRouter.Route, { path: 'text-mode', component: _TextMode2.default, onEnter: this._onTextEnter }),
+	                     _react2.default.createElement(_reactRouter.Route, { path: 'text/:textId', component: _Text2.default }),
+	                     _react2.default.createElement(
+	                        _reactRouter.Route,
+	                        { path: 'learning-mode', component: _LearningMode2.default },
+	                        _react2.default.createElement(_reactRouter.IndexRoute, { onEnter: this._onLearningEnter }),
+	                        _react2.default.createElement(_reactRouter.Route, { path: 'fingers', component: _LearningFingers2.default }),
+	                        _react2.default.createElement(_reactRouter.Route, { path: 'free', component: _LearningFree2.default })
+	                     ),
+	                     _react2.default.createElement(_reactRouter.Route, { path: 'keyboard', component: _Keyboard2.default })
+	                  )
+	               )
 	            )
-	          )
-	        )
-	      );
-	    }
-	  }, {
-	    key: '_onKeyboardEnter',
-	    value: function _onKeyboardEnter() {
-	      _store2.default.dispatch((0, _main.updateStartVariables)());
+	         );
+	      }
+	   }, {
+	      key: '_onKeyboardEnter',
+	      value: function _onKeyboardEnter() {
+	         _store2.default.dispatch((0, _main.updateStartVariables)());
 
-	      _store2.default.dispatch((0, _main.updateCharToType)());
-	    }
-	  }, {
-	    key: '_enterDependOnMode',
-	    value: function _enterDependOnMode(nextState, replace) {
-	      var path = '/settings/' + _store2.default.getState().keyboard.mode;
+	         _store2.default.dispatch((0, _main.updateCharToType)());
+	      }
+	   }, {
+	      key: '_enterDependOnMode',
+	      value: function _enterDependOnMode(nextState, replace) {
+	         var path = '/settings/' + _store2.default.getState().keyboard.mode;
 
-	      replace({
-	        pathname: path + '-mode'
-	      });
-	    }
-	  }, {
-	    key: '_onTextEnter',
-	    value: function _onTextEnter() {
-	      _store2.default.dispatch((0, _main.setMode)('text'));
-	    }
-	  }, {
-	    key: '_onLearningEnter',
-	    value: function _onLearningEnter() {
-	      _store2.default.dispatch((0, _main.setMode)('learning'));
-	    }
-	  }]);
+	         replace({
+	            pathname: path + '-mode'
+	         });
+	      }
+	   }, {
+	      key: '_onTextEnter',
+	      value: function _onTextEnter() {
+	         _store2.default.dispatch((0, _main.setMode)('text'));
+	      }
+	   }, {
+	      key: '_onLearningEnter',
+	      value: function _onLearningEnter(nextState, replace) {
+	         var path = '/settings/learning-mode/' + _store2.default.getState().learningMode.mode;
 
-	  return App;
+	         replace({
+	            pathname: path
+	         });
+	      }
+	   }]);
+
+	   return App;
 	}(_react.Component);
 
 	exports.default = App;
@@ -78733,17 +78751,9 @@
 
 	var _nouislider2 = _interopRequireDefault(_nouislider);
 
-	var _classNames = __webpack_require__(471);
+	var _Switcher = __webpack_require__(556);
 
-	var _classNames2 = _interopRequireDefault(_classNames);
-
-	var _LearningFree = __webpack_require__(543);
-
-	var _LearningFree2 = _interopRequireDefault(_LearningFree);
-
-	var _LearningFingers = __webpack_require__(550);
-
-	var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
+	var _Switcher2 = _interopRequireDefault(_Switcher);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -78796,46 +78806,8 @@
 	      value: function render() {
 	         var _this2 = this;
 
-	         var _props = this.props;
-	         var mode = _props.mode;
-	         var lesson = _props.lesson;
+	         var lesson = this.props.lesson;
 
-	         var tabContent = void 0;
-
-	         switch (mode) {
-	            case 'fingers':
-	               tabContent = _react2.default.createElement(_LearningFingers2.default, null);
-	               break;
-	            case 'free':
-	               tabContent = _react2.default.createElement(_LearningFree2.default, null);
-	               break;
-	         }
-
-	         var menuItemsData = [{
-	            name: 'By fingers',
-	            id: 'fingers'
-	         }, {
-	            name: 'Free',
-	            id: 'free'
-	         }];
-
-	         var menuItems = menuItemsData.map(function (item, i) {
-	            var linkClass = 'menu__item';
-
-	            if (item.id === mode) {
-	               linkClass = (0, _classNames2.default)(linkClass, 'menu__item_selected');
-	            }
-
-	            return _react2.default.createElement(
-	               'div',
-	               { key: i, className: 'settings-learning__modes-menu-item' },
-	               _react2.default.createElement(
-	                  'a',
-	                  { className: linkClass, onClick: _this2._onClickMenu.bind(_this2, item.id) },
-	                  item.name
-	               )
-	            );
-	         });
 
 	         var lessonKeys = lesson.split('').map(function (char, idx) {
 	            if (char === ' ') {
@@ -78849,9 +78821,16 @@
 	            return char;
 	         });
 
+	         var learningModePath = '/settings/learning-mode/';
+
 	         return _react2.default.createElement(
 	            'div',
 	            { className: 'settings-learning' },
+	            _react2.default.createElement(
+	               'div',
+	               { className: 'settings-learning__mode-switch' },
+	               _react2.default.createElement(_Switcher2.default, { 'data-active': 'true' })
+	            ),
 	            _react2.default.createElement(
 	               'div',
 	               { className: 'learningarea' },
@@ -78868,7 +78847,30 @@
 	                     { className: 'settings-learning__modes-menu-title' },
 	                     'Keys set'
 	                  ),
-	                  menuItems
+	                  _react2.default.createElement(
+	                     'div',
+	                     { className: 'settings-learning__modes-menu-item' },
+	                     _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        {
+	                           className: 'menu__item',
+	                           activeClassName: 'menu__item_selected',
+	                           to: learningModePath + 'fingers' },
+	                        'By fingers'
+	                     )
+	                  ),
+	                  _react2.default.createElement(
+	                     'div',
+	                     { className: 'settings-learning__modes-menu-item' },
+	                     _react2.default.createElement(
+	                        _reactRouter.Link,
+	                        {
+	                           className: 'menu__item',
+	                           activeClassName: 'menu__item_selected',
+	                           to: learningModePath + 'free' },
+	                        'Free'
+	                     )
+	                  )
 	               ),
 	               _react2.default.createElement(
 	                  'div',
@@ -78889,7 +78891,7 @@
 	                           } })
 	                     )
 	                  ),
-	                  tabContent
+	                  this.props.children
 	               )
 	            )
 	         );
@@ -78897,9 +78899,9 @@
 	   }, {
 	      key: '_onClickMenu',
 	      value: function _onClickMenu(selectedMode, e) {
-	         var _props2 = this.props;
-	         var mode = _props2.mode;
-	         var setLearningMode = _props2.setLearningMode;
+	         var _props = this.props;
+	         var mode = _props.mode;
+	         var setLearningMode = _props.setLearningMode;
 
 
 	         e.preventDefault();
@@ -79075,9 +79077,7 @@
 	exports.default = LearningFree;
 
 /***/ },
-/* 545 */,
-/* 546 */,
-/* 547 */
+/* 545 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79090,169 +79090,7 @@
 
 	var _lodash = __webpack_require__(281);
 
-	var _Keyboard = __webpack_require__(548);
-
-	var _Keyboard2 = _interopRequireDefault(_Keyboard);
-
-	var _main = __webpack_require__(279);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys,
-	    keyboardName: state.keyboard.keyboardName
-	  };
-	};
-
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    setKeyboard: function setKeyboard(name) {
-	      dispatch((0, _main.setKeyboard)(name));
-	    }
-	  };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Keyboard2.default);
-
-/***/ },
-/* 548 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(166);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _classNames = __webpack_require__(471);
-
-	var _classNames2 = _interopRequireDefault(_classNames);
-
-	var _keyboards = __webpack_require__(463);
-
-	var _keyboards2 = _interopRequireDefault(_keyboards);
-
-	var _Key = __webpack_require__(529);
-
-	var _Key2 = _interopRequireDefault(_Key);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var Keyboard = function (_Component) {
-	  _inherits(Keyboard, _Component);
-
-	  function Keyboard() {
-	    _classCallCheck(this, Keyboard);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Keyboard).apply(this, arguments));
-	  }
-
-	  _createClass(Keyboard, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var _props = this.props;
-	      var keys = _props.keys;
-	      var keyboardName = _props.keyboardName;
-
-
-	      var keyNodes = keys.map(function (obj) {
-	        var keyProps = {
-	          className: 'keyboard__key',
-	          'data-key': obj.id
-	        };
-
-	        return _react2.default.createElement(_Key2.default, {
-	          key: obj.id,
-	          keyProps: keyProps,
-	          type: obj.type,
-	          char: obj.key,
-	          shiftChar: obj.shiftKey,
-	          classNameShift: 'keyboard__shift-key'
-	        });
-	      });
-
-	      var menuItems = _keyboards2.default.map(function (keyboard, i) {
-	        var name = keyboard.name;
-	        var linkClass = 'menu__item';
-
-	        if (name === keyboardName) {
-	          linkClass = (0, _classNames2.default)(linkClass, 'menu__item_selected');
-	        }
-
-	        return _react2.default.createElement(
-	          'div',
-	          { key: i, className: 'keyboard-layout__menu-item' },
-	          _react2.default.createElement(
-	            'a',
-	            { className: linkClass, onClick: _this2._onClickNameHandler.bind(_this2, name) },
-	            name
-	          )
-	        );
-	      });
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'keyboard-layout' },
-	        _react2.default.createElement(
-	          'menu',
-	          { className: 'keyboard-layout__types menu' },
-	          menuItems
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'keyboard' },
-	          keyNodes
-	        )
-	      );
-	    }
-	  }, {
-	    key: '_onClickNameHandler',
-	    value: function _onClickNameHandler(name) {
-	      this.props.setKeyboard(name);
-	    }
-	  }]);
-
-	  return Keyboard;
-	}(_react.Component);
-
-	exports.default = Keyboard;
-
-/***/ },
-/* 549 */
-/***/ function(module, exports) {
-
-	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 550 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _reactRedux = __webpack_require__(173);
-
-	var _lodash = __webpack_require__(281);
-
-	var _LearningFingers = __webpack_require__(551);
+	var _LearningFingers = __webpack_require__(546);
 
 	var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
 
@@ -79289,7 +79127,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningFingers2.default);
 
 /***/ },
-/* 551 */
+/* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79469,6 +79307,202 @@
 	}(_react.Component);
 
 	exports.default = LearningFingers;
+
+/***/ },
+/* 547 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _reactRedux = __webpack_require__(173);
+
+	var _lodash = __webpack_require__(281);
+
+	var _Keyboard = __webpack_require__(548);
+
+	var _Keyboard2 = _interopRequireDefault(_Keyboard);
+
+	var _main = __webpack_require__(279);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys,
+	    keyboardName: state.keyboard.keyboardName
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    setKeyboard: function setKeyboard(name) {
+	      dispatch((0, _main.setKeyboard)(name));
+	    }
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Keyboard2.default);
+
+/***/ },
+/* 548 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(166);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classNames = __webpack_require__(471);
+
+	var _classNames2 = _interopRequireDefault(_classNames);
+
+	var _keyboards = __webpack_require__(463);
+
+	var _keyboards2 = _interopRequireDefault(_keyboards);
+
+	var _Key = __webpack_require__(529);
+
+	var _Key2 = _interopRequireDefault(_Key);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var Keyboard = function (_Component) {
+	  _inherits(Keyboard, _Component);
+
+	  function Keyboard() {
+	    _classCallCheck(this, Keyboard);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(Keyboard).apply(this, arguments));
+	  }
+
+	  _createClass(Keyboard, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var _props = this.props;
+	      var keys = _props.keys;
+	      var keyboardName = _props.keyboardName;
+
+
+	      var keyNodes = keys.map(function (obj) {
+	        var keyProps = {
+	          className: 'keyboard__key',
+	          'data-key': obj.id
+	        };
+
+	        return _react2.default.createElement(_Key2.default, {
+	          key: obj.id,
+	          keyProps: keyProps,
+	          type: obj.type,
+	          char: obj.key,
+	          shiftChar: obj.shiftKey,
+	          classNameShift: 'keyboard__shift-key'
+	        });
+	      });
+
+	      var menuItems = _keyboards2.default.map(function (keyboard, i) {
+	        var name = keyboard.name;
+	        var linkClass = 'menu__item';
+
+	        if (name === keyboardName) {
+	          linkClass = (0, _classNames2.default)(linkClass, 'menu__item_selected');
+	        }
+
+	        return _react2.default.createElement(
+	          'div',
+	          { key: i, className: 'keyboard-layout__menu-item' },
+	          _react2.default.createElement(
+	            'a',
+	            { className: linkClass, onClick: _this2._onClickNameHandler.bind(_this2, name) },
+	            name
+	          )
+	        );
+	      });
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'keyboard-layout' },
+	        _react2.default.createElement(
+	          'menu',
+	          { className: 'keyboard-layout__types menu' },
+	          menuItems
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'keyboard' },
+	          keyNodes
+	        )
+	      );
+	    }
+	  }, {
+	    key: '_onClickNameHandler',
+	    value: function _onClickNameHandler(name) {
+	      this.props.setKeyboard(name);
+	    }
+	  }]);
+
+	  return Keyboard;
+	}(_react.Component);
+
+	exports.default = Keyboard;
+
+/***/ },
+/* 549 */
+/***/ function(module, exports) {
+
+	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 550 */,
+/* 551 */,
+/* 552 */,
+/* 553 */,
+/* 554 */,
+/* 555 */,
+/* 556 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _react = __webpack_require__(166);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Footer = function Footer(props) {
+	  return _react2.default.createElement(
+	    "div",
+	    _extends({ className: "switcher" }, props),
+	    _react2.default.createElement("span", { className: "switcher__toggle" })
+	  );
+	};
+
+	exports.default = Footer;
 
 /***/ }
 /******/ ]);

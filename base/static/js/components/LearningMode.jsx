@@ -3,9 +3,7 @@ import {Link} from 'react-router'
 import {forEach, find} from 'lodash';
 import $ from 'jquery';
 import noUiSlider from 'nouislider';
-import classNames from 'classNames';
-import LearningFree from '../containers/LearningFree.jsx'
-import LearningFingers from '../containers/LearningFingers.jsx'
+import Switcher from './Switcher.jsx';
 
 class LearningMode extends Component {
 
@@ -42,41 +40,7 @@ class LearningMode extends Component {
    }
 
    render() {
-      const {mode, lesson} = this.props;
-      let tabContent;
-
-      switch (mode) {
-         case 'fingers':
-            tabContent = <LearningFingers />
-            break;
-         case 'free':
-            tabContent = <LearningFree />
-            break;
-      }
-
-      let menuItemsData = [
-         {
-            name: 'By fingers',
-            id  : 'fingers'
-         }, {
-            name: 'Free',
-            id  : 'free'
-         }
-      ];
-
-      let menuItems = menuItemsData.map((item, i) => {
-         let linkClass = 'menu__item';
-
-         if (item.id === mode) {
-            linkClass = classNames(linkClass, 'menu__item_selected');
-         }
-
-         return (
-           <div key={i} className='settings-learning__modes-menu-item'>
-              <a className={linkClass} onClick={ this._onClickMenu.bind(this, item.id) }>{item.name}</a>
-           </div>
-         )
-      })
+      const {lesson} = this.props;
 
       let lessonKeys = lesson.split('').map((char, idx) => {
          if (char === ' ') {
@@ -86,8 +50,15 @@ class LearningMode extends Component {
          return char;
       });
 
+      let learningModePath = '/settings/learning-mode/';
+
       return (
         <div className="settings-learning">
+
+           <div className="settings-learning__mode-switch">
+              <Switcher data-active="true" />
+           </div>
+
            <div className='learningarea'>
               {lessonKeys}
            </div>
@@ -95,7 +66,23 @@ class LearningMode extends Component {
            <div className="settings-learning__modes">
               <div className="settings-learning__modes-menu">
                  <h4 className="settings-learning__modes-menu-title">Keys set</h4>
-                 {menuItems}
+
+                 <div className='settings-learning__modes-menu-item'>
+                    <Link
+                      className="menu__item"
+                      activeClassName="menu__item_selected"
+                      to={learningModePath + 'fingers'}>
+                       By fingers
+                    </Link>
+                 </div>
+                 <div className='settings-learning__modes-menu-item'>
+                    <Link
+                      className="menu__item"
+                      activeClassName="menu__item_selected"
+                      to={learningModePath + 'free'}>
+                       Free
+                    </Link>
+                 </div>
               </div>
 
               <div className="settings-learning__modes-content">
@@ -108,7 +95,7 @@ class LearningMode extends Component {
                     </div>
                  </div>
 
-                 {tabContent}
+                 { this.props.children }
 
               </div>
            </div>
