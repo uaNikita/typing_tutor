@@ -9,7 +9,7 @@ module.exports = {
   context: __dirname,
 
   // The entry point for the bundle.
-  entry: './webpack-entry.jsx',
+  entry: './entry.jsx',
 
   // Options affecting the output.
   output: {
@@ -82,6 +82,7 @@ module.exports = {
     ]
 
   },
+
   postcss: function () {
     return [autoprefixer({browsers: ["> 3%"]})];
   }

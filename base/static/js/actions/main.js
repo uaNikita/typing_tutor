@@ -4,6 +4,13 @@ import {updateFromTextModeCharToType, typeTextMode} from './text-mode';
 import {updateFromLearningModeCharToType, typeLearningMode} from './learning-mode';
 import {getIdsFromChar, sliceChar} from '../utils';
 
+export function setMode(mode) {
+  return {
+    type: types.SET_MODE,
+    mode
+  };
+}
+
 export function pressKey(char) {
   return {
     type: types.PRESS_KEY,

@@ -1,6 +1,4 @@
 export const PRESS_KEY = 'PRESS_KEY';
-export const STOP_BEEN_PRESSED_KEY = 'STOP_BEEN_PRESSED_KEY';
-
 
 export const UPDATE_START_VARIABLES = 'UPDATE_START_VARIABLES';
 export const SET_MODE = 'SET_MODE';

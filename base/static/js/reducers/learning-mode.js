@@ -20,6 +20,10 @@ const INITIAL_STATE = {
    // fingers, free,
    mode: 'fingers',
 
+   lessonFingersMode:'',
+
+   lessonFreeMode:'',
+
    lesson: {
       typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
       last : 'da'

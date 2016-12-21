@@ -60,7 +60,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(549);
+	__webpack_require__(550);
 
 	_reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById('root'));
 
@@ -21394,15 +21394,15 @@
 
 	var _LearningMode2 = _interopRequireDefault(_LearningMode);
 
-	var _LearningFingers = __webpack_require__(545);
+	var _LearningFingers = __webpack_require__(544);
 
 	var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
 
-	var _LearningFree = __webpack_require__(543);
+	var _LearningFree = __webpack_require__(546);
 
 	var _LearningFree2 = _interopRequireDefault(_LearningFree);
 
-	var _Keyboard = __webpack_require__(547);
+	var _Keyboard = __webpack_require__(548);
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
@@ -39267,12 +39267,26 @@
 	  return _react2.default.createElement(
 	    "footer",
 	    { className: "footer" },
-	    "© 2016 «Сайт» ",
-	    _react2.default.createElement("br", null),
 	    _react2.default.createElement(
-	      "a",
-	      { className: "footer__link", href: "" },
-	      "info@site.com"
+	      "div",
+	      { className: "footer__column" },
+	      "Email: ",
+	      _react2.default.createElement(
+	        "a",
+	        { className: "footer__link", href: "" },
+	        "info@site.com"
+	      ),
+	      _react2.default.createElement("br", null),
+	      _react2.default.createElement(
+	        "a",
+	        { className: "footer__link", href: "" },
+	        "Help"
+	      )
+	    ),
+	    _react2.default.createElement(
+	      "div",
+	      { className: "footer__column" },
+	      "© 2016 «Сайт»"
 	    )
 	  );
 	};
@@ -40354,6 +40368,7 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
+	exports.setMode = setMode;
 	exports.pressKey = pressKey;
 	exports.updateStartVariables = updateStartVariables;
 	exports.setMode = setMode;
@@ -40383,6 +40398,13 @@
 	var _utils = __webpack_require__(284);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function setMode(mode) {
+	  return {
+	    type: types.SET_MODE,
+	    mode: mode
+	  };
+	}
 
 	function pressKey(char) {
 	  return {
@@ -40522,7 +40544,6 @@
 	  value: true
 	});
 	var PRESS_KEY = exports.PRESS_KEY = 'PRESS_KEY';
-	var STOP_BEEN_PRESSED_KEY = exports.STOP_BEEN_PRESSED_KEY = 'STOP_BEEN_PRESSED_KEY';
 
 	var UPDATE_START_VARIABLES = exports.UPDATE_START_VARIABLES = 'UPDATE_START_VARIABLES';
 	var SET_MODE = exports.SET_MODE = 'SET_MODE';
@@ -66833,6 +66854,10 @@
 	   // fingers, free,
 	   mode: 'fingers',
 
+	   lessonFingersMode: '',
+
+	   lessonFreeMode: '',
+
 	   lesson: {
 	      typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
 	      last: 'da'
@@ -78751,7 +78776,7 @@
 
 	var _nouislider2 = _interopRequireDefault(_nouislider);
 
-	var _Switcher = __webpack_require__(556);
+	var _Switcher = __webpack_require__(543);
 
 	var _Switcher2 = _interopRequireDefault(_Switcher);
 
@@ -78806,7 +78831,9 @@
 	      value: function render() {
 	         var _this2 = this;
 
-	         var lesson = this.props.lesson;
+	         var _props = this.props;
+	         var lesson = _props.lesson;
+	         var mode = _props.mode;
 
 
 	         var lessonKeys = lesson.split('').map(function (char, idx) {
@@ -78823,13 +78850,21 @@
 
 	         var learningModePath = '/settings/learning-mode/';
 
+	         var switcherChecked = false;
+
+	         if (mode === 'free') {
+	            switcherChecked = true;
+	         }
+
+	         console.log('switcherChecked', switcherChecked);
+
 	         return _react2.default.createElement(
 	            'div',
 	            { className: 'settings-learning' },
 	            _react2.default.createElement(
 	               'div',
 	               { className: 'settings-learning__mode-switch' },
-	               _react2.default.createElement(_Switcher2.default, { 'data-active': 'true' })
+	               _react2.default.createElement(_Switcher2.default, { checked: switcherChecked, name: 'efasdf', value: 'adsf', onChange: this._onSwitcherChange.bind(this) })
 	            ),
 	            _react2.default.createElement(
 	               'div',
@@ -78897,11 +78932,19 @@
 	         );
 	      }
 	   }, {
+	      key: '_onSwitcherChange',
+	      value: function _onSwitcherChange(e) {
+
+	         if (e.target.checked) {
+	            this.props.setLearningMode('free');
+	         }
+	      }
+	   }, {
 	      key: '_onClickMenu',
 	      value: function _onClickMenu(selectedMode, e) {
-	         var _props = this.props;
-	         var mode = _props.mode;
-	         var setLearningMode = _props.setLearningMode;
+	         var _props2 = this.props;
+	         var mode = _props2.mode;
+	         var setLearningMode = _props2.setLearningMode;
 
 
 	         e.preventDefault();
@@ -78923,47 +78966,31 @@
 /* 543 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
+	"use strict";
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
-	var _reactRedux = __webpack_require__(173);
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-	var _lodash = __webpack_require__(281);
+	var _react = __webpack_require__(166);
 
-	var _LearningFree = __webpack_require__(544);
-
-	var _LearningFree2 = _interopRequireDefault(_LearningFree);
-
-	var _learningMode = __webpack_require__(461);
+	var _react2 = _interopRequireDefault(_react);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys,
-	    letters: state.learningMode.lettersFreeMode
-	  };
+	var Footer = function Footer(props) {
+	   return _react2.default.createElement(
+	      "label",
+	      { className: "switcher" },
+	      _react2.default.createElement("input", _extends({ type: "radio" }, props)),
+	      _react2.default.createElement("span", { className: "switcher__bg" }),
+	      _react2.default.createElement("span", { className: "switcher__toggle" })
+	   );
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    addLetter: function addLetter(letter) {
-	      dispatch((0, _learningMode.addLetterToLesson)(letter));
-
-	      dispatch((0, _learningMode.generateLessonFromCurrentMode)());
-	    },
-	    removeLetter: function removeLetter(letter) {
-	      dispatch((0, _learningMode.removeLetterFromLesson)(letter));
-
-	      dispatch((0, _learningMode.generateLessonFromCurrentMode)());
-	    }
-	  };
-	};
-
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningFree2.default);
+	exports.default = Footer;
 
 /***/ },
 /* 544 */
@@ -78975,122 +79002,11 @@
 	  value: true
 	});
 
-	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-	var _react = __webpack_require__(166);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	var _classNames = __webpack_require__(471);
-
-	var _classNames2 = _interopRequireDefault(_classNames);
-
-	var _lodash = __webpack_require__(281);
-
-	var _Key = __webpack_require__(529);
-
-	var _Key2 = _interopRequireDefault(_Key);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var LearningFree = function (_Component) {
-	  _inherits(LearningFree, _Component);
-
-	  function LearningFree() {
-	    _classCallCheck(this, LearningFree);
-
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(LearningFree).apply(this, arguments));
-	  }
-
-	  _createClass(LearningFree, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
-
-	      var _props = this.props;
-	      var keys = _props.keys;
-	      var letters = _props.letters;
-
-
-	      var keyNodes = keys.map(function (obj) {
-	        var className = 'keyboard__key';
-
-	        var keyProps = {
-	          'data-key': obj.id
-	        };
-
-	        if (obj.type === 'letter') {
-
-	          if (letters.indexOf(obj.key) + 1) {
-	            keyProps.onClick = _this2._onClickSelectedKey.bind(_this2, obj.key);
-	            className = (0, _classNames2.default)(className, 'keyboard__key_selected');
-	          } else {
-	            keyProps.onClick = _this2._onClickNonSelectedKey.bind(_this2, obj.key);
-	          }
-	        } else {
-	          className = (0, _classNames2.default)(className, 'keyboard__key_disabled');
-	        }
-
-	        keyProps.className = className;
-
-	        return _react2.default.createElement(_Key2.default, {
-	          key: obj.id,
-	          keyProps: keyProps,
-	          type: obj.type,
-	          char: obj.key,
-	          shiftChar: obj.shiftKey,
-	          classNameShift: 'keyboard__shift-key'
-	        });
-	      });
-
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'settings-learning__keyboard' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'keyboard' },
-	          keyNodes
-	        )
-	      );
-	    }
-	  }, {
-	    key: '_onClickNonSelectedKey',
-	    value: function _onClickNonSelectedKey(key) {
-	      this.props.addLetter(key);
-	    }
-	  }, {
-	    key: '_onClickSelectedKey',
-	    value: function _onClickSelectedKey(key) {
-	      this.props.removeLetter(key);
-	    }
-	  }]);
-
-	  return LearningFree;
-	}(_react.Component);
-
-	exports.default = LearningFree;
-
-/***/ },
-/* 545 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
 	var _reactRedux = __webpack_require__(173);
 
 	var _lodash = __webpack_require__(281);
 
-	var _LearningFingers = __webpack_require__(546);
+	var _LearningFingers = __webpack_require__(545);
 
 	var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
 
@@ -79127,7 +79043,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningFingers2.default);
 
 /***/ },
-/* 546 */
+/* 545 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79181,8 +79097,6 @@
 	      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LearningFingers).call(this, props));
 
 	      _this.fingersLetters = (0, _utils.getLearningLettersSet)();
-
-	      console.log('this.fingersLetters', _this.fingersLetters);
 	      return _this;
 	   }
 
@@ -79309,7 +79223,7 @@
 	exports.default = LearningFingers;
 
 /***/ },
-/* 547 */
+/* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79322,7 +79236,164 @@
 
 	var _lodash = __webpack_require__(281);
 
-	var _Keyboard = __webpack_require__(548);
+	var _LearningFree = __webpack_require__(547);
+
+	var _LearningFree2 = _interopRequireDefault(_LearningFree);
+
+	var _learningMode = __webpack_require__(461);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var mapStateToProps = function mapStateToProps(state) {
+	  return {
+	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys,
+	    letters: state.learningMode.lettersFreeMode
+	  };
+	};
+
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+	  return {
+	    addLetter: function addLetter(letter) {
+	      dispatch((0, _learningMode.addLetterToLesson)(letter));
+
+	      dispatch((0, _learningMode.generateLessonFromCurrentMode)());
+	    },
+	    removeLetter: function removeLetter(letter) {
+	      dispatch((0, _learningMode.removeLetterFromLesson)(letter));
+
+	      dispatch((0, _learningMode.generateLessonFromCurrentMode)());
+	    }
+	  };
+	};
+
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningFree2.default);
+
+/***/ },
+/* 547 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+	var _react = __webpack_require__(166);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _classNames = __webpack_require__(471);
+
+	var _classNames2 = _interopRequireDefault(_classNames);
+
+	var _lodash = __webpack_require__(281);
+
+	var _Key = __webpack_require__(529);
+
+	var _Key2 = _interopRequireDefault(_Key);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var LearningFree = function (_Component) {
+	  _inherits(LearningFree, _Component);
+
+	  function LearningFree() {
+	    _classCallCheck(this, LearningFree);
+
+	    return _possibleConstructorReturn(this, Object.getPrototypeOf(LearningFree).apply(this, arguments));
+	  }
+
+	  _createClass(LearningFree, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this2 = this;
+
+	      var _props = this.props;
+	      var keys = _props.keys;
+	      var letters = _props.letters;
+
+
+	      var keyNodes = keys.map(function (obj) {
+	        var className = 'keyboard__key';
+
+	        var keyProps = {
+	          'data-key': obj.id
+	        };
+
+	        if (obj.type === 'letter') {
+
+	          if (letters.indexOf(obj.key) + 1) {
+	            keyProps.onClick = _this2._onClickSelectedKey.bind(_this2, obj.key);
+	            className = (0, _classNames2.default)(className, 'keyboard__key_selected');
+	          } else {
+	            keyProps.onClick = _this2._onClickNonSelectedKey.bind(_this2, obj.key);
+	          }
+	        } else {
+	          className = (0, _classNames2.default)(className, 'keyboard__key_disabled');
+	        }
+
+	        keyProps.className = className;
+
+	        return _react2.default.createElement(_Key2.default, {
+	          key: obj.id,
+	          keyProps: keyProps,
+	          type: obj.type,
+	          char: obj.key,
+	          shiftChar: obj.shiftKey,
+	          classNameShift: 'keyboard__shift-key'
+	        });
+	      });
+
+	      return _react2.default.createElement(
+	        'div',
+	        { className: 'settings-learning__keyboard' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'keyboard' },
+	          keyNodes
+	        )
+	      );
+	    }
+	  }, {
+	    key: '_onClickNonSelectedKey',
+	    value: function _onClickNonSelectedKey(key) {
+	      this.props.addLetter(key);
+	    }
+	  }, {
+	    key: '_onClickSelectedKey',
+	    value: function _onClickSelectedKey(key) {
+	      this.props.removeLetter(key);
+	    }
+	  }]);
+
+	  return LearningFree;
+	}(_react.Component);
+
+	exports.default = LearningFree;
+
+/***/ },
+/* 548 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _reactRedux = __webpack_require__(173);
+
+	var _lodash = __webpack_require__(281);
+
+	var _Keyboard = __webpack_require__(549);
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
@@ -79348,7 +79419,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Keyboard2.default);
 
 /***/ },
-/* 548 */
+/* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79465,44 +79536,10 @@
 	exports.default = Keyboard;
 
 /***/ },
-/* 549 */
+/* 550 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 550 */,
-/* 551 */,
-/* 552 */,
-/* 553 */,
-/* 554 */,
-/* 555 */,
-/* 556 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _react = __webpack_require__(166);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Footer = function Footer(props) {
-	  return _react2.default.createElement(
-	    "div",
-	    _extends({ className: "switcher" }, props),
-	    _react2.default.createElement("span", { className: "switcher__toggle" })
-	  );
-	};
-
-	exports.default = Footer;
 
 /***/ }
 /******/ ]);

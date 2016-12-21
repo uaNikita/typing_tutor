@@ -14,8 +14,6 @@ class LearningFingers extends Component {
       super(props);
 
       this.fingersLetters = getLearningLettersSet();
-      
-      console.log('this.fingersLetters', this.fingersLetters);
    }
 
    componentDidMount() {

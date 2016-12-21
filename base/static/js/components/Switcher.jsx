@@ -1,9 +1,11 @@
 import React from 'react';
 
 const Footer = (props) => (
-  <div className="switcher" {...props}>
+  <label className="switcher">
+     <input type="radio" {...props}/>
+     <span className="switcher__bg"></span>
      <span className="switcher__toggle"></span>
-  </div>
+  </label>
 );
 
 export default Footer

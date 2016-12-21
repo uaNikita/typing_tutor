@@ -40,7 +40,7 @@ class LearningMode extends Component {
    }
 
    render() {
-      const {lesson} = this.props;
+      const {lesson, mode} = this.props;
 
       let lessonKeys = lesson.split('').map((char, idx) => {
          if (char === ' ') {
@@ -52,11 +52,19 @@ class LearningMode extends Component {
 
       let learningModePath = '/settings/learning-mode/';
 
+      let switcherChecked = false;
+
+      if (mode === 'free') {
+         switcherChecked = true;
+      }
+
+      console.log('switcherChecked', switcherChecked);
+      
       return (
         <div className="settings-learning">
 
            <div className="settings-learning__mode-switch">
-              <Switcher data-active="true" />
+              <Switcher checked={switcherChecked} name="efasdf" value="adsf" onChange={this._onSwitcherChange.bind(this)} />
            </div>
 
            <div className='learningarea'>
@@ -102,6 +110,14 @@ class LearningMode extends Component {
 
         </div>
       )
+   }
+
+   _onSwitcherChange(e) {
+
+      if (e.target.checked) {
+         this.props.setLearningMode('free');
+      }
+
    }
 
    _onClickMenu(selectedMode, e) {
