@@ -5,6 +5,7 @@ import Ps from 'perfect-scrollbar';
 import classNames from 'classNames';
 
 import AddTextForm from '../containers/AddTextForm.jsx';
+import Switcher from './Switcher.jsx';
 
 class TextMode extends Component {
 
@@ -14,25 +15,19 @@ class TextMode extends Component {
 
   render() {
     const self = this;
-    const {texts, currentTextId} = this.props
+    const {texts, currentTextId, mode} = this.props
 
     var textsBlock = texts.map(obj => {
-      let clsN = 'settings-text__text'
-      let textId = parseInt(obj.textId, 10)
-      let refresh = '';
-
+      let clsN = 'settings-text__text';
+      let textId = parseInt(obj.textId, 10);
 
       if (textId === currentTextId) {
-        clsN = classNames(clsN, 'settings-text__text-selected')
+        clsN = classNames(clsN, 'settings-text__text-selected');
       }
 
-      // if (obj.typed) {
-      //   refresh = <span onClick={() => refreshText(id)} className="settings-text__text-reload fa fa-refresh" />
-      // }
-      // {/*onClick={() => onSelectText(textId)}*/}
+
 
       return <div className="settings-text__text-wrap" key={ textId }>
-        {refresh}
         <div className={ clsN } title={obj.title} onClick={self._onSelectText.bind(self, textId)}>
           <h3 className="settings-text__text-title">
             <Link to={'/settings/text/' + textId}>
@@ -45,10 +40,18 @@ class TextMode extends Component {
           </div>
         </div>
       </div>
-    })
+    });
 
+    let switcherChecked = false;
+
+    if (mode === 'text') {
+      switcherChecked = true;
+    }
+    
     return (
       <div className="settings-text">
+        <Switcher checked={switcherChecked} onChange={this._onSwitcherChange.bind(this)} />
+
         <div className="settings-text__item">
           <label htmlFor="" className="settings-text__label">
             Current text
@@ -70,6 +73,14 @@ class TextMode extends Component {
       </div>
 
     )
+  }
+
+  _onSwitcherChange(e) {
+
+    if (e.target.checked) {
+      this.props.setMode('text');
+    }
+
   }
 
   _onSelectText(textId, e) {

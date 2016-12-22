@@ -1,7 +1,9 @@
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import {map} from 'lodash';
-import TextMode from '../components/TextMode.jsx'
-import {selectText, refreshText} from '../actions/text-mode'
+import TextMode from '../components/TextMode.jsx';
+
+import {selectText, refreshText} from '../actions/text-mode';
+import {setMode} from '../actions/main';
 
 const mapStateToProps = (state) => {
   var texts = map(state.textMode.entities, (obj, key) => {
@@ -16,7 +18,8 @@ const mapStateToProps = (state) => {
 
   return {
     texts,
-    currentTextId: state.textMode.currentTextId
+    currentTextId: state.textMode.currentTextId,
+    mode: state.keyboard.mode
   }
 }
 
@@ -24,6 +27,9 @@ const mapDispatchToProps = (dispatch) => {
   return {
     selectText: (textId) => {
       dispatch(selectText(textId))
+    },
+    setMode: (mode) => {
+      dispatch(setMode(mode))
     }
   }
 }

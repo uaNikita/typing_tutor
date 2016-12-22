@@ -21412,6 +21412,8 @@
 
 	var _main = __webpack_require__(279);
 
+	var _learningMode = __webpack_require__(461);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21461,16 +21463,16 @@
 	                  _react2.default.createElement(
 	                     _reactRouter.Route,
 	                     { path: 'settings', component: _Settings2.default },
-	                     _react2.default.createElement(_reactRouter.IndexRoute, { onEnter: this._enterDependOnMode }),
-	                     _react2.default.createElement(_reactRouter.Route, { path: 'text-mode', component: _TextMode2.default, onEnter: this._onTextEnter }),
-	                     _react2.default.createElement(_reactRouter.Route, { path: 'text/:textId', component: _Text2.default }),
+	                     _react2.default.createElement(_reactRouter.IndexRoute, { onEnter: this._onSettingsEnter }),
 	                     _react2.default.createElement(
 	                        _reactRouter.Route,
 	                        { path: 'learning-mode', component: _LearningMode2.default },
-	                        _react2.default.createElement(_reactRouter.IndexRoute, { onEnter: this._onLearningEnter }),
-	                        _react2.default.createElement(_reactRouter.Route, { path: 'fingers', component: _LearningFingers2.default }),
-	                        _react2.default.createElement(_reactRouter.Route, { path: 'free', component: _LearningFree2.default })
+	                        _react2.default.createElement(_reactRouter.IndexRoute, { onEnter: this._onLearningModeEnter }),
+	                        _react2.default.createElement(_reactRouter.Route, { path: 'fingers', component: _LearningFingers2.default, onEnter: this._onLearningModeFingersEnter }),
+	                        _react2.default.createElement(_reactRouter.Route, { path: 'free', component: _LearningFree2.default, onEnter: this._onLearningModeFreeEnter })
 	                     ),
+	                     _react2.default.createElement(_reactRouter.Route, { path: 'text-mode', component: _TextMode2.default }),
+	                     _react2.default.createElement(_reactRouter.Route, { path: 'text/:textId', component: _Text2.default }),
 	                     _react2.default.createElement(_reactRouter.Route, { path: 'keyboard', component: _Keyboard2.default })
 	                  )
 	               )
@@ -21485,27 +21487,33 @@
 	         _store2.default.dispatch((0, _main.updateCharToType)());
 	      }
 	   }, {
-	      key: '_enterDependOnMode',
-	      value: function _enterDependOnMode(nextState, replace) {
-	         var path = '/settings/' + _store2.default.getState().keyboard.mode;
+	      key: '_onSettingsEnter',
+	      value: function _onSettingsEnter(nextState, replace) {
+
+	         var path = '/settings/' + _store2.default.getState().keyboard.mode + '-mode';
 
 	         replace({
-	            pathname: path + '-mode'
+	            pathname: path
 	         });
 	      }
 	   }, {
-	      key: '_onTextEnter',
-	      value: function _onTextEnter() {
-	         _store2.default.dispatch((0, _main.setMode)('text'));
-	      }
-	   }, {
-	      key: '_onLearningEnter',
-	      value: function _onLearningEnter(nextState, replace) {
+	      key: '_onLearningModeEnter',
+	      value: function _onLearningModeEnter(nextState, replace) {
 	         var path = '/settings/learning-mode/' + _store2.default.getState().learningMode.mode;
 
 	         replace({
 	            pathname: path
 	         });
+	      }
+	   }, {
+	      key: '_onLearningModeFingersEnter',
+	      value: function _onLearningModeFingersEnter(nextState, replace) {
+	         _store2.default.dispatch((0, _learningMode.setLearningMode)('fingers'));
+	      }
+	   }, {
+	      key: '_onLearningModeFreeEnter',
+	      value: function _onLearningModeFreeEnter(nextState, replace) {
+	         _store2.default.dispatch((0, _learningMode.setLearningMode)('free'));
 	      }
 	   }]);
 
@@ -40371,7 +40379,6 @@
 	exports.setMode = setMode;
 	exports.pressKey = pressKey;
 	exports.updateStartVariables = updateStartVariables;
-	exports.setMode = setMode;
 	exports.actionMetronome = actionMetronome;
 	exports.setKeyboard = setKeyboard;
 	exports.openModal = openModal;
@@ -40381,6 +40388,7 @@
 	exports.setIdsCharToType = setIdsCharToType;
 	exports.addSuccesType = addSuccesType;
 	exports.addErrorType = addErrorType;
+	exports.stopBeenPressedKey = stopBeenPressedKey;
 	exports.stopBeenPressedKey = stopBeenPressedKey;
 	exports.updateCharToType = updateCharToType;
 	exports.typeChar = typeChar;
@@ -40416,13 +40424,6 @@
 	function updateStartVariables() {
 	  return {
 	    type: types.UPDATE_START_VARIABLES
-	  };
-	}
-
-	function setMode(mode) {
-	  return {
-	    type: types.SET_MODE,
-	    mode: mode
 	  };
 	}
 
@@ -40485,6 +40486,20 @@
 	function addErrorType() {
 	  return {
 	    type: types.ADD_ERROR_TYPE
+	  };
+	}
+
+	function stopBeenPressedKey(char) {
+	  return function (dispatch, getState) {
+	    var state = getState();
+	    var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
+
+	    var sliceCurrentChar = function sliceCurrentChar(pressed) {
+	      return (0, _utils.sliceChar)(pressed, (0, _utils.getIdsFromChar)(keys, char));
+	    };
+
+	    dispatch(setPressedRightIds(sliceCurrentChar(state.keyboard.pressedRightIds)));
+	    dispatch(setPressedWrongIds(sliceCurrentChar(state.keyboard.pressedWrongIds)));
 	  };
 	}
 
@@ -66854,9 +66869,9 @@
 	   // fingers, free,
 	   mode: 'fingers',
 
-	   lessonFingersMode: '',
+	   lessonFingersMode: 'qwwqerqwer qwre qwr qwr q',
 
-	   lessonFreeMode: '',
+	   lessonFreeMode: 'qwerqwer qwe rqw re',
 
 	   lesson: {
 	      typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
@@ -67108,7 +67123,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _action_types = __webpack_require__(280);
@@ -67126,114 +67141,114 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	var INITIAL_STATE = {
-	  keyboardName: 'US',
+	   keyboardName: 'US',
 
-	  keyboards: _keyboards2.default,
+	   keyboards: _keyboards2.default,
 
-	  pressedRightIds: [],
+	   pressedRightIds: [],
 
-	  pressedWrongIds: [],
+	   pressedWrongIds: [],
 
-	  startTypingTime: 1461228933292,
+	   startTypingTime: 1461228933292,
 
-	  successTypes: 0,
+	   successTypes: 0,
 
-	  errorTypes: 0,
+	   errorTypes: 0,
 
-	  idCharsToType: '',
+	   idCharsToType: '',
 
-	  metronomeStatus: 0,
+	   metronomeStatus: 0,
 
-	  metronomeInterval: 800,
+	   metronomeInterval: 800,
 
-	  // text, learning
-	  mode: 'learning'
+	   // text, learning
+	   mode: 'learning'
 	};
 
 	var actionMetronome = function actionMetronome(state, action, value) {
-	  var newState = void 0;
-	  var status = void 0;
-	  var volume = void 0;
+	   var newState = void 0;
+	   var status = void 0;
+	   var volume = void 0;
 
-	  switch (action) {
-	    case 'play':
-	      status = 1;
-	      break;
-	    case 'stop':
-	      status = 1;
-	      break;
-	    case 'interval':
-	      volume = value;
-	      break;
-	  }
+	   switch (action) {
+	      case 'play':
+	         status = 1;
+	         break;
+	      case 'stop':
+	         status = 1;
+	         break;
+	      case 'interval':
+	         volume = value;
+	         break;
+	   }
 
-	  if (status !== undefined) {
-	    newState = {
-	      metronomeStatus: status
-	    };
-	  } else {
-	    newState = {
-	      metronomeInterval: volume
-	    };
-	  }
+	   if (status !== undefined) {
+	      newState = {
+	         metronomeStatus: status
+	      };
+	   } else {
+	      newState = {
+	         metronomeInterval: volume
+	      };
+	   }
 
-	  return (0, _lodash.assign)({}, state, newState);
+	   return (0, _lodash.assign)({}, state, newState);
 	};
 
 	exports.default = function () {
-	  var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
-	  var action = arguments[1];
+	   var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
+	   var action = arguments[1];
 
-	  switch (action.type) {
-	    case types.SET_PRESSED_RIGHT_IDS:
-	      return (0, _lodash.assign)({}, state, {
-	        pressedRightIds: action.ids
-	      });
+	   switch (action.type) {
+	      case types.SET_PRESSED_RIGHT_IDS:
+	         return (0, _lodash.assign)({}, state, {
+	            pressedRightIds: action.ids
+	         });
 
-	    case types.SET_PRESSED_WRONG_IDS:
-	      return (0, _lodash.assign)({}, state, {
-	        pressedWrongIds: action.ids
-	      });
+	      case types.SET_PRESSED_WRONG_IDS:
+	         return (0, _lodash.assign)({}, state, {
+	            pressedWrongIds: action.ids
+	         });
 
-	    case types.SET_IDS_CHAR_TO_TYPE:
-	      return (0, _lodash.assign)({}, state, {
-	        idCharsToType: action.id
-	      });
+	      case types.SET_IDS_CHAR_TO_TYPE:
+	         return (0, _lodash.assign)({}, state, {
+	            idCharsToType: action.id
+	         });
 
-	    case types.ADD_SUCCESS_TYPE:
-	      return (0, _lodash.assign)({}, state, {
-	        successTypes: state.successTypes + 1
-	      });
+	      case types.ADD_SUCCESS_TYPE:
+	         return (0, _lodash.assign)({}, state, {
+	            successTypes: state.successTypes + 1
+	         });
 
-	    case types.ADD_ERROR_TYPE:
-	      return (0, _lodash.assign)({}, state, {
-	        errorTypes: state.errorTypes + 1
-	      });
+	      case types.ADD_ERROR_TYPE:
+	         return (0, _lodash.assign)({}, state, {
+	            errorTypes: state.errorTypes + 1
+	         });
 
-	    case types.UPDATE_START_VARIABLES:
-	      return (0, _lodash.assign)({}, state, {
-	        startTypingTime: Date.now(),
-	        successTypes: 0,
-	        errorTypes: 0
-	      });
+	      case types.UPDATE_START_VARIABLES:
+	         return (0, _lodash.assign)({}, state, {
+	            startTypingTime: Date.now(),
+	            successTypes: 0,
+	            errorTypes: 0
+	         });
 
-	    case types.SET_MODE:
-	      return (0, _lodash.assign)({}, state, {
-	        mode: action.mode
-	      });
+	      case types.SET_MODE:
+	         return (0, _lodash.assign)({}, state, {
+	            mode: action.mode
+	         });
 
-	    case types.ACTION_METRONOME:
-	      return actionMetronome(state, action.action, action.value);
+	      case types.ACTION_METRONOME:
+	         return actionMetronome(state, action.action, action.value);
 
-	    case types.SET_KEYBOARD:
-	      return (0, _lodash.assign)({}, state, {
-	        keyboardName: action.name
-	      });
+	      case types.SET_KEYBOARD:
+	         return (0, _lodash.assign)({}, state, {
+	            keyboardName: action.name
+	         });
 
-	    default:
-	      return state;
+	      default:
+	         return state;
 
-	  }
+	   }
 	};
 
 /***/ },
@@ -78016,6 +78031,8 @@
 
 	var _textMode = __webpack_require__(283);
 
+	var _main = __webpack_require__(279);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
@@ -78031,7 +78048,8 @@
 
 	  return {
 	    texts: texts,
-	    currentTextId: state.textMode.currentTextId
+	    currentTextId: state.textMode.currentTextId,
+	    mode: state.keyboard.mode
 	  };
 	};
 
@@ -78039,6 +78057,9 @@
 	  return {
 	    selectText: function selectText(textId) {
 	      dispatch((0, _textMode.selectText)(textId));
+	    },
+	    setMode: function setMode(mode) {
+	      dispatch((0, _main.setMode)(mode));
 	    }
 	  };
 	};
@@ -78075,6 +78096,10 @@
 
 	var _AddTextForm2 = _interopRequireDefault(_AddTextForm);
 
+	var _Switcher = __webpack_require__(543);
+
+	var _Switcher2 = _interopRequireDefault(_Switcher);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -78106,26 +78131,20 @@
 	      var _props = this.props;
 	      var texts = _props.texts;
 	      var currentTextId = _props.currentTextId;
+	      var mode = _props.mode;
 
 
 	      var textsBlock = texts.map(function (obj) {
 	        var clsN = 'settings-text__text';
 	        var textId = parseInt(obj.textId, 10);
-	        var refresh = '';
 
 	        if (textId === currentTextId) {
 	          clsN = (0, _classNames2.default)(clsN, 'settings-text__text-selected');
 	        }
 
-	        // if (obj.typed) {
-	        //   refresh = <span onClick={() => refreshText(id)} className="settings-text__text-reload fa fa-refresh" />
-	        // }
-	        // {/*onClick={() => onSelectText(textId)}*/}
-
 	        return _react2.default.createElement(
 	          'div',
 	          { className: 'settings-text__text-wrap', key: textId },
-	          refresh,
 	          _react2.default.createElement(
 	            'div',
 	            { className: clsN, title: obj.title, onClick: self._onSelectText.bind(self, textId) },
@@ -78147,9 +78166,16 @@
 	        );
 	      });
 
+	      var switcherChecked = false;
+
+	      if (mode === 'text') {
+	        switcherChecked = true;
+	      }
+
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'settings-text' },
+	        _react2.default.createElement(_Switcher2.default, { checked: switcherChecked, onChange: this._onSwitcherChange.bind(this) }),
 	        _react2.default.createElement(
 	          'div',
 	          { className: 'settings-text__item' },
@@ -78185,6 +78211,14 @@
 	          )
 	        )
 	      );
+	    }
+	  }, {
+	    key: '_onSwitcherChange',
+	    value: function _onSwitcherChange(e) {
+
+	      if (e.target.checked) {
+	        this.props.setMode('text');
+	      }
 	    }
 	  }, {
 	    key: '_onSelectText',
@@ -78712,7 +78746,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _reactRedux = __webpack_require__(173);
@@ -78723,27 +78757,33 @@
 
 	var _learningMode = __webpack_require__(461);
 
+	var _main = __webpack_require__(279);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    maxWordLength: state.learningMode.maxWordLength,
-	    lesson: state.learningMode.lesson.typed + state.learningMode.lesson.last,
-	    mode: state.learningMode.mode
-	  };
+	   return {
+	      maxWordLength: state.learningMode.maxWordLength,
+	      lesson: state.learningMode.lesson.typed + state.learningMode.lesson.last,
+	      learningMode: state.learningMode.mode,
+	      mode: state.keyboard.mode
+	   };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    setMaxWordLength: function setMaxWordLength(length) {
-	      dispatch((0, _learningMode.setLessonMaxWordLength)(length));
+	   return {
+	      setMaxWordLength: function setMaxWordLength(length) {
+	         dispatch((0, _learningMode.setLessonMaxWordLength)(length));
 
-	      dispatch((0, _learningMode.generateLessonFromCurrentMode)());
-	    },
-	    setLearningMode: function setLearningMode(mode) {
-	      dispatch((0, _learningMode.setLearningMode)(mode));
-	    }
-	  };
+	         dispatch((0, _learningMode.generateLessonFromCurrentMode)());
+	      },
+	      setLearningMode: function setLearningMode(mode) {
+	         dispatch((0, _learningMode.setLearningMode)(mode));
+	      },
+	      setMode: function setMode(mode) {
+	         dispatch((0, _main.setMode)(mode));
+	      }
+	   };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningMode2.default);
@@ -78852,20 +78892,14 @@
 
 	         var switcherChecked = false;
 
-	         if (mode === 'free') {
+	         if (mode === 'learning') {
 	            switcherChecked = true;
 	         }
-
-	         console.log('switcherChecked', switcherChecked);
 
 	         return _react2.default.createElement(
 	            'div',
 	            { className: 'settings-learning' },
-	            _react2.default.createElement(
-	               'div',
-	               { className: 'settings-learning__mode-switch' },
-	               _react2.default.createElement(_Switcher2.default, { checked: switcherChecked, name: 'efasdf', value: 'adsf', onChange: this._onSwitcherChange.bind(this) })
-	            ),
+	            _react2.default.createElement(_Switcher2.default, { checked: switcherChecked, onChange: this._onSwitcherChange.bind(this) }),
 	            _react2.default.createElement(
 	               'div',
 	               { className: 'learningarea' },
@@ -78936,7 +78970,7 @@
 	      value: function _onSwitcherChange(e) {
 
 	         if (e.target.checked) {
-	            this.props.setLearningMode('free');
+	            this.props.setMode('learning');
 	         }
 	      }
 	   }, {

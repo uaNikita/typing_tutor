@@ -15,12 +15,17 @@ import LearningFree from './LearningFree.jsx';
 import Keyboard from './Keyboard.jsx';
 
 import store from './../store';
+
 import {
   typeChar,
   updateStartVariables,
-  setMode,
   updateCharToType
 } from '../actions/main'
+
+import {
+  setLearningMode
+} from '../actions/learning-mode'
+
 
 const history = syncHistoryWithStore(browserHistory, store)
 
@@ -47,14 +52,14 @@ export default class App extends Component {
               <Route path="/" component={ Layout }>
                  <IndexRoute component={ Home } onEnter={ this._onKeyboardEnter } />
                  <Route path="settings" component={ Settings }>
-                    <IndexRoute onEnter={this._enterDependOnMode} />
-                    <Route path="text-mode" component={ TextMode } onEnter={ this._onTextEnter } />
-                    <Route path="text/:textId" component={ Text } />
+                    <IndexRoute onEnter={this._onSettingsEnter} />
                     <Route path="learning-mode" component={ LearningMode }>
-                       <IndexRoute onEnter={this._onLearningEnter} />
-                       <Route path="fingers" component={ LearningFingers } />
-                       <Route path="free" component={ LearningFree } />
+                       <IndexRoute onEnter={this._onLearningModeEnter} />
+                       <Route path="fingers" component={ LearningFingers } onEnter={this._onLearningModeFingersEnter} />
+                       <Route path="free" component={ LearningFree } onEnter={this._onLearningModeFreeEnter} />
                     </Route>
+                    <Route path="text-mode" component={ TextMode } />
+                    <Route path="text/:textId" component={ Text } />
                     <Route path="keyboard" component={ Keyboard } />
                  </Route>
               </Route>
@@ -69,23 +74,33 @@ export default class App extends Component {
       store.dispatch(updateCharToType());
    }
 
-   _enterDependOnMode(nextState, replace) {
-      let path = '/settings/' + store.getState().keyboard.mode;
+   _onSettingsEnter(nextState, replace) {
+
+
+
+
+
+
+      let path = '/settings/' + store.getState().keyboard.mode + '-mode';
 
       replace({
-         pathname: path + '-mode'
+         pathname: path
       });
    }
 
-   _onTextEnter() {
-      store.dispatch(setMode('text'));
-   }
-
-   _onLearningEnter(nextState, replace) {
+   _onLearningModeEnter(nextState, replace) {
       let path = '/settings/learning-mode/' + store.getState().learningMode.mode;
 
       replace({
          pathname: path
       });
+   }
+
+   _onLearningModeFingersEnter(nextState, replace) {
+      store.dispatch(setLearningMode('fingers'));
+   }
+
+   _onLearningModeFreeEnter(nextState, replace) {
+      store.dispatch(setLearningMode('free'));
    }
 }

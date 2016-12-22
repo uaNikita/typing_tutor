@@ -24,13 +24,6 @@ export function updateStartVariables() {
   };
 }
 
-export function setMode(mode) {
-  return {
-    type: types.SET_MODE,
-    mode
-  };
-}
-
 export function actionMetronome(action, value) {
   return {
     type: types.ACTION_METRONOME,
@@ -94,6 +87,19 @@ export function addErrorType() {
   };
 }
 
+export function stopBeenPressedKey(char) {
+  return (dispatch, getState) => {
+    let state = getState()
+    let keys = find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys;
+
+    let sliceCurrentChar = pressed => {
+      return sliceChar(pressed, getIdsFromChar(keys, char))
+    }
+
+    dispatch(setPressedRightIds(sliceCurrentChar(state.keyboard.pressedRightIds)));
+    dispatch(setPressedWrongIds(sliceCurrentChar(state.keyboard.pressedWrongIds)));
+  }
+}
 
 export function stopBeenPressedKey(char) {
   return (dispatch, getState) => {

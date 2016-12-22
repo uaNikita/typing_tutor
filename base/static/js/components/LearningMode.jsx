@@ -17,10 +17,10 @@ class LearningMode extends Component {
 
       // max word length range
       noUiSlider.create(this._maxWordLengthRange, {
-         start  : [this.props.maxWordLength],
-         step   : 1,
+         start: [this.props.maxWordLength],
+         step: 1,
          connect: 'lower',
-         range  : {
+         range: {
             'min': 3,
             'max': 10
          }
@@ -54,18 +54,14 @@ class LearningMode extends Component {
 
       let switcherChecked = false;
 
-      if (mode === 'free') {
+      if (mode === 'learning') {
          switcherChecked = true;
       }
-
-      console.log('switcherChecked', switcherChecked);
       
       return (
         <div className="settings-learning">
-
-           <div className="settings-learning__mode-switch">
-              <Switcher checked={switcherChecked} name="efasdf" value="adsf" onChange={this._onSwitcherChange.bind(this)} />
-           </div>
+           
+           <Switcher checked={switcherChecked} onChange={this._onSwitcherChange.bind(this)} />
 
            <div className='learningarea'>
               {lessonKeys}
@@ -115,7 +111,7 @@ class LearningMode extends Component {
    _onSwitcherChange(e) {
 
       if (e.target.checked) {
-         this.props.setLearningMode('free');
+         this.props.setMode('learning');
       }
 
    }
