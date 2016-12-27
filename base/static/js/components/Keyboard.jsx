@@ -8,7 +8,7 @@ class Keyboard extends Component {
 
   render() {
 
-    const {keys, keyboardName} = this.props;
+    const {keys, keyboard} = this.props;
 
     let keyNodes = keys.map(obj => {
       let keyProps = {
@@ -27,11 +27,11 @@ class Keyboard extends Component {
 
     })
 
-    let menuItems = keyboards.map((keyboard, i) => {
-      let name = keyboard.name;
+    let menuItems = keyboards.map((kb, i) => {
+      let name = kb.name;
       let linkClass = 'menu__item';
 
-      if (name === keyboardName) {
+      if (name === keyboard) {
         linkClass = classNames(linkClass, 'menu__item_selected');
       }
 

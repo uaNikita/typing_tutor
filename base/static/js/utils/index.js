@@ -81,7 +81,7 @@ export const generateLesson = (() => {
 export function getFingersSet() {
    let state = store.getState();
 
-   let keys = find(state.main.keyboards, {'name': state.main.keyboardName}).keys;
+   let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
    var fingers = ['index', 'middle', 'ring', 'pinky'];
    var rows = ['middle', 'top', 'bottom'];
    var hands = ['left', 'right'];

@@ -21427,7 +21427,10 @@
 	// todo: написать проверку, где брать пользователя из кук и вытягивать данные из базы
 	// если такого пользователя нет значит сгенерировать значения такие как уроки для мода лернинг и так далее
 	// можно хранить статистику за последние сутки например и при входе в аккаунт берем последнюю версию и подгоняем все на нее
+	// на данный момент что это за информация: это выбранная раскладка на клавиатуре и выбранный мод в лернинг моде,
+	// ввести ограничения на 10 текстов не больше 10000 тысяч символов
 
+	_store2.default.dispatch((0, _learningMode.initializeLearningState)());
 
 	var App = function (_Component) {
 	   _inherits(App, _Component);
@@ -40504,7 +40507,7 @@
 	function stopBeenPressedKey(char) {
 	  return function (dispatch, getState) {
 	    var state = getState();
-	    var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys;
+	    var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
 
 	    var sliceCurrentChar = function sliceCurrentChar(pressed) {
 	      return (0, _utils.sliceChar)(pressed, (0, _utils.getIdsFromCharacter)(keys, char));
@@ -57385,7 +57388,7 @@
 	function updateFromTextModeCharToType() {
 	  return function (dispatch, getState) {
 	    var state = getState();
-	    var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys;
+	    var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
 	    var textId = state.textMode.currentTextId;
 	    var entities = state.textMode.entities;
 
@@ -57400,7 +57403,7 @@
 	    var state = getState();
 	    var keyboardState = state.keyboard;
 	    var textModeState = state.textMode;
-	    var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboardName }).keys;
+	    var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboard }).keys;
 	    var textId = textModeState.currentTextId;
 	    var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
 
@@ -57521,7 +57524,7 @@
 	function getFingersSet() {
 	   var state = _store2.default.getState();
 
-	   var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys;
+	   var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
 	   var fingers = ['index', 'middle', 'ring', 'pinky'];
 	   var rows = ['middle', 'top', 'bottom'];
 	   var hands = ['left', 'right'];
@@ -66895,17 +66898,17 @@
 
 	   maxWordLength: 5,
 
-	   fingersSetSize: 7,
+	   fingersSetSize: 0,
 
-	   lessonFingers: 'lka dgg khljd djdgl fla ksafh dhgfj hfd dkgh akd',
+	   lessonFingers: '',
 
-	   lettersFree: ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+	   lettersFree: [],
 
-	   lessonFree: 'dlaj skls khfd khslg llalja adad gsshs fjf adhgdg',
+	   lessonFree: '',
 
 	   lesson: {
 	      typed: '',
-	      last: 'lka dgg khljd djdgl fla ksafh dhgfj hfd dkgh akd'
+	      last: ''
 	   }
 	};
 
@@ -66964,6 +66967,11 @@
 	            lessonFree: action.lesson
 	         });
 
+	      case types.SET_FREE_LETTERS:
+	         return (0, _lodash.assign)({}, state, {
+	            lettersFree: action.letters
+	         });
+
 	      case types.ADD_LETTER_TO_FREE_LETTERS:
 	         return (0, _lodash.assign)({}, state, {
 	            lettersFree: [].concat(_toConsumableArray(state.lettersFree), [action.letter])
@@ -67000,6 +67008,7 @@
 	var SET_FINGERS_SET_SIZE = exports.SET_FINGERS_SET_SIZE = 'SET_FINGERS_SET_SIZE';
 
 	var SET_FREE_LESSON = exports.SET_FREE_LESSON = 'SET_FREE_LESSON';
+	var SET_FREE_LETTERS = exports.SET_FREE_LETTERS = 'SET_FREE_LETTERS';
 	var ADD_LETTER_TO_FREE_LETTERS = exports.ADD_LETTER_TO_FREE_LETTERS = 'ADD_LETTER_TO_FREE_LETTERS';
 	var REMOVE_LETTER_FROM_FREE_LETTERS = exports.REMOVE_LETTER_FROM_FREE_LETTERS = 'REMOVE_LETTER_FROM_FREE_LETTERS';
 
@@ -67028,7 +67037,7 @@
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	var INITIAL_STATE = {
-	   keyboardName: 'US',
+	   keyboard: 'US',
 
 	   keyboards: _keyboards2.default,
 
@@ -68337,6 +68346,7 @@
 	exports.setFingersLesson = setFingersLesson;
 	exports.setFingersSetSize = setFingersSetSize;
 	exports.setFreeLesson = setFreeLesson;
+	exports.setFreeLetters = setFreeLetters;
 	exports.addLetterToFreeLetters = addLetterToFreeLetters;
 	exports.removeLetterFromFreeLetters = removeLetterFromFreeLetters;
 	exports.typeOnLesson = typeOnLesson;
@@ -68344,7 +68354,7 @@
 	exports.generateAndSetFreeLesson = generateAndSetFreeLesson;
 	exports.updateCharToType = updateCharToType;
 	exports.typeLearningMode = typeLearningMode;
-	exports.updateLearningState = updateLearningState;
+	exports.initializeLearningState = initializeLearningState;
 
 	var _lodash = __webpack_require__(280);
 
@@ -68403,6 +68413,13 @@
 	   return {
 	      type: types.SET_FREE_LESSON,
 	      lesson: lesson
+	   };
+	}
+
+	function setFreeLetters(letters) {
+	   return {
+	      type: types.SET_FREE_LETTERS,
+	      letters: letters
 	   };
 	}
 
@@ -68465,7 +68482,7 @@
 
 	               if (!lettersFree.length) {
 
-	                  var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys;
+	                  var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
 
 	                  lettersFree = (0, _lodash.filter)(keys, {
 	                     row: 'middle',
@@ -68505,7 +68522,7 @@
 	function updateCharToType() {
 	   return function (dispatch, getState) {
 	      var state = getState();
-	      var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys;
+	      var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
 	      var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, state.learningMode.lesson.last[0]);
 
 	      dispatch((0, _main.setIdsCharToType)(idsCharToType));
@@ -68517,7 +68534,7 @@
 	      var state = getState();
 	      var keyboardState = state.main;
 	      var learningModeState = state.learningMode;
-	      var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboardName }).keys;
+	      var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboard }).keys;
 	      var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
 
 	      if (learningModeState.lesson.last[0] === char) {
@@ -68544,9 +68561,45 @@
 	   };
 	}
 
-	function updateLearningState(char) {
+	function initializeLearningState() {
 	   return function (dispatch, getState) {
-	      // ghjfgltq
+
+	      var state = getState();
+
+	      var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
+
+	      var defaultKeys = (0, _lodash.filter)(keys, {
+	         row: 'middle',
+	         type: 'letter'
+	      });
+
+	      var resultForUnionWith = defaultKeys.map(function (obj) {
+	         return {
+	            finger: obj.finger,
+	            hand: obj.hand
+	         };
+	      });
+
+	      var size = _.uniqWith(resultForUnionWith, _.isEqual).length;
+
+	      dispatch(setFingersSetSize(size));
+
+	      var letters = defaultKeys.map(function (obj) {
+	         return obj.key;
+	      });
+
+	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, letters);
+
+	      dispatch(setFingersLesson(lesson));
+
+	      dispatch(setCurrentLesson(lesson));
+
+	      dispatch(setFreeLetters(letters));
+
+	      // different lesson for free mode
+	      lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, letters);
+
+	      dispatch(setFreeLesson(lesson));
 	   };
 	}
 
@@ -75678,7 +75731,7 @@
 	var mapStateToProps = function mapStateToProps(state) {
 
 	  return {
-	    keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys,
+	    keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys,
 	    pressedRightIds: state.main.pressedRightIds,
 	    pressedWrongIds: state.main.pressedWrongIds,
 	    idCharsToType: state.main.idCharsToType
@@ -79154,7 +79207,7 @@
 	   return {
 	      fingersSetSize: state.learningMode.fingersSetSize,
 	      maxWordLength: state.learningMode.maxWordLength,
-	      keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys
+	      keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys
 	   };
 	};
 
@@ -79374,7 +79427,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _reactRedux = __webpack_require__(173);
@@ -79390,26 +79443,25 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
-
-	  return {
-	    keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys,
-	    letters: state.learningMode.lettersFree
-	  };
+	   return {
+	      keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys,
+	      letters: state.learningMode.lettersFree
+	   };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    addLetter: function addLetter(letter) {
-	      dispatch((0, _learningMode.addLetterToFreeLetters)(letter));
+	   return {
+	      addLetter: function addLetter(letter) {
+	         dispatch((0, _learningMode.addLetterToFreeLetters)(letter));
 
-	      dispatch((0, _learningMode.generateAndSetFreeLesson)());
-	    },
-	    removeLetter: function removeLetter(letter) {
-	      dispatch((0, _learningMode.removeLetterFromFreeLetters)(letter));
+	         dispatch((0, _learningMode.generateAndSetFreeLesson)());
+	      },
+	      removeLetter: function removeLetter(letter) {
+	         dispatch((0, _learningMode.removeLetterFromFreeLetters)(letter));
 
-	      dispatch((0, _learningMode.generateAndSetFreeLesson)());
-	    }
-	  };
+	         dispatch((0, _learningMode.generateAndSetFreeLesson)());
+	      }
+	   };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningFree2.default);
@@ -79549,8 +79601,8 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys,
-	    keyboardName: state.main.keyboardName
+	    keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys,
+	    keyboardName: state.main.keyboard
 	  };
 	};
 
@@ -79616,7 +79668,7 @@
 
 	      var _props = this.props;
 	      var keys = _props.keys;
-	      var keyboardName = _props.keyboardName;
+	      var keyboard = _props.keyboard;
 
 
 	      var keyNodes = keys.map(function (obj) {
@@ -79635,11 +79687,11 @@
 	        });
 	      });
 
-	      var menuItems = _keyboards2.default.map(function (keyboard, i) {
-	        var name = keyboard.name;
+	      var menuItems = _keyboards2.default.map(function (kb, i) {
+	        var name = kb.name;
 	        var linkClass = 'menu__item';
 
-	        if (name === keyboardName) {
+	        if (name === keyboard) {
 	          linkClass = (0, _classNames2.default)(linkClass, 'menu__item_selected');
 	        }
 

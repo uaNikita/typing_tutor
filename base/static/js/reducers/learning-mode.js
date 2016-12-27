@@ -7,17 +7,17 @@ const INITIAL_STATE = {
 
    maxWordLength: 5,
 
-   fingersSetSize: 7,
+   fingersSetSize: 0,
 
-   lessonFingers: 'lka dgg khljd djdgl fla ksafh dhgfj hfd dkgh akd',
+   lessonFingers: '',
 
-   lettersFree: ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+   lettersFree: [],
 
-   lessonFree: 'dlaj skls khfd khslg llalja adad gsshs fjf adhgdg',
+   lessonFree: '',
 
    lesson: {
       typed: '',
-      last: 'lka dgg khljd djdgl fla ksafh dhgfj hfd dkgh akd'
+      last: ''
    }
 };
 
@@ -71,6 +71,11 @@ export default (state = INITIAL_STATE, action) => {
       case types.SET_FREE_LESSON:
          return assign({}, state, {
             lessonFree: action.lesson
+         });
+
+      case types.SET_FREE_LETTERS:
+         return assign({}, state, {
+            lettersFree: action.letters
          });
 
       case types.ADD_LETTER_TO_FREE_LETTERS:

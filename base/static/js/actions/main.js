@@ -91,7 +91,7 @@ export function addErrorType() {
 export function stopBeenPressedKey(char) {
   return (dispatch, getState) => {
     let state = getState()
-    let keys = find(state.main.keyboards, {'name': state.main.keyboardName}).keys;
+    let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
 
     let sliceCurrentChar = pressed => {
       return sliceChar(pressed, getIdsFromCharacter(keys, char))

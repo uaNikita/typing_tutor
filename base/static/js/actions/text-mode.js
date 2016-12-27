@@ -43,7 +43,7 @@ export function typeOnEntitie(textId) {
 export function updateFromTextModeCharToType() {
   return (dispatch, getState) => {
     let state = getState();
-    let keys = find(state.main.keyboards, {'name': state.main.keyboardName}).keys;
+    let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
     let textId = state.textMode.currentTextId;
     let entities = state.textMode.entities;
 
@@ -58,7 +58,7 @@ export function typeTextMode(char) {
     let state = getState();
     let keyboardState = state.keyboard;
     var textModeState = state.textMode;
-    let keys = find(keyboardState.keyboards, {'name': keyboardState.keyboardName}).keys
+    let keys = find(keyboardState.keyboards, {'name': keyboardState.keyboard}).keys
     let textId = textModeState.currentTextId;
     let idsChar = getIdsFromCharacter(keys, char);
 

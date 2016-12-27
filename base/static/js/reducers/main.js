@@ -13,7 +13,7 @@ import {
 } from 'lodash';
 
 const INITIAL_STATE = {
-   keyboardName: 'US',
+   keyboard: 'US',
 
    keyboards: keyboards,
 

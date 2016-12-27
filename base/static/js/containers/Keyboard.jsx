@@ -5,8 +5,8 @@ import {setKeyboard} from '../actions/main'
 
 const mapStateToProps = (state) => {
   return {
-    keys: find(state.main.keyboards, {'name': state.main.keyboardName}).keys,
-    keyboardName: state.main.keyboardName
+    keys: find(state.main.keyboards, {'name': state.main.keyboard}).keys,
+    keyboardName: state.main.keyboard
   }
 }
 

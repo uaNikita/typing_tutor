@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
    return {
       fingersSetSize: state.learningMode.fingersSetSize,
       maxWordLength: state.learningMode.maxWordLength,
-      keys: find(state.main.keyboards, {'name': state.main.keyboardName}).keys
+      keys: find(state.main.keyboards, {'name': state.main.keyboard}).keys
    }
 };
 
