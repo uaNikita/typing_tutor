@@ -40,7 +40,7 @@ class LearningMode extends Component {
    }
 
    render() {
-      const {lesson, mode} = this.props;
+      const {lesson, mode, learningMode} = this.props;
 
       let lessonKeys = lesson.split('').map((char, idx) => {
          if (char === ' ') {
@@ -54,14 +54,19 @@ class LearningMode extends Component {
 
       let switcherChecked = false;
 
+      console.log('learningMode', learningMode);
+      console.log('mode', mode);
+
+      let switcher = <Switcher checked={switcherChecked} onChange={this._onSwitcherChange.bind(this)} />
+
       if (mode === 'learning') {
-         switcherChecked = true;
+         switcher = <Switcher checked={true} onChange={this._onSwitcherChange.bind(this)} />
       }
       
       return (
         <div className="settings-learning">
-           
-           <Switcher checked={switcherChecked} onChange={this._onSwitcherChange.bind(this)} />
+
+           {switcher}
 
            <div className='learningarea'>
               {lessonKeys}
@@ -108,25 +113,12 @@ class LearningMode extends Component {
       )
    }
 
-   _onSwitcherChange(e) {
+   _onSwitcherChange() {
 
-      if (e.target.checked) {
-         this.props.setMode('learning');
-      }
+       this.props.setMode('learning');
 
    }
-
-   _onClickMenu(selectedMode, e) {
-      const {mode, setLearningMode} = this.props;
-
-      e.preventDefault()
-
-      if (selectedMode === mode) {
-         return;
-      }
-
-      setLearningMode(selectedMode);
-   }
+   
 }
 
 export default LearningMode

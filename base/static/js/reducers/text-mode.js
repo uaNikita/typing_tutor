@@ -1,9 +1,5 @@
-import {
-  ADD_NEW_TEXT,
-  SELECT_TEXT,
-  REFRESH_TEXT,
-  TYPE_ON_ENTITIE
-} from '../actions/text-mode';
+import * as types from '../constants/action-types/text-mode';
+
 import {assign, cloneDeep} from 'lodash';
 
 const INITIAL_STATE = {
@@ -42,7 +38,7 @@ let nextTextId = 10
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
-    case ADD_NEW_TEXT:
+    case types.ADD_NEW_TEXT:
       nextTextId += 1;
 
       return assign({}, state, {
@@ -55,14 +51,12 @@ export default (state = INITIAL_STATE, action) => {
         })
       });
 
-    case SELECT_TEXT:
-      console.log('action.textId', action.textId);
-      
+    case types.SELECT_TEXT:
       return assign({}, state, {
         currentTextId: action.textId
       });
 
-    case REFRESH_TEXT:
+    case types.REFRESH_TEXT:
       let text = state.entities[action.textId];
 
       return assign({}, state, {
@@ -75,7 +69,7 @@ export default (state = INITIAL_STATE, action) => {
         })
       });
 
-    case TYPE_ON_ENTITIE:
+    case types.TYPE_ON_ENTITIE:
       return (() => {
         let entities = cloneDeep(state.entities);
 

@@ -23,11 +23,18 @@ import {
 } from '../actions/main'
 
 import {
-  setLearningMode
+  refreshCurrentLesson,
+  selectMode as selectLearningMode
 } from '../actions/learning-mode'
 
 
 const history = syncHistoryWithStore(browserHistory, store)
+
+
+// todo: написать проверку, где брать пользователя из кук и вытягивать данные из базы
+// если такого пользователя нет значит сгенерировать значения такие как уроки для мода лернинг и так далее
+// можно хранить статистику за последние сутки например и при входе в аккаунт берем последнюю версию и подгоняем все на нее
+
 
 export default class App extends Component {
 
@@ -76,12 +83,9 @@ export default class App extends Component {
 
    _onSettingsEnter(nextState, replace) {
 
+      store.dispatch(refreshCurrentLesson());
 
-
-
-
-
-      let path = '/settings/' + store.getState().keyboard.mode + '-mode';
+      let path = '/settings/' + store.getState().main.mode + '-mode';
 
       replace({
          pathname: path
@@ -97,10 +101,18 @@ export default class App extends Component {
    }
 
    _onLearningModeFingersEnter(nextState, replace) {
-      store.dispatch(setLearningMode('fingers'));
+
+      if (store.getState().learningMode.mode !== 'fingers') {
+         store.dispatch(selectLearningMode('fingers'));
+      }
+
    }
 
    _onLearningModeFreeEnter(nextState, replace) {
-      store.dispatch(setLearningMode('free'));
+
+      if (store.getState().learningMode.mode !== 'free') {
+         store.dispatch(selectLearningMode('free'));
+      }
+
    }
 }

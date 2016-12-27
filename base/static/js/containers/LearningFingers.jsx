@@ -1,41 +1,55 @@
 import {connect} from 'react-redux'
-import {find} from 'lodash';
+import {find, concat} from 'lodash';
 import LearningFingers from '../components/LearningFingers.jsx'
 import {
-  setLessonFingersSetSize,
-  setLettersFingersLearningMode,
-  generateLessonFromFingersMode,
-  updateFromLearningModeCharToType
+  setFingersSetSize,
+  setFingersLesson,
+  setCurrentLesson,
+  updateCharToType
 } from '../actions/learning-mode'
 
+import {getFingersSet, generateLesson} from "../utils";
+
 const mapStateToProps = (state) => {
-  return {
-    fingersSetSize: state.learningMode.fingersSetSize,
-    keys: find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys
-  }
-}
+   return {
+      fingersSetSize: state.learningMode.fingersSetSize,
+      maxWordLength: state.learningMode.maxWordLength,
+      keys: find(state.main.keyboards, {'name': state.main.keyboardName}).keys
+   }
+};
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    setFingersSetSize: (size) => {
-      dispatch(setLessonFingersSetSize(size));
+const mergeProps = (stateProps, dispatchProps) => {
 
-      dispatch(generateLessonFromFingersMode());
+   const {fingersSetSize, maxWordLength, keys} = stateProps;
 
-      dispatch(updateFromLearningModeCharToType());
-    },
-    setLetters: (letters) => {
-      dispatch(setLettersFingersLearningMode(letters));
+   const {dispatch} = dispatchProps;
 
-      dispatch(generateLessonFromFingersMode());
+   return {
+      fingersSetSize,
+      keys,
+      setFingersSetSize: (size) => {
+         dispatch(setFingersSetSize(size));
 
-      dispatch(updateFromLearningModeCharToType());
-    }
-  }
-}
+         let lettersSet = getFingersSet();
 
+         lettersSet.splice(size);
+
+         lettersSet = concat.apply(null, lettersSet);
+
+         let lesson = generateLesson(maxWordLength, lettersSet);
+
+         dispatch(setFingersLesson(lesson));
+
+         dispatch(setCurrentLesson(lesson));
+
+         dispatch(updateCharToType());
+      }
+   };
+
+};
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(LearningFingers)
+  null,
+  mergeProps
+)(LearningFingers);

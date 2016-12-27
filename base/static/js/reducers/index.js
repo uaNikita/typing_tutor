@@ -4,12 +4,12 @@ import { routerReducer } from 'react-router-redux'
 import modal from './modal';
 import textMode from './text-mode';
 import learningMode from './learning-mode';
-import keypad from './keypad';
+import main from './main';
 
 export default combineReducers({
   routing: routerReducer,
   form: reduxFormReducer,
-  keyboard: keypad,
+  main,
   modal,
   textMode,
   learningMode

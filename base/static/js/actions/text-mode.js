@@ -1,5 +1,5 @@
 import {find} from 'lodash';
-import {getIdsFromChar, sliceChar} from "../utils";
+import {getIdsFromCharacter, sliceChar} from "../utils";
 import {
   setIdsCharToType,
   setPressedRightIds,
@@ -9,14 +9,11 @@ import {
   updateCharToType
 } from "./main";
 
-export const SELECT_TEXT = 'SELECT_TEXT';
-export const REFRESH_TEXT = 'REFRESH_TEXT';
-export const ADD_NEW_TEXT = 'ADD_NEW_TEXT';
-export const TYPE_ON_ENTITIE = 'TYPE_ON_ENTITIE';
+import * as types from '../constants/action-types/text-mode';
 
 export function addNewText(title, text) {
   return {
-    type: ADD_NEW_TEXT,
+    type: types.ADD_NEW_TEXT,
     title,
     text
   };
@@ -24,21 +21,21 @@ export function addNewText(title, text) {
 
 export function selectText(textId) {
   return {
-    type: SELECT_TEXT,
+    type: types.SELECT_TEXT,
     textId
   };
 }
 
 export function refreshText(textId) {
   return {
-    type: REFRESH_TEXT,
+    type: types.REFRESH_TEXT,
     textId
   };
 }
 
 export function typeOnEntitie(textId) {
   return {
-    type: TYPE_ON_ENTITIE,
+    type: types.TYPE_ON_ENTITIE,
     textId
   };
 }
@@ -46,11 +43,11 @@ export function typeOnEntitie(textId) {
 export function updateFromTextModeCharToType() {
   return (dispatch, getState) => {
     let state = getState();
-    let keys = find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys;
+    let keys = find(state.main.keyboards, {'name': state.main.keyboardName}).keys;
     let textId = state.textMode.currentTextId;
     let entities = state.textMode.entities;
 
-    let idsCharToType = getIdsFromChar(keys, entities[textId].last[0]);
+    let idsCharToType = getIdsFromCharacter(keys, entities[textId].last[0]);
 
     dispatch(setIdsCharToType(idsCharToType));
   }
@@ -63,7 +60,7 @@ export function typeTextMode(char) {
     var textModeState = state.textMode;
     let keys = find(keyboardState.keyboards, {'name': keyboardState.keyboardName}).keys
     let textId = textModeState.currentTextId;
-    let idsChar = getIdsFromChar(keys, char);
+    let idsChar = getIdsFromCharacter(keys, char);
 
     if (textModeState.entities[textId].last[0] === char) {
       let pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);

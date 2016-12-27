@@ -1,136 +1,187 @@
-import {find, random, times, concat} from 'lodash';
+import {find, random, times, concat, filter} from 'lodash';
+
 import {
   setIdsCharToType,
   setPressedRightIds,
   setPressedWrongIds,
   addSuccesType,
-  addErrorType,
-  updateCharToType
+  addErrorType
 } from "./main";
+
 import {
-  getIdsFromChar,
+  getIdsFromCharacter,
   sliceChar,
-  createLesson,
-  getLearningLettersSet
+  generateLesson,
+  getFingersSet
 } from "../utils";
 
+import * as types from '../constants/action-types/learning-mode';
 
-export const SET_LESSON_FINGERS_SET_SIZE = 'SET_LESSON_FINGERS_SET_SIZE';
-export const SET_LESSON_MAX_WORD_LENGTH = 'SET_LESSON_MAX_WORD_LENGTH';
-export const ADD_LETTER_TO_LESSON = 'ADD_LETTER_TO_LESSON';
-export const REMOVE_LETTER_FROM_LESSON = 'REMOVE_LETTER_FROM_LESSON';
-export const TYPE_ON_LESSON = 'TYPE_ON_LESSON';
-export const SET_LESSON = 'SET_LESSON';
-export const SET_LEARNING_MODE = 'SET_LEARNING_MODE';
-export const SET_LETTERS_FREE_LEARNING_MODE = 'SET_LETTERS_FREE_LEARNING_MODE';
-
-
-export function setLessonFingersSetSize(size) {
+export function setMode(mode) {
    return {
-      type: SET_LESSON_FINGERS_SET_SIZE,
-      size
+      type: types.SET_LEARNING_MODE,
+      mode
    };
 }
 
-export function setLessonMaxWordLength(length) {
+export function setCurrentLesson(lesson) {
    return {
-      type: SET_LESSON_MAX_WORD_LENGTH,
+      type: types.SET_CURRENT_LESSON,
+      lesson
+   };
+}
+
+export function refreshCurrentLesson() {
+   return {
+      type: types.REFRESH_CURRENT_LESSON
+   };
+}
+
+export function setMaxWordLength(length) {
+   return {
+      type: types.SET_MAX_WORD_LENGTH,
       length
    };
 }
 
-export function addLetterToLesson(letter) {
+export function setFingersLesson(lesson) {
    return {
-      type: ADD_LETTER_TO_LESSON,
+      type: types.SET_FINGERS_LESSON,
+      lesson
+   };
+}
+
+export function setFingersSetSize(size) {
+   return {
+      type: types.SET_FINGERS_SET_SIZE,
+      size
+   };
+}
+
+export function setFreeLesson(lesson) {
+   return {
+      type: types.SET_FREE_LESSON,
+      lesson
+   };
+}
+
+export function addLetterToFreeLetters(letter) {
+   return {
+      type: types.ADD_LETTER_TO_FREE_LETTERS,
       letter
    };
 }
 
-export function removeLetterFromLesson(letter) {
+export function removeLetterFromFreeLetters(letter) {
    return {
-      type: REMOVE_LETTER_FROM_LESSON,
+      type: types.REMOVE_LETTER_FROM_FREE_LETTERS,
       letter
    };
 }
 
 export function typeOnLesson() {
    return {
-      type: TYPE_ON_LESSON
+      type: types.TYPE_ON_LESSON
    };
 }
 
-
-export function setLesson(lesson) {
-   return {
-      type: SET_LESSON,
-      lesson
-   };
-}
-
-export function setLearningMode(mode) {
-   return {
-      type: SET_LEARNING_MODE,
-      mode
-   };
-}
-
-export function updateFromLearningModeCharToType() {
+export function selectMode(mode) {
    return (dispatch, getState) => {
+
+      dispatch(setMode(mode));
+
       let state = getState();
-      let keys = find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys;
-      let idsCharToType = getIdsFromChar(keys, state.learningMode.lesson.last[0]);
+      let learningModeState = state.learningMode;
+      let lesson = '';
 
-      dispatch(setIdsCharToType(idsCharToType));
-   }
-}
+      switch (mode) {
+         case 'fingers':
 
-export function generateLessonFromFingersMode() {
-   return (dispatch, getState) => {
-      let state = getState();
+            lesson = learningModeState.lessonFingers;
 
-      let lettersSet = getLearningLettersSet();
+            if (!lesson) {
 
-      lettersSet.splice(state.learningMode.fingersSetSize);
+               let lettersSet = getFingersSet();
 
-      lettersSet = concat.apply(null, lettersSet);
+               lettersSet.splice(learningModeState.fingersSetSize);
 
-      let lesson = createLesson(state.learningMode.maxWordLength, lettersSet);
+               lettersSet = concat.apply(null, lettersSet);
 
-      dispatch(setLesson(lesson));
-   }
-}
+               lesson = generateLesson(learningModeState.maxWordLength, lettersSet);
 
-export function generateLessonFromFreeMode() {
-   return (dispatch, getState) => {
-      let state = getState();
+               dispatch(setFingersLesson(lesson));
 
-      let lesson = createLesson(state.learningMode.maxWordLength, state.learningMode.lettersFreeMode);
+            }
 
-      dispatch(setLesson(lesson));
-   }
-}
+            break;
 
-export function generateLessonFromCurrentMode() {
-   return (dispatch, getState) => {
-      let state = getState();
+         case 'free':
 
-      if (state.learningMode.mode === 'fingers') {
-         dispatch(generateLessonFromFingersMode());
-      } else if (state.learningMode.mode === 'free') {
-         dispatch(generateLessonFromFreeMode());
+            lesson = learningModeState.lessonFree;
+
+            if (!lesson) {
+
+               let lettersFree = learningModeState.lettersFree
+
+               if (!lettersFree.length) {
+
+                  let keys = find(state.main.keyboards, {'name': state.main.keyboardName}).keys
+
+                  lettersFree = filter(keys, {
+                     row   : 'middle',
+                     type  : 'letter'
+                  }).map(obj=> {
+                     return obj.key;
+                  });
+
+                  dispatch(setFingersSetSize(lettersFree));
+
+               }
+               
+               lesson = generateLesson(learningModeState.maxWordLength, lettersFree);
+
+               dispatch(setFreeLesson(lesson));
+
+            }
+
+            break;
       }
 
-      dispatch(updateFromLearningModeCharToType());
+      dispatch(setCurrentLesson(lesson));
+
+   }
+}
+
+export function generateAndSetFreeLesson() {
+   return (dispatch, getState) => {
+
+      let state = getState();
+
+      let lesson = generateLesson(state.learningMode.maxWordLength, state.learningMode.lettersFree);
+
+      dispatch(setFreeLesson(lesson));
+
+      dispatch(setCurrentLesson(lesson));
+   }
+}
+
+export function updateCharToType() {
+   return (dispatch, getState) => {
+      let state = getState();
+      let keys = find(state.main.keyboards, {'name': state.main.keyboardName}).keys;
+      let idsCharToType = getIdsFromCharacter(keys, state.learningMode.lesson.last[0]);
+
+      dispatch(setIdsCharToType(idsCharToType));
    }
 }
 
 export function typeLearningMode(char) {
    return (dispatch, getState) => {
       let state = getState();
-      let keyboardState = state.keyboard;
+      let keyboardState = state.main;
       var learningModeState = state.learningMode;
       let keys = find(keyboardState.keyboards, {'name': keyboardState.keyboardName}).keys
-      let idsChar = getIdsFromChar(keys, char);
+      let idsChar = getIdsFromCharacter(keys, char);
 
       if (learningModeState.lesson.last[0] === char) {
          let pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
@@ -139,9 +190,9 @@ export function typeLearningMode(char) {
 
          dispatch(typeOnLesson());
 
-         if (getState().learningMode.lesson.last.length === 0) {
-            dispatch(generateLessonFromCurrentMode());
-         }
+         // if (getState().learningMode.lesson.last.length === 0) {
+         //    dispatch(generateLessonFromCurrentMode());
+         // }
 
          dispatch(addSuccesType());
 
@@ -154,5 +205,11 @@ export function typeLearningMode(char) {
 
          dispatch(addErrorType());
       }
+   }
+}
+
+export function updateLearningState(char) {
+   return (dispatch, getState) => {
+      // ghjfgltq
    }
 }

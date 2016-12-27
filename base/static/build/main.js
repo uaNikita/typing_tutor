@@ -60,7 +60,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(550);
+	__webpack_require__(553);
 
 	_reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById('root'));
 
@@ -21374,35 +21374,35 @@
 
 	var _Layout2 = _interopRequireDefault(_Layout);
 
-	var _Home = __webpack_require__(500);
+	var _Home = __webpack_require__(503);
 
 	var _Home2 = _interopRequireDefault(_Home);
 
-	var _Settings = __webpack_require__(533);
+	var _Settings = __webpack_require__(536);
 
 	var _Settings2 = _interopRequireDefault(_Settings);
 
-	var _TextMode = __webpack_require__(534);
+	var _TextMode = __webpack_require__(537);
 
 	var _TextMode2 = _interopRequireDefault(_TextMode);
 
-	var _Text = __webpack_require__(539);
+	var _Text = __webpack_require__(543);
 
 	var _Text2 = _interopRequireDefault(_Text);
 
-	var _LearningMode = __webpack_require__(541);
+	var _LearningMode = __webpack_require__(545);
 
 	var _LearningMode2 = _interopRequireDefault(_LearningMode);
 
-	var _LearningFingers = __webpack_require__(544);
+	var _LearningFingers = __webpack_require__(547);
 
 	var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
 
-	var _LearningFree = __webpack_require__(546);
+	var _LearningFree = __webpack_require__(549);
 
 	var _LearningFree2 = _interopRequireDefault(_LearningFree);
 
-	var _Keyboard = __webpack_require__(548);
+	var _Keyboard = __webpack_require__(551);
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
@@ -21412,7 +21412,7 @@
 
 	var _main = __webpack_require__(279);
 
-	var _learningMode = __webpack_require__(461);
+	var _learningMode = __webpack_require__(469);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -21423,6 +21423,11 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.browserHistory, _store2.default);
+
+	// todo: написать проверку, где брать пользователя из кук и вытягивать данные из базы
+	// если такого пользователя нет значит сгенерировать значения такие как уроки для мода лернинг и так далее
+	// можно хранить статистику за последние сутки например и при входе в аккаунт берем последнюю версию и подгоняем все на нее
+
 
 	var App = function (_Component) {
 	   _inherits(App, _Component);
@@ -21490,7 +21495,9 @@
 	      key: '_onSettingsEnter',
 	      value: function _onSettingsEnter(nextState, replace) {
 
-	         var path = '/settings/' + _store2.default.getState().keyboard.mode + '-mode';
+	         _store2.default.dispatch((0, _learningMode.refreshCurrentLesson)());
+
+	         var path = '/settings/' + _store2.default.getState().main.mode + '-mode';
 
 	         replace({
 	            pathname: path
@@ -21508,12 +21515,18 @@
 	   }, {
 	      key: '_onLearningModeFingersEnter',
 	      value: function _onLearningModeFingersEnter(nextState, replace) {
-	         _store2.default.dispatch((0, _learningMode.setLearningMode)('fingers'));
+
+	         if (_store2.default.getState().learningMode.mode !== 'fingers') {
+	            _store2.default.dispatch((0, _learningMode.selectMode)('fingers'));
+	         }
 	      }
 	   }, {
 	      key: '_onLearningModeFreeEnter',
 	      value: function _onLearningModeFreeEnter(nextState, replace) {
-	         _store2.default.dispatch((0, _learningMode.setLearningMode)('free'));
+
+	         if (_store2.default.getState().learningMode.mode !== 'free') {
+	            _store2.default.dispatch((0, _learningMode.selectMode)('free'));
+	         }
 	      }
 	   }]);
 
@@ -39190,7 +39203,7 @@
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
@@ -39352,7 +39365,7 @@
 
 	var _Modal2 = _interopRequireDefault(_Modal);
 
-	var _Authorization = __webpack_require__(467);
+	var _Authorization = __webpack_require__(470);
 
 	var _Authorization2 = _interopRequireDefault(_Authorization);
 
@@ -40389,19 +40402,18 @@
 	exports.addSuccesType = addSuccesType;
 	exports.addErrorType = addErrorType;
 	exports.stopBeenPressedKey = stopBeenPressedKey;
-	exports.stopBeenPressedKey = stopBeenPressedKey;
 	exports.updateCharToType = updateCharToType;
 	exports.typeChar = typeChar;
 
-	var _action_types = __webpack_require__(280);
+	var _lodash = __webpack_require__(280);
 
-	var types = _interopRequireWildcard(_action_types);
+	var _main = __webpack_require__(282);
 
-	var _lodash = __webpack_require__(281);
+	var types = _interopRequireWildcard(_main);
 
 	var _textMode = __webpack_require__(283);
 
-	var _learningMode = __webpack_require__(461);
+	var _learningMode = __webpack_require__(469);
 
 	var _utils = __webpack_require__(284);
 
@@ -40492,39 +40504,25 @@
 	function stopBeenPressedKey(char) {
 	  return function (dispatch, getState) {
 	    var state = getState();
-	    var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
+	    var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys;
 
 	    var sliceCurrentChar = function sliceCurrentChar(pressed) {
-	      return (0, _utils.sliceChar)(pressed, (0, _utils.getIdsFromChar)(keys, char));
+	      return (0, _utils.sliceChar)(pressed, (0, _utils.getIdsFromCharacter)(keys, char));
 	    };
 
-	    dispatch(setPressedRightIds(sliceCurrentChar(state.keyboard.pressedRightIds)));
-	    dispatch(setPressedWrongIds(sliceCurrentChar(state.keyboard.pressedWrongIds)));
-	  };
-	}
-
-	function stopBeenPressedKey(char) {
-	  return function (dispatch, getState) {
-	    var state = getState();
-	    var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
-
-	    var sliceCurrentChar = function sliceCurrentChar(pressed) {
-	      return (0, _utils.sliceChar)(pressed, (0, _utils.getIdsFromChar)(keys, char));
-	    };
-
-	    dispatch(setPressedRightIds(sliceCurrentChar(state.keyboard.pressedRightIds)));
-	    dispatch(setPressedWrongIds(sliceCurrentChar(state.keyboard.pressedWrongIds)));
+	    dispatch(setPressedRightIds(sliceCurrentChar(state.main.pressedRightIds)));
+	    dispatch(setPressedWrongIds(sliceCurrentChar(state.main.pressedWrongIds)));
 	  };
 	}
 
 	function updateCharToType() {
 	  return function (dispatch, getState) {
-	    switch (getState().keyboard.mode) {
+	    switch (getState().main.mode) {
 	      case 'text':
 	        dispatch((0, _textMode.updateFromTextModeCharToType)());
 	        break;
 	      case 'learning':
-	        dispatch((0, _learningMode.updateFromLearningModeCharToType)());
+	        dispatch((0, _learningMode.updateCharToType)());
 	        break;
 	    }
 	  };
@@ -40538,7 +40536,7 @@
 	      dispatch(stopBeenPressedKey(char));
 	    }, 100);
 
-	    switch (getState().keyboard.mode) {
+	    switch (getState().main.mode) {
 	      case 'text':
 	        dispatch((0, _textMode.typeTextMode)(char));
 	        break;
@@ -40551,30 +40549,6 @@
 
 /***/ },
 /* 280 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var PRESS_KEY = exports.PRESS_KEY = 'PRESS_KEY';
-
-	var UPDATE_START_VARIABLES = exports.UPDATE_START_VARIABLES = 'UPDATE_START_VARIABLES';
-	var SET_MODE = exports.SET_MODE = 'SET_MODE';
-	var ACTION_METRONOME = exports.ACTION_METRONOME = 'ACTION_METRONOME';
-	var SET_KEYBOARD = exports.SET_KEYBOARD = 'SET_KEYBOARD';
-	var OPEN_MODAL = exports.OPEN_MODAL = 'OPEN_MODAL';
-	var CLOSE_MODAL = exports.CLOSE_MODAL = 'CLOSE_MODAL';
-
-	var SET_PRESSED_RIGHT_IDS = exports.SET_PRESSED_RIGHT_IDS = 'SET_PRESSED_RIGHT_IDS';
-	var SET_PRESSED_WRONG_IDS = exports.SET_PRESSED_WRONG_IDS = 'SET_PRESSED_WRONG_IDS';
-	var SET_IDS_CHAR_TO_TYPE = exports.SET_IDS_CHAR_TO_TYPE = 'SET_IDS_CHAR_TO_TYPE';
-	var ADD_SUCCESS_TYPE = exports.ADD_SUCCESS_TYPE = 'ADD_SUCCESS_TYPE';
-	var ADD_ERROR_TYPE = exports.ADD_ERROR_TYPE = 'ADD_ERROR_TYPE';
-
-/***/ },
-/* 281 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global, module) {/**
@@ -57311,10 +57285,10 @@
 	  }
 	}.call(this));
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(282)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(281)(module)))
 
 /***/ },
-/* 282 */
+/* 281 */
 /***/ function(module, exports) {
 
 	module.exports = function(module) {
@@ -57330,6 +57304,28 @@
 
 
 /***/ },
+/* 282 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var PRESS_KEY = exports.PRESS_KEY = 'PRESS_KEY';
+
+	var UPDATE_START_VARIABLES = exports.UPDATE_START_VARIABLES = 'UPDATE_START_VARIABLES';
+	var SET_MODE = exports.SET_MODE = 'SET_MODE';
+	var ACTION_METRONOME = exports.ACTION_METRONOME = 'ACTION_METRONOME';
+	var SET_KEYBOARD = exports.SET_KEYBOARD = 'SET_KEYBOARD';
+
+	var SET_PRESSED_RIGHT_IDS = exports.SET_PRESSED_RIGHT_IDS = 'SET_PRESSED_RIGHT_IDS';
+	var SET_PRESSED_WRONG_IDS = exports.SET_PRESSED_WRONG_IDS = 'SET_PRESSED_WRONG_IDS';
+	var SET_IDS_CHAR_TO_TYPE = exports.SET_IDS_CHAR_TO_TYPE = 'SET_IDS_CHAR_TO_TYPE';
+	var ADD_SUCCESS_TYPE = exports.ADD_SUCCESS_TYPE = 'ADD_SUCCESS_TYPE';
+	var ADD_ERROR_TYPE = exports.ADD_ERROR_TYPE = 'ADD_ERROR_TYPE';
+
+/***/ },
 /* 283 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -57338,7 +57334,6 @@
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
-	exports.TYPE_ON_ENTITIE = exports.ADD_NEW_TEXT = exports.REFRESH_TEXT = exports.SELECT_TEXT = undefined;
 	exports.addNewText = addNewText;
 	exports.selectText = selectText;
 	exports.refreshText = refreshText;
@@ -57346,20 +57341,21 @@
 	exports.updateFromTextModeCharToType = updateFromTextModeCharToType;
 	exports.typeTextMode = typeTextMode;
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
 	var _utils = __webpack_require__(284);
 
 	var _main = __webpack_require__(279);
 
-	var SELECT_TEXT = exports.SELECT_TEXT = 'SELECT_TEXT';
-	var REFRESH_TEXT = exports.REFRESH_TEXT = 'REFRESH_TEXT';
-	var ADD_NEW_TEXT = exports.ADD_NEW_TEXT = 'ADD_NEW_TEXT';
-	var TYPE_ON_ENTITIE = exports.TYPE_ON_ENTITIE = 'TYPE_ON_ENTITIE';
+	var _textMode = __webpack_require__(461);
+
+	var types = _interopRequireWildcard(_textMode);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function addNewText(title, text) {
 	  return {
-	    type: ADD_NEW_TEXT,
+	    type: types.ADD_NEW_TEXT,
 	    title: title,
 	    text: text
 	  };
@@ -57367,21 +57363,21 @@
 
 	function selectText(textId) {
 	  return {
-	    type: SELECT_TEXT,
+	    type: types.SELECT_TEXT,
 	    textId: textId
 	  };
 	}
 
 	function refreshText(textId) {
 	  return {
-	    type: REFRESH_TEXT,
+	    type: types.REFRESH_TEXT,
 	    textId: textId
 	  };
 	}
 
 	function typeOnEntitie(textId) {
 	  return {
-	    type: TYPE_ON_ENTITIE,
+	    type: types.TYPE_ON_ENTITIE,
 	    textId: textId
 	  };
 	}
@@ -57389,11 +57385,11 @@
 	function updateFromTextModeCharToType() {
 	  return function (dispatch, getState) {
 	    var state = getState();
-	    var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
+	    var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys;
 	    var textId = state.textMode.currentTextId;
 	    var entities = state.textMode.entities;
 
-	    var idsCharToType = (0, _utils.getIdsFromChar)(keys, entities[textId].last[0]);
+	    var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, entities[textId].last[0]);
 
 	    dispatch((0, _main.setIdsCharToType)(idsCharToType));
 	  };
@@ -57406,7 +57402,7 @@
 	    var textModeState = state.textMode;
 	    var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboardName }).keys;
 	    var textId = textModeState.currentTextId;
-	    var idsChar = (0, _utils.getIdsFromChar)(keys, char);
+	    var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
 
 	    if (textModeState.entities[textId].last[0] === char) {
 	      var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
@@ -57437,28 +57433,28 @@
 	Object.defineProperty(exports, "__esModule", {
 	   value: true
 	});
-	exports.createLesson = undefined;
-	exports.getIdsFromChar = getIdsFromChar;
+	exports.generateLesson = undefined;
+	exports.getIdsFromCharacter = getIdsFromCharacter;
 	exports.sliceChar = sliceChar;
-	exports.getLearningLettersSet = getLearningLettersSet;
+	exports.getFingersSet = getFingersSet;
 
 	var _store = __webpack_require__(285);
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-	function getIdsFromChar(keys, char) {
+	function getIdsFromCharacter(keys, сharacter) {
 	   var charsToType = [];
 
 	   keys.forEach(function (obj) {
 
 	      // check if it upper case letter
-	      if (obj.shiftKey === char) {
+	      if (obj.shiftKey === сharacter) {
 	         charsToType.push(obj.id);
 
 	         if (obj.hand === 'left') {
@@ -57466,7 +57462,7 @@
 	         } else if (obj.hand === 'right') {
 	            charsToType.push('Left Shift');
 	         }
-	      } else if (obj.key === char) {
+	      } else if (obj.key === сharacter) {
 	         charsToType.push(obj.id);
 	      }
 	   });
@@ -57488,7 +57484,7 @@
 	   return newChars;
 	}
 
-	var createLesson = exports.createLesson = function () {
+	var generateLesson = exports.generateLesson = function () {
 	   var minWordLength = 3;
 	   var maxChars = 50;
 
@@ -57522,10 +57518,10 @@
 	   };
 	}();
 
-	function getLearningLettersSet() {
+	function getFingersSet() {
 	   var state = _store2.default.getState();
 
-	   var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
+	   var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys;
 	   var fingers = ['index', 'middle', 'ring', 'pinky'];
 	   var rows = ['middle', 'top', 'bottom'];
 	   var hands = ['left', 'right'];
@@ -57870,24 +57866,24 @@
 
 	var _modal2 = _interopRequireDefault(_modal);
 
-	var _textMode = __webpack_require__(459);
+	var _textMode = __webpack_require__(460);
 
 	var _textMode2 = _interopRequireDefault(_textMode);
 
-	var _learningMode = __webpack_require__(460);
+	var _learningMode = __webpack_require__(462);
 
 	var _learningMode2 = _interopRequireDefault(_learningMode);
 
-	var _keypad = __webpack_require__(462);
+	var _main = __webpack_require__(464);
 
-	var _keypad2 = _interopRequireDefault(_keypad);
+	var _main2 = _interopRequireDefault(_main);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	exports.default = (0, _redux.combineReducers)({
 	  routing: _reactRouterRedux.routerReducer,
 	  form: _reduxForm.reducer,
-	  keyboard: _keypad2.default,
+	  main: _main2.default,
 	  modal: _modal2.default,
 	  textMode: _textMode2.default,
 	  learningMode: _learningMode2.default
@@ -62381,7 +62377,7 @@
 
 	module.exports = nodeUtil;
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(282)(module)))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(281)(module)))
 
 /***/ },
 /* 387 */
@@ -66696,11 +66692,11 @@
 	  value: true
 	});
 
-	var _action_types = __webpack_require__(280);
+	var _modal = __webpack_require__(459);
 
-	var types = _interopRequireWildcard(_action_types);
+	var types = _interopRequireWildcard(_modal);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -66743,6 +66739,18 @@
 
 /***/ },
 /* 459 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var OPEN_MODAL = exports.OPEN_MODAL = 'OPEN_MODAL';
+	var CLOSE_MODAL = exports.CLOSE_MODAL = 'CLOSE_MODAL';
+
+/***/ },
+/* 460 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -66751,9 +66759,13 @@
 	  value: true
 	});
 
-	var _textMode = __webpack_require__(283);
+	var _textMode = __webpack_require__(461);
 
-	var _lodash = __webpack_require__(281);
+	var types = _interopRequireWildcard(_textMode);
+
+	var _lodash = __webpack_require__(280);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -66796,7 +66808,7 @@
 	  var action = arguments[1];
 
 	  switch (action.type) {
-	    case _textMode.ADD_NEW_TEXT:
+	    case types.ADD_NEW_TEXT:
 	      nextTextId += 1;
 
 	      return (0, _lodash.assign)({}, state, {
@@ -66807,14 +66819,12 @@
 	        }))
 	      });
 
-	    case _textMode.SELECT_TEXT:
-	      console.log('action.textId', action.textId);
-
+	    case types.SELECT_TEXT:
 	      return (0, _lodash.assign)({}, state, {
 	        currentTextId: action.textId
 	      });
 
-	    case _textMode.REFRESH_TEXT:
+	    case types.REFRESH_TEXT:
 	      var text = state.entities[action.textId];
 
 	      return (0, _lodash.assign)({}, state, {
@@ -66825,7 +66835,7 @@
 	        }))
 	      });
 
-	    case _textMode.TYPE_ON_ENTITIE:
+	    case types.TYPE_ON_ENTITIE:
 	      return function () {
 	        var entities = (0, _lodash.cloneDeep)(state.entities);
 
@@ -66846,275 +66856,18 @@
 	};
 
 /***/ },
-/* 460 */
-/***/ function(module, exports, __webpack_require__) {
+/* 461 */
+/***/ function(module, exports) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	   value: true
+	  value: true
 	});
-
-	var _learningMode = __webpack_require__(461);
-
-	var _lodash = __webpack_require__(281);
-
-	var INITIAL_STATE = {
-	   fingersSetSize: 9,
-
-	   maxWordLength: 5,
-
-	   lettersFreeMode: [],
-
-	   // fingers, free,
-	   mode: 'fingers',
-
-	   lessonFingersMode: 'qwwqerqwer qwre qwr qwr q',
-
-	   lessonFreeMode: 'qwerqwer qwe rqw re',
-
-	   lesson: {
-	      typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
-	      last: 'da'
-	   }
-	};
-
-	exports.default = function () {
-	   var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
-	   var action = arguments[1];
-
-	   switch (action.type) {
-	      case _learningMode.TYPE_ON_LESSON:
-	         return (0, _lodash.assign)({}, state, {
-	            lesson: {
-	               typed: state.lesson.typed + state.lesson.last[0],
-	               last: state.lesson.last.substring(1)
-	            }
-	         });
-
-	      case _learningMode.SET_LEARNING_MODE:
-	         return (0, _lodash.assign)({}, state, {
-	            mode: action.mode
-	         });
-
-	      case _learningMode.SET_LESSON:
-	         return (0, _lodash.assign)({}, state, {
-	            lesson: {
-	               typed: '',
-	               last: action.lesson
-	            }
-	         });
-
-	      case _learningMode.SET_LESSON_MAX_WORD_LENGTH:
-	         return (0, _lodash.assign)({}, state, {
-	            maxWordLength: action.length
-	         });
-
-	      case _learningMode.SET_LESSON_FINGERS_SET_SIZE:
-	         return (0, _lodash.assign)({}, state, {
-	            fingersSetSize: action.size
-	         });
-
-	      case _learningMode.SET_LETTERS_FREE_LEARNING_MODE:
-	         return (0, _lodash.assign)({}, state, {
-	            lettersFreeMode: action.letters
-	         });
-
-	      case _learningMode.ADD_LETTER_TO_LESSON:
-	         return function () {
-	            var lettersFreeMode = (0, _lodash.clone)(state.lettersFreeMode);
-
-	            lettersFreeMode.push(action.letter);
-
-	            return (0, _lodash.assign)({}, state, {
-	               lettersFreeMode: lettersFreeMode
-	            });
-	         }();
-
-	      case _learningMode.REMOVE_LETTER_FROM_LESSON:
-	         return function () {
-	            var lettersFreeMode = (0, _lodash.clone)(state.lettersFreeMode);
-
-	            lettersFreeMode.push(action.letter);
-
-	            return (0, _lodash.assign)({}, state, {
-	               lettersFreeMode: lettersFreeMode
-	            });
-	         }();
-
-	      default:
-	         return state;
-
-	   }
-	};
-
-/***/ },
-/* 461 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-	exports.SET_LETTERS_FREE_LEARNING_MODE = exports.SET_LEARNING_MODE = exports.SET_LESSON = exports.TYPE_ON_LESSON = exports.REMOVE_LETTER_FROM_LESSON = exports.ADD_LETTER_TO_LESSON = exports.SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_FINGERS_SET_SIZE = undefined;
-	exports.setLessonFingersSetSize = setLessonFingersSetSize;
-	exports.setLessonMaxWordLength = setLessonMaxWordLength;
-	exports.addLetterToLesson = addLetterToLesson;
-	exports.removeLetterFromLesson = removeLetterFromLesson;
-	exports.typeOnLesson = typeOnLesson;
-	exports.setLesson = setLesson;
-	exports.setLearningMode = setLearningMode;
-	exports.updateFromLearningModeCharToType = updateFromLearningModeCharToType;
-	exports.generateLessonFromFingersMode = generateLessonFromFingersMode;
-	exports.generateLessonFromFreeMode = generateLessonFromFreeMode;
-	exports.generateLessonFromCurrentMode = generateLessonFromCurrentMode;
-	exports.typeLearningMode = typeLearningMode;
-
-	var _lodash = __webpack_require__(281);
-
-	var _main = __webpack_require__(279);
-
-	var _utils = __webpack_require__(284);
-
-	var SET_LESSON_FINGERS_SET_SIZE = exports.SET_LESSON_FINGERS_SET_SIZE = 'SET_LESSON_FINGERS_SET_SIZE';
-	var SET_LESSON_MAX_WORD_LENGTH = exports.SET_LESSON_MAX_WORD_LENGTH = 'SET_LESSON_MAX_WORD_LENGTH';
-	var ADD_LETTER_TO_LESSON = exports.ADD_LETTER_TO_LESSON = 'ADD_LETTER_TO_LESSON';
-	var REMOVE_LETTER_FROM_LESSON = exports.REMOVE_LETTER_FROM_LESSON = 'REMOVE_LETTER_FROM_LESSON';
-	var TYPE_ON_LESSON = exports.TYPE_ON_LESSON = 'TYPE_ON_LESSON';
-	var SET_LESSON = exports.SET_LESSON = 'SET_LESSON';
-	var SET_LEARNING_MODE = exports.SET_LEARNING_MODE = 'SET_LEARNING_MODE';
-	var SET_LETTERS_FREE_LEARNING_MODE = exports.SET_LETTERS_FREE_LEARNING_MODE = 'SET_LETTERS_FREE_LEARNING_MODE';
-
-	function setLessonFingersSetSize(size) {
-	   return {
-	      type: SET_LESSON_FINGERS_SET_SIZE,
-	      size: size
-	   };
-	}
-
-	function setLessonMaxWordLength(length) {
-	   return {
-	      type: SET_LESSON_MAX_WORD_LENGTH,
-	      length: length
-	   };
-	}
-
-	function addLetterToLesson(letter) {
-	   return {
-	      type: ADD_LETTER_TO_LESSON,
-	      letter: letter
-	   };
-	}
-
-	function removeLetterFromLesson(letter) {
-	   return {
-	      type: REMOVE_LETTER_FROM_LESSON,
-	      letter: letter
-	   };
-	}
-
-	function typeOnLesson() {
-	   return {
-	      type: TYPE_ON_LESSON
-	   };
-	}
-
-	function setLesson(lesson) {
-	   return {
-	      type: SET_LESSON,
-	      lesson: lesson
-	   };
-	}
-
-	function setLearningMode(mode) {
-	   return {
-	      type: SET_LEARNING_MODE,
-	      mode: mode
-	   };
-	}
-
-	function updateFromLearningModeCharToType() {
-	   return function (dispatch, getState) {
-	      var state = getState();
-	      var keys = (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys;
-	      var idsCharToType = (0, _utils.getIdsFromChar)(keys, state.learningMode.lesson.last[0]);
-
-	      dispatch((0, _main.setIdsCharToType)(idsCharToType));
-	   };
-	}
-
-	function generateLessonFromFingersMode() {
-	   return function (dispatch, getState) {
-	      var state = getState();
-
-	      var lettersSet = (0, _utils.getLearningLettersSet)();
-
-	      lettersSet.splice(state.learningMode.fingersSetSize);
-
-	      lettersSet = _lodash.concat.apply(null, lettersSet);
-
-	      var lesson = (0, _utils.createLesson)(state.learningMode.maxWordLength, lettersSet);
-
-	      dispatch(setLesson(lesson));
-	   };
-	}
-
-	function generateLessonFromFreeMode() {
-	   return function (dispatch, getState) {
-	      var state = getState();
-
-	      var lesson = (0, _utils.createLesson)(state.learningMode.maxWordLength, state.learningMode.lettersFreeMode);
-
-	      dispatch(setLesson(lesson));
-	   };
-	}
-
-	function generateLessonFromCurrentMode() {
-	   return function (dispatch, getState) {
-	      var state = getState();
-
-	      if (state.learningMode.mode === 'fingers') {
-	         dispatch(generateLessonFromFingersMode());
-	      } else if (state.learningMode.mode === 'free') {
-	         dispatch(generateLessonFromFreeMode());
-	      }
-
-	      dispatch(updateFromLearningModeCharToType());
-	   };
-	}
-
-	function typeLearningMode(char) {
-	   return function (dispatch, getState) {
-	      var state = getState();
-	      var keyboardState = state.keyboard;
-	      var learningModeState = state.learningMode;
-	      var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboardName }).keys;
-	      var idsChar = (0, _utils.getIdsFromChar)(keys, char);
-
-	      if (learningModeState.lesson.last[0] === char) {
-	         var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
-
-	         dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
-
-	         dispatch(typeOnLesson());
-
-	         if (getState().learningMode.lesson.last.length === 0) {
-	            dispatch(generateLessonFromCurrentMode());
-	         }
-
-	         dispatch((0, _main.addSuccesType)());
-
-	         dispatch((0, _main.updateCharToType)());
-	      } else {
-	         var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
-
-	         dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
-
-	         dispatch((0, _main.addErrorType)());
-	      }
-	   };
-	}
+	var SELECT_TEXT = exports.SELECT_TEXT = 'SELECT_TEXT';
+	var REFRESH_TEXT = exports.REFRESH_TEXT = 'REFRESH_TEXT';
+	var ADD_NEW_TEXT = exports.ADD_NEW_TEXT = 'ADD_NEW_TEXT';
+	var TYPE_ON_ENTITIE = exports.TYPE_ON_ENTITIE = 'TYPE_ON_ENTITIE';
 
 /***/ },
 /* 462 */
@@ -67126,15 +66879,149 @@
 	   value: true
 	});
 
-	var _action_types = __webpack_require__(280);
+	var _learningMode = __webpack_require__(463);
 
-	var types = _interopRequireWildcard(_action_types);
+	var types = _interopRequireWildcard(_learningMode);
 
-	var _keyboards = __webpack_require__(463);
+	var _lodash = __webpack_require__(280);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var INITIAL_STATE = {
+	   // fingers, free,
+	   mode: 'fingers',
+
+	   maxWordLength: 5,
+
+	   fingersSetSize: 7,
+
+	   lessonFingers: 'lka dgg khljd djdgl fla ksafh dhgfj hfd dkgh akd',
+
+	   lettersFree: ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+
+	   lessonFree: 'dlaj skls khfd khslg llalja adad gsshs fjf adhgdg',
+
+	   lesson: {
+	      typed: '',
+	      last: 'lka dgg khljd djdgl fla ksafh dhgfj hfd dkgh akd'
+	   }
+	};
+
+	exports.default = function () {
+	   var state = arguments.length <= 0 || arguments[0] === undefined ? INITIAL_STATE : arguments[0];
+	   var action = arguments[1];
+
+	   switch (action.type) {
+
+	      case types.REFRESH_CURRENT_LESSON:
+	         return (0, _lodash.assign)({}, state, {
+	            lesson: {
+	               typed: state.lesson.typed + state.lesson.last,
+	               last: ''
+	            }
+	         });
+
+	      case types.TYPE_ON_LESSON:
+	         return (0, _lodash.assign)({}, state, {
+	            lesson: {
+	               typed: state.lesson.typed + state.lesson.last[0],
+	               last: state.lesson.last.substring(1)
+	            }
+	         });
+
+	      case types.SET_LEARNING_MODE:
+	         return (0, _lodash.assign)({}, state, {
+	            mode: action.mode
+	         });
+
+	      case types.SET_CURRENT_LESSON:
+	         return (0, _lodash.assign)({}, state, {
+	            lesson: {
+	               typed: '',
+	               last: action.lesson
+	            }
+	         });
+
+	      case types.SET_MAX_WORD_LENGTH:
+	         return (0, _lodash.assign)({}, state, {
+	            maxWordLength: action.length
+	         });
+
+	      case types.SET_FINGERS_SET_SIZE:
+	         return (0, _lodash.assign)({}, state, {
+	            fingersSetSize: action.size
+	         });
+
+	      case types.SET_FINGERS_LESSON:
+	         return (0, _lodash.assign)({}, state, {
+	            lessonFingers: action.lesson
+	         });
+
+	      case types.SET_FREE_LESSON:
+	         return (0, _lodash.assign)({}, state, {
+	            lessonFree: action.lesson
+	         });
+
+	      case types.ADD_LETTER_TO_FREE_LETTERS:
+	         return (0, _lodash.assign)({}, state, {
+	            lettersFree: [].concat(_toConsumableArray(state.lettersFree), [action.letter])
+	         });
+
+	      case types.REMOVE_LETTER_FROM_FREE_LETTERS:
+	         return (0, _lodash.assign)({}, state, {
+	            lettersFree: [].concat(_toConsumableArray((0, _lodash.pull)(state.lettersFree, action.letter)))
+	         });
+
+	      default:
+	         return state;
+
+	   }
+	};
+
+/***/ },
+/* 463 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	var TYPE_ON_LESSON = exports.TYPE_ON_LESSON = 'TYPE_ON_LESSON';
+
+	var SET_LEARNING_MODE = exports.SET_LEARNING_MODE = 'SET_LEARNING_MODE';
+	var SET_CURRENT_LESSON = exports.SET_CURRENT_LESSON = 'SET_CURRENT_LESSON';
+	var REFRESH_CURRENT_LESSON = exports.REFRESH_CURRENT_LESSON = 'REFRESH_CURRENT_LESSON';
+	var SET_MAX_WORD_LENGTH = exports.SET_MAX_WORD_LENGTH = 'SET_MAX_WORD_LENGTH';
+
+	var SET_FINGERS_LESSON = exports.SET_FINGERS_LESSON = 'SET_FINGERS_LESSON';
+	var SET_FINGERS_SET_SIZE = exports.SET_FINGERS_SET_SIZE = 'SET_FINGERS_SET_SIZE';
+
+	var SET_FREE_LESSON = exports.SET_FREE_LESSON = 'SET_FREE_LESSON';
+	var ADD_LETTER_TO_FREE_LETTERS = exports.ADD_LETTER_TO_FREE_LETTERS = 'ADD_LETTER_TO_FREE_LETTERS';
+	var REMOVE_LETTER_FROM_FREE_LETTERS = exports.REMOVE_LETTER_FROM_FREE_LETTERS = 'REMOVE_LETTER_FROM_FREE_LETTERS';
+
+/***/ },
+/* 464 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+
+	var _main = __webpack_require__(282);
+
+	var types = _interopRequireWildcard(_main);
+
+	var _keyboards = __webpack_require__(465);
 
 	var _keyboards2 = _interopRequireDefault(_keyboards);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -67252,7 +67139,7 @@
 	};
 
 /***/ },
-/* 463 */
+/* 465 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -67261,15 +67148,15 @@
 	  value: true
 	});
 
-	var _us = __webpack_require__(464);
+	var _us = __webpack_require__(466);
 
 	var _us2 = _interopRequireDefault(_us);
 
-	var _ru = __webpack_require__(465);
+	var _ru = __webpack_require__(467);
 
 	var _ru2 = _interopRequireDefault(_ru);
 
-	var _ruTypewriter = __webpack_require__(466);
+	var _ruTypewriter = __webpack_require__(468);
 
 	var _ruTypewriter2 = _interopRequireDefault(_ruTypewriter);
 
@@ -67287,7 +67174,7 @@
 	}];
 
 /***/ },
-/* 464 */
+/* 466 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -67687,7 +67574,7 @@
 	}];
 
 /***/ },
-/* 465 */
+/* 467 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -68061,7 +67948,7 @@
 	}];
 
 /***/ },
-/* 466 */
+/* 468 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -68435,7 +68322,236 @@
 	}];
 
 /***/ },
-/* 467 */
+/* 469 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+	exports.setMode = setMode;
+	exports.setCurrentLesson = setCurrentLesson;
+	exports.refreshCurrentLesson = refreshCurrentLesson;
+	exports.setMaxWordLength = setMaxWordLength;
+	exports.setFingersLesson = setFingersLesson;
+	exports.setFingersSetSize = setFingersSetSize;
+	exports.setFreeLesson = setFreeLesson;
+	exports.addLetterToFreeLetters = addLetterToFreeLetters;
+	exports.removeLetterFromFreeLetters = removeLetterFromFreeLetters;
+	exports.typeOnLesson = typeOnLesson;
+	exports.selectMode = selectMode;
+	exports.generateAndSetFreeLesson = generateAndSetFreeLesson;
+	exports.updateCharToType = updateCharToType;
+	exports.typeLearningMode = typeLearningMode;
+	exports.updateLearningState = updateLearningState;
+
+	var _lodash = __webpack_require__(280);
+
+	var _main = __webpack_require__(279);
+
+	var _utils = __webpack_require__(284);
+
+	var _learningMode = __webpack_require__(463);
+
+	var types = _interopRequireWildcard(_learningMode);
+
+	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
+
+	function setMode(mode) {
+	   return {
+	      type: types.SET_LEARNING_MODE,
+	      mode: mode
+	   };
+	}
+
+	function setCurrentLesson(lesson) {
+	   return {
+	      type: types.SET_CURRENT_LESSON,
+	      lesson: lesson
+	   };
+	}
+
+	function refreshCurrentLesson() {
+	   return {
+	      type: types.REFRESH_CURRENT_LESSON
+	   };
+	}
+
+	function setMaxWordLength(length) {
+	   return {
+	      type: types.SET_MAX_WORD_LENGTH,
+	      length: length
+	   };
+	}
+
+	function setFingersLesson(lesson) {
+	   return {
+	      type: types.SET_FINGERS_LESSON,
+	      lesson: lesson
+	   };
+	}
+
+	function setFingersSetSize(size) {
+	   return {
+	      type: types.SET_FINGERS_SET_SIZE,
+	      size: size
+	   };
+	}
+
+	function setFreeLesson(lesson) {
+	   return {
+	      type: types.SET_FREE_LESSON,
+	      lesson: lesson
+	   };
+	}
+
+	function addLetterToFreeLetters(letter) {
+	   return {
+	      type: types.ADD_LETTER_TO_FREE_LETTERS,
+	      letter: letter
+	   };
+	}
+
+	function removeLetterFromFreeLetters(letter) {
+	   return {
+	      type: types.REMOVE_LETTER_FROM_FREE_LETTERS,
+	      letter: letter
+	   };
+	}
+
+	function typeOnLesson() {
+	   return {
+	      type: types.TYPE_ON_LESSON
+	   };
+	}
+
+	function selectMode(mode) {
+	   return function (dispatch, getState) {
+
+	      dispatch(setMode(mode));
+
+	      var state = getState();
+	      var learningModeState = state.learningMode;
+	      var lesson = '';
+
+	      switch (mode) {
+	         case 'fingers':
+
+	            lesson = learningModeState.lessonFingers;
+
+	            if (!lesson) {
+
+	               var lettersSet = (0, _utils.getFingersSet)();
+
+	               lettersSet.splice(learningModeState.fingersSetSize);
+
+	               lettersSet = _lodash.concat.apply(null, lettersSet);
+
+	               lesson = (0, _utils.generateLesson)(learningModeState.maxWordLength, lettersSet);
+
+	               dispatch(setFingersLesson(lesson));
+	            }
+
+	            break;
+
+	         case 'free':
+
+	            lesson = learningModeState.lessonFree;
+
+	            if (!lesson) {
+
+	               var lettersFree = learningModeState.lettersFree;
+
+	               if (!lettersFree.length) {
+
+	                  var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys;
+
+	                  lettersFree = (0, _lodash.filter)(keys, {
+	                     row: 'middle',
+	                     type: 'letter'
+	                  }).map(function (obj) {
+	                     return obj.key;
+	                  });
+
+	                  dispatch(setFingersSetSize(lettersFree));
+	               }
+
+	               lesson = (0, _utils.generateLesson)(learningModeState.maxWordLength, lettersFree);
+
+	               dispatch(setFreeLesson(lesson));
+	            }
+
+	            break;
+	      }
+
+	      dispatch(setCurrentLesson(lesson));
+	   };
+	}
+
+	function generateAndSetFreeLesson() {
+	   return function (dispatch, getState) {
+
+	      var state = getState();
+
+	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, state.learningMode.lettersFree);
+
+	      dispatch(setFreeLesson(lesson));
+
+	      dispatch(setCurrentLesson(lesson));
+	   };
+	}
+
+	function updateCharToType() {
+	   return function (dispatch, getState) {
+	      var state = getState();
+	      var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys;
+	      var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, state.learningMode.lesson.last[0]);
+
+	      dispatch((0, _main.setIdsCharToType)(idsCharToType));
+	   };
+	}
+
+	function typeLearningMode(char) {
+	   return function (dispatch, getState) {
+	      var state = getState();
+	      var keyboardState = state.main;
+	      var learningModeState = state.learningMode;
+	      var keys = (0, _lodash.find)(keyboardState.keyboards, { 'name': keyboardState.keyboardName }).keys;
+	      var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
+
+	      if (learningModeState.lesson.last[0] === char) {
+	         var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
+
+	         dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
+
+	         dispatch(typeOnLesson());
+
+	         // if (getState().learningMode.lesson.last.length === 0) {
+	         //    dispatch(generateLessonFromCurrentMode());
+	         // }
+
+	         dispatch((0, _main.addSuccesType)());
+
+	         dispatch(updateCharToType());
+	      } else {
+	         var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
+
+	         dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
+
+	         dispatch((0, _main.addErrorType)());
+	      }
+	   };
+	}
+
+	function updateLearningState(char) {
+	   return function (dispatch, getState) {
+	      // ghjfgltq
+	   };
+	}
+
+/***/ },
+/* 470 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68446,7 +68562,7 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _Authorization = __webpack_require__(468);
+	var _Authorization = __webpack_require__(471);
 
 	var _Authorization2 = _interopRequireDefault(_Authorization);
 
@@ -68471,7 +68587,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Authorization2.default);
 
 /***/ },
-/* 468 */
+/* 471 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68486,15 +68602,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Login = __webpack_require__(469);
+	var _Login = __webpack_require__(472);
 
 	var _Login2 = _interopRequireDefault(_Login);
 
-	var _Register = __webpack_require__(472);
+	var _Register = __webpack_require__(475);
 
 	var _Register2 = _interopRequireDefault(_Register);
 
-	var _ForgotPas = __webpack_require__(498);
+	var _ForgotPas = __webpack_require__(501);
 
 	var _ForgotPas2 = _interopRequireDefault(_ForgotPas);
 
@@ -68574,7 +68690,7 @@
 	exports.default = Authorization;
 
 /***/ },
-/* 469 */
+/* 472 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68585,7 +68701,7 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _Login = __webpack_require__(470);
+	var _Login = __webpack_require__(473);
 
 	var _Login2 = _interopRequireDefault(_Login);
 
@@ -68608,7 +68724,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Login2.default);
 
 /***/ },
-/* 470 */
+/* 473 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68627,7 +68743,7 @@
 
 	var _reduxForm = __webpack_require__(289);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
@@ -68786,7 +68902,7 @@
 	})(Login);
 
 /***/ },
-/* 471 */
+/* 474 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -68840,7 +68956,7 @@
 
 
 /***/ },
-/* 472 */
+/* 475 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68851,7 +68967,7 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _Register = __webpack_require__(473);
+	var _Register = __webpack_require__(476);
 
 	var _Register2 = _interopRequireDefault(_Register);
 
@@ -68874,7 +68990,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Register2.default);
 
 /***/ },
-/* 473 */
+/* 476 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -68893,11 +69009,11 @@
 
 	var _reduxForm = __webpack_require__(289);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
-	var _passwordGenerator = __webpack_require__(474);
+	var _passwordGenerator = __webpack_require__(477);
 
 	var _passwordGenerator2 = _interopRequireDefault(_passwordGenerator);
 
@@ -69168,13 +69284,13 @@
 	})(Register);
 
 /***/ },
-/* 474 */
+/* 477 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = __webpack_require__(475);
+	module.exports = __webpack_require__(478);
 
 /***/ },
-/* 475 */
+/* 478 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -69275,7 +69391,7 @@
 	    } else if (typeof root.msCrypto === "object" && typeof root.msCrypto.getRandomValues === 'function') {
 	      root.msCrypto.getRandomValues(buf);
 	    } else if (module.exports === password && "function" !== "undefined") {
-	      var bytes = __webpack_require__(476).randomBytes(buf.length);
+	      var bytes = __webpack_require__(479).randomBytes(buf.length);
 	      buf.set(bytes);
 	    } else {
 	      throw new Error("No secure random number generator available.");
@@ -69295,10 +69411,10 @@
 
 
 /***/ },
-/* 476 */
+/* 479 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var rng = __webpack_require__(481)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var rng = __webpack_require__(484)
 
 	function error () {
 	  var m = [].slice.call(arguments).join(' ')
@@ -69309,9 +69425,9 @@
 	    ].join('\n'))
 	}
 
-	exports.createHash = __webpack_require__(483)
+	exports.createHash = __webpack_require__(486)
 
-	exports.createHmac = __webpack_require__(495)
+	exports.createHmac = __webpack_require__(498)
 
 	exports.randomBytes = function(size, callback) {
 	  if (callback && callback.call) {
@@ -69332,7 +69448,7 @@
 	  return ['sha1', 'sha256', 'sha512', 'md5', 'rmd160']
 	}
 
-	var p = __webpack_require__(496)(exports)
+	var p = __webpack_require__(499)(exports)
 	exports.pbkdf2 = p.pbkdf2
 	exports.pbkdf2Sync = p.pbkdf2Sync
 
@@ -69352,10 +69468,10 @@
 	  }
 	})
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(477).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(480).Buffer))
 
 /***/ },
-/* 477 */
+/* 480 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -69368,9 +69484,9 @@
 
 	'use strict'
 
-	var base64 = __webpack_require__(478)
-	var ieee754 = __webpack_require__(479)
-	var isArray = __webpack_require__(480)
+	var base64 = __webpack_require__(481)
+	var ieee754 = __webpack_require__(482)
+	var isArray = __webpack_require__(483)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -71148,10 +71264,10 @@
 	  return val !== val // eslint-disable-line no-self-compare
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(477).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(480).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 478 */
+/* 481 */
 /***/ function(module, exports) {
 
 	'use strict'
@@ -71266,7 +71382,7 @@
 
 
 /***/ },
-/* 479 */
+/* 482 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -71356,7 +71472,7 @@
 
 
 /***/ },
-/* 480 */
+/* 483 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -71367,13 +71483,13 @@
 
 
 /***/ },
-/* 481 */
+/* 484 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, Buffer) {(function() {
 	  var g = ('undefined' === typeof window ? global : window) || {}
 	  _crypto = (
-	    g.crypto || g.msCrypto || __webpack_require__(482)
+	    g.crypto || g.msCrypto || __webpack_require__(485)
 	  )
 	  module.exports = function(size) {
 	    // Modern Browsers
@@ -71397,22 +71513,22 @@
 	  }
 	}())
 
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(477).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(480).Buffer))
 
 /***/ },
-/* 482 */
+/* 485 */
 /***/ function(module, exports) {
 
 	/* (ignored) */
 
 /***/ },
-/* 483 */
+/* 486 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(484)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(487)
 
-	var md5 = toConstructor(__webpack_require__(492))
-	var rmd160 = toConstructor(__webpack_require__(494))
+	var md5 = toConstructor(__webpack_require__(495))
+	var rmd160 = toConstructor(__webpack_require__(497))
 
 	function toConstructor (fn) {
 	  return function () {
@@ -71440,10 +71556,10 @@
 	  return createHash(alg)
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(477).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(480).Buffer))
 
 /***/ },
-/* 484 */
+/* 487 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var exports = module.exports = function (alg) {
@@ -71452,16 +71568,16 @@
 	  return new Alg()
 	}
 
-	var Buffer = __webpack_require__(477).Buffer
-	var Hash   = __webpack_require__(485)(Buffer)
+	var Buffer = __webpack_require__(480).Buffer
+	var Hash   = __webpack_require__(488)(Buffer)
 
-	exports.sha1 = __webpack_require__(486)(Buffer, Hash)
-	exports.sha256 = __webpack_require__(490)(Buffer, Hash)
-	exports.sha512 = __webpack_require__(491)(Buffer, Hash)
+	exports.sha1 = __webpack_require__(489)(Buffer, Hash)
+	exports.sha256 = __webpack_require__(493)(Buffer, Hash)
+	exports.sha512 = __webpack_require__(494)(Buffer, Hash)
 
 
 /***/ },
-/* 485 */
+/* 488 */
 /***/ function(module, exports) {
 
 	module.exports = function (Buffer) {
@@ -71544,7 +71660,7 @@
 
 
 /***/ },
-/* 486 */
+/* 489 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -71556,7 +71672,7 @@
 	 * See http://pajhome.org.uk/crypt/md5 for details.
 	 */
 
-	var inherits = __webpack_require__(487).inherits
+	var inherits = __webpack_require__(490).inherits
 
 	module.exports = function (Buffer, Hash) {
 
@@ -71688,7 +71804,7 @@
 
 
 /***/ },
-/* 487 */
+/* 490 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(global, process) {// Copyright Joyent, Inc. and other Node contributors.
@@ -72216,7 +72332,7 @@
 	}
 	exports.isPrimitive = isPrimitive;
 
-	exports.isBuffer = __webpack_require__(488);
+	exports.isBuffer = __webpack_require__(491);
 
 	function objectToString(o) {
 	  return Object.prototype.toString.call(o);
@@ -72260,7 +72376,7 @@
 	 *     prototype.
 	 * @param {function} superCtor Constructor function to inherit prototype from.
 	 */
-	exports.inherits = __webpack_require__(489);
+	exports.inherits = __webpack_require__(492);
 
 	exports._extend = function(origin, add) {
 	  // Don't do anything if add isn't an object
@@ -72281,7 +72397,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }()), __webpack_require__(108)))
 
 /***/ },
-/* 488 */
+/* 491 */
 /***/ function(module, exports) {
 
 	module.exports = function isBuffer(arg) {
@@ -72292,7 +72408,7 @@
 	}
 
 /***/ },
-/* 489 */
+/* 492 */
 /***/ function(module, exports) {
 
 	if (typeof Object.create === 'function') {
@@ -72321,7 +72437,7 @@
 
 
 /***/ },
-/* 490 */
+/* 493 */
 /***/ function(module, exports, __webpack_require__) {
 
 	
@@ -72333,7 +72449,7 @@
 	 *
 	 */
 
-	var inherits = __webpack_require__(487).inherits
+	var inherits = __webpack_require__(490).inherits
 
 	module.exports = function (Buffer, Hash) {
 
@@ -72474,10 +72590,10 @@
 
 
 /***/ },
-/* 491 */
+/* 494 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var inherits = __webpack_require__(487).inherits
+	var inherits = __webpack_require__(490).inherits
 
 	module.exports = function (Buffer, Hash) {
 	  var K = [
@@ -72724,7 +72840,7 @@
 
 
 /***/ },
-/* 492 */
+/* 495 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -72736,7 +72852,7 @@
 	 * See http://pajhome.org.uk/crypt/md5 for more info.
 	 */
 
-	var helpers = __webpack_require__(493);
+	var helpers = __webpack_require__(496);
 
 	/*
 	 * Calculate the MD5 of an array of little-endian words, and a bit length
@@ -72885,7 +73001,7 @@
 
 
 /***/ },
-/* 493 */
+/* 496 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {var intSize = 4;
@@ -72923,10 +73039,10 @@
 
 	module.exports = { hash: hash };
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(477).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(480).Buffer))
 
 /***/ },
-/* 494 */
+/* 497 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {
@@ -73135,13 +73251,13 @@
 
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(477).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(480).Buffer))
 
 /***/ },
-/* 495 */
+/* 498 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(483)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(486)
 
 	var zeroBuffer = new Buffer(128)
 	zeroBuffer.fill(0)
@@ -73185,13 +73301,13 @@
 	}
 
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(477).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(480).Buffer))
 
 /***/ },
-/* 496 */
+/* 499 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var pbkdf2Export = __webpack_require__(497)
+	var pbkdf2Export = __webpack_require__(500)
 
 	module.exports = function (crypto, exports) {
 	  exports = exports || {}
@@ -73206,7 +73322,7 @@
 
 
 /***/ },
-/* 497 */
+/* 500 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer) {module.exports = function(crypto) {
@@ -73294,10 +73410,10 @@
 	  }
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(477).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(480).Buffer))
 
 /***/ },
-/* 498 */
+/* 501 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73308,7 +73424,7 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _ForgotPas = __webpack_require__(499);
+	var _ForgotPas = __webpack_require__(502);
 
 	var _ForgotPas2 = _interopRequireDefault(_ForgotPas);
 
@@ -73331,7 +73447,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_ForgotPas2.default);
 
 /***/ },
-/* 499 */
+/* 502 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73350,7 +73466,7 @@
 
 	var _reduxForm = __webpack_require__(289);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
@@ -73497,7 +73613,7 @@
 	})(ForgotPas);
 
 /***/ },
-/* 500 */
+/* 503 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73508,7 +73624,7 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _Home = __webpack_require__(501);
+	var _Home = __webpack_require__(504);
 
 	var _Home2 = _interopRequireDefault(_Home);
 
@@ -73517,13 +73633,13 @@
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
-	  var spendTime = (Date.now() - state.keyboard.startTypingTime) / (1000 * 60);
+	  var spendTime = (Date.now() - state.main.startTypingTime) / (1000 * 60);
 
 	  return {
-	    successTypes: state.keyboard.successTypes,
-	    errorTypes: state.keyboard.errorTypes,
-	    speed: parseInt((state.keyboard.successTypes + state.keyboard.errorTypes) / spendTime, 10),
-	    mode: state.keyboard.mode
+	    successTypes: state.main.successTypes,
+	    errorTypes: state.main.errorTypes,
+	    speed: parseInt((state.main.successTypes + state.main.errorTypes) / spendTime, 10),
+	    mode: state.main.mode
 	  };
 	};
 
@@ -73538,7 +73654,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Home2.default);
 
 /***/ },
-/* 501 */
+/* 504 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73555,19 +73671,19 @@
 
 	var _reactRouter = __webpack_require__(196);
 
-	var _Textarea = __webpack_require__(502);
+	var _Textarea = __webpack_require__(505);
 
 	var _Textarea2 = _interopRequireDefault(_Textarea);
 
-	var _Learningarea = __webpack_require__(525);
+	var _Learningarea = __webpack_require__(528);
 
 	var _Learningarea2 = _interopRequireDefault(_Learningarea);
 
-	var _Keypad = __webpack_require__(527);
+	var _Keypad = __webpack_require__(530);
 
 	var _Keypad2 = _interopRequireDefault(_Keypad);
 
-	var _Metronome = __webpack_require__(530);
+	var _Metronome = __webpack_require__(533);
 
 	var _Metronome2 = _interopRequireDefault(_Metronome);
 
@@ -73690,7 +73806,7 @@
 	exports.default = Home;
 
 /***/ },
-/* 502 */
+/* 505 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73701,7 +73817,7 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _Textarea = __webpack_require__(503);
+	var _Textarea = __webpack_require__(506);
 
 	var _Textarea2 = _interopRequireDefault(_Textarea);
 
@@ -73720,7 +73836,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Textarea2.default);
 
 /***/ },
-/* 503 */
+/* 506 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -73735,7 +73851,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _perfectScrollbar = __webpack_require__(504);
+	var _perfectScrollbar = __webpack_require__(507);
 
 	var _perfectScrollbar2 = _interopRequireDefault(_perfectScrollbar);
 
@@ -73797,23 +73913,23 @@
 	exports.default = Textarea;
 
 /***/ },
-/* 504 */
+/* 507 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	module.exports = __webpack_require__(505);
+	module.exports = __webpack_require__(508);
 
 
 /***/ },
-/* 505 */
+/* 508 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var destroy = __webpack_require__(506);
-	var initialize = __webpack_require__(514);
-	var update = __webpack_require__(524);
+	var destroy = __webpack_require__(509);
+	var initialize = __webpack_require__(517);
+	var update = __webpack_require__(527);
 
 	module.exports = {
 	  initialize: initialize,
@@ -73823,14 +73939,14 @@
 
 
 /***/ },
-/* 506 */
+/* 509 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(507);
-	var dom = __webpack_require__(509);
-	var instances = __webpack_require__(510);
+	var _ = __webpack_require__(510);
+	var dom = __webpack_require__(512);
+	var instances = __webpack_require__(513);
 
 	module.exports = function (element) {
 	  var i = instances.get(element);
@@ -73851,13 +73967,13 @@
 
 
 /***/ },
-/* 507 */
+/* 510 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var cls = __webpack_require__(508);
-	var dom = __webpack_require__(509);
+	var cls = __webpack_require__(511);
+	var dom = __webpack_require__(512);
 
 	var toInt = exports.toInt = function (x) {
 	  return parseInt(x, 10) || 0;
@@ -73940,7 +74056,7 @@
 
 
 /***/ },
-/* 508 */
+/* 511 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -73988,7 +74104,7 @@
 
 
 /***/ },
-/* 509 */
+/* 512 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -74078,17 +74194,17 @@
 
 
 /***/ },
-/* 510 */
+/* 513 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(507);
-	var cls = __webpack_require__(508);
-	var defaultSettings = __webpack_require__(511);
-	var dom = __webpack_require__(509);
-	var EventManager = __webpack_require__(512);
-	var guid = __webpack_require__(513);
+	var _ = __webpack_require__(510);
+	var cls = __webpack_require__(511);
+	var defaultSettings = __webpack_require__(514);
+	var dom = __webpack_require__(512);
+	var EventManager = __webpack_require__(515);
+	var guid = __webpack_require__(516);
 
 	var instances = {};
 
@@ -74191,7 +74307,7 @@
 
 
 /***/ },
-/* 511 */
+/* 514 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -74214,7 +74330,7 @@
 
 
 /***/ },
-/* 512 */
+/* 515 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -74291,7 +74407,7 @@
 
 
 /***/ },
-/* 513 */
+/* 516 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -74310,26 +74426,26 @@
 
 
 /***/ },
-/* 514 */
+/* 517 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(507);
-	var cls = __webpack_require__(508);
-	var instances = __webpack_require__(510);
-	var updateGeometry = __webpack_require__(515);
+	var _ = __webpack_require__(510);
+	var cls = __webpack_require__(511);
+	var instances = __webpack_require__(513);
+	var updateGeometry = __webpack_require__(518);
 
 	// Handlers
 	var handlers = {
-	  'click-rail': __webpack_require__(517),
-	  'drag-scrollbar': __webpack_require__(518),
-	  'keyboard': __webpack_require__(519),
-	  'wheel': __webpack_require__(520),
-	  'touch': __webpack_require__(521),
-	  'selection': __webpack_require__(522)
+	  'click-rail': __webpack_require__(520),
+	  'drag-scrollbar': __webpack_require__(521),
+	  'keyboard': __webpack_require__(522),
+	  'wheel': __webpack_require__(523),
+	  'touch': __webpack_require__(524),
+	  'selection': __webpack_require__(525)
 	};
-	var nativeScrollHandler = __webpack_require__(523);
+	var nativeScrollHandler = __webpack_require__(526);
 
 	module.exports = function (element, userSettings) {
 	  userSettings = typeof userSettings === 'object' ? userSettings : {};
@@ -74353,16 +74469,16 @@
 
 
 /***/ },
-/* 515 */
+/* 518 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(507);
-	var cls = __webpack_require__(508);
-	var dom = __webpack_require__(509);
-	var instances = __webpack_require__(510);
-	var updateScroll = __webpack_require__(516);
+	var _ = __webpack_require__(510);
+	var cls = __webpack_require__(511);
+	var dom = __webpack_require__(512);
+	var instances = __webpack_require__(513);
+	var updateScroll = __webpack_require__(519);
 
 	function getThumbSize(i, thumbSize) {
 	  if (i.settings.minScrollbarLength) {
@@ -74485,12 +74601,12 @@
 
 
 /***/ },
-/* 516 */
+/* 519 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var instances = __webpack_require__(510);
+	var instances = __webpack_require__(513);
 
 	var upEvent = document.createEvent('Event');
 	var downEvent = document.createEvent('Event');
@@ -74603,15 +74719,15 @@
 
 
 /***/ },
-/* 517 */
+/* 520 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(507);
-	var instances = __webpack_require__(510);
-	var updateGeometry = __webpack_require__(515);
-	var updateScroll = __webpack_require__(516);
+	var _ = __webpack_require__(510);
+	var instances = __webpack_require__(513);
+	var updateGeometry = __webpack_require__(518);
+	var updateScroll = __webpack_require__(519);
 
 	function bindClickRailHandler(element, i) {
 	  function pageOffset(el) {
@@ -74669,16 +74785,16 @@
 
 
 /***/ },
-/* 518 */
+/* 521 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(507);
-	var dom = __webpack_require__(509);
-	var instances = __webpack_require__(510);
-	var updateGeometry = __webpack_require__(515);
-	var updateScroll = __webpack_require__(516);
+	var _ = __webpack_require__(510);
+	var dom = __webpack_require__(512);
+	var instances = __webpack_require__(513);
+	var updateGeometry = __webpack_require__(518);
+	var updateScroll = __webpack_require__(519);
 
 	function bindMouseScrollXHandler(element, i) {
 	  var currentLeft = null;
@@ -74778,16 +74894,16 @@
 
 
 /***/ },
-/* 519 */
+/* 522 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(507);
-	var dom = __webpack_require__(509);
-	var instances = __webpack_require__(510);
-	var updateGeometry = __webpack_require__(515);
-	var updateScroll = __webpack_require__(516);
+	var _ = __webpack_require__(510);
+	var dom = __webpack_require__(512);
+	var instances = __webpack_require__(513);
+	var updateGeometry = __webpack_require__(518);
+	var updateScroll = __webpack_require__(519);
 
 	function bindKeyboardHandler(element, i) {
 	  var hovered = false;
@@ -74914,14 +75030,14 @@
 
 
 /***/ },
-/* 520 */
+/* 523 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var instances = __webpack_require__(510);
-	var updateGeometry = __webpack_require__(515);
-	var updateScroll = __webpack_require__(516);
+	var instances = __webpack_require__(513);
+	var updateGeometry = __webpack_require__(518);
+	var updateScroll = __webpack_require__(519);
 
 	function bindMouseWheelHandler(element, i) {
 	  var shouldPrevent = false;
@@ -75056,15 +75172,15 @@
 
 
 /***/ },
-/* 521 */
+/* 524 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(507);
-	var instances = __webpack_require__(510);
-	var updateGeometry = __webpack_require__(515);
-	var updateScroll = __webpack_require__(516);
+	var _ = __webpack_require__(510);
+	var instances = __webpack_require__(513);
+	var updateGeometry = __webpack_require__(518);
+	var updateScroll = __webpack_require__(519);
 
 	function bindTouchHandler(element, i, supportsTouch, supportsIePointer) {
 	  function shouldPreventDefault(deltaX, deltaY) {
@@ -75238,15 +75354,15 @@
 
 
 /***/ },
-/* 522 */
+/* 525 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(507);
-	var instances = __webpack_require__(510);
-	var updateGeometry = __webpack_require__(515);
-	var updateScroll = __webpack_require__(516);
+	var _ = __webpack_require__(510);
+	var instances = __webpack_require__(513);
+	var updateGeometry = __webpack_require__(518);
+	var updateScroll = __webpack_require__(519);
 
 	function bindSelectionHandler(element, i) {
 	  function getRangeNode() {
@@ -75353,13 +75469,13 @@
 
 
 /***/ },
-/* 523 */
+/* 526 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var instances = __webpack_require__(510);
-	var updateGeometry = __webpack_require__(515);
+	var instances = __webpack_require__(513);
+	var updateGeometry = __webpack_require__(518);
 
 	function bindNativeScrollHandler(element, i) {
 	  i.event.bind(element, 'scroll', function () {
@@ -75374,16 +75490,16 @@
 
 
 /***/ },
-/* 524 */
+/* 527 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _ = __webpack_require__(507);
-	var dom = __webpack_require__(509);
-	var instances = __webpack_require__(510);
-	var updateGeometry = __webpack_require__(515);
-	var updateScroll = __webpack_require__(516);
+	var _ = __webpack_require__(510);
+	var dom = __webpack_require__(512);
+	var instances = __webpack_require__(513);
+	var updateGeometry = __webpack_require__(518);
+	var updateScroll = __webpack_require__(519);
 
 	module.exports = function (element) {
 	  var i = instances.get(element);
@@ -75417,7 +75533,7 @@
 
 
 /***/ },
-/* 525 */
+/* 528 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75428,7 +75544,7 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _Learningarea = __webpack_require__(526);
+	var _Learningarea = __webpack_require__(529);
 
 	var _Learningarea2 = _interopRequireDefault(_Learningarea);
 
@@ -75444,7 +75560,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Learningarea2.default);
 
 /***/ },
-/* 526 */
+/* 529 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75540,7 +75656,7 @@
 	exports.default = Learningarea;
 
 /***/ },
-/* 527 */
+/* 530 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75551,9 +75667,9 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _Keypad = __webpack_require__(528);
+	var _Keypad = __webpack_require__(531);
 
 	var _Keypad2 = _interopRequireDefault(_Keypad);
 
@@ -75562,17 +75678,17 @@
 	var mapStateToProps = function mapStateToProps(state) {
 
 	  return {
-	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys,
-	    pressedRightIds: state.keyboard.pressedRightIds,
-	    pressedWrongIds: state.keyboard.pressedWrongIds,
-	    idCharsToType: state.keyboard.idCharsToType
+	    keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys,
+	    pressedRightIds: state.main.pressedRightIds,
+	    pressedWrongIds: state.main.pressedWrongIds,
+	    idCharsToType: state.main.idCharsToType
 	  };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Keypad2.default);
 
 /***/ },
-/* 528 */
+/* 531 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75587,17 +75703,17 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _keyboards = __webpack_require__(463);
+	var _keyboards = __webpack_require__(465);
 
 	var _keyboards2 = _interopRequireDefault(_keyboards);
 
-	var _Key = __webpack_require__(529);
+	var _Key = __webpack_require__(532);
 
 	var _Key2 = _interopRequireDefault(_Key);
 
@@ -75682,7 +75798,7 @@
 	exports.default = KeyPad;
 
 /***/ },
-/* 529 */
+/* 532 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75760,7 +75876,7 @@
 	exports.default = Key;
 
 /***/ },
-/* 530 */
+/* 533 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75771,7 +75887,7 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _Metronome = __webpack_require__(531);
+	var _Metronome = __webpack_require__(534);
 
 	var _Metronome2 = _interopRequireDefault(_Metronome);
 
@@ -75781,8 +75897,8 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    status: state.keyboard.metronomeStatus,
-	    interval: state.keyboard.metronomeInterval
+	    status: state.main.metronomeStatus,
+	    interval: state.main.metronomeInterval
 	  };
 	};
 
@@ -75797,7 +75913,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Metronome2.default);
 
 /***/ },
-/* 531 */
+/* 534 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -75812,13 +75928,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _nouislider = __webpack_require__(532);
+	var _nouislider = __webpack_require__(535);
 
 	var _nouislider2 = _interopRequireDefault(_nouislider);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
@@ -75960,8 +76076,6 @@
 	    value: function _stopPlaying() {
 	      clearTimeout(this.timeout);
 
-	      console.log('pause');
-
 	      this.audio.pause();
 	    }
 	  }]);
@@ -75972,7 +76086,7 @@
 	exports.default = Metronome;
 
 /***/ },
-/* 532 */
+/* 535 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! nouislider - 8.5.1 - 2016-04-24 16:00:29 */
@@ -77936,7 +78050,7 @@
 	}));
 
 /***/ },
-/* 533 */
+/* 536 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78012,7 +78126,7 @@
 	exports.default = Settings;
 
 /***/ },
-/* 534 */
+/* 537 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78023,9 +78137,9 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _TextMode = __webpack_require__(535);
+	var _TextMode = __webpack_require__(538);
 
 	var _TextMode2 = _interopRequireDefault(_TextMode);
 
@@ -78049,7 +78163,7 @@
 	  return {
 	    texts: texts,
 	    currentTextId: state.textMode.currentTextId,
-	    mode: state.keyboard.mode
+	    mode: state.main.mode
 	  };
 	};
 
@@ -78067,7 +78181,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_TextMode2.default);
 
 /***/ },
-/* 535 */
+/* 538 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78084,19 +78198,19 @@
 
 	var _reactRouter = __webpack_require__(196);
 
-	var _perfectScrollbar = __webpack_require__(504);
+	var _perfectScrollbar = __webpack_require__(507);
 
 	var _perfectScrollbar2 = _interopRequireDefault(_perfectScrollbar);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
-	var _AddTextForm = __webpack_require__(536);
+	var _AddTextForm = __webpack_require__(539);
 
 	var _AddTextForm2 = _interopRequireDefault(_AddTextForm);
 
-	var _Switcher = __webpack_require__(543);
+	var _Switcher = __webpack_require__(542);
 
 	var _Switcher2 = _interopRequireDefault(_Switcher);
 
@@ -78237,7 +78351,7 @@
 	exports.default = TextMode;
 
 /***/ },
-/* 536 */
+/* 539 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78248,9 +78362,9 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _AddTextForm = __webpack_require__(537);
+	var _AddTextForm = __webpack_require__(540);
 
 	var _AddTextForm2 = _interopRequireDefault(_AddTextForm);
 
@@ -78270,7 +78384,7 @@
 
 	  return {
 	    texts: texts,
-	    currentTextId: state.keyboard.currentTextId
+	    currentTextId: state.main.currentTextId
 	  };
 	};
 
@@ -78285,7 +78399,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_AddTextForm2.default);
 
 /***/ },
-/* 537 */
+/* 540 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78300,13 +78414,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
-	var _Control = __webpack_require__(538);
+	var _Control = __webpack_require__(541);
 
 	var _Control2 = _interopRequireDefault(_Control);
 
@@ -78470,7 +78584,7 @@
 	exports.default = AddTextForm;
 
 /***/ },
-/* 538 */
+/* 541 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78485,7 +78599,7 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
@@ -78578,7 +78692,37 @@
 	exports.default = Control;
 
 /***/ },
-/* 539 */
+/* 542 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _react = __webpack_require__(166);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Footer = function Footer(props) {
+	   return _react2.default.createElement(
+	      "label",
+	      { className: "switcher" },
+	      _react2.default.createElement("input", _extends({ type: "radio" }, props)),
+	      _react2.default.createElement("span", { className: "switcher__bg" }),
+	      _react2.default.createElement("span", { className: "switcher__toggle" })
+	   );
+	};
+
+	exports.default = Footer;
+
+/***/ },
+/* 543 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78589,9 +78733,9 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _Text = __webpack_require__(540);
+	var _Text = __webpack_require__(544);
 
 	var _Text2 = _interopRequireDefault(_Text);
 
@@ -78626,7 +78770,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Text2.default);
 
 /***/ },
-/* 540 */
+/* 544 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78643,7 +78787,7 @@
 
 	var _reactRouter = __webpack_require__(196);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
@@ -78740,7 +78884,7 @@
 	exports.default = Texts;
 
 /***/ },
-/* 541 */
+/* 545 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78751,11 +78895,11 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _LearningMode = __webpack_require__(542);
+	var _LearningMode = __webpack_require__(546);
 
 	var _LearningMode2 = _interopRequireDefault(_LearningMode);
 
-	var _learningMode = __webpack_require__(461);
+	var _learningMode = __webpack_require__(469);
 
 	var _main = __webpack_require__(279);
 
@@ -78766,19 +78910,17 @@
 	      maxWordLength: state.learningMode.maxWordLength,
 	      lesson: state.learningMode.lesson.typed + state.learningMode.lesson.last,
 	      learningMode: state.learningMode.mode,
-	      mode: state.keyboard.mode
+	      mode: state.main.mode
 	   };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	   return {
 	      setMaxWordLength: function setMaxWordLength(length) {
-	         dispatch((0, _learningMode.setLessonMaxWordLength)(length));
-
-	         dispatch((0, _learningMode.generateLessonFromCurrentMode)());
+	         dispatch((0, _learningMode.setMaxWordLength)(length));
 	      },
 	      setLearningMode: function setLearningMode(mode) {
-	         dispatch((0, _learningMode.setLearningMode)(mode));
+	         dispatch((0, _learningMode.setMode)(mode));
 	      },
 	      setMode: function setMode(mode) {
 	         dispatch((0, _main.setMode)(mode));
@@ -78789,7 +78931,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningMode2.default);
 
 /***/ },
-/* 542 */
+/* 546 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -78806,17 +78948,17 @@
 
 	var _reactRouter = __webpack_require__(196);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
 	var _jquery = __webpack_require__(264);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _nouislider = __webpack_require__(532);
+	var _nouislider = __webpack_require__(535);
 
 	var _nouislider2 = _interopRequireDefault(_nouislider);
 
-	var _Switcher = __webpack_require__(543);
+	var _Switcher = __webpack_require__(542);
 
 	var _Switcher2 = _interopRequireDefault(_Switcher);
 
@@ -78874,6 +79016,7 @@
 	         var _props = this.props;
 	         var lesson = _props.lesson;
 	         var mode = _props.mode;
+	         var learningMode = _props.learningMode;
 
 
 	         var lessonKeys = lesson.split('').map(function (char, idx) {
@@ -78892,14 +79035,19 @@
 
 	         var switcherChecked = false;
 
+	         console.log('learningMode', learningMode);
+	         console.log('mode', mode);
+
+	         var switcher = _react2.default.createElement(_Switcher2.default, { checked: switcherChecked, onChange: this._onSwitcherChange.bind(this) });
+
 	         if (mode === 'learning') {
-	            switcherChecked = true;
+	            switcher = _react2.default.createElement(_Switcher2.default, { checked: true, onChange: this._onSwitcherChange.bind(this) });
 	         }
 
 	         return _react2.default.createElement(
 	            'div',
 	            { className: 'settings-learning' },
-	            _react2.default.createElement(_Switcher2.default, { checked: switcherChecked, onChange: this._onSwitcherChange.bind(this) }),
+	            switcher,
 	            _react2.default.createElement(
 	               'div',
 	               { className: 'learningarea' },
@@ -78967,27 +79115,9 @@
 	      }
 	   }, {
 	      key: '_onSwitcherChange',
-	      value: function _onSwitcherChange(e) {
+	      value: function _onSwitcherChange() {
 
-	         if (e.target.checked) {
-	            this.props.setMode('learning');
-	         }
-	      }
-	   }, {
-	      key: '_onClickMenu',
-	      value: function _onClickMenu(selectedMode, e) {
-	         var _props2 = this.props;
-	         var mode = _props2.mode;
-	         var setLearningMode = _props2.setLearningMode;
-
-
-	         e.preventDefault();
-
-	         if (selectedMode === mode) {
-	            return;
-	         }
-
-	         setLearningMode(selectedMode);
+	         this.props.setMode('learning');
 	      }
 	   }]);
 
@@ -78997,87 +79127,71 @@
 	exports.default = LearningMode;
 
 /***/ },
-/* 543 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _react = __webpack_require__(166);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Footer = function Footer(props) {
-	   return _react2.default.createElement(
-	      "label",
-	      { className: "switcher" },
-	      _react2.default.createElement("input", _extends({ type: "radio" }, props)),
-	      _react2.default.createElement("span", { className: "switcher__bg" }),
-	      _react2.default.createElement("span", { className: "switcher__toggle" })
-	   );
-	};
-
-	exports.default = Footer;
-
-/***/ },
-/* 544 */
+/* 547 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _LearningFingers = __webpack_require__(545);
+	var _LearningFingers = __webpack_require__(548);
 
 	var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
 
-	var _learningMode = __webpack_require__(461);
+	var _learningMode = __webpack_require__(469);
+
+	var _utils = __webpack_require__(284);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
-	  return {
-	    fingersSetSize: state.learningMode.fingersSetSize,
-	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys
-	  };
+	   return {
+	      fingersSetSize: state.learningMode.fingersSetSize,
+	      maxWordLength: state.learningMode.maxWordLength,
+	      keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys
+	   };
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	  return {
-	    setFingersSetSize: function setFingersSetSize(size) {
-	      dispatch((0, _learningMode.setLessonFingersSetSize)(size));
+	var mergeProps = function mergeProps(stateProps, dispatchProps) {
+	   var fingersSetSize = stateProps.fingersSetSize;
+	   var maxWordLength = stateProps.maxWordLength;
+	   var keys = stateProps.keys;
+	   var dispatch = dispatchProps.dispatch;
 
-	      dispatch((0, _learningMode.generateLessonFromFingersMode)());
 
-	      dispatch((0, _learningMode.updateFromLearningModeCharToType)());
-	    },
-	    setLetters: function setLetters(letters) {
-	      dispatch((0, _learningMode.setLettersFingersLearningMode)(letters));
+	   return {
+	      fingersSetSize: fingersSetSize,
+	      keys: keys,
+	      setFingersSetSize: function setFingersSetSize(size) {
+	         dispatch((0, _learningMode.setFingersSetSize)(size));
 
-	      dispatch((0, _learningMode.generateLessonFromFingersMode)());
+	         var lettersSet = (0, _utils.getFingersSet)();
 
-	      dispatch((0, _learningMode.updateFromLearningModeCharToType)());
-	    }
-	  };
+	         lettersSet.splice(size);
+
+	         lettersSet = _lodash.concat.apply(null, lettersSet);
+
+	         var lesson = (0, _utils.generateLesson)(maxWordLength, lettersSet);
+
+	         dispatch((0, _learningMode.setFingersLesson)(lesson));
+
+	         dispatch((0, _learningMode.setCurrentLesson)(lesson));
+
+	         dispatch((0, _learningMode.updateCharToType)());
+	      }
+	   };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningFingers2.default);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, null, mergeProps)(_LearningFingers2.default);
 
 /***/ },
-/* 545 */
+/* 548 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79094,21 +79208,21 @@
 
 	var _reactRouter = __webpack_require__(196);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
 	var _jquery = __webpack_require__(264);
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
-	var _nouislider = __webpack_require__(532);
+	var _nouislider = __webpack_require__(535);
 
 	var _nouislider2 = _interopRequireDefault(_nouislider);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
-	var _Key = __webpack_require__(529);
+	var _Key = __webpack_require__(532);
 
 	var _Key2 = _interopRequireDefault(_Key);
 
@@ -79130,7 +79244,7 @@
 
 	      var _this = _possibleConstructorReturn(this, Object.getPrototypeOf(LearningFingers).call(this, props));
 
-	      _this.fingersLetters = (0, _utils.getLearningLettersSet)();
+	      _this.fingersLetters = (0, _utils.getFingersSet)();
 	      return _this;
 	   }
 
@@ -79246,9 +79360,6 @@
 	            )
 	         );
 	      }
-	   }, {
-	      key: '_setLetters',
-	      value: function _setLetters(letterKeys) {}
 	   }]);
 
 	   return LearningFingers;
@@ -79257,7 +79368,7 @@
 	exports.default = LearningFingers;
 
 /***/ },
-/* 546 */
+/* 549 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79268,34 +79379,35 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _LearningFree = __webpack_require__(547);
+	var _LearningFree = __webpack_require__(550);
 
 	var _LearningFree2 = _interopRequireDefault(_LearningFree);
 
-	var _learningMode = __webpack_require__(461);
+	var _learningMode = __webpack_require__(469);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
+
 	  return {
-	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys,
-	    letters: state.learningMode.lettersFreeMode
+	    keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys,
+	    letters: state.learningMode.lettersFree
 	  };
 	};
 
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	  return {
 	    addLetter: function addLetter(letter) {
-	      dispatch((0, _learningMode.addLetterToLesson)(letter));
+	      dispatch((0, _learningMode.addLetterToFreeLetters)(letter));
 
-	      dispatch((0, _learningMode.generateLessonFromCurrentMode)());
+	      dispatch((0, _learningMode.generateAndSetFreeLesson)());
 	    },
 	    removeLetter: function removeLetter(letter) {
-	      dispatch((0, _learningMode.removeLetterFromLesson)(letter));
+	      dispatch((0, _learningMode.removeLetterFromFreeLetters)(letter));
 
-	      dispatch((0, _learningMode.generateLessonFromCurrentMode)());
+	      dispatch((0, _learningMode.generateAndSetFreeLesson)());
 	    }
 	  };
 	};
@@ -79303,7 +79415,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningFree2.default);
 
 /***/ },
-/* 547 */
+/* 550 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79318,13 +79430,13 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _Key = __webpack_require__(529);
+	var _Key = __webpack_require__(532);
 
 	var _Key2 = _interopRequireDefault(_Key);
 
@@ -79414,7 +79526,7 @@
 	exports.default = LearningFree;
 
 /***/ },
-/* 548 */
+/* 551 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79425,9 +79537,9 @@
 
 	var _reactRedux = __webpack_require__(173);
 
-	var _lodash = __webpack_require__(281);
+	var _lodash = __webpack_require__(280);
 
-	var _Keyboard = __webpack_require__(549);
+	var _Keyboard = __webpack_require__(552);
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
@@ -79437,8 +79549,8 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	  return {
-	    keys: (0, _lodash.find)(state.keyboard.keyboards, { 'name': state.keyboard.keyboardName }).keys,
-	    keyboardName: state.keyboard.keyboardName
+	    keys: (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboardName }).keys,
+	    keyboardName: state.main.keyboardName
 	  };
 	};
 
@@ -79453,7 +79565,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Keyboard2.default);
 
 /***/ },
-/* 549 */
+/* 552 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -79468,15 +79580,15 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _classNames = __webpack_require__(471);
+	var _classNames = __webpack_require__(474);
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
-	var _keyboards = __webpack_require__(463);
+	var _keyboards = __webpack_require__(465);
 
 	var _keyboards2 = _interopRequireDefault(_keyboards);
 
-	var _Key = __webpack_require__(529);
+	var _Key = __webpack_require__(532);
 
 	var _Key2 = _interopRequireDefault(_Key);
 
@@ -79570,7 +79682,7 @@
 	exports.default = Keyboard;
 
 /***/ },
-/* 550 */
+/* 553 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin

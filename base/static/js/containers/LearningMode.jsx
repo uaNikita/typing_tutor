@@ -1,9 +1,8 @@
 import {connect} from 'react-redux';
 import LearningMode from '../components/LearningMode.jsx';
 import {
-  setLessonMaxWordLength,
-  generateLessonFromCurrentMode,
-  setLearningMode
+  setMaxWordLength,
+  setMode as setLearningMode
 } from '../actions/learning-mode';
 
 import {setMode} from '../actions/main';
@@ -13,16 +12,14 @@ const mapStateToProps = (state) => {
       maxWordLength: state.learningMode.maxWordLength,
       lesson: state.learningMode.lesson.typed + state.learningMode.lesson.last,
       learningMode: state.learningMode.mode,
-      mode: state.keyboard.mode
+      mode: state.main.mode
    }
 }
 
 const mapDispatchToProps = (dispatch) => {
    return {
       setMaxWordLength: (length) => {
-         dispatch(setLessonMaxWordLength(length));
-
-         dispatch(generateLessonFromCurrentMode());
+         dispatch(setMaxWordLength(length));
       },
       setLearningMode: (mode) => {
          dispatch(setLearningMode(mode))

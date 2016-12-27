@@ -111,9 +111,7 @@ class Metronome extends Component {
 
   _stopPlaying() {
     clearTimeout(this.timeout);
-
-    console.log('pause');
-
+    
     this.audio.pause();
   }
 

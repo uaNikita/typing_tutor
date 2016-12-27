@@ -1,94 +1,92 @@
-import {
-  TYPE_ON_LESSON,
-  SET_LESSON,
-  SET_LESSON_FINGERS_SET_SIZE,
-  SET_LESSON_MAX_WORD_LENGTH,
-  ADD_LETTER_TO_LESSON,
-  REMOVE_LETTER_FROM_LESSON,
-  SET_LEARNING_MODE,
-  SET_LETTERS_FREE_LEARNING_MODE
-} from '../actions/learning-mode';
-import {assign, clone, cloneDeep, remove} from 'lodash';
+import * as types from '../constants/action-types/learning-mode';
+import {assign, clone, cloneDeep, remove, pull} from 'lodash';
 
 const INITIAL_STATE = {
-   fingersSetSize: 9,
-
-   maxWordLength: 5,
-
-   lettersFreeMode: [],
-
    // fingers, free,
    mode: 'fingers',
 
-   lessonFingersMode:'qwwqerqwer qwre qwr qwr q',
+   maxWordLength: 5,
 
-   lessonFreeMode:'qwerqwer qwe rqw re',
+   fingersSetSize: 7,
+
+   lessonFingers: 'lka dgg khljd djdgl fla ksafh dhgfj hfd dkgh akd',
+
+   lettersFree: ['a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l'],
+
+   lessonFree: 'dlaj skls khfd khslg llalja adad gsshs fjf adhgdg',
 
    lesson: {
-      typed: 'fkad lfdaj aslh sgk ljgkl lgd lfjlf lgh hshf hl',
-      last : 'da'
+      typed: '',
+      last: 'lka dgg khljd djdgl fla ksafh dhgfj hfd dkgh akd'
    }
 };
 
 export default (state = INITIAL_STATE, action) => {
    switch (action.type) {
-      case TYPE_ON_LESSON:
+
+      case types.REFRESH_CURRENT_LESSON:
+         return assign({}, state, {
+            lesson: {
+               typed: state.lesson.typed + state.lesson.last,
+               last: ''
+            }
+         })
+
+      case types.TYPE_ON_LESSON:
          return assign({}, state, {
             lesson: {
                typed: state.lesson.typed + state.lesson.last[0],
-               last : state.lesson.last.substring(1)
+               last: state.lesson.last.substring(1)
             }
          })
 
-      case SET_LEARNING_MODE:
+      case types.SET_LEARNING_MODE:
          return assign({}, state, {
-            mode: action.mode
+            mode: action.mode,
          });
 
-      case SET_LESSON:
+      case types.SET_CURRENT_LESSON:
          return assign({}, state, {
             lesson: {
                typed: '',
-               last : action.lesson
+               last: action.lesson
             }
          })
 
-      case SET_LESSON_MAX_WORD_LENGTH:
+      case types.SET_MAX_WORD_LENGTH:
          return assign({}, state, {
             maxWordLength: action.length
          });
 
-      case SET_LESSON_FINGERS_SET_SIZE:
+      case types.SET_FINGERS_SET_SIZE:
          return assign({}, state, {
             fingersSetSize: action.size
          });
 
-      case SET_LETTERS_FREE_LEARNING_MODE:
+      case types.SET_FINGERS_LESSON:
          return assign({}, state, {
-            lettersFreeMode: action.letters
+            lessonFingers: action.lesson
          });
 
-      case ADD_LETTER_TO_LESSON:
-         return (() => {
-            let lettersFreeMode = clone(state.lettersFreeMode);
+      case types.SET_FREE_LESSON:
+         return assign({}, state, {
+            lessonFree: action.lesson
+         });
 
-            lettersFreeMode.push(action.letter);
+      case types.ADD_LETTER_TO_FREE_LETTERS:
+         return assign({}, state, {
+            lettersFree: [
+               ...state.lettersFree,
+               action.letter
+            ]
+         });
 
-            return assign({}, state, {
-               lettersFreeMode
-            });
-         })();
-
-      case REMOVE_LETTER_FROM_LESSON:
-         return (() => {
-            let lettersFreeMode = clone(state.lettersFreeMode);
-
-            lettersFreeMode.push(action.letter);
-
-            return assign({}, state, {
-               lettersFreeMode
-            });
-         })();
+      case types.REMOVE_LETTER_FROM_FREE_LETTERS:
+         return assign({}, state, {
+            lettersFree: [
+               ...pull(state.lettersFree, action.letter)
+            ]
+         });
 
       default:
          return state;

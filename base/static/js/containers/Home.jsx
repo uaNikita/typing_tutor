@@ -3,13 +3,13 @@ import Home from '../components/Home.jsx'
 import {openModal} from '../actions/main'
 
 const mapStateToProps = (state) => {
-  let spendTime = (Date.now() - state.keyboard.startTypingTime) / (1000 * 60);
+  let spendTime = (Date.now() - state.main.startTypingTime) / (1000 * 60);
 
   return {
-    successTypes: state.keyboard.successTypes,
-    errorTypes: state.keyboard.errorTypes,
-    speed: parseInt((state.keyboard.successTypes + state.keyboard.errorTypes) / spendTime, 10),
-    mode: state.keyboard.mode
+    successTypes: state.main.successTypes,
+    errorTypes: state.main.errorTypes,
+    speed: parseInt((state.main.successTypes + state.main.errorTypes) / spendTime, 10),
+    mode: state.main.mode
   }
 }
 

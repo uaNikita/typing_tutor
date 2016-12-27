@@ -5,10 +5,10 @@ import KeyPad from '../components/Keypad.jsx'
 const mapStateToProps = (state) => {
 
   return {
-    keys: find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys,
-    pressedRightIds: state.keyboard.pressedRightIds,
-    pressedWrongIds: state.keyboard.pressedWrongIds,
-    idCharsToType: state.keyboard.idCharsToType
+    keys: find(state.main.keyboards, {'name': state.main.keyboardName}).keys,
+    pressedRightIds: state.main.pressedRightIds,
+    pressedWrongIds: state.main.pressedWrongIds,
+    idCharsToType: state.main.idCharsToType
   }
 
 }

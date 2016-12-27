@@ -1,13 +1,13 @@
 import store from './../store';
 import {find, forEach, filter, random, times} from 'lodash';
 
-export function getIdsFromChar(keys, char) {
+export function getIdsFromCharacter(keys, сharacter) {
    let charsToType = [];
 
    keys.forEach(obj => {
 
       // check if it upper case letter
-      if (obj.shiftKey === char) {
+      if (obj.shiftKey === сharacter) {
          charsToType.push(obj.id);
 
          if (obj.hand === 'left') {
@@ -16,7 +16,7 @@ export function getIdsFromChar(keys, char) {
             charsToType.push('Left Shift');
          }
 
-      } else if (obj.key === char) {
+      } else if (obj.key === сharacter) {
          charsToType.push(obj.id)
       }
 
@@ -43,7 +43,7 @@ export function sliceChar(chars, idChars) {
    return newChars;
 }
 
-export const createLesson = (() => {
+export const generateLesson = (() => {
    let minWordLength = 3;
    let maxChars = 50;
 
@@ -78,10 +78,10 @@ export const createLesson = (() => {
    }
 })();
 
-export function getLearningLettersSet() {
+export function getFingersSet() {
    let state = store.getState();
 
-   let keys = find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys;
+   let keys = find(state.main.keyboards, {'name': state.main.keyboardName}).keys;
    var fingers = ['index', 'middle', 'ring', 'pinky'];
    var rows = ['middle', 'top', 'bottom'];
    var hands = ['left', 'right'];

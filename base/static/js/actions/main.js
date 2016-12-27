@@ -1,8 +1,9 @@
-import * as types from '../constants/action_types';
 import {find, assign} from 'lodash';
+import * as types from '../constants/action-types/main';
+
 import {updateFromTextModeCharToType, typeTextMode} from './text-mode';
-import {updateFromLearningModeCharToType, typeLearningMode} from './learning-mode';
-import {getIdsFromChar, sliceChar} from '../utils';
+import {updateCharToType as updateFromLearningModeCharToType, typeLearningMode} from './learning-mode';
+import {getIdsFromCharacter, sliceChar} from '../utils';
 
 export function setMode(mode) {
   return {
@@ -90,35 +91,20 @@ export function addErrorType() {
 export function stopBeenPressedKey(char) {
   return (dispatch, getState) => {
     let state = getState()
-    let keys = find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys;
+    let keys = find(state.main.keyboards, {'name': state.main.keyboardName}).keys;
 
     let sliceCurrentChar = pressed => {
-      return sliceChar(pressed, getIdsFromChar(keys, char))
+      return sliceChar(pressed, getIdsFromCharacter(keys, char))
     }
 
-    dispatch(setPressedRightIds(sliceCurrentChar(state.keyboard.pressedRightIds)));
-    dispatch(setPressedWrongIds(sliceCurrentChar(state.keyboard.pressedWrongIds)));
+    dispatch(setPressedRightIds(sliceCurrentChar(state.main.pressedRightIds)));
+    dispatch(setPressedWrongIds(sliceCurrentChar(state.main.pressedWrongIds)));
   }
 }
-
-export function stopBeenPressedKey(char) {
-  return (dispatch, getState) => {
-    let state = getState()
-    let keys = find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys;
-
-    let sliceCurrentChar = pressed => {
-      return sliceChar(pressed, getIdsFromChar(keys, char))
-    }
-
-    dispatch(setPressedRightIds(sliceCurrentChar(state.keyboard.pressedRightIds)));
-    dispatch(setPressedWrongIds(sliceCurrentChar(state.keyboard.pressedWrongIds)));
-  }
-}
-
 
 export function updateCharToType() {
   return (dispatch, getState) => {
-    switch (getState().keyboard.mode) {
+    switch (getState().main.mode) {
       case 'text':
         dispatch(updateFromTextModeCharToType());
         break;
@@ -137,7 +123,7 @@ export function typeChar(char) {
       dispatch(stopBeenPressedKey(char));
     }, 100);
 
-    switch (getState().keyboard.mode) {
+    switch (getState().main.mode) {
       case 'text':
         dispatch(typeTextMode(char))
         break

@@ -1,4 +1,5 @@
-import * as types from '../constants/action_types';
+import * as types from '../constants/action-types/main';
+
 import keyboards from '../constants/keyboards';
 import {
   forEach,

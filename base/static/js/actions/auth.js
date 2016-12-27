@@ -1,21 +1,16 @@
-export const SEND_LOGIN_REQUEST = 'SEND_LOGIN_REQUEST'
-export const RECEIVE_LOGIN_ANSWER = 'RECEIVE_LOGIN_ANSWER'
-export const SEND_REG_REQUEST = 'SEND_REG_REQUEST'
-export const RECEIVE_REG_ANSWER = 'SEND_REG_REQUEST'
-export const SEND_PASS_RESET_REQUEST = 'SEND_REG_REQUEST'
-export const RECEIVE_PASS_RESET_ANSWER = 'SEND_REG_REQUEST'
+import * as types from '../constants/action-types/auth';
 
 function sendLoginRequest(login, pass) {
   return {
-    type: SEND_LOGIN_REQUEST,
+    type: types.SEND_LOGIN_REQUEST,
     login,
     pass
   };
 }
 
-receiveLoginAnswer = (success, errors) => {
+let receiveLoginAnswer = (success, errors) => {
   return {
-    type: RECEIVE_LOGIN_ANSWER,
+    type: types.RECEIVE_LOGIN_ANSWER,
     success,
     errors
   };
@@ -58,3 +53,4 @@ const mapDispatchToProps = (dispatch) => {
     }
   }
 }
+

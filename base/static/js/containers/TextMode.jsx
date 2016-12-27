@@ -19,7 +19,7 @@ const mapStateToProps = (state) => {
   return {
     texts,
     currentTextId: state.textMode.currentTextId,
-    mode: state.keyboard.mode
+    mode: state.main.mode
   }
 }
 

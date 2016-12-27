@@ -2,29 +2,31 @@ import {connect} from 'react-redux'
 import {find} from 'lodash';
 import LearningFree from '../components/LearningFree.jsx'
 import {
-  addLetterToLesson,
-  removeLetterFromLesson,
-  generateLessonFromCurrentMode
+  addLetterToFreeLetters,
+  removeLetterFromFreeLetters,
+  generateAndSetFreeLesson
 } from '../actions/learning-mode'
 
 const mapStateToProps = (state) => {
+
+
   return {
-    keys: find(state.keyboard.keyboards, {'name': state.keyboard.keyboardName}).keys,
-    letters: state.learningMode.lettersFreeMode
+    keys: find(state.main.keyboards, {'name': state.main.keyboardName}).keys,
+    letters: state.learningMode.lettersFree
   }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     addLetter: (letter) => {
-      dispatch(addLetterToLesson(letter))
+      dispatch(addLetterToFreeLetters(letter));
 
-      dispatch(generateLessonFromCurrentMode())
+      dispatch(generateAndSetFreeLesson());
     },
     removeLetter: (letter) => {
-      dispatch(removeLetterFromLesson(letter))
+      dispatch(removeLetterFromFreeLetters(letter));
 
-      dispatch(generateLessonFromCurrentMode())
+      dispatch(generateAndSetFreeLesson());
     }
   }
 }

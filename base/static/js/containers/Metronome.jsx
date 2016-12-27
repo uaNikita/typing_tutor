@@ -4,8 +4,8 @@ import { actionMetronome } from '../actions/main'
 
 const mapStateToProps = (state) => {
   return {
-    status: state.keyboard.metronomeStatus,
-    interval: state.keyboard.metronomeInterval,
+    status: state.main.metronomeStatus,
+    interval: state.main.metronomeInterval,
   }
 }
 

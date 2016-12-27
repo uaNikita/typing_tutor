@@ -6,14 +6,14 @@ import noUiSlider from 'nouislider';
 import classNames from 'classNames';
 import Key from './Key.jsx';
 
-import {getLearningLettersSet} from "../utils";
+import {getFingersSet} from "../utils";
 
 class LearningFingers extends Component {
 
    constructor(props) {
       super(props);
 
-      this.fingersLetters = getLearningLettersSet();
+      this.fingersLetters = getFingersSet();
    }
 
    componentDidMount() {
@@ -112,11 +112,6 @@ class LearningFingers extends Component {
         </div>
       )
    }
-
-
-   _setLetters(letterKeys) {
-
-   };
 
 }
 

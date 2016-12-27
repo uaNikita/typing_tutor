@@ -1,4 +1,5 @@
-import * as types from '../constants/action_types';
+import * as types from '../constants/action-types/modal';
+
 import {assign} from 'lodash';
 
 const INITIAL_STATE = {

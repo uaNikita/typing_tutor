@@ -1,4 +1,5 @@
-import {SEND_LOGIN_REQUEST, RECEIVE_LOGIN_ANSWER} from '../constants/action_types';
+import * as types from '../constants/action-types/auth';
+
 import {
   forEach
 } from 'lodash';
@@ -12,10 +13,10 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
 
-    case SEND_LOGIN_REQUEST:
+    case types.SEND_LOGIN_REQUEST:
       return actionMetronome(state, action.action, action.value);
 
-    case RECEIVE_LOGIN_ANSWER:
+    case types.RECEIVE_LOGIN_ANSWER:
       return assign({}, state, {
         keyboardName: action.name
       });
