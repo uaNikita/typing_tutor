@@ -1,5 +1,5 @@
 import store from './../store';
-import {find, forEach, filter, random, times} from 'lodash';
+import {find, forEach, filter, random, times, concat} from 'lodash';
 
 export function getIdsFromCharacter(keys, сharacter) {
    let charsToType = [];

@@ -3,12 +3,8 @@ import {find, concat} from 'lodash';
 import LearningFingers from '../components/LearningFingers.jsx'
 import {
   setFingersSetSize,
-  setFingersLesson,
-  setCurrentLesson,
-  updateCharToType
+  generateAndSetFingersLesson
 } from '../actions/learning-mode'
-
-import {getFingersSet, generateLesson} from "../utils";
 
 const mapStateToProps = (state) => {
    return {
@@ -18,38 +14,17 @@ const mapStateToProps = (state) => {
    }
 };
 
-const mergeProps = (stateProps, dispatchProps) => {
-
-   const {fingersSetSize, maxWordLength, keys} = stateProps;
-
-   const {dispatch} = dispatchProps;
-
+const mapDispatchToProps = (dispatch) => {
    return {
-      fingersSetSize,
-      keys,
       setFingersSetSize: (size) => {
          dispatch(setFingersSetSize(size));
 
-         let lettersSet = getFingersSet();
-
-         lettersSet.splice(size);
-
-         lettersSet = concat.apply(null, lettersSet);
-
-         let lesson = generateLesson(maxWordLength, lettersSet);
-
-         dispatch(setFingersLesson(lesson));
-
-         dispatch(setCurrentLesson(lesson));
-
-         dispatch(updateCharToType());
+         dispatch(generateAndSetFingersLesson(size));
       }
-   };
-
-};
+   }
+}
 
 export default connect(
   mapStateToProps,
-  null,
-  mergeProps
+  mapDispatchToProps
 )(LearningFingers);

@@ -68351,6 +68351,7 @@
 	exports.removeLetterFromFreeLetters = removeLetterFromFreeLetters;
 	exports.typeOnLesson = typeOnLesson;
 	exports.selectMode = selectMode;
+	exports.generateAndSetFingersLesson = generateAndSetFingersLesson;
 	exports.generateAndSetFreeLesson = generateAndSetFreeLesson;
 	exports.updateCharToType = updateCharToType;
 	exports.typeLearningMode = typeLearningMode;
@@ -68449,58 +68450,40 @@
 	      dispatch(setMode(mode));
 
 	      var state = getState();
-	      var learningModeState = state.learningMode;
 	      var lesson = '';
 
 	      switch (mode) {
 	         case 'fingers':
 
-	            lesson = learningModeState.lessonFingers;
-
-	            if (!lesson) {
-
-	               var lettersSet = (0, _utils.getFingersSet)();
-
-	               lettersSet.splice(learningModeState.fingersSetSize);
-
-	               lettersSet = _lodash.concat.apply(null, lettersSet);
-
-	               lesson = (0, _utils.generateLesson)(learningModeState.maxWordLength, lettersSet);
-
-	               dispatch(setFingersLesson(lesson));
-	            }
+	            lesson = state.learningMode.lessonFingers;
 
 	            break;
 
 	         case 'free':
 
-	            lesson = learningModeState.lessonFree;
-
-	            if (!lesson) {
-
-	               var lettersFree = learningModeState.lettersFree;
-
-	               if (!lettersFree.length) {
-
-	                  var keys = (0, _lodash.find)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
-
-	                  lettersFree = (0, _lodash.filter)(keys, {
-	                     row: 'middle',
-	                     type: 'letter'
-	                  }).map(function (obj) {
-	                     return obj.key;
-	                  });
-
-	                  dispatch(setFingersSetSize(lettersFree));
-	               }
-
-	               lesson = (0, _utils.generateLesson)(learningModeState.maxWordLength, lettersFree);
-
-	               dispatch(setFreeLesson(lesson));
-	            }
+	            lesson = state.learningMode.lessonFree;
 
 	            break;
 	      }
+
+	      dispatch(setCurrentLesson(lesson));
+	   };
+	}
+
+	function generateAndSetFingersLesson() {
+	   return function (dispatch, getState) {
+
+	      var state = getState();
+
+	      var fingersSet = (0, _utils.getFingersSet)();
+
+	      fingersSet.splice(state.learningMode.fingersSetSize);
+
+	      fingersSet = _lodash.concat.apply(null, fingersSet);
+
+	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, fingersSet);
+
+	      dispatch(setFingersLesson(lesson));
 
 	      dispatch(setCurrentLesson(lesson));
 	   };
@@ -78948,6 +78931,8 @@
 
 	var _reactRedux = __webpack_require__(173);
 
+	var _lodash = __webpack_require__(280);
+
 	var _LearningMode = __webpack_require__(546);
 
 	var _LearningMode2 = _interopRequireDefault(_LearningMode);
@@ -78961,27 +78946,43 @@
 	var mapStateToProps = function mapStateToProps(state) {
 	   return {
 	      maxWordLength: state.learningMode.maxWordLength,
-	      lesson: state.learningMode.lesson.typed + state.learningMode.lesson.last,
+	      lesson: state.learningMode.lesson.last,
 	      learningMode: state.learningMode.mode,
 	      mode: state.main.mode
 	   };
 	};
 
-	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-	   return {
-	      setMaxWordLength: function setMaxWordLength(length) {
-	         dispatch((0, _learningMode.setMaxWordLength)(length));
-	      },
-	      setLearningMode: function setLearningMode(mode) {
-	         dispatch((0, _learningMode.setMode)(mode));
-	      },
+	var mergeProps = function mergeProps(stateProps, dispatchProps, ownProps) {
+	   var learningMode = stateProps.learningMode;
+	   var dispatch = dispatchProps.dispatch;
+
+
+	   return (0, _lodash.assign)({}, stateProps, ownProps, {
 	      setMode: function setMode(mode) {
 	         dispatch((0, _main.setMode)(mode));
+	      },
+	      setMaxWordLength: function setMaxWordLength(length) {
+
+	         dispatch((0, _learningMode.setMaxWordLength)(length));
+
+	         switch (learningMode) {
+	            case 'fingers':
+
+	               dispatch((0, _learningMode.generateAndSetFingersLesson)());
+
+	               break;
+
+	            case 'free':
+
+	               dispatch((0, _learningMode.generateAndSetFreeLesson)());
+
+	               break;
+	         }
 	      }
-	   };
+	   });
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningMode2.default);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, null, mergeProps)(_LearningMode2.default);
 
 /***/ },
 /* 546 */
@@ -79087,9 +79088,6 @@
 	         var learningModePath = '/settings/learning-mode/';
 
 	         var switcherChecked = false;
-
-	         console.log('learningMode', learningMode);
-	         console.log('mode', mode);
 
 	         var switcher = _react2.default.createElement(_Switcher2.default, { checked: switcherChecked, onChange: this._onSwitcherChange.bind(this) });
 
@@ -79199,8 +79197,6 @@
 
 	var _learningMode = __webpack_require__(469);
 
-	var _utils = __webpack_require__(284);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
@@ -79211,37 +79207,17 @@
 	   };
 	};
 
-	var mergeProps = function mergeProps(stateProps, dispatchProps) {
-	   var fingersSetSize = stateProps.fingersSetSize;
-	   var maxWordLength = stateProps.maxWordLength;
-	   var keys = stateProps.keys;
-	   var dispatch = dispatchProps.dispatch;
-
-
+	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	   return {
-	      fingersSetSize: fingersSetSize,
-	      keys: keys,
 	      setFingersSetSize: function setFingersSetSize(size) {
 	         dispatch((0, _learningMode.setFingersSetSize)(size));
 
-	         var lettersSet = (0, _utils.getFingersSet)();
-
-	         lettersSet.splice(size);
-
-	         lettersSet = _lodash.concat.apply(null, lettersSet);
-
-	         var lesson = (0, _utils.generateLesson)(maxWordLength, lettersSet);
-
-	         dispatch((0, _learningMode.setFingersLesson)(lesson));
-
-	         dispatch((0, _learningMode.setCurrentLesson)(lesson));
-
-	         dispatch((0, _learningMode.updateCharToType)());
+	         dispatch((0, _learningMode.generateAndSetFingersLesson)(size));
 	      }
 	   };
 	};
 
-	exports.default = (0, _reactRedux.connect)(mapStateToProps, null, mergeProps)(_LearningFingers2.default);
+	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningFingers2.default);
 
 /***/ },
 /* 548 */
@@ -79454,10 +79430,14 @@
 	      addLetter: function addLetter(letter) {
 	         dispatch((0, _learningMode.addLetterToFreeLetters)(letter));
 
+	         console.log('addLetter');
+
 	         dispatch((0, _learningMode.generateAndSetFreeLesson)());
 	      },
 	      removeLetter: function removeLetter(letter) {
 	         dispatch((0, _learningMode.removeLetterFromFreeLetters)(letter));
+
+	         console.log('removeLetter');
 
 	         dispatch((0, _learningMode.generateAndSetFreeLesson)());
 	      }
@@ -79473,7 +79453,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -79501,78 +79481,81 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var LearningFree = function (_Component) {
-	  _inherits(LearningFree, _Component);
+	   _inherits(LearningFree, _Component);
 
-	  function LearningFree() {
-	    _classCallCheck(this, LearningFree);
+	   function LearningFree() {
+	      _classCallCheck(this, LearningFree);
 
-	    return _possibleConstructorReturn(this, Object.getPrototypeOf(LearningFree).apply(this, arguments));
-	  }
+	      return _possibleConstructorReturn(this, Object.getPrototypeOf(LearningFree).apply(this, arguments));
+	   }
 
-	  _createClass(LearningFree, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
+	   _createClass(LearningFree, [{
+	      key: 'render',
+	      value: function render() {
+	         var _this2 = this;
 
-	      var _props = this.props;
-	      var keys = _props.keys;
-	      var letters = _props.letters;
+	         var _props = this.props;
+	         var keys = _props.keys;
+	         var letters = _props.letters;
 
 
-	      var keyNodes = keys.map(function (obj) {
-	        var className = 'keyboard__key';
+	         var keyNodes = keys.map(function (obj) {
+	            var className = 'keyboard__key';
 
-	        var keyProps = {
-	          'data-key': obj.id
-	        };
+	            var keyProps = {
+	               'data-key': obj.id
+	            };
 
-	        if (obj.type === 'letter') {
+	            if (obj.type === 'letter') {
 
-	          if (letters.indexOf(obj.key) + 1) {
-	            keyProps.onClick = _this2._onClickSelectedKey.bind(_this2, obj.key);
-	            className = (0, _classNames2.default)(className, 'keyboard__key_selected');
-	          } else {
-	            keyProps.onClick = _this2._onClickNonSelectedKey.bind(_this2, obj.key);
-	          }
-	        } else {
-	          className = (0, _classNames2.default)(className, 'keyboard__key_disabled');
-	        }
+	               if (letters.indexOf(obj.key) + 1) {
+	                  if (letters.length > 1) {
+	                     keyProps.onClick = _this2._onClickSelectedKey.bind(_this2, obj.key);
+	                  }
 
-	        keyProps.className = className;
+	                  className = (0, _classNames2.default)(className, 'keyboard__key_selected');
+	               } else {
+	                  keyProps.onClick = _this2._onClickNonSelectedKey.bind(_this2, obj.key);
+	               }
+	            } else {
+	               className = (0, _classNames2.default)(className, 'keyboard__key_disabled');
+	            }
 
-	        return _react2.default.createElement(_Key2.default, {
-	          key: obj.id,
-	          keyProps: keyProps,
-	          type: obj.type,
-	          char: obj.key,
-	          shiftChar: obj.shiftKey,
-	          classNameShift: 'keyboard__shift-key'
-	        });
-	      });
+	            keyProps.className = className;
 
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'settings-learning__keyboard' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'keyboard' },
-	          keyNodes
-	        )
-	      );
-	    }
-	  }, {
-	    key: '_onClickNonSelectedKey',
-	    value: function _onClickNonSelectedKey(key) {
-	      this.props.addLetter(key);
-	    }
-	  }, {
-	    key: '_onClickSelectedKey',
-	    value: function _onClickSelectedKey(key) {
-	      this.props.removeLetter(key);
-	    }
-	  }]);
+	            return _react2.default.createElement(_Key2.default, {
+	               key: obj.id,
+	               keyProps: keyProps,
+	               type: obj.type,
+	               char: obj.key,
+	               shiftChar: obj.shiftKey,
+	               classNameShift: 'keyboard__shift-key'
+	            });
+	         });
 
-	  return LearningFree;
+	         return _react2.default.createElement(
+	            'div',
+	            { className: 'settings-learning__keyboard' },
+	            _react2.default.createElement(
+	               'div',
+	               { className: 'keyboard' },
+	               keyNodes
+	            )
+	         );
+	      }
+	   }, {
+	      key: '_onClickNonSelectedKey',
+	      value: function _onClickNonSelectedKey(key) {
+	         this.props.addLetter(key);
+	      }
+	   }, {
+	      key: '_onClickSelectedKey',
+	      value: function _onClickSelectedKey(key) {
+	         this.props.removeLetter(key);
+	      }
+	   }]);
+
+	   return LearningFree;
 	}(_react.Component);
 
 	exports.default = LearningFree;

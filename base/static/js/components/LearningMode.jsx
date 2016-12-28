@@ -54,9 +54,6 @@ class LearningMode extends Component {
 
       let switcherChecked = false;
 
-      console.log('learningMode', learningMode);
-      console.log('mode', mode);
-
       let switcher = <Switcher checked={switcherChecked} onChange={this._onSwitcherChange.bind(this)} />
 
       if (mode === 'learning') {

@@ -19,10 +19,14 @@ const mapDispatchToProps = (dispatch) => {
       addLetter: (letter) => {
          dispatch(addLetterToFreeLetters(letter));
 
+         console.log('addLetter');
+
          dispatch(generateAndSetFreeLesson());
       },
       removeLetter: (letter) => {
          dispatch(removeLetterFromFreeLetters(letter));
+
+         console.log('removeLetter');
 
          dispatch(generateAndSetFreeLesson());
       }

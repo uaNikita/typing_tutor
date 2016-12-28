@@ -98,64 +98,43 @@ export function selectMode(mode) {
       dispatch(setMode(mode));
 
       let state = getState();
-      let learningModeState = state.learningMode;
       let lesson = '';
 
       switch (mode) {
          case 'fingers':
 
-            lesson = learningModeState.lessonFingers;
-
-            if (!lesson) {
-
-               let lettersSet = getFingersSet();
-
-               lettersSet.splice(learningModeState.fingersSetSize);
-
-               lettersSet = concat.apply(null, lettersSet);
-
-               lesson = generateLesson(learningModeState.maxWordLength, lettersSet);
-
-               dispatch(setFingersLesson(lesson));
-
-            }
+            lesson = state.learningMode.lessonFingers;
 
             break;
 
          case 'free':
 
-            lesson = learningModeState.lessonFree;
-
-            if (!lesson) {
-
-               let lettersFree = learningModeState.lettersFree
-
-               if (!lettersFree.length) {
-
-                  let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys
-
-                  lettersFree = filter(keys, {
-                     row: 'middle',
-                     type: 'letter'
-                  }).map(obj=> {
-                     return obj.key;
-                  });
-
-                  dispatch(setFingersSetSize(lettersFree));
-
-               }
-
-               lesson = generateLesson(learningModeState.maxWordLength, lettersFree);
-
-               dispatch(setFreeLesson(lesson));
-
-            }
+            lesson = state.learningMode.lessonFree;
 
             break;
       }
 
       dispatch(setCurrentLesson(lesson));
 
+   }
+}
+
+export function generateAndSetFingersLesson() {
+   return (dispatch, getState) => {
+
+      let state = getState();
+
+      let fingersSet = getFingersSet();
+
+      fingersSet.splice(state.learningMode.fingersSetSize);
+
+      fingersSet = concat.apply(null, fingersSet);
+
+      let lesson = generateLesson(state.learningMode.maxWordLength, fingersSet);
+
+      dispatch(setFingersLesson(lesson));
+
+      dispatch(setCurrentLesson(lesson));
    }
 }
 
