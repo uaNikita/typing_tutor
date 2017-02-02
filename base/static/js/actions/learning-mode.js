@@ -1,4 +1,4 @@
-import {find, random, times, concat, filter} from 'lodash';
+import {find, random, times, concat, filter, uniqWith, isEqual} from 'lodash';
 
 import {
   setIdsCharToType,
@@ -213,7 +213,7 @@ export function initializeLearningState() {
          };
       });
 
-      let size = _.uniqWith(resultForUnionWith, _.isEqual).length;
+      let size = uniqWith(resultForUnionWith, isEqual).length;
 
       dispatch(setFingersSetSize(size));
 
