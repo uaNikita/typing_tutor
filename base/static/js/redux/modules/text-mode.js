@@ -1,6 +1,19 @@
-import * as types from '../constants/action-types/text-mode';
+export const SELECT_TEXT = 'text-mode/SELECT_TEXT';
+export const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
+export const ADD_NEW_TEXT = 'text-mode/ADD_NEW_TEXT';
+export const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
 
-import {assign, cloneDeep} from 'lodash';
+import {assign, cloneDeep, find} from 'lodash';
+
+import {getIdsFromCharacter, sliceChar} from "../../utils";
+import {
+  setIdsCharToType,
+  setPressedRightIds,
+  setPressedWrongIds,
+  addSuccesType,
+  addErrorType,
+  updateCharToType
+} from "./main";
 
 const INITIAL_STATE = {
   currentTextId: 2,
@@ -36,9 +49,9 @@ const INITIAL_STATE = {
 
 let nextTextId = 10
 
-export default (state = INITIAL_STATE, action) => {
+export default (state = INITIAL_STATE, action = {}) => {
   switch (action.type) {
-    case types.ADD_NEW_TEXT:
+    case ADD_NEW_TEXT:
       nextTextId += 1;
 
       return assign({}, state, {
@@ -51,12 +64,12 @@ export default (state = INITIAL_STATE, action) => {
         })
       });
 
-    case types.SELECT_TEXT:
+    case SELECT_TEXT:
       return assign({}, state, {
         currentTextId: action.textId
       });
 
-    case types.REFRESH_TEXT:
+    case REFRESH_TEXT:
       let text = state.entities[action.textId];
 
       return assign({}, state, {
@@ -69,7 +82,7 @@ export default (state = INITIAL_STATE, action) => {
         })
       });
 
-    case types.TYPE_ON_ENTITIE:
+    case TYPE_ON_ENTITIE:
       return (() => {
         let entities = cloneDeep(state.entities);
 
@@ -89,3 +102,74 @@ export default (state = INITIAL_STATE, action) => {
 
   }
 };
+
+export function addNewText(title, text) {
+  return {
+    type: ADD_NEW_TEXT,
+    title,
+    text
+  };
+}
+
+export function selectText(textId) {
+  return {
+    type: SELECT_TEXT,
+    textId
+  };
+}
+
+export function refreshText(textId) {
+  return {
+    type: REFRESH_TEXT,
+    textId
+  };
+}
+
+export function typeOnEntitie(textId) {
+  return {
+    type: TYPE_ON_ENTITIE,
+    textId
+  };
+}
+
+export function updateFromTextModeCharToType() {
+  return (dispatch, getState) => {
+    let state = getState();
+    let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
+    let textId = state.textMode.currentTextId;
+    let entities = state.textMode.entities;
+
+    let idsCharToType = getIdsFromCharacter(keys, entities[textId].last[0]);
+
+    dispatch(setIdsCharToType(idsCharToType));
+  }
+}
+
+export function typeTextMode(char) {
+  return (dispatch, getState) => {
+    let state = getState();
+    let keyboardState = state.keyboard;
+    var textModeState = state.textMode;
+    let keys = find(keyboardState.keyboards, {'name': keyboardState.keyboard}).keys
+    let textId = textModeState.currentTextId;
+    let idsChar = getIdsFromCharacter(keys, char);
+
+    if (textModeState.entities[textId].last[0] === char) {
+      let pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
+
+      dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
+
+      dispatch(typeOnEntitie(textId));
+
+      dispatch(addSuccesType());
+
+      dispatch(updateCharToType());
+    } else {
+      let pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar)
+
+      dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
+
+      dispatch(addErrorType());
+    }
+  }
+}

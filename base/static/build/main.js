@@ -21565,13 +21565,13 @@
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
-	var _store = __webpack_require__(427);
+	var _store = __webpack_require__(679);
 
 	var _store2 = _interopRequireDefault(_store);
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
-	var _learningMode = __webpack_require__(561);
+	var _learningMode = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/learning-mode\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41853,7 +41853,7 @@
 
 	var _Modal2 = _interopRequireDefault(_Modal);
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -41946,178 +41946,7 @@
 	exports.default = Modal;
 
 /***/ },
-/* 296 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _find2 = __webpack_require__(297);
-
-	var _find3 = _interopRequireDefault(_find2);
-
-	exports.setMode = setMode;
-	exports.pressKey = pressKey;
-	exports.updateStartVariables = updateStartVariables;
-	exports.actionMetronome = actionMetronome;
-	exports.setKeyboard = setKeyboard;
-	exports.openModal = openModal;
-	exports.closeModal = closeModal;
-	exports.setPressedRightIds = setPressedRightIds;
-	exports.setPressedWrongIds = setPressedWrongIds;
-	exports.setIdsCharToType = setIdsCharToType;
-	exports.addSuccesType = addSuccesType;
-	exports.addErrorType = addErrorType;
-	exports.stopBeenPressedKey = stopBeenPressedKey;
-	exports.updateCharToType = updateCharToType;
-	exports.typeChar = typeChar;
-
-	var _main = __webpack_require__(410);
-
-	var types = _interopRequireWildcard(_main);
-
-	var _textMode = __webpack_require__(411);
-
-	var _learningMode = __webpack_require__(561);
-
-	var _utils = __webpack_require__(412);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function setMode(mode) {
-	  return {
-	    type: types.SET_MODE,
-	    mode: mode
-	  };
-	}
-
-	function pressKey(char) {
-	  return {
-	    type: types.PRESS_KEY,
-	    char: char
-	  };
-	}
-
-	function updateStartVariables() {
-	  return {
-	    type: types.UPDATE_START_VARIABLES
-	  };
-	}
-
-	function actionMetronome(action, value) {
-	  return {
-	    type: types.ACTION_METRONOME,
-	    action: action,
-	    value: value
-	  };
-	}
-
-	function setKeyboard(name) {
-	  return {
-	    type: types.SET_KEYBOARD,
-	    name: name
-	  };
-	}
-
-	function openModal(name, closable) {
-	  return {
-	    type: types.OPEN_MODAL,
-	    name: name,
-	    closable: closable
-	  };
-	}
-
-	function closeModal() {
-	  return {
-	    type: types.CLOSE_MODAL
-	  };
-	}
-
-	function setPressedRightIds(ids) {
-	  return {
-	    type: types.SET_PRESSED_RIGHT_IDS,
-	    ids: ids
-	  };
-	}
-
-	function setPressedWrongIds(ids) {
-	  return {
-	    type: types.SET_PRESSED_WRONG_IDS,
-	    ids: ids
-	  };
-	}
-
-	function setIdsCharToType(id) {
-	  return {
-	    type: types.SET_IDS_CHAR_TO_TYPE,
-	    id: id
-	  };
-	}
-
-	function addSuccesType() {
-	  return {
-	    type: types.ADD_SUCCESS_TYPE
-	  };
-	}
-
-	function addErrorType() {
-	  return {
-	    type: types.ADD_ERROR_TYPE
-	  };
-	}
-
-	function stopBeenPressedKey(char) {
-	  return function (dispatch, getState) {
-	    var state = getState();
-	    var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
-
-	    var sliceCurrentChar = function sliceCurrentChar(pressed) {
-	      return (0, _utils.sliceChar)(pressed, (0, _utils.getIdsFromCharacter)(keys, char));
-	    };
-
-	    dispatch(setPressedRightIds(sliceCurrentChar(state.main.pressedRightIds)));
-	    dispatch(setPressedWrongIds(sliceCurrentChar(state.main.pressedWrongIds)));
-	  };
-	}
-
-	function updateCharToType() {
-	  return function (dispatch, getState) {
-	    switch (getState().main.mode) {
-	      case 'text':
-	        dispatch((0, _textMode.updateFromTextModeCharToType)());
-	        break;
-	      case 'learning':
-	        dispatch((0, _learningMode.updateCharToType)());
-	        break;
-	    }
-	  };
-	}
-
-	function typeChar(char) {
-	  return function (dispatch, getState) {
-	    dispatch(pressKey(char));
-
-	    setTimeout(function () {
-	      dispatch(stopBeenPressedKey(char));
-	    }, 100);
-
-	    switch (getState().main.mode) {
-	      case 'text':
-	        dispatch((0, _textMode.typeTextMode)(char));
-	        break;
-	      case 'learning':
-	        dispatch((0, _learningMode.typeLearningMode)(char));
-	        break;
-	    }
-	  };
-	}
-
-/***/ },
+/* 296 */,
 /* 297 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -45925,132 +45754,8 @@
 
 
 /***/ },
-/* 410 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var PRESS_KEY = exports.PRESS_KEY = 'PRESS_KEY';
-
-	var UPDATE_START_VARIABLES = exports.UPDATE_START_VARIABLES = 'UPDATE_START_VARIABLES';
-	var SET_MODE = exports.SET_MODE = 'SET_MODE';
-	var ACTION_METRONOME = exports.ACTION_METRONOME = 'ACTION_METRONOME';
-	var SET_KEYBOARD = exports.SET_KEYBOARD = 'SET_KEYBOARD';
-
-	var SET_PRESSED_RIGHT_IDS = exports.SET_PRESSED_RIGHT_IDS = 'SET_PRESSED_RIGHT_IDS';
-	var SET_PRESSED_WRONG_IDS = exports.SET_PRESSED_WRONG_IDS = 'SET_PRESSED_WRONG_IDS';
-	var SET_IDS_CHAR_TO_TYPE = exports.SET_IDS_CHAR_TO_TYPE = 'SET_IDS_CHAR_TO_TYPE';
-	var ADD_SUCCESS_TYPE = exports.ADD_SUCCESS_TYPE = 'ADD_SUCCESS_TYPE';
-	var ADD_ERROR_TYPE = exports.ADD_ERROR_TYPE = 'ADD_ERROR_TYPE';
-
-/***/ },
-/* 411 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _find2 = __webpack_require__(297);
-
-	var _find3 = _interopRequireDefault(_find2);
-
-	exports.addNewText = addNewText;
-	exports.selectText = selectText;
-	exports.refreshText = refreshText;
-	exports.typeOnEntitie = typeOnEntitie;
-	exports.updateFromTextModeCharToType = updateFromTextModeCharToType;
-	exports.typeTextMode = typeTextMode;
-
-	var _utils = __webpack_require__(412);
-
-	var _main = __webpack_require__(296);
-
-	var _textMode = __webpack_require__(546);
-
-	var types = _interopRequireWildcard(_textMode);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function addNewText(title, text) {
-	  return {
-	    type: types.ADD_NEW_TEXT,
-	    title: title,
-	    text: text
-	  };
-	}
-
-	function selectText(textId) {
-	  return {
-	    type: types.SELECT_TEXT,
-	    textId: textId
-	  };
-	}
-
-	function refreshText(textId) {
-	  return {
-	    type: types.REFRESH_TEXT,
-	    textId: textId
-	  };
-	}
-
-	function typeOnEntitie(textId) {
-	  return {
-	    type: types.TYPE_ON_ENTITIE,
-	    textId: textId
-	  };
-	}
-
-	function updateFromTextModeCharToType() {
-	  return function (dispatch, getState) {
-	    var state = getState();
-	    var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
-	    var textId = state.textMode.currentTextId;
-	    var entities = state.textMode.entities;
-
-	    var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, entities[textId].last[0]);
-
-	    dispatch((0, _main.setIdsCharToType)(idsCharToType));
-	  };
-	}
-
-	function typeTextMode(char) {
-	  return function (dispatch, getState) {
-	    var state = getState();
-	    var keyboardState = state.keyboard;
-	    var textModeState = state.textMode;
-	    var keys = (0, _find3.default)(keyboardState.keyboards, { 'name': keyboardState.keyboard }).keys;
-	    var textId = textModeState.currentTextId;
-	    var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
-
-	    if (textModeState.entities[textId].last[0] === char) {
-	      var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
-
-	      dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
-
-	      dispatch(typeOnEntitie(textId));
-
-	      dispatch((0, _main.addSuccesType)());
-
-	      dispatch((0, _main.updateCharToType)());
-	    } else {
-	      var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
-
-	      dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
-
-	      dispatch((0, _main.addErrorType)());
-	    }
-	  };
-	}
-
-/***/ },
+/* 410 */,
+/* 411 */,
 /* 412 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -46085,7 +45790,7 @@
 	exports.sliceChar = sliceChar;
 	exports.getFingersSet = getFingersSet;
 
-	var _store = __webpack_require__(427);
+	var _store = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./../store\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	var _store2 = _interopRequireDefault(_store);
 
@@ -46713,38 +46418,7 @@
 
 
 /***/ },
-/* 427 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _redux = __webpack_require__(190);
-
-	var _reduxLogger = __webpack_require__(428);
-
-	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
-
-	var _reduxThunk = __webpack_require__(434);
-
-	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
-
-	var _reducers = __webpack_require__(435);
-
-	var _reducers2 = _interopRequireDefault(_reducers);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var logger = (0, _reduxLogger2.default)();
-
-	exports.default = (0, _redux.createStore)(_reducers2.default, (0, _redux.applyMiddleware)(_reduxThunk2.default
-	// , logger
-	));
-
-/***/ },
+/* 427 */,
 /* 428 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -47634,49 +47308,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 435 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _redux = __webpack_require__(190);
-
-	var _reduxForm = __webpack_require__(436);
-
-	var _reactRouterRedux = __webpack_require__(270);
-
-	var _modal = __webpack_require__(524);
-
-	var _modal2 = _interopRequireDefault(_modal);
-
-	var _textMode = __webpack_require__(527);
-
-	var _textMode2 = _interopRequireDefault(_textMode);
-
-	var _learningMode = __webpack_require__(547);
-
-	var _learningMode2 = _interopRequireDefault(_learningMode);
-
-	var _main = __webpack_require__(556);
-
-	var _main2 = _interopRequireDefault(_main);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	exports.default = (0, _redux.combineReducers)({
-	  routing: _reactRouterRedux.routerReducer,
-	  form: _reduxForm.reducer,
-	  main: _main2.default,
-	  modal: _modal2.default,
-	  textMode: _textMode2.default,
-	  learningMode: _learningMode2.default
-	});
-
-/***/ },
+/* 435 */,
 /* 436 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -54001,65 +53633,7 @@
 	exports.default = propTypes;
 
 /***/ },
-/* 524 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _assign2 = __webpack_require__(525);
-
-	var _assign3 = _interopRequireDefault(_assign2);
-
-	var _modal = __webpack_require__(526);
-
-	var types = _interopRequireWildcard(_modal);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var INITIAL_STATE = {
-	  name: '',
-
-	  closable: true
-	};
-
-	exports.default = function () {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
-	  var action = arguments[1];
-
-	  switch (action.type) {
-
-	    case types.OPEN_MODAL:
-	      return function () {
-	        var closable = true;
-
-	        if (action.closable) {
-	          closable = action.closable;
-	        }
-
-	        return (0, _assign3.default)({}, state, {
-	          name: action.name,
-	          closable: closable
-	        });
-	      }();
-
-	    case types.CLOSE_MODAL:
-	      return (0, _assign3.default)({}, state, {
-	        name: ''
-	      });
-
-	    default:
-	      return state;
-
-	  }
-	};
-
-/***/ },
+/* 524 */,
 /* 525 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -54124,132 +53698,8 @@
 
 
 /***/ },
-/* 526 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var OPEN_MODAL = exports.OPEN_MODAL = 'OPEN_MODAL';
-	var CLOSE_MODAL = exports.CLOSE_MODAL = 'CLOSE_MODAL';
-
-/***/ },
-/* 527 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-
-	var _cloneDeep2 = __webpack_require__(528);
-
-	var _cloneDeep3 = _interopRequireDefault(_cloneDeep2);
-
-	var _assign4 = __webpack_require__(525);
-
-	var _assign5 = _interopRequireDefault(_assign4);
-
-	var _textMode = __webpack_require__(546);
-
-	var types = _interopRequireWildcard(_textMode);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-	var INITIAL_STATE = {
-	  currentTextId: 2,
-
-	  entities: {
-	    1: {
-	      title: 'First',
-	      typed: 'Dolphins are a widely distributed and diverse group of fully aqua',
-	      last: 'tTtTtttTTTtic marine mammals. They are an informal grouping within the order Cetacea, excluding whales and porpoises, so to zoologists the grouping is paraphyletic. The dolphins comprise the extant families Delphinidae (the oceanic dolphins), Platanistidae (the Indian river dolphins), Iniidae (the new world river dolphins), and Pontoporiidae (the brackish dolphins). There are 40 extant species of dolphins. Dolphins, alongside other cetaceans, belong to the clade Cetartiodactyla with even-toed ungulates, and their closest living relatives are the hippopotamuses, having diverged about 40 million years ago. Dolphins range in size from the 1.7 metres (5.6 ft) long and 50 kilograms (110 lb) Maui\'s dolphin to the 9.5 metres (31 ft) and 10 metric tons (11 short tons) killer whale. Several species exhibit sexual dimorphism, in that the males are larger than females. They have streamlined bodies and two limbs that are modified into flippers. Though not quite as flexible as seals, some dolphins can travel at 55.5 kilometres per hour (34.5 mph). Dolphins use their conical shaped teeth to capture fast moving prey. They have well-developed hearing − their hearing, which is adapted for both air and water, is so well developed that some can survive even if they are blind. Some species are well adapted for diving to great depths. They have a layer of fat, or blubber, under the skin to keep warm in the cold water.'
-	    },
-	    2: {
-	      title: 'Second',
-	      typed: '',
-	      last: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
-	    },
-	    3: {
-	      title: 'Long long long long long long long long long long long long long long long long long title',
-	      typed: 'Bears are mammals of the fa',
-	      last: 'mily Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
-	    },
-	    4: {
-	      title: 'Second',
-	      typed: 'Bears are mammals of the fa',
-	      last: 'mily Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
-	    },
-	    5: {
-	      title: 'Second',
-	      typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
-	      last: ''
-	    }
-	  }
-	};
-
-	var nextTextId = 10;
-
-	exports.default = function () {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
-	  var action = arguments[1];
-
-	  switch (action.type) {
-	    case types.ADD_NEW_TEXT:
-	      nextTextId += 1;
-
-	      return (0, _assign5.default)({}, state, {
-	        entities: (0, _assign5.default)({}, state.entities, _defineProperty({}, nextTextId - 1, {
-	          title: action.title,
-	          typed: '',
-	          last: action.text
-	        }))
-	      });
-
-	    case types.SELECT_TEXT:
-	      return (0, _assign5.default)({}, state, {
-	        currentTextId: action.textId
-	      });
-
-	    case types.REFRESH_TEXT:
-	      var text = state.entities[action.textId];
-
-	      return (0, _assign5.default)({}, state, {
-	        entities: (0, _assign5.default)({}, state.entities, _defineProperty({}, action.textId, {
-	          title: text.title,
-	          typed: '',
-	          last: text.typed + text.last
-	        }))
-	      });
-
-	    case types.TYPE_ON_ENTITIE:
-	      return function () {
-	        var entities = (0, _cloneDeep3.default)(state.entities);
-
-	        var text = entities[action.textId];
-
-	        text.typed += text.last[0];
-	        text.last = text.last.substring(1);
-
-	        return (0, _assign5.default)({}, state, {
-	          entities: entities
-	        });
-	      }();
-
-	    default:
-	      return state;
-
-	  }
-	};
-
-/***/ },
+/* 526 */,
+/* 527 */,
 /* 528 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -54905,144 +54355,8 @@
 
 
 /***/ },
-/* 546 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var SELECT_TEXT = exports.SELECT_TEXT = 'SELECT_TEXT';
-	var REFRESH_TEXT = exports.REFRESH_TEXT = 'REFRESH_TEXT';
-	var ADD_NEW_TEXT = exports.ADD_NEW_TEXT = 'ADD_NEW_TEXT';
-	var TYPE_ON_ENTITIE = exports.TYPE_ON_ENTITIE = 'TYPE_ON_ENTITIE';
-
-/***/ },
-/* 547 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-
-	var _pull2 = __webpack_require__(548);
-
-	var _pull3 = _interopRequireDefault(_pull2);
-
-	var _assign2 = __webpack_require__(525);
-
-	var _assign3 = _interopRequireDefault(_assign2);
-
-	var _learningMode = __webpack_require__(555);
-
-	var types = _interopRequireWildcard(_learningMode);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-	var INITIAL_STATE = {
-	   // fingers, free,
-	   mode: 'fingers',
-
-	   maxWordLength: 5,
-
-	   fingersSetSize: 0,
-
-	   lessonFingers: '',
-
-	   lettersFree: [],
-
-	   lessonFree: '',
-
-	   lesson: {
-	      typed: '',
-	      last: ''
-	   }
-	};
-
-	exports.default = function () {
-	   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
-	   var action = arguments[1];
-
-	   switch (action.type) {
-
-	      case types.REFRESH_CURRENT_LESSON:
-	         return (0, _assign3.default)({}, state, {
-	            lesson: {
-	               typed: state.lesson.typed + state.lesson.last,
-	               last: ''
-	            }
-	         });
-
-	      case types.TYPE_ON_LESSON:
-	         return (0, _assign3.default)({}, state, {
-	            lesson: {
-	               typed: state.lesson.typed + state.lesson.last[0],
-	               last: state.lesson.last.substring(1)
-	            }
-	         });
-
-	      case types.SET_LEARNING_MODE:
-	         return (0, _assign3.default)({}, state, {
-	            mode: action.mode
-	         });
-
-	      case types.SET_CURRENT_LESSON:
-	         return (0, _assign3.default)({}, state, {
-	            lesson: {
-	               typed: '',
-	               last: action.lesson
-	            }
-	         });
-
-	      case types.SET_MAX_WORD_LENGTH:
-	         return (0, _assign3.default)({}, state, {
-	            maxWordLength: action.length
-	         });
-
-	      case types.SET_FINGERS_SET_SIZE:
-	         return (0, _assign3.default)({}, state, {
-	            fingersSetSize: action.size
-	         });
-
-	      case types.SET_FINGERS_LESSON:
-	         return (0, _assign3.default)({}, state, {
-	            lessonFingers: action.lesson
-	         });
-
-	      case types.SET_FREE_LESSON:
-	         return (0, _assign3.default)({}, state, {
-	            lessonFree: action.lesson
-	         });
-
-	      case types.SET_FREE_LETTERS:
-	         return (0, _assign3.default)({}, state, {
-	            lettersFree: action.letters
-	         });
-
-	      case types.ADD_LETTER_TO_FREE_LETTERS:
-	         return (0, _assign3.default)({}, state, {
-	            lettersFree: [].concat(_toConsumableArray(state.lettersFree), [action.letter])
-	         });
-
-	      case types.REMOVE_LETTER_FROM_FREE_LETTERS:
-	         return (0, _assign3.default)({}, state, {
-	            lettersFree: [].concat(_toConsumableArray((0, _pull3.default)(state.lettersFree, action.letter)))
-	         });
-
-	      default:
-	         return state;
-
-	   }
-	};
-
-/***/ },
+/* 546 */,
+/* 547 */,
 /* 548 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -55272,167 +54586,8 @@
 
 
 /***/ },
-/* 555 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
-	var TYPE_ON_LESSON = exports.TYPE_ON_LESSON = 'TYPE_ON_LESSON';
-
-	var SET_LEARNING_MODE = exports.SET_LEARNING_MODE = 'SET_LEARNING_MODE';
-	var SET_CURRENT_LESSON = exports.SET_CURRENT_LESSON = 'SET_CURRENT_LESSON';
-	var REFRESH_CURRENT_LESSON = exports.REFRESH_CURRENT_LESSON = 'REFRESH_CURRENT_LESSON';
-	var SET_MAX_WORD_LENGTH = exports.SET_MAX_WORD_LENGTH = 'SET_MAX_WORD_LENGTH';
-
-	var SET_FINGERS_LESSON = exports.SET_FINGERS_LESSON = 'SET_FINGERS_LESSON';
-	var SET_FINGERS_SET_SIZE = exports.SET_FINGERS_SET_SIZE = 'SET_FINGERS_SET_SIZE';
-
-	var SET_FREE_LESSON = exports.SET_FREE_LESSON = 'SET_FREE_LESSON';
-	var SET_FREE_LETTERS = exports.SET_FREE_LETTERS = 'SET_FREE_LETTERS';
-	var ADD_LETTER_TO_FREE_LETTERS = exports.ADD_LETTER_TO_FREE_LETTERS = 'ADD_LETTER_TO_FREE_LETTERS';
-	var REMOVE_LETTER_FROM_FREE_LETTERS = exports.REMOVE_LETTER_FROM_FREE_LETTERS = 'REMOVE_LETTER_FROM_FREE_LETTERS';
-
-/***/ },
-/* 556 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-
-	var _assign2 = __webpack_require__(525);
-
-	var _assign3 = _interopRequireDefault(_assign2);
-
-	var _main = __webpack_require__(410);
-
-	var types = _interopRequireWildcard(_main);
-
-	var _keyboards = __webpack_require__(557);
-
-	var _keyboards2 = _interopRequireDefault(_keyboards);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var INITIAL_STATE = {
-	   keyboard: 'US',
-
-	   keyboards: _keyboards2.default,
-
-	   pressedRightIds: [],
-
-	   pressedWrongIds: [],
-
-	   startTypingTime: 1461228933292,
-
-	   successTypes: 0,
-
-	   errorTypes: 0,
-
-	   idCharsToType: '',
-
-	   metronomeStatus: 0,
-
-	   metronomeInterval: 800,
-
-	   // text, learning
-	   mode: 'learning'
-	};
-
-	var actionMetronome = function actionMetronome(state, action, value) {
-	   var newState = void 0;
-	   var status = void 0;
-	   var volume = void 0;
-
-	   switch (action) {
-	      case 'play':
-	         status = 1;
-	         break;
-	      case 'stop':
-	         status = 1;
-	         break;
-	      case 'interval':
-	         volume = value;
-	         break;
-	   }
-
-	   if (status !== undefined) {
-	      newState = {
-	         metronomeStatus: status
-	      };
-	   } else {
-	      newState = {
-	         metronomeInterval: volume
-	      };
-	   }
-
-	   return (0, _assign3.default)({}, state, newState);
-	};
-
-	exports.default = function () {
-	   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
-	   var action = arguments[1];
-
-	   switch (action.type) {
-	      case types.SET_PRESSED_RIGHT_IDS:
-	         return (0, _assign3.default)({}, state, {
-	            pressedRightIds: action.ids
-	         });
-
-	      case types.SET_PRESSED_WRONG_IDS:
-	         return (0, _assign3.default)({}, state, {
-	            pressedWrongIds: action.ids
-	         });
-
-	      case types.SET_IDS_CHAR_TO_TYPE:
-	         return (0, _assign3.default)({}, state, {
-	            idCharsToType: action.id
-	         });
-
-	      case types.ADD_SUCCESS_TYPE:
-	         return (0, _assign3.default)({}, state, {
-	            successTypes: state.successTypes + 1
-	         });
-
-	      case types.ADD_ERROR_TYPE:
-	         return (0, _assign3.default)({}, state, {
-	            errorTypes: state.errorTypes + 1
-	         });
-
-	      case types.UPDATE_START_VARIABLES:
-	         return (0, _assign3.default)({}, state, {
-	            startTypingTime: Date.now(),
-	            successTypes: 0,
-	            errorTypes: 0
-	         });
-
-	      case types.SET_MODE:
-	         return (0, _assign3.default)({}, state, {
-	            mode: action.mode
-	         });
-
-	      case types.ACTION_METRONOME:
-	         return actionMetronome(state, action.action, action.value);
-
-	      case types.SET_KEYBOARD:
-	         return (0, _assign3.default)({}, state, {
-	            keyboardName: action.name
-	         });
-
-	      default:
-	         return state;
-
-	   }
-	};
-
-/***/ },
+/* 555 */,
+/* 556 */,
 /* 557 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -56616,283 +55771,7 @@
 	}];
 
 /***/ },
-/* 561 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-
-	var _isEqual2 = __webpack_require__(562);
-
-	var _isEqual3 = _interopRequireDefault(_isEqual2);
-
-	var _uniqWith2 = __webpack_require__(563);
-
-	var _uniqWith3 = _interopRequireDefault(_uniqWith2);
-
-	var _filter2 = __webpack_require__(418);
-
-	var _filter3 = _interopRequireDefault(_filter2);
-
-	var _concat2 = __webpack_require__(569);
-
-	var _concat3 = _interopRequireDefault(_concat2);
-
-	var _find2 = __webpack_require__(297);
-
-	var _find3 = _interopRequireDefault(_find2);
-
-	exports.setMode = setMode;
-	exports.setCurrentLesson = setCurrentLesson;
-	exports.refreshCurrentLesson = refreshCurrentLesson;
-	exports.setMaxWordLength = setMaxWordLength;
-	exports.setFingersLesson = setFingersLesson;
-	exports.setFingersSetSize = setFingersSetSize;
-	exports.setFreeLesson = setFreeLesson;
-	exports.setFreeLetters = setFreeLetters;
-	exports.addLetterToFreeLetters = addLetterToFreeLetters;
-	exports.removeLetterFromFreeLetters = removeLetterFromFreeLetters;
-	exports.typeOnLesson = typeOnLesson;
-	exports.selectMode = selectMode;
-	exports.generateAndSetFingersLesson = generateAndSetFingersLesson;
-	exports.generateAndSetFreeLesson = generateAndSetFreeLesson;
-	exports.updateCharToType = updateCharToType;
-	exports.typeLearningMode = typeLearningMode;
-	exports.initializeLearningState = initializeLearningState;
-
-	var _main = __webpack_require__(296);
-
-	var _utils = __webpack_require__(412);
-
-	var _learningMode = __webpack_require__(555);
-
-	var types = _interopRequireWildcard(_learningMode);
-
-	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	function setMode(mode) {
-	   return {
-	      type: types.SET_LEARNING_MODE,
-	      mode: mode
-	   };
-	}
-
-	function setCurrentLesson(lesson) {
-	   return {
-	      type: types.SET_CURRENT_LESSON,
-	      lesson: lesson
-	   };
-	}
-
-	function refreshCurrentLesson() {
-	   return {
-	      type: types.REFRESH_CURRENT_LESSON
-	   };
-	}
-
-	function setMaxWordLength(length) {
-	   return {
-	      type: types.SET_MAX_WORD_LENGTH,
-	      length: length
-	   };
-	}
-
-	function setFingersLesson(lesson) {
-	   return {
-	      type: types.SET_FINGERS_LESSON,
-	      lesson: lesson
-	   };
-	}
-
-	function setFingersSetSize(size) {
-	   return {
-	      type: types.SET_FINGERS_SET_SIZE,
-	      size: size
-	   };
-	}
-
-	function setFreeLesson(lesson) {
-	   return {
-	      type: types.SET_FREE_LESSON,
-	      lesson: lesson
-	   };
-	}
-
-	function setFreeLetters(letters) {
-	   return {
-	      type: types.SET_FREE_LETTERS,
-	      letters: letters
-	   };
-	}
-
-	function addLetterToFreeLetters(letter) {
-	   return {
-	      type: types.ADD_LETTER_TO_FREE_LETTERS,
-	      letter: letter
-	   };
-	}
-
-	function removeLetterFromFreeLetters(letter) {
-	   return {
-	      type: types.REMOVE_LETTER_FROM_FREE_LETTERS,
-	      letter: letter
-	   };
-	}
-
-	function typeOnLesson() {
-	   return {
-	      type: types.TYPE_ON_LESSON
-	   };
-	}
-
-	function selectMode(mode) {
-	   return function (dispatch, getState) {
-
-	      dispatch(setMode(mode));
-
-	      var state = getState();
-	      var lesson = '';
-
-	      switch (mode) {
-	         case 'fingers':
-
-	            lesson = state.learningMode.lessonFingers;
-
-	            break;
-
-	         case 'free':
-
-	            lesson = state.learningMode.lessonFree;
-
-	            break;
-	      }
-
-	      dispatch(setCurrentLesson(lesson));
-	   };
-	}
-
-	function generateAndSetFingersLesson() {
-	   return function (dispatch, getState) {
-
-	      var state = getState();
-
-	      var fingersSet = (0, _utils.getFingersSet)();
-
-	      fingersSet.splice(state.learningMode.fingersSetSize);
-
-	      fingersSet = _concat3.default.apply(null, fingersSet);
-
-	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, fingersSet);
-
-	      dispatch(setFingersLesson(lesson));
-
-	      dispatch(setCurrentLesson(lesson));
-	   };
-	}
-
-	function generateAndSetFreeLesson() {
-	   return function (dispatch, getState) {
-
-	      var state = getState();
-
-	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, state.learningMode.lettersFree);
-
-	      dispatch(setFreeLesson(lesson));
-
-	      dispatch(setCurrentLesson(lesson));
-	   };
-	}
-
-	function updateCharToType() {
-	   return function (dispatch, getState) {
-	      var state = getState();
-	      var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
-	      var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, state.learningMode.lesson.last[0]);
-
-	      dispatch((0, _main.setIdsCharToType)(idsCharToType));
-	   };
-	}
-
-	function typeLearningMode(char) {
-	   return function (dispatch, getState) {
-	      var state = getState();
-	      var keyboardState = state.main;
-	      var learningModeState = state.learningMode;
-	      var keys = (0, _find3.default)(keyboardState.keyboards, { 'name': keyboardState.keyboard }).keys;
-	      var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
-
-	      if (learningModeState.lesson.last[0] === char) {
-	         var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
-
-	         dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
-
-	         dispatch(typeOnLesson());
-
-	         // if (getState().learningMode.lesson.last.length === 0) {
-	         //    dispatch(generateLessonFromCurrentMode());
-	         // }
-
-	         dispatch((0, _main.addSuccesType)());
-
-	         dispatch(updateCharToType());
-	      } else {
-	         var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
-
-	         dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
-
-	         dispatch((0, _main.addErrorType)());
-	      }
-	   };
-	}
-
-	function initializeLearningState() {
-	   return function (dispatch, getState) {
-
-	      var state = getState();
-
-	      var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
-
-	      var defaultKeys = (0, _filter3.default)(keys, {
-	         row: 'middle',
-	         type: 'letter'
-	      });
-
-	      var resultForUnionWith = defaultKeys.map(function (obj) {
-	         return {
-	            finger: obj.finger,
-	            hand: obj.hand
-	         };
-	      });
-
-	      var size = (0, _uniqWith3.default)(resultForUnionWith, _isEqual3.default).length;
-
-	      dispatch(setFingersSetSize(size));
-
-	      var letters = defaultKeys.map(function (obj) {
-	         return obj.key;
-	      });
-
-	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, letters);
-
-	      dispatch(setFingersLesson(lesson));
-
-	      dispatch(setCurrentLesson(lesson));
-
-	      dispatch(setFreeLetters(letters));
-
-	      // different lesson for free mode
-	      lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, letters);
-
-	      dispatch(setFreeLesson(lesson));
-	   };
-	}
-
-/***/ },
+/* 561 */,
 /* 562 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -57279,7 +56158,7 @@
 
 	var _Authorization2 = _interopRequireDefault(_Authorization);
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57418,7 +56297,7 @@
 
 	var _Login2 = _interopRequireDefault(_Login);
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -57684,7 +56563,7 @@
 
 	var _Register2 = _interopRequireDefault(_Register);
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62146,7 +61025,7 @@
 
 	var _ForgotPas2 = _interopRequireDefault(_ForgotPas);
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -62346,7 +61225,7 @@
 
 	var _Home2 = _interopRequireDefault(_Home);
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -64614,7 +63493,7 @@
 
 	var _Metronome2 = _interopRequireDefault(_Metronome);
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -67280,9 +66159,9 @@
 
 	var _TextMode2 = _interopRequireDefault(_TextMode);
 
-	var _textMode = __webpack_require__(411);
+	var _textMode = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/text-mode\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -67594,7 +66473,7 @@
 
 	var _AddTextForm2 = _interopRequireDefault(_AddTextForm);
 
-	var _textMode = __webpack_require__(411);
+	var _textMode = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/text-mode\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -67996,7 +66875,7 @@
 
 	var _Text2 = _interopRequireDefault(_Text);
 
-	var _textMode = __webpack_require__(411);
+	var _textMode = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/text-mode\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68160,9 +67039,9 @@
 
 	var _LearningMode2 = _interopRequireDefault(_LearningMode);
 
-	var _learningMode = __webpack_require__(561);
+	var _learningMode = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/learning-mode\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68418,7 +67297,7 @@
 
 	var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
 
-	var _learningMode = __webpack_require__(561);
+	var _learningMode = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/learning-mode\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68687,7 +67566,7 @@
 
 	var _LearningFree2 = _interopRequireDefault(_LearningFree);
 
-	var _learningMode = __webpack_require__(561);
+	var _learningMode = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/learning-mode\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -68851,7 +67730,7 @@
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
-	var _main = __webpack_require__(296);
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"../actions/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -69030,6 +67909,652 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 678 */,
+/* 679 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _redux = __webpack_require__(190);
+
+	var _reduxForm = __webpack_require__(436);
+
+	var _reactRouterRedux = __webpack_require__(270);
+
+	var _reduxLogger = __webpack_require__(428);
+
+	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
+
+	var _reduxThunk = __webpack_require__(434);
+
+	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
+
+	var _textMode = __webpack_require__(680);
+
+	var _textMode2 = _interopRequireDefault(_textMode);
+
+	var _learningMode = __webpack_require__(682);
+
+	var _learningMode2 = _interopRequireDefault(_learningMode);
+
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./modules/main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _main2 = _interopRequireDefault(_main);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var reducer = (0, _redux.combineReducers)({
+	  routing: _reactRouterRedux.routerReducer,
+	  form: _reduxForm.reducer,
+	  main: _main2.default,
+	  textMode: _textMode2.default,
+	  learningMode: _learningMode2.default
+	});
+
+	var logger = (0, _reduxLogger2.default)();
+
+	exports.default = (0, _redux.createStore)(reducer, (0, _redux.applyMiddleware)(_reduxThunk2.default
+	// , logger
+	));
+
+/***/ },
+/* 680 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+	exports.TYPE_ON_ENTITIE = exports.ADD_NEW_TEXT = exports.REFRESH_TEXT = exports.SELECT_TEXT = undefined;
+
+	var _find2 = __webpack_require__(297);
+
+	var _find3 = _interopRequireDefault(_find2);
+
+	var _cloneDeep2 = __webpack_require__(528);
+
+	var _cloneDeep3 = _interopRequireDefault(_cloneDeep2);
+
+	var _assign4 = __webpack_require__(525);
+
+	var _assign5 = _interopRequireDefault(_assign4);
+
+	exports.addNewText = addNewText;
+	exports.selectText = selectText;
+	exports.refreshText = refreshText;
+	exports.typeOnEntitie = typeOnEntitie;
+	exports.updateFromTextModeCharToType = updateFromTextModeCharToType;
+	exports.typeTextMode = typeTextMode;
+
+	var _utils = __webpack_require__(412);
+
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+	var SELECT_TEXT = exports.SELECT_TEXT = 'text-mode/SELECT_TEXT';
+	var REFRESH_TEXT = exports.REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
+	var ADD_NEW_TEXT = exports.ADD_NEW_TEXT = 'text-mode/ADD_NEW_TEXT';
+	var TYPE_ON_ENTITIE = exports.TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
+
+	var INITIAL_STATE = {
+	  currentTextId: 2,
+
+	  entities: {
+	    1: {
+	      title: 'First',
+	      typed: 'Dolphins are a widely distributed and diverse group of fully aqua',
+	      last: 'tTtTtttTTTtic marine mammals. They are an informal grouping within the order Cetacea, excluding whales and porpoises, so to zoologists the grouping is paraphyletic. The dolphins comprise the extant families Delphinidae (the oceanic dolphins), Platanistidae (the Indian river dolphins), Iniidae (the new world river dolphins), and Pontoporiidae (the brackish dolphins). There are 40 extant species of dolphins. Dolphins, alongside other cetaceans, belong to the clade Cetartiodactyla with even-toed ungulates, and their closest living relatives are the hippopotamuses, having diverged about 40 million years ago. Dolphins range in size from the 1.7 metres (5.6 ft) long and 50 kilograms (110 lb) Maui\'s dolphin to the 9.5 metres (31 ft) and 10 metric tons (11 short tons) killer whale. Several species exhibit sexual dimorphism, in that the males are larger than females. They have streamlined bodies and two limbs that are modified into flippers. Though not quite as flexible as seals, some dolphins can travel at 55.5 kilometres per hour (34.5 mph). Dolphins use their conical shaped teeth to capture fast moving prey. They have well-developed hearing − their hearing, which is adapted for both air and water, is so well developed that some can survive even if they are blind. Some species are well adapted for diving to great depths. They have a layer of fat, or blubber, under the skin to keep warm in the cold water.'
+	    },
+	    2: {
+	      title: 'Second',
+	      typed: '',
+	      last: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
+	    },
+	    3: {
+	      title: 'Long long long long long long long long long long long long long long long long long title',
+	      typed: 'Bears are mammals of the fa',
+	      last: 'mily Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
+	    },
+	    4: {
+	      title: 'Second',
+	      typed: 'Bears are mammals of the fa',
+	      last: 'mily Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
+	    },
+	    5: {
+	      title: 'Second',
+	      typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	      last: ''
+	    }
+	  }
+	};
+
+	var nextTextId = 10;
+
+	exports.default = function () {
+	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
+	  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	  switch (action.type) {
+	    case ADD_NEW_TEXT:
+	      nextTextId += 1;
+
+	      return (0, _assign5.default)({}, state, {
+	        entities: (0, _assign5.default)({}, state.entities, _defineProperty({}, nextTextId - 1, {
+	          title: action.title,
+	          typed: '',
+	          last: action.text
+	        }))
+	      });
+
+	    case SELECT_TEXT:
+	      return (0, _assign5.default)({}, state, {
+	        currentTextId: action.textId
+	      });
+
+	    case REFRESH_TEXT:
+	      var text = state.entities[action.textId];
+
+	      return (0, _assign5.default)({}, state, {
+	        entities: (0, _assign5.default)({}, state.entities, _defineProperty({}, action.textId, {
+	          title: text.title,
+	          typed: '',
+	          last: text.typed + text.last
+	        }))
+	      });
+
+	    case TYPE_ON_ENTITIE:
+	      return function () {
+	        var entities = (0, _cloneDeep3.default)(state.entities);
+
+	        var text = entities[action.textId];
+
+	        text.typed += text.last[0];
+	        text.last = text.last.substring(1);
+
+	        return (0, _assign5.default)({}, state, {
+	          entities: entities
+	        });
+	      }();
+
+	    default:
+	      return state;
+
+	  }
+	};
+
+	function addNewText(title, text) {
+	  return {
+	    type: ADD_NEW_TEXT,
+	    title: title,
+	    text: text
+	  };
+	}
+
+	function selectText(textId) {
+	  return {
+	    type: SELECT_TEXT,
+	    textId: textId
+	  };
+	}
+
+	function refreshText(textId) {
+	  return {
+	    type: REFRESH_TEXT,
+	    textId: textId
+	  };
+	}
+
+	function typeOnEntitie(textId) {
+	  return {
+	    type: TYPE_ON_ENTITIE,
+	    textId: textId
+	  };
+	}
+
+	function updateFromTextModeCharToType() {
+	  return function (dispatch, getState) {
+	    var state = getState();
+	    var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
+	    var textId = state.textMode.currentTextId;
+	    var entities = state.textMode.entities;
+
+	    var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, entities[textId].last[0]);
+
+	    dispatch((0, _main.setIdsCharToType)(idsCharToType));
+	  };
+	}
+
+	function typeTextMode(char) {
+	  return function (dispatch, getState) {
+	    var state = getState();
+	    var keyboardState = state.keyboard;
+	    var textModeState = state.textMode;
+	    var keys = (0, _find3.default)(keyboardState.keyboards, { 'name': keyboardState.keyboard }).keys;
+	    var textId = textModeState.currentTextId;
+	    var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
+
+	    if (textModeState.entities[textId].last[0] === char) {
+	      var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
+
+	      dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
+
+	      dispatch(typeOnEntitie(textId));
+
+	      dispatch((0, _main.addSuccesType)());
+
+	      dispatch((0, _main.updateCharToType)());
+	    } else {
+	      var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
+
+	      dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
+
+	      dispatch((0, _main.addErrorType)());
+	    }
+	  };
+	}
+
+/***/ },
+/* 681 */,
+/* 682 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+
+	var _pull2 = __webpack_require__(548);
+
+	var _pull3 = _interopRequireDefault(_pull2);
+
+	var _assign2 = __webpack_require__(525);
+
+	var _assign3 = _interopRequireDefault(_assign2);
+
+	var _isEqual2 = __webpack_require__(562);
+
+	var _isEqual3 = _interopRequireDefault(_isEqual2);
+
+	var _uniqWith2 = __webpack_require__(563);
+
+	var _uniqWith3 = _interopRequireDefault(_uniqWith2);
+
+	var _filter2 = __webpack_require__(418);
+
+	var _filter3 = _interopRequireDefault(_filter2);
+
+	var _concat2 = __webpack_require__(569);
+
+	var _concat3 = _interopRequireDefault(_concat2);
+
+	var _find2 = __webpack_require__(297);
+
+	var _find3 = _interopRequireDefault(_find2);
+
+	exports.setMode = setMode;
+	exports.setCurrentLesson = setCurrentLesson;
+	exports.refreshCurrentLesson = refreshCurrentLesson;
+	exports.setMaxWordLength = setMaxWordLength;
+	exports.setFingersLesson = setFingersLesson;
+	exports.setFingersSetSize = setFingersSetSize;
+	exports.setFreeLesson = setFreeLesson;
+	exports.setFreeLetters = setFreeLetters;
+	exports.addLetterToFreeLetters = addLetterToFreeLetters;
+	exports.removeLetterFromFreeLetters = removeLetterFromFreeLetters;
+	exports.typeOnLesson = typeOnLesson;
+	exports.selectMode = selectMode;
+	exports.generateAndSetFingersLesson = generateAndSetFingersLesson;
+	exports.generateAndSetFreeLesson = generateAndSetFreeLesson;
+	exports.updateCharToType = updateCharToType;
+	exports.typeLearningMode = typeLearningMode;
+	exports.initializeLearningState = initializeLearningState;
+
+	var _main = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"./main\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+	var _utils = __webpack_require__(412);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+	var TYPE_ON_LESSON = 'learning-mode/TYPE_ON_LESSON';
+
+	var SET_LEARNING_MODE = 'learning-mode/SET_LEARNING_MODE';
+	var SET_CURRENT_LESSON = 'learning-mode/SET_CURRENT_LESSON';
+	var REFRESH_CURRENT_LESSON = 'learning-mode/REFRESH_CURRENT_LESSON';
+	var SET_MAX_WORD_LENGTH = 'learning-mode/SET_MAX_WORD_LENGTH';
+
+	var SET_FINGERS_LESSON = 'learning-mode/SET_FINGERS_LESSON';
+	var SET_FINGERS_SET_SIZE = 'learning-mode/SET_FINGERS_SET_SIZE';
+
+	var SET_FREE_LESSON = 'learning-mode/SET_FREE_LESSON';
+	var SET_FREE_LETTERS = 'learning-mode/SET_FREE_LETTERS';
+	var ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
+	var REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
+
+	var INITIAL_STATE = {
+	   // fingers, free,
+	   mode: 'fingers',
+
+	   maxWordLength: 5,
+
+	   fingersSetSize: 0,
+
+	   lessonFingers: '',
+
+	   lettersFree: [],
+
+	   lessonFree: '',
+
+	   lesson: {
+	      typed: '',
+	      last: ''
+	   }
+	};
+
+	exports.default = function () {
+	   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
+	   var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+	   switch (action.type) {
+
+	      case REFRESH_CURRENT_LESSON:
+	         return (0, _assign3.default)({}, state, {
+	            lesson: {
+	               typed: state.lesson.typed + state.lesson.last,
+	               last: ''
+	            }
+	         });
+
+	      case TYPE_ON_LESSON:
+	         return (0, _assign3.default)({}, state, {
+	            lesson: {
+	               typed: state.lesson.typed + state.lesson.last[0],
+	               last: state.lesson.last.substring(1)
+	            }
+	         });
+
+	      case SET_LEARNING_MODE:
+	         return (0, _assign3.default)({}, state, {
+	            mode: action.mode
+	         });
+
+	      case SET_CURRENT_LESSON:
+	         return (0, _assign3.default)({}, state, {
+	            lesson: {
+	               typed: '',
+	               last: action.lesson
+	            }
+	         });
+
+	      case SET_MAX_WORD_LENGTH:
+	         return (0, _assign3.default)({}, state, {
+	            maxWordLength: action.length
+	         });
+
+	      case SET_FINGERS_SET_SIZE:
+	         return (0, _assign3.default)({}, state, {
+	            fingersSetSize: action.size
+	         });
+
+	      case SET_FINGERS_LESSON:
+	         return (0, _assign3.default)({}, state, {
+	            lessonFingers: action.lesson
+	         });
+
+	      case SET_FREE_LESSON:
+	         return (0, _assign3.default)({}, state, {
+	            lessonFree: action.lesson
+	         });
+
+	      case SET_FREE_LETTERS:
+	         return (0, _assign3.default)({}, state, {
+	            lettersFree: action.letters
+	         });
+
+	      case ADD_LETTER_TO_FREE_LETTERS:
+	         return (0, _assign3.default)({}, state, {
+	            lettersFree: [].concat(_toConsumableArray(state.lettersFree), [action.letter])
+	         });
+
+	      case REMOVE_LETTER_FROM_FREE_LETTERS:
+	         return (0, _assign3.default)({}, state, {
+	            lettersFree: [].concat(_toConsumableArray((0, _pull3.default)(state.lettersFree, action.letter)))
+	         });
+
+	      default:
+	         return state;
+
+	   }
+	};
+
+	function setMode(mode) {
+	   return {
+	      type: SET_LEARNING_MODE,
+	      mode: mode
+	   };
+	}
+
+	function setCurrentLesson(lesson) {
+	   return {
+	      type: SET_CURRENT_LESSON,
+	      lesson: lesson
+	   };
+	}
+
+	function refreshCurrentLesson() {
+	   return {
+	      type: REFRESH_CURRENT_LESSON
+	   };
+	}
+
+	function setMaxWordLength(length) {
+	   return {
+	      type: SET_MAX_WORD_LENGTH,
+	      length: length
+	   };
+	}
+
+	function setFingersLesson(lesson) {
+	   return {
+	      type: SET_FINGERS_LESSON,
+	      lesson: lesson
+	   };
+	}
+
+	function setFingersSetSize(size) {
+	   return {
+	      type: SET_FINGERS_SET_SIZE,
+	      size: size
+	   };
+	}
+
+	function setFreeLesson(lesson) {
+	   return {
+	      type: SET_FREE_LESSON,
+	      lesson: lesson
+	   };
+	}
+
+	function setFreeLetters(letters) {
+	   return {
+	      type: SET_FREE_LETTERS,
+	      letters: letters
+	   };
+	}
+
+	function addLetterToFreeLetters(letter) {
+	   return {
+	      type: ADD_LETTER_TO_FREE_LETTERS,
+	      letter: letter
+	   };
+	}
+
+	function removeLetterFromFreeLetters(letter) {
+	   return {
+	      type: REMOVE_LETTER_FROM_FREE_LETTERS,
+	      letter: letter
+	   };
+	}
+
+	function typeOnLesson() {
+	   return {
+	      type: TYPE_ON_LESSON
+	   };
+	}
+
+	function selectMode(mode) {
+	   return function (dispatch, getState) {
+
+	      dispatch(setMode(mode));
+
+	      var state = getState();
+	      var lesson = '';
+
+	      switch (mode) {
+	         case 'fingers':
+
+	            lesson = state.learningMode.lessonFingers;
+
+	            break;
+
+	         case 'free':
+
+	            lesson = state.learningMode.lessonFree;
+
+	            break;
+	      }
+
+	      dispatch(setCurrentLesson(lesson));
+	   };
+	}
+
+	function generateAndSetFingersLesson() {
+	   return function (dispatch, getState) {
+
+	      var state = getState();
+
+	      var fingersSet = (0, _utils.getFingersSet)();
+
+	      fingersSet.splice(state.learningMode.fingersSetSize);
+
+	      fingersSet = _concat3.default.apply(null, fingersSet);
+
+	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, fingersSet);
+
+	      dispatch(setFingersLesson(lesson));
+
+	      dispatch(setCurrentLesson(lesson));
+	   };
+	}
+
+	function generateAndSetFreeLesson() {
+	   return function (dispatch, getState) {
+
+	      var state = getState();
+
+	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, state.learningMode.lettersFree);
+
+	      dispatch(setFreeLesson(lesson));
+
+	      dispatch(setCurrentLesson(lesson));
+	   };
+	}
+
+	function updateCharToType() {
+	   return function (dispatch, getState) {
+	      var state = getState();
+	      var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
+	      var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, state.learningMode.lesson.last[0]);
+
+	      dispatch((0, _main.setIdsCharToType)(idsCharToType));
+	   };
+	}
+
+	function typeLearningMode(char) {
+	   return function (dispatch, getState) {
+	      var state = getState();
+	      var keyboardState = state.main;
+	      var learningModeState = state.learningMode;
+	      var keys = (0, _find3.default)(keyboardState.keyboards, { 'name': keyboardState.keyboard }).keys;
+	      var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
+
+	      if (learningModeState.lesson.last[0] === char) {
+	         var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
+
+	         dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
+
+	         dispatch(typeOnLesson());
+
+	         // if (getState().learningMode.lesson.last.length === 0) {
+	         //    dispatch(generateLessonFromCurrentMode());
+	         // }
+
+	         dispatch((0, _main.addSuccesType)());
+
+	         dispatch(updateCharToType());
+	      } else {
+	         var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
+
+	         dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
+
+	         dispatch((0, _main.addErrorType)());
+	      }
+	   };
+	}
+
+	function initializeLearningState() {
+	   return function (dispatch, getState) {
+
+	      var state = getState();
+
+	      var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
+
+	      var defaultKeys = (0, _filter3.default)(keys, {
+	         row: 'middle',
+	         type: 'letter'
+	      });
+
+	      var resultForUnionWith = defaultKeys.map(function (obj) {
+	         return {
+	            finger: obj.finger,
+	            hand: obj.hand
+	         };
+	      });
+
+	      var size = (0, _uniqWith3.default)(resultForUnionWith, _isEqual3.default).length;
+
+	      dispatch(setFingersSetSize(size));
+
+	      var letters = defaultKeys.map(function (obj) {
+	         return obj.key;
+	      });
+
+	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, letters);
+
+	      dispatch(setFingersLesson(lesson));
+
+	      dispatch(setCurrentLesson(lesson));
+
+	      dispatch(setFreeLetters(letters));
+
+	      // different lesson for free mode
+	      lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, letters);
+
+	      dispatch(setFreeLesson(lesson));
+	   };
+	}
 
 /***/ }
 /******/ ]);

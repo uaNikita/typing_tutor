@@ -14,7 +14,7 @@ import LearningFingers from './LearningFingers.jsx';
 import LearningFree from './LearningFree.jsx';
 import Keyboard from './Keyboard.jsx';
 
-import store from './../store';
+import store from './../redux/store';
 
 import {
   typeChar,
