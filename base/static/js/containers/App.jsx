@@ -20,13 +20,13 @@ import {
   typeChar,
   updateStartVariables,
   updateCharToType
-} from '../actions/main'
+} from '../redux/modules/main'
 
 import {
   initializeLearningState,
   refreshCurrentLesson,
   selectMode as selectLearningMode
-} from '../actions/learning-mode'
+} from '../redux/modules/learning-mode'
 
 const history = syncHistoryWithStore(browserHistory, store)
 

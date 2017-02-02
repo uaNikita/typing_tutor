@@ -2,8 +2,8 @@ import {connect} from 'react-redux';
 import {map} from 'lodash';
 import TextMode from '../components/TextMode.jsx';
 
-import {selectText, refreshText} from '../actions/text-mode';
-import {setMode} from '../actions/main';
+import {selectText, refreshText} from '../redux/modules/text-mode';
+import {setMode} from '../redux/modules/main';
 
 const mapStateToProps = (state) => {
   var texts = map(state.textMode.entities, (obj, key) => {

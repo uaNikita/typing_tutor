@@ -1,17 +1,17 @@
-export const PRESS_KEY = 'main/PRESS_KEY';
+const PRESS_KEY = 'main/PRESS_KEY';
 
-export const UPDATE_START_VARIABLES = 'main/UPDATE_START_VARIABLES';
-export const SET_MODE = 'main/SET_MODE';
-export const ACTION_METRONOME = 'main/ACTION_METRONOME';
-export const SET_KEYBOARD = 'main/SET_KEYBOARD';
+const UPDATE_START_VARIABLES = 'main/UPDATE_START_VARIABLES';
+const SET_MODE = 'main/SET_MODE';
+const ACTION_METRONOME = 'main/ACTION_METRONOME';
+const SET_KEYBOARD = 'main/SET_KEYBOARD';
 
-export const SET_PRESSED_RIGHT_IDS = 'main/SET_PRESSED_RIGHT_IDS';
-export const SET_PRESSED_WRONG_IDS = 'main/SET_PRESSED_WRONG_IDS';
-export const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
-export const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
-export const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
+const SET_PRESSED_RIGHT_IDS = 'main/SET_PRESSED_RIGHT_IDS';
+const SET_PRESSED_WRONG_IDS = 'main/SET_PRESSED_WRONG_IDS';
+const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
+const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
+const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
 
-import keyboards from '../constants/keyboards';
+import keyboards from '../../constants/keyboards';
 import {forEach, assign, clone, cloneDeep, map, random, times, find} from 'lodash';
 
 import {updateFromTextModeCharToType, typeTextMode} from './text-mode';
@@ -42,36 +42,6 @@ const INITIAL_STATE = {
 
    // text, learning
    mode: 'learning',
-};
-
-const actionMetronome = (state, action, value) => {
-   let newState;
-   let status;
-   let volume;
-
-   switch (action) {
-      case 'play':
-         status = 1;
-         break
-      case 'stop':
-         status = 1;
-         break
-      case 'interval':
-         volume = value;
-         break
-   }
-
-   if (status !== undefined) {
-      newState = {
-         metronomeStatus: status
-      };
-   } else {
-      newState = {
-         metronomeInterval: volume
-      };
-   }
-
-   return assign({}, state, newState);
 };
 
 export default (state = INITIAL_STATE, action = {}) => {
@@ -114,7 +84,7 @@ export default (state = INITIAL_STATE, action = {}) => {
          });
 
       case ACTION_METRONOME:
-         return actionMetronome(state, action.action, action.value);
+         return assign({}, state);
 
       case SET_KEYBOARD:
          return assign({}, state, {

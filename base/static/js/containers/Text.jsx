@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import {map} from 'lodash';
 import Text from '../components/Text.jsx'
-import {selectText, refreshText} from '../actions/text-mode'
+import {selectText, refreshText} from '../redux/modules/text-mode'
 
 const mapStateToProps = (state, ownProps) => {
   let textId = ownProps.params.textId;

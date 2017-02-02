@@ -4,14 +4,21 @@ import LearningFingers from '../components/LearningFingers.jsx'
 import {
   setFingersSetSize,
   generateAndSetFingersLesson
-} from '../actions/learning-mode'
+} from '../redux/modules/learning-mode'
+
+import {getFingersSet} from "../utils";
 
 const mapStateToProps = (state) => {
+
+   let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
+
    return {
       fingersSetSize: state.learningMode.fingersSetSize,
       maxWordLength: state.learningMode.maxWordLength,
-      keys: find(state.main.keyboards, {'name': state.main.keyboard}).keys
+      fingersSet: getFingersSet(keys),
+      keys
    }
+   
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -1,7 +1,7 @@
-export const SELECT_TEXT = 'text-mode/SELECT_TEXT';
-export const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
-export const ADD_NEW_TEXT = 'text-mode/ADD_NEW_TEXT';
-export const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
+const SELECT_TEXT = 'text-mode/SELECT_TEXT';
+const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
+const ADD_NEW_TEXT = 'text-mode/ADD_NEW_TEXT';
+const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
 
 import {assign, cloneDeep, find} from 'lodash';
 

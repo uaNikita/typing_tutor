@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import ForgotPas from '../../components/auth/ForgotPas.jsx'
-import {openModal} from '../../actions/main'
+import {openModal} from '../../redux/modules/main'
 
 const mapStateToProps = (state) => {
   return {}

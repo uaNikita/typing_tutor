@@ -6,33 +6,25 @@ import noUiSlider from 'nouislider';
 import classNames from 'classNames';
 import Key from './Key.jsx';
 
-import {getFingersSet} from "../utils";
-
 class LearningFingers extends Component {
-
-   constructor(props) {
-      super(props);
-
-      this.fingersLetters = getFingersSet();
-   }
 
    componentDidMount() {
       let self = this;
       this.$noUiValueFingersSet = $('<span class="noUi-value" />');
 
-      let start = this.props.fingersSetSize;
+      const {fingersSet, fingersSetSize} = this.props;
 
       noUiSlider.create(this._fingersRange, {
-         start  : [start],
+         start  : [fingersSetSize],
          step   : 1,
          connect: 'lower',
          range  : {
             'min': 1,
-            'max': this.fingersLetters.length
+            'max': fingersSet.length
          }
       });
 
-      this.$noUiValueFingersSet.text(start);
+      this.$noUiValueFingersSet.text(fingersSetSize);
 
       $(this._fingersRange).find('.noUi-handle').append(this.$noUiValueFingersSet);
 
@@ -50,9 +42,9 @@ class LearningFingers extends Component {
    }
 
    render() {
-      const {keys, fingersSetSize} = this.props;
+      const {keys, fingersSet, fingersSetSize} = this.props;
 
-      let selectedLetters = clone(this.fingersLetters);
+      let selectedLetters = clone(fingersSet);
 
       selectedLetters.splice(fingersSetSize);
 

@@ -5,7 +5,7 @@ import {
   addLetterToFreeLetters,
   removeLetterFromFreeLetters,
   generateAndSetFreeLesson
-} from '../actions/learning-mode'
+} from '../redux/modules/learning-mode'
 
 const mapStateToProps = (state) => {
    return {

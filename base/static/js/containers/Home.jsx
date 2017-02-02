@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
 import Home from '../components/Home.jsx'
-import {openModal} from '../actions/main'
+import {openModal} from '../redux/modules/main'
 
 const mapStateToProps = (state) => {
   let spendTime = (Date.now() - state.main.startTypingTime) / (1000 * 60);

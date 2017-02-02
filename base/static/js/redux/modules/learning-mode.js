@@ -237,7 +237,9 @@ export function generateAndSetFingersLesson() {
 
       let state = getState();
 
-      let fingersSet = getFingersSet();
+      let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
+
+      let fingersSet = getFingersSet(keys);
 
       fingersSet.splice(state.learningMode.fingersSetSize);
 
@@ -311,6 +313,8 @@ export function initializeLearningState() {
    return (dispatch, getState) => {
 
       let state = getState();
+
+      console.log('state', state);
 
       let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
 

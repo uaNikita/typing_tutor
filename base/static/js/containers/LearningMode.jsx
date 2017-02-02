@@ -3,8 +3,8 @@ import {assign, concat} from 'lodash';
 
 import LearningMode from '../components/LearningMode.jsx';
 
-import {setMaxWordLength, generateAndSetFingersLesson, generateAndSetFreeLesson} from '../actions/learning-mode';
-import {setMode} from '../actions/main';
+import {setMaxWordLength, generateAndSetFingersLesson, generateAndSetFreeLesson} from '../redux/modules/learning-mode';
+import {setMode} from '../redux/modules/main';
 
 const mapStateToProps = (state) => {
    return {

@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import {find} from 'lodash';
 import Keyboard from '../components/Keyboard.jsx'
-import {setKeyboard} from '../actions/main'
+import {setKeyboard} from '../redux/modules/main'
 
 const mapStateToProps = (state) => {
   return {
