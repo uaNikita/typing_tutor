@@ -3330,25 +3330,27 @@ a:hover {
   border-top-color: #20b426;
   content: '';
 }
+.ps-container .ps-scrollbar-y {
+  width: 6px !important;
+  right: 0 !important;
+  border-radius: 5px !important;
+  -webkit-transition: width 0.1s linear !important;
+  transition: width 0.1s linear !important;
+}
 .ps-container .ps-scrollbar-y-rail {
-  width: 6px;
+  width: 6px !important;
+  border-radius: 3px;
   -webkit-transition: width 0.1s linear, opacity 0.1s linear;
   transition: width 0.1s linear, opacity 0.1s linear;
 }
-.ps-container .ps-scrollbar-y-rail > .ps-scrollbar-y {
-  width: 6px;
-  border-radius: 5px;
-  -webkit-transition: width 0.1s linear;
-  transition: width 0.1s linear;
+.ps-container .ps-scrollbar-y-rail:hover {
+  width: 10px !important;
 }
-.ps-container:hover > .ps-scrollbar-y-rail {
+.ps-container .ps-scrollbar-y-rail:hover .ps-scrollbar-y {
+  width: 10px !important;
+}
+.ps-container:hover .ps-scrollbar-y-rail {
   opacity: 0.3;
-}
-.ps-container:hover > .ps-scrollbar-y-rail:hover {
-  width: 10px;
-}
-.ps-container:hover > .ps-scrollbar-y-rail:hover > .ps-scrollbar-y {
-  width: 10px;
 }
 .select2-container--default .select2-selection--single {
   height: auto;
@@ -4152,9 +4154,6 @@ a:hover {
   position: relative;
   overflow: auto;
   max-height: 330px;
-}
-.settings-text__text-wrap {
-  position: relative;
 }
 .settings-text__text {
   position: relative;

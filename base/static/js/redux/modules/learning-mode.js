@@ -3,13 +3,14 @@ const TYPE_ON_LESSON = 'learning-mode/TYPE_ON_LESSON';
 const SET_LEARNING_MODE = 'learning-mode/SET_LEARNING_MODE';
 const SET_CURRENT_LESSON = 'learning-mode/SET_CURRENT_LESSON';
 const REFRESH_CURRENT_LESSON = 'learning-mode/REFRESH_CURRENT_LESSON';
-const SET_MAX_WORD_LENGTH = 'learning-mode/SET_MAX_WORD_LENGTH';
 
-const SET_FINGERS_LESSON = 'learning-mode/SET_FINGERS_LESSON';
-const SET_FINGERS_SET_SIZE = 'learning-mode/SET_FINGERS_SET_SIZE';
+const SET_LESSON_FINGERS = 'learning-mode/SET_LESSON_FINGERS';
+const SET_SET_SIZE_FINGERS = 'learning-mode/SET_SET_SIZE_FINGERS';
+const SET_MAX_LETTERS_IN_WORD_FINGERS = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FINGERS';
 
-const SET_FREE_LESSON = 'learning-mode/SET_FREE_LESSON';
-const SET_FREE_LETTERS = 'learning-mode/SET_FREE_LETTERS';
+const SET_LESSON_FREE = 'learning-mode/SET_LESSON_FREE';
+const SET_LETTERS_FREE = 'learning-mode/SET_LETTERS_FREE';
+const SET_MAX_LETTERS_IN_WORD_FREE = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FREE';
 const ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
 const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
 
@@ -35,11 +36,13 @@ const INITIAL_STATE = {
    // fingers, free,
    mode: 'fingers',
 
-   maxWordLength: 5,
+   maxLettersInWordFingers: 5,
 
-   fingersSetSize: 0,
+   setSizeFingers: 0,
 
    lessonFingers: '',
+
+   maxLettersInWordFree: 5,
 
    lettersFree: [],
 
@@ -60,7 +63,7 @@ export default (state = INITIAL_STATE, action = {}) => {
                typed: state.lesson.typed + state.lesson.last,
                last: ''
             }
-         })
+         });
 
       case TYPE_ON_LESSON:
          return assign({}, state, {
@@ -68,7 +71,7 @@ export default (state = INITIAL_STATE, action = {}) => {
                typed: state.lesson.typed + state.lesson.last[0],
                last: state.lesson.last.substring(1)
             }
-         })
+         });
 
       case SET_LEARNING_MODE:
          return assign({}, state, {
@@ -81,29 +84,34 @@ export default (state = INITIAL_STATE, action = {}) => {
                typed: '',
                last: action.lesson
             }
-         })
-
-      case SET_MAX_WORD_LENGTH:
-         return assign({}, state, {
-            maxWordLength: action.length
          });
 
-      case SET_FINGERS_SET_SIZE:
+      case SET_MAX_LETTERS_IN_WORD_FINGERS:
          return assign({}, state, {
-            fingersSetSize: action.size
+            maxLettersInWordFingers: action.length
          });
 
-      case SET_FINGERS_LESSON:
+      case SET_MAX_LETTERS_IN_WORD_FREE:
+         return assign({}, state, {
+            maxLettersInWordFree: action.length
+         });
+
+      case SET_SET_SIZE_FINGERS:
+         return assign({}, state, {
+            setSizeFingers: action.size
+         });
+
+      case SET_LESSON_FINGERS:
          return assign({}, state, {
             lessonFingers: action.lesson
          });
 
-      case SET_FREE_LESSON:
+      case SET_LESSON_FREE:
          return assign({}, state, {
             lessonFree: action.lesson
          });
 
-      case SET_FREE_LETTERS:
+      case SET_LETTERS_FREE:
          return assign({}, state, {
             lettersFree: action.letters
          });
@@ -150,37 +158,44 @@ export function refreshCurrentLesson() {
    };
 }
 
-export function setMaxWordLength(length) {
+export function setMaxLettersInWordFingers(length) {
    return {
-      type: SET_MAX_WORD_LENGTH,
+      type: SET_MAX_LETTERS_IN_WORD_FINGERS,
       length
    };
 }
 
-export function setFingersLesson(lesson) {
+export function setMaxLettersInWordFree(length) {
    return {
-      type: SET_FINGERS_LESSON,
+      type: SET_MAX_LETTERS_IN_WORD_FREE,
+      length
+   };
+}
+
+export function setLessonFingers(lesson) {
+   return {
+      type: SET_LESSON_FINGERS,
       lesson
    };
 }
 
-export function setFingersSetSize(size) {
+export function setSetSizeFingers(size) {
    return {
-      type: SET_FINGERS_SET_SIZE,
+      type: SET_SET_SIZE_FINGERS,
       size
    };
 }
 
-export function setFreeLesson(lesson) {
+export function setLessonFree(lesson) {
    return {
-      type: SET_FREE_LESSON,
+      type: SET_LESSON_FREE,
       lesson
    };
 }
 
-export function setFreeLetters(letters) {
+export function setLettersFree(letters) {
    return {
-      type: SET_FREE_LETTERS,
+      type: SET_LETTERS_FREE,
       letters
    };
 }
@@ -229,7 +244,7 @@ export function selectMode(mode) {
 
       dispatch(setCurrentLesson(lesson));
 
-   }
+   };
 }
 
 export function generateAndSetFingersLesson() {
@@ -241,16 +256,16 @@ export function generateAndSetFingersLesson() {
 
       let fingersSet = getFingersSet(keys);
 
-      fingersSet.splice(state.learningMode.fingersSetSize);
+      fingersSet.splice(state.learningMode.setSizeFingers);
 
       fingersSet = concat.apply(null, fingersSet);
 
-      let lesson = generateLesson(state.learningMode.maxWordLength, fingersSet);
+      let lesson = generateLesson(state.learningMode.maxLettersInWordFingers, fingersSet);
 
-      dispatch(setFingersLesson(lesson));
+      dispatch(setLessonFingers(lesson));
 
       dispatch(setCurrentLesson(lesson));
-   }
+   };
 }
 
 export function generateAndSetFreeLesson() {
@@ -258,12 +273,12 @@ export function generateAndSetFreeLesson() {
 
       let state = getState();
 
-      let lesson = generateLesson(state.learningMode.maxWordLength, state.learningMode.lettersFree);
+      let lesson = generateLesson(state.learningMode.maxLettersInWordFree, state.learningMode.lettersFree);
 
-      dispatch(setFreeLesson(lesson));
+      dispatch(setLessonFree(lesson));
 
       dispatch(setCurrentLesson(lesson));
-   }
+   };
 }
 
 export function updateCharToType() {
@@ -273,7 +288,7 @@ export function updateCharToType() {
       let idsCharToType = getIdsFromCharacter(keys, state.learningMode.lesson.last[0]);
 
       dispatch(setIdsCharToType(idsCharToType));
-   }
+   };
 }
 
 export function typeLearningMode(char) {
@@ -300,21 +315,19 @@ export function typeLearningMode(char) {
          dispatch(updateCharToType());
 
       } else {
-         let pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar)
+         let pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar);
 
          dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
 
          dispatch(addErrorType());
       }
-   }
+   };
 }
 
 export function initializeLearningState() {
    return (dispatch, getState) => {
 
       let state = getState();
-
-      console.log('state', state);
 
       let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
 
@@ -332,24 +345,24 @@ export function initializeLearningState() {
 
       let size = uniqWith(resultForUnionWith, isEqual).length;
 
-      dispatch(setFingersSetSize(size));
+      dispatch(setSetSizeFingers(size));
 
       let letters = defaultKeys.map(obj=> {
          return obj.key;
       });
 
-      let lesson = generateLesson(state.learningMode.maxWordLength, letters);
+      let lesson = generateLesson(state.learningMode.maxLettersInWordFingers, letters);
 
-      dispatch(setFingersLesson(lesson));
+      dispatch(setLessonFingers(lesson));
 
       dispatch(setCurrentLesson(lesson));
 
-      dispatch(setFreeLetters(letters));
+      dispatch(setLettersFree(letters));
 
       // different lesson for free mode
-      lesson = generateLesson(state.learningMode.maxWordLength, letters);
+      lesson = generateLesson(state.learningMode.maxLettersInWordFree, letters);
 
-      dispatch(setFreeLesson(lesson));
+      dispatch(setLessonFree(lesson));
 
-   }
+   };
 }

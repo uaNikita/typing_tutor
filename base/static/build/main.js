@@ -21529,6 +21529,8 @@
 
 	var _jquery2 = _interopRequireDefault(_jquery);
 
+	__webpack_require__(671);
+
 	var _Layout = __webpack_require__(276);
 
 	var _Layout2 = _interopRequireDefault(_Layout);
@@ -21580,6 +21582,10 @@
 	function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	window.$ = _jquery2.default;
+	// initialize perfect-scrollbar for $ in all project;
+
 
 	var history = (0, _reactRouterRedux.syncHistoryWithStore)(_reactRouter.browserHistory, _store2.default);
 
@@ -47696,7 +47702,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _find2 = __webpack_require__(297);
@@ -47732,160 +47738,215 @@
 	var TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
 
 	var INITIAL_STATE = {
-	  currentTextId: 2,
+	   currentTextId: 7,
 
-	  entities: {
-	    1: {
-	      title: 'First',
-	      typed: 'Dolphins are a widely distributed and diverse group of fully aqua',
-	      last: 'tTtTtttTTTtic marine mammals. They are an informal grouping within the order Cetacea, excluding whales and porpoises, so to zoologists the grouping is paraphyletic. The dolphins comprise the extant families Delphinidae (the oceanic dolphins), Platanistidae (the Indian river dolphins), Iniidae (the new world river dolphins), and Pontoporiidae (the brackish dolphins). There are 40 extant species of dolphins. Dolphins, alongside other cetaceans, belong to the clade Cetartiodactyla with even-toed ungulates, and their closest living relatives are the hippopotamuses, having diverged about 40 million years ago. Dolphins range in size from the 1.7 metres (5.6 ft) long and 50 kilograms (110 lb) Maui\'s dolphin to the 9.5 metres (31 ft) and 10 metric tons (11 short tons) killer whale. Several species exhibit sexual dimorphism, in that the males are larger than females. They have streamlined bodies and two limbs that are modified into flippers. Though not quite as flexible as seals, some dolphins can travel at 55.5 kilometres per hour (34.5 mph). Dolphins use their conical shaped teeth to capture fast moving prey. They have well-developed hearing − their hearing, which is adapted for both air and water, is so well developed that some can survive even if they are blind. Some species are well adapted for diving to great depths. They have a layer of fat, or blubber, under the skin to keep warm in the cold water.'
-	    },
-	    2: {
-	      title: 'Second',
-	      typed: '',
-	      last: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
-	    },
-	    3: {
-	      title: 'Long long long long long long long long long long long long long long long long long title',
-	      typed: 'Bears are mammals of the fa',
-	      last: 'mily Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
-	    },
-	    4: {
-	      title: 'Second',
-	      typed: 'Bears are mammals of the fa',
-	      last: 'mily Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
-	    },
-	    5: {
-	      title: 'Second',
-	      typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
-	      last: ''
-	    }
-	  }
+	   entities: {
+	      1: {
+	         title: 'First',
+	         typed: 'Dolphins are a widely distributed and diverse group of fully aqua',
+	         last: 'tTtTtttTTTtic marine mammals. They are an informal grouping within the order Cetacea, excluding whales and porpoises, so to zoologists the grouping is paraphyletic. The dolphins comprise the extant families Delphinidae (the oceanic dolphins), Platanistidae (the Indian river dolphins), Iniidae (the new world river dolphins), and Pontoporiidae (the brackish dolphins). There are 40 extant species of dolphins. Dolphins, alongside other cetaceans, belong to the clade Cetartiodactyla with even-toed ungulates, and their closest living relatives are the hippopotamuses, having diverged about 40 million years ago. Dolphins range in size from the 1.7 metres (5.6 ft) long and 50 kilograms (110 lb) Maui\'s dolphin to the 9.5 metres (31 ft) and 10 metric tons (11 short tons) killer whale. Several species exhibit sexual dimorphism, in that the males are larger than females. They have streamlined bodies and two limbs that are modified into flippers. Though not quite as flexible as seals, some dolphins can travel at 55.5 kilometres per hour (34.5 mph). Dolphins use their conical shaped teeth to capture fast moving prey. They have well-developed hearing − their hearing, which is adapted for both air and water, is so well developed that some can survive even if they are blind. Some species are well adapted for diving to great depths. They have a layer of fat, or blubber, under the skin to keep warm in the cold water.'
+	      },
+	      2: {
+	         title: 'Second',
+	         typed: '',
+	         last: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
+	      },
+	      3: {
+	         title: 'Long long long long long long long long long long long long long long long long long title',
+	         typed: 'Bears are mammals of the fa',
+	         last: 'mily Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
+	      },
+	      4: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the fa',
+	         last: 'mily Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
+	      },
+	      5: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      6: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      7: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      8: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      9: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      10: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      11: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      12: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      13: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      14: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      15: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      },
+	      16: {
+	         title: 'Second',
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
+	         last: ''
+	      }
+	   }
 	};
 
 	var nextTextId = 10;
 
 	exports.default = function () {
-	  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
-	  var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+	   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
+	   var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-	  switch (action.type) {
-	    case ADD_NEW_TEXT:
-	      nextTextId += 1;
+	   switch (action.type) {
+	      case ADD_NEW_TEXT:
+	         nextTextId += 1;
 
-	      return (0, _assign5.default)({}, state, {
-	        entities: (0, _assign5.default)({}, state.entities, _defineProperty({}, nextTextId - 1, {
-	          title: action.title,
-	          typed: '',
-	          last: action.text
-	        }))
-	      });
+	         return (0, _assign5.default)({}, state, {
+	            entities: (0, _assign5.default)({}, state.entities, _defineProperty({}, nextTextId - 1, {
+	               title: action.title,
+	               typed: '',
+	               last: action.text
+	            }))
+	         });
 
-	    case SELECT_TEXT:
-	      return (0, _assign5.default)({}, state, {
-	        currentTextId: action.textId
-	      });
+	      case SELECT_TEXT:
+	         return (0, _assign5.default)({}, state, {
+	            currentTextId: action.textId
+	         });
 
-	    case REFRESH_TEXT:
-	      var text = state.entities[action.textId];
+	      case REFRESH_TEXT:
+	         var text = state.entities[action.textId];
 
-	      return (0, _assign5.default)({}, state, {
-	        entities: (0, _assign5.default)({}, state.entities, _defineProperty({}, action.textId, {
-	          title: text.title,
-	          typed: '',
-	          last: text.typed + text.last
-	        }))
-	      });
+	         return (0, _assign5.default)({}, state, {
+	            entities: (0, _assign5.default)({}, state.entities, _defineProperty({}, action.textId, {
+	               title: text.title,
+	               typed: '',
+	               last: text.typed + text.last
+	            }))
+	         });
 
-	    case TYPE_ON_ENTITIE:
-	      return function () {
-	        var entities = (0, _cloneDeep3.default)(state.entities);
+	      case TYPE_ON_ENTITIE:
+	         return function () {
+	            var entities = (0, _cloneDeep3.default)(state.entities);
 
-	        var text = entities[action.textId];
+	            var text = entities[action.textId];
 
-	        text.typed += text.last[0];
-	        text.last = text.last.substring(1);
+	            text.typed += text.last[0];
+	            text.last = text.last.substring(1);
 
-	        return (0, _assign5.default)({}, state, {
-	          entities: entities
-	        });
-	      }();
+	            return (0, _assign5.default)({}, state, {
+	               entities: entities
+	            });
+	         }();
 
-	    default:
-	      return state;
+	      default:
+	         return state;
 
-	  }
+	   }
 	};
 
 	function addNewText(title, text) {
-	  return {
-	    type: ADD_NEW_TEXT,
-	    title: title,
-	    text: text
-	  };
+	   return {
+	      type: ADD_NEW_TEXT,
+	      title: title,
+	      text: text
+	   };
 	}
 
 	function selectText(textId) {
-	  return {
-	    type: SELECT_TEXT,
-	    textId: textId
-	  };
+	   return {
+	      type: SELECT_TEXT,
+	      textId: textId
+	   };
 	}
 
 	function refreshText(textId) {
-	  return {
-	    type: REFRESH_TEXT,
-	    textId: textId
-	  };
+	   return {
+	      type: REFRESH_TEXT,
+	      textId: textId
+	   };
 	}
 
 	function typeOnEntitie(textId) {
-	  return {
-	    type: TYPE_ON_ENTITIE,
-	    textId: textId
-	  };
+	   return {
+	      type: TYPE_ON_ENTITIE,
+	      textId: textId
+	   };
 	}
 
 	function updateFromTextModeCharToType() {
-	  return function (dispatch, getState) {
-	    var state = getState();
-	    var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
-	    var textId = state.textMode.currentTextId;
-	    var entities = state.textMode.entities;
+	   return function (dispatch, getState) {
+	      var state = getState();
+	      var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
+	      var textId = state.textMode.currentTextId;
+	      var entities = state.textMode.entities;
 
-	    var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, entities[textId].last[0]);
+	      var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, entities[textId].last[0]);
 
-	    dispatch((0, _main.setIdsCharToType)(idsCharToType));
-	  };
+	      dispatch((0, _main.setIdsCharToType)(idsCharToType));
+	   };
 	}
-
+	//
 	function typeTextMode(char) {
-	  return function (dispatch, getState) {
-	    var state = getState();
-	    var keyboardState = state.keyboard;
-	    var textModeState = state.textMode;
-	    var keys = (0, _find3.default)(keyboardState.keyboards, { 'name': keyboardState.keyboard }).keys;
-	    var textId = textModeState.currentTextId;
-	    var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
+	   return function (dispatch, getState) {
+	      var state = getState();
+	      var keyboardState = state.keyboard;
+	      var textModeState = state.textMode;
+	      var keys = (0, _find3.default)(keyboardState.keyboards, { 'name': keyboardState.keyboard }).keys;
+	      var textId = textModeState.currentTextId;
+	      var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
 
-	    if (textModeState.entities[textId].last[0] === char) {
-	      var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
+	      if (textModeState.entities[textId].last[0] === char) {
+	         var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
 
-	      dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
+	         dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
 
-	      dispatch(typeOnEntitie(textId));
+	         dispatch(typeOnEntitie(textId));
 
-	      dispatch((0, _main.addSuccesType)());
+	         dispatch((0, _main.addSuccesType)());
 
-	      dispatch((0, _main.updateCharToType)());
-	    } else {
-	      var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
+	         dispatch((0, _main.updateCharToType)());
+	      } else {
+	         var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
 
-	      dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
+	         dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
 
-	      dispatch((0, _main.addErrorType)());
-	    }
-	  };
+	         dispatch((0, _main.addErrorType)());
+	      }
+	   };
 	}
 
 /***/ },
@@ -48921,12 +48982,12 @@
 	   var minWordLength = 3;
 	   var maxChars = 50;
 
-	   return function (maxWordLength, letters) {
+	   return function (maxLettersInWord, letters) {
 	      var lesson = '';
 	      var wordLength = void 0;
 
 	      while (lesson.length <= maxChars) {
-	         wordLength = (0, _random3.default)(minWordLength, maxWordLength);
+	         wordLength = (0, _random3.default)(minWordLength, maxLettersInWord);
 
 	         if (lesson.length + wordLength > maxChars) {
 	            wordLength = maxChars - lesson.length;
@@ -49474,11 +49535,12 @@
 	exports.setMode = setMode;
 	exports.setCurrentLesson = setCurrentLesson;
 	exports.refreshCurrentLesson = refreshCurrentLesson;
-	exports.setMaxWordLength = setMaxWordLength;
-	exports.setFingersLesson = setFingersLesson;
-	exports.setFingersSetSize = setFingersSetSize;
-	exports.setFreeLesson = setFreeLesson;
-	exports.setFreeLetters = setFreeLetters;
+	exports.setMaxLettersInWordFingers = setMaxLettersInWordFingers;
+	exports.setMaxLettersInWordFree = setMaxLettersInWordFree;
+	exports.setLessonFingers = setLessonFingers;
+	exports.setSetSizeFingers = setSetSizeFingers;
+	exports.setLessonFree = setLessonFree;
+	exports.setLettersFree = setLettersFree;
 	exports.addLetterToFreeLetters = addLetterToFreeLetters;
 	exports.removeLetterFromFreeLetters = removeLetterFromFreeLetters;
 	exports.typeOnLesson = typeOnLesson;
@@ -49502,13 +49564,14 @@
 	var SET_LEARNING_MODE = 'learning-mode/SET_LEARNING_MODE';
 	var SET_CURRENT_LESSON = 'learning-mode/SET_CURRENT_LESSON';
 	var REFRESH_CURRENT_LESSON = 'learning-mode/REFRESH_CURRENT_LESSON';
-	var SET_MAX_WORD_LENGTH = 'learning-mode/SET_MAX_WORD_LENGTH';
 
-	var SET_FINGERS_LESSON = 'learning-mode/SET_FINGERS_LESSON';
-	var SET_FINGERS_SET_SIZE = 'learning-mode/SET_FINGERS_SET_SIZE';
+	var SET_LESSON_FINGERS = 'learning-mode/SET_LESSON_FINGERS';
+	var SET_SET_SIZE_FINGERS = 'learning-mode/SET_SET_SIZE_FINGERS';
+	var SET_MAX_LETTERS_IN_WORD_FINGERS = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FINGERS';
 
-	var SET_FREE_LESSON = 'learning-mode/SET_FREE_LESSON';
-	var SET_FREE_LETTERS = 'learning-mode/SET_FREE_LETTERS';
+	var SET_LESSON_FREE = 'learning-mode/SET_LESSON_FREE';
+	var SET_LETTERS_FREE = 'learning-mode/SET_LETTERS_FREE';
+	var SET_MAX_LETTERS_IN_WORD_FREE = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FREE';
 	var ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
 	var REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
 
@@ -49516,11 +49579,13 @@
 	   // fingers, free,
 	   mode: 'fingers',
 
-	   maxWordLength: 5,
+	   maxLettersInWordFingers: 5,
 
-	   fingersSetSize: 0,
+	   setSizeFingers: 0,
 
 	   lessonFingers: '',
+
+	   maxLettersInWordFree: 5,
 
 	   lettersFree: [],
 
@@ -49567,27 +49632,32 @@
 	            }
 	         });
 
-	      case SET_MAX_WORD_LENGTH:
+	      case SET_MAX_LETTERS_IN_WORD_FINGERS:
 	         return (0, _assign3.default)({}, state, {
-	            maxWordLength: action.length
+	            maxLettersInWordFingers: action.length
 	         });
 
-	      case SET_FINGERS_SET_SIZE:
+	      case SET_MAX_LETTERS_IN_WORD_FREE:
 	         return (0, _assign3.default)({}, state, {
-	            fingersSetSize: action.size
+	            maxLettersInWordFree: action.length
 	         });
 
-	      case SET_FINGERS_LESSON:
+	      case SET_SET_SIZE_FINGERS:
+	         return (0, _assign3.default)({}, state, {
+	            setSizeFingers: action.size
+	         });
+
+	      case SET_LESSON_FINGERS:
 	         return (0, _assign3.default)({}, state, {
 	            lessonFingers: action.lesson
 	         });
 
-	      case SET_FREE_LESSON:
+	      case SET_LESSON_FREE:
 	         return (0, _assign3.default)({}, state, {
 	            lessonFree: action.lesson
 	         });
 
-	      case SET_FREE_LETTERS:
+	      case SET_LETTERS_FREE:
 	         return (0, _assign3.default)({}, state, {
 	            lettersFree: action.letters
 	         });
@@ -49628,37 +49698,44 @@
 	   };
 	}
 
-	function setMaxWordLength(length) {
+	function setMaxLettersInWordFingers(length) {
 	   return {
-	      type: SET_MAX_WORD_LENGTH,
+	      type: SET_MAX_LETTERS_IN_WORD_FINGERS,
 	      length: length
 	   };
 	}
 
-	function setFingersLesson(lesson) {
+	function setMaxLettersInWordFree(length) {
 	   return {
-	      type: SET_FINGERS_LESSON,
+	      type: SET_MAX_LETTERS_IN_WORD_FREE,
+	      length: length
+	   };
+	}
+
+	function setLessonFingers(lesson) {
+	   return {
+	      type: SET_LESSON_FINGERS,
 	      lesson: lesson
 	   };
 	}
 
-	function setFingersSetSize(size) {
+	function setSetSizeFingers(size) {
 	   return {
-	      type: SET_FINGERS_SET_SIZE,
+	      type: SET_SET_SIZE_FINGERS,
 	      size: size
 	   };
 	}
 
-	function setFreeLesson(lesson) {
+	function setLessonFree(lesson) {
 	   return {
-	      type: SET_FREE_LESSON,
+	      type: SET_LESSON_FREE,
 	      lesson: lesson
 	   };
 	}
 
-	function setFreeLetters(letters) {
+	function setLettersFree(letters) {
 	   return {
-	      type: SET_FREE_LETTERS,
+	      type: SET_LETTERS_FREE,
 	      letters: letters
 	   };
 	}
@@ -49718,13 +49795,13 @@
 
 	      var fingersSet = (0, _utils.getFingersSet)(keys);
 
-	      fingersSet.splice(state.learningMode.fingersSetSize);
+	      fingersSet.splice(state.learningMode.setSizeFingers);
 
 	      fingersSet = _concat3.default.apply(null, fingersSet);
 
-	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, fingersSet);
+	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFingers, fingersSet);
 
-	      dispatch(setFingersLesson(lesson));
+	      dispatch(setLessonFingers(lesson));
 
 	      dispatch(setCurrentLesson(lesson));
 	   };
@@ -49735,9 +49812,9 @@
 
 	      var state = getState();
 
-	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, state.learningMode.lettersFree);
+	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFree, state.learningMode.lettersFree);
 
-	      dispatch(setFreeLesson(lesson));
+	      dispatch(setLessonFree(lesson));
 
 	      dispatch(setCurrentLesson(lesson));
 	   };
@@ -49790,8 +49867,6 @@
 
 	      var state = getState();
 
-	      console.log('state', state);
-
 	      var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
 
 	      var defaultKeys = (0, _filter3.default)(keys, {
@@ -49808,24 +49883,24 @@
 
 	      var size = (0, _uniqWith3.default)(resultForUnionWith, _isEqual3.default).length;
 
-	      dispatch(setFingersSetSize(size));
+	      dispatch(setSetSizeFingers(size));
 
 	      var letters = defaultKeys.map(function (obj) {
 	         return obj.key;
 	      });
 
-	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, letters);
+	      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFingers, letters);
 
-	      dispatch(setFingersLesson(lesson));
+	      dispatch(setLessonFingers(lesson));
 
 	      dispatch(setCurrentLesson(lesson));
 
-	      dispatch(setFreeLetters(letters));
+	      dispatch(setLettersFree(letters));
 
 	      // different lesson for free mode
-	      lesson = (0, _utils.generateLesson)(state.learningMode.maxWordLength, letters);
+	      lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFree, letters);
 
-	      dispatch(setFreeLesson(lesson));
+	      dispatch(setLessonFree(lesson));
 	   };
 	}
 
@@ -61398,10 +61473,6 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _perfectScrollbar = __webpack_require__(592);
-
-	var _perfectScrollbar2 = _interopRequireDefault(_perfectScrollbar);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -61422,7 +61493,7 @@
 	  _createClass(Textarea, [{
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      _perfectScrollbar2.default.initialize(this._textarea);
+	      $(this._textarea).perfectScrollbar();
 	    }
 	  }, {
 	    key: 'render',
@@ -61460,15 +61531,7 @@
 	exports.default = Textarea;
 
 /***/ },
-/* 592 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	module.exports = __webpack_require__(593);
-
-
-/***/ },
+/* 592 */,
 /* 593 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -66240,7 +66303,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -66251,9 +66314,9 @@
 
 	var _reactRouter = __webpack_require__(217);
 
-	var _perfectScrollbar = __webpack_require__(592);
+	var _jquery = __webpack_require__(275);
 
-	var _perfectScrollbar2 = _interopRequireDefault(_perfectScrollbar);
+	var _jquery2 = _interopRequireDefault(_jquery);
 
 	var _classNames = __webpack_require__(559);
 
@@ -66262,10 +66325,6 @@
 	var _AddTextForm = __webpack_require__(628);
 
 	var _AddTextForm2 = _interopRequireDefault(_AddTextForm);
-
-	var _Switcher = __webpack_require__(632);
-
-	var _Switcher2 = _interopRequireDefault(_Switcher);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66276,129 +66335,138 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var TextMode = function (_Component) {
-	  _inherits(TextMode, _Component);
+	   _inherits(TextMode, _Component);
 
-	  function TextMode() {
-	    _classCallCheck(this, TextMode);
+	   function TextMode() {
+	      _classCallCheck(this, TextMode);
 
-	    return _possibleConstructorReturn(this, (TextMode.__proto__ || Object.getPrototypeOf(TextMode)).apply(this, arguments));
-	  }
+	      return _possibleConstructorReturn(this, (TextMode.__proto__ || Object.getPrototypeOf(TextMode)).apply(this, arguments));
+	   }
 
-	  _createClass(TextMode, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      _perfectScrollbar2.default.initialize(this._texts);
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
+	   _createClass(TextMode, [{
+	      key: 'componentDidMount',
+	      value: function componentDidMount() {
 
-	      var self = this;
-	      var _props = this.props,
-	          texts = _props.texts,
-	          currentTextId = _props.currentTextId,
-	          mode = _props.mode;
+	         var $texts = (0, _jquery2.default)(this._texts);
+
+	         var selectedTextOffsetTop = (0, _jquery2.default)(this._selectedText).offset().top;
+
+	         $texts.scrollTop(selectedTextOffsetTop - $texts.offset().top - 120);
+
+	         $texts.perfectScrollbar();
+	      }
+	   }, {
+	      key: 'render',
+	      value: function render() {
+	         var _this2 = this;
+
+	         var self = this;
+	         var _props = this.props,
+	             texts = _props.texts,
+	             currentTextId = _props.currentTextId;
 
 
-	      var textsBlock = texts.map(function (obj) {
-	        var clsN = 'settings-text__text';
-	        var textId = parseInt(obj.textId, 10);
+	         var textsBlock = texts.map(function (obj) {
+	            var clsN = 'settings-text__text';
+	            var textId = parseInt(obj.textId, 10);
 
-	        if (textId === currentTextId) {
-	          clsN = (0, _classNames2.default)(clsN, 'settings-text__text-selected');
-	        }
+	            var props = {
+	               key: textId,
+	               title: obj.title,
+	               className: clsN
+	            };
 
-	        return _react2.default.createElement(
-	          'div',
-	          { className: 'settings-text__text-wrap', key: textId },
-	          _react2.default.createElement(
+	            if (textId === currentTextId) {
+
+	               props.className = (0, _classNames2.default)(props.className, 'settings-text__text-selected');
+
+	               props.ref = function (t) {
+	                  self._selectedText = t;
+	               };
+	            } else {
+
+	               props.onClick = self._onSelectText.bind(self, textId);
+	            }
+
+	            return _react2.default.createElement(
+	               'div',
+	               props,
+	               _react2.default.createElement(
+	                  'h3',
+	                  { className: 'settings-text__text-title' },
+	                  _react2.default.createElement(
+	                     _reactRouter.Link,
+	                     { to: '/settings/text/' + textId },
+	                     obj.title
+	                  )
+	               ),
+	               _react2.default.createElement(
+	                  'div',
+	                  { className: 'settings-text__text-content' },
+	                  obj.text
+	               )
+	            );
+	         });
+
+	         return _react2.default.createElement(
 	            'div',
-	            { className: clsN, title: obj.title, onClick: self._onSelectText.bind(self, textId) },
+	            { className: 'settings-text' },
 	            _react2.default.createElement(
-	              'h3',
-	              { className: 'settings-text__text-title' },
-	              _react2.default.createElement(
-	                _reactRouter.Link,
-	                { to: '/settings/text/' + textId },
-	                obj.title
-	              )
+	               'div',
+	               { className: 'settings-text__item' },
+	               _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: '', className: 'settings-text__label' },
+	                  'Current text'
+	               ),
+	               _react2.default.createElement(
+	                  'div',
+	                  { className: 'settings-text__item-ctrl settings-text__ctrl-texts' },
+	                  _react2.default.createElement(
+	                     'div',
+	                     { className: 'settings-text__texts', ref: function ref(t) {
+	                           return _this2._texts = t;
+	                        } },
+	                     textsBlock
+	                  )
+	               )
 	            ),
 	            _react2.default.createElement(
-	              'div',
-	              { className: 'settings-text__text-content' },
-	              obj.text
+	               'div',
+	               { className: 'settings-text__item' },
+	               _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: '', className: 'settings-text__label' },
+	                  'Add new text'
+	               ),
+	               _react2.default.createElement(
+	                  'div',
+	                  { className: 'settings-text__item-ctrl' },
+	                  _react2.default.createElement(_AddTextForm2.default, { className: 'settings-text__add-text-form' })
+	               )
 	            )
-	          )
-	        );
-	      });
-
-	      var switcherChecked = false;
-
-	      if (mode === 'text') {
-	        switcherChecked = true;
+	         );
 	      }
+	   }, {
+	      key: '_onSwitcherChange',
+	      value: function _onSwitcherChange(e) {
 
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'settings-text' },
-	        _react2.default.createElement(_Switcher2.default, { checked: switcherChecked, onChange: this._onSwitcherChange.bind(this) }),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'settings-text__item' },
-	          _react2.default.createElement(
-	            'label',
-	            { htmlFor: '', className: 'settings-text__label' },
-	            'Current text'
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'settings-text__item-ctrl settings-text__ctrl-texts' },
-	            _react2.default.createElement(
-	              'div',
-	              { className: 'settings-text__texts', ref: function ref(t) {
-	                  return _this2._texts = t;
-	                } },
-	              textsBlock
-	            )
-	          )
-	        ),
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'settings-text__item' },
-	          _react2.default.createElement(
-	            'label',
-	            { htmlFor: '', className: 'settings-text__label' },
-	            'Add new text'
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'settings-text__item-ctrl' },
-	            _react2.default.createElement(_AddTextForm2.default, { className: 'settings-text__add-text-form' })
-	          )
-	        )
-	      );
-	    }
-	  }, {
-	    key: '_onSwitcherChange',
-	    value: function _onSwitcherChange(e) {
-
-	      if (e.target.checked) {
-	        this.props.setMode('text');
+	         if (e.target.checked) {
+	            this.props.setMode('text');
+	         }
 	      }
-	    }
-	  }, {
-	    key: '_onSelectText',
-	    value: function _onSelectText(textId, e) {
-	      if (e.target.nodeName.toLowerCase() === 'a') {
-	        return;
+	   }, {
+	      key: '_onSelectText',
+	      value: function _onSelectText(textId, e) {
+	         if (e.target.nodeName.toLowerCase() === 'a') {
+	            return;
+	         }
+
+	         this.props.selectText(textId);
 	      }
+	   }]);
 
-	      this.props.selectText(textId);
-	    }
-	  }]);
-
-	  return TextMode;
+	   return TextMode;
 	}(_react.Component);
 
 	exports.default = TextMode;
@@ -66780,36 +66848,7 @@
 	exports.default = Control;
 
 /***/ },
-/* 632 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _react = __webpack_require__(177);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Footer = function Footer(props) {
-	   return _react2.default.createElement(
-	      "label",
-	      { className: "switcher" },
-	      _react2.default.createElement("input", _extends({ type: "radio" }, props)),
-	      _react2.default.createElement("span", { className: "switcher__bg" }),
-	      _react2.default.createElement("span", { className: "switcher__toggle" })
-	   );
-	};
-
-	exports.default = Footer;
-
-/***/ },
+/* 632 */,
 /* 633 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -66989,15 +67028,12 @@
 
 	var _LearningMode2 = _interopRequireDefault(_LearningMode);
 
-	var _learningMode = __webpack_require__(470);
-
 	var _main = __webpack_require__(296);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var mapStateToProps = function mapStateToProps(state) {
 	   return {
-	      maxWordLength: state.learningMode.maxWordLength,
 	      lesson: state.learningMode.lesson.last,
 	      learningMode: state.learningMode.mode,
 	      mode: state.main.mode
@@ -67005,31 +67041,12 @@
 	};
 
 	var mergeProps = function mergeProps(stateProps, dispatchProps, ownProps) {
-	   var learningMode = stateProps.learningMode;
 	   var dispatch = dispatchProps.dispatch;
 
 
 	   return (0, _assign3.default)({}, stateProps, ownProps, {
 	      setMode: function setMode(mode) {
 	         dispatch((0, _main.setMode)(mode));
-	      },
-	      setMaxWordLength: function setMaxWordLength(length) {
-
-	         dispatch((0, _learningMode.setMaxWordLength)(length));
-
-	         switch (learningMode) {
-	            case 'fingers':
-
-	               dispatch((0, _learningMode.generateAndSetFingersLesson)());
-
-	               break;
-
-	            case 'free':
-
-	               dispatch((0, _learningMode.generateAndSetFreeLesson)());
-
-	               break;
-	         }
 	      }
 	   });
 	};
@@ -67054,18 +67071,6 @@
 
 	var _reactRouter = __webpack_require__(217);
 
-	var _jquery = __webpack_require__(275);
-
-	var _jquery2 = _interopRequireDefault(_jquery);
-
-	var _nouislider = __webpack_require__(622);
-
-	var _nouislider2 = _interopRequireDefault(_nouislider);
-
-	var _Switcher = __webpack_require__(632);
-
-	var _Switcher2 = _interopRequireDefault(_Switcher);
-
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -67077,50 +67082,16 @@
 	var LearningMode = function (_Component) {
 	   _inherits(LearningMode, _Component);
 
-	   function LearningMode(props) {
+	   function LearningMode() {
 	      _classCallCheck(this, LearningMode);
 
-	      return _possibleConstructorReturn(this, (LearningMode.__proto__ || Object.getPrototypeOf(LearningMode)).call(this, props));
+	      return _possibleConstructorReturn(this, (LearningMode.__proto__ || Object.getPrototypeOf(LearningMode)).apply(this, arguments));
 	   }
 
 	   _createClass(LearningMode, [{
-	      key: 'componentDidMount',
-	      value: function componentDidMount() {
-	         var self = this;
-	         var $noUiValueMaxWordLength = (0, _jquery2.default)('<span class="noUi-value" />');
-
-	         // max word length range
-	         _nouislider2.default.create(this._maxWordLengthRange, {
-	            start: [this.props.maxWordLength],
-	            step: 1,
-	            connect: 'lower',
-	            range: {
-	               'min': 3,
-	               'max': 10
-	            }
-	         });
-
-	         $noUiValueMaxWordLength.text(this.props.maxWordLength);
-
-	         (0, _jquery2.default)(this._maxWordLengthRange).find('.noUi-handle').append($noUiValueMaxWordLength);
-
-	         this._maxWordLengthRange.noUiSlider.on('slide', function (values, handle) {
-	            var val = parseInt(values[handle], 10);
-
-	            self.props.setMaxWordLength(val);
-
-	            $noUiValueMaxWordLength.text(val);
-	         });
-	      }
-	   }, {
 	      key: 'render',
 	      value: function render() {
-	         var _this2 = this;
-
-	         var _props = this.props,
-	             lesson = _props.lesson,
-	             mode = _props.mode,
-	             learningMode = _props.learningMode;
+	         var lesson = this.props.lesson;
 
 
 	         var lessonKeys = lesson.split('').map(function (char, idx) {
@@ -67137,18 +67108,9 @@
 
 	         var learningModePath = '/settings/learning-mode/';
 
-	         var switcherChecked = false;
-
-	         var switcher = _react2.default.createElement(_Switcher2.default, { checked: switcherChecked, onChange: this._onSwitcherChange.bind(this) });
-
-	         if (mode === 'learning') {
-	            switcher = _react2.default.createElement(_Switcher2.default, { checked: true, onChange: this._onSwitcherChange.bind(this) });
-	         }
-
 	         return _react2.default.createElement(
 	            'div',
 	            { className: 'settings-learning' },
-	            switcher,
 	            _react2.default.createElement(
 	               'div',
 	               { className: 'learningarea' },
@@ -67193,22 +67155,6 @@
 	               _react2.default.createElement(
 	                  'div',
 	                  { className: 'settings-learning__modes-content' },
-	                  _react2.default.createElement(
-	                     'div',
-	                     { className: 'settings-learning__item' },
-	                     _react2.default.createElement(
-	                        'label',
-	                        { htmlFor: '', className: 'settings-learning__label' },
-	                        'Max word length:'
-	                     ),
-	                     _react2.default.createElement(
-	                        'div',
-	                        { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
-	                        _react2.default.createElement('div', { className: 'settings-learning__range settings-learning__max-word-length', ref: function ref(c) {
-	                              return _this2._maxWordLengthRange = c;
-	                           } })
-	                     )
-	                  ),
 	                  this.props.children
 	               )
 	            )
@@ -67258,8 +67204,8 @@
 	   var keys = (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys;
 
 	   return {
-	      fingersSetSize: state.learningMode.fingersSetSize,
-	      maxWordLength: state.learningMode.maxWordLength,
+	      setSizeFingers: state.learningMode.setSizeFingers,
+	      maxLettersInWord: state.learningMode.maxLettersInWordFingers,
 	      fingersSet: (0, _utils.getFingersSet)(keys),
 	      keys: keys
 	   };
@@ -67268,9 +67214,15 @@
 	var mapDispatchToProps = function mapDispatchToProps(dispatch) {
 	   return {
 	      setFingersSetSize: function setFingersSetSize(size) {
-	         dispatch((0, _learningMode.setFingersSetSize)(size));
+	         dispatch((0, _learningMode.setSetSizeFingers)(size));
 
 	         dispatch((0, _learningMode.generateAndSetFingersLesson)(size));
+	      },
+	      setMaxLettersInWord: function setMaxLettersInWord(length) {
+
+	         dispatch((0, _learningMode.setMaxLettersInWordFingers)(length));
+
+	         dispatch((0, _learningMode.generateAndSetFingersLesson)());
 	      }
 	   };
 	};
@@ -67339,18 +67291,43 @@
 	   _createClass(LearningFingers, [{
 	      key: 'componentDidMount',
 	      value: function componentDidMount() {
-	         var _this2 = this;
-
 	         var self = this;
-	         this.$noUiValueFingersSet = (0, _jquery2.default)('<span class="noUi-value" />');
 
 	         var _props = this.props,
 	             fingersSet = _props.fingersSet,
-	             fingersSetSize = _props.fingersSetSize;
+	             setSizeFingers = _props.setSizeFingers,
+	             maxLettersInWord = _props.maxLettersInWord;
 
+
+	         var $noUiValueMaxLettersInWord = (0, _jquery2.default)('<span class="noUi-value" />');
+
+	         // max word length range
+	         _nouislider2.default.create(this._maxLettersInWordRange, {
+	            start: [maxLettersInWord],
+	            step: 1,
+	            connect: 'lower',
+	            range: {
+	               'min': 3,
+	               'max': 10
+	            }
+	         });
+
+	         $noUiValueMaxLettersInWord.text(maxLettersInWord);
+
+	         (0, _jquery2.default)(this._maxLettersInWordRange).find('.noUi-handle').append($noUiValueMaxLettersInWord);
+
+	         this._maxLettersInWordRange.noUiSlider.on('slide', function (values, handle) {
+	            var val = parseInt(values[handle], 10);
+
+	            self.props.setMaxLettersInWord(val);
+
+	            $noUiValueMaxLettersInWord.text(val);
+	         });
+
+	         var $noUiValueFingersSet = (0, _jquery2.default)('<span class="noUi-value" />');
 
 	         _nouislider2.default.create(this._fingersRange, {
-	            start: [fingersSetSize],
+	            start: [setSizeFingers],
 	            step: 1,
 	            connect: 'lower',
 	            range: {
@@ -67359,37 +67336,32 @@
 	            }
 	         });
 
-	         this.$noUiValueFingersSet.text(fingersSetSize);
+	         $noUiValueFingersSet.text(setSizeFingers);
 
-	         (0, _jquery2.default)(this._fingersRange).find('.noUi-handle').append(this.$noUiValueFingersSet);
+	         (0, _jquery2.default)(this._fingersRange).find('.noUi-handle').append($noUiValueFingersSet);
 
 	         this._fingersRange.noUiSlider.on('slide', function (values, handle) {
 	            var val = parseInt(values[handle], 10);
 
 	            self.props.setFingersSetSize(val);
 
-	            _this2.$noUiValueFingersSet.text(val);
+	            $noUiValueFingersSet.text(val);
 	         });
-	      }
-	   }, {
-	      key: 'componentDidUpdate',
-	      value: function componentDidUpdate() {
-	         this.$noUiValueFingersSet.text(this.props.fingersSetSize);
 	      }
 	   }, {
 	      key: 'render',
 	      value: function render() {
-	         var _this3 = this;
+	         var _this2 = this;
 
 	         var _props2 = this.props,
 	             keys = _props2.keys,
 	             fingersSet = _props2.fingersSet,
-	             fingersSetSize = _props2.fingersSetSize;
+	             setSizeFingers = _props2.setSizeFingers;
 
 
 	         var selectedLetters = (0, _clone3.default)(fingersSet);
 
-	         selectedLetters.splice(fingersSetSize);
+	         selectedLetters.splice(setSizeFingers);
 
 	         selectedLetters = _concat3.default.apply(null, selectedLetters);
 
@@ -67428,7 +67400,23 @@
 
 	         return _react2.default.createElement(
 	            'div',
-	            { className: 'settings-learning__letters-set' },
+	            null,
+	            _react2.default.createElement(
+	               'div',
+	               { className: 'settings-learning__item' },
+	               _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: '', className: 'settings-learning__label' },
+	                  'Max word length:'
+	               ),
+	               _react2.default.createElement(
+	                  'div',
+	                  { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
+	                  _react2.default.createElement('div', { className: 'settings-learning__range settings-learning__max-word-length', ref: function ref(c) {
+	                        return _this2._maxLettersInWordRange = c;
+	                     } })
+	               )
+	            ),
 	            _react2.default.createElement(
 	               'div',
 	               { className: 'settings-learning__item' },
@@ -67441,7 +67429,7 @@
 	                  'div',
 	                  { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
 	                  _react2.default.createElement('div', { className: 'settings-learning__range', ref: function ref(c) {
-	                        return _this3._fingersRange = c;
+	                        return _this2._fingersRange = c;
 	                     } })
 	               )
 	            ),
@@ -67527,6 +67515,7 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 	   return {
+	      maxLettersInWord: state.learningMode.maxLettersInWordFree,
 	      keys: (0, _find3.default)(state.main.keyboards, { 'name': state.main.keyboard }).keys,
 	      letters: state.learningMode.lettersFree
 	   };
@@ -67537,14 +67526,16 @@
 	      addLetter: function addLetter(letter) {
 	         dispatch((0, _learningMode.addLetterToFreeLetters)(letter));
 
-	         console.log('addLetter');
-
 	         dispatch((0, _learningMode.generateAndSetFreeLesson)());
 	      },
 	      removeLetter: function removeLetter(letter) {
 	         dispatch((0, _learningMode.removeLetterFromFreeLetters)(letter));
 
-	         console.log('removeLetter');
+	         dispatch((0, _learningMode.generateAndSetFreeLesson)());
+	      },
+	      setMaxLettersInWord: function setMaxLettersInWord(length) {
+
+	         dispatch((0, _learningMode.setMaxLettersInWordFingers)(length));
 
 	         dispatch((0, _learningMode.generateAndSetFreeLesson)());
 	      }
@@ -67573,6 +67564,14 @@
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
+	var _jquery = __webpack_require__(275);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
+
+	var _nouislider = __webpack_require__(622);
+
+	var _nouislider2 = _interopRequireDefault(_nouislider);
+
 	var _Key = __webpack_require__(617);
 
 	var _Key2 = _interopRequireDefault(_Key);
@@ -67595,6 +67594,39 @@
 	   }
 
 	   _createClass(LearningFree, [{
+	      key: 'componentDidMount',
+	      value: function componentDidMount() {
+	         var self = this;
+
+	         var maxLettersInWord = this.props.maxLettersInWord;
+
+
+	         var $noUiValueMaxLettersInWord = (0, _jquery2.default)('<span class="noUi-value" />');
+
+	         // max word length range
+	         _nouislider2.default.create(this._maxLettersInWordRange, {
+	            start: [maxLettersInWord],
+	            step: 1,
+	            connect: 'lower',
+	            range: {
+	               'min': 3,
+	               'max': 10
+	            }
+	         });
+
+	         $noUiValueMaxLettersInWord.text(maxLettersInWord);
+
+	         (0, _jquery2.default)(this._maxLettersInWordRange).find('.noUi-handle').append($noUiValueMaxLettersInWord);
+
+	         this._maxLettersInWordRange.noUiSlider.on('slide', function (values, handle) {
+	            var val = parseInt(values[handle], 10);
+
+	            self.props.setMaxLettersInWord(val);
+
+	            $noUiValueMaxLettersInWord.text(val);
+	         });
+	      }
+	   }, {
 	      key: 'render',
 	      value: function render() {
 	         var _this2 = this;
@@ -67640,7 +67672,23 @@
 
 	         return _react2.default.createElement(
 	            'div',
-	            { className: 'settings-learning__keyboard' },
+	            null,
+	            _react2.default.createElement(
+	               'div',
+	               { className: 'settings-learning__item' },
+	               _react2.default.createElement(
+	                  'label',
+	                  { htmlFor: '', className: 'settings-learning__label' },
+	                  'Max word length:'
+	               ),
+	               _react2.default.createElement(
+	                  'div',
+	                  { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
+	                  _react2.default.createElement('div', { className: 'settings-learning__range settings-learning__max-word-length', ref: function ref(c) {
+	                        return _this2._maxLettersInWordRange = c;
+	                     } })
+	               )
+	            ),
 	            _react2.default.createElement(
 	               'div',
 	               { className: 'keyboard' },
@@ -68866,6 +68914,63 @@
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
+
+/***/ },
+/* 670 */,
+/* 671 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	module.exports = __webpack_require__(672);
+
+
+/***/ },
+/* 672 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;'use strict';
+
+	var ps = __webpack_require__(593);
+	var psInstances = __webpack_require__(598);
+
+	function mountJQuery(jQuery) {
+	  jQuery.fn.perfectScrollbar = function (settingOrCommand) {
+	    return this.each(function () {
+	      if (typeof settingOrCommand === 'object' ||
+	          typeof settingOrCommand === 'undefined') {
+	        // If it's an object or none, initialize.
+	        var settings = settingOrCommand;
+
+	        if (!psInstances.get(this)) {
+	          ps.initialize(this, settings);
+	        }
+	      } else {
+	        // Unless, it may be a command.
+	        var command = settingOrCommand;
+
+	        if (command === 'update') {
+	          ps.update(this);
+	        } else if (command === 'destroy') {
+	          ps.destroy(this);
+	        }
+	      }
+	    });
+	  };
+	}
+
+	if (true) {
+	  // AMD. Register as an anonymous module.
+	  !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(275)], __WEBPACK_AMD_DEFINE_FACTORY__ = (mountJQuery), __WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ? (__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__), __WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
+	} else {
+	  var jq = window.jQuery ? window.jQuery : window.$;
+	  if (typeof jq !== 'undefined') {
+	    mountJQuery(jq);
+	  }
+	}
+
+	module.exports = mountJQuery;
+
 
 /***/ }
 /******/ ]);

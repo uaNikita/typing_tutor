@@ -1,16 +1,14 @@
 import React, { Component } from 'react';
 
-import Ps from 'perfect-scrollbar';
-
 class Textarea extends Component {
 
   componentDidMount() {
-    Ps.initialize(this._textarea);
+     $(this._textarea).perfectScrollbar();
   }
 
   render() {
 
-    const { typed, nonTyped } = this.props
+    const { typed, nonTyped } = this.props;
 
     return (
       <div className='textarea' ref={(t) => this._textarea = t}>

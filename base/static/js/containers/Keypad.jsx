@@ -1,6 +1,6 @@
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import {find} from 'lodash';
-import KeyPad from '../components/Keypad.jsx'
+import KeyPad from '../components/Keypad.jsx';
 
 const mapStateToProps = (state) => {
 
@@ -9,10 +9,10 @@ const mapStateToProps = (state) => {
     pressedRightIds: state.main.pressedRightIds,
     pressedWrongIds: state.main.pressedWrongIds,
     idCharsToType: state.main.idCharsToType
-  }
+  };
 
-}
+};
 
 export default connect(
   mapStateToProps
-)(KeyPad)
+)(KeyPad);

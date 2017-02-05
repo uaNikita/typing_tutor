@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import { uniq } from 'lodash';
 import classNames from 'classNames';
 
-import Control from './Control.jsx'
+import Control from './Control.jsx';
 
 class AddTextForm extends Component {
 
@@ -27,11 +27,11 @@ class AddTextForm extends Component {
     e.preventDefault();
 
     if (!this._wasSubmit) {
-      this._wasSubmit = true
+      this._wasSubmit = true;
     }
 
     if (this._validateForm()) {
-      this.props.onSubmit(this._title.refs.ctrl.value, this._textarea.refs.ctrl.value)
+      this.props.onSubmit(this._title.refs.ctrl.value, this._textarea.refs.ctrl.value);
 
       this._title.refs.ctrl.value = '';
 
@@ -43,15 +43,15 @@ class AddTextForm extends Component {
   handleKeyUp() {
 
     if (!this._wasSubmit) {
-      return
+      return;
     }
 
-    this._validateForm()
+    this._validateForm();
 
   }
 
   render() {
-    const { className } = this.props
+    const { className } = this.props;
 
     return (
       <form className={ classNames('add-text-form', className) } onSubmit={ this.handleSubmit.bind(this) }>

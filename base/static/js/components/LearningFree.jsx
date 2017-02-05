@@ -1,9 +1,45 @@
 import React, {Component} from 'react';
 import classNames from 'classNames';
 import {assign} from 'lodash';
+import $ from 'jquery';
+import noUiSlider from 'nouislider';
 import Key from './Key.jsx';
 
 class LearningFree extends Component {
+
+   componentDidMount() {
+      let self = this;
+
+      const {maxLettersInWord} = this.props;
+
+      let $noUiValueMaxLettersInWord = $('<span class="noUi-value" />');
+
+      // max word length range
+      noUiSlider.create(this._maxLettersInWordRange, {
+         start: [maxLettersInWord],
+         step: 1,
+         connect: 'lower',
+         range: {
+            'min': 3,
+            'max': 10
+         }
+      });
+
+      $noUiValueMaxLettersInWord.text(maxLettersInWord);
+
+      $(this._maxLettersInWordRange)
+        .find('.noUi-handle')
+        .append($noUiValueMaxLettersInWord);
+
+      this._maxLettersInWordRange.noUiSlider.on('slide', function (values, handle) {
+         let val = parseInt(values[handle], 10);
+
+         self.props.setMaxLettersInWord(val);
+
+         $noUiValueMaxLettersInWord.text(val);
+      });
+
+   }
 
    render() {
       const {keys, letters} = this.props;
@@ -45,10 +81,21 @@ class LearningFree extends Component {
       });
 
       return (
-        <div className="settings-learning__keyboard">
+        <div>
+
+           <div className="settings-learning__item">
+              <label htmlFor="" className="settings-learning__label">
+                 Max word length:
+              </label>
+              <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+                 <div className="settings-learning__range settings-learning__max-word-length" ref={(c) => this._maxLettersInWordRange = c }></div>
+              </div>
+           </div>
+
            <div className="keyboard">
               {keyNodes}
            </div>
+
         </div>
       )
    }

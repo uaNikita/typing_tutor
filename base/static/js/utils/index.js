@@ -16,7 +16,7 @@ export function getIdsFromCharacter(keys, сharacter) {
          }
 
       } else if (obj.key === сharacter) {
-         charsToType.push(obj.id)
+         charsToType.push(obj.id);
       }
 
    });
@@ -34,7 +34,7 @@ export function sliceChar(chars, idChars) {
          newChars = [
             ...newChars.slice(0, index),
             ...newChars.slice(index + 1)
-         ]
+         ];
       }
 
    });
@@ -46,12 +46,12 @@ export const generateLesson = (() => {
    let minWordLength = 3;
    let maxChars = 50;
 
-   return (maxWordLength, letters) => {
+   return (maxLettersInWord, letters) => {
       let lesson = '';
       let wordLength;
 
       while (lesson.length <= maxChars) {
-         wordLength = random(minWordLength, maxWordLength);
+         wordLength = random(minWordLength, maxLettersInWord);
 
          if (lesson.length + wordLength > maxChars) {
             wordLength = maxChars - lesson.length;
@@ -61,7 +61,7 @@ export const generateLesson = (() => {
             }
          }
 
-         times(wordLength, function () {
+         times(wordLength, () => {
             let idxLetter = random(0, letters.length - 1);
 
             lesson += letters[idxLetter];
@@ -71,10 +71,10 @@ export const generateLesson = (() => {
 
       }
 
-      lesson = lesson.slice(0, -1)
+      lesson = lesson.slice(0, -1);
 
       return lesson;
-   }
+   };
 })();
 
 export function getFingersSet(keys) {
@@ -91,11 +91,11 @@ export function getFingersSet(keys) {
          hands.forEach(hand => {
 
             let keysArr = filter(keys, {
-               row   : row,
+               row: row,
                finger: finger,
-               hand  : hand,
-               type  : 'letter'
-            }).map(obj=> {
+               hand: hand,
+               type: 'letter'
+            }).map(obj => {
                return obj.key;
             });
 

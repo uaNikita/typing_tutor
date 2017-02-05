@@ -1,39 +1,43 @@
-import {connect} from 'react-redux'
+import {connect} from 'react-redux';
 import {find} from 'lodash';
-import LearningFree from '../components/LearningFree.jsx'
+import LearningFree from '../components/LearningFree.jsx';
 import {
-  addLetterToFreeLetters,
-  removeLetterFromFreeLetters,
-  generateAndSetFreeLesson
-} from '../redux/modules/learning-mode'
+   addLetterToFreeLetters,
+   removeLetterFromFreeLetters,
+   generateAndSetFreeLesson,
+   setMaxLettersInWordFingers
+} from '../redux/modules/learning-mode';
 
 const mapStateToProps = (state) => {
    return {
+      maxLettersInWord: state.learningMode.maxLettersInWordFree,
       keys: find(state.main.keyboards, {'name': state.main.keyboard}).keys,
       letters: state.learningMode.lettersFree
-   }
-}
+   };
+};
 
 const mapDispatchToProps = (dispatch) => {
    return {
       addLetter: (letter) => {
          dispatch(addLetterToFreeLetters(letter));
 
-         console.log('addLetter');
-
          dispatch(generateAndSetFreeLesson());
       },
       removeLetter: (letter) => {
          dispatch(removeLetterFromFreeLetters(letter));
 
-         console.log('removeLetter');
+         dispatch(generateAndSetFreeLesson());
+      },
+      setMaxLettersInWord: (length) => {
+
+         dispatch(setMaxLettersInWordFingers(length));
 
          dispatch(generateAndSetFreeLesson());
       }
-   }
-}
+   };
+};
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(LearningFree)
+)(LearningFree);

@@ -4,6 +4,11 @@ import {Router, Route, Redirect, IndexRoute, browserHistory} from 'react-router'
 import {syncHistoryWithStore} from 'react-router-redux'
 import $ from 'jquery';
 
+
+window.$ = $;
+// initialize perfect-scrollbar for $ in all project;
+import 'perfect-scrollbar/jquery';
+
 import Layout from '../containers/Layout.jsx';
 import Home from './Home.jsx';
 import Settings from '../components/Settings.jsx';
@@ -20,15 +25,15 @@ import {
   typeChar,
   updateStartVariables,
   updateCharToType
-} from '../redux/modules/main'
+} from '../redux/modules/main';
 
 import {
   initializeLearningState,
   refreshCurrentLesson,
   selectMode as selectLearningMode
-} from '../redux/modules/learning-mode'
+} from '../redux/modules/learning-mode';
 
-const history = syncHistoryWithStore(browserHistory, store)
+const history = syncHistoryWithStore(browserHistory, store);
 
 // todo: написать проверку, где брать пользователя из кук и вытягивать данные из базы
 // если такого пользователя нет значит сгенерировать значения такие как уроки для мода лернинг и так далее

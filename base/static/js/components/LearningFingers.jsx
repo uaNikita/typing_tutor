@@ -10,12 +10,42 @@ class LearningFingers extends Component {
 
    componentDidMount() {
       let self = this;
-      this.$noUiValueFingersSet = $('<span class="noUi-value" />');
 
-      const {fingersSet, fingersSetSize} = this.props;
+      const {fingersSet, setSizeFingers, maxLettersInWord} = this.props;
+
+
+      let $noUiValueMaxLettersInWord = $('<span class="noUi-value" />');
+
+      // max word length range
+      noUiSlider.create(this._maxLettersInWordRange, {
+         start  : [maxLettersInWord],
+         step   : 1,
+         connect: 'lower',
+         range  : {
+            'min': 3,
+            'max': 10
+         }
+      });
+
+      $noUiValueMaxLettersInWord.text(maxLettersInWord);
+
+      $(this._maxLettersInWordRange)
+        .find('.noUi-handle')
+        .append($noUiValueMaxLettersInWord);
+
+      this._maxLettersInWordRange.noUiSlider.on('slide', function (values, handle) {
+         let val = parseInt(values[handle], 10);
+
+         self.props.setMaxLettersInWord(val);
+
+         $noUiValueMaxLettersInWord.text(val);
+      });
+
+
+      let $noUiValueFingersSet = $('<span class="noUi-value" />');
 
       noUiSlider.create(this._fingersRange, {
-         start  : [fingersSetSize],
+         start  : [setSizeFingers],
          step   : 1,
          connect: 'lower',
          range  : {
@@ -24,29 +54,27 @@ class LearningFingers extends Component {
          }
       });
 
-      this.$noUiValueFingersSet.text(fingersSetSize);
+      $noUiValueFingersSet.text(setSizeFingers);
 
-      $(this._fingersRange).find('.noUi-handle').append(this.$noUiValueFingersSet);
+      $(this._fingersRange)
+        .find('.noUi-handle')
+        .append($noUiValueFingersSet);
 
       this._fingersRange.noUiSlider.on('slide', (values, handle) => {
          let val = parseInt(values[handle], 10);
          
          self.props.setFingersSetSize(val);
 
-         this.$noUiValueFingersSet.text(val);
+         $noUiValueFingersSet.text(val);
       });
    }
 
-   componentDidUpdate() {
-      this.$noUiValueFingersSet.text(this.props.fingersSetSize);
-   }
-
    render() {
-      const {keys, fingersSet, fingersSetSize} = this.props;
+      const {keys, fingersSet, setSizeFingers} = this.props;
 
       let selectedLetters = clone(fingersSet);
 
-      selectedLetters.splice(fingersSetSize);
+      selectedLetters.splice(setSizeFingers);
 
       selectedLetters = concat.apply(null, selectedLetters);
       
@@ -86,7 +114,16 @@ class LearningFingers extends Component {
 
 
       return (
-        <div className="settings-learning__letters-set">
+        <div>
+
+           <div className="settings-learning__item">
+              <label htmlFor="" className="settings-learning__label">
+                 Max word length:
+              </label>
+              <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+                 <div className="settings-learning__range settings-learning__max-word-length" ref={(c) => this._maxLettersInWordRange = c }></div>
+              </div>
+           </div>
 
            <div className="settings-learning__item">
               <label htmlFor="" className="settings-learning__label">

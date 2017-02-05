@@ -24,7 +24,7 @@ export default (state = INITIAL_STATE, action = {}) => {
                name: action.name,
                closable
             });
-         })()
+         })();
 
       case CLOSE_MODAL:
          return assign({}, state, {
