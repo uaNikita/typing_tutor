@@ -22,7 +22,7 @@ import {getIdsFromCharacter, sliceChar} from '../../utils';
 const INITIAL_STATE = {
    keyboard: 'US',
 
-   keyboards: keyboards,
+   keys: find(keyboards, {'name': 'US'}).keys,
 
    pressedRightIds: [],
 
@@ -88,7 +88,8 @@ export default (state = INITIAL_STATE, action = {}) => {
 
       case SET_KEYBOARD:
          return assign({}, state, {
-            keyboardName: action.name
+            keyboard: action.name,
+            keys: find(keyboards, {'name': action.name}).keys
          });
 
       default:
@@ -183,7 +184,7 @@ export function addErrorType() {
 export function stopBeenPressedKey(char) {
    return (dispatch, getState) => {
       let state = getState()
-      let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
+      let keys = state.main.keys;
 
       let sliceCurrentChar = pressed => {
          return sliceChar(pressed, getIdsFromCharacter(keys, char))

@@ -11,7 +11,7 @@ import {
 const mapStateToProps = (state) => {
    return {
       maxLettersInWord: state.learningMode.maxLettersInWordFree,
-      keys: find(state.main.keyboards, {'name': state.main.keyboard}).keys,
+      keys: state.main.keys,
       letters: state.learningMode.lettersFree
    };
 };

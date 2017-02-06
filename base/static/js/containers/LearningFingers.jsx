@@ -11,7 +11,7 @@ import {getFingersSet} from "../utils";
 
 const mapStateToProps = (state) => {
 
-   let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
+   const keys = state.main.keys;
 
    return {
       setSizeFingers  : state.learningMode.setSizeFingers,

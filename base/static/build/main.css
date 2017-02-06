@@ -3891,6 +3891,15 @@ a:hover {
   top: -13px;
   text-align: left;
 }
+.menu {
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+          flex-direction: column;
+  -webkit-box-align: start;
+          align-items: flex-start;
+}
 .menu__item {
   border-bottom: none;
   cursor: pointer;
@@ -4162,21 +4171,18 @@ a:hover {
   cursor: default;
 }
 .settings-text__text:hover {
-  background-color: rgba(0,0,0,0.02);
+  background-color: #fafafa;
 }
-.settings-text__text:after {
-  height: 18px;
-  position: absolute;
-  top: 40px;
-  right: 0;
-  left: 0;
-  background: -webkit-linear-gradient(top, transparent 0%, #fff 70%);
-  background: linear-gradient(to bottom, transparent 0%, #fff 70%);
-  content: '';
+.settings-text__text:hover .settings-text__text-content:after {
+  background: -webkit-linear-gradient(left, transparent 0%, #fafafa 70%);
+  background: linear-gradient(to right, transparent 0%, #fafafa 70%);
 }
-.settings-text__text-selected {
-  background: -webkit-linear-gradient(left, rgba(247,167,0,0.5) 0%, rgba(255,225,0,0.5) 100%);
-  background: linear-gradient(to right, rgba(247,167,0,0.5) 0%, rgba(255,225,0,0.5) 100%);
+.settings-text__text_selected {
+  background: #feec80 !important;
+}
+.settings-text__text_selected .settings-text__text-content:after {
+  background: -webkit-linear-gradient(left, transparent 0%, #feec80 70%) !important;
+  background: linear-gradient(to right, transparent 0%, #feec80 70%) !important;
 }
 .settings-text__text-title {
   margin-bottom: 2px;
@@ -4187,10 +4193,21 @@ a:hover {
   line-height: 17px;
 }
 .settings-text__text-content {
-  max-height: 29px;
+  max-height: 30px;
+  position: relative;
   overflow: hidden;
   font-size: 12px;
   line-height: 15px;
+}
+.settings-text__text-content:after {
+  width: 50px;
+  height: 15px;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  background: -webkit-linear-gradient(left, transparent 0%, #fff 70%);
+  background: linear-gradient(to right, transparent 0%, #fff 70%);
+  content: '';
 }
 .num-chars__icon {
   margin-right: 5px;

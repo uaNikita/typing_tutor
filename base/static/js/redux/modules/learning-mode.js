@@ -252,7 +252,7 @@ export function generateAndSetFingersLesson() {
 
       let state = getState();
 
-      let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
+      let keys = state.main.keys;
 
       let fingersSet = getFingersSet(keys);
 
@@ -284,7 +284,7 @@ export function generateAndSetFreeLesson() {
 export function updateCharToType() {
    return (dispatch, getState) => {
       let state = getState();
-      let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
+      let keys = state.main.keys;
       let idsCharToType = getIdsFromCharacter(keys, state.learningMode.lesson.last[0]);
 
       dispatch(setIdsCharToType(idsCharToType));
@@ -296,7 +296,7 @@ export function typeLearningMode(char) {
       let state = getState();
       let keyboardState = state.main;
       var learningModeState = state.learningMode;
-      let keys = find(keyboardState.keyboards, {'name': keyboardState.keyboard}).keys;
+      let keys = state.main.keys;
       let idsChar = getIdsFromCharacter(keys, char);
 
       if (learningModeState.lesson.last[0] === char) {
@@ -329,7 +329,7 @@ export function initializeLearningState() {
 
       let state = getState();
 
-      let keys = find(state.main.keyboards, {'name': state.main.keyboard}).keys;
+      let keys = state.main.keys;
 
       let defaultKeys = filter(keys, {
          row: 'middle',

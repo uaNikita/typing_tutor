@@ -26,26 +26,31 @@
          border-radius: 4px;
          cursor: default
          &:hover
-            background-color: rgba(0, 0, 0, 0.02)
-         &:after
-            height: 18px
-            position: absolute
-            top: 40px
-            right: 0
-            left: 0
-            background: linear-gradient(to bottom, transparent 0%, #fff 70%);
-            content ''
-      &text-selected
-         background: linear-gradient(to right, rgba(247, 167, 0, 0.5) 0%, rgba(255, 225, 0, 0.5) 100%)
-      &text-title
-         margin-bottom:2px;
-         overflow: hidden
-         white-space nowrap
-         text-overflow ellipsis
-         font-size: 14px
-         line-height: 17px
-      &text-content
-         max-height: 29px;
-         overflow: hidden
-         font-size: 12px;
-         line-height: 15px;
+            background-color: #fafafa
+            .settings-text__text-content:after
+               background: linear-gradient(to right, transparent 0%, #fafafa 70%)
+         &_selected
+            background: #feec80 !important
+            .settings-text__text-content:after
+               background: linear-gradient(to right, transparent 0%, #feec80 70%) !important
+         &-title
+            margin-bottom:2px;
+            overflow: hidden
+            white-space nowrap
+            text-overflow ellipsis
+            font-size: 14px
+            line-height: 17px
+         &-content
+            max-height: 30px;
+            position: relative
+            overflow: hidden
+            font-size: 12px;
+            line-height: 15px;
+            &:after
+               width: 50px;
+               height: 15px;
+               position: absolute;
+               bottom: 0;
+               right: 0;
+               background: linear-gradient(to right, transparent 0%, #fff 70%);
+               content: '';

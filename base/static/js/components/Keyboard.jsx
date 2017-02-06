@@ -6,63 +6,71 @@ import Key from './Key.jsx';
 
 class Keyboard extends Component {
 
-  render() {
+   render() {
 
-    const {keys, keyboard} = this.props;
+      const {keys, name} = this.props;
 
-    let keyNodes = keys.map(obj => {
-      let keyProps = {
-        className: 'keyboard__key',
-        'data-key': obj.id
-      };
+      let keyNodes = keys.map(obj => {
+         let keyProps = {
+            className: 'keyboard__key',
+            'data-key': obj.id
+         };
 
-      return <Key
-        key={obj.id}
-        keyProps={keyProps}
-        type={obj.type}
-        char={obj.key}
-        shiftChar={obj.shiftKey}
-        classNameShift='keyboard__shift-key'
-      />
+         return <Key
+           key={obj.id}
+           keyProps={keyProps}
+           type={obj.type}
+           char={obj.key}
+           shiftChar={obj.shiftKey}
+           classNameShift='keyboard__shift-key'
+         />
 
-    })
+      })
 
-    let menuItems = keyboards.map((kb, i) => {
-      let name = kb.name;
-      let linkClass = 'menu__item';
+      let menuItems = keyboards.map((kb, i) => {
 
-      if (name === keyboard) {
-        linkClass = classNames(linkClass, 'menu__item_selected');
-      }
+         let props = {
+            key: i,
+            className: 'menu__item'
+         }
+
+         if (kb.name === name) {
+
+            props.className = classNames(props.className, 'menu__item_selected');
+
+         } else {
+
+            props.onClick = this._onClickNameHandler.bind(this, kb.name);
+
+         }
+
+         return <a {...props}>{kb.name}</a>
+
+      })
+
 
       return (
-        <div key={i} className='keyboard-layout__menu-item'>
-          <a className={linkClass} onClick={ this._onClickNameHandler.bind(this, name) }>{name}</a>
+        <div className='keyboard-layout'>
+
+           <menu className='keyboard-layout__types menu'>
+              {menuItems}
+           </menu>
+
+           <div className='keyboard'>
+              {keyNodes}
+           </div>
+
         </div>
       )
 
-    })
+   }
 
+   _onClickNameHandler(name) {
 
-    return (
-      <div className='keyboard-layout'>
+      console.log('_onClickNameHandler');
 
-        <menu className='keyboard-layout__types menu'>
-          {menuItems}
-        </menu>
-
-        <div className='keyboard'>
-          {keyNodes}
-        </div>
-
-      </div>
-    )
-
-  }
-
-  _onClickNameHandler(name) {
-    this.props.setKeyboard(name);
-  }
+      this.props.setKeyboard(name);
+   }
 
 }
 

@@ -36,7 +36,7 @@ class TextMode extends Component {
 
          if (textId === currentTextId) {
 
-            props.className = classNames(props.className, 'settings-text__text-selected');
+            props.className = classNames(props.className, 'settings-text__text_selected');
 
             props.ref = t => {
                self._selectedText = t;
