@@ -109,33 +109,38 @@ export default (state = INITIAL_STATE, action = {}) => {
       case ADD_NEW_TEXT:
          nextTextId += 1;
 
-         return assign({}, state, {
-            entities: assign({}, state.entities, {
+         return {
+            ...state,
+            entities: {
+               ...state.entities,
                [nextTextId - 1]: {
                   title: action.title,
                   typed: '',
                   last: action.text
                }
-            })
-         });
+            }
+         }
 
       case SELECT_TEXT:
-         return assign({}, state, {
+         return {
+            ...state,
             currentTextId: action.textId
-         });
+         }
 
       case REFRESH_TEXT:
          let text = state.entities[action.textId];
 
-         return assign({}, state, {
-            entities: assign({}, state.entities, {
+         return {
+            ...state,
+            entities: {
+               ...state.entities,
                [action.textId]: {
                   title: text.title,
                   typed: '',
                   last: text.typed + text.last,
                }
-            })
-         });
+            }
+         }
 
       case TYPE_ON_ENTITIE:
          return (() => {
@@ -151,6 +156,19 @@ export default (state = INITIAL_STATE, action = {}) => {
             });
 
          })();
+
+
+         // return {
+         //    ...state,
+         //    entities: {
+         //       ...state.entities,
+         //       [action.textId]: {
+         //          title: text.title,
+         //          typed: '',
+         //          last: text.typed + text.last,
+         //       }
+         //    }
+         // }
 
       default:
          return state;

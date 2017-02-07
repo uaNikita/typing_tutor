@@ -13,23 +13,17 @@ export default (state = INITIAL_STATE, action = {}) => {
    switch (action.type) {
 
       case OPEN_MODAL:
-         return (() => {
-            let closable = true;
-
-            if (action.closable) {
-               closable = action.closable;
-            }
-
-            return assign({}, state, {
-               name: action.name,
-               closable
-            });
-         })();
+         return {
+            ...state,
+            name: action.name,
+            closable: !!action.closable
+         }
 
       case CLOSE_MODAL:
-         return assign({}, state, {
+         return {
+            ...state,
             name: ''
-         });
+         }
 
       default:
          return state;

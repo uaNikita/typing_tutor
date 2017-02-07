@@ -357,7 +357,6 @@ export function initializeLearningState() {
         .value()
         .length;
 
-
       dispatch(setSetSizeFingers(size));
 
       let letters = defaultKeys.map(obj => {

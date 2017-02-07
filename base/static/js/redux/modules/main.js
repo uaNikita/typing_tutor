@@ -12,7 +12,7 @@ const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
 const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
 
 import keyboards from '../../constants/keyboards';
-import {forEach, assign, clone, cloneDeep, map, random, times, find} from 'lodash';
+import _ from 'lodash';
 
 import {updateFromTextModeCharToType, typeTextMode} from './text-mode';
 import {updateCharToType as updateFromLearningModeCharToType, typeLearningMode} from './learning-mode';
@@ -22,7 +22,7 @@ import {getIdsFromCharacter, sliceChar} from '../../utils';
 const INITIAL_STATE = {
    keyboard: 'US',
 
-   keys: find(keyboards, {'name': 'US'}).keys,
+   keys: _.find(keyboards, {'name': 'US'}).keys,
 
    pressedRightIds: [],
 
@@ -47,50 +47,60 @@ const INITIAL_STATE = {
 export default (state = INITIAL_STATE, action = {}) => {
    switch (action.type) {
       case SET_PRESSED_RIGHT_IDS:
-         return assign({}, state, {
+         return {
+            ...state,
             pressedRightIds: action.ids
-         });
+         }
 
       case SET_PRESSED_WRONG_IDS:
-         return assign({}, state, {
+         return {
+            ...state,
             pressedWrongIds: action.ids
-         });
+         }
 
       case SET_IDS_CHAR_TO_TYPE:
-         return assign({}, state, {
+         return {
+            ...state,
             idCharsToType: action.id
-         });
+         }
 
       case ADD_SUCCESS_TYPE:
-         return assign({}, state, {
+         return {
+            ...state,
             successTypes: state.successTypes + 1
-         });
+         }
 
       case ADD_ERROR_TYPE:
-         return assign({}, state, {
+         return {
+            ...state,
             errorTypes: state.errorTypes + 1
-         });
+         }
 
       case UPDATE_START_VARIABLES:
-         return assign({}, state, {
+         return {
+            ...state,
             startTypingTime: Date.now(),
             successTypes: 0,
             errorTypes: 0,
-         });
+         }
 
       case SET_MODE:
-         return assign({}, state, {
+         return {
+            ...state,
             mode: action.mode
-         });
+         }
 
       case ACTION_METRONOME:
-         return assign({}, state);
+         return {
+            ...state
+         }
 
       case SET_KEYBOARD:
-         return assign({}, state, {
+         return {
+            ...state,
             keyboard: action.name,
-            keys: find(keyboards, {'name': action.name}).keys
-         });
+            keys: _.find(keyboards, {'name': action.name}).keys
+         }
 
       default:
          return state;
