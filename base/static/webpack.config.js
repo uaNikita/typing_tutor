@@ -70,7 +70,7 @@ module.exports = {
             loader: 'babel',
             exclude: /node_modules/,
             query: {
-               plugins: ['lodash'],
+               plugins: ["transform-object-rest-spread"],
                presets: ['es2015', 'react']
             }
          },

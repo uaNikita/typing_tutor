@@ -21,7 +21,7 @@
     "babel-loader": "*",
     "babel-preset-es2015": "*",
     "babel-preset-react": "*",
-    "babel-plugin-lodash": "*",
+    "babel-plugin-transform-object-rest-spread": "*",
     "react": "*",
     "react-dom": "*",
     "react-redux": "*",

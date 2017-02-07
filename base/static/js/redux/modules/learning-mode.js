@@ -14,22 +14,21 @@ const SET_MAX_LETTERS_IN_WORD_FREE = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FREE
 const ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
 const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
 
-import {find, random, times, concat, filter, uniqWith, isEqual,
-  assign, clone, cloneDeep, remove, pull} from 'lodash';
+import _ from 'lodash';
 
 import {
-  setIdsCharToType,
-  setPressedRightIds,
-  setPressedWrongIds,
-  addSuccesType,
-  addErrorType
+   setIdsCharToType,
+   setPressedRightIds,
+   setPressedWrongIds,
+   addSuccesType,
+   addErrorType
 } from "./main";
 
 import {
-  getIdsFromCharacter,
-  sliceChar,
-  generateLesson,
-  getFingersSet
+   getIdsFromCharacter,
+   sliceChar,
+   generateLesson,
+   getFingersSet
 } from "../../utils";
 
 const INITIAL_STATE = {
@@ -54,82 +53,95 @@ const INITIAL_STATE = {
    }
 };
 
+
 export default (state = INITIAL_STATE, action = {}) => {
    switch (action.type) {
 
       case REFRESH_CURRENT_LESSON:
-         return assign({}, state, {
+         return {
+            ...state,
             lesson: {
                typed: state.lesson.typed + state.lesson.last,
                last: ''
             }
-         });
+         }
 
       case TYPE_ON_LESSON:
-         return assign({}, state, {
+         return {
+            ...state,
             lesson: {
                typed: state.lesson.typed + state.lesson.last[0],
                last: state.lesson.last.substring(1)
             }
-         });
+         }
 
       case SET_LEARNING_MODE:
-         return assign({}, state, {
-            mode: action.mode,
-         });
+         return {
+            ...state,
+            mode: action.mode
+         };
 
       case SET_CURRENT_LESSON:
-         return assign({}, state, {
+         return {
+            ...state,
             lesson: {
                typed: '',
                last: action.lesson
             }
-         });
+         };
 
       case SET_MAX_LETTERS_IN_WORD_FINGERS:
-         return assign({}, state, {
+         return {
+            ...state,
             maxLettersInWordFingers: action.length
-         });
+         }
 
       case SET_MAX_LETTERS_IN_WORD_FREE:
-         return assign({}, state, {
+         return {
+            ...state,
             maxLettersInWordFree: action.length
-         });
+         }
 
       case SET_SET_SIZE_FINGERS:
-         return assign({}, state, {
+         return {
+            ...state,
             setSizeFingers: action.size
-         });
+         }
 
       case SET_LESSON_FINGERS:
-         return assign({}, state, {
+         return {
+            ...state,
             lessonFingers: action.lesson
-         });
+         }
 
       case SET_LESSON_FREE:
-         return assign({}, state, {
+         return {
+            ...state,
             lessonFree: action.lesson
-         });
+         }
 
       case SET_LETTERS_FREE:
-         return assign({}, state, {
+         return {
+            ...state,
             lettersFree: action.letters
-         });
+         }
 
       case ADD_LETTER_TO_FREE_LETTERS:
-         return assign({}, state, {
+         return {
+            ...state,
             lettersFree: [
                ...state.lettersFree,
                action.letter
             ]
-         });
+         }
 
       case REMOVE_LETTER_FROM_FREE_LETTERS:
-         return assign({}, state, {
+         return {
+            ...state,
             lettersFree: [
-               ...pull(state.lettersFree, action.letter)
+               ..._.pull(state.lettersFree, action.letter)
             ]
-         });
+         }
 
       default:
          return state;
@@ -258,7 +270,7 @@ export function generateAndSetFingersLesson() {
 
       fingersSet.splice(state.learningMode.setSizeFingers);
 
-      fingersSet = concat.apply(null, fingersSet);
+      fingersSet = _.concat.apply(null, fingersSet);
 
       let lesson = generateLesson(state.learningMode.maxLettersInWordFingers, fingersSet);
 
@@ -327,27 +339,28 @@ export function typeLearningMode(char) {
 export function initializeLearningState() {
    return (dispatch, getState) => {
 
-      let state = getState();
+      const state = getState();
 
-      let keys = state.main.keys;
-
-      let defaultKeys = filter(keys, {
+      let defaultKeys = _.filter(state.main.keys, {
          row: 'middle',
          type: 'letter'
       });
 
-      let resultForUnionWith = defaultKeys.map(obj=> {
-         return {
-            finger: obj.finger,
-            hand: obj.hand
-         };
-      });
+      let size = _(defaultKeys)
+        .map(o => {
+           return {
+              finger: o.finger,
+              hand: o.hand
+           };
+        })
+        .uniqWith(_.isEqual)
+        .value()
+        .length;
 
-      let size = uniqWith(resultForUnionWith, isEqual).length;
 
       dispatch(setSetSizeFingers(size));
 
-      let letters = defaultKeys.map(obj=> {
+      let letters = defaultKeys.map(obj => {
          return obj.key;
       });
 

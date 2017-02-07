@@ -4,8 +4,6 @@ import {Router, Route, Redirect, IndexRoute, browserHistory} from 'react-router'
 import {syncHistoryWithStore} from 'react-router-redux'
 import $ from 'jquery';
 
-
-window.$ = $;
 // initialize perfect-scrollbar for $ in all project;
 import 'perfect-scrollbar/jquery';
 
