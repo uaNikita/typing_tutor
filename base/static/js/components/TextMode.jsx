@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
 import $ from 'jquery';
-
 import classNames from 'classNames';
 
+import Switcher from './Switcher.jsx';
 import AddTextForm from '../containers/AddTextForm.jsx';
 
 class TextMode extends Component {
@@ -22,9 +22,32 @@ class TextMode extends Component {
 
    render() {
       const self = this;
-      const {texts, currentTextId} = this.props;
+      const {texts, currentTextId, mode} = this.props;
 
-      var textsBlock = texts.map(obj => {
+      let switcherProps = {
+         label: {
+            title: 'Learning mode on'
+         },
+         input: {
+            checked: true,
+            readOnly: true,
+         }
+      };
+
+      if (mode !== 'text') {
+
+         switcherProps.label.title = 'Learning mode off';
+
+         switcherProps.input = {
+            ...switcherProps.input,
+            checked: false,
+            readOnly: false,
+            onChange: this._onSwitcherChange.bind(this)
+         }
+
+      }
+
+      let textsBlock = texts.map(obj => {
          let clsN = 'settings-text__text';
          let textId = parseInt(obj.textId, 10);
 
@@ -66,6 +89,8 @@ class TextMode extends Component {
       return (
         <div className="settings-text">
 
+           <Switcher {...switcherProps} />
+
            <div className="settings-text__item">
               <label htmlFor="" className="settings-text__label">
                  Current text
@@ -76,6 +101,7 @@ class TextMode extends Component {
                  </div>
               </div>
            </div>
+
            <div className="settings-text__item">
               <label htmlFor="" className="settings-text__label">
                  Add new text
@@ -84,6 +110,7 @@ class TextMode extends Component {
                  <AddTextForm className="settings-text__add-text-form" />
               </div>
            </div>
+
         </div>
 
       )
@@ -91,9 +118,7 @@ class TextMode extends Component {
 
    _onSwitcherChange(e) {
 
-      if (e.target.checked) {
-         this.props.setMode('text');
-      }
+      this.props.setMode('text');
 
    }
 

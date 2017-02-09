@@ -61,8 +61,8 @@ export default (state = INITIAL_STATE, action = {}) => {
          return {
             ...state,
             lesson: {
-               typed: state.lesson.typed + state.lesson.last,
-               last: ''
+               typed: '',
+               last: state.lesson.typed + state.lesson.last
             }
          }
 

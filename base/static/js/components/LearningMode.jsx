@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
+import Switcher from './Switcher.jsx';
 
 class LearningMode extends Component {
 
    render() {
-      const {lesson} = this.props;
+      const {lesson, mode} = this.props;
 
       let lessonKeys = lesson.split('').map((char, idx) => {
          if (char === ' ') {
@@ -16,8 +17,33 @@ class LearningMode extends Component {
 
       let learningModePath = '/settings/learning-mode/';
 
+      let switcherProps = {
+         label: {
+            title: 'Learning mode on'
+         },
+         input: {
+            checked: true,
+            readOnly: true,
+         }
+      };
+
+      if (mode !== 'learning') {
+
+         switcherProps.label.title = 'Learning mode off';
+
+         switcherProps.input = {
+           ...switcherProps.input,
+            checked: false,
+            readOnly: false,
+            onChange: this._onSwitcherChange.bind(this)
+         }
+
+      }
+
       return (
         <div className="settings-learning">
+
+           <Switcher {...switcherProps} />
 
            <div className='learningarea'>
               {lessonKeys}
@@ -35,6 +61,7 @@ class LearningMode extends Component {
                        By fingers
                     </Link>
                  </div>
+
                  <div className='settings-learning__modes-menu-item'>
                     <Link
                       className="menu__item"
@@ -57,7 +84,7 @@ class LearningMode extends Component {
    }
 
    _onSwitcherChange() {
-
+console.log('_onSwitcherChange');
       this.props.setMode('learning');
 
    }

@@ -62,7 +62,10 @@ export default class App extends Component {
         <Provider store={store}>
            <Router history={ history }>
               <Route path="/" component={ Layout }>
-                 <IndexRoute component={ Home } onEnter={ this._onKeyboardEnter } />
+                 <IndexRoute
+                   component={ Home }
+                   onEnter={ this._onKeyboardEnter }
+                 />
                  <Route path="settings" component={ Settings }>
                     <IndexRoute onEnter={this._onSettingsEnter} />
                     <Route path="learning-mode" component={ LearningMode }>
@@ -70,7 +73,11 @@ export default class App extends Component {
                        <Route path="fingers" component={ LearningFingers } onEnter={this._onLearningModeFingersEnter} />
                        <Route path="free" component={ LearningFree } onEnter={this._onLearningModeFreeEnter} />
                     </Route>
-                    <Route path="text-mode" component={ TextMode } />
+                    <Route
+                      path="text-mode"
+                      component={ TextMode }
+                      onEnter={this._onTextModeEnter}
+                    />
                     <Route path="text/:textId" component={ Text } />
                     <Route path="keyboard" component={ Keyboard } />
                  </Route>
@@ -81,9 +88,11 @@ export default class App extends Component {
    }
 
    _onKeyboardEnter() {
+
       store.dispatch(updateStartVariables());
 
       store.dispatch(updateCharToType());
+
    }
 
    _onSettingsEnter(nextState, replace) {
@@ -105,7 +114,7 @@ export default class App extends Component {
       });
    }
 
-   _onLearningModeFingersEnter(nextState, replace) {
+   _onLearningModeFingersEnter() {
 
       if (store.getState().learningMode.mode !== 'fingers') {
          store.dispatch(selectLearningMode('fingers'));
@@ -120,4 +129,12 @@ export default class App extends Component {
       }
 
    }
+
+   _onTextModeEnter() {
+
+
+
+
+   }
+
 }
