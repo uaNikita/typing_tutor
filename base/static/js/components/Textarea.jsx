@@ -1,24 +1,35 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+import $ from 'jquery';
 
 class Textarea extends Component {
 
-  componentDidMount() {
-     $(this._textarea).perfectScrollbar();
-  }
+   componentDidMount() {
 
-  render() {
+      const $content = $(this._content);
 
-    const { typed, nonTyped } = this.props;
+      const cursorOffsetTop = $(this._cursor).offset().top;
 
-    return (
-      <div className='textarea' ref={(t) => this._textarea = t}>
-        <span className="textarea__typed">{typed}</span>
-        <span className="textarea__cursor"></span>
-        <span className="textarea__non-typed">{nonTyped}</span>
-      </div>
-    )
-  }
-  
+      $content.scrollTop(cursorOffsetTop - $content.offset().top - 80);
+
+      $content.perfectScrollbar();
+
+   }
+
+   render() {
+
+      const {typed, nonTyped} = this.props;
+
+      return (
+        <div className='textarea'>
+           <div className="textarea__content" ref={el => this._content = el}>
+              <span className="textarea__typed">{typed}</span>
+              <span className="textarea__cursor" ref={el => this._cursor = el}></span>
+              <span className="textarea__non-typed">{nonTyped}</span>
+           </div>
+        </div>
+      )
+   }
+
 }
 
 export default Textarea

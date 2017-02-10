@@ -60,12 +60,12 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	__webpack_require__(595);
-	__webpack_require__(605);
-	__webpack_require__(607);
-	__webpack_require__(609);
+	__webpack_require__(596);
+	__webpack_require__(606);
+	__webpack_require__(608);
+	__webpack_require__(610);
 
-	__webpack_require__(611);
+	__webpack_require__(612);
 
 	_reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById('root'));
 
@@ -21547,27 +21547,27 @@
 
 	var _TextMode2 = _interopRequireDefault(_TextMode);
 
-	var _Text = __webpack_require__(576);
+	var _Text = __webpack_require__(577);
 
 	var _Text2 = _interopRequireDefault(_Text);
 
-	var _LearningMode = __webpack_require__(578);
+	var _LearningMode = __webpack_require__(579);
 
 	var _LearningMode2 = _interopRequireDefault(_LearningMode);
 
-	var _LearningFingers = __webpack_require__(580);
+	var _LearningFingers = __webpack_require__(581);
 
 	var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
 
-	var _LearningFree = __webpack_require__(582);
+	var _LearningFree = __webpack_require__(583);
 
 	var _LearningFree2 = _interopRequireDefault(_LearningFree);
 
-	var _Keyboard = __webpack_require__(584);
+	var _Keyboard = __webpack_require__(585);
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
-	var _store = __webpack_require__(586);
+	var _store = __webpack_require__(587);
 
 	var _store2 = _interopRequireDefault(_store);
 
@@ -21594,7 +21594,15 @@
 	// на данный момент что это за информация: это выбранная раскладка на клавиатуре и выбранный мод в лернинг моде,
 	// ввести ограничения на 10 текстов не больше 10000 тысяч символов
 
+
 	_store2.default.dispatch((0, _learningMode.initializeLearningState)());
+
+	var $document = (0, _jquery2.default)(document);
+
+	var keyPressEventHandler = function keyPressEventHandler(e) {
+
+	   _store2.default.dispatch((0, _main.typeChar)(String.fromCharCode(e.which)));
+	};
 
 	var App = function (_Component) {
 	   _inherits(App, _Component);
@@ -21610,14 +21618,6 @@
 	      value: function componentDidMount() {
 
 	         _store2.default.dispatch((0, _main.updateCharToType)());
-
-	         (0, _jquery2.default)(document).on('keypress', function (e) {
-	            if (location.pathname !== '/') {
-	               return;
-	            }
-
-	            _store2.default.dispatch((0, _main.typeChar)(String.fromCharCode(e.which)));
-	         });
 	      }
 	   }, {
 	      key: 'render',
@@ -21662,6 +21662,8 @@
 	      key: '_onKeyboardEnter',
 	      value: function _onKeyboardEnter() {
 
+	         $document.on('keypress', keyPressEventHandler);
+
 	         _store2.default.dispatch((0, _main.updateStartVariables)());
 
 	         _store2.default.dispatch((0, _main.updateCharToType)());
@@ -21669,6 +21671,8 @@
 	   }, {
 	      key: '_onSettingsEnter',
 	      value: function _onSettingsEnter(nextState, replace) {
+
+	         $document.off('keypress', keyPressEventHandler);
 
 	         _store2.default.dispatch((0, _learningMode.refreshCurrentLesson)());
 
@@ -43708,7 +43712,7 @@
 	   metronomeInterval: 800,
 
 	   // text, learning
-	   mode: 'learning'
+	   mode: 'text'
 	};
 
 	exports.default = function () {
@@ -62238,8 +62242,8 @@
 	      },
 	      7: {
 	         title: 'Second',
-	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
-	         last: ''
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a',
+	         last: ' wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
 	      },
 	      8: {
 	         title: 'Second',
@@ -78137,7 +78141,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -78145,6 +78149,10 @@
 	var _react = __webpack_require__(177);
 
 	var _react2 = _interopRequireDefault(_react);
+
+	var _jquery = __webpack_require__(275);
+
+	var _jquery2 = _interopRequireDefault(_jquery);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -78155,50 +78163,63 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var Textarea = function (_Component) {
-	  _inherits(Textarea, _Component);
+	   _inherits(Textarea, _Component);
 
-	  function Textarea() {
-	    _classCallCheck(this, Textarea);
+	   function Textarea() {
+	      _classCallCheck(this, Textarea);
 
-	    return _possibleConstructorReturn(this, (Textarea.__proto__ || Object.getPrototypeOf(Textarea)).apply(this, arguments));
-	  }
+	      return _possibleConstructorReturn(this, (Textarea.__proto__ || Object.getPrototypeOf(Textarea)).apply(this, arguments));
+	   }
 
-	  _createClass(Textarea, [{
-	    key: 'componentDidMount',
-	    value: function componentDidMount() {
-	      $(this._textarea).perfectScrollbar();
-	    }
-	  }, {
-	    key: 'render',
-	    value: function render() {
-	      var _this2 = this;
+	   _createClass(Textarea, [{
+	      key: 'componentDidMount',
+	      value: function componentDidMount() {
 
-	      var _props = this.props,
-	          typed = _props.typed,
-	          nonTyped = _props.nonTyped;
+	         var $content = (0, _jquery2.default)(this._content);
+
+	         var cursorOffsetTop = (0, _jquery2.default)(this._cursor).offset().top;
+
+	         $content.scrollTop(cursorOffsetTop - $content.offset().top - 80);
+
+	         $content.perfectScrollbar();
+	      }
+	   }, {
+	      key: 'render',
+	      value: function render() {
+	         var _this2 = this;
+
+	         var _props = this.props,
+	             typed = _props.typed,
+	             nonTyped = _props.nonTyped;
 
 
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'textarea', ref: function ref(t) {
-	            return _this2._textarea = t;
-	          } },
-	        _react2.default.createElement(
-	          'span',
-	          { className: 'textarea__typed' },
-	          typed
-	        ),
-	        _react2.default.createElement('span', { className: 'textarea__cursor' }),
-	        _react2.default.createElement(
-	          'span',
-	          { className: 'textarea__non-typed' },
-	          nonTyped
-	        )
-	      );
-	    }
-	  }]);
+	         return _react2.default.createElement(
+	            'div',
+	            { className: 'textarea' },
+	            _react2.default.createElement(
+	               'div',
+	               { className: 'textarea__content', ref: function ref(el) {
+	                     return _this2._content = el;
+	                  } },
+	               _react2.default.createElement(
+	                  'span',
+	                  { className: 'textarea__typed' },
+	                  typed
+	               ),
+	               _react2.default.createElement('span', { className: 'textarea__cursor', ref: function ref(el) {
+	                     return _this2._cursor = el;
+	                  } }),
+	               _react2.default.createElement(
+	                  'span',
+	                  { className: 'textarea__non-typed' },
+	                  nonTyped
+	               )
+	            )
+	         );
+	      }
+	   }]);
 
-	  return Textarea;
+	   return Textarea;
 	}(_react.Component);
 
 	exports.default = Textarea;
@@ -78380,9 +78401,7 @@
 
 	var _lodash = __webpack_require__(323);
 
-	var _keyboards = __webpack_require__(319);
-
-	var _keyboards2 = _interopRequireDefault(_keyboards);
+	var _lodash2 = _interopRequireDefault(_lodash);
 
 	var _Key = __webpack_require__(566);
 
@@ -78420,7 +78439,7 @@
 	        var isPressedWrong = pressedWrongIds.indexOf(obj.id) + 1;
 	        var needToType = false;
 
-	        (0, _lodash.forEach)(idCharsToType, function (value) {
+	        _lodash2.default.forEach(idCharsToType, function (value) {
 	          if (obj.id === value) {
 	            needToType = true;
 	            return false;
@@ -81065,11 +81084,11 @@
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
-	var _Switcher = __webpack_require__(613);
+	var _Switcher = __webpack_require__(573);
 
 	var _Switcher2 = _interopRequireDefault(_Switcher);
 
-	var _AddTextForm = __webpack_require__(573);
+	var _AddTextForm = __webpack_require__(574);
 
 	var _AddTextForm2 = _interopRequireDefault(_AddTextForm);
 
@@ -81243,6 +81262,36 @@
 /* 573 */
 /***/ function(module, exports, __webpack_require__) {
 
+	"use strict";
+
+	Object.defineProperty(exports, "__esModule", {
+	   value: true
+	});
+
+	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+	var _react = __webpack_require__(177);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Footer = function Footer(props) {
+	   return _react2.default.createElement(
+	      "label",
+	      _extends({ className: "switcher" }, props.label),
+	      _react2.default.createElement("input", _extends({ type: "radio" }, props.input)),
+	      _react2.default.createElement("span", { className: "switcher__bg" }),
+	      _react2.default.createElement("span", { className: "switcher__toggle" })
+	   );
+	};
+
+	exports.default = Footer;
+
+/***/ },
+/* 574 */
+/***/ function(module, exports, __webpack_require__) {
+
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
@@ -81253,7 +81302,7 @@
 
 	var _lodash = __webpack_require__(323);
 
-	var _AddTextForm = __webpack_require__(574);
+	var _AddTextForm = __webpack_require__(575);
 
 	var _AddTextForm2 = _interopRequireDefault(_AddTextForm);
 
@@ -81288,7 +81337,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_AddTextForm2.default);
 
 /***/ },
-/* 574 */
+/* 575 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81309,7 +81358,7 @@
 
 	var _classNames2 = _interopRequireDefault(_classNames);
 
-	var _Control = __webpack_require__(575);
+	var _Control = __webpack_require__(576);
 
 	var _Control2 = _interopRequireDefault(_Control);
 
@@ -81473,7 +81522,7 @@
 	exports.default = AddTextForm;
 
 /***/ },
-/* 575 */
+/* 576 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81581,7 +81630,7 @@
 	exports.default = Control;
 
 /***/ },
-/* 576 */
+/* 577 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81594,7 +81643,7 @@
 
 	var _lodash = __webpack_require__(323);
 
-	var _Text = __webpack_require__(577);
+	var _Text = __webpack_require__(578);
 
 	var _Text2 = _interopRequireDefault(_Text);
 
@@ -81629,7 +81678,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Text2.default);
 
 /***/ },
-/* 577 */
+/* 578 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81743,7 +81792,7 @@
 	exports.default = Texts;
 
 /***/ },
-/* 578 */
+/* 579 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81756,7 +81805,7 @@
 
 	var _lodash = __webpack_require__(323);
 
-	var _LearningMode = __webpack_require__(579);
+	var _LearningMode = __webpack_require__(580);
 
 	var _LearningMode2 = _interopRequireDefault(_LearningMode);
 
@@ -81786,7 +81835,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningMode2.default);
 
 /***/ },
-/* 579 */
+/* 580 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81805,7 +81854,7 @@
 
 	var _reactRouter = __webpack_require__(217);
 
-	var _Switcher = __webpack_require__(613);
+	var _Switcher = __webpack_require__(573);
 
 	var _Switcher2 = _interopRequireDefault(_Switcher);
 
@@ -81936,7 +81985,7 @@
 	exports.default = LearningMode;
 
 /***/ },
-/* 580 */
+/* 581 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -81949,7 +81998,7 @@
 
 	var _lodash = __webpack_require__(323);
 
-	var _LearningFingers = __webpack_require__(581);
+	var _LearningFingers = __webpack_require__(582);
 
 	var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
 
@@ -81990,7 +82039,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningFingers2.default);
 
 /***/ },
-/* 581 */
+/* 582 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82202,7 +82251,7 @@
 	exports.default = LearningFingers;
 
 /***/ },
-/* 582 */
+/* 583 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82215,7 +82264,7 @@
 
 	var _lodash = __webpack_require__(323);
 
-	var _LearningFree = __webpack_require__(583);
+	var _LearningFree = __webpack_require__(584);
 
 	var _LearningFree2 = _interopRequireDefault(_LearningFree);
 
@@ -82255,7 +82304,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_LearningFree2.default);
 
 /***/ },
-/* 583 */
+/* 584 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82426,7 +82475,7 @@
 	exports.default = LearningFree;
 
 /***/ },
-/* 584 */
+/* 585 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82439,7 +82488,7 @@
 
 	var _lodash = __webpack_require__(323);
 
-	var _Keyboard = __webpack_require__(585);
+	var _Keyboard = __webpack_require__(586);
 
 	var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
@@ -82465,7 +82514,7 @@
 	exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Keyboard2.default);
 
 /***/ },
-/* 585 */
+/* 586 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82588,7 +82637,7 @@
 	exports.default = Keyboard;
 
 /***/ },
-/* 586 */
+/* 587 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82603,15 +82652,15 @@
 
 	var _reactRouterRedux = __webpack_require__(270);
 
-	var _reduxLogger = __webpack_require__(587);
+	var _reduxLogger = __webpack_require__(588);
 
 	var _reduxLogger2 = _interopRequireDefault(_reduxLogger);
 
-	var _reduxThunk = __webpack_require__(593);
+	var _reduxThunk = __webpack_require__(594);
 
 	var _reduxThunk2 = _interopRequireDefault(_reduxThunk);
 
-	var _modal = __webpack_require__(594);
+	var _modal = __webpack_require__(595);
 
 	var _modal2 = _interopRequireDefault(_modal);
 
@@ -82645,7 +82694,7 @@
 	));
 
 /***/ },
-/* 587 */
+/* 588 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82656,11 +82705,11 @@
 	  value: true
 	});
 
-	var _core = __webpack_require__(588);
+	var _core = __webpack_require__(589);
 
-	var _helpers = __webpack_require__(589);
+	var _helpers = __webpack_require__(590);
 
-	var _defaults = __webpack_require__(592);
+	var _defaults = __webpack_require__(593);
 
 	var _defaults2 = _interopRequireDefault(_defaults);
 
@@ -82763,7 +82812,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 588 */
+/* 589 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82773,9 +82822,9 @@
 	});
 	exports.printBuffer = printBuffer;
 
-	var _helpers = __webpack_require__(589);
+	var _helpers = __webpack_require__(590);
 
-	var _diff = __webpack_require__(590);
+	var _diff = __webpack_require__(591);
 
 	var _diff2 = _interopRequireDefault(_diff);
 
@@ -82904,7 +82953,7 @@
 	}
 
 /***/ },
-/* 589 */
+/* 590 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -82928,7 +82977,7 @@
 	var timer = exports.timer = typeof performance !== "undefined" && performance !== null && typeof performance.now === "function" ? performance : Date;
 
 /***/ },
-/* 590 */
+/* 591 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -82938,7 +82987,7 @@
 	});
 	exports.default = diffLogger;
 
-	var _deepDiff = __webpack_require__(591);
+	var _deepDiff = __webpack_require__(592);
 
 	var _deepDiff2 = _interopRequireDefault(_deepDiff);
 
@@ -83026,7 +83075,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 591 */
+/* 592 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/* WEBPACK VAR INJECTION */(function(global) {/*!
@@ -83455,7 +83504,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 592 */
+/* 593 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -83506,7 +83555,7 @@
 	module.exports = exports['default'];
 
 /***/ },
-/* 593 */
+/* 594 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -83534,7 +83583,7 @@
 	exports['default'] = thunk;
 
 /***/ },
-/* 594 */
+/* 595 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -83580,13 +83629,12 @@
 	};
 
 /***/ },
-/* 595 */
+/* 596 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 596 */,
 /* 597 */,
 /* 598 */,
 /* 599 */,
@@ -83595,62 +83643,32 @@
 /* 602 */,
 /* 603 */,
 /* 604 */,
-/* 605 */
+/* 605 */,
+/* 606 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 606 */,
-/* 607 */
+/* 607 */,
+/* 608 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 608 */,
-/* 609 */
+/* 609 */,
+/* 610 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
 
 /***/ },
-/* 610 */,
-/* 611 */
+/* 611 */,
+/* 612 */
 /***/ function(module, exports) {
 
 	// removed by extract-text-webpack-plugin
-
-/***/ },
-/* 612 */,
-/* 613 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	Object.defineProperty(exports, "__esModule", {
-	   value: true
-	});
-
-	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-	var _react = __webpack_require__(177);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var Footer = function Footer(props) {
-	   return _react2.default.createElement(
-	      "label",
-	      _extends({ className: "switcher" }, props.label),
-	      _react2.default.createElement("input", _extends({ type: "radio" }, props.input)),
-	      _react2.default.createElement("span", { className: "switcher__bg" }),
-	      _react2.default.createElement("span", { className: "switcher__toggle" })
-	   );
-	};
-
-	exports.default = Footer;
 
 /***/ }
 /******/ ]);

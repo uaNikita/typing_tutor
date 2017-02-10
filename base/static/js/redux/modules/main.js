@@ -41,7 +41,7 @@ const INITIAL_STATE = {
    metronomeInterval: 800,
 
    // text, learning
-   mode: 'learning',
+   mode: 'text',
 };
 
 export default (state = INITIAL_STATE, action = {}) => {

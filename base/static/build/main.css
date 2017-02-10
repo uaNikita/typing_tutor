@@ -4252,14 +4252,35 @@ a:hover {
   color: #008000;
 }
 .textarea {
-  height: 6.4em;
+  height: 200px;
   position: relative;
-  box-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-  border: 1px solid #dcdcdc;
-  border-radius: 3px;
-  padding: 0.8em 1em;
+}
+.textarea:before,
+.textarea:after {
+  width: 100%;
+  height: 5px;
+  position: absolute;
+  left: 0;
+  content: '';
+  z-index: 1;
+}
+.textarea:before {
+  top: 0;
+  background-image: -webkit-linear-gradient(bottom, transparent, #fff);
+  background-image: linear-gradient(to top, transparent, #fff);
+}
+.textarea:after {
+  bottom: 0;
+  background-image: -webkit-linear-gradient(top, transparent, #fff);
+  background-image: linear-gradient(to bottom, transparent, #fff);
+}
+.textarea__content {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+  padding: 0 40px;
   font-size: 28px;
-  line-height: 1.6;
+  line-height: 40px;
 }
 .textarea__typed {
   opacity: 0.2;
@@ -4272,9 +4293,6 @@ a:hover {
           animation: cursor 1s infinite linear;
 }
 @-webkit-keyframes cursor {
-  39.99% {
-    visibility: hidden;
-  }
   40% {
     visibility: hidden;
   }
@@ -4283,9 +4301,6 @@ a:hover {
   }
 }
 @keyframes cursor {
-  39.99% {
-    visibility: hidden;
-  }
   40% {
     visibility: hidden;
   }

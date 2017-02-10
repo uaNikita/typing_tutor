@@ -1,7 +1,6 @@
 import React, {PropTypes, Component} from 'react'
 import classNames from 'classNames';
-import {find, forEach} from 'lodash';
-import keyboards from '../constants/keyboards';
+import _ from 'lodash';
 import Key from '../components/Key.jsx';
 
 class KeyPad extends Component {
@@ -20,7 +19,7 @@ class KeyPad extends Component {
       let isPressedWrong = pressedWrongIds.indexOf(obj.id) + 1;
       let needToType = false;
 
-      forEach(idCharsToType, value => {
+      _.forEach(idCharsToType, value => {
         if (obj.id === value) {
           needToType = true;
           return false;

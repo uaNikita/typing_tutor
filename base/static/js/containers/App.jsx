@@ -20,15 +20,15 @@ import Keyboard from './Keyboard.jsx';
 import store from './../redux/store';
 
 import {
-  typeChar,
-  updateStartVariables,
-  updateCharToType
+   typeChar,
+   updateStartVariables,
+   updateCharToType
 } from '../redux/modules/main';
 
 import {
-  initializeLearningState,
-  refreshCurrentLesson,
-  selectMode as selectLearningMode
+   initializeLearningState,
+   refreshCurrentLesson,
+   selectMode as selectLearningMode
 } from '../redux/modules/learning-mode';
 
 const history = syncHistoryWithStore(browserHistory, store);
@@ -39,21 +39,22 @@ const history = syncHistoryWithStore(browserHistory, store);
 // на данный момент что это за информация: это выбранная раскладка на клавиатуре и выбранный мод в лернинг моде,
 // ввести ограничения на 10 текстов не больше 10000 тысяч символов
 
+
 store.dispatch(initializeLearningState());
+
+const $document = $(document);
+
+const keyPressEventHandler = e => {
+
+   store.dispatch(typeChar(String.fromCharCode(e.which)));
+
+};
 
 export default class App extends Component {
 
    componentDidMount() {
 
       store.dispatch(updateCharToType());
-
-      $(document).on('keypress', (e) => {
-         if (location.pathname !== '/') {
-            return;
-         }
-
-         store.dispatch(typeChar(String.fromCharCode(e.which)));
-      });
 
    }
 
@@ -89,6 +90,8 @@ export default class App extends Component {
 
    _onKeyboardEnter() {
 
+      $document.on('keypress', keyPressEventHandler);
+
       store.dispatch(updateStartVariables());
 
       store.dispatch(updateCharToType());
@@ -97,6 +100,8 @@ export default class App extends Component {
 
    _onSettingsEnter(nextState, replace) {
 
+      $document.off('keypress', keyPressEventHandler);
+
       store.dispatch(refreshCurrentLesson());
 
       let path = '/settings/' + store.getState().main.mode + '-mode';
@@ -104,6 +109,7 @@ export default class App extends Component {
       replace({
          pathname: path
       });
+
    }
 
    _onLearningModeEnter(nextState, replace) {
@@ -131,8 +137,6 @@ export default class App extends Component {
    }
 
    _onTextModeEnter() {
-
-
 
 
    }
