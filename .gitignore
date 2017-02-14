@@ -1,6 +1,5 @@
-.idea/
-node_modules/
+.idea
+node_modules
 .DS_Store
-build/.DS_Store
-__pycache__/
+__pycache__
 npm-debug.log
