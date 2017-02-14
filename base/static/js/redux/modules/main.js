@@ -1,12 +1,11 @@
-const PRESS_KEY = 'main/PRESS_KEY';
+const PRESS_KEYS = 'main/PRESS_KEYS';
 
 const UPDATE_START_VARIABLES = 'main/UPDATE_START_VARIABLES';
 const SET_MODE = 'main/SET_MODE';
 const ACTION_METRONOME = 'main/ACTION_METRONOME';
 const SET_KEYBOARD = 'main/SET_KEYBOARD';
 
-const SET_PRESSED_RIGHT_IDS = 'main/SET_PRESSED_RIGHT_IDS';
-const SET_PRESSED_WRONG_IDS = 'main/SET_PRESSED_WRONG_IDS';
+const PRESS_WRONG_KEYS = 'main/PRESS_WRONG_KEYS';
 const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
 const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
@@ -15,7 +14,7 @@ import keyboards from '../../constants/keyboards';
 import _ from 'lodash';
 
 import {updateFromTextModeCharToType, typeTextMode} from './text-mode';
-import {updateCharToType as updateFromLearningModeCharToType, typeLearningMode} from './learning-mode';
+import {typeLearningMode} from './learning-mode';
 import {getIdsFromCharacter, sliceChar} from '../../utils';
 
 
@@ -24,9 +23,9 @@ const INITIAL_STATE = {
 
    keys: _.find(keyboards, {'name': 'US'}).keys,
 
-   pressedRightIds: [],
+   pressedKeys: [],
 
-   pressedWrongIds: [],
+   pressedWrongKeys: [],
 
    startTypingTime: 1461228933292,
 
@@ -46,16 +45,17 @@ const INITIAL_STATE = {
 
 export default (state = INITIAL_STATE, action = {}) => {
    switch (action.type) {
-      case SET_PRESSED_RIGHT_IDS:
+
+      case PRESS_KEYS:
          return {
             ...state,
-            pressedRightIds: action.ids
+            pressedKeys: action.ids
          }
 
-      case SET_PRESSED_WRONG_IDS:
+      case PRESS_WRONG_KEYS:
          return {
             ...state,
-            pressedWrongIds: action.ids
+            pressedWrongKeys: action.ids
          }
 
       case SET_IDS_CHAR_TO_TYPE:
@@ -115,10 +115,10 @@ export function setMode(mode) {
    };
 }
 
-export function pressKey(char) {
+export function pressKeys(ids) {
    return {
-      type: PRESS_KEY,
-      char
+      type: PRESS_KEYS,
+      ids
    };
 }
 
@@ -157,17 +157,9 @@ export function closeModal() {
    };
 }
 
-
-export function setPressedRightIds(ids) {
+export function pressWrongKeys(ids) {
    return {
-      type: SET_PRESSED_RIGHT_IDS,
-      ids
-   };
-}
-
-export function setPressedWrongIds(ids) {
-   return {
-      type: SET_PRESSED_WRONG_IDS,
+      type: PRESS_WRONG_KEYS,
       ids
    };
 }
@@ -191,39 +183,24 @@ export function addErrorType() {
    };
 }
 
-export function stopBeenPressedKey(char) {
-   return (dispatch, getState) => {
-      let state = getState()
-      let keys = state.main.keys;
-
-      let sliceCurrentChar = pressed => {
-         return sliceChar(pressed, getIdsFromCharacter(keys, char))
-      }
-
-      dispatch(setPressedRightIds(sliceCurrentChar(state.main.pressedRightIds)));
-      dispatch(setPressedWrongIds(sliceCurrentChar(state.main.pressedWrongIds)));
-   }
-}
-
-export function updateCharToType() {
-   return (dispatch, getState) => {
-      switch (getState().main.mode) {
-         case 'text':
-            dispatch(updateFromTextModeCharToType());
-            break;
-         case 'learning':
-            dispatch(updateFromLearningModeCharToType());
-            break;
-      }
-   }
-}
-
 export function typeChar(char) {
    return (dispatch, getState) => {
-      dispatch(pressKey(char));
 
+      const state = getState();
+
+      const idsChar = getIdsFromCharacter(state.main.keys, char);
+
+      dispatch(pressKeys(idsChar));
+
+      // unpress keys
       setTimeout(() => {
-         dispatch(stopBeenPressedKey(char));
+
+         const state = getState();
+
+         dispatch(pressKeys(sliceChar(state.main.pressedKeys, idsChar)));
+
+         dispatch(pressWrongKeys(sliceChar(state.main.pressedWrongKeys, idsChar)));
+
       }, 100);
 
       switch (getState().main.mode) {

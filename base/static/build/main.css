@@ -3726,14 +3726,14 @@ a:hover {
   border-color: #a5a5a5;
   box-shadow: 0 1px 1px 0px rgba(0,0,0,0.8);
 }
-.keypad__key.keypad__active {
+.keypad__key.keypad__pressed {
   border: none;
   top: 2px;
   border-bottom: 1px solid #afafaf;
   box-shadow: 1px 1px 0 rgba(0,0,0,0.05), inset 0 1px 0px rgba(0,0,0,0.3);
 }
-.keypad__key.keypad__active:before,
-.keypad__key.keypad__active:after {
+.keypad__key.keypad__pressed:before,
+.keypad__key.keypad__pressed:after {
   border: none;
   box-shadow: none;
 }

@@ -21,8 +21,7 @@ import store from './../redux/store';
 
 import {
    typeChar,
-   updateStartVariables,
-   updateCharToType
+   updateStartVariables
 } from '../redux/modules/main';
 
 import {
@@ -30,6 +29,8 @@ import {
    refreshCurrentLesson,
    selectMode as selectLearningMode
 } from '../redux/modules/learning-mode';
+
+import { initializeTextState } from '../redux/modules/text-mode';
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -39,24 +40,30 @@ const history = syncHistoryWithStore(browserHistory, store);
 // на данный момент что это за информация: это выбранная раскладка на клавиатуре и выбранный мод в лернинг моде,
 // ввести ограничения на 10 текстов не больше 10000 тысяч символов
 
-
 store.dispatch(initializeLearningState());
+store.dispatch(initializeTextState());
 
 const $document = $(document);
 
-const keyPressEventHandler = e => {
+const keyPressHandler = e => {
 
-   store.dispatch(typeChar(String.fromCharCode(e.which)));
+   if (e.which !== 32) {
+      store.dispatch(typeChar(String.fromCharCode(e.which)));
+   }
 
 };
 
-export default class App extends Component {
+const keyDownHandler = e => {
 
-   componentDidMount() {
+   if (e.which == 32) {
+      e.preventDefault();
 
-      store.dispatch(updateCharToType());
-
+      store.dispatch(typeChar(String.fromCharCode(e.which)));
    }
+
+}
+
+export default class App extends Component {
 
    render() {
       return (
@@ -90,17 +97,19 @@ export default class App extends Component {
 
    _onKeyboardEnter() {
 
-      $document.on('keypress', keyPressEventHandler);
+      $document.on('keydown', keyDownHandler);
+      
+      $document.on('keypress', keyPressHandler);
 
       store.dispatch(updateStartVariables());
-
-      store.dispatch(updateCharToType());
 
    }
 
    _onSettingsEnter(nextState, replace) {
 
-      $document.off('keypress', keyPressEventHandler);
+      $document.off('keydown', keyDownHandler);
+
+      $document.off('keypress', keyPressHandler);
 
       store.dispatch(refreshCurrentLesson());
 

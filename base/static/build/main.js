@@ -21575,6 +21575,8 @@
 
 	var _learningMode = __webpack_require__(326);
 
+	var _textMode = __webpack_require__(324);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -21594,14 +21596,25 @@
 	// на данный момент что это за информация: это выбранная раскладка на клавиатуре и выбранный мод в лернинг моде,
 	// ввести ограничения на 10 текстов не больше 10000 тысяч символов
 
-
 	_store2.default.dispatch((0, _learningMode.initializeLearningState)());
+	_store2.default.dispatch((0, _textMode.initializeTextState)());
 
 	var $document = (0, _jquery2.default)(document);
 
-	var keyPressEventHandler = function keyPressEventHandler(e) {
+	var keyPressHandler = function keyPressHandler(e) {
 
-	   _store2.default.dispatch((0, _main.typeChar)(String.fromCharCode(e.which)));
+	   if (e.which !== 32) {
+	      _store2.default.dispatch((0, _main.typeChar)(String.fromCharCode(e.which)));
+	   }
+	};
+
+	var keyDownHandler = function keyDownHandler(e) {
+
+	   if (e.which == 32) {
+	      e.preventDefault();
+
+	      _store2.default.dispatch((0, _main.typeChar)(String.fromCharCode(e.which)));
+	   }
 	};
 
 	var App = function (_Component) {
@@ -21614,12 +21627,6 @@
 	   }
 
 	   _createClass(App, [{
-	      key: 'componentDidMount',
-	      value: function componentDidMount() {
-
-	         _store2.default.dispatch((0, _main.updateCharToType)());
-	      }
-	   }, {
 	      key: 'render',
 	      value: function render() {
 	         return _react2.default.createElement(
@@ -21662,17 +21669,19 @@
 	      key: '_onKeyboardEnter',
 	      value: function _onKeyboardEnter() {
 
-	         $document.on('keypress', keyPressEventHandler);
+	         $document.on('keydown', keyDownHandler);
+
+	         $document.on('keypress', keyPressHandler);
 
 	         _store2.default.dispatch((0, _main.updateStartVariables)());
-
-	         _store2.default.dispatch((0, _main.updateCharToType)());
 	      }
 	   }, {
 	      key: '_onSettingsEnter',
 	      value: function _onSettingsEnter(nextState, replace) {
 
-	         $document.off('keypress', keyPressEventHandler);
+	         $document.off('keydown', keyDownHandler);
+
+	         $document.off('keypress', keyPressHandler);
 
 	         _store2.default.dispatch((0, _learningMode.refreshCurrentLesson)());
 
@@ -43646,19 +43655,16 @@
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	exports.setMode = setMode;
-	exports.pressKey = pressKey;
+	exports.pressKeys = pressKeys;
 	exports.updateStartVariables = updateStartVariables;
 	exports.actionMetronome = actionMetronome;
 	exports.setKeyboard = setKeyboard;
 	exports.openModal = openModal;
 	exports.closeModal = closeModal;
-	exports.setPressedRightIds = setPressedRightIds;
-	exports.setPressedWrongIds = setPressedWrongIds;
+	exports.pressWrongKeys = pressWrongKeys;
 	exports.setIdsCharToType = setIdsCharToType;
 	exports.addSuccesType = addSuccesType;
 	exports.addErrorType = addErrorType;
-	exports.stopBeenPressedKey = stopBeenPressedKey;
-	exports.updateCharToType = updateCharToType;
 	exports.typeChar = typeChar;
 
 	var _keyboards = __webpack_require__(319);
@@ -43677,15 +43683,14 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var PRESS_KEY = 'main/PRESS_KEY';
+	var PRESS_KEYS = 'main/PRESS_KEYS';
 
 	var UPDATE_START_VARIABLES = 'main/UPDATE_START_VARIABLES';
 	var SET_MODE = 'main/SET_MODE';
 	var ACTION_METRONOME = 'main/ACTION_METRONOME';
 	var SET_KEYBOARD = 'main/SET_KEYBOARD';
 
-	var SET_PRESSED_RIGHT_IDS = 'main/SET_PRESSED_RIGHT_IDS';
-	var SET_PRESSED_WRONG_IDS = 'main/SET_PRESSED_WRONG_IDS';
+	var PRESS_WRONG_KEYS = 'main/PRESS_WRONG_KEYS';
 	var SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 	var ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
 	var ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
@@ -43695,9 +43700,9 @@
 
 	   keys: _lodash2.default.find(_keyboards2.default, { 'name': 'US' }).keys,
 
-	   pressedRightIds: [],
+	   pressedKeys: [],
 
-	   pressedWrongIds: [],
+	   pressedWrongKeys: [],
 
 	   startTypingTime: 1461228933292,
 
@@ -43720,14 +43725,15 @@
 	   var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
 	   switch (action.type) {
-	      case SET_PRESSED_RIGHT_IDS:
+
+	      case PRESS_KEYS:
 	         return _extends({}, state, {
-	            pressedRightIds: action.ids
+	            pressedKeys: action.ids
 	         });
 
-	      case SET_PRESSED_WRONG_IDS:
+	      case PRESS_WRONG_KEYS:
 	         return _extends({}, state, {
-	            pressedWrongIds: action.ids
+	            pressedWrongKeys: action.ids
 	         });
 
 	      case SET_IDS_CHAR_TO_TYPE:
@@ -43779,10 +43785,10 @@
 	   };
 	}
 
-	function pressKey(char) {
+	function pressKeys(ids) {
 	   return {
-	      type: PRESS_KEY,
-	      char: char
+	      type: PRESS_KEYS,
+	      ids: ids
 	   };
 	}
 
@@ -43821,16 +43827,9 @@
 	   };
 	}
 
-	function setPressedRightIds(ids) {
+	function pressWrongKeys(ids) {
 	   return {
-	      type: SET_PRESSED_RIGHT_IDS,
-	      ids: ids
-	   };
-	}
-
-	function setPressedWrongIds(ids) {
-	   return {
-	      type: SET_PRESSED_WRONG_IDS,
+	      type: PRESS_WRONG_KEYS,
 	      ids: ids
 	   };
 	}
@@ -43854,39 +43853,23 @@
 	   };
 	}
 
-	function stopBeenPressedKey(char) {
-	   return function (dispatch, getState) {
-	      var state = getState();
-	      var keys = state.main.keys;
-
-	      var sliceCurrentChar = function sliceCurrentChar(pressed) {
-	         return (0, _utils.sliceChar)(pressed, (0, _utils.getIdsFromCharacter)(keys, char));
-	      };
-
-	      dispatch(setPressedRightIds(sliceCurrentChar(state.main.pressedRightIds)));
-	      dispatch(setPressedWrongIds(sliceCurrentChar(state.main.pressedWrongIds)));
-	   };
-	}
-
-	function updateCharToType() {
-	   return function (dispatch, getState) {
-	      switch (getState().main.mode) {
-	         case 'text':
-	            dispatch((0, _textMode.updateFromTextModeCharToType)());
-	            break;
-	         case 'learning':
-	            dispatch((0, _learningMode.updateCharToType)());
-	            break;
-	      }
-	   };
-	}
-
 	function typeChar(char) {
 	   return function (dispatch, getState) {
-	      dispatch(pressKey(char));
 
+	      var state = getState();
+
+	      var idsChar = (0, _utils.getIdsFromCharacter)(state.main.keys, char);
+
+	      dispatch(pressKeys(idsChar));
+
+	      // unpress keys
 	      setTimeout(function () {
-	         dispatch(stopBeenPressedKey(char));
+
+	         var state = getState();
+
+	         dispatch(pressKeys((0, _utils.sliceChar)(state.main.pressedKeys, idsChar)));
+
+	         dispatch(pressWrongKeys((0, _utils.sliceChar)(state.main.pressedWrongKeys, idsChar)));
 	      }, 100);
 
 	      switch (getState().main.mode) {
@@ -62190,14 +62173,19 @@
 	exports.selectText = selectText;
 	exports.refreshText = refreshText;
 	exports.typeOnEntitie = typeOnEntitie;
-	exports.updateFromTextModeCharToType = updateFromTextModeCharToType;
+	exports.updateCharToType = updateCharToType;
 	exports.typeTextMode = typeTextMode;
+	exports.initializeTextState = initializeTextState;
 
 	var _lodash = __webpack_require__(323);
+
+	var _lodash2 = _interopRequireDefault(_lodash);
 
 	var _utils = __webpack_require__(325);
 
 	var _main = __webpack_require__(318);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -62242,8 +62230,8 @@
 	      },
 	      7: {
 	         title: 'Second',
-	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a',
-	         last: ' wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
+	         typed: 'Bears are mammals of the family Ursidae. Bears are classified as ',
+	         last: 'wIde var'
 	      },
 	      8: {
 	         title: 'Second',
@@ -62329,29 +62317,18 @@
 
 	      case TYPE_ON_ENTITIE:
 	         return function () {
-	            var entities = (0, _lodash.cloneDeep)(state.entities);
+
+	            var entities = _lodash2.default.cloneDeep(state.entities);
 
 	            var text = entities[action.textId];
 
 	            text.typed += text.last[0];
 	            text.last = text.last.substring(1);
 
-	            return (0, _lodash.assign)({}, state, {
+	            return _extends({}, state, {
 	               entities: entities
 	            });
 	         }();
-
-	      // return {
-	      //    ...state,
-	      //    entities: {
-	      //       ...state.entities,
-	      //       [action.textId]: {
-	      //          title: text.title,
-	      //          typed: '',
-	      //          last: text.typed + text.last,
-	      //       }
-	      //    }
-	      // }
 
 	      default:
 	         return state;
@@ -62388,45 +62365,49 @@
 	   };
 	}
 
-	function updateFromTextModeCharToType() {
+	function updateCharToType() {
 	   return function (dispatch, getState) {
 	      var state = getState();
-	      var keys = state.main.keys;
 	      var textId = state.textMode.currentTextId;
 	      var entities = state.textMode.entities;
 
-	      var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, entities[textId].last[0]);
+	      var idsChar = '';
 
-	      dispatch((0, _main.setIdsCharToType)(idsCharToType));
+	      if (entities[textId].last) {
+	         idsChar = (0, _utils.getIdsFromCharacter)(state.main.keys, entities[textId].last[0]);
+	      }
+
+	      dispatch((0, _main.setIdsCharToType)(idsChar));
 	   };
 	}
-	//
+
 	function typeTextMode(char) {
 	   return function (dispatch, getState) {
 	      var state = getState();
-	      var keyboardState = state.keyboard;
-	      var textModeState = state.textMode;
-	      var keys = state.main.keys;
-	      var textId = textModeState.currentTextId;
-	      var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
+	      var textId = state.textMode.currentTextId;
+	      var idsChar = (0, _utils.getIdsFromCharacter)(state.main.keys, char);
 
-	      if (textModeState.entities[textId].last[0] === char) {
-	         var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
-
-	         dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
+	      if (state.textMode.entities[textId].last[0] === char) {
 
 	         dispatch(typeOnEntitie(textId));
 
 	         dispatch((0, _main.addSuccesType)());
 
-	         dispatch((0, _main.updateCharToType)());
+	         dispatch(updateCharToType());
 	      } else {
-	         var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
 
-	         dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
+	         var pressedWrongKeys = (0, _utils.sliceChar)(state.main.pressedWrongKeys, idsChar);
+
+	         dispatch((0, _main.pressWrongKeys)(pressedWrongKeys.concat(idsChar)));
 
 	         dispatch((0, _main.addErrorType)());
 	      }
+	   };
+	}
+
+	function initializeTextState() {
+	   return function (dispatch, getState) {
+	      dispatch(updateCharToType());
 	   };
 	}
 
@@ -62471,6 +62452,11 @@
 	}
 
 	function sliceChar(chars, idChars) {
+
+	   if (!chars) {
+	      debugger;
+	   }
+
 	   var newChars = chars.slice();
 
 	   (0, _lodash.forEach)(idChars, function (id) {
@@ -62858,40 +62844,42 @@
 	   return function (dispatch, getState) {
 	      var state = getState();
 	      var keys = state.main.keys;
-	      var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, state.learningMode.lesson.last[0]);
 
-	      dispatch((0, _main.setIdsCharToType)(idsCharToType));
+	      if (state.learningMode.lesson.last[0]) {
+	         var idsCharToType = (0, _utils.getIdsFromCharacter)(keys, state.learningMode.lesson.last[0]);
+
+	         dispatch((0, _main.setIdsCharToType)(idsCharToType));
+	      }
 	   };
 	}
 
 	function typeLearningMode(char) {
 	   return function (dispatch, getState) {
+
 	      var state = getState();
-	      var keyboardState = state.main;
-	      var learningModeState = state.learningMode;
-	      var keys = state.main.keys;
-	      var idsChar = (0, _utils.getIdsFromCharacter)(keys, char);
 
-	      if (learningModeState.lesson.last[0] === char) {
-	         var pressedRightIds = (0, _utils.sliceChar)(keyboardState.pressedRightIds, idsChar);
+	      if (state.learningMode.lesson.last) {
 
-	         dispatch((0, _main.setPressedRightIds)(pressedRightIds.concat(idsChar)));
+	         var idsChar = (0, _utils.getIdsFromCharacter)(state.main.keys, char);
 
-	         dispatch(typeOnLesson());
+	         if (state.learningMode.lesson.last[0] === char) {
 
-	         // if (getState().learningMode.lesson.last.length === 0) {
-	         //    dispatch(generateLessonFromCurrentMode());
-	         // }
+	            dispatch(typeOnLesson());
 
-	         dispatch((0, _main.addSuccesType)());
+	            dispatch((0, _main.addSuccesType)());
 
-	         dispatch(updateCharToType());
+	            dispatch(updateCharToType());
+	         } else {
+
+	            var pressedWrongKeys = (0, _utils.sliceChar)(state.main.pressedWrongKeys, idsChar);
+
+	            dispatch((0, _main.pressWrongKeys)(pressedWrongKeys.concat(idsChar)));
+
+	            dispatch((0, _main.addErrorType)());
+	         }
 	      } else {
-	         var pressedWrongIds = (0, _utils.sliceChar)(keyboardState.pressedWrongIds, idsChar);
 
-	         dispatch((0, _main.setPressedWrongIds)(pressedWrongIds.concat(idsChar)));
-
-	         dispatch((0, _main.addErrorType)());
+	         dispatch(generateLessonFromCurrentMode());
 	      }
 	   };
 	}
@@ -62931,6 +62919,8 @@
 	      lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFree, letters);
 
 	      dispatch(setLessonFree(lesson));
+
+	      dispatch(updateCharToType());
 	   };
 	}
 
@@ -78182,6 +78172,14 @@
 	         $content.scrollTop(cursorOffsetTop - $content.offset().top - 80);
 
 	         $content.perfectScrollbar();
+
+	         $content.on('focus', function () {
+	            console.log('focus');
+	         });
+
+	         $content.on('click', function () {
+	            console.log('click');
+	         });
 	      }
 	   }, {
 	      key: 'render',
@@ -78354,7 +78352,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _reactRedux = __webpack_require__(179);
@@ -78369,12 +78367,12 @@
 
 	var mapStateToProps = function mapStateToProps(state) {
 
-	  return {
-	    keys: state.main.keys,
-	    pressedRightIds: state.main.pressedRightIds,
-	    pressedWrongIds: state.main.pressedWrongIds,
-	    idCharsToType: state.main.idCharsToType
-	  };
+	   return {
+	      keys: state.main.keys,
+	      pressedKeys: state.main.pressedKeys,
+	      pressedWrongKeys: state.main.pressedWrongKeys,
+	      idCharsToType: state.main.idCharsToType
+	   };
 	};
 
 	exports.default = (0, _reactRedux.connect)(mapStateToProps)(_Keypad2.default);
@@ -78386,7 +78384,7 @@
 	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
-	  value: true
+	   value: true
 	});
 
 	var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
@@ -78416,73 +78414,73 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var KeyPad = function (_Component) {
-	  _inherits(KeyPad, _Component);
+	   _inherits(KeyPad, _Component);
 
-	  function KeyPad() {
-	    _classCallCheck(this, KeyPad);
+	   function KeyPad() {
+	      _classCallCheck(this, KeyPad);
 
-	    return _possibleConstructorReturn(this, (KeyPad.__proto__ || Object.getPrototypeOf(KeyPad)).apply(this, arguments));
-	  }
+	      return _possibleConstructorReturn(this, (KeyPad.__proto__ || Object.getPrototypeOf(KeyPad)).apply(this, arguments));
+	   }
 
-	  _createClass(KeyPad, [{
-	    key: 'render',
-	    value: function render() {
-	      var _props = this.props,
-	          keys = _props.keys,
-	          pressedRightIds = _props.pressedRightIds,
-	          pressedWrongIds = _props.pressedWrongIds,
-	          idCharsToType = _props.idCharsToType;
+	   _createClass(KeyPad, [{
+	      key: 'render',
+	      value: function render() {
+	         var _props = this.props,
+	             keys = _props.keys,
+	             pressedKeys = _props.pressedKeys,
+	             pressedWrongKeys = _props.pressedWrongKeys,
+	             idCharsToType = _props.idCharsToType;
 
 
-	      var keysNode = keys.map(function (obj) {
-	        var isPressedRight = pressedRightIds.indexOf(obj.id) + 1;
-	        var isPressedWrong = pressedWrongIds.indexOf(obj.id) + 1;
-	        var needToType = false;
+	         var keysNode = keys.map(function (obj) {
+	            var isPressed = pressedKeys.indexOf(obj.id) + 1;
+	            var isWrong = pressedWrongKeys.indexOf(obj.id) + 1;
+	            var needToType = false;
 
-	        _lodash2.default.forEach(idCharsToType, function (value) {
-	          if (obj.id === value) {
-	            needToType = true;
-	            return false;
-	          }
-	        });
+	            _lodash2.default.forEach(idCharsToType, function (value) {
+	               if (obj.id === value) {
+	                  needToType = true;
+	                  return false;
+	               }
+	            });
 
-	        var className = (0, _classNames2.default)('keypad__key', {
-	          'keypad__active': isPressedRight || isPressedWrong,
-	          'keypad__wrong': isPressedWrong,
-	          'keypad__to-type': needToType
-	        });
+	            var className = (0, _classNames2.default)('keypad__key', {
+	               'keypad__pressed': isPressed,
+	               'keypad__wrong': isWrong,
+	               'keypad__to-type': needToType
+	            });
 
-	        var finger = obj.finger;
+	            var finger = obj.finger;
 
-	        if (finger === 'index') {
-	          finger = obj.hand + '-' + finger;
-	        }
+	            if (finger === 'index') {
+	               finger = obj.hand + '-' + finger;
+	            }
 
-	        var keyProps = {
-	          className: className,
-	          'data-key': obj.id,
-	          'data-finger': finger
-	        };
+	            var keyProps = {
+	               className: className,
+	               'data-key': obj.id,
+	               'data-finger': finger
+	            };
 
-	        return _react2.default.createElement(_Key2.default, {
-	          key: obj.id,
-	          keyProps: keyProps,
-	          type: obj.type,
-	          char: obj.key,
-	          shiftChar: obj.shiftKey,
-	          classNameShift: 'keypad__shift'
-	        });
-	      });
+	            return _react2.default.createElement(_Key2.default, {
+	               key: obj.id,
+	               keyProps: keyProps,
+	               type: obj.type,
+	               char: obj.key,
+	               shiftChar: obj.shiftKey,
+	               classNameShift: 'keypad__shift'
+	            });
+	         });
 
-	      return _react2.default.createElement(
-	        'div',
-	        { className: 'keypad' },
-	        keysNode
-	      );
-	    }
-	  }]);
+	         return _react2.default.createElement(
+	            'div',
+	            { className: 'keypad' },
+	            keysNode
+	         );
+	      }
+	   }]);
 
-	  return KeyPad;
+	   return KeyPad;
 	}(_react.Component);
 
 	exports.default = KeyPad;

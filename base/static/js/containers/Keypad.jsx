@@ -4,12 +4,12 @@ import KeyPad from '../components/Keypad.jsx';
 
 const mapStateToProps = (state) => {
 
-  return {
-    keys: state.main.keys,
-    pressedRightIds: state.main.pressedRightIds,
-    pressedWrongIds: state.main.pressedWrongIds,
-    idCharsToType: state.main.idCharsToType
-  };
+   return {
+      keys: state.main.keys,
+      pressedKeys: state.main.pressedKeys,
+      pressedWrongKeys: state.main.pressedWrongKeys,
+      idCharsToType: state.main.idCharsToType
+   };
 
 };
 

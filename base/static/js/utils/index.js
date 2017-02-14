@@ -25,6 +25,11 @@ export function getIdsFromCharacter(keys, сharacter) {
 }
 
 export function sliceChar(chars, idChars) {
+
+   if (!chars) {
+      debugger;
+   }
+
    let newChars = chars.slice();
 
    forEach(idChars, id => {

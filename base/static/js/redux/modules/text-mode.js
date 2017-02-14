@@ -3,16 +3,14 @@ const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
 const ADD_NEW_TEXT = 'text-mode/ADD_NEW_TEXT';
 const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
 
-import {assign, cloneDeep, find} from 'lodash';
+import _ from 'lodash';
 
 import {getIdsFromCharacter, sliceChar} from "../../utils";
 import {
    setIdsCharToType,
-   setPressedRightIds,
-   setPressedWrongIds,
+   pressWrongKeys,
    addSuccesType,
-   addErrorType,
-   updateCharToType
+   addErrorType
 } from "./main";
 
 const INITIAL_STATE = {
@@ -51,8 +49,8 @@ const INITIAL_STATE = {
       },
       7: {
          title: 'Second',
-         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a',
-         last: ' wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.'
+         typed: 'Bears are mammals of the family Ursidae. Bears are classified as ',
+         last: 'wIde var'
       },
       8: {
          title: 'Second',
@@ -144,31 +142,20 @@ export default (state = INITIAL_STATE, action = {}) => {
 
       case TYPE_ON_ENTITIE:
          return (() => {
-            let entities = cloneDeep(state.entities);
+
+            let entities = _.cloneDeep(state.entities);
 
             let text = entities[action.textId];
 
             text.typed += text.last[0];
             text.last = text.last.substring(1);
 
-            return assign({}, state, {
+            return {
+               ...state,
                entities
-            });
+            };
 
          })();
-
-
-         // return {
-         //    ...state,
-         //    entities: {
-         //       ...state.entities,
-         //       [action.textId]: {
-         //          title: text.title,
-         //          typed: '',
-         //          last: text.typed + text.last,
-         //       }
-         //    }
-         // }
 
       default:
          return state;
@@ -205,44 +192,51 @@ export function typeOnEntitie(textId) {
    };
 }
 
-export function updateFromTextModeCharToType() {
+export function updateCharToType() {
    return (dispatch, getState) => {
       let state = getState();
-      let keys = state.main.keys;
       let textId = state.textMode.currentTextId;
       let entities = state.textMode.entities;
 
-      let idsCharToType = getIdsFromCharacter(keys, entities[textId].last[0]);
+      let idsChar = '';
 
-      dispatch(setIdsCharToType(idsCharToType));
+      if (entities[textId].last) {
+         idsChar = getIdsFromCharacter(state.main.keys, entities[textId].last[0]);
+      }
+
+      dispatch(setIdsCharToType(idsChar));
+
    };
 }
-//
+
 export function typeTextMode(char) {
    return (dispatch, getState) => {
       let state = getState();
-      let keyboardState = state.keyboard;
-      var textModeState = state.textMode;
-      let keys = state.main.keys
-      let textId = textModeState.currentTextId;
-      let idsChar = getIdsFromCharacter(keys, char);
+      let textId = state.textMode.currentTextId;
+      let idsChar = getIdsFromCharacter(state.main.keys, char);
 
-      if (textModeState.entities[textId].last[0] === char) {
-         let pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
-
-         dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
+      if (state.textMode.entities[textId].last[0] === char) {
 
          dispatch(typeOnEntitie(textId));
 
          dispatch(addSuccesType());
 
          dispatch(updateCharToType());
-      } else {
-         let pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar);
 
-         dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
+      } else {
+
+         let pressedWrongKeys = sliceChar(state.main.pressedWrongKeys, idsChar);
+         
+         dispatch(pressWrongKeys(pressedWrongKeys.concat(idsChar)));
 
          dispatch(addErrorType());
+
       }
+   };
+}
+
+export function initializeTextState() {
+   return (dispatch, getState) => {
+      dispatch(updateCharToType());
    };
 }

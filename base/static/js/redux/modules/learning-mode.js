@@ -18,8 +18,7 @@ import _ from 'lodash';
 
 import {
    setIdsCharToType,
-   setPressedRightIds,
-   setPressedWrongIds,
+   pressWrongKeys,
    addSuccesType,
    addErrorType
 } from "./main";
@@ -297,42 +296,49 @@ export function updateCharToType() {
    return (dispatch, getState) => {
       let state = getState();
       let keys = state.main.keys;
-      let idsCharToType = getIdsFromCharacter(keys, state.learningMode.lesson.last[0]);
 
-      dispatch(setIdsCharToType(idsCharToType));
+      if (state.learningMode.lesson.last[0]) {
+         let idsCharToType = getIdsFromCharacter(keys, state.learningMode.lesson.last[0]);
+
+         dispatch(setIdsCharToType(idsCharToType));
+      }
+
    };
 }
 
 export function typeLearningMode(char) {
    return (dispatch, getState) => {
+
       let state = getState();
-      let keyboardState = state.main;
-      var learningModeState = state.learningMode;
-      let keys = state.main.keys;
-      let idsChar = getIdsFromCharacter(keys, char);
 
-      if (learningModeState.lesson.last[0] === char) {
-         let pressedRightIds = sliceChar(keyboardState.pressedRightIds, idsChar);
+      if (state.learningMode.lesson.last) {
 
-         dispatch(setPressedRightIds(pressedRightIds.concat(idsChar)));
+         let idsChar = getIdsFromCharacter(state.main.keys, char);
 
-         dispatch(typeOnLesson());
+         if (state.learningMode.lesson.last[0] === char) {
 
-         // if (getState().learningMode.lesson.last.length === 0) {
-         //    dispatch(generateLessonFromCurrentMode());
-         // }
+            dispatch(typeOnLesson());
 
-         dispatch(addSuccesType());
+            dispatch(addSuccesType());
 
-         dispatch(updateCharToType());
+            dispatch(updateCharToType());
+
+         } else {
+
+            let pressedWrongKeys = sliceChar(state.main.pressedWrongKeys, idsChar);
+            
+            dispatch(pressWrongKeys(pressedWrongKeys.concat(idsChar)));
+
+            dispatch(addErrorType());
+
+         }
 
       } else {
-         let pressedWrongIds = sliceChar(keyboardState.pressedWrongIds, idsChar);
 
-         dispatch(setPressedWrongIds(pressedWrongIds.concat(idsChar)));
+         dispatch(generateLessonFromCurrentMode());
 
-         dispatch(addErrorType());
       }
+
    };
 }
 
@@ -376,5 +382,6 @@ export function initializeLearningState() {
 
       dispatch(setLessonFree(lesson));
 
+      dispatch(updateCharToType());
    };
 }
