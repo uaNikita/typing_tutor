@@ -3516,6 +3516,7 @@ a:hover {
   width: 840px;
   margin: 50px auto 0;
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   font-size: 11px;
   color: #7d848c;
@@ -3544,10 +3545,13 @@ a:hover {
 .home__head {
   height: 64px;
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
           justify-content: space-between;
   -webkit-box-align: center;
+      -ms-flex-align: center;
           align-items: center;
 }
 .home__auth {
@@ -3560,6 +3564,7 @@ a:hover {
 }
 .home__buttons {
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 .home__buttons > * {
@@ -3580,8 +3585,10 @@ a:hover {
 }
 .home__typing-info {
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: center;
+      -ms-flex-pack: center;
           justify-content: center;
   margin: 10px 0;
 }
@@ -3591,9 +3598,12 @@ a:hover {
 .keyboard {
   width: 650px;
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   -webkit-box-pack: center;
+      -ms-flex-pack: center;
           justify-content: center;
 }
 .keyboard__menu-item {
@@ -3670,23 +3680,29 @@ a:hover {
 .keyboard-layout {
   width: 840px;
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin: 20px auto 0;
 }
 .keyboard-layout__types {
   -webkit-box-flex: 0;
+      -ms-flex: 0 0 190px;
           flex: 0 0 190px;
   padding-left: 10px;
 }
 .keyboard-layout__item {
   -webkit-box-flex: 0;
+      -ms-flex: 0 0 650px;
           flex: 0 0 650px;
 }
 .keypad {
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
   -webkit-box-pack: center;
+      -ms-flex-pack: center;
           justify-content: center;
   margin: 20px 4px 10px;
 }
@@ -3893,11 +3909,14 @@ a:hover {
 }
 .menu {
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
+      -ms-flex-direction: column;
           flex-direction: column;
   -webkit-box-align: start;
+      -ms-flex-align: start;
           align-items: flex-start;
 }
 .menu__item {
@@ -4065,10 +4084,13 @@ a:hover {
 .text__buttons {
   height: 30px;
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   -webkit-box-pack: end;
+      -ms-flex-pack: end;
           justify-content: flex-end;
   -webkit-box-align: center;
+      -ms-flex-align: center;
           align-items: center;
   margin-bottom: 10px;
 }
@@ -4097,25 +4119,32 @@ a:hover {
 }
 .settings-learning__item-ctrl-range {
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
+      -ms-flex-align: center;
           align-items: center;
 }
 .settings-learning__range {
-  flex-basis: 100%;
+  -ms-flex-preferred-size: 100%;
+      flex-basis: 100%;
 }
 .settings-learning__max-word-length {
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   -webkit-box-align: center;
+      -ms-flex-align: center;
           align-items: center;
 }
 .settings-learning__modes {
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 .settings-learning__modes-menu {
   -webkit-box-flex: 0;
+      -ms-flex: 0 0 140px;
           flex: 0 0 140px;
 }
 .settings-learning__modes-menu-item {
@@ -4126,6 +4155,7 @@ a:hover {
 }
 .settings-learning__modes-content {
   -webkit-box-flex: 0;
+      -ms-flex: 0 0 700px;
           flex: 0 0 700px;
 }
 .settings-learning__keyboard .keyboard__key:not(.keyboard__key_disabled) {
@@ -4140,17 +4170,20 @@ a:hover {
 }
 .settings-text__item {
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   margin-bottom: 15px;
 }
 .settings-text__label {
   -webkit-box-flex: 0;
+      -ms-flex: 0 0 150px;
           flex: 0 0 150px;
   padding-top: 5px;
 }
 .settings-text__item-ctrl {
   width: 100%;
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
 }
 .settings-text__ctrl-texts select {
@@ -4231,8 +4264,10 @@ a:hover {
 .settings__nav-in {
   width: 840px;
   display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
-  align-content: center;
+  -ms-flex-line-pack: center;
+      align-content: center;
   margin: 0 auto;
 }
 .settings__nav-item {

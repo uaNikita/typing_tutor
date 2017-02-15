@@ -16,7 +16,7 @@
   "license": "ISC",
   "private": true,
   "devDependencies": {
-    "webpack": "1.13.2",
+    "webpack": "*",
     "babel-core": "*",
     "babel-loader": "*",
     "babel-preset-es2015": "*",
@@ -33,7 +33,7 @@
     "redux-thunk": "*",
     "react-router-redux": "*",
     "classnames": "*",
-    "extract-text-webpack-plugin": "*",
+    "extract-text-webpack-plugin": "2.0.0-rc.3",
     "password-generator": "*",
     "perfect-scrollbar": "*",
     "css-loader": "*",

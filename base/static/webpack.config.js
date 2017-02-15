@@ -6,23 +6,33 @@ var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var env = process.env.WEBPACK_ENV;
-var plugins = [new ExtractTextPlugin('[name].css')];
+var plugins = [
+   new ExtractTextPlugin('[name].css'),
+   new webpack.LoaderOptionsPlugin({
+      options: {
+         context: __dirname,
+         postcss: [
+            autoprefixer
+         ]
+      }
+   })
+];
 
 if (env === 'build') {
 
-   plugins.push(new webpack.DefinePlugin({
-      'process.env': {
-         'NODE_ENV': JSON.stringify('production')
-      }
-   }));
-
-   plugins.push(new webpack.NoErrorsPlugin());
-
-   plugins.push(new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-         warnings: false
-      }
-   }));
+   plugins.concat([
+      new webpack.DefinePlugin({
+         'process.env': {
+            'NODE_ENV': JSON.stringify('production')
+         }
+      }),
+      new webpack.NoErrorsPlugin(),
+      new webpack.optimize.UglifyJsPlugin({
+         compressor: {
+            warnings: false
+         }
+      })
+   ]);
 
 }
 
@@ -45,29 +55,13 @@ module.exports = {
 
    plugins: plugins,
 
-   // Options affecting the resolving of modules.
-   resolve: {
-      // An array of directory names to be resolved to the current directory as well as its ancestors, and searched for modules.
-      modulesDirectories: ['node_modules'],
-      // An array of extensions that should be used to resolve modules.
-      extensions: ['', '.js']
-   },
-
-   // Like resolve but for loaders.
-   resolveLoader: {
-      modulesDirectories: ['node_modules'],
-      // It describes alternatives for the module name that are tried.
-      moduleTemplates: ['*-loader'],
-      extention: ['', '.js']
-   },
-
    // Options affecting the normal modules
    module: {
       // A array of automatically applied loaders.
-      loaders: [
+      rules: [
          {
             test: /\.jsx?$/,
-            loader: 'babel',
+            loader: 'babel-loader',
             exclude: /node_modules/,
             query: {
                plugins: ["transform-object-rest-spread"],
@@ -76,14 +70,30 @@ module.exports = {
          },
          {
             test: /\.styl$/,
-            loader: ExtractTextPlugin.extract('style', 'css?-url&-import!postcss!stylus')
-         },
-         {
+            loader: ExtractTextPlugin.extract({
+               fallback: 'style-loader',
+               use: [
+                  {
+                     loader: "css-loader",
+                     options: {
+                        url: true,
+                        import: true,
+                     }
+                  },
+                  "postcss-loader",
+                  "stylus-loader"
+
+               ]
+            })
+         }, {
             test: /\.css$/,
-            loader: ExtractTextPlugin.extract('style', 'css')
+            loader: ExtractTextPlugin.extract({
+               fallback: 'style-loader',
+               use: 'css-loader'
+            })
          }, {
             test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-            loader: "url",
+            loader: "url-loader",
             query: {
                limit: "10000",
                mimetype: "application/font-woff",
@@ -91,7 +101,7 @@ module.exports = {
             }
          }, {
             test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-            loader: "url",
+            loader: "url-loader",
             query: {
                limit: "10000",
                mimetype: "application/font-woff",
@@ -99,7 +109,7 @@ module.exports = {
             }
          }, {
             test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-            loader: "url",
+            loader: "url-loader",
             query: {
                limit: "10000",
                mimetype: "application/octet-stream",
@@ -107,13 +117,13 @@ module.exports = {
             }
          }, {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-            loader: "file",
+            loader: "file-loader",
             query: {
                name: "[name].[ext]"
             }
          }, {
             test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-            loader: "url",
+            loader: "url-loader",
             query: {
                limit: "10000",
                mimetype: "image/svg+xml",
@@ -121,12 +131,6 @@ module.exports = {
             }
          }
       ]
-   },
-
-   postcss: function () {
-      return [autoprefixer({
-         browsers: ['> 3%']
-      })];
    }
 
 };
