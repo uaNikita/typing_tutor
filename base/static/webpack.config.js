@@ -20,7 +20,7 @@ var plugins = [
 
 if (env === 'build') {
 
-   plugins.concat([
+   plugins = plugins.concat([
       new webpack.DefinePlugin({
          'process.env': {
             'NODE_ENV': JSON.stringify('production')

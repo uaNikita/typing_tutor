@@ -8,7 +8,7 @@
     "url": "git://github.com/uaNikita/typing_tutor"
   },
   "scripts": {
-    "build": "WEBPACK_ENV=build webpack",
+    "build": "WEBPACK_ENV=build webpack --progress",
     "dev": "WEBPACK_ENV=dev webpack --progress --watch"
   },
   "keywords": [],
