@@ -24,6 +24,7 @@ class Home extends Component {
       case 'learning':
         area = <Learningarea />
         break
+
     }
 
     return (
