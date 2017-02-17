@@ -13,9 +13,15 @@ class Key extends Component {
 
     if (type === 'number' || type === 'non-alphanumeric') {
 
+      let className = 'keyboard__shift-key';
+
+      if (classNameShift) {
+         className = classNameShift;
+      }
+
       return (
         <span {...keyProps}>
-          <span className={classNameShift}>{shiftChar}</span>
+          <span className={className}>{shiftChar}</span>
           {char}
         </span>
       )

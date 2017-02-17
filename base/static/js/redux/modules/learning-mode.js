@@ -294,14 +294,17 @@ export function generateAndSetFreeLesson() {
 
 export function updateCharToType() {
    return (dispatch, getState) => {
+
       let state = getState();
-      let keys = state.main.keys;
 
-      if (state.learningMode.lesson.last[0]) {
-         let idsCharToType = getIdsFromCharacter(keys, state.learningMode.lesson.last[0]);
+      let idsChar = '';
 
-         dispatch(setIdsCharToType(idsCharToType));
+      if (state.learningMode.lesson.last) {
+
+         idsChar = getIdsFromCharacter(state.main.keys, state.learningMode.lesson.last[0]);
       }
+      
+      dispatch(setIdsCharToType(idsChar));
 
    };
 }
@@ -326,7 +329,7 @@ export function typeLearningMode(char) {
          } else {
 
             let pressedWrongKeys = sliceChar(state.main.pressedWrongKeys, idsChar);
-            
+
             dispatch(pressWrongKeys(pressedWrongKeys.concat(idsChar)));
 
             dispatch(addErrorType());

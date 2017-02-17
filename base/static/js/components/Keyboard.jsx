@@ -22,7 +22,6 @@ class Keyboard extends Component {
            type={obj.type}
            char={obj.key}
            shiftChar={obj.shiftKey}
-           classNameShift='keyboard__shift-key'
          />
 
       })
@@ -67,9 +66,8 @@ class Keyboard extends Component {
 
    _onClickNameHandler(name) {
 
-      console.log('_onClickNameHandler');
-
       this.props.setKeyboard(name);
+
    }
 
 }

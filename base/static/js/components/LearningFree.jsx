@@ -75,7 +75,6 @@ class LearningFree extends Component {
            type={obj.type}
            char={obj.key}
            shiftChar={obj.shiftKey}
-           classNameShift='keyboard__shift-key'
          />
 
       });

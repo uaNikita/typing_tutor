@@ -37,12 +37,6 @@ class Metronome extends Component {
 
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log(nextState.interval, this.state.interval)
-  //
-  //   return !isEqual(nextProps, this.props);
-  // }
-
   componentDidUpdate() {
 
     if (this.state.status) {

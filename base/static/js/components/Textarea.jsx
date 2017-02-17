@@ -13,16 +13,6 @@ class Textarea extends Component {
 
       $content.perfectScrollbar();
 
-
-      $content.on('focus', function() {
-         console.log('focus');
-      });
-
-      $content.on('click', function() {
-         console.log('click');
-      });
-
-      
    }
 
    render() {

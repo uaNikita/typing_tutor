@@ -84,7 +84,7 @@ class LearningMode extends Component {
    }
 
    _onSwitcherChange() {
-console.log('_onSwitcherChange');
+
       this.props.setMode('learning');
 
    }
