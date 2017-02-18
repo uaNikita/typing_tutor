@@ -23248,7 +23248,7 @@ elliptic.eddsa = __webpack_require__(374);
 
 
 
-var _prodInvariant = __webpack_require__(46);
+var _prodInvariant = __webpack_require__(47);
 
 var ReactCurrentOwner = __webpack_require__(26);
 
@@ -23594,7 +23594,6 @@ exports.pressWrongKeys = pressWrongKeys;
 exports.setIdsCharToType = setIdsCharToType;
 exports.addSuccesType = addSuccesType;
 exports.addErrorType = addErrorType;
-exports.setModeAndUpdateKeysToType = setModeAndUpdateKeysToType;
 exports.typeChar = typeChar;
 
 var _keyboards = __webpack_require__(171);
@@ -23605,9 +23604,9 @@ var _lodash = __webpack_require__(13);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
-var _textMode = __webpack_require__(48);
+var _textMode = __webpack_require__(49);
 
-var _learningMode = __webpack_require__(63);
+var _learningMode = __webpack_require__(37);
 
 var _utils = __webpack_require__(76);
 
@@ -23783,23 +23782,6 @@ function addErrorType() {
    };
 }
 
-function setModeAndUpdateKeysToType(mode) {
-
-   return function (dispatch, getState) {
-
-      dispatch(setMode(mode));
-
-      switch (mode) {
-         case 'text':
-            dispatch((0, _textMode.updateCharToType)());
-            break;
-         case 'learning':
-            dispatch((0, _learningMode.updateCharToType)());
-            break;
-      }
-   };
-}
-
 function typeChar(char) {
    return function (dispatch, getState) {
 
@@ -23895,7 +23877,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 var _ = __webpack_require__(27);
 var cls = __webpack_require__(96);
 var defaultSettings = __webpack_require__(518);
-var dom = __webpack_require__(41);
+var dom = __webpack_require__(42);
 var EventManager = __webpack_require__(515);
 var guid = __webpack_require__(516);
 
@@ -24094,9 +24076,9 @@ var _prodInvariant = __webpack_require__(6),
     _assign = __webpack_require__(7);
 
 var CallbackQueue = __webpack_require__(219);
-var PooledClass = __webpack_require__(42);
+var PooledClass = __webpack_require__(43);
 var ReactFeatureFlags = __webpack_require__(227);
-var ReactReconciler = __webpack_require__(43);
+var ReactReconciler = __webpack_require__(44);
 var Transaction = __webpack_require__(98);
 
 var invariant = __webpack_require__(3);
@@ -24354,7 +24336,7 @@ var ReactComponent = __webpack_require__(153);
 var ReactPureComponent = __webpack_require__(636);
 var ReactClass = __webpack_require__(633);
 var ReactDOMFactories = __webpack_require__(634);
-var ReactElement = __webpack_require__(45);
+var ReactElement = __webpack_require__(46);
 var ReactPropTypes = __webpack_require__(635);
 var ReactVersion = __webpack_require__(640);
 
@@ -24494,7 +24476,7 @@ var isArray = Array.isArray;
 
 var _assign = __webpack_require__(7);
 
-var PooledClass = __webpack_require__(42);
+var PooledClass = __webpack_require__(43);
 
 var emptyFunction = __webpack_require__(19);
 var warning = __webpack_require__(4);
@@ -24793,7 +24775,7 @@ module.exports = ReactCurrentOwner;
 
 
 var cls = __webpack_require__(96);
-var dom = __webpack_require__(41);
+var dom = __webpack_require__(42);
 
 var toInt = exports.toInt = function (x) {
   return parseInt(x, 10) || 0;
@@ -24884,7 +24866,7 @@ exports.env = {
 
 var _ = __webpack_require__(27);
 var cls = __webpack_require__(96);
-var dom = __webpack_require__(41);
+var dom = __webpack_require__(42);
 var instances = __webpack_require__(18);
 var updateScroll = __webpack_require__(32);
 
@@ -25705,6 +25687,400 @@ module.exports = warning;
 /* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+   value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.setMode = setMode;
+exports.setCurrentLesson = setCurrentLesson;
+exports.refreshCurrentLesson = refreshCurrentLesson;
+exports.setMaxLettersInWordFingers = setMaxLettersInWordFingers;
+exports.setMaxLettersInWordFree = setMaxLettersInWordFree;
+exports.setLessonFingers = setLessonFingers;
+exports.setSetSizeFingers = setSetSizeFingers;
+exports.setLessonFree = setLessonFree;
+exports.setLettersFree = setLettersFree;
+exports.addLetterToFreeLetters = addLetterToFreeLetters;
+exports.removeLetterFromFreeLetters = removeLetterFromFreeLetters;
+exports.typeOnLesson = typeOnLesson;
+exports.selectMode = selectMode;
+exports.generateAndSetFingersLesson = generateAndSetFingersLesson;
+exports.generateAndSetFreeLesson = generateAndSetFreeLesson;
+exports.updateCharToType = updateCharToType;
+exports.typeLearningMode = typeLearningMode;
+exports.initializeLearningState = initializeLearningState;
+
+var _lodash = __webpack_require__(13);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _main = __webpack_require__(16);
+
+var _utils = __webpack_require__(76);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+var TYPE_ON_LESSON = 'learning-mode/TYPE_ON_LESSON';
+
+var SET_LEARNING_MODE = 'learning-mode/SET_LEARNING_MODE';
+var SET_CURRENT_LESSON = 'learning-mode/SET_CURRENT_LESSON';
+var REFRESH_CURRENT_LESSON = 'learning-mode/REFRESH_CURRENT_LESSON';
+
+var SET_LESSON_FINGERS = 'learning-mode/SET_LESSON_FINGERS';
+var SET_SET_SIZE_FINGERS = 'learning-mode/SET_SET_SIZE_FINGERS';
+var SET_MAX_LETTERS_IN_WORD_FINGERS = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FINGERS';
+
+var SET_LESSON_FREE = 'learning-mode/SET_LESSON_FREE';
+var SET_LETTERS_FREE = 'learning-mode/SET_LETTERS_FREE';
+var SET_MAX_LETTERS_IN_WORD_FREE = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FREE';
+var ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
+var REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
+
+var INITIAL_STATE = {
+   // fingers, free,
+   mode: 'fingers',
+
+   maxLettersInWordFingers: 5,
+
+   setSizeFingers: 0,
+
+   lessonFingers: '',
+
+   maxLettersInWordFree: 5,
+
+   lettersFree: [],
+
+   lessonFree: '',
+
+   lesson: {
+      typed: '',
+      last: ''
+   }
+};
+
+exports.default = function () {
+   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
+   var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
+
+   switch (action.type) {
+
+      case REFRESH_CURRENT_LESSON:
+         return _extends({}, state, {
+            lesson: {
+               typed: '',
+               last: state.lesson.typed + state.lesson.last
+            }
+         });
+
+      case TYPE_ON_LESSON:
+         return _extends({}, state, {
+            lesson: {
+               typed: state.lesson.typed + state.lesson.last[0],
+               last: state.lesson.last.substring(1)
+            }
+         });
+
+      case SET_LEARNING_MODE:
+         return _extends({}, state, {
+            mode: action.mode
+         });
+
+      case SET_CURRENT_LESSON:
+         return _extends({}, state, {
+            lesson: {
+               typed: '',
+               last: action.lesson
+            }
+         });
+
+      case SET_MAX_LETTERS_IN_WORD_FINGERS:
+         return _extends({}, state, {
+            maxLettersInWordFingers: action.length
+         });
+
+      case SET_MAX_LETTERS_IN_WORD_FREE:
+         return _extends({}, state, {
+            maxLettersInWordFree: action.length
+         });
+
+      case SET_SET_SIZE_FINGERS:
+         return _extends({}, state, {
+            setSizeFingers: action.size
+         });
+
+      case SET_LESSON_FINGERS:
+         return _extends({}, state, {
+            lessonFingers: action.lesson
+         });
+
+      case SET_LESSON_FREE:
+         return _extends({}, state, {
+            lessonFree: action.lesson
+         });
+
+      case SET_LETTERS_FREE:
+         return _extends({}, state, {
+            lettersFree: action.letters
+         });
+
+      case ADD_LETTER_TO_FREE_LETTERS:
+         return _extends({}, state, {
+            lettersFree: [].concat(_toConsumableArray(state.lettersFree), [action.letter])
+         });
+
+      case REMOVE_LETTER_FROM_FREE_LETTERS:
+         return _extends({}, state, {
+            lettersFree: [].concat(_toConsumableArray(_lodash2.default.pull(state.lettersFree, action.letter)))
+         });
+
+      default:
+         return state;
+
+   }
+};
+
+function setMode(mode) {
+   return {
+      type: SET_LEARNING_MODE,
+      mode: mode
+   };
+}
+
+function setCurrentLesson(lesson) {
+   return {
+      type: SET_CURRENT_LESSON,
+      lesson: lesson
+   };
+}
+
+function refreshCurrentLesson() {
+   return {
+      type: REFRESH_CURRENT_LESSON
+   };
+}
+
+function setMaxLettersInWordFingers(length) {
+   return {
+      type: SET_MAX_LETTERS_IN_WORD_FINGERS,
+      length: length
+   };
+}
+
+function setMaxLettersInWordFree(length) {
+   return {
+      type: SET_MAX_LETTERS_IN_WORD_FREE,
+      length: length
+   };
+}
+
+function setLessonFingers(lesson) {
+   return {
+      type: SET_LESSON_FINGERS,
+      lesson: lesson
+   };
+}
+
+function setSetSizeFingers(size) {
+   return {
+      type: SET_SET_SIZE_FINGERS,
+      size: size
+   };
+}
+
+function setLessonFree(lesson) {
+   return {
+      type: SET_LESSON_FREE,
+      lesson: lesson
+   };
+}
+
+function setLettersFree(letters) {
+   return {
+      type: SET_LETTERS_FREE,
+      letters: letters
+   };
+}
+
+function addLetterToFreeLetters(letter) {
+   return {
+      type: ADD_LETTER_TO_FREE_LETTERS,
+      letter: letter
+   };
+}
+
+function removeLetterFromFreeLetters(letter) {
+   return {
+      type: REMOVE_LETTER_FROM_FREE_LETTERS,
+      letter: letter
+   };
+}
+
+function typeOnLesson() {
+   return {
+      type: TYPE_ON_LESSON
+   };
+}
+
+function selectMode(mode) {
+   return function (dispatch, getState) {
+
+      dispatch(setMode(mode));
+
+      var state = getState();
+      var lesson = '';
+
+      switch (mode) {
+         case 'fingers':
+
+            lesson = state.learningMode.lessonFingers;
+
+            break;
+
+         case 'free':
+
+            lesson = state.learningMode.lessonFree;
+
+            break;
+      }
+
+      dispatch(setCurrentLesson(lesson));
+   };
+}
+
+function generateAndSetFingersLesson() {
+   return function (dispatch, getState) {
+
+      var state = getState();
+
+      var keys = state.main.keys;
+
+      var fingersSet = (0, _utils.getFingersSet)(keys);
+
+      fingersSet.splice(state.learningMode.setSizeFingers);
+
+      fingersSet = _lodash2.default.concat.apply(null, fingersSet);
+
+      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFingers, fingersSet);
+
+      dispatch(setLessonFingers(lesson));
+
+      dispatch(setCurrentLesson(lesson));
+   };
+}
+
+function generateAndSetFreeLesson() {
+   return function (dispatch, getState) {
+
+      var state = getState();
+
+      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFree, state.learningMode.lettersFree);
+
+      dispatch(setLessonFree(lesson));
+
+      dispatch(setCurrentLesson(lesson));
+   };
+}
+
+function updateCharToType() {
+   return function (dispatch, getState) {
+
+      var state = getState();
+
+      var idsChar = '';
+
+      if (state.learningMode.lesson.last) {
+
+         idsChar = (0, _utils.getIdsFromCharacter)(state.main.keys, state.learningMode.lesson.last[0]);
+      }
+
+      dispatch((0, _main.setIdsCharToType)(idsChar));
+   };
+}
+
+function typeLearningMode(char) {
+   return function (dispatch, getState) {
+
+      var state = getState();
+
+      if (state.learningMode.lesson.last) {
+
+         var idsChar = (0, _utils.getIdsFromCharacter)(state.main.keys, char);
+
+         if (state.learningMode.lesson.last[0] === char) {
+
+            dispatch(typeOnLesson());
+
+            dispatch((0, _main.addSuccesType)());
+
+            dispatch(updateCharToType());
+         } else {
+
+            var pressedWrongKeys = (0, _utils.sliceChar)(state.main.pressedWrongKeys, idsChar);
+
+            dispatch((0, _main.pressWrongKeys)(pressedWrongKeys.concat(idsChar)));
+
+            dispatch((0, _main.addErrorType)());
+         }
+      } else {
+
+         dispatch(generateLessonFromCurrentMode());
+      }
+   };
+}
+
+function initializeLearningState() {
+   return function (dispatch, getState) {
+
+      var state = getState();
+
+      var defaultKeys = _lodash2.default.filter(state.main.keys, {
+         row: 'middle',
+         type: 'letter'
+      });
+
+      console.log('defaultKeys', defaultKeys);
+
+      var size = (0, _lodash2.default)(defaultKeys).map(function (o) {
+         return {
+            finger: o.finger,
+            hand: o.hand
+         };
+      }).uniqWith(_lodash2.default.isEqual).value().length;
+
+      dispatch(setSetSizeFingers(size));
+
+      var letters = defaultKeys.map(function (obj) {
+         return obj.key;
+      });
+
+      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFingers, letters);
+
+      dispatch(setLessonFingers(lesson));
+
+      dispatch(setCurrentLesson(lesson));
+
+      dispatch(setLettersFree(letters));
+
+      // different lesson for free mode
+      lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFree, letters);
+
+      dispatch(setLessonFree(lesson));
+
+      dispatch(updateCharToType());
+   };
+}
+
+/***/ }),
+/* 38 */
+/***/ (function(module, exports, __webpack_require__) {
+
 var hash = exports;
 
 hash.utils = __webpack_require__(401);
@@ -25723,7 +26099,7 @@ hash.ripemd160 = hash.ripemd.ripemd160;
 
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -35950,7 +36326,7 @@ return jQuery;
 
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -35976,7 +36352,7 @@ function getNative(object, key) {
 
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36012,7 +36388,7 @@ function isObjectLike(value) {
 
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36103,7 +36479,7 @@ module.exports = DOM;
 
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36221,7 +36597,7 @@ module.exports = PooledClass;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 43 */
+/* 44 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36395,7 +36771,7 @@ module.exports = ReactReconciler;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -36427,7 +36803,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "match", function() { return __WEBPACK_IMPORTED_MODULE_11__match__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__useRouterHistory__ = __webpack_require__(260);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "useRouterHistory", function() { return __WEBPACK_IMPORTED_MODULE_12__useRouterHistory__["a"]; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__PatternUtils__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__PatternUtils__ = __webpack_require__(59);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "formatPattern", function() { return __WEBPACK_IMPORTED_MODULE_13__PatternUtils__["a"]; });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__applyRouterMiddleware__ = __webpack_require__(618);
 /* harmony reexport (binding) */ __webpack_require__.d(__webpack_exports__, "applyRouterMiddleware", function() { return __WEBPACK_IMPORTED_MODULE_14__applyRouterMiddleware__["a"]; });
@@ -36484,7 +36860,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36831,7 +37207,7 @@ module.exports = ReactElement;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 46 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36875,7 +37251,7 @@ function reactProdInvariant(code) {
 module.exports = reactProdInvariant;
 
 /***/ }),
-/* 47 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -36956,7 +37332,7 @@ function forEach(xs, f) {
 }
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37211,10 +37587,10 @@ function initializeTextState() {
 }
 
 /***/ }),
-/* 49 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(Buffer) {var Transform = __webpack_require__(61).Transform
+/* WEBPACK VAR INJECTION */(function(Buffer) {var Transform = __webpack_require__(62).Transform
 var inherits = __webpack_require__(5)
 var StringDecoder = __webpack_require__(163).StringDecoder
 module.exports = CipherBase
@@ -37308,7 +37684,7 @@ CipherBase.prototype._toString = function (value, enc, fin) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2).Buffer))
 
 /***/ }),
-/* 50 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37318,7 +37694,7 @@ var md5 = __webpack_require__(183)
 var rmd160 = __webpack_require__(699)
 var sha = __webpack_require__(701)
 
-var Base = __webpack_require__(49)
+var Base = __webpack_require__(50)
 
 function HashNoConstructor(hash) {
   Base.call(this, 'digest')
@@ -37368,7 +37744,7 @@ module.exports = function createHash (alg) {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2).Buffer))
 
 /***/ }),
-/* 51 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37394,7 +37770,7 @@ module.exports = emptyObject;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 52 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37493,7 +37869,7 @@ var locationsAreEqual = exports.locationsAreEqual = function locationsAreEqual(a
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 53 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -37531,7 +37907,7 @@ function baseGetTag(value) {
 
 
 /***/ }),
-/* 54 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37654,7 +38030,7 @@ DOMLazyTree.queueText = queueText;
 module.exports = DOMLazyTree;
 
 /***/ }),
-/* 55 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37938,7 +38314,7 @@ module.exports = EventPluginHub;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 56 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -37954,7 +38330,7 @@ module.exports = EventPluginHub;
 
 
 
-var EventPluginHub = __webpack_require__(55);
+var EventPluginHub = __webpack_require__(56);
 var EventPluginUtils = __webpack_require__(134);
 
 var accumulateInto = __webpack_require__(234);
@@ -38078,7 +38454,7 @@ module.exports = EventPropagators;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 57 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38131,7 +38507,7 @@ var ReactInstanceMap = {
 module.exports = ReactInstanceMap;
 
 /***/ }),
-/* 58 */
+/* 59 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38376,7 +38752,7 @@ function formatPattern(pattern, params) {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))
 
 /***/ }),
-/* 59 */
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -38412,7 +38788,7 @@ function _resetWarned() {
 }
 
 /***/ }),
-/* 60 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {// prototype class for hash functions
@@ -38488,7 +38864,7 @@ module.exports = Hash
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2).Buffer))
 
 /***/ }),
-/* 61 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Copyright Joyent, Inc. and other Node contributors.
@@ -38621,7 +38997,7 @@ Stream.prototype.pipe = function(dest, options) {
 
 
 /***/ }),
-/* 62 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var base = exports;
@@ -38631,398 +39007,6 @@ base.DecoderBuffer = __webpack_require__(166).DecoderBuffer;
 base.EncoderBuffer = __webpack_require__(166).EncoderBuffer;
 base.Node = __webpack_require__(291);
 
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-   value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-exports.setMode = setMode;
-exports.setCurrentLesson = setCurrentLesson;
-exports.refreshCurrentLesson = refreshCurrentLesson;
-exports.setMaxLettersInWordFingers = setMaxLettersInWordFingers;
-exports.setMaxLettersInWordFree = setMaxLettersInWordFree;
-exports.setLessonFingers = setLessonFingers;
-exports.setSetSizeFingers = setSetSizeFingers;
-exports.setLessonFree = setLessonFree;
-exports.setLettersFree = setLettersFree;
-exports.addLetterToFreeLetters = addLetterToFreeLetters;
-exports.removeLetterFromFreeLetters = removeLetterFromFreeLetters;
-exports.typeOnLesson = typeOnLesson;
-exports.selectMode = selectMode;
-exports.generateAndSetFingersLesson = generateAndSetFingersLesson;
-exports.generateAndSetFreeLesson = generateAndSetFreeLesson;
-exports.updateCharToType = updateCharToType;
-exports.typeLearningMode = typeLearningMode;
-exports.initializeLearningState = initializeLearningState;
-
-var _lodash = __webpack_require__(13);
-
-var _lodash2 = _interopRequireDefault(_lodash);
-
-var _main = __webpack_require__(16);
-
-var _utils = __webpack_require__(76);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-var TYPE_ON_LESSON = 'learning-mode/TYPE_ON_LESSON';
-
-var SET_LEARNING_MODE = 'learning-mode/SET_LEARNING_MODE';
-var SET_CURRENT_LESSON = 'learning-mode/SET_CURRENT_LESSON';
-var REFRESH_CURRENT_LESSON = 'learning-mode/REFRESH_CURRENT_LESSON';
-
-var SET_LESSON_FINGERS = 'learning-mode/SET_LESSON_FINGERS';
-var SET_SET_SIZE_FINGERS = 'learning-mode/SET_SET_SIZE_FINGERS';
-var SET_MAX_LETTERS_IN_WORD_FINGERS = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FINGERS';
-
-var SET_LESSON_FREE = 'learning-mode/SET_LESSON_FREE';
-var SET_LETTERS_FREE = 'learning-mode/SET_LETTERS_FREE';
-var SET_MAX_LETTERS_IN_WORD_FREE = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FREE';
-var ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
-var REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
-
-var INITIAL_STATE = {
-   // fingers, free,
-   mode: 'fingers',
-
-   maxLettersInWordFingers: 5,
-
-   setSizeFingers: 0,
-
-   lessonFingers: '',
-
-   maxLettersInWordFree: 5,
-
-   lettersFree: [],
-
-   lessonFree: '',
-
-   lesson: {
-      typed: '',
-      last: ''
-   }
-};
-
-exports.default = function () {
-   var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
-   var action = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
-
-   switch (action.type) {
-
-      case REFRESH_CURRENT_LESSON:
-         return _extends({}, state, {
-            lesson: {
-               typed: '',
-               last: state.lesson.typed + state.lesson.last
-            }
-         });
-
-      case TYPE_ON_LESSON:
-         return _extends({}, state, {
-            lesson: {
-               typed: state.lesson.typed + state.lesson.last[0],
-               last: state.lesson.last.substring(1)
-            }
-         });
-
-      case SET_LEARNING_MODE:
-         return _extends({}, state, {
-            mode: action.mode
-         });
-
-      case SET_CURRENT_LESSON:
-         return _extends({}, state, {
-            lesson: {
-               typed: '',
-               last: action.lesson
-            }
-         });
-
-      case SET_MAX_LETTERS_IN_WORD_FINGERS:
-         return _extends({}, state, {
-            maxLettersInWordFingers: action.length
-         });
-
-      case SET_MAX_LETTERS_IN_WORD_FREE:
-         return _extends({}, state, {
-            maxLettersInWordFree: action.length
-         });
-
-      case SET_SET_SIZE_FINGERS:
-         return _extends({}, state, {
-            setSizeFingers: action.size
-         });
-
-      case SET_LESSON_FINGERS:
-         return _extends({}, state, {
-            lessonFingers: action.lesson
-         });
-
-      case SET_LESSON_FREE:
-         return _extends({}, state, {
-            lessonFree: action.lesson
-         });
-
-      case SET_LETTERS_FREE:
-         return _extends({}, state, {
-            lettersFree: action.letters
-         });
-
-      case ADD_LETTER_TO_FREE_LETTERS:
-         return _extends({}, state, {
-            lettersFree: [].concat(_toConsumableArray(state.lettersFree), [action.letter])
-         });
-
-      case REMOVE_LETTER_FROM_FREE_LETTERS:
-         return _extends({}, state, {
-            lettersFree: [].concat(_toConsumableArray(_lodash2.default.pull(state.lettersFree, action.letter)))
-         });
-
-      default:
-         return state;
-
-   }
-};
-
-function setMode(mode) {
-   return {
-      type: SET_LEARNING_MODE,
-      mode: mode
-   };
-}
-
-function setCurrentLesson(lesson) {
-   return {
-      type: SET_CURRENT_LESSON,
-      lesson: lesson
-   };
-}
-
-function refreshCurrentLesson() {
-   return {
-      type: REFRESH_CURRENT_LESSON
-   };
-}
-
-function setMaxLettersInWordFingers(length) {
-   return {
-      type: SET_MAX_LETTERS_IN_WORD_FINGERS,
-      length: length
-   };
-}
-
-function setMaxLettersInWordFree(length) {
-   return {
-      type: SET_MAX_LETTERS_IN_WORD_FREE,
-      length: length
-   };
-}
-
-function setLessonFingers(lesson) {
-   return {
-      type: SET_LESSON_FINGERS,
-      lesson: lesson
-   };
-}
-
-function setSetSizeFingers(size) {
-   return {
-      type: SET_SET_SIZE_FINGERS,
-      size: size
-   };
-}
-
-function setLessonFree(lesson) {
-   return {
-      type: SET_LESSON_FREE,
-      lesson: lesson
-   };
-}
-
-function setLettersFree(letters) {
-   return {
-      type: SET_LETTERS_FREE,
-      letters: letters
-   };
-}
-
-function addLetterToFreeLetters(letter) {
-   return {
-      type: ADD_LETTER_TO_FREE_LETTERS,
-      letter: letter
-   };
-}
-
-function removeLetterFromFreeLetters(letter) {
-   return {
-      type: REMOVE_LETTER_FROM_FREE_LETTERS,
-      letter: letter
-   };
-}
-
-function typeOnLesson() {
-   return {
-      type: TYPE_ON_LESSON
-   };
-}
-
-function selectMode(mode) {
-   return function (dispatch, getState) {
-
-      dispatch(setMode(mode));
-
-      var state = getState();
-      var lesson = '';
-
-      switch (mode) {
-         case 'fingers':
-
-            lesson = state.learningMode.lessonFingers;
-
-            break;
-
-         case 'free':
-
-            lesson = state.learningMode.lessonFree;
-
-            break;
-      }
-
-      dispatch(setCurrentLesson(lesson));
-   };
-}
-
-function generateAndSetFingersLesson() {
-   return function (dispatch, getState) {
-
-      var state = getState();
-
-      var keys = state.main.keys;
-
-      var fingersSet = (0, _utils.getFingersSet)(keys);
-
-      fingersSet.splice(state.learningMode.setSizeFingers);
-
-      fingersSet = _lodash2.default.concat.apply(null, fingersSet);
-
-      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFingers, fingersSet);
-
-      dispatch(setLessonFingers(lesson));
-
-      dispatch(setCurrentLesson(lesson));
-   };
-}
-
-function generateAndSetFreeLesson() {
-   return function (dispatch, getState) {
-
-      var state = getState();
-
-      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFree, state.learningMode.lettersFree);
-
-      dispatch(setLessonFree(lesson));
-
-      dispatch(setCurrentLesson(lesson));
-   };
-}
-
-function updateCharToType() {
-   return function (dispatch, getState) {
-
-      var state = getState();
-
-      var idsChar = '';
-
-      if (state.learningMode.lesson.last) {
-
-         idsChar = (0, _utils.getIdsFromCharacter)(state.main.keys, state.learningMode.lesson.last[0]);
-      }
-
-      dispatch((0, _main.setIdsCharToType)(idsChar));
-   };
-}
-
-function typeLearningMode(char) {
-   return function (dispatch, getState) {
-
-      var state = getState();
-
-      if (state.learningMode.lesson.last) {
-
-         var idsChar = (0, _utils.getIdsFromCharacter)(state.main.keys, char);
-
-         if (state.learningMode.lesson.last[0] === char) {
-
-            dispatch(typeOnLesson());
-
-            dispatch((0, _main.addSuccesType)());
-
-            dispatch(updateCharToType());
-         } else {
-
-            var pressedWrongKeys = (0, _utils.sliceChar)(state.main.pressedWrongKeys, idsChar);
-
-            dispatch((0, _main.pressWrongKeys)(pressedWrongKeys.concat(idsChar)));
-
-            dispatch((0, _main.addErrorType)());
-         }
-      } else {
-
-         dispatch(generateLessonFromCurrentMode());
-      }
-   };
-}
-
-function initializeLearningState() {
-   return function (dispatch, getState) {
-
-      var state = getState();
-
-      var defaultKeys = _lodash2.default.filter(state.main.keys, {
-         row: 'middle',
-         type: 'letter'
-      });
-
-      var size = (0, _lodash2.default)(defaultKeys).map(function (o) {
-         return {
-            finger: o.finger,
-            hand: o.hand
-         };
-      }).uniqWith(_lodash2.default.isEqual).value().length;
-
-      dispatch(setSetSizeFingers(size));
-
-      var letters = defaultKeys.map(function (obj) {
-         return obj.key;
-      });
-
-      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFingers, letters);
-
-      dispatch(setLessonFingers(lesson));
-
-      dispatch(setCurrentLesson(lesson));
-
-      dispatch(setLettersFree(letters));
-
-      // different lesson for free mode
-      lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFree, letters);
-
-      dispatch(setLessonFree(lesson));
-
-      dispatch(updateCharToType());
-   };
-}
 
 /***/ }),
 /* 64 */
@@ -39998,7 +39982,7 @@ var asn1 = exports;
 asn1.bignum = __webpack_require__(10);
 
 asn1.define = __webpack_require__(290).define;
-asn1.base = __webpack_require__(62);
+asn1.base = __webpack_require__(63);
 asn1.constants = __webpack_require__(167);
 asn1.decoders = __webpack_require__(294);
 asn1.encoders = __webpack_require__(296);
@@ -41237,7 +41221,7 @@ function getMapData(map, key) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(40);
 
 
 /* Built-in method references that are verified to be native. */
@@ -41293,9 +41277,9 @@ function isArrayLike(value) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__getPrototype_js__ = __webpack_require__(203);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(41);
 
 
 
@@ -41365,8 +41349,8 @@ function isPlainObject(value) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(41);
 
 
 
@@ -42495,10 +42479,10 @@ exports.allocUnsafeSlow = function allocUnsafeSlow(size) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function(Buffer) {
-var createHash = __webpack_require__(50);
+var createHash = __webpack_require__(51);
 var inherits = __webpack_require__(5)
 
-var Transform = __webpack_require__(61).Transform
+var Transform = __webpack_require__(62).Transform
 
 var ZEROS = new Buffer(128)
 ZEROS.fill(0)
@@ -42662,7 +42646,7 @@ module.exports = shallowEqual;
 exports.__esModule = true;
 exports.go = exports.replaceLocation = exports.pushLocation = exports.startListener = exports.getUserConfirmation = exports.getCurrentLocation = undefined;
 
-var _LocationUtils = __webpack_require__(52);
+var _LocationUtils = __webpack_require__(53);
 
 var _DOMUtils = __webpack_require__(84);
 
@@ -42785,7 +42769,7 @@ var _runTransitionHook2 = _interopRequireDefault(_runTransitionHook);
 
 var _Actions = __webpack_require__(83);
 
-var _LocationUtils = __webpack_require__(52);
+var _LocationUtils = __webpack_require__(53);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -43051,7 +43035,7 @@ function isPromise(obj) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__root_js__ = __webpack_require__(23);
 
 
@@ -43152,7 +43136,7 @@ Stack.prototype.set = __WEBPACK_IMPORTED_MODULE_5__stackSet_js__["a" /* default 
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseIsEqualDeep_js__ = __webpack_require__(426);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(41);
 
 
 
@@ -43309,7 +43293,7 @@ function identity(value) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseIsArguments_js__ = __webpack_require__(425);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(41);
 
 
 
@@ -43401,7 +43385,7 @@ var isBuffer = nativeIsBuffer || __WEBPACK_IMPORTED_MODULE_1__stubFalse_js__["a"
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObject_js__ = __webpack_require__(31);
 
 
@@ -45790,7 +45774,7 @@ function nextTick(fn, arg1, arg2, arg3) {
 
 
 
-var DOMLazyTree = __webpack_require__(54);
+var DOMLazyTree = __webpack_require__(55);
 var Danger = __webpack_require__(539);
 var ReactDOMComponentTree = __webpack_require__(9);
 var ReactInstrumentation = __webpack_require__(20);
@@ -46540,7 +46524,7 @@ module.exports = ReactComponentEnvironment;
 var ReactDOMComponentTree = __webpack_require__(9);
 var ReactDefaultInjection = __webpack_require__(225);
 var ReactMount = __webpack_require__(230);
-var ReactReconciler = __webpack_require__(43);
+var ReactReconciler = __webpack_require__(44);
 var ReactUpdates = __webpack_require__(21);
 var ReactVersion = __webpack_require__(579);
 
@@ -46738,7 +46722,7 @@ module.exports = ReactErrorUtils;
 var _prodInvariant = __webpack_require__(6);
 
 var ReactCurrentOwner = __webpack_require__(26);
-var ReactInstanceMap = __webpack_require__(57);
+var ReactInstanceMap = __webpack_require__(58);
 var ReactInstrumentation = __webpack_require__(20);
 var ReactUpdates = __webpack_require__(21);
 
@@ -48057,12 +48041,12 @@ var RouterContext = __WEBPACK_IMPORTED_MODULE_1_react___default.a.createClass({
 
 
 
-var _prodInvariant = __webpack_require__(46);
+var _prodInvariant = __webpack_require__(47);
 
 var ReactNoopUpdateQueue = __webpack_require__(154);
 
 var canDefineProperty = __webpack_require__(156);
-var emptyObject = __webpack_require__(51);
+var emptyObject = __webpack_require__(52);
 var invariant = __webpack_require__(3);
 var warning = __webpack_require__(4);
 
@@ -48426,7 +48410,7 @@ module.exports = getIteratorFn;
 
 module.exports = Transform;
 
-var Duplex = __webpack_require__(47);
+var Duplex = __webpack_require__(48);
 
 /*<replacement>*/
 var util = __webpack_require__(65);
@@ -48605,7 +48589,7 @@ var internalUtil = {
 var Stream;
 (function () {
   try {
-    Stream = __webpack_require__(61);
+    Stream = __webpack_require__(62);
   } catch (_) {} finally {
     if (!Stream) Stream = __webpack_require__(81).EventEmitter;
   }
@@ -48629,7 +48613,7 @@ function WriteReq(chunk, encoding, cb) {
 }
 
 function WritableState(options, stream) {
-  Duplex = Duplex || __webpack_require__(47);
+  Duplex = Duplex || __webpack_require__(48);
 
   options = options || {};
 
@@ -48763,7 +48747,7 @@ if (typeof Symbol === 'function' && Symbol.hasInstance && typeof Function.protot
 }
 
 function Writable(options) {
-  Duplex = Duplex || __webpack_require__(47);
+  Duplex = Duplex || __webpack_require__(48);
 
   // Writable ctor is applied to Duplexes, too.
   // `realHasInstance` is necessary because using plain `instanceof`
@@ -49565,7 +49549,7 @@ module.exports = function(module) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var inherits = __webpack_require__(5);
-var Reporter = __webpack_require__(62).Reporter;
+var Reporter = __webpack_require__(63).Reporter;
 var Buffer = __webpack_require__(2).Buffer;
 
 function DecoderBuffer(base, options) {
@@ -50473,7 +50457,7 @@ if (typeof self === 'object') {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var aes = __webpack_require__(77)
-var Transform = __webpack_require__(49)
+var Transform = __webpack_require__(50)
 var inherits = __webpack_require__(5)
 var GHASH = __webpack_require__(347)
 var xor = __webpack_require__(64)
@@ -50736,7 +50720,7 @@ exports.encrypt = function (self, chunk) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var aes = __webpack_require__(77)
-var Transform = __webpack_require__(49)
+var Transform = __webpack_require__(50)
 var inherits = __webpack_require__(5)
 
 inherits(StreamCipher, Transform)
@@ -51521,7 +51505,7 @@ var _runTransitionHook = __webpack_require__(113);
 
 var _runTransitionHook2 = _interopRequireDefault(_runTransitionHook);
 
-var _LocationUtils = __webpack_require__(52);
+var _LocationUtils = __webpack_require__(53);
 
 var _PathUtils = __webpack_require__(30);
 
@@ -51896,7 +51880,7 @@ function copyArray(source, array) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(40);
 
 
 var defineProperty = (function() {
@@ -52548,7 +52532,7 @@ exports.pbkdf2Sync = function (password, salt, iterations, keylen, digest) {
 /* 215 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(50);
+/* WEBPACK VAR INJECTION */(function(Buffer) {var createHash = __webpack_require__(51);
 module.exports = function (seed, len) {
   var t = new Buffer('');
   var  i = 0, c;
@@ -52770,7 +52754,7 @@ var _prodInvariant = __webpack_require__(6);
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var PooledClass = __webpack_require__(42);
+var PooledClass = __webpack_require__(43);
 
 var invariant = __webpack_require__(3);
 
@@ -53140,16 +53124,16 @@ var React = __webpack_require__(22);
 var ReactComponentEnvironment = __webpack_require__(137);
 var ReactCurrentOwner = __webpack_require__(26);
 var ReactErrorUtils = __webpack_require__(139);
-var ReactInstanceMap = __webpack_require__(57);
+var ReactInstanceMap = __webpack_require__(58);
 var ReactInstrumentation = __webpack_require__(20);
 var ReactNodeTypes = __webpack_require__(231);
-var ReactReconciler = __webpack_require__(43);
+var ReactReconciler = __webpack_require__(44);
 
 if (process.env.NODE_ENV !== 'production') {
   var checkReactTypeSpec = __webpack_require__(594);
 }
 
-var emptyObject = __webpack_require__(51);
+var emptyObject = __webpack_require__(52);
 var invariant = __webpack_require__(3);
 var shallowEqual = __webpack_require__(109);
 var shouldUpdateReactComponent = __webpack_require__(146);
@@ -54995,7 +54979,7 @@ module.exports = ReactInputSelection;
 
 var _prodInvariant = __webpack_require__(6);
 
-var DOMLazyTree = __webpack_require__(54);
+var DOMLazyTree = __webpack_require__(55);
 var DOMProperty = __webpack_require__(33);
 var React = __webpack_require__(22);
 var ReactBrowserEventEmitter = __webpack_require__(71);
@@ -55004,14 +54988,14 @@ var ReactDOMComponentTree = __webpack_require__(9);
 var ReactDOMContainerInfo = __webpack_require__(548);
 var ReactDOMFeatureFlags = __webpack_require__(550);
 var ReactFeatureFlags = __webpack_require__(227);
-var ReactInstanceMap = __webpack_require__(57);
+var ReactInstanceMap = __webpack_require__(58);
 var ReactInstrumentation = __webpack_require__(20);
 var ReactMarkupChecksum = __webpack_require__(568);
-var ReactReconciler = __webpack_require__(43);
+var ReactReconciler = __webpack_require__(44);
 var ReactUpdateQueue = __webpack_require__(140);
 var ReactUpdates = __webpack_require__(21);
 
-var emptyObject = __webpack_require__(51);
+var emptyObject = __webpack_require__(52);
 var instantiateReactComponent = __webpack_require__(241);
 var invariant = __webpack_require__(3);
 var setInnerHTML = __webpack_require__(100);
@@ -55705,7 +55689,7 @@ var _prodInvariant = __webpack_require__(6);
 
 var ReactCurrentOwner = __webpack_require__(26);
 var ReactDOMComponentTree = __webpack_require__(9);
-var ReactInstanceMap = __webpack_require__(57);
+var ReactInstanceMap = __webpack_require__(58);
 
 var getHostComponentFromComposite = __webpack_require__(237);
 var invariant = __webpack_require__(3);
@@ -57246,7 +57230,7 @@ function isPromise(obj) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__RouteUtils__ = __webpack_require__(34);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PatternUtils__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__PatternUtils__ = __webpack_require__(59);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__InternalPropTypes__ = __webpack_require__(73);
 
 
@@ -57417,7 +57401,7 @@ var canUseDOM = !!(typeof window !== 'undefined' && window.document && window.do
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routerWarning__ = __webpack_require__(59);
+/* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__routerWarning__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__computeChangedRoutes__ = __webpack_require__(620);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__TransitionUtils__ = __webpack_require__(617);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__isActive__ = __webpack_require__(624);
@@ -57812,7 +57796,7 @@ module.exports = REACT_ELEMENT_TYPE;
 
 var ReactCurrentOwner = __webpack_require__(26);
 var ReactComponentTreeHook = __webpack_require__(15);
-var ReactElement = __webpack_require__(45);
+var ReactElement = __webpack_require__(46);
 
 var checkReactTypeSpec = __webpack_require__(641);
 
@@ -58064,9 +58048,9 @@ module.exports = ReactPropTypesSecret;
  */
 
 
-var _prodInvariant = __webpack_require__(46);
+var _prodInvariant = __webpack_require__(47);
 
-var ReactElement = __webpack_require__(45);
+var ReactElement = __webpack_require__(46);
 
 var invariant = __webpack_require__(3);
 
@@ -58109,7 +58093,7 @@ module.exports = onlyChild;
 
 
 
-var _prodInvariant = __webpack_require__(46);
+var _prodInvariant = __webpack_require__(47);
 
 var ReactCurrentOwner = __webpack_require__(26);
 var REACT_ELEMENT_TYPE = __webpack_require__(262);
@@ -58341,7 +58325,7 @@ var EElistenerCount = function (emitter, type) {
 var Stream;
 (function () {
   try {
-    Stream = __webpack_require__(61);
+    Stream = __webpack_require__(62);
   } catch (_) {} finally {
     if (!Stream) Stream = __webpack_require__(81).EventEmitter;
   }
@@ -58388,7 +58372,7 @@ function prependListener(emitter, event, fn) {
 }
 
 function ReadableState(options, stream) {
-  Duplex = Duplex || __webpack_require__(47);
+  Duplex = Duplex || __webpack_require__(48);
 
   options = options || {};
 
@@ -58457,7 +58441,7 @@ function ReadableState(options, stream) {
 }
 
 function Readable(options) {
-  Duplex = Duplex || __webpack_require__(47);
+  Duplex = Duplex || __webpack_require__(48);
 
   if (!(this instanceof Readable)) return new Readable(options);
 
@@ -60111,7 +60095,7 @@ function warning(message) {
  */
 
 var inherits = __webpack_require__(5)
-var Hash = __webpack_require__(60)
+var Hash = __webpack_require__(61)
 
 var K = [
   0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5,
@@ -60244,7 +60228,7 @@ module.exports = Sha256
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var inherits = __webpack_require__(5)
-var Hash = __webpack_require__(60)
+var Hash = __webpack_require__(61)
 
 var K = [
   0x428a2f98, 0xd728ae22, 0x71374491, 0x23ef65cd,
@@ -60524,11 +60508,11 @@ var _react2 = _interopRequireDefault(_react);
 
 var _reactRedux = __webpack_require__(8);
 
-var _reactRouter = __webpack_require__(44);
+var _reactRouter = __webpack_require__(45);
 
 var _reactRouterRedux = __webpack_require__(251);
 
-var _jquery = __webpack_require__(38);
+var _jquery = __webpack_require__(39);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -60576,9 +60560,9 @@ var _store2 = _interopRequireDefault(_store);
 
 var _main = __webpack_require__(16);
 
-var _learningMode = __webpack_require__(63);
+var _learningMode = __webpack_require__(37);
 
-var _textMode = __webpack_require__(48);
+var _textMode = __webpack_require__(49);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -60840,9 +60824,9 @@ Entity.prototype.encode = function encode(data, enc, /* internal */ reporter) {
 /* 291 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var Reporter = __webpack_require__(62).Reporter;
-var EncoderBuffer = __webpack_require__(62).EncoderBuffer;
-var DecoderBuffer = __webpack_require__(62).DecoderBuffer;
+var Reporter = __webpack_require__(63).Reporter;
+var EncoderBuffer = __webpack_require__(63).EncoderBuffer;
+var DecoderBuffer = __webpack_require__(63).DecoderBuffer;
 var assert = __webpack_require__(68);
 
 // Supported tags
@@ -62112,7 +62096,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = __webpack_require__(44);
+var _reactRouter = __webpack_require__(45);
 
 var _Textarea = __webpack_require__(337);
 
@@ -62504,7 +62488,7 @@ var _ModalFrame = __webpack_require__(334);
 
 var _ModalFrame2 = _interopRequireDefault(_ModalFrame);
 
-var _jquery = __webpack_require__(38);
+var _jquery = __webpack_require__(39);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -62590,11 +62574,11 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = __webpack_require__(44);
+var _reactRouter = __webpack_require__(45);
 
 var _lodash = __webpack_require__(13);
 
-var _jquery = __webpack_require__(38);
+var _jquery = __webpack_require__(39);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -62750,7 +62734,9 @@ var LearningFingers = function (_Component) {
                _react2.default.createElement(
                   'div',
                   { className: 'settings-learning__item-ctrl settings-learning__item-ctrl-range' },
-                  _react2.default.createElement('div', { className: 'settings-learning__range settings-learning__max-word-length', ref: function ref(c) {
+                  _react2.default.createElement('div', {
+                     className: 'settings-learning__range settings-learning__max-word-length',
+                     ref: function ref(c) {
                         return _this2._maxLettersInWordRange = c;
                      } })
                )
@@ -62808,7 +62794,7 @@ var _classNames2 = _interopRequireDefault(_classNames);
 
 var _lodash = __webpack_require__(13);
 
-var _jquery = __webpack_require__(38);
+var _jquery = __webpack_require__(39);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -62975,7 +62961,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = __webpack_require__(44);
+var _reactRouter = __webpack_require__(45);
 
 var _Switcher = __webpack_require__(170);
 
@@ -63562,7 +63548,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = __webpack_require__(44);
+var _reactRouter = __webpack_require__(45);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -63639,7 +63625,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = __webpack_require__(44);
+var _reactRouter = __webpack_require__(45);
 
 var _classNames = __webpack_require__(17);
 
@@ -63756,9 +63742,9 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _reactRouter = __webpack_require__(44);
+var _reactRouter = __webpack_require__(45);
 
-var _jquery = __webpack_require__(38);
+var _jquery = __webpack_require__(39);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -63957,7 +63943,7 @@ var _react = __webpack_require__(1);
 
 var _react2 = _interopRequireDefault(_react);
 
-var _jquery = __webpack_require__(38);
+var _jquery = __webpack_require__(39);
 
 var _jquery2 = _interopRequireDefault(_jquery);
 
@@ -64784,371 +64770,404 @@ exports.default = (0, _reduxForm.reduxForm)({
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+   value: true
 });
 exports.default = [{
-  key: '|',
-  shiftKey: '+',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'left',
-  id: '|'
+   key: '|',
+   shiftKey: '+',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'left',
+   id: '|'
 }, {
-  key: '№',
-  shiftKey: '1',
-  type: 'number',
-  finger: 'pinky',
-  hand: 'left',
-  id: '№'
+   key: '№',
+   shiftKey: '1',
+   type: 'number',
+   finger: 'pinky',
+   hand: 'left',
+   id: '№'
 }, {
-  key: '-',
-  shiftKey: '2',
-  type: 'number',
-  finger: 'ring-finger',
-  hand: 'left',
-  id: '-'
+   key: '-',
+   shiftKey: '2',
+   type: 'number',
+   finger: 'ring-finger',
+   hand: 'left',
+   id: '-'
 }, {
-  key: '/',
-  shiftKey: '3',
-  type: 'number',
-  finger: 'middle-finger',
-  hand: 'left',
-  id: '/'
+   key: '/',
+   shiftKey: '3',
+   type: 'number',
+   finger: 'middle-finger',
+   hand: 'left',
+   id: '/'
 }, {
-  key: '"',
-  shiftKey: '4',
-  type: 'number',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: '"'
+   key: '"',
+   shiftKey: '4',
+   type: 'number',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: '"'
 }, {
-  key: ':',
-  shiftKey: '5',
-  type: 'number',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: ':'
+   key: ':',
+   shiftKey: '5',
+   type: 'number',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: ':'
 }, {
-  key: ',',
-  shiftKey: '6',
-  type: 'number',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: ','
+   key: ',',
+   shiftKey: '6',
+   type: 'number',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: ','
 }, {
-  key: '.',
-  shiftKey: '7',
-  type: 'number',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: '.'
+   key: '.',
+   shiftKey: '7',
+   type: 'number',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: '.'
 }, {
-  key: '_',
-  shiftKey: '8',
-  type: 'number',
-  finger: 'middle-finger',
-  hand: 'right',
-  id: '_'
+   key: '_',
+   shiftKey: '8',
+   type: 'number',
+   finger: 'middle-finger',
+   hand: 'right',
+   id: '_'
 }, {
-  key: '?',
-  shiftKey: '9',
-  type: 'number',
-  finger: 'ring-finger',
-  hand: 'right',
-  id: '?'
+   key: '?',
+   shiftKey: '9',
+   type: 'number',
+   finger: 'ring-finger',
+   hand: 'right',
+   id: '?'
 }, {
-  key: '%',
-  shiftKey: '0',
-  type: 'number',
-  finger: 'pinky',
-  hand: 'right',
-  id: '%'
+   key: '%',
+   shiftKey: '0',
+   type: 'number',
+   finger: 'pinky',
+   hand: 'right',
+   id: '%'
 }, {
-  key: '!',
-  shiftKey: '=',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: '!'
+   key: '!',
+   shiftKey: '=',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: '!'
 }, {
-  key: ';',
-  shiftKey: '\\',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: ';'
+   key: ';',
+   shiftKey: '\\',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: ';'
 }, {
-  key: '←',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'Backspace'
+   key: '←',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'Backspace'
 }, {
-  key: 'Tab',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'Tab'
+   key: 'Tab',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'Tab'
 }, {
-  key: 'й',
-  shiftKey: 'Й',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'й'
+   key: 'й',
+   shiftKey: 'Й',
+   type: 'letter',
+   row: 'top',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'й'
 }, {
-  key: 'ц',
-  shiftKey: 'Ц',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'left',
-  id: 'ц'
+   key: 'ц',
+   shiftKey: 'Ц',
+   type: 'letter',
+   row: 'top',
+   finger: 'ring-finger',
+   hand: 'left',
+   id: 'ц'
 }, {
-  key: 'у',
-  shiftKey: 'У',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'left',
-  id: 'у'
+   key: 'у',
+   shiftKey: 'У',
+   type: 'letter',
+   row: 'top',
+   finger: 'middle-finger',
+   hand: 'left',
+   id: 'у'
 }, {
-  key: 'к',
-  shiftKey: 'К',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'к'
+   key: 'к',
+   shiftKey: 'К',
+   type: 'letter',
+   row: 'top',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'к'
 }, {
-  key: 'е',
-  shiftKey: 'Е',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'е'
+   key: 'е',
+   shiftKey: 'Е',
+   type: 'letter',
+   row: 'top',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'е'
 }, {
-  key: 'н',
-  shiftKey: 'Н',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'н'
+   key: 'н',
+   shiftKey: 'Н',
+   type: 'letter',
+   row: 'top',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'н'
 }, {
-  key: 'г',
-  shiftKey: 'Г',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'г'
+   key: 'г',
+   shiftKey: 'Г',
+   type: 'letter',
+   row: 'top',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'г'
 }, {
-  key: 'ш',
-  shiftKey: 'Ш',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'right',
-  id: 'ш'
+   key: 'ш',
+   shiftKey: 'Ш',
+   type: 'letter',
+   row: 'top',
+   finger: 'middle-finger',
+   hand: 'right',
+   id: 'ш'
 }, {
-  key: 'щ',
-  shiftKey: 'Щ',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'right',
-  id: 'щ'
+   key: 'щ',
+   shiftKey: 'Щ',
+   type: 'letter',
+   row: 'top',
+   finger: 'ring-finger',
+   hand: 'right',
+   id: 'щ'
 }, {
-  key: 'з',
-  shiftKey: 'З',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'з'
+   key: 'з',
+   shiftKey: 'З',
+   type: 'letter',
+   row: 'top',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'з'
 }, {
-  key: 'х',
-  shiftKey: 'Х',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'х'
+   key: 'х',
+   shiftKey: 'Х',
+   type: 'letter',
+   row: 'top',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'х'
 }, {
-  key: 'ъ',
-  shiftKey: 'Ъ',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'ъ'
+   key: 'ъ',
+   shiftKey: 'Ъ',
+   type: 'letter',
+   row: 'top',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'ъ'
 }, {
-  key: ')',
-  shiftKey: '(',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: ')'
+   key: ')',
+   shiftKey: '(',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: ')'
 }, {
-  key: 'Caps',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'Caps'
+   key: 'Caps',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'Caps'
 }, {
-  key: 'ф',
-  shiftKey: 'Ф',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'ф'
+   key: 'ф',
+   shiftKey: 'Ф',
+   type: 'letter',
+   row: 'middle',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'ф'
 }, {
-  key: 'ы',
-  shiftKey: 'Ы',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'left',
-  id: 'ы'
+   key: 'ы',
+   shiftKey: 'Ы',
+   type: 'letter',
+   row: 'middle',
+   finger: 'ring-finger',
+   hand: 'left',
+   id: 'ы'
 }, {
-  key: 'в',
-  shiftKey: 'В',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'left',
-  id: 'в'
+   key: 'в',
+   shiftKey: 'В',
+   type: 'letter',
+   row: 'middle',
+   finger: 'middle-finger',
+   hand: 'left',
+   id: 'в'
 }, {
-  key: 'а',
-  shiftKey: 'А',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'а'
+   key: 'а',
+   shiftKey: 'А',
+   type: 'letter',
+   row: 'middle',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'а'
 }, {
-  key: 'п',
-  shiftKey: 'П',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'п'
+   key: 'п',
+   shiftKey: 'П',
+   type: 'letter',
+   row: 'middle',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'п'
 }, {
-  key: 'р',
-  shiftKey: 'Р',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'р'
+   key: 'р',
+   shiftKey: 'Р',
+   type: 'letter',
+   row: 'middle',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'р'
 }, {
-  key: 'о',
-  shiftKey: 'О',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'о'
+   key: 'о',
+   shiftKey: 'О',
+   type: 'letter',
+   row: 'middle',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'о'
 }, {
-  key: 'л',
-  shiftKey: 'Л',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'right',
-  id: 'л'
+   key: 'л',
+   shiftKey: 'Л',
+   type: 'letter',
+   row: 'middle',
+   finger: 'middle-finger',
+   hand: 'right',
+   id: 'л'
 }, {
-  key: 'д',
-  shiftKey: 'Д',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'right',
-  id: 'д'
+   key: 'д',
+   shiftKey: 'Д',
+   type: 'letter',
+   row: 'middle',
+   finger: 'ring-finger',
+   hand: 'right',
+   id: 'д'
 }, {
-  key: 'ж',
-  shiftKey: 'Ж',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'ж'
+   key: 'ж',
+   shiftKey: 'Ж',
+   type: 'letter',
+   row: 'middle',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'ж'
 }, {
-  key: 'э',
-  shiftKey: 'Э',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'э'
+   key: 'э',
+   shiftKey: 'Э',
+   type: 'letter',
+   row: 'middle',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'э'
 }, {
-  key: 'Enter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'Enter'
+   key: 'Enter',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'Enter'
 }, {
-  key: 'Shift',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'Left Shift'
+   key: 'Shift',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'Left Shift'
 }, {
-  key: 'я',
-  shiftKey: 'Я',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'я'
+   key: 'я',
+   shiftKey: 'Я',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'я'
 }, {
-  key: 'ч',
-  shiftKey: 'Ч',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'left',
-  id: 'ч'
+   key: 'ч',
+   shiftKey: 'Ч',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'ring-finger',
+   hand: 'left',
+   id: 'ч'
 }, {
-  key: 'с',
-  shiftKey: 'С',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'left',
-  id: 'с'
+   key: 'с',
+   shiftKey: 'С',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'middle-finger',
+   hand: 'left',
+   id: 'с'
 }, {
-  key: 'м',
-  shiftKey: 'М',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'м'
+   key: 'м',
+   shiftKey: 'М',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'м'
 }, {
-  key: 'и',
-  shiftKey: 'И',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'и'
+   key: 'и',
+   shiftKey: 'И',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'и'
 }, {
-  key: 'т',
-  shiftKey: 'Т',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'т'
+   key: 'т',
+   shiftKey: 'Т',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'т'
 }, {
-  key: 'ь',
-  shiftKey: 'Ь',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'ь'
+   key: 'ь',
+   shiftKey: 'Ь',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'ь'
 }, {
-  key: 'б',
-  shiftKey: 'Б',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'right',
-  id: 'б'
+   key: 'б',
+   shiftKey: 'Б',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'middle-finger',
+   hand: 'right',
+   id: 'б'
 }, {
-  key: 'ю',
-  shiftKey: 'Ю',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'right',
-  id: 'ю'
+   key: 'ю',
+   shiftKey: 'Ю',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'ring-finger',
+   hand: 'right',
+   id: 'ю'
 }, {
-  key: 'ё',
-  shiftKey: 'Ё',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'ё'
+   key: 'ё',
+   shiftKey: 'Ё',
+   type: 'letter',
+   finger: 'pinky',
+   row: 'bottom',
+   hand: 'right',
+   id: 'ё'
 }, {
-  key: 'Shift',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'Right Shift'
+   key: 'Shift',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'Right Shift'
 }, {
-  key: ' ',
-  finger: 'thumb',
-  id: 'Space'
+   key: ' ',
+   finger: 'thumb',
+   id: 'Space'
 }];
 
 /***/ }),
@@ -65159,371 +65178,403 @@ exports.default = [{
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+   value: true
 });
 exports.default = [{
-  key: ']',
-  shiftKey: '[',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'left',
-  id: ']'
+   key: ']',
+   shiftKey: '[',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'left',
+   id: ']'
 }, {
-  key: '1',
-  shiftKey: '!',
-  type: 'number',
-  finger: 'pinky',
-  hand: 'left',
-  id: '1'
+   key: '1',
+   shiftKey: '!',
+   type: 'number',
+   finger: 'pinky',
+   hand: 'left',
+   id: '1'
 }, {
-  key: '2',
-  shiftKey: '"',
-  type: 'number',
-  finger: 'ring-finger',
-  hand: 'left',
-  id: '2'
+   key: '2',
+   shiftKey: '"',
+   type: 'number',
+   finger: 'ring-finger',
+   hand: 'left',
+   id: '2'
 }, {
-  key: '3',
-  shiftKey: '№',
-  type: 'number',
-  finger: 'middle-finger',
-  hand: 'left',
-  id: '3'
+   key: '3',
+   shiftKey: '№',
+   type: 'number',
+   finger: 'middle-finger',
+   hand: 'left',
+   id: '3'
 }, {
-  key: '4',
-  shiftKey: ';',
-  type: 'number',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: '4'
+   key: '4',
+   shiftKey: ';',
+   type: 'number',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: '4'
 }, {
-  key: '5',
-  shiftKey: '%',
-  type: 'number',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: '5'
+   key: '5',
+   shiftKey: '%',
+   type: 'number',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: '5'
 }, {
-  key: '6',
-  shiftKey: ':',
-  type: 'number',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: '6'
+   key: '6',
+   shiftKey: ':',
+   type: 'number',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: '6'
 }, {
-  key: '7',
-  shiftKey: '?',
-  type: 'number',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: '7'
+   key: '7',
+   shiftKey: '?',
+   type: 'number',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: '7'
 }, {
-  key: '8',
-  shiftKey: '*',
-  type: 'number',
-  finger: 'middle-finger',
-  hand: 'right',
-  id: '8'
+   key: '8',
+   shiftKey: '*',
+   type: 'number',
+   finger: 'middle-finger',
+   hand: 'right',
+   id: '8'
 }, {
-  key: '9',
-  shiftKey: '(',
-  type: 'number',
-  finger: 'ring-finger',
-  hand: 'right',
-  id: '9'
+   key: '9',
+   shiftKey: '(',
+   type: 'number',
+   finger: 'ring-finger',
+   hand: 'right',
+   id: '9'
 }, {
-  key: '0',
-  shiftKey: ')',
-  type: 'number',
-  finger: 'pinky',
-  hand: 'right',
-  id: '0'
+   key: '0',
+   shiftKey: ')',
+   type: 'number',
+   finger: 'pinky',
+   hand: 'right',
+   id: '0'
 }, {
-  key: '-',
-  shiftKey: '_',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: '-'
+   key: '-',
+   shiftKey: '_',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: '-'
 }, {
-  key: '=',
-  shiftKey: '+',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: '='
+   key: '=',
+   shiftKey: '+',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: '='
 }, {
-  key: '←',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'Backspace'
+   key: '←',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'Backspace'
 }, {
-  key: 'Tab',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'Tab'
+   key: 'Tab',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'Tab'
 }, {
-  key: 'й',
-  shiftKey: 'Й',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'й'
+   key: 'й',
+   shiftKey: 'Й',
+   type: 'letter',
+   row: 'top',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'й'
 }, {
-  key: 'ц',
-  shiftKey: 'Ц',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'left',
-  id: 'ц'
+   key: 'ц',
+   shiftKey: 'Ц',
+   type: 'letter',
+   row: 'top',
+   finger: 'ring-finger',
+   hand: 'left',
+   id: 'ц'
 }, {
-  key: 'у',
-  shiftKey: 'У',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'left',
-  id: 'у'
+   key: 'у',
+   shiftKey: 'У',
+   type: 'letter',
+   row: 'top',
+   finger: 'middle-finger',
+   hand: 'left',
+   id: 'у'
 }, {
-  key: 'к',
-  shiftKey: 'К',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'к'
+   key: 'к',
+   shiftKey: 'К',
+   type: 'letter',
+   row: 'top',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'к'
 }, {
-  key: 'е',
-  shiftKey: 'Е',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'е'
+   key: 'е',
+   shiftKey: 'Е',
+   type: 'letter',
+   row: 'top',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'е'
 }, {
-  key: 'н',
-  shiftKey: 'Н',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'н'
+   key: 'н',
+   shiftKey: 'Н',
+   type: 'letter',
+   row: 'top',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'н'
 }, {
-  key: 'г',
-  shiftKey: 'Г',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'г'
+   key: 'г',
+   shiftKey: 'Г',
+   type: 'letter',
+   row: 'top',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'г'
 }, {
-  key: 'ш',
-  shiftKey: 'Ш',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'right',
-  id: 'ш'
+   key: 'ш',
+   shiftKey: 'Ш',
+   type: 'letter',
+   row: 'top',
+   finger: 'middle-finger',
+   hand: 'right',
+   id: 'ш'
 }, {
-  key: 'щ',
-  shiftKey: 'Щ',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'right',
-  id: 'щ'
+   key: 'щ',
+   shiftKey: 'Щ',
+   type: 'letter',
+   row: 'top',
+   finger: 'ring-finger',
+   hand: 'right',
+   id: 'щ'
 }, {
-  key: 'з',
-  shiftKey: 'З',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'з'
+   key: 'з',
+   shiftKey: 'З',
+   type: 'letter',
+   row: 'top',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'з'
 }, {
-  key: 'х',
-  shiftKey: 'Х',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'х'
+   key: 'х',
+   shiftKey: 'Х',
+   type: 'letter',
+   row: 'top',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'х'
 }, {
-  key: 'ъ',
-  shiftKey: 'Ъ',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'ъ'
+   key: 'ъ',
+   shiftKey: 'Ъ',
+   type: 'letter',
+   row: 'top',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'ъ'
 }, {
-  key: '\\',
-  shiftKey: '/',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: '\\'
+   key: '\\',
+   shiftKey: '/',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: '\\'
 }, {
-  key: 'Caps',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'Caps'
+   key: 'Caps',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'Caps'
 }, {
-  key: 'ф',
-  shiftKey: 'Ф',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'ф'
+   key: 'ф',
+   shiftKey: 'Ф',
+   type: 'letter',
+   row: 'middle',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'ф'
 }, {
-  key: 'ы',
-  shiftKey: 'Ы',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'left',
-  id: 'ы'
+   key: 'ы',
+   shiftKey: 'Ы',
+   type: 'letter',
+   row: 'middle',
+   finger: 'ring-finger',
+   hand: 'left',
+   id: 'ы'
 }, {
-  key: 'в',
-  shiftKey: 'В',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'left',
-  id: 'в'
+   key: 'в',
+   shiftKey: 'В',
+   type: 'letter',
+   row: 'middle',
+   finger: 'middle-finger',
+   hand: 'left',
+   id: 'в'
 }, {
-  key: 'а',
-  shiftKey: 'А',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'а'
+   key: 'а',
+   shiftKey: 'А',
+   type: 'letter',
+   row: 'middle',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'а'
 }, {
-  key: 'п',
-  shiftKey: 'П',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'п'
+   key: 'п',
+   shiftKey: 'П',
+   type: 'letter',
+   row: 'middle',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'п'
 }, {
-  key: 'р',
-  shiftKey: 'Р',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'р'
+   key: 'р',
+   shiftKey: 'Р',
+   type: 'letter',
+   row: 'middle',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'р'
 }, {
-  key: 'о',
-  shiftKey: 'О',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'о'
+   key: 'о',
+   shiftKey: 'О',
+   type: 'letter',
+   row: 'middle',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'о'
 }, {
-  key: 'л',
-  shiftKey: 'Л',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'right',
-  id: 'л'
+   key: 'л',
+   shiftKey: 'Л',
+   type: 'letter',
+   row: 'middle',
+   finger: 'middle-finger',
+   hand: 'right',
+   id: 'л'
 }, {
-  key: 'д',
-  shiftKey: 'Д',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'right',
-  id: 'д'
+   key: 'д',
+   shiftKey: 'Д',
+   type: 'letter',
+   row: 'middle',
+   finger: 'ring-finger',
+   hand: 'right',
+   id: 'д'
 }, {
-  key: 'ж',
-  shiftKey: 'Ж',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'ж'
+   key: 'ж',
+   shiftKey: 'Ж',
+   type: 'letter',
+   row: 'middle',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'ж'
 }, {
-  key: 'э',
-  shiftKey: 'Э',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'э'
+   key: 'э',
+   shiftKey: 'Э',
+   type: 'letter',
+   row: 'middle',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'э'
 }, {
-  key: 'Enter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'Enter'
+   key: 'Enter',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'Enter'
 }, {
-  key: 'Shift',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'Left Shift'
+   key: 'Shift',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'Left Shift'
 }, {
-  key: 'я',
-  shiftKey: 'Я',
-  type: 'letter',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'я'
+   key: 'я',
+   shiftKey: 'Я',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'я'
 }, {
-  key: 'ч',
-  shiftKey: 'Ч',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'left',
-  id: 'ч'
+   key: 'ч',
+   shiftKey: 'Ч',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'ring-finger',
+   hand: 'left',
+   id: 'ч'
 }, {
-  key: 'с',
-  shiftKey: 'С',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'left',
-  id: 'с'
+   key: 'с',
+   shiftKey: 'С',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'middle-finger',
+   hand: 'left',
+   id: 'с'
 }, {
-  key: 'м',
-  shiftKey: 'М',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'м'
+   key: 'м',
+   shiftKey: 'М',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'м'
 }, {
-  key: 'и',
-  shiftKey: 'И',
-  type: 'letter',
-  finger: 'left-index-finger',
-  hand: 'left',
-  id: 'и'
+   key: 'и',
+   shiftKey: 'И',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'left-index-finger',
+   hand: 'left',
+   id: 'и'
 }, {
-  key: 'т',
-  shiftKey: 'Т',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'т'
+   key: 'т',
+   shiftKey: 'Т',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'т'
 }, {
-  key: 'ь',
-  shiftKey: 'Ь',
-  type: 'letter',
-  finger: 'right-index-finger',
-  hand: 'right',
-  id: 'ь'
+   key: 'ь',
+   shiftKey: 'Ь',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'right-index-finger',
+   hand: 'right',
+   id: 'ь'
 }, {
-  key: 'б',
-  shiftKey: 'Б',
-  type: 'letter',
-  finger: 'middle-finger',
-  hand: 'right',
-  id: 'б'
+   key: 'б',
+   shiftKey: 'Б',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'middle-finger',
+   hand: 'right',
+   id: 'б'
 }, {
-  key: 'ю',
-  shiftKey: 'Ю',
-  type: 'letter',
-  finger: 'ring-finger',
-  hand: 'right',
-  id: 'ю'
+   key: 'ю',
+   shiftKey: 'Ю',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'ring-finger',
+   hand: 'right',
+   id: 'ю'
 }, {
-  key: '.',
-  shiftKey: ',',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: '.'
+   key: '.',
+   shiftKey: ',',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: '.'
 }, {
-  key: 'Shift',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'Right Shift'
+   key: 'Shift',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'Right Shift'
 }, {
-  key: ' ',
-  finger: 'thumb',
-  id: 'Space'
+   key: ' ',
+   finger: 'thumb',
+   id: 'Space'
 }];
 
 /***/ }),
@@ -65534,397 +65585,397 @@ exports.default = [{
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+   value: true
 });
 exports.default = [{
-  key: '`',
-  shiftKey: '~',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'left',
-  id: '`'
+   key: '`',
+   shiftKey: '~',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'left',
+   id: '`'
 }, {
-  key: '1',
-  shiftKey: '!',
-  type: 'number',
-  finger: 'pinky',
-  hand: 'left',
-  id: '1'
+   key: '1',
+   shiftKey: '!',
+   type: 'number',
+   finger: 'pinky',
+   hand: 'left',
+   id: '1'
 }, {
-  key: '2',
-  shiftKey: '@',
-  type: 'number',
-  finger: 'ring',
-  hand: 'left',
-  id: '2'
+   key: '2',
+   shiftKey: '@',
+   type: 'number',
+   finger: 'ring',
+   hand: 'left',
+   id: '2'
 }, {
-  key: '3',
-  shiftKey: '#',
-  type: 'number',
-  finger: 'middle',
-  hand: 'left',
-  id: '3'
+   key: '3',
+   shiftKey: '#',
+   type: 'number',
+   finger: 'middle',
+   hand: 'left',
+   id: '3'
 }, {
-  key: '4',
-  shiftKey: '$',
-  type: 'number',
-  finger: 'index',
-  hand: 'left',
-  id: '4'
+   key: '4',
+   shiftKey: '$',
+   type: 'number',
+   finger: 'index',
+   hand: 'left',
+   id: '4'
 }, {
-  key: '5',
-  shiftKey: '%',
-  type: 'number',
-  finger: 'index',
-  hand: 'left',
-  id: '5'
+   key: '5',
+   shiftKey: '%',
+   type: 'number',
+   finger: 'index',
+   hand: 'left',
+   id: '5'
 }, {
-  key: '6',
-  shiftKey: '^',
-  type: 'number',
-  finger: 'index',
-  hand: 'right',
-  id: '6'
+   key: '6',
+   shiftKey: '^',
+   type: 'number',
+   finger: 'index',
+   hand: 'right',
+   id: '6'
 }, {
-  key: '7',
-  shiftKey: '&',
-  type: 'number',
-  finger: 'index',
-  hand: 'right',
-  id: '7'
+   key: '7',
+   shiftKey: '&',
+   type: 'number',
+   finger: 'index',
+   hand: 'right',
+   id: '7'
 }, {
-  key: '8',
-  shiftKey: '*',
-  type: 'number',
-  finger: 'middle',
-  hand: 'right',
-  id: '8'
+   key: '8',
+   shiftKey: '*',
+   type: 'number',
+   finger: 'middle',
+   hand: 'right',
+   id: '8'
 }, {
-  key: '9',
-  shiftKey: '(',
-  type: 'number',
-  finger: 'ring',
-  hand: 'right',
-  id: '9'
+   key: '9',
+   shiftKey: '(',
+   type: 'number',
+   finger: 'ring',
+   hand: 'right',
+   id: '9'
 }, {
-  key: '0',
-  shiftKey: ')',
-  type: 'number',
-  finger: 'pinky',
-  hand: 'right',
-  id: '0'
+   key: '0',
+   shiftKey: ')',
+   type: 'number',
+   finger: 'pinky',
+   hand: 'right',
+   id: '0'
 }, {
-  key: '-',
-  shiftKey: '_',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: '-'
+   key: '-',
+   shiftKey: '_',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: '-'
 }, {
-  key: '=',
-  shiftKey: '+',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: '='
+   key: '=',
+   shiftKey: '+',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: '='
 }, {
-  key: '←',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'Backspace'
+   key: '←',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'Backspace'
 }, {
-  key: 'Tab',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'Tab'
+   key: 'Tab',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'Tab'
 }, {
-  key: 'q',
-  shiftKey: 'Q',
-  type: 'letter',
-  row: 'top',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'q'
+   key: 'q',
+   shiftKey: 'Q',
+   type: 'letter',
+   row: 'top',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'q'
 }, {
-  key: 'w',
-  shiftKey: 'W',
-  type: 'letter',
-  row: 'top',
-  finger: 'ring',
-  hand: 'left',
-  id: 'w'
+   key: 'w',
+   shiftKey: 'W',
+   type: 'letter',
+   row: 'top',
+   finger: 'ring',
+   hand: 'left',
+   id: 'w'
 }, {
-  key: 'e',
-  shiftKey: 'E',
-  type: 'letter',
-  row: 'top',
-  finger: 'middle',
-  hand: 'left',
-  id: 'e'
+   key: 'e',
+   shiftKey: 'E',
+   type: 'letter',
+   row: 'top',
+   finger: 'middle',
+   hand: 'left',
+   id: 'e'
 }, {
-  key: 'r',
-  shiftKey: 'R',
-  type: 'letter',
-  row: 'top',
-  finger: 'index',
-  hand: 'left',
-  id: 'r'
+   key: 'r',
+   shiftKey: 'R',
+   type: 'letter',
+   row: 'top',
+   finger: 'index',
+   hand: 'left',
+   id: 'r'
 }, {
-  key: 't',
-  shiftKey: 'T',
-  type: 'letter',
-  row: 'top',
-  finger: 'index',
-  hand: 'left',
-  id: 't'
+   key: 't',
+   shiftKey: 'T',
+   type: 'letter',
+   row: 'top',
+   finger: 'index',
+   hand: 'left',
+   id: 't'
 }, {
-  key: 'y',
-  shiftKey: 'Y',
-  type: 'letter',
-  row: 'top',
-  finger: 'index',
-  hand: 'right',
-  id: 'y'
+   key: 'y',
+   shiftKey: 'Y',
+   type: 'letter',
+   row: 'top',
+   finger: 'index',
+   hand: 'right',
+   id: 'y'
 }, {
-  key: 'u',
-  shiftKey: 'U',
-  type: 'letter',
-  row: 'top',
-  finger: 'index',
-  hand: 'right',
-  id: 'u'
+   key: 'u',
+   shiftKey: 'U',
+   type: 'letter',
+   row: 'top',
+   finger: 'index',
+   hand: 'right',
+   id: 'u'
 }, {
-  key: 'i',
-  shiftKey: 'I',
-  type: 'letter',
-  row: 'top',
-  finger: 'middle',
-  hand: 'right',
-  id: 'i'
+   key: 'i',
+   shiftKey: 'I',
+   type: 'letter',
+   row: 'top',
+   finger: 'middle',
+   hand: 'right',
+   id: 'i'
 }, {
-  key: 'o',
-  shiftKey: 'O',
-  type: 'letter',
-  row: 'top',
-  finger: 'ring',
-  hand: 'right',
-  id: 'o'
+   key: 'o',
+   shiftKey: 'O',
+   type: 'letter',
+   row: 'top',
+   finger: 'ring',
+   hand: 'right',
+   id: 'o'
 }, {
-  key: 'p',
-  shiftKey: 'P',
-  type: 'letter',
-  row: 'top',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'p'
+   key: 'p',
+   shiftKey: 'P',
+   type: 'letter',
+   row: 'top',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'p'
 }, {
-  key: '[',
-  shiftKey: '{',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: '['
+   key: '[',
+   shiftKey: '{',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: '['
 }, {
-  key: ']',
-  shiftKey: '}',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: ']'
+   key: ']',
+   shiftKey: '}',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: ']'
 }, {
-  key: '\\',
-  shiftKey: '|',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: '\\'
+   key: '\\',
+   shiftKey: '|',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: '\\'
 }, {
-  key: 'Caps',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'Caps'
+   key: 'Caps',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'Caps'
 }, {
-  key: 'a',
-  shiftKey: 'A',
-  type: 'letter',
-  row: 'middle',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'a'
+   key: 'a',
+   shiftKey: 'A',
+   type: 'letter',
+   row: 'middle',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'a'
 }, {
-  key: 's',
-  shiftKey: 'S',
-  type: 'letter',
-  row: 'middle',
-  finger: 'ring',
-  hand: 'left',
-  id: 's'
+   key: 's',
+   shiftKey: 'S',
+   type: 'letter',
+   row: 'middle',
+   finger: 'ring',
+   hand: 'left',
+   id: 's'
 }, {
-  key: 'd',
-  shiftKey: 'D',
-  type: 'letter',
-  row: 'middle',
-  finger: 'middle',
-  hand: 'left',
-  id: 'd'
+   key: 'd',
+   shiftKey: 'D',
+   type: 'letter',
+   row: 'middle',
+   finger: 'middle',
+   hand: 'left',
+   id: 'd'
 }, {
-  key: 'f',
-  shiftKey: 'F',
-  type: 'letter',
-  row: 'middle',
-  finger: 'index',
-  hand: 'left',
-  id: 'f'
+   key: 'f',
+   shiftKey: 'F',
+   type: 'letter',
+   row: 'middle',
+   finger: 'index',
+   hand: 'left',
+   id: 'f'
 }, {
-  key: 'g',
-  shiftKey: 'G',
-  type: 'letter',
-  row: 'middle',
-  finger: 'index',
-  hand: 'left',
-  id: 'g'
+   key: 'g',
+   shiftKey: 'G',
+   type: 'letter',
+   row: 'middle',
+   finger: 'index',
+   hand: 'left',
+   id: 'g'
 }, {
-  key: 'h',
-  shiftKey: 'H',
-  type: 'letter',
-  row: 'middle',
-  finger: 'index',
-  hand: 'right',
-  id: 'h'
+   key: 'h',
+   shiftKey: 'H',
+   type: 'letter',
+   row: 'middle',
+   finger: 'index',
+   hand: 'right',
+   id: 'h'
 }, {
-  key: 'j',
-  shiftKey: 'J',
-  type: 'letter',
-  row: 'middle',
-  finger: 'index',
-  hand: 'right',
-  id: 'j'
+   key: 'j',
+   shiftKey: 'J',
+   type: 'letter',
+   row: 'middle',
+   finger: 'index',
+   hand: 'right',
+   id: 'j'
 }, {
-  key: 'k',
-  shiftKey: 'K',
-  type: 'letter',
-  row: 'middle',
-  finger: 'middle',
-  hand: 'right',
-  id: 'k'
+   key: 'k',
+   shiftKey: 'K',
+   type: 'letter',
+   row: 'middle',
+   finger: 'middle',
+   hand: 'right',
+   id: 'k'
 }, {
-  key: 'l',
-  shiftKey: 'L',
-  type: 'letter',
-  row: 'middle',
-  finger: 'ring',
-  hand: 'right',
-  id: 'l'
+   key: 'l',
+   shiftKey: 'L',
+   type: 'letter',
+   row: 'middle',
+   finger: 'ring',
+   hand: 'right',
+   id: 'l'
 }, {
-  key: ';',
-  shiftKey: ':',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: ';'
+   key: ';',
+   shiftKey: ':',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: ';'
 }, {
-  key: "'",
-  shiftKey: '"',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: "'"
+   key: "'",
+   shiftKey: '"',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: "'"
 }, {
-  key: 'Enter',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'Enter'
+   key: 'Enter',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'Enter'
 }, {
-  key: 'Shift',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'Left Shift'
+   key: 'Shift',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'Left Shift'
 }, {
-  key: 'z',
-  shiftKey: 'Z',
-  type: 'letter',
-  row: 'bottom',
-  finger: 'pinky',
-  hand: 'left',
-  id: 'z'
+   key: 'z',
+   shiftKey: 'Z',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'pinky',
+   hand: 'left',
+   id: 'z'
 }, {
-  key: 'x',
-  shiftKey: 'X',
-  type: 'letter',
-  row: 'bottom',
-  finger: 'ring',
-  hand: 'left',
-  id: 'x'
+   key: 'x',
+   shiftKey: 'X',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'ring',
+   hand: 'left',
+   id: 'x'
 }, {
-  key: 'c',
-  shiftKey: 'C',
-  type: 'letter',
-  row: 'bottom',
-  finger: 'middle',
-  hand: 'left',
-  id: 'c'
+   key: 'c',
+   shiftKey: 'C',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'middle',
+   hand: 'left',
+   id: 'c'
 }, {
-  key: 'v',
-  shiftKey: 'V',
-  type: 'letter',
-  row: 'bottom',
-  finger: 'index',
-  hand: 'left',
-  id: 'v'
+   key: 'v',
+   shiftKey: 'V',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'index',
+   hand: 'left',
+   id: 'v'
 }, {
-  key: 'b',
-  shiftKey: 'B',
-  type: 'letter',
-  row: 'bottom',
-  finger: 'index',
-  hand: 'left',
-  id: 'b'
+   key: 'b',
+   shiftKey: 'B',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'index',
+   hand: 'left',
+   id: 'b'
 }, {
-  key: 'n',
-  shiftKey: 'N',
-  type: 'letter',
-  row: 'bottom',
-  finger: 'index',
-  hand: 'right',
-  id: 'n'
+   key: 'n',
+   shiftKey: 'N',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'index',
+   hand: 'right',
+   id: 'n'
 }, {
-  key: 'm',
-  shiftKey: 'M',
-  type: 'letter',
-  row: 'bottom',
-  finger: 'index',
-  hand: 'right',
-  id: 'm'
+   key: 'm',
+   shiftKey: 'M',
+   type: 'letter',
+   row: 'bottom',
+   finger: 'index',
+   hand: 'right',
+   id: 'm'
 }, {
-  key: ',',
-  shiftKey: '<',
-  type: 'non-alphanumeric',
-  finger: 'middle',
-  hand: 'right',
-  id: ','
+   key: ',',
+   shiftKey: '<',
+   type: 'non-alphanumeric',
+   finger: 'middle',
+   hand: 'right',
+   id: ','
 }, {
-  key: '.',
-  shiftKey: '>',
-  type: 'non-alphanumeric',
-  finger: 'ring',
-  hand: 'right',
-  id: '.'
+   key: '.',
+   shiftKey: '>',
+   type: 'non-alphanumeric',
+   finger: 'ring',
+   hand: 'right',
+   id: '.'
 }, {
-  key: '/',
-  shiftKey: '?',
-  type: 'non-alphanumeric',
-  finger: 'pinky',
-  hand: 'right',
-  id: '/'
+   key: '/',
+   shiftKey: '?',
+   type: 'non-alphanumeric',
+   finger: 'pinky',
+   hand: 'right',
+   id: '/'
 }, {
-  key: 'Shift',
-  finger: 'pinky',
-  hand: 'right',
-  id: 'Right Shift'
+   key: 'Shift',
+   finger: 'pinky',
+   hand: 'right',
+   id: 'Right Shift'
 }, {
-  key: ' ',
-  finger: 'thumb',
-  id: 'Space'
+   key: ' ',
+   finger: 'thumb',
+   id: 'Space'
 }];
 
 /***/ }),
@@ -65946,7 +65997,7 @@ var _AddTextForm = __webpack_require__(298);
 
 var _AddTextForm2 = _interopRequireDefault(_AddTextForm);
 
-var _textMode = __webpack_require__(48);
+var _textMode = __webpack_require__(49);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66026,7 +66077,7 @@ exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(
 
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+   value: true
 });
 
 var _reactRedux = __webpack_require__(8);
@@ -66039,21 +66090,26 @@ var _Keyboard2 = _interopRequireDefault(_Keyboard);
 
 var _main = __webpack_require__(16);
 
+var _learningMode = __webpack_require__(37);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
-  return {
-    keys: state.main.keys,
-    name: state.main.keyboard
-  };
+   return {
+      keys: state.main.keys,
+      name: state.main.keyboard
+   };
 };
 
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
-  return {
-    setKeyboard: function setKeyboard(name) {
-      dispatch((0, _main.setKeyboard)(name));
-    }
-  };
+   return {
+      setKeyboard: function setKeyboard(name) {
+
+         dispatch((0, _main.setKeyboard)(name));
+
+         dispatch((0, _learningMode.initializeLearningState)(name));
+      }
+   };
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_Keyboard2.default);
@@ -66137,7 +66193,7 @@ var _LearningFingers = __webpack_require__(305);
 
 var _LearningFingers2 = _interopRequireDefault(_LearningFingers);
 
-var _learningMode = __webpack_require__(63);
+var _learningMode = __webpack_require__(37);
 
 var _utils = __webpack_require__(76);
 
@@ -66192,7 +66248,7 @@ var _LearningFree = __webpack_require__(306);
 
 var _LearningFree2 = _interopRequireDefault(_LearningFree);
 
-var _learningMode = __webpack_require__(63);
+var _learningMode = __webpack_require__(37);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66248,6 +66304,8 @@ var _LearningMode2 = _interopRequireDefault(_LearningMode);
 
 var _main = __webpack_require__(16);
 
+var _learningMode = __webpack_require__(37);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 var mapStateToProps = function mapStateToProps(state) {
@@ -66262,7 +66320,10 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
    return {
       setMode: function setMode(mode) {
-         dispatch((0, _main.setModeAndUpdateKeysToType)(mode));
+
+         dispatch((0, _main.setMode)(mode));
+
+         dispatch((0, _learningMode.updateCharToType)());
       }
    };
 };
@@ -66417,7 +66478,7 @@ var _Text = __webpack_require__(313);
 
 var _Text2 = _interopRequireDefault(_Text);
 
-var _textMode = __webpack_require__(48);
+var _textMode = __webpack_require__(49);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66466,9 +66527,9 @@ var _TextMode = __webpack_require__(314);
 
 var _TextMode2 = _interopRequireDefault(_TextMode);
 
-var _textMode = __webpack_require__(48);
-
 var _main = __webpack_require__(16);
+
+var _textMode = __webpack_require__(49);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -66495,7 +66556,10 @@ var mapDispatchToProps = function mapDispatchToProps(dispatch) {
          dispatch((0, _textMode.selectText)(textId));
       },
       setMode: function setMode(mode) {
-         dispatch((0, _main.setModeAndUpdateKeysToType)(mode));
+
+         dispatch((0, _main.setMode)(mode));
+
+         dispatch((0, _textMode.updateCharToType)());
       }
    };
 };
@@ -66751,11 +66815,11 @@ var _modal = __webpack_require__(342);
 
 var _modal2 = _interopRequireDefault(_modal);
 
-var _textMode = __webpack_require__(48);
+var _textMode = __webpack_require__(49);
 
 var _textMode2 = _interopRequireDefault(_textMode);
 
-var _learningMode = __webpack_require__(63);
+var _learningMode = __webpack_require__(37);
 
 var _learningMode2 = _interopRequireDefault(_learningMode);
 
@@ -66906,7 +66970,7 @@ function fromByteArray (uint8) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var aes = __webpack_require__(77)
-var Transform = __webpack_require__(49)
+var Transform = __webpack_require__(50)
 var inherits = __webpack_require__(5)
 var modes = __webpack_require__(78)
 var StreamCipher = __webpack_require__(180)
@@ -67050,7 +67114,7 @@ exports.createDecipheriv = createDecipheriv
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var aes = __webpack_require__(77)
-var Transform = __webpack_require__(49)
+var Transform = __webpack_require__(50)
 var inherits = __webpack_require__(5)
 var modes = __webpack_require__(78)
 var ebtk = __webpack_require__(82)
@@ -67362,7 +67426,7 @@ exports.listCiphers = exports.getCiphers = getCiphers
 /* 349 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(Buffer) {var CipherBase = __webpack_require__(49)
+/* WEBPACK VAR INJECTION */(function(Buffer) {var CipherBase = __webpack_require__(50)
 var des = __webpack_require__(108)
 var inherits = __webpack_require__(5)
 
@@ -67443,10 +67507,10 @@ exports['des-ede'] = {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var _algos = __webpack_require__(181)
-var createHash = __webpack_require__(50)
+var createHash = __webpack_require__(51)
 var inherits = __webpack_require__(5)
 var sign = __webpack_require__(352)
-var stream = __webpack_require__(61)
+var stream = __webpack_require__(62)
 var verify = __webpack_require__(353)
 
 var algos = {}
@@ -68028,7 +68092,7 @@ exports.hash = hash;
 
 
 exports.randomBytes = exports.rng = exports.pseudoRandomBytes = exports.prng = __webpack_require__(69)
-exports.createHash = exports.Hash = __webpack_require__(50)
+exports.createHash = exports.Hash = __webpack_require__(51)
 exports.createHmac = exports.Hmac = __webpack_require__(107)
 
 var hashes = ['sha1', 'sha224', 'sha256', 'sha384', 'sha512', 'md5', 'rmd160'].concat(Object.keys(__webpack_require__(181)))
@@ -71451,7 +71515,7 @@ JPoint.prototype.isInfinity = function isInfinity() {
 
 var curves = exports;
 
-var hash = __webpack_require__(37);
+var hash = __webpack_require__(38);
 var elliptic = __webpack_require__(14);
 
 var assert = elliptic.utils.assert;
@@ -72173,7 +72237,7 @@ Signature.prototype.toDER = function toDER(enc) {
 "use strict";
 
 
-var hash = __webpack_require__(37);
+var hash = __webpack_require__(38);
 var elliptic = __webpack_require__(14);
 var utils = elliptic.utils;
 var assert = utils.assert;
@@ -72474,7 +72538,7 @@ module.exports = Signature;
 "use strict";
 
 
-var hash = __webpack_require__(37);
+var hash = __webpack_require__(38);
 var elliptic = __webpack_require__(14);
 var utils = elliptic.utils;
 var assert = utils.assert;
@@ -74633,7 +74697,7 @@ module.exports = performanceNow;
 /* 397 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var hash = __webpack_require__(37);
+var hash = __webpack_require__(38);
 var utils = hash.utils;
 var assert = utils.assert;
 
@@ -74732,7 +74796,7 @@ BlockHash.prototype._pad = function pad() {
 
 var hmac = exports;
 
-var hash = __webpack_require__(37);
+var hash = __webpack_require__(38);
 var utils = hash.utils;
 var assert = utils.assert;
 
@@ -74784,7 +74848,7 @@ Hmac.prototype.digest = function digest(enc) {
 /* 399 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var hash = __webpack_require__(37);
+var hash = __webpack_require__(38);
 var utils = hash.utils;
 
 var rotl32 = utils.rotl32;
@@ -74934,7 +74998,7 @@ var sh = [
 /* 400 */
 /***/ (function(module, exports, __webpack_require__) {
 
-var hash = __webpack_require__(37);
+var hash = __webpack_require__(38);
 var utils = hash.utils;
 var assert = utils.assert;
 
@@ -75854,7 +75918,7 @@ var _warning = __webpack_require__(36);
 
 var _warning2 = _interopRequireDefault(_warning);
 
-var _LocationUtils = __webpack_require__(52);
+var _LocationUtils = __webpack_require__(53);
 
 var _DOMUtils = __webpack_require__(84);
 
@@ -75993,7 +76057,7 @@ Object.defineProperty(exports, 'go', {
   }
 });
 
-var _LocationUtils = __webpack_require__(52);
+var _LocationUtils = __webpack_require__(53);
 
 var _PathUtils = __webpack_require__(30);
 
@@ -76284,7 +76348,7 @@ var _invariant = __webpack_require__(11);
 
 var _invariant2 = _interopRequireDefault(_invariant);
 
-var _LocationUtils = __webpack_require__(52);
+var _LocationUtils = __webpack_require__(53);
 
 var _PathUtils = __webpack_require__(30);
 
@@ -76522,7 +76586,7 @@ module.exports = function(arr, obj){
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__root_js__ = __webpack_require__(23);
 
 
@@ -76582,7 +76646,7 @@ Hash.prototype.set = __WEBPACK_IMPORTED_MODULE_4__hashSet_js__["a" /* default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__root_js__ = __webpack_require__(23);
 
 
@@ -76598,7 +76662,7 @@ var Promise = __webpack_require__.i(__WEBPACK_IMPORTED_MODULE_0__getNative_js__[
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__root_js__ = __webpack_require__(23);
 
 
@@ -76651,7 +76715,7 @@ SetCache.prototype.has = __WEBPACK_IMPORTED_MODULE_2__setCacheHas_js__["a" /* de
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__getNative_js__ = __webpack_require__(40);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__root_js__ = __webpack_require__(23);
 
 
@@ -76933,8 +76997,8 @@ function baseHasIn(object, key) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(53);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(41);
 
 
 
@@ -77187,9 +77251,9 @@ function baseIsNative(value) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__baseGetTag_js__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isLength_js__ = __webpack_require__(127);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__isObjectLike_js__ = __webpack_require__(41);
 
 
 
@@ -78461,7 +78525,7 @@ var getSymbols = !nativeGetSymbols ? __WEBPACK_IMPORTED_MODULE_1__stubArray_js__
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__Promise_js__ = __webpack_require__(412);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Set_js__ = __webpack_require__(413);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__WeakMap_js__ = __webpack_require__(415);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__baseGetTag_js__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__baseGetTag_js__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__toSource_js__ = __webpack_require__(208);
 
 
@@ -79744,7 +79808,7 @@ function hasIn(object, path) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__isArrayLike_js__ = __webpack_require__(91);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__isObjectLike_js__ = __webpack_require__(41);
 
 
 
@@ -80425,7 +80489,7 @@ function mountJQuery(jQuery) {
 
 if (true) {
   // AMD. Register as an anonymous module.
-  !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(38)], __WEBPACK_AMD_DEFINE_FACTORY__ = (mountJQuery),
+  !(__WEBPACK_AMD_DEFINE_ARRAY__ = [__webpack_require__(39)], __WEBPACK_AMD_DEFINE_FACTORY__ = (mountJQuery),
 				__WEBPACK_AMD_DEFINE_RESULT__ = (typeof __WEBPACK_AMD_DEFINE_FACTORY__ === 'function' ?
 				(__WEBPACK_AMD_DEFINE_FACTORY__.apply(exports, __WEBPACK_AMD_DEFINE_ARRAY__)) : __WEBPACK_AMD_DEFINE_FACTORY__),
 				__WEBPACK_AMD_DEFINE_RESULT__ !== undefined && (module.exports = __WEBPACK_AMD_DEFINE_RESULT__));
@@ -80586,7 +80650,7 @@ module.exports = {
 
 
 var _ = __webpack_require__(27);
-var dom = __webpack_require__(41);
+var dom = __webpack_require__(42);
 var instances = __webpack_require__(18);
 
 module.exports = function (element) {
@@ -80661,7 +80725,7 @@ module.exports = function (element) {
 
 
 var _ = __webpack_require__(27);
-var dom = __webpack_require__(41);
+var dom = __webpack_require__(42);
 var instances = __webpack_require__(18);
 var updateGeometry = __webpack_require__(28);
 var updateScroll = __webpack_require__(32);
@@ -80771,7 +80835,7 @@ module.exports = function (element) {
 
 
 var _ = __webpack_require__(27);
-var dom = __webpack_require__(41);
+var dom = __webpack_require__(42);
 var instances = __webpack_require__(18);
 var updateGeometry = __webpack_require__(28);
 var updateScroll = __webpack_require__(32);
@@ -81454,7 +81518,7 @@ module.exports = function (element, userSettings) {
 
 
 var _ = __webpack_require__(27);
-var dom = __webpack_require__(41);
+var dom = __webpack_require__(42);
 var instances = __webpack_require__(18);
 var updateGeometry = __webpack_require__(28);
 var updateScroll = __webpack_require__(32);
@@ -81514,7 +81578,7 @@ var mgf = __webpack_require__(215);
 var xor = __webpack_require__(217);
 var bn = __webpack_require__(10);
 var crt = __webpack_require__(105);
-var createHash = __webpack_require__(50);
+var createHash = __webpack_require__(51);
 var withPublic = __webpack_require__(216);
 module.exports = function privateDecrypt(private_key, enc, reverse) {
   var padding;
@@ -81625,7 +81689,7 @@ function compare(a, b){
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var parseKeys = __webpack_require__(95);
 var randomBytes = __webpack_require__(69);
-var createHash = __webpack_require__(50);
+var createHash = __webpack_require__(51);
 var mgf = __webpack_require__(215);
 var xor = __webpack_require__(217);
 var bn = __webpack_require__(10);
@@ -82061,7 +82125,7 @@ module.exports = AutoFocusUtils;
 
 
 
-var EventPropagators = __webpack_require__(56);
+var EventPropagators = __webpack_require__(57);
 var ExecutionEnvironment = __webpack_require__(12);
 var FallbackCompositionState = __webpack_require__(543);
 var SyntheticCompositionEvent = __webpack_require__(585);
@@ -82666,8 +82730,8 @@ module.exports = CSSPropertyOperations;
 
 
 
-var EventPluginHub = __webpack_require__(55);
-var EventPropagators = __webpack_require__(56);
+var EventPluginHub = __webpack_require__(56);
+var EventPropagators = __webpack_require__(57);
 var ExecutionEnvironment = __webpack_require__(12);
 var ReactDOMComponentTree = __webpack_require__(9);
 var ReactUpdates = __webpack_require__(21);
@@ -82994,7 +83058,7 @@ module.exports = ChangeEventPlugin;
 
 var _prodInvariant = __webpack_require__(6);
 
-var DOMLazyTree = __webpack_require__(54);
+var DOMLazyTree = __webpack_require__(55);
 var ExecutionEnvironment = __webpack_require__(12);
 
 var createNodesFromMarkup = __webpack_require__(387);
@@ -83077,7 +83141,7 @@ module.exports = DefaultEventPluginOrder;
 
 
 
-var EventPropagators = __webpack_require__(56);
+var EventPropagators = __webpack_require__(57);
 var ReactDOMComponentTree = __webpack_require__(9);
 var SyntheticMouseEvent = __webpack_require__(97);
 
@@ -83281,7 +83345,7 @@ module.exports = EventConstants;
 
 var _assign = __webpack_require__(7);
 
-var PooledClass = __webpack_require__(42);
+var PooledClass = __webpack_require__(43);
 
 var getTextContentAccessor = __webpack_require__(239);
 
@@ -83596,7 +83660,7 @@ module.exports = HTMLDOMPropertyConfig;
 
 
 
-var ReactReconciler = __webpack_require__(43);
+var ReactReconciler = __webpack_require__(44);
 
 var instantiateReactComponent = __webpack_require__(241);
 var KeyEscapeUtils = __webpack_require__(135);
@@ -83798,11 +83862,11 @@ var _prodInvariant = __webpack_require__(6),
 
 var AutoFocusUtils = __webpack_require__(535);
 var CSSPropertyOperations = __webpack_require__(537);
-var DOMLazyTree = __webpack_require__(54);
+var DOMLazyTree = __webpack_require__(55);
 var DOMNamespaces = __webpack_require__(133);
 var DOMProperty = __webpack_require__(33);
 var DOMPropertyOperations = __webpack_require__(220);
-var EventPluginHub = __webpack_require__(55);
+var EventPluginHub = __webpack_require__(56);
 var EventPluginRegistry = __webpack_require__(70);
 var ReactBrowserEventEmitter = __webpack_require__(71);
 var ReactDOMComponentFlags = __webpack_require__(222);
@@ -84839,7 +84903,7 @@ module.exports = ReactDOMContainerInfo;
 
 var _assign = __webpack_require__(7);
 
-var DOMLazyTree = __webpack_require__(54);
+var DOMLazyTree = __webpack_require__(55);
 var ReactDOMComponentTree = __webpack_require__(9);
 
 var ReactDOMEmptyComponent = function (instantiate) {
@@ -85747,7 +85811,7 @@ var _prodInvariant = __webpack_require__(6),
     _assign = __webpack_require__(7);
 
 var DOMChildrenOperations = __webpack_require__(132);
-var DOMLazyTree = __webpack_require__(54);
+var DOMLazyTree = __webpack_require__(55);
 var ReactDOMComponentTree = __webpack_require__(9);
 
 var escapeTextContentForBrowser = __webpack_require__(99);
@@ -86437,7 +86501,7 @@ module.exports = REACT_ELEMENT_TYPE;
 
 
 
-var EventPluginHub = __webpack_require__(55);
+var EventPluginHub = __webpack_require__(56);
 
 function runEventQueueInBatch(events) {
   EventPluginHub.enqueueEvents(events);
@@ -86479,7 +86543,7 @@ var _assign = __webpack_require__(7);
 
 var EventListener = __webpack_require__(185);
 var ExecutionEnvironment = __webpack_require__(12);
-var PooledClass = __webpack_require__(42);
+var PooledClass = __webpack_require__(43);
 var ReactDOMComponentTree = __webpack_require__(9);
 var ReactUpdates = __webpack_require__(21);
 
@@ -86675,7 +86739,7 @@ module.exports = ReactHostOperationHistoryHook;
 
 
 var DOMProperty = __webpack_require__(33);
-var EventPluginHub = __webpack_require__(55);
+var EventPluginHub = __webpack_require__(56);
 var EventPluginUtils = __webpack_require__(134);
 var ReactComponentEnvironment = __webpack_require__(137);
 var ReactEmptyComponent = __webpack_require__(226);
@@ -86814,11 +86878,11 @@ module.exports = ReactMarkupChecksum;
 var _prodInvariant = __webpack_require__(6);
 
 var ReactComponentEnvironment = __webpack_require__(137);
-var ReactInstanceMap = __webpack_require__(57);
+var ReactInstanceMap = __webpack_require__(58);
 var ReactInstrumentation = __webpack_require__(20);
 
 var ReactCurrentOwner = __webpack_require__(26);
-var ReactReconciler = __webpack_require__(43);
+var ReactReconciler = __webpack_require__(44);
 var ReactChildReconciler = __webpack_require__(545);
 
 var emptyFunction = __webpack_require__(19);
@@ -87908,7 +87972,7 @@ module.exports = ReactPropTypeLocationNames;
 var _assign = __webpack_require__(7);
 
 var CallbackQueue = __webpack_require__(219);
-var PooledClass = __webpack_require__(42);
+var PooledClass = __webpack_require__(43);
 var ReactBrowserEventEmitter = __webpack_require__(71);
 var ReactInputSelection = __webpack_require__(229);
 var ReactInstrumentation = __webpack_require__(20);
@@ -88185,7 +88249,7 @@ module.exports = ReactRef;
 
 var _assign = __webpack_require__(7);
 
-var PooledClass = __webpack_require__(42);
+var PooledClass = __webpack_require__(43);
 var Transaction = __webpack_require__(98);
 var ReactInstrumentation = __webpack_require__(20);
 var ReactServerUpdateQueue = __webpack_require__(576);
@@ -88432,10 +88496,10 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var React = __webpack_require__(22);
 var ReactDefaultInjection = __webpack_require__(225);
 var ReactCompositeComponent = __webpack_require__(221);
-var ReactReconciler = __webpack_require__(43);
+var ReactReconciler = __webpack_require__(44);
 var ReactUpdates = __webpack_require__(21);
 
-var emptyObject = __webpack_require__(51);
+var emptyObject = __webpack_require__(52);
 var getNextDebugID = __webpack_require__(238);
 var invariant = __webpack_require__(3);
 
@@ -88569,14 +88633,14 @@ var _prodInvariant = __webpack_require__(6),
     _assign = __webpack_require__(7);
 
 var EventConstants = __webpack_require__(542);
-var EventPluginHub = __webpack_require__(55);
+var EventPluginHub = __webpack_require__(56);
 var EventPluginRegistry = __webpack_require__(70);
-var EventPropagators = __webpack_require__(56);
+var EventPropagators = __webpack_require__(57);
 var React = __webpack_require__(22);
 var ReactDOM = __webpack_require__(138);
 var ReactDOMComponentTree = __webpack_require__(9);
 var ReactBrowserEventEmitter = __webpack_require__(71);
-var ReactInstanceMap = __webpack_require__(57);
+var ReactInstanceMap = __webpack_require__(58);
 var ReactUpdates = __webpack_require__(21);
 var SyntheticEvent = __webpack_require__(25);
 var ReactShallowRenderer = __webpack_require__(577);
@@ -89309,7 +89373,7 @@ module.exports = SVGDOMPropertyConfig;
 
 
 
-var EventPropagators = __webpack_require__(56);
+var EventPropagators = __webpack_require__(57);
 var ExecutionEnvironment = __webpack_require__(12);
 var ReactDOMComponentTree = __webpack_require__(9);
 var ReactInputSelection = __webpack_require__(229);
@@ -89509,7 +89573,7 @@ module.exports = SelectEventPlugin;
 var _prodInvariant = __webpack_require__(6);
 
 var EventListener = __webpack_require__(185);
-var EventPropagators = __webpack_require__(56);
+var EventPropagators = __webpack_require__(57);
 var ReactDOMComponentTree = __webpack_require__(9);
 var SyntheticAnimationEvent = __webpack_require__(583);
 var SyntheticClipboardEvent = __webpack_require__(584);
@@ -91512,7 +91576,7 @@ var IndexLink = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routerWarning__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routerWarning__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_invariant__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__Redirect__ = __webpack_require__(255);
@@ -91571,7 +91635,7 @@ var IndexRedirect = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routerWarning__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routerWarning__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_invariant__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2_invariant___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2_invariant__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__RouteUtils__ = __webpack_require__(34);
@@ -91693,7 +91757,7 @@ var Route = __WEBPACK_IMPORTED_MODULE_0_react___default.a.createClass({
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__RouterContext__ = __webpack_require__(152);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__RouteUtils__ = __webpack_require__(34);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__RouterUtils__ = __webpack_require__(256);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__routerWarning__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__routerWarning__ = __webpack_require__(60);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _objectWithoutProperties(obj, keys) { var target = {}; for (var i in obj) { if (keys.indexOf(i) >= 0) continue; if (!Object.prototype.hasOwnProperty.call(obj, i)) continue; target[i] = obj[i]; } return target; }
@@ -92014,7 +92078,7 @@ function runLeaveHooks(routes, prevState) {
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react__ = __webpack_require__(1);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_react___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_react__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__RouterContext__ = __webpack_require__(152);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__routerWarning__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__routerWarning__ = __webpack_require__(60);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 
@@ -92075,7 +92139,7 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PatternUtils__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PatternUtils__ = __webpack_require__(59);
 
 
 function routeParamsChanged(route, prevState, nextState) {
@@ -92196,7 +92260,7 @@ function getComponents(nextState, callback) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PatternUtils__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PatternUtils__ = __webpack_require__(59);
 
 
 /**
@@ -92236,7 +92300,7 @@ function getRouteParams(route, params) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PatternUtils__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__PatternUtils__ = __webpack_require__(59);
 /* harmony export (immutable) */ __webpack_exports__["a"] = isActive;
 var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
@@ -92461,8 +92525,8 @@ function match(_ref, callback) {
 "use strict";
 /* WEBPACK VAR INJECTION */(function(process) {/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__AsyncUtils__ = __webpack_require__(149);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__PromiseUtils__ = __webpack_require__(254);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PatternUtils__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__routerWarning__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__PatternUtils__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__routerWarning__ = __webpack_require__(60);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__RouteUtils__ = __webpack_require__(34);
 /* harmony export (immutable) */ __webpack_exports__["a"] = matchRoutes;
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
@@ -92806,7 +92870,7 @@ function withRouter(WrappedComponent, options) {
 
 
 
-var _prodInvariant = __webpack_require__(46);
+var _prodInvariant = __webpack_require__(47);
 
 var invariant = __webpack_require__(3);
 
@@ -93249,7 +93313,7 @@ module.exports = ReactCSSTransitionGroupChild;
 
 
 var PooledClass = __webpack_require__(628);
-var ReactElement = __webpack_require__(45);
+var ReactElement = __webpack_require__(46);
 
 var emptyFunction = __webpack_require__(19);
 var traverseAllChildren = __webpack_require__(266);
@@ -93444,15 +93508,15 @@ module.exports = ReactChildren;
 
 
 
-var _prodInvariant = __webpack_require__(46),
+var _prodInvariant = __webpack_require__(47),
     _assign = __webpack_require__(7);
 
 var ReactComponent = __webpack_require__(153);
-var ReactElement = __webpack_require__(45);
+var ReactElement = __webpack_require__(46);
 var ReactPropTypeLocationNames = __webpack_require__(155);
 var ReactNoopUpdateQueue = __webpack_require__(154);
 
-var emptyObject = __webpack_require__(51);
+var emptyObject = __webpack_require__(52);
 var invariant = __webpack_require__(3);
 var warning = __webpack_require__(4);
 
@@ -94167,7 +94231,7 @@ module.exports = ReactClass;
 
 
 
-var ReactElement = __webpack_require__(45);
+var ReactElement = __webpack_require__(46);
 
 /**
  * Create a factory that creates HTML tag elements.
@@ -94343,7 +94407,7 @@ module.exports = ReactDOMFactories;
 
 
 
-var ReactElement = __webpack_require__(45);
+var ReactElement = __webpack_require__(46);
 var ReactPropTypeLocationNames = __webpack_require__(155);
 var ReactPropTypesSecret = __webpack_require__(264);
 
@@ -94788,7 +94852,7 @@ var _assign = __webpack_require__(7);
 var ReactComponent = __webpack_require__(153);
 var ReactNoopUpdateQueue = __webpack_require__(154);
 
-var emptyObject = __webpack_require__(51);
+var emptyObject = __webpack_require__(52);
 
 /**
  * Base class helpers for the updating state of a component.
@@ -95270,7 +95334,7 @@ module.exports = '15.4.2';
 
 
 
-var _prodInvariant = __webpack_require__(46);
+var _prodInvariant = __webpack_require__(47);
 
 var ReactPropTypeLocationNames = __webpack_require__(155);
 var ReactPropTypesSecret = __webpack_require__(264);
@@ -95432,7 +95496,7 @@ module.exports = flattenChildren;
 /* 643 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(47)
+module.exports = __webpack_require__(48)
 
 
 /***/ }),
@@ -95518,14 +95582,14 @@ module.exports = __webpack_require__(267)
 
 /* WEBPACK VAR INJECTION */(function(process) {var Stream = (function (){
   try {
-    return __webpack_require__(61); // hack to fix a circular dependency issue when used with browserify
+    return __webpack_require__(62); // hack to fix a circular dependency issue when used with browserify
   } catch(_){}
 }());
 exports = module.exports = __webpack_require__(268);
 exports.Stream = Stream || exports;
 exports.Readable = exports;
 exports.Writable = __webpack_require__(159);
-exports.Duplex = __webpack_require__(47);
+exports.Duplex = __webpack_require__(48);
 exports.Transform = __webpack_require__(158);
 exports.PassThrough = __webpack_require__(267);
 
@@ -100617,7 +100681,7 @@ exports.sha512 = __webpack_require__(282)
  */
 
 var inherits = __webpack_require__(5)
-var Hash = __webpack_require__(60)
+var Hash = __webpack_require__(61)
 
 var K = [
   0x5a827999, 0x6ed9eba1, 0x8f1bbcdc | 0, 0xca62c1d6 | 0
@@ -100718,7 +100782,7 @@ module.exports = Sha
  */
 
 var inherits = __webpack_require__(5)
-var Hash = __webpack_require__(60)
+var Hash = __webpack_require__(61)
 
 var K = [
   0x5a827999, 0x6ed9eba1, 0x8f1bbcdc | 0, 0xca62c1d6 | 0
@@ -100823,7 +100887,7 @@ module.exports = Sha1
 
 var inherits = __webpack_require__(5)
 var Sha256 = __webpack_require__(281)
-var Hash = __webpack_require__(60)
+var Hash = __webpack_require__(61)
 
 var W = new Array(64)
 
@@ -100874,7 +100938,7 @@ module.exports = Sha224
 
 /* WEBPACK VAR INJECTION */(function(Buffer) {var inherits = __webpack_require__(5)
 var SHA512 = __webpack_require__(282)
-var Hash = __webpack_require__(60)
+var Hash = __webpack_require__(61)
 
 var W = new Array(160)
 

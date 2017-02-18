@@ -349,11 +349,14 @@ export function initializeLearningState() {
    return (dispatch, getState) => {
 
       const state = getState();
-
+      
       let defaultKeys = _.filter(state.main.keys, {
          row: 'middle',
          type: 'letter'
       });
+
+
+      console.log('defaultKeys', defaultKeys);
 
       let size = _(defaultKeys)
         .map(o => {

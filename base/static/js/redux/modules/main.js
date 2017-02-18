@@ -13,8 +13,8 @@ const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
 import keyboards from '../../constants/keyboards';
 import _ from 'lodash';
 
-import {typeTextMode, updateCharToType as updateCharToTypeTextMode} from './text-mode';
-import {typeLearningMode, updateCharToType as updateCharToTypeLearningMode} from './learning-mode';
+import {typeTextMode} from './text-mode';
+import {typeLearningMode} from './learning-mode';
 import {getIdsFromCharacter, sliceChar} from '../../utils';
 
 
@@ -181,25 +181,6 @@ export function addErrorType() {
    return {
       type: ADD_ERROR_TYPE
    };
-}
-
-export function setModeAndUpdateKeysToType(mode) {
-
-   return (dispatch, getState) => {
-
-      dispatch(setMode(mode));
-
-      switch (mode) {
-         case 'text':
-            dispatch(updateCharToTypeTextMode());
-            break;
-         case 'learning':
-            dispatch(updateCharToTypeLearningMode());
-            break;
-      }
-
-   }
-
 }
 
 export function typeChar(char) {

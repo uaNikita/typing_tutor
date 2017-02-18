@@ -2,8 +2,8 @@ import {connect} from 'react-redux';
 import {map} from 'lodash';
 import TextMode from '../components/TextMode.jsx';
 
-import {selectText} from '../redux/modules/text-mode';
-import {setModeAndUpdateKeysToType} from '../redux/modules/main';
+import {setMode} from '../redux/modules/main';
+import {selectText, updateCharToType} from '../redux/modules/text-mode';
 
 const mapStateToProps = (state) => {
 
@@ -29,7 +29,11 @@ const mapDispatchToProps = (dispatch) => {
          dispatch(selectText(textId))
       },
       setMode: (mode) => {
-         dispatch(setModeAndUpdateKeysToType(mode))
+
+         dispatch(setMode(mode));
+
+         dispatch(updateCharToType());
+
       }
    }
 }

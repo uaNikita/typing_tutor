@@ -3,7 +3,9 @@ import {assign, concat} from 'lodash';
 
 import LearningMode from '../components/LearningMode.jsx';
 
-import {setModeAndUpdateKeysToType} from '../redux/modules/main';
+import {setMode} from '../redux/modules/main';
+import {updateCharToType} from '../redux/modules/learning-mode';
+
 const mapStateToProps = (state) => {
 
    return {
@@ -17,7 +19,11 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
    return {
       setMode: (mode) => {
-         dispatch(setModeAndUpdateKeysToType(mode));
+
+         dispatch(setMode(mode));
+
+         dispatch(updateCharToType());
+
       }
    };
 };

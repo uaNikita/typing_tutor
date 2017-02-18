@@ -13,7 +13,6 @@ class LearningFingers extends Component {
 
       const {fingersSet, setSizeFingers, maxLettersInWord} = this.props;
 
-
       let $noUiValueMaxLettersInWord = $('<span class="noUi-value" />');
 
       // max word length range
@@ -121,7 +120,9 @@ class LearningFingers extends Component {
                  Max word length:
               </label>
               <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-                 <div className="settings-learning__range settings-learning__max-word-length" ref={(c) => this._maxLettersInWordRange = c }></div>
+                 <div
+                   className="settings-learning__range settings-learning__max-word-length"
+                   ref={(c) => this._maxLettersInWordRange = c }></div>
               </div>
            </div>
 
