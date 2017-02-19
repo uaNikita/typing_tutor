@@ -26,7 +26,7 @@ if (env === 'build') {
             'NODE_ENV': JSON.stringify('production')
          }
       }),
-      new webpack.NoErrorsPlugin(),
+      new webpack.NoEmitOnErrorsPlugin(),
       new webpack.optimize.UglifyJsPlugin({
          compressor: {
             warnings: false

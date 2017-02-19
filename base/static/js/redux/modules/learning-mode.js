@@ -276,17 +276,9 @@ export function updateFingersLesson() {
 export function updateFreeLesson() {
    return (dispatch, getState) => {
 
-      let state = getState();
+      let learningState = getState().learningMode;
 
-      let keys = state.main.keys;
-
-      let fingersSet = getFingersSet(keys);
-
-      fingersSet.splice(state.learningMode.setSizeFingers);
-
-      fingersSet = _.concat.apply(null, fingersSet);
-
-      let lesson = generateLesson(state.learningMode.maxLettersInWordFingers, fingersSet);
+      let lesson = generateLesson(learningState.maxLettersInWordFree, learningState.lettersFree);
 
       dispatch(setLessonFree(lesson));
    };
@@ -294,8 +286,6 @@ export function updateFreeLesson() {
 
 export function updateCharToType() {
    return (dispatch, getState) => {
-
-      console.log('updateCharToType');
 
       let state = getState();
 
