@@ -27,7 +27,9 @@ import {
 import {
    initializeLearningState,
    refreshCurrentLesson,
-   selectMode as selectLearningMode
+   setMode as setLearningMode,
+   updateCurrentLessonFromCurrentMode as updateCurrentLearningLessonFromCurrentLearningMode,
+   updateCharToType as updateCharToTypeFromLearningMode,
 } from '../redux/modules/learning-mode';
 
 import { initializeTextState } from '../redux/modules/text-mode';
@@ -131,16 +133,36 @@ export default class App extends Component {
 
    _onLearningModeFingersEnter() {
 
-      if (store.getState().learningMode.mode !== 'fingers') {
-         store.dispatch(selectLearningMode('fingers'));
+      const state = store.getState();
+
+      if (state.learningMode.mode !== 'fingers') {
+
+         store.dispatch(setLearningMode('fingers'));
+
+         store.dispatch(updateCurrentLearningLessonFromCurrentLearningMode());
+
+         if (state.main.mode === 'learning') {
+            store.dispatch(updateCharToTypeFromLearningMode());
+         }
+
       }
 
    }
 
    _onLearningModeFreeEnter(nextState, replace) {
 
-      if (store.getState().learningMode.mode !== 'free') {
-         store.dispatch(selectLearningMode('free'));
+      const state = store.getState();
+
+      if (state.learningMode.mode !== 'free') {
+
+         store.dispatch(setLearningMode('free'));
+
+         store.dispatch(updateCurrentLearningLessonFromCurrentLearningMode());
+
+         if (state.main.mode === 'learning') {
+            store.dispatch(updateCharToTypeFromLearningMode());
+         }
+
       }
 
    }

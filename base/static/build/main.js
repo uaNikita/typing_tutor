@@ -25708,9 +25708,9 @@ exports.setLettersFree = setLettersFree;
 exports.addLetterToFreeLetters = addLetterToFreeLetters;
 exports.removeLetterFromFreeLetters = removeLetterFromFreeLetters;
 exports.typeOnLesson = typeOnLesson;
-exports.selectMode = selectMode;
-exports.generateAndSetFingersLesson = generateAndSetFingersLesson;
-exports.generateAndSetFreeLesson = generateAndSetFreeLesson;
+exports.updateCurrentLessonFromCurrentMode = updateCurrentLessonFromCurrentMode;
+exports.updateFingersLesson = updateFingersLesson;
+exports.updateFreeLesson = updateFreeLesson;
 exports.updateCharToType = updateCharToType;
 exports.typeLearningMode = typeLearningMode;
 exports.initializeLearningState = initializeLearningState;
@@ -25928,33 +25928,28 @@ function typeOnLesson() {
    };
 }
 
-function selectMode(mode) {
+function updateCurrentLessonFromCurrentMode() {
    return function (dispatch, getState) {
 
-      dispatch(setMode(mode));
+      var learningState = getState().learningMode;
 
-      var state = getState();
-      var lesson = '';
+      var lesson = void 0;
 
-      switch (mode) {
+      switch (learningState.mode) {
          case 'fingers':
-
-            lesson = state.learningMode.lessonFingers;
-
+            lesson = learningState.lessonFingers;
             break;
 
          case 'free':
-
-            lesson = state.learningMode.lessonFree;
-
+            lesson = learningState.lessonFree;
             break;
       }
 
       dispatch(setCurrentLesson(lesson));
    };
-}
+};
 
-function generateAndSetFingersLesson() {
+function updateFingersLesson() {
    return function (dispatch, getState) {
 
       var state = getState();
@@ -25970,26 +25965,32 @@ function generateAndSetFingersLesson() {
       var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFingers, fingersSet);
 
       dispatch(setLessonFingers(lesson));
-
-      dispatch(setCurrentLesson(lesson));
    };
 }
 
-function generateAndSetFreeLesson() {
+function updateFreeLesson() {
    return function (dispatch, getState) {
 
       var state = getState();
 
-      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFree, state.learningMode.lettersFree);
+      var keys = state.main.keys;
+
+      var fingersSet = (0, _utils.getFingersSet)(keys);
+
+      fingersSet.splice(state.learningMode.setSizeFingers);
+
+      fingersSet = _lodash2.default.concat.apply(null, fingersSet);
+
+      var lesson = (0, _utils.generateLesson)(state.learningMode.maxLettersInWordFingers, fingersSet);
 
       dispatch(setLessonFree(lesson));
-
-      dispatch(setCurrentLesson(lesson));
    };
 }
 
 function updateCharToType() {
    return function (dispatch, getState) {
+
+      console.log('updateCharToType');
 
       var state = getState();
 
@@ -26030,7 +26031,22 @@ function typeLearningMode(char) {
          }
       } else {
 
-         dispatch(generateLessonFromCurrentMode());
+         switch (state.learningMode.mode) {
+            case 'fingers':
+
+               dispatch(updateFingersLesson());
+
+               dispatch(setCurrentLesson(getState().learningMode.lessonFingers));
+
+               break;
+            case 'free':
+
+               dispatch(updateFreeLesson());
+
+               dispatch(setCurrentLesson(getState().learningMode.lessonFree));
+
+               break;
+         }
       }
    };
 }
@@ -26044,8 +26060,6 @@ function initializeLearningState() {
          row: 'middle',
          type: 'letter'
       });
-
-      console.log('defaultKeys', defaultKeys);
 
       var size = (0, _lodash2.default)(defaultKeys).map(function (o) {
          return {
@@ -60691,16 +60705,34 @@ var App = function (_Component) {
       key: '_onLearningModeFingersEnter',
       value: function _onLearningModeFingersEnter() {
 
-         if (_store2.default.getState().learningMode.mode !== 'fingers') {
-            _store2.default.dispatch((0, _learningMode.selectMode)('fingers'));
+         var state = _store2.default.getState();
+
+         if (state.learningMode.mode !== 'fingers') {
+
+            _store2.default.dispatch((0, _learningMode.setMode)('fingers'));
+
+            _store2.default.dispatch((0, _learningMode.updateCurrentLessonFromCurrentMode)());
+
+            if (state.main.mode === 'learning') {
+               _store2.default.dispatch((0, _learningMode.updateCharToType)());
+            }
          }
       }
    }, {
       key: '_onLearningModeFreeEnter',
       value: function _onLearningModeFreeEnter(nextState, replace) {
 
-         if (_store2.default.getState().learningMode.mode !== 'free') {
-            _store2.default.dispatch((0, _learningMode.selectMode)('free'));
+         var state = _store2.default.getState();
+
+         if (state.learningMode.mode !== 'free') {
+
+            _store2.default.dispatch((0, _learningMode.setMode)('free'));
+
+            _store2.default.dispatch((0, _learningMode.updateCurrentLessonFromCurrentMode)());
+
+            if (state.main.mode === 'learning') {
+               _store2.default.dispatch((0, _learningMode.updateCharToType)());
+            }
          }
       }
    }, {
@@ -64790,56 +64822,56 @@ exports.default = [{
    key: '-',
    shiftKey: '2',
    type: 'number',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: '-'
 }, {
    key: '/',
    shiftKey: '3',
    type: 'number',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: '/'
 }, {
    key: '"',
    shiftKey: '4',
    type: 'number',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: '"'
 }, {
    key: ':',
    shiftKey: '5',
    type: 'number',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: ':'
 }, {
    key: ',',
    shiftKey: '6',
    type: 'number',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: ','
 }, {
    key: '.',
    shiftKey: '7',
    type: 'number',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: '.'
 }, {
    key: '_',
    shiftKey: '8',
    type: 'number',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: '_'
 }, {
    key: '?',
    shiftKey: '9',
    type: 'number',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: '?'
 }, {
@@ -64886,7 +64918,7 @@ exports.default = [{
    shiftKey: 'Ц',
    type: 'letter',
    row: 'top',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: 'ц'
 }, {
@@ -64894,7 +64926,7 @@ exports.default = [{
    shiftKey: 'У',
    type: 'letter',
    row: 'top',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: 'у'
 }, {
@@ -64902,7 +64934,7 @@ exports.default = [{
    shiftKey: 'К',
    type: 'letter',
    row: 'top',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'к'
 }, {
@@ -64910,7 +64942,7 @@ exports.default = [{
    shiftKey: 'Е',
    type: 'letter',
    row: 'top',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'е'
 }, {
@@ -64918,7 +64950,7 @@ exports.default = [{
    shiftKey: 'Н',
    type: 'letter',
    row: 'top',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'н'
 }, {
@@ -64926,7 +64958,7 @@ exports.default = [{
    shiftKey: 'Г',
    type: 'letter',
    row: 'top',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'г'
 }, {
@@ -64934,7 +64966,7 @@ exports.default = [{
    shiftKey: 'Ш',
    type: 'letter',
    row: 'top',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: 'ш'
 }, {
@@ -64942,7 +64974,7 @@ exports.default = [{
    shiftKey: 'Щ',
    type: 'letter',
    row: 'top',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: 'щ'
 }, {
@@ -64994,7 +65026,7 @@ exports.default = [{
    shiftKey: 'Ы',
    type: 'letter',
    row: 'middle',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: 'ы'
 }, {
@@ -65002,7 +65034,7 @@ exports.default = [{
    shiftKey: 'В',
    type: 'letter',
    row: 'middle',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: 'в'
 }, {
@@ -65010,7 +65042,7 @@ exports.default = [{
    shiftKey: 'А',
    type: 'letter',
    row: 'middle',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'а'
 }, {
@@ -65018,7 +65050,7 @@ exports.default = [{
    shiftKey: 'П',
    type: 'letter',
    row: 'middle',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'п'
 }, {
@@ -65026,7 +65058,7 @@ exports.default = [{
    shiftKey: 'Р',
    type: 'letter',
    row: 'middle',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'р'
 }, {
@@ -65034,7 +65066,7 @@ exports.default = [{
    shiftKey: 'О',
    type: 'letter',
    row: 'middle',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'о'
 }, {
@@ -65042,7 +65074,7 @@ exports.default = [{
    shiftKey: 'Л',
    type: 'letter',
    row: 'middle',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: 'л'
 }, {
@@ -65050,7 +65082,7 @@ exports.default = [{
    shiftKey: 'Д',
    type: 'letter',
    row: 'middle',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: 'д'
 }, {
@@ -65092,7 +65124,7 @@ exports.default = [{
    shiftKey: 'Ч',
    type: 'letter',
    row: 'bottom',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: 'ч'
 }, {
@@ -65100,7 +65132,7 @@ exports.default = [{
    shiftKey: 'С',
    type: 'letter',
    row: 'bottom',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: 'с'
 }, {
@@ -65108,7 +65140,7 @@ exports.default = [{
    shiftKey: 'М',
    type: 'letter',
    row: 'bottom',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'м'
 }, {
@@ -65116,7 +65148,7 @@ exports.default = [{
    shiftKey: 'И',
    type: 'letter',
    row: 'bottom',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'и'
 }, {
@@ -65124,7 +65156,7 @@ exports.default = [{
    shiftKey: 'Т',
    type: 'letter',
    row: 'bottom',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'т'
 }, {
@@ -65132,7 +65164,7 @@ exports.default = [{
    shiftKey: 'Ь',
    type: 'letter',
    row: 'bottom',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'ь'
 }, {
@@ -65140,7 +65172,7 @@ exports.default = [{
    shiftKey: 'Б',
    type: 'letter',
    row: 'bottom',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: 'б'
 }, {
@@ -65148,7 +65180,7 @@ exports.default = [{
    shiftKey: 'Ю',
    type: 'letter',
    row: 'bottom',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: 'ю'
 }, {
@@ -65198,56 +65230,56 @@ exports.default = [{
    key: '2',
    shiftKey: '"',
    type: 'number',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: '2'
 }, {
    key: '3',
    shiftKey: '№',
    type: 'number',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: '3'
 }, {
    key: '4',
    shiftKey: ';',
    type: 'number',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: '4'
 }, {
    key: '5',
    shiftKey: '%',
    type: 'number',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: '5'
 }, {
    key: '6',
    shiftKey: ':',
    type: 'number',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: '6'
 }, {
    key: '7',
    shiftKey: '?',
    type: 'number',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: '7'
 }, {
    key: '8',
    shiftKey: '*',
    type: 'number',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: '8'
 }, {
    key: '9',
    shiftKey: '(',
    type: 'number',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: '9'
 }, {
@@ -65294,7 +65326,7 @@ exports.default = [{
    shiftKey: 'Ц',
    type: 'letter',
    row: 'top',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: 'ц'
 }, {
@@ -65302,7 +65334,7 @@ exports.default = [{
    shiftKey: 'У',
    type: 'letter',
    row: 'top',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: 'у'
 }, {
@@ -65310,7 +65342,7 @@ exports.default = [{
    shiftKey: 'К',
    type: 'letter',
    row: 'top',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'к'
 }, {
@@ -65318,7 +65350,7 @@ exports.default = [{
    shiftKey: 'Е',
    type: 'letter',
    row: 'top',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'е'
 }, {
@@ -65326,7 +65358,7 @@ exports.default = [{
    shiftKey: 'Н',
    type: 'letter',
    row: 'top',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'н'
 }, {
@@ -65334,7 +65366,7 @@ exports.default = [{
    shiftKey: 'Г',
    type: 'letter',
    row: 'top',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'г'
 }, {
@@ -65342,7 +65374,7 @@ exports.default = [{
    shiftKey: 'Ш',
    type: 'letter',
    row: 'top',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: 'ш'
 }, {
@@ -65350,7 +65382,7 @@ exports.default = [{
    shiftKey: 'Щ',
    type: 'letter',
    row: 'top',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: 'щ'
 }, {
@@ -65402,7 +65434,7 @@ exports.default = [{
    shiftKey: 'Ы',
    type: 'letter',
    row: 'middle',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: 'ы'
 }, {
@@ -65410,7 +65442,7 @@ exports.default = [{
    shiftKey: 'В',
    type: 'letter',
    row: 'middle',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: 'в'
 }, {
@@ -65418,7 +65450,7 @@ exports.default = [{
    shiftKey: 'А',
    type: 'letter',
    row: 'middle',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'а'
 }, {
@@ -65426,7 +65458,7 @@ exports.default = [{
    shiftKey: 'П',
    type: 'letter',
    row: 'middle',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'п'
 }, {
@@ -65434,7 +65466,7 @@ exports.default = [{
    shiftKey: 'Р',
    type: 'letter',
    row: 'middle',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'р'
 }, {
@@ -65442,7 +65474,7 @@ exports.default = [{
    shiftKey: 'О',
    type: 'letter',
    row: 'middle',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'о'
 }, {
@@ -65450,7 +65482,7 @@ exports.default = [{
    shiftKey: 'Л',
    type: 'letter',
    row: 'middle',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: 'л'
 }, {
@@ -65458,7 +65490,7 @@ exports.default = [{
    shiftKey: 'Д',
    type: 'letter',
    row: 'middle',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: 'д'
 }, {
@@ -65500,7 +65532,7 @@ exports.default = [{
    shiftKey: 'Ч',
    type: 'letter',
    row: 'bottom',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: 'ч'
 }, {
@@ -65508,7 +65540,7 @@ exports.default = [{
    shiftKey: 'С',
    type: 'letter',
    row: 'bottom',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: 'с'
 }, {
@@ -65516,7 +65548,7 @@ exports.default = [{
    shiftKey: 'М',
    type: 'letter',
    row: 'bottom',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'м'
 }, {
@@ -65524,7 +65556,7 @@ exports.default = [{
    shiftKey: 'И',
    type: 'letter',
    row: 'bottom',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'и'
 }, {
@@ -65532,7 +65564,7 @@ exports.default = [{
    shiftKey: 'Т',
    type: 'letter',
    row: 'bottom',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'т'
 }, {
@@ -65540,7 +65572,7 @@ exports.default = [{
    shiftKey: 'Ь',
    type: 'letter',
    row: 'bottom',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'ь'
 }, {
@@ -65548,7 +65580,7 @@ exports.default = [{
    shiftKey: 'Б',
    type: 'letter',
    row: 'bottom',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: 'б'
 }, {
@@ -65556,7 +65588,7 @@ exports.default = [{
    shiftKey: 'Ю',
    type: 'letter',
    row: 'bottom',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: 'ю'
 }, {
@@ -66214,15 +66246,24 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
    return {
       setFingersSetSize: function setFingersSetSize(size) {
+
          dispatch((0, _learningMode.setSetSizeFingers)(size));
 
-         dispatch((0, _learningMode.generateAndSetFingersLesson)(size));
+         dispatch((0, _learningMode.updateFingersLesson)());
+
+         dispatch((0, _learningMode.updateCurrentLessonFromCurrentMode)());
+
+         dispatch((0, _learningMode.updateCharToType)());
       },
       setMaxLettersInWord: function setMaxLettersInWord(length) {
 
          dispatch((0, _learningMode.setMaxLettersInWordFingers)(length));
 
-         dispatch((0, _learningMode.generateAndSetFingersLesson)());
+         dispatch((0, _learningMode.updateFingersLesson)());
+
+         dispatch((0, _learningMode.updateCurrentLessonFromCurrentMode)());
+
+         dispatch((0, _learningMode.updateCharToType)());
       }
    };
 };
@@ -66263,20 +66304,34 @@ var mapStateToProps = function mapStateToProps(state) {
 var mapDispatchToProps = function mapDispatchToProps(dispatch) {
    return {
       addLetter: function addLetter(letter) {
+
          dispatch((0, _learningMode.addLetterToFreeLetters)(letter));
 
-         dispatch((0, _learningMode.generateAndSetFreeLesson)());
+         dispatch((0, _learningMode.updateFreeLesson)());
+
+         dispatch((0, _learningMode.updateCurrentLessonFromCurrentMode)());
+
+         dispatch((0, _learningMode.updateCharToType)());
       },
       removeLetter: function removeLetter(letter) {
+
          dispatch((0, _learningMode.removeLetterFromFreeLetters)(letter));
 
-         dispatch((0, _learningMode.generateAndSetFreeLesson)());
+         dispatch((0, _learningMode.updateFreeLesson)());
+
+         dispatch((0, _learningMode.updateCurrentLessonFromCurrentMode)());
+
+         dispatch((0, _learningMode.updateCharToType)());
       },
       setMaxLettersInWord: function setMaxLettersInWord(length) {
 
-         dispatch((0, _learningMode.setMaxLettersInWordFingers)(length));
+         dispatch((0, _learningMode.setMaxLettersInWordFree)(length));
 
-         dispatch((0, _learningMode.generateAndSetFreeLesson)());
+         dispatch((0, _learningMode.updateFreeLesson)());
+
+         dispatch((0, _learningMode.updateCurrentLessonFromCurrentMode)());
+
+         dispatch((0, _learningMode.updateCharToType)());
       }
    };
 };

@@ -16,56 +16,56 @@ export default [{
    key: '-',
    shiftKey: '2',
    type: 'number',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: '-'
 }, {
    key: '/',
    shiftKey: '3',
    type: 'number',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: '/'
 }, {
    key: '"',
    shiftKey: '4',
    type: 'number',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: '"'
 }, {
    key: ':',
    shiftKey: '5',
    type: 'number',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: ':'
 }, {
    key: ',',
    shiftKey: '6',
    type: 'number',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: ','
 }, {
    key: '.',
    shiftKey: '7',
    type: 'number',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: '.'
 }, {
    key: '_',
    shiftKey: '8',
    type: 'number',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: '_'
 }, {
    key: '?',
    shiftKey: '9',
    type: 'number',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: '?'
 }, {
@@ -112,7 +112,7 @@ export default [{
    shiftKey: 'Ц',
    type: 'letter',
    row: 'top',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: 'ц'
 }, {
@@ -120,7 +120,7 @@ export default [{
    shiftKey: 'У',
    type: 'letter',
    row: 'top',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: 'у'
 }, {
@@ -128,7 +128,7 @@ export default [{
    shiftKey: 'К',
    type: 'letter',
    row: 'top',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'к'
 }, {
@@ -136,7 +136,7 @@ export default [{
    shiftKey: 'Е',
    type: 'letter',
    row: 'top',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'е'
 }, {
@@ -144,7 +144,7 @@ export default [{
    shiftKey: 'Н',
    type: 'letter',
    row: 'top',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'н'
 }, {
@@ -152,7 +152,7 @@ export default [{
    shiftKey: 'Г',
    type: 'letter',
    row: 'top',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'г'
 }, {
@@ -160,7 +160,7 @@ export default [{
    shiftKey: 'Ш',
    type: 'letter',
    row: 'top',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: 'ш'
 }, {
@@ -168,7 +168,7 @@ export default [{
    shiftKey: 'Щ',
    type: 'letter',
    row: 'top',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: 'щ'
 }, {
@@ -220,7 +220,7 @@ export default [{
    shiftKey: 'Ы',
    type: 'letter',
    row: 'middle',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: 'ы'
 }, {
@@ -228,7 +228,7 @@ export default [{
    shiftKey: 'В',
    type: 'letter',
    row: 'middle',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: 'в'
 }, {
@@ -236,7 +236,7 @@ export default [{
    shiftKey: 'А',
    type: 'letter',
    row: 'middle',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'а'
 }, {
@@ -244,7 +244,7 @@ export default [{
    shiftKey: 'П',
    type: 'letter',
    row: 'middle',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'п'
 }, {
@@ -252,7 +252,7 @@ export default [{
    shiftKey: 'Р',
    type: 'letter',
    row: 'middle',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'р'
 }, {
@@ -260,7 +260,7 @@ export default [{
    shiftKey: 'О',
    type: 'letter',
    row: 'middle',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'о'
 }, {
@@ -268,7 +268,7 @@ export default [{
    shiftKey: 'Л',
    type: 'letter',
    row: 'middle',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: 'л'
 }, {
@@ -276,7 +276,7 @@ export default [{
    shiftKey: 'Д',
    type: 'letter',
    row: 'middle',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: 'д'
 }, {
@@ -318,7 +318,7 @@ export default [{
    shiftKey: 'Ч',
    type: 'letter',
    row: 'bottom',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'left',
    id: 'ч'
 }, {
@@ -326,7 +326,7 @@ export default [{
    shiftKey: 'С',
    type: 'letter',
    row: 'bottom',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'left',
    id: 'с'
 }, {
@@ -334,7 +334,7 @@ export default [{
    shiftKey: 'М',
    type: 'letter',
    row: 'bottom',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'м'
 }, {
@@ -342,7 +342,7 @@ export default [{
    shiftKey: 'И',
    type: 'letter',
    row: 'bottom',
-   finger: 'left-index-finger',
+   finger: 'index',
    hand: 'left',
    id: 'и'
 }, {
@@ -350,7 +350,7 @@ export default [{
    shiftKey: 'Т',
    type: 'letter',
    row: 'bottom',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'т'
 }, {
@@ -358,7 +358,7 @@ export default [{
    shiftKey: 'Ь',
    type: 'letter',
    row: 'bottom',
-   finger: 'right-index-finger',
+   finger: 'index',
    hand: 'right',
    id: 'ь'
 }, {
@@ -366,7 +366,7 @@ export default [{
    shiftKey: 'Б',
    type: 'letter',
    row: 'bottom',
-   finger: 'middle-finger',
+   finger: 'middle',
    hand: 'right',
    id: 'б'
 }, {
@@ -374,7 +374,7 @@ export default [{
    shiftKey: 'Ю',
    type: 'letter',
    row: 'bottom',
-   finger: 'ring-finger',
+   finger: 'ring',
    hand: 'right',
    id: 'ю'
 }, {

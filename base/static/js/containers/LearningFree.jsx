@@ -4,8 +4,10 @@ import LearningFree from '../components/LearningFree.jsx';
 import {
    addLetterToFreeLetters,
    removeLetterFromFreeLetters,
-   generateAndSetFreeLesson,
-   setMaxLettersInWordFingers
+   setMaxLettersInWordFree,
+   updateFreeLesson,
+   updateCurrentLessonFromCurrentMode,
+   updateCharToType
 } from '../redux/modules/learning-mode';
 
 const mapStateToProps = (state) => {
@@ -19,20 +21,37 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
    return {
       addLetter: (letter) => {
+
          dispatch(addLetterToFreeLetters(letter));
 
-         dispatch(generateAndSetFreeLesson());
+         dispatch(updateFreeLesson());
+
+         dispatch(updateCurrentLessonFromCurrentMode());
+
+         dispatch(updateCharToType());
+
       },
       removeLetter: (letter) => {
+
          dispatch(removeLetterFromFreeLetters(letter));
 
-         dispatch(generateAndSetFreeLesson());
+         dispatch(updateFreeLesson());
+
+         dispatch(updateCurrentLessonFromCurrentMode());
+
+         dispatch(updateCharToType());
+
       },
       setMaxLettersInWord: (length) => {
 
-         dispatch(setMaxLettersInWordFingers(length));
+         dispatch(setMaxLettersInWordFree(length));
 
-         dispatch(generateAndSetFreeLesson());
+         dispatch(updateFreeLesson());
+
+         dispatch(updateCurrentLessonFromCurrentMode());
+
+         dispatch(updateCharToType());
+
       }
    };
 };

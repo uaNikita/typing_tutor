@@ -3,8 +3,10 @@ import {find, concat} from 'lodash';
 import LearningFingers from '../components/LearningFingers.jsx';
 import {
    setSetSizeFingers,
-   generateAndSetFingersLesson,
-   setMaxLettersInWordFingers
+   setMaxLettersInWordFingers,
+   updateFingersLesson,
+   updateCurrentLessonFromCurrentMode,
+   updateCharToType
 } from '../redux/modules/learning-mode';
 
 import {getFingersSet} from "../utils";
@@ -14,9 +16,9 @@ const mapStateToProps = (state) => {
    const keys = state.main.keys;
 
    return {
-      setSizeFingers  : state.learningMode.setSizeFingers,
+      setSizeFingers: state.learningMode.setSizeFingers,
       maxLettersInWord: state.learningMode.maxLettersInWordFingers,
-      fingersSet      : getFingersSet(keys),
+      fingersSet: getFingersSet(keys),
       keys
    };
 
@@ -25,15 +27,25 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
    return {
       setFingersSetSize: (size) => {
+
          dispatch(setSetSizeFingers(size));
 
-         dispatch(generateAndSetFingersLesson(size));
+         dispatch(updateFingersLesson());
+
+         dispatch(updateCurrentLessonFromCurrentMode());
+
+         dispatch(updateCharToType());
+
       },
-      setMaxLettersInWord : (length) => {
+      setMaxLettersInWord: (length) => {
 
          dispatch(setMaxLettersInWordFingers(length));
 
-         dispatch(generateAndSetFingersLesson());
+         dispatch(updateFingersLesson());
+
+         dispatch(updateCurrentLessonFromCurrentMode());
+
+         dispatch(updateCharToType());
 
       }
    };

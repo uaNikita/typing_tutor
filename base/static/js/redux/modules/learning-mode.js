@@ -231,34 +231,30 @@ export function typeOnLesson() {
    };
 }
 
-export function selectMode(mode) {
+
+export function updateCurrentLessonFromCurrentMode() {
    return (dispatch, getState) => {
 
-      dispatch(setMode(mode));
+      const learningState = getState().learningMode;
 
-      let state = getState();
-      let lesson = '';
+      let lesson;
 
-      switch (mode) {
+      switch (learningState.mode) {
          case 'fingers':
-
-            lesson = state.learningMode.lessonFingers;
-
+            lesson = learningState.lessonFingers;
             break;
 
          case 'free':
-
-            lesson = state.learningMode.lessonFree;
-
+            lesson = learningState.lessonFree;
             break;
       }
 
       dispatch(setCurrentLesson(lesson));
 
    };
-}
+};
 
-export function generateAndSetFingersLesson() {
+export function updateFingersLesson() {
    return (dispatch, getState) => {
 
       let state = getState();
@@ -274,26 +270,32 @@ export function generateAndSetFingersLesson() {
       let lesson = generateLesson(state.learningMode.maxLettersInWordFingers, fingersSet);
 
       dispatch(setLessonFingers(lesson));
-
-      dispatch(setCurrentLesson(lesson));
    };
 }
 
-export function generateAndSetFreeLesson() {
+export function updateFreeLesson() {
    return (dispatch, getState) => {
 
       let state = getState();
 
-      let lesson = generateLesson(state.learningMode.maxLettersInWordFree, state.learningMode.lettersFree);
+      let keys = state.main.keys;
+
+      let fingersSet = getFingersSet(keys);
+
+      fingersSet.splice(state.learningMode.setSizeFingers);
+
+      fingersSet = _.concat.apply(null, fingersSet);
+
+      let lesson = generateLesson(state.learningMode.maxLettersInWordFingers, fingersSet);
 
       dispatch(setLessonFree(lesson));
-
-      dispatch(setCurrentLesson(lesson));
    };
 }
 
 export function updateCharToType() {
    return (dispatch, getState) => {
+
+      console.log('updateCharToType');
 
       let state = getState();
 
@@ -303,7 +305,7 @@ export function updateCharToType() {
 
          idsChar = getIdsFromCharacter(state.main.keys, state.learningMode.lesson.last[0]);
       }
-      
+
       dispatch(setIdsCharToType(idsChar));
 
    };
@@ -312,7 +314,7 @@ export function updateCharToType() {
 export function typeLearningMode(char) {
    return (dispatch, getState) => {
 
-      let state = getState();
+      const state = getState();
 
       if (state.learningMode.lesson.last) {
 
@@ -338,7 +340,22 @@ export function typeLearningMode(char) {
 
       } else {
 
-         dispatch(generateLessonFromCurrentMode());
+         switch (state.learningMode.mode) {
+            case 'fingers':
+
+               dispatch(updateFingersLesson());
+
+               dispatch(setCurrentLesson(getState().learningMode.lessonFingers));
+
+               break;
+            case 'free':
+
+               dispatch(updateFreeLesson());
+
+               dispatch(setCurrentLesson(getState().learningMode.lessonFree));
+
+               break;
+         }
 
       }
 
@@ -349,14 +366,11 @@ export function initializeLearningState() {
    return (dispatch, getState) => {
 
       const state = getState();
-      
+
       let defaultKeys = _.filter(state.main.keys, {
          row: 'middle',
          type: 'letter'
       });
-
-
-      console.log('defaultKeys', defaultKeys);
 
       let size = _(defaultKeys)
         .map(o => {
