@@ -107,7 +107,10 @@ class TextMode extends Component {
                  Add new text
               </label>
               <div className="settings-text__item-ctrl">
-                 <AddTextForm className="settings-text__add-text-form" />
+                 <AddTextForm
+                   className="settings-text__add-text-form"
+                   onSubmit={ this._textFormHandleSubmit.bind(this) }
+                 />
               </div>
            </div>
 
@@ -116,6 +119,11 @@ class TextMode extends Component {
       )
    }
 
+
+   _textFormHandleSubmit() {
+      console.log(234);
+   }
+   
    _onSwitcherChange(e) {
 
       this.props.setMode('text');

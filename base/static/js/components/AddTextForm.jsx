@@ -1,140 +1,177 @@
 import React, {Component} from 'react';
+import {Field, reduxForm} from 'redux-form'
 
-import { uniq } from 'lodash';
+import _ from 'lodash';
 import classNames from 'classNames';
 
-import Control from './Control.jsx';
 
-class AddTextForm extends Component {
+const validCharacters = ['w', 's', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', ',', '.', '/', ';', ':', '"', "'", '\\', '|', '[', ']', '{', '}']
 
-  constructor(props) {
-    super(props);
+const handleSubmit = (e) => {
 
-    this.state = {
-      titleError: '',
-      textareaError: '',
-    };
+   e.preventDefault();
 
-    this._validCharacters = ['w', 's', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', ',', '.', '/', ';', ':', '"', "'", '\\', '|', '[', ']', '{', '}'];
-  }
 
-  componentDidMount() {
-    this._wasSubmit = false;
-  }
+   console.log('_handleSubmit');
 
-  handleSubmit(e) {
-
-    e.preventDefault();
-
-    if (!this._wasSubmit) {
-      this._wasSubmit = true;
-    }
-
-    if (this._validateForm()) {
-      this.props.onSubmit(this._title.refs.ctrl.value, this._textarea.refs.ctrl.value);
-
-      this._title.refs.ctrl.value = '';
-
-      this._textarea.refs.ctrl.value = '';
-    }
-
-  }
-
-  handleKeyUp() {
-
-    if (!this._wasSubmit) {
-      return;
-    }
-
-    this._validateForm();
-
-  }
-
-  render() {
-    const { className } = this.props;
-
-    return (
-      <form className={ classNames('add-text-form', className) } onSubmit={ this.handleSubmit.bind(this) }>
-        <Control
-          className="add-text-form__ctrl-full"
-          classNameCtrl="add-text-form__title"
-          el="input"
-          type="text"
-          error={ this.state.titleError }
-          ref={(c) => this._title = c }
-          onKeyUp={ this.handleKeyUp.bind(this) }
-          placeholder="Title"
-        />
-        <Control
-          className="add-text-form__ctrl-full"
-          classNameCtrl="add-text-form__textarea"
-          el="textarea"
-          error={ this.state.textareaError }
-          ref={ (c) => this._textarea = c }
-          onKeyUp={ this.handleKeyUp.bind(this) }
-          placeholder="Add text here"
-        />
-        <button className="button add-text-form__add" title="Add text">Add</button>
-      </form>
-    )
-
-  }
-
-  _getWrongCharsError(text) {
-    let re = new RegExp('[^\\' + this._validCharacters.join('\\') + ']', 'g');
-    let result = '';
-
-    let errorCharsResult = text.match(re);
-
-    if (errorCharsResult) {
-      errorCharsResult = uniq(errorCharsResult);
-
-      result = 'Title contains invalid character';
-
-      if (errorCharsResult.length > 1) {
-        result += 's';
-      }
-
-      result += ' - ' + errorCharsResult.join(', ');
-    }
-
-    return result;
-  }
-
-  _validateForm() {
-    let elTitle = this._title.refs.ctrl;
-    let elTextarea = this._textarea.refs.ctrl;
-    let titleError;
-    let textareaError;
-
-    if (!elTitle.value) {
-      titleError = 'Title can not be empty';
-    }
-    else {
-      titleError = this._getWrongCharsError(elTitle.value);
-    }
-
-    if (!elTextarea.value) {
-      textareaError = 'Body can not be empty';
-    }
-    else {
-      textareaError = this._getWrongCharsError(elTextarea.value);
-    }
-
-    this.setState({
-      titleError,
-      textareaError
-    });
-
-    if (titleError || textareaError) {
-      return false;
-    }
-
-    return true;
-  }
+   // if (!this._wasSubmit) {
+   //    this._wasSubmit = true;
+   // }
+   //
+   // if (this._validateForm()) {
+   //    this.props.onSubmit(this._title.refs.ctrl.value, this._textarea.refs.ctrl.value);
+   //
+   //    this._title.refs.ctrl.value = '';
+   //
+   //    this._textarea.refs.ctrl.value = '';
+   // }
 
 }
 
+const getWrongCharsError = (text) => {
+   let re = new RegExp('[^\\' + validCharacters.join('\\') + ']', 'g');
 
-export default AddTextForm
+   let result = '';
 
+   let errorCharsResult = text.match(re);
+
+   if (errorCharsResult) {
+      errorCharsResult = _.uniq(errorCharsResult);
+
+      result = 'Contains invalid character';
+
+      if (errorCharsResult.length > 1) {
+         result += 's';
+      }
+
+      result += ' - ' + errorCharsResult.join(', ');
+   }
+
+   return result;
+}
+
+const validate = values => {
+
+   let errors = {};
+
+   if (!values.title) {
+      errors.title = 'Title required';
+   } else {
+
+      let error = getWrongCharsError(values.title);
+
+      if (error) {
+         errors.title = error;
+      }
+
+   }
+
+   if (!values.text) {
+      errors.text = 'Text required';
+   } else {
+
+      let error = getWrongCharsError(values.text);
+
+      if (error) {
+         errors.text = error;
+      }
+
+   }
+
+   // console.log('errors', errors);
+
+   return errors;
+}
+
+class RenderField extends Component {
+
+   render() {
+
+      const {
+              input,
+              placeholder,
+              type,
+              classNameCtrl,
+              meta: {
+                touched,
+                error,
+                warning
+              }
+            } = this.props
+
+      let notification;
+
+      if (touched) {
+
+         if (error) {
+            notification = error;
+         }
+         else if (warning) {
+            notification = warning;
+         }
+
+         if (notification) {
+            notification = <p className="error ctrl-full__error">{ notification }</p>
+         }
+
+      }
+
+      let ctrl;
+
+      if (type === 'textarea') {
+         ctrl = <textarea
+           {...input}
+           className={classNames('add-text-form__ctrl', classNameCtrl)}
+           placeholder={placeholder}
+           type={type}
+         />
+      } else {
+         ctrl = <input
+           {...input}
+           className={classNames('add-text-form__ctrl', classNameCtrl)}
+           placeholder={placeholder}
+           type={type}
+         />
+      }
+
+      return (
+        <div className='add-text-form__ctrl-full'>
+           {ctrl}
+           {notification}
+        </div>
+      )
+   }
+
+}
+
+const AddTextForm = props => {
+
+   const {handleSubmit} = props;
+
+   return (
+     <form className='add-text-form' onSubmit={handleSubmit}>
+
+        <Field
+          name='title'
+          type='text'
+          placeholder='Title'
+          component={RenderField}
+        />
+
+        <Field
+          name='text'
+          type='textarea'
+          placeholder='Text'
+          classNameCtrl='add-text-form__ctrl_text'
+          component={RenderField}
+        />
+
+        <button type="submit" className='button add-text-form__add' title='Add text'>Add</button>
+     </form>
+   )
+};
+
+export default reduxForm({
+   form: 'forgot-password',
+   validate
+})(AddTextForm)

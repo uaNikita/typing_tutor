@@ -3250,15 +3250,17 @@ input[type="radio"] {
 body {
   font: 14px/1.3 'Open Sans', sans-serif;
 }
+textarea,
 input[type="text"],
 input[type="password"],
 input[type="email"] {
-  padding: 0 12px;
+  padding: 8px 12px;
   border-radius: 4px;
   border: 1px solid #ddd;
   background: #fff;
-  font: 16px/36px 'Open Sans', sans-serif;
+  font: 16px/20px 'Open Sans', sans-serif;
 }
+textarea[disabled],
 input[type="text"][disabled],
 input[type="password"][disabled],
 input[type="email"][disabled] {
@@ -3381,6 +3383,9 @@ a:hover {
 .select2-container--open .select2-dropdown--below {
   border-color: #33c3f0;
   box-shadow: 0 0 5px rgba(51,195,240,0.3);
+}
+.add-text-form {
+  width: 100%;
 }
 .add-text-form:focus {
   background-color: #000;
