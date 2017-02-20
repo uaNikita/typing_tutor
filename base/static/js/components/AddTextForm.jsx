@@ -4,32 +4,20 @@ import {Field, reduxForm} from 'redux-form'
 import _ from 'lodash';
 import classNames from 'classNames';
 
+const specisalCharacters = [
+   '\\s', '!', '@', '#', '\\$', '%', '\\^', '&', '\\*', '\\(', '\\)', '_',
+   '\\+', '-', '=', ',', '\\.', '\\?', '/', ';', ':', '"', "'", '\\\\', '\\|',
+   '\\[', '\\]', '{', '}'
+];
 
-const validCharacters = ['w', 's', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '_', '+', '-', '=', ',', '.', '/', ';', ':', '"', "'", '\\', '|', '[', ']', '{', '}']
+const enCharacters = ['\\w'];
 
-const handleSubmit = (e) => {
+const ruCharacters = ['а-я'];
 
-   e.preventDefault();
-
-
-   console.log('_handleSubmit');
-
-   // if (!this._wasSubmit) {
-   //    this._wasSubmit = true;
-   // }
-   //
-   // if (this._validateForm()) {
-   //    this.props.onSubmit(this._title.refs.ctrl.value, this._textarea.refs.ctrl.value);
-   //
-   //    this._title.refs.ctrl.value = '';
-   //
-   //    this._textarea.refs.ctrl.value = '';
-   // }
-
-}
+const allCharacters = _.concat(specisalCharacters, enCharacters, ruCharacters);
 
 const getWrongCharsError = (text) => {
-   let re = new RegExp('[^\\' + validCharacters.join('\\') + ']', 'g');
+   let re = new RegExp('[^' + allCharacters.join('') + ']', 'ig');
 
    let result = '';
 
@@ -78,8 +66,6 @@ const validate = values => {
 
    }
 
-   // console.log('errors', errors);
-
    return errors;
 }
 
@@ -111,7 +97,7 @@ class RenderField extends Component {
          }
 
          if (notification) {
-            notification = <p className="error ctrl-full__error">{ notification }</p>
+            notification = <p className="error">{ notification }</p>
          }
 
       }
@@ -121,21 +107,21 @@ class RenderField extends Component {
       if (type === 'textarea') {
          ctrl = <textarea
            {...input}
-           className={classNames('add-text-form__ctrl', classNameCtrl)}
+           className={classNames('ctrl__el', classNameCtrl)}
            placeholder={placeholder}
            type={type}
          />
       } else {
          ctrl = <input
            {...input}
-           className={classNames('add-text-form__ctrl', classNameCtrl)}
+           className={classNames('ctrl__el', classNameCtrl)}
            placeholder={placeholder}
            type={type}
          />
       }
 
       return (
-        <div className='add-text-form__ctrl-full'>
+        <div className='ctrl'>
            {ctrl}
            {notification}
         </div>
@@ -162,7 +148,7 @@ const AddTextForm = props => {
           name='text'
           type='textarea'
           placeholder='Text'
-          classNameCtrl='add-text-form__ctrl_text'
+          classNameCtrl='add-text-form__text'
           component={RenderField}
         />
 

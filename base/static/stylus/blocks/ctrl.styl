@@ -1,15 +1,15 @@
 .ctrl
-   padding: 7px 12px;
-   border-radius: 4px;
-   border: 1px solid #D1D1D1;
-   outline none
-   font 14px / 1.3 Verdana, Geneva, sans-serif
-   transition: box-shadow 0.3s, border 0.3s, height 0.3s;
-   &:focus
-      border-color: #33C3F0
-      box-shadow 0 0 5px rgba(51, 195, 240, 0.3)
-   &__error
+   position: relative;
+   padding-bottom: 18px;
+   &__
+      &el
+         width: 100%
+         &:focus
+            border-color: #33C3F0
+            box-shadow 0 0 5px rgba(51, 195, 240, 0.3)
+   .error
+      position: absolute;
+      bottom: 6px;
+      left: 0
       border-color: #ff4500
-      &:focus
-         border-color: #ff4500
-         box-shadow: 0 0 5px rgba(255, 69, 0, 0.3);
+      line-height: 12px;
