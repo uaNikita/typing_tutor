@@ -17,7 +17,7 @@ const ruCharacters = ['а-я'];
 const allCharacters = _.concat(specisalCharacters, enCharacters, ruCharacters);
 
 const getWrongCharsError = (text) => {
-   let re = new RegExp('[^' + allCharacters.join('') + ']', 'ig');
+   let re = new RegExp(`[^${allCharacters.join('')}]`, 'ig');
 
    let result = '';
 
@@ -158,6 +158,6 @@ const AddTextForm = props => {
 };
 
 export default reduxForm({
-   form: 'forgot-password',
+   form: 'add-text',
    validate
 })(AddTextForm)

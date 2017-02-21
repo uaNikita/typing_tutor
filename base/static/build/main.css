@@ -3267,6 +3267,30 @@ input[type="password"][disabled],
 input[type="email"][disabled] {
   background-color: #f4f4f4;
 }
+textarea::-webkit-input-placeholder,
+input[type="text"]::-webkit-input-placeholder,
+input[type="password"]::-webkit-input-placeholder,
+input[type="email"]::-webkit-input-placeholder {
+  font-style: italic;
+}
+textarea::-moz-placeholder,
+input[type="text"]::-moz-placeholder,
+input[type="password"]::-moz-placeholder,
+input[type="email"]::-moz-placeholder {
+  font-style: italic;
+}
+textarea:-ms-input-placeholder,
+input[type="text"]:-ms-input-placeholder,
+input[type="password"]:-ms-input-placeholder,
+input[type="email"]:-ms-input-placeholder {
+  font-style: italic;
+}
+textarea::placeholder,
+input[type="text"]::placeholder,
+input[type="password"]::placeholder,
+input[type="email"]::placeholder {
+  font-style: italic;
+}
 a {
   text-decoration: none;
   border-bottom: 1px solid rgba(28,136,212,0.3);
@@ -3385,11 +3409,16 @@ a:hover {
   border-color: #33c3f0;
   box-shadow: 0 0 5px rgba(51,195,240,0.3);
 }
+.add-text {
+  width: 840px;
+  margin: 0 auto;
+  position: relative;
+}
 .add-text-form {
   width: 100%;
 }
 .add-text-form__text {
-  height: 200px;
+  height: 450px;
 }
 .add-text-form__add {
   display: block;
@@ -4163,34 +4192,20 @@ a:hover {
   width: 840px;
   margin: 0 auto;
 }
-.settings-text__item {
+.settings-text__actions {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  margin-bottom: 15px;
-}
-.settings-text__label {
-  -webkit-box-flex: 0;
-      -ms-flex: 0 0 150px;
-          flex: 0 0 150px;
-  padding-top: 5px;
-}
-.settings-text__item-ctrl {
-  width: 100%;
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-}
-.settings-text__ctrl-texts select {
-  width: 100%;
-}
-.settings-text__add-text-form {
-  width: 100%;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  margin-bottom: 30px;
 }
 .settings-text__texts {
-  position: relative;
-  overflow: auto;
-  max-height: 330px;
+  margin: 0 -7px;
 }
 .settings-text__text {
   position: relative;
@@ -4236,9 +4251,6 @@ a:hover {
   background: -webkit-linear-gradient(left, transparent 0%, #fff 70%);
   background: linear-gradient(to right, transparent 0%, #fff 70%);
   content: '';
-}
-.settings-text .switcher {
-  margin-bottom: 30px;
 }
 .num-chars__icon {
   margin-right: 5px;

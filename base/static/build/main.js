@@ -37421,41 +37421,6 @@ var INITIAL_STATE = {
          title: 'Second',
          typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
          last: ''
-      },
-      10: {
-         title: 'Second',
-         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
-         last: ''
-      },
-      11: {
-         title: 'Second',
-         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
-         last: ''
-      },
-      12: {
-         title: 'Second',
-         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
-         last: ''
-      },
-      13: {
-         title: 'Second',
-         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
-         last: ''
-      },
-      14: {
-         title: 'Second',
-         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
-         last: ''
-      },
-      15: {
-         title: 'Second',
-         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
-         last: ''
-      },
-      16: {
-         title: 'Second',
-         typed: 'Bears are mammals of the family Ursidae. Bears are classified as caniforms, or doglike carnivorans, with the pinnipeds being their closest living relatives. Although only eight species of bears are extant, they are widespread, appearing in a wide variety of habitats throughout the Northern Hemisphere and partially in the Southern Hemisphere. Bears are found on the continents of North America, South America, Europe, and Asia. Common characteristics of modern bears include large bodies with stocky legs, long snouts, shaggy hair, plantigrade paws with five nonretractile claws, and short tails. While the polar bear is mostly carnivorous, and the giant panda feeds almost entirely on bamboo, the remaining six species are omnivorous with varied diets.',
-         last: ''
       }
    }
 };
@@ -60542,6 +60507,10 @@ var _Text = __webpack_require__(334);
 
 var _Text2 = _interopRequireDefault(_Text);
 
+var _AddText = __webpack_require__(729);
+
+var _AddText2 = _interopRequireDefault(_AddText);
+
 var _LearningMode = __webpack_require__(329);
 
 var _LearningMode2 = _interopRequireDefault(_LearningMode);
@@ -60631,8 +60600,7 @@ var App = function (_Component) {
                   { path: '/', component: _Layout2.default },
                   _react2.default.createElement(_reactRouter.IndexRoute, {
                      component: _Home2.default,
-                     onEnter: this._onKeyboardEnter
-                  }),
+                     onEnter: this._onKeyboardEnter }),
                   _react2.default.createElement(
                      _reactRouter.Route,
                      { path: 'settings', component: _Settings2.default },
@@ -60644,12 +60612,14 @@ var App = function (_Component) {
                         _react2.default.createElement(_reactRouter.Route, { path: 'fingers', component: _LearningFingers2.default, onEnter: this._onLearningModeFingersEnter }),
                         _react2.default.createElement(_reactRouter.Route, { path: 'free', component: _LearningFree2.default, onEnter: this._onLearningModeFreeEnter })
                      ),
-                     _react2.default.createElement(_reactRouter.Route, {
-                        path: 'text-mode',
-                        component: _TextMode2.default,
-                        onEnter: this._onTextModeEnter
-                     }),
-                     _react2.default.createElement(_reactRouter.Route, { path: 'text/:textId', component: _Text2.default }),
+                     _react2.default.createElement(
+                        _reactRouter.Route,
+                        {
+                           path: 'text-mode' },
+                        _react2.default.createElement(_reactRouter.IndexRoute, { component: _TextMode2.default, onEnter: this._onTextModeEnter }),
+                        _react2.default.createElement(_reactRouter.Route, { path: 'text/:textId', component: _Text2.default }),
+                        _react2.default.createElement(_reactRouter.Route, { path: 'add-text', component: _AddText2.default })
+                     ),
                      _react2.default.createElement(_reactRouter.Route, { path: 'keyboard', component: _Keyboard2.default })
                   )
                )
@@ -61954,7 +61924,7 @@ var AddTextForm = function AddTextForm(props) {
 };
 
 exports.default = (0, _reduxForm.reduxForm)({
-   form: 'forgot-password',
+   form: 'add-text',
    validate: validate
 })(AddTextForm);
 
@@ -63583,7 +63553,6 @@ var Texts = function (_Component) {
           typed = _props.typed,
           last = _props.last,
           currentTextId = _props.currentTextId,
-          selectText = _props.selectText,
           refreshText = _props.refreshText;
 
 
@@ -63682,10 +63651,6 @@ var _Switcher = __webpack_require__(170);
 
 var _Switcher2 = _interopRequireDefault(_Switcher);
 
-var _AddTextForm = __webpack_require__(322);
-
-var _AddTextForm2 = _interopRequireDefault(_AddTextForm);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -63704,22 +63669,8 @@ var TextMode = function (_Component) {
    }
 
    _createClass(TextMode, [{
-      key: 'componentDidMount',
-      value: function componentDidMount() {
-
-         var $texts = (0, _jquery2.default)(this._texts);
-
-         var selectedTextOffsetTop = (0, _jquery2.default)(this._selectedText).offset().top;
-
-         $texts.scrollTop(selectedTextOffsetTop - $texts.offset().top - 120);
-
-         $texts.perfectScrollbar();
-      }
-   }, {
       key: 'render',
       value: function render() {
-         var _this2 = this;
-
          var self = this;
          var _props = this.props,
              texts = _props.texts,
@@ -63748,7 +63699,18 @@ var TextMode = function (_Component) {
             });
          }
 
-         var textsBlock = texts.map(function (obj) {
+         var addTextLink = void 0;
+
+         if (texts.length <= 10) {
+
+            addTextLink = _react2.default.createElement(
+               _reactRouter.Link,
+               { to: '/settings/text-mode/add-text' },
+               'Add new text'
+            );
+         }
+
+         var textEls = texts.map(function (obj) {
             var clsN = 'settings-text__text';
             var textId = parseInt(obj.textId, 10);
 
@@ -63778,7 +63740,7 @@ var TextMode = function (_Component) {
                   { className: 'settings-text__text-title' },
                   _react2.default.createElement(
                      _reactRouter.Link,
-                     { to: '/settings/text/' + textId },
+                     { to: '/settings/text-mode/text/' + textId },
                      obj.title
                   )
                ),
@@ -63793,54 +63755,25 @@ var TextMode = function (_Component) {
          return _react2.default.createElement(
             'div',
             { className: 'settings-text' },
-            _react2.default.createElement(_Switcher2.default, switcherProps),
             _react2.default.createElement(
                'div',
-               { className: 'settings-text__item' },
-               _react2.default.createElement(
-                  'label',
-                  { htmlFor: '', className: 'settings-text__label' },
-                  'Current text'
-               ),
-               _react2.default.createElement(
-                  'div',
-                  { className: 'settings-text__item-ctrl settings-text__ctrl-texts' },
-                  _react2.default.createElement(
-                     'div',
-                     { className: 'settings-text__texts', ref: function ref(t) {
-                           return _this2._texts = t;
-                        } },
-                     textsBlock
-                  )
-               )
+               { className: 'settings-text__actions' },
+               _react2.default.createElement(_Switcher2.default, switcherProps),
+               addTextLink
             ),
             _react2.default.createElement(
                'div',
-               { className: 'settings-text__item' },
-               _react2.default.createElement(
-                  'label',
-                  { htmlFor: '', className: 'settings-text__label' },
-                  'Add new text'
-               ),
-               _react2.default.createElement(
-                  'div',
-                  { className: 'settings-text__item-ctrl' },
-                  _react2.default.createElement(_AddTextForm2.default, {
-                     className: 'settings-text__add-text-form',
-                     onSubmit: this._textFormHandleSubmit.bind(this)
-                  })
-               )
+               { className: 'settings-text__texts' },
+               textEls
             )
          );
       }
    }, {
-      key: '_textFormHandleSubmit',
-      value: function _textFormHandleSubmit() {
-         console.log(234);
-      }
+      key: '_handleClickAddText',
+      value: function _handleClickAddText() {}
    }, {
       key: '_onSwitcherChange',
-      value: function _onSwitcherChange(e) {
+      value: function _onSwitcherChange() {
 
          this.props.setMode('text');
       }
@@ -101355,6 +101288,118 @@ __webpack_require__(287);
 __webpack_require__(284);
 
 _reactDom2.default.render(_react2.default.createElement(_App2.default, null), document.getElementById('root'));
+
+/***/ }),
+/* 715 */,
+/* 716 */,
+/* 717 */,
+/* 718 */,
+/* 719 */,
+/* 720 */,
+/* 721 */,
+/* 722 */,
+/* 723 */,
+/* 724 */,
+/* 725 */,
+/* 726 */,
+/* 727 */,
+/* 728 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+   value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(1);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = __webpack_require__(45);
+
+var _AddTextForm = __webpack_require__(322);
+
+var _AddTextForm2 = _interopRequireDefault(_AddTextForm);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var AddText = function (_Component) {
+   _inherits(AddText, _Component);
+
+   function AddText() {
+      _classCallCheck(this, AddText);
+
+      return _possibleConstructorReturn(this, (AddText.__proto__ || Object.getPrototypeOf(AddText)).apply(this, arguments));
+   }
+
+   _createClass(AddText, [{
+      key: 'render',
+      value: function render() {
+
+         return _react2.default.createElement(
+            'div',
+            { className: 'add-text' },
+            _react2.default.createElement(_AddTextForm2.default, {
+               className: 'settings-text__add-text-form',
+               onSubmit: this._textFormHandleSubmit.bind(this)
+            })
+         );
+      }
+   }, {
+      key: '_textFormHandleSubmit',
+      value: function _textFormHandleSubmit() {
+         console.log(234);
+      }
+   }]);
+
+   return AddText;
+}(_react.Component);
+
+exports.default = AddText;
+
+/***/ }),
+/* 729 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+   value: true
+});
+
+var _reactRedux = __webpack_require__(8);
+
+var _lodash = __webpack_require__(13);
+
+var _lodash2 = _interopRequireDefault(_lodash);
+
+var _AddText = __webpack_require__(728);
+
+var _AddText2 = _interopRequireDefault(_AddText);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var mapStateToProps = function mapStateToProps(state, ownProps) {
+
+   return {};
+};
+
+var mapDispatchToProps = function mapDispatchToProps(dispatch) {
+   return {};
+};
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(_AddText2.default);
 
 /***/ })
 /******/ ]);

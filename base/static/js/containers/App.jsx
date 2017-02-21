@@ -12,6 +12,7 @@ import Home from './Home.jsx';
 import Settings from '../components/Settings.jsx';
 import TextMode from './TextMode.jsx';
 import Text from './Text.jsx';
+import AddText from './AddText.jsx';
 import LearningMode from './LearningMode.jsx';
 import LearningFingers from './LearningFingers.jsx';
 import LearningFree from './LearningFree.jsx';
@@ -32,7 +33,7 @@ import {
    updateCharToType as updateCharToTypeFromLearningMode,
 } from '../redux/modules/learning-mode';
 
-import { initializeTextState } from '../redux/modules/text-mode';
+import {initializeTextState} from '../redux/modules/text-mode';
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -74,21 +75,23 @@ export default class App extends Component {
               <Route path="/" component={ Layout }>
                  <IndexRoute
                    component={ Home }
-                   onEnter={ this._onKeyboardEnter }
-                 />
+                   onEnter={ this._onKeyboardEnter } />
                  <Route path="settings" component={ Settings }>
                     <IndexRoute onEnter={this._onSettingsEnter} />
+
                     <Route path="learning-mode" component={ LearningMode }>
                        <IndexRoute onEnter={this._onLearningModeEnter} />
                        <Route path="fingers" component={ LearningFingers } onEnter={this._onLearningModeFingersEnter} />
                        <Route path="free" component={ LearningFree } onEnter={this._onLearningModeFreeEnter} />
                     </Route>
+
                     <Route
-                      path="text-mode"
-                      component={ TextMode }
-                      onEnter={this._onTextModeEnter}
-                    />
-                    <Route path="text/:textId" component={ Text } />
+                      path="text-mode">
+                       <IndexRoute component={ TextMode } onEnter={this._onTextModeEnter} />
+                       <Route path="text/:textId" component={ Text } />
+                       <Route path="add-text" component={ AddText } />
+                    </Route>
+
                     <Route path="keyboard" component={ Keyboard } />
                  </Route>
               </Route>
@@ -100,7 +103,7 @@ export default class App extends Component {
    _onKeyboardEnter() {
 
       $document.on('keydown', keyDownHandler);
-      
+
       $document.on('keypress', keyPressHandler);
 
       store.dispatch(updateStartVariables());

@@ -11,7 +11,6 @@ class Texts extends Component {
             typed,
             last,
             currentTextId,
-            selectText,
             refreshText
           } = this.props;
 

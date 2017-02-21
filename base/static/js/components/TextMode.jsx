@@ -4,21 +4,9 @@ import $ from 'jquery';
 import classNames from 'classNames';
 
 import Switcher from './Switcher.jsx';
-import AddTextForm from '../containers/AddTextForm.jsx';
+
 
 class TextMode extends Component {
-
-   componentDidMount() {
-
-      const $texts = $(this._texts);
-
-      const selectedTextOffsetTop = $(this._selectedText).offset().top;
-
-      $texts.scrollTop(selectedTextOffsetTop - $texts.offset().top - 120);
-
-      $texts.perfectScrollbar();
-
-   }
 
    render() {
       const self = this;
@@ -47,7 +35,16 @@ class TextMode extends Component {
 
       }
 
-      let textsBlock = texts.map(obj => {
+
+      let addTextLink;
+
+      if (texts.length <= 10) {
+
+         addTextLink = <Link to={ '/settings/text-mode/add-text'}>Add new text</Link>
+
+      }
+
+      const textEls = texts.map(obj => {
          let clsN = 'settings-text__text';
          let textId = parseInt(obj.textId, 10);
 
@@ -74,7 +71,7 @@ class TextMode extends Component {
          return (
            <div {...props}>
               <h3 className="settings-text__text-title">
-                 <Link to={'/settings/text/' + textId}>
+                 <Link to={'/settings/text-mode/text/' + textId}>
                     {obj.title}
                  </Link>
               </h3>
@@ -89,29 +86,16 @@ class TextMode extends Component {
       return (
         <div className="settings-text">
 
-           <Switcher {...switcherProps} />
+           <div className="settings-text__actions">
 
-           <div className="settings-text__item">
-              <label htmlFor="" className="settings-text__label">
-                 Current text
-              </label>
-              <div className="settings-text__item-ctrl settings-text__ctrl-texts">
-                 <div className="settings-text__texts" ref={(t) => this._texts = t}>
-                    { textsBlock }
-                 </div>
-              </div>
+              <Switcher {...switcherProps} />
+
+              {addTextLink}
+
            </div>
 
-           <div className="settings-text__item">
-              <label htmlFor="" className="settings-text__label">
-                 Add new text
-              </label>
-              <div className="settings-text__item-ctrl">
-                 <AddTextForm
-                   className="settings-text__add-text-form"
-                   onSubmit={ this._textFormHandleSubmit.bind(this) }
-                 />
-              </div>
+           <div className="settings-text__texts">
+              { textEls }
            </div>
 
         </div>
@@ -119,12 +103,11 @@ class TextMode extends Component {
       )
    }
 
+   _handleClickAddText() {
 
-   _textFormHandleSubmit() {
-      console.log(234);
    }
-   
-   _onSwitcherChange(e) {
+
+   _onSwitcherChange() {
 
       this.props.setMode('text');
 
