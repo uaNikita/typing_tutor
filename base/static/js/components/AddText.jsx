@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router'
 
-import AddTextForm from '../containers/AddTextForm.jsx';
+import AddTextForm from '../components/AddTextForm.jsx';
 
 class AddText extends Component {
 
@@ -19,8 +19,12 @@ class AddText extends Component {
       )
    }
 
-   _textFormHandleSubmit() {
-      console.log(234);
+   _textFormHandleSubmit(values) {
+
+      console.log(this.props.history);
+
+      this.props.addText(values.title, values.text);
+
    }
 
 }

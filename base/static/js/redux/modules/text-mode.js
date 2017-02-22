@@ -1,6 +1,6 @@
 const SELECT_TEXT = 'text-mode/SELECT_TEXT';
 const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
-const ADD_NEW_TEXT = 'text-mode/ADD_NEW_TEXT';
+const ADD_TEXT = 'text-mode/ADD_TEXT';
 const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
 
 import _ from 'lodash';
@@ -69,7 +69,7 @@ let nextTextId = 10;
 
 export default (state = INITIAL_STATE, action = {}) => {
    switch (action.type) {
-      case ADD_NEW_TEXT:
+      case ADD_TEXT:
          nextTextId += 1;
 
          return {
@@ -128,9 +128,9 @@ export default (state = INITIAL_STATE, action = {}) => {
    }
 };
 
-export function addNewText(title, text) {
+export function addText(title, text) {
    return {
-      type: ADD_NEW_TEXT,
+      type: ADD_TEXT,
       title,
       text
    };

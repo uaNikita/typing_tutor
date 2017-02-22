@@ -1,24 +1,21 @@
 import {connect} from 'react-redux'
-import _ from 'lodash';
-
+import { push } from 'react-router-redux'
 import AddText from '../components/AddText.jsx'
-
-
-const mapStateToProps = (state, ownProps) => {
-
-
-   return {
-
-   }
-}
+import {addText} from '../redux/modules/text-mode'
 
 const mapDispatchToProps = (dispatch) => {
    return {
+      addText: (title, text) => {
 
+         dispatch(addText(title, text));
+
+         dispatch(push('/settings/text-mode'));
+
+      }
    }
 }
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(AddText)

@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
 import {Link} from 'react-router';
-import $ from 'jquery';
 import classNames from 'classNames';
 
 import Switcher from './Switcher.jsx';
-
 
 class TextMode extends Component {
 
@@ -35,10 +33,9 @@ class TextMode extends Component {
 
       }
 
-
       let addTextLink;
 
-      if (texts.length <= 10) {
+      if (texts.length < 10) {
 
          addTextLink = <Link to={ '/settings/text-mode/add-text'}>Add new text</Link>
 
@@ -64,7 +61,7 @@ class TextMode extends Component {
 
          } else {
 
-            props.onClick = self._onSelectText.bind(self, textId);
+            props.onClick = self._onHandleTextClick.bind(self, textId);
 
          }
 
@@ -103,17 +100,13 @@ class TextMode extends Component {
       )
    }
 
-   _handleClickAddText() {
-
-   }
-
    _onSwitcherChange() {
 
       this.props.setMode('text');
 
    }
 
-   _onSelectText(textId, e) {
+   _onHandleTextClick(textId, e) {
       if (e.target.nodeName.toLowerCase() === 'a') {
          return;
       }
