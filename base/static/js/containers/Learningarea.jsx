@@ -3,8 +3,8 @@ import Textarea from '../components/Learningarea.jsx'
 
 const mapStateToProps = (state) => {
   return {
-    lessonTyped: state.learningMode.lesson.typed,
-    lessonLast: state.learningMode.lesson.last,
+    lessonTyped: state.learningMode.lessonTyped,
+    lessonLast: state.learningMode.lessonRest,
   }
 }
 

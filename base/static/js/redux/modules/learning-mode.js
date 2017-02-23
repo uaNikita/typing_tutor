@@ -46,10 +46,9 @@ const INITIAL_STATE = {
 
    lessonFree: '',
 
-   lesson: {
-      typed: '',
-      last: ''
-   }
+   lessonTyped:'',
+
+   lessonRest:''
 };
 
 
@@ -61,7 +60,7 @@ export default (state = INITIAL_STATE, action = {}) => {
             ...state,
             lesson: {
                typed: '',
-               last: state.lesson.typed + state.lesson.last
+               last: state.lessonTyped + state.lessonRest
             }
          }
 
@@ -69,8 +68,8 @@ export default (state = INITIAL_STATE, action = {}) => {
          return {
             ...state,
             lesson: {
-               typed: state.lesson.typed + state.lesson.last[0],
-               last: state.lesson.last.substring(1)
+               typed: state.lessonTyped + state.lessonRest[0],
+               last: state.lessonRest.substring(1)
             }
          }
 
@@ -291,9 +290,9 @@ export function updateCharToType() {
 
       let idsChar = '';
 
-      if (state.learningMode.lesson.last) {
+      if (state.learningMode.lessonRest) {
 
-         idsChar = getIdsFromCharacter(state.main.keys, state.learningMode.lesson.last[0]);
+         idsChar = getIdsFromCharacter(state.main.keys, state.learningMode.lessonRest[0]);
       }
 
       dispatch(setIdsCharToType(idsChar));
@@ -306,11 +305,11 @@ export function typeLearningMode(char) {
 
       const state = getState();
 
-      if (state.learningMode.lesson.last) {
+      if (state.learningMode.lessonRest) {
 
          let idsChar = getIdsFromCharacter(state.main.keys, char);
 
-         if (state.learningMode.lesson.last[0] === char) {
+         if (state.learningMode.lessonRest[0] === char) {
 
             dispatch(typeOnLesson());
 

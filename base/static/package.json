@@ -32,6 +32,8 @@
     "redux-logger": "*",
     "redux-thunk": "*",
     "react-router-redux": "*",
+    "redux-immutable": "*",
+    "immutable": "*",
     "classnames": "*",
     "extract-text-webpack-plugin": "2.0.0-rc.3",
     "password-generator": "*",
