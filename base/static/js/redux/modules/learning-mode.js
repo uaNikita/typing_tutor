@@ -30,7 +30,7 @@ import {
    getFingersSet
 } from "../../utils";
 
-const INITIAL_STATE = {
+const initialState = Immutable.Map({
    // fingers, free,
    mode: 'fingers',
 
@@ -42,104 +42,62 @@ const INITIAL_STATE = {
 
    maxLettersInWordFree: 5,
 
-   lettersFree: [],
+   lettersFree: Immutable.Set([]),
 
    lessonFree: '',
 
-   lessonTyped:'',
+   lessonTyped: '',
 
-   lessonRest:''
-};
+   lessonRest: ''
+});
 
-
-export default (state = INITIAL_STATE, action = {}) => {
+export default (state = initialState, action = {}) => {
    switch (action.type) {
 
       case REFRESH_CURRENT_LESSON:
-         return {
-            ...state,
-            lesson: {
-               typed: '',
-               last: state.lessonTyped + state.lessonRest
-            }
-         }
+         return state.merge({
+            lessonTyped: '',
+            lessonRest: state.get('lessonTyped') + state.get('lessonRest')
+         });
 
       case TYPE_ON_LESSON:
-         return {
-            ...state,
-            lesson: {
-               typed: state.lessonTyped + state.lessonRest[0],
-               last: state.lessonRest.substring(1)
-            }
-         }
+         return state.merge({
+            lessonTyped: state.get('lessonTyped') + state.get('lessonRest')[0],
+            lessonRest: state.get('lessonRest').substring(1)
+         });
 
       case SET_LEARNING_MODE:
-         return {
-            ...state,
-            mode: action.mode
-         };
+         return state.set('mode', action.mode);
 
       case SET_CURRENT_LESSON:
-         return {
-            ...state,
-            lesson: {
-               typed: '',
-               last: action.lesson
-            }
-         };
+         return state.merge({
+            lessonTyped: '',
+            lessonRest: action.lesson
+         });
 
       case SET_MAX_LETTERS_IN_WORD_FINGERS:
-         return {
-            ...state,
-            maxLettersInWordFingers: action.length
-         }
+         return state.set('maxLettersInWordFingers', action.length);
 
       case SET_MAX_LETTERS_IN_WORD_FREE:
-         return {
-            ...state,
-            maxLettersInWordFree: action.length
-         }
+         return state.set('maxLettersInWordFree', action.length);
 
       case SET_SET_SIZE_FINGERS:
-         return {
-            ...state,
-            setSizeFingers: action.size
-         }
+         return state.set('setSizeFingers', action.size);
 
       case SET_LESSON_FINGERS:
-         return {
-            ...state,
-            lessonFingers: action.lesson
-         }
+         return state.set('lessonFingers', action.lesson);
 
       case SET_LESSON_FREE:
-         return {
-            ...state,
-            lessonFree: action.lesson
-         }
+         return state.set('lessonFree', action.lesson);
 
       case SET_LETTERS_FREE:
-         return {
-            ...state,
-            lettersFree: action.letters
-         }
+         return state.set('lettersFree', action.letters);
 
       case ADD_LETTER_TO_FREE_LETTERS:
-         return {
-            ...state,
-            lettersFree: [
-               ...state.lettersFree,
-               action.letter
-            ]
-         }
+         return state.updateIn('lettersFree', letters => letters.add(action.letter));
 
       case REMOVE_LETTER_FROM_FREE_LETTERS:
-         return {
-            ...state,
-            lettersFree: [
-               ..._.pull(state.lettersFree, action.letter)
-            ]
-         }
+         return state.updateIn('lettersFree', letters => letters.delete(action.letter));
 
       default:
          return state;

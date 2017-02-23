@@ -1,4 +1,5 @@
-import {combineReducers, createStore, applyMiddleware} from 'redux';
+import {createStore, applyMiddleware} from 'redux';
+import {combineReducers} from 'redux-immutable';
 import {reducer as reduxFormReducer} from 'redux-form';
 import {browserHistory} from 'react-router';
 import {routerReducer, routerMiddleware} from 'react-router-redux';
