@@ -31,7 +31,7 @@ class Keyboard extends Component {
          let props = {
             key: i,
             className: 'menu__item'
-         }
+         };
 
          if (kb.name === name) {
 

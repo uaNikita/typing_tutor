@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router'
-import classNames from 'classNames';
+import {Link} from 'react-router';
 
 class Texts extends Component {
 
@@ -15,15 +14,15 @@ class Texts extends Component {
           } = this.props;
 
     if (typed) {
-      var refresh = <span onClick={() => refreshText(id)} className="text__reload fa fa-refresh" />
+      var refresh = <span onClick={() => refreshText(id)} className="text__reload fa fa-refresh" />;
     }
 
     var select;
 
     if (id === currentTextId) {
-      select = <span className="text__select text__select_selected">This text is selected</span>
+      select = <span className="text__select text__select_selected">This text is selected</span>;
     } else {
-      select = <a onClick={this._onClickSelectText.bind(this, id)} className="text__select" href>Select this text to type</a>
+      select = <a onClick={this._onClickSelectText.bind(this, id)} className="text__select" href>Select this text to type</a>;
     }
 
     return (

@@ -21,19 +21,18 @@ import Keyboard from './Keyboard.jsx';
 import store from './../redux/store';
 
 import {
+   setMode,
    typeChar,
    updateStartVariables
 } from '../redux/modules/main';
 
 import {
-   initializeLearningState,
+   updateLearningState,
    refreshCurrentLesson,
    setMode as setLearningMode,
    updateCurrentLessonFromCurrentMode as updateCurrentLearningLessonFromCurrentLearningMode,
    updateCharToType as updateCharToTypeFromLearningMode,
 } from '../redux/modules/learning-mode';
-
-import {initializeTextState} from '../redux/modules/text-mode';
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -43,8 +42,11 @@ const history = syncHistoryWithStore(browserHistory, store);
 // на данный момент что это за информация: это выбранная раскладка на клавиатуре и выбранный мод в лернинг моде,
 // ввести ограничения на 10 текстов не больше 10000 тысяч символов
 
-store.dispatch(initializeLearningState());
-store.dispatch(initializeTextState());
+store.dispatch(updateLearningState());
+
+store.dispatch(setMode('learning'));
+
+store.dispatch(updateCharToTypeFromLearningMode());
 
 const $document = $(document);
 

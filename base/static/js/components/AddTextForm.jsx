@@ -152,7 +152,22 @@ const AddTextForm = props => {
           component={RenderField}
         />
 
-        <button type="submit" className='button add-text-form__add' title='Add text'>Add</button>
+        <div className="add-text-form__actions">
+
+           <button type="submit" className="button add-text-form__add" title="Add text">Add text</button>
+
+           <label className="add-text-form__select">
+              <Field
+                className="add-text-form__select-input"
+                name="select-text"
+                component="input"
+                type="checkbox"
+              />
+              and select
+           </label>
+
+        </div>
+
      </form>
    )
 };

@@ -352,7 +352,7 @@ export function typeLearningMode(char) {
    };
 }
 
-export function initializeLearningState() {
+export function updateLearningState() {
    return (dispatch, getState) => {
 
       const state = getState();
@@ -392,6 +392,5 @@ export function initializeLearningState() {
 
       dispatch(setLessonFree(lesson));
 
-      dispatch(updateCharToType());
    };
 }

@@ -3419,10 +3419,25 @@ a:hover {
 }
 .add-text-form__text {
   height: 450px;
-}
-.add-text-form__add {
   display: block;
-  margin-left: auto;
+}
+.add-text-form__actions {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+.add-text-form__select {
+  margin-left: 10px;
+  font-size: 12px;
+}
+.add-text-form__select-input {
+  margin-right: 5px;
 }
 .add-text-form .ctrl {
   width: 100%;
@@ -4236,7 +4251,7 @@ a:hover {
   line-height: 17px;
 }
 .settings-text__text-content {
-  max-height: 30px;
+  max-height: 45px;
   position: relative;
   overflow: hidden;
   font-size: 12px;

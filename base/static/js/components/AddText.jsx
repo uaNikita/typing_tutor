@@ -21,9 +21,17 @@ class AddText extends Component {
 
    _textFormHandleSubmit(values) {
 
-      console.log(this.props.history);
+      const {addText, selectAddedText, goToTextList} = this.props;
 
-      this.props.addText(values.title, values.text);
+      addText(values.title, values.text);
+
+      if (values['select-text']) {
+
+         selectAddedText();
+
+      }
+
+      goToTextList();
 
    }
 
