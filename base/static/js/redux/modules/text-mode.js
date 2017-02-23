@@ -4,7 +4,9 @@ const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
 const ADD_TEXT = 'text-mode/ADD_TEXT';
 const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
 
+
 import _ from 'lodash';
+import uuidV4 from 'uuid/v4';
 
 import {getIdsFromCharacter, sliceChar} from "../../utils";
 import {
@@ -75,19 +77,15 @@ const INITIAL_STATE = {
    ]
 };
 
-let nextTextId = 9;
-
 export default (state = INITIAL_STATE, action = {}) => {
    switch (action.type) {
       case ADD_TEXT:
          return (() => {
 
-            nextTextId += 1;
-
             let entities = _.cloneDeep(state.entities);
 
             entities.push({
-               id: nextTextId,
+               id: uuidV4(),
                title: action.title,
                typed: '',
                last: action.text
@@ -220,7 +218,7 @@ export function typeTextMode(char) {
       let textId = state.textMode.currentTextId;
       let idsChar = getIdsFromCharacter(state.main.keys, char);
 
-      const text = _.find(entities, {
+      const text = _.find(state.textMode.entities, {
          id: textId
       });
 

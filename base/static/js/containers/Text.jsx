@@ -5,11 +5,13 @@ import {selectText, refreshText} from '../redux/modules/text-mode'
 
 const mapStateToProps = (state, ownProps) => {
 
-   const id = parseInt(ownProps.params.textId, 10);
+   const id = ownProps.params.textId;
 
    let text = _.find(state.textMode.entities, {
       id
    });
+
+   console.log(id, text);
 
    return {
       id,

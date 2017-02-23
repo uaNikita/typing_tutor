@@ -43,7 +43,7 @@ class TextMode extends Component {
 
       const textEls = texts.map(obj => {
          let clsN = 'settings-text__text';
-         let textId = parseInt(obj.textId, 10);
+         let textId = obj.textId;
 
          let props = {
             key: textId,

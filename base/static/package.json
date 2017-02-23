@@ -50,6 +50,7 @@
     "jquery": "*",
     "nouislider": "leongersen/noUiSlider",
     "lodash": "*",
-    "font-awesome": "*"
+    "font-awesome": "*",
+    "uuid ": "*"
   }
 }

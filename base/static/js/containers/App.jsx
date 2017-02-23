@@ -87,8 +87,7 @@ export default class App extends Component {
                        <Route path="free" component={ LearningFree } onEnter={this._onLearningModeFreeEnter} />
                     </Route>
 
-                    <Route
-                      path="text-mode">
+                    <Route path="text-mode">
                        <IndexRoute component={ TextMode } onEnter={this._onTextModeEnter} />
                        <Route path="text/:textId" component={ Text } />
                        <Route path="add-text" component={ AddText } />
