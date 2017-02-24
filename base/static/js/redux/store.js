@@ -2,10 +2,11 @@ import {createStore, applyMiddleware} from 'redux';
 import {combineReducers} from 'redux-immutable';
 import {reducer as reduxFormReducer} from 'redux-form';
 import {browserHistory} from 'react-router';
-import {routerReducer, routerMiddleware} from 'react-router-redux';
+import {routerMiddleware} from 'react-router-redux';
 import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 
+import routerReducer from './modules/router';
 import modal from './modules/modal';
 import textMode from './modules/text-mode';
 import learningMode from './modules/learning-mode';

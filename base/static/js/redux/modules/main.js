@@ -1,31 +1,30 @@
-const PRESS_KEYS = 'main/PRESS_KEYS';
+import Immutable from 'immutable';
+import _ from 'lodash';
 
+const PRESS_KEYS = 'main/PRESS_KEYS';
 const UPDATE_START_VARIABLES = 'main/UPDATE_START_VARIABLES';
 const SET_MODE = 'main/SET_MODE';
 const ACTION_METRONOME = 'main/ACTION_METRONOME';
 const SET_KEYBOARD = 'main/SET_KEYBOARD';
-
 const PRESS_WRONG_KEYS = 'main/PRESS_WRONG_KEYS';
 const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
 const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
 
 import keyboards from '../../constants/keyboards';
-import _ from 'lodash';
 
 import {typeTextMode} from './text-mode';
 import {typeLearningMode} from './learning-mode';
 import {getIdsFromCharacter, sliceChar} from '../../utils';
 
-
-const INITIAL_STATE = {
+const initialState = Immutable.Map({
    keyboard: 'US',
 
-   keys: _.find(keyboards, {'name': 'US'}).keys,
+   keys: Immutable.List(_.find(keyboards, {'name': 'US'}).keys),
 
-   pressedKeys: [],
+   pressedKeys: Immutable.Set([]),
 
-   pressedWrongKeys: [],
+   pressedWrongKeys: Immutable.Set([]),
 
    startTypingTime: 1461228933292,
 
@@ -41,66 +40,45 @@ const INITIAL_STATE = {
 
    // text, learning
    mode: 'text',
-};
+});
 
-export default (state = INITIAL_STATE, action = {}) => {
+export default (state = initialState, action = {}) => {
    switch (action.type) {
 
+     // todo: keys is set now, update action logic
       case PRESS_KEYS:
-         return {
-            ...state,
-            pressedKeys: action.ids
-         }
+         return state.set('pressedKeys', Immutable.Set(action.ids));
 
       case PRESS_WRONG_KEYS:
-         return {
-            ...state,
-            pressedWrongKeys: action.ids
-         }
+         return state.set('pressedWrongKeys', Immutable.Set(action.ids));
 
       case SET_IDS_CHAR_TO_TYPE:
-         return {
-            ...state,
-            idCharsToType: action.id
-         }
+         return state.set('idCharsToType', action.id);
 
       case ADD_SUCCESS_TYPE:
-         return {
-            ...state,
-            successTypes: state.successTypes + 1
-         }
+         return state.set('successTypes', state.get('successTypes') + 1);
 
       case ADD_ERROR_TYPE:
-         return {
-            ...state,
-            errorTypes: state.errorTypes + 1
-         }
+         return state.set('errorTypes', state.get('errorTypes') + 1);
 
       case UPDATE_START_VARIABLES:
-         return {
-            ...state,
+         return state.merge({
             startTypingTime: Date.now(),
             successTypes: 0,
             errorTypes: 0,
-         }
+         });
 
       case SET_MODE:
-         return {
-            ...state,
-            mode: action.mode
-         }
+         return state.set('mode', action.mode);
 
       case ACTION_METRONOME:
-         return {
-            ...state
-         }
+         return state.set('metronomeStatus', 0);
 
       case SET_KEYBOARD:
-         return {
-            ...state,
+         return state.merge({
             keyboard: action.name,
-            keys: _.find(keyboards, {'name': action.name}).keys
-         }
+            keys: Immutable.List(_.find(keyboards, {'name': action.name}).keys)
+         });
 
       default:
          return state;
@@ -188,22 +166,22 @@ export function typeChar(char) {
 
       const state = getState();
 
-      const idsChar = getIdsFromCharacter(state.main.keys, char);
+      const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
       dispatch(pressKeys(idsChar));
 
       // unpress keys
       setTimeout(() => {
 
-         const state = getState();
+         const stateMain = getState().get('main');
 
-         dispatch(pressKeys(sliceChar(state.main.pressedKeys, idsChar)));
+         dispatch(pressKeys(sliceChar(stateMain.get('pressedKeys').toJS(), idsChar)));
 
-         dispatch(pressWrongKeys(sliceChar(state.main.pressedWrongKeys, idsChar)));
+         dispatch(pressWrongKeys(sliceChar(stateMain.get('pressedWrongKeys').toJS(), idsChar)));
 
       }, 100);
 
-      switch (state.main.mode) {
+      switch (state.getIn(['main', 'mode'])) {
          case 'text':
             dispatch(typeTextMode(char))
             break

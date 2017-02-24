@@ -2,8 +2,12 @@ import {connect} from 'react-redux'
 import Layout from '../components/Layout.jsx'
 
 const mapStateToProps = (state) => {
+
+  console.log();
+
+
   return {
-    modalName: state.modal.name
+    modalName: state.getIn(['modal', 'name'])
   }
 }
 

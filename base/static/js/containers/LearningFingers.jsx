@@ -13,11 +13,13 @@ import {getFingersSet} from "../utils";
 
 const mapStateToProps = (state) => {
 
-   const keys = state.main.keys;
+   const keys = state.getIn(['main', 'keys']).toJS();
+   
+   const stateLearningMode = state.get('learningMode');
 
    return {
-      setSizeFingers: state.learningMode.setSizeFingers,
-      maxLettersInWord: state.learningMode.maxLettersInWordFingers,
+      setSizeFingers: stateLearningMode.get('setSizeFingers'),
+      maxLettersInWord: stateLearningMode.get('maxLettersInWordFingers'),
       fingersSet: getFingersSet(keys),
       keys
    };

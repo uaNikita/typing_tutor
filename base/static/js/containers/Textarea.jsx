@@ -3,8 +3,10 @@ import Textarea from '../components/Textarea.jsx'
 
 const mapStateToProps = (state) => {
 
-   let text = _.find(state.textMode.entities, {
-      id: state.textMode.currentTextId
+   const stateTextMode = state.get('textMode');
+
+   let text = _.find(stateTextMode.get('entities'), {
+      id: stateTextMode.get('currentTextId')
    });
 
    return {

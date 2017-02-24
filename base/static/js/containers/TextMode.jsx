@@ -6,7 +6,9 @@ import {selectText, updateCharToType} from '../redux/modules/text-mode';
 
 const mapStateToProps = (state) => {
 
-   const texts = state.textMode.entities.map(obj => {
+   const stateTextMode = state.get('textMode');
+
+   const texts = stateTextMode.get('entities').map(obj => {
       return {
          textId: obj.id,
          title: obj.title,
@@ -16,8 +18,8 @@ const mapStateToProps = (state) => {
 
    return {
       texts,
-      currentTextId: state.textMode.currentTextId,
-      mode: state.main.mode
+      currentTextId: stateTextMode.get('currentTextId'),
+      mode: state.getIn(['main', 'mode'])
    }
 
 }

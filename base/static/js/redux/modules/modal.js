@@ -1,29 +1,26 @@
+import Immutable from 'immutable';
+
 const OPEN_MODAL = 'OPEN_MODAL';
 const CLOSE_MODAL = 'CLOSE_MODAL';
 
-import {assign} from 'lodash';
-
-const INITIAL_STATE = {
+const initialState = Immutable.Map({
    name: '',
 
    closable: true,
-};
+});
 
-export default (state = INITIAL_STATE, action = {}) => {
+
+export default (state = initialState, action = {}) => {
    switch (action.type) {
 
       case OPEN_MODAL:
-         return {
-            ...state,
+         return state.merge({
             name: action.name,
             closable: !!action.closable
-         }
+         });
 
       case CLOSE_MODAL:
-         return {
-            ...state,
-            name: ''
-         }
+         return state.set('name', '');
 
       default:
          return state;

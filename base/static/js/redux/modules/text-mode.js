@@ -1,12 +1,12 @@
+import Immutable from 'immutable';
+import _ from 'lodash';
+import uuidV4 from 'uuid/v4';
+
 const SELECT_TEXT = 'text-mode/SELECT_TEXT';
 const SELECT_LAST_TEXT = 'text-mode/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
 const ADD_TEXT = 'text-mode/ADD_TEXT';
 const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
-
-
-import _ from 'lodash';
-import uuidV4 from 'uuid/v4';
 
 import {getIdsFromCharacter, sliceChar} from "../../utils";
 import {
@@ -16,7 +16,8 @@ import {
    addErrorType
 } from "./main";
 
-const INITIAL_STATE = {
+const initialState = Immutable.fromJS({
+
    currentTextId: 7,
 
    entities: [
@@ -75,79 +76,61 @@ const INITIAL_STATE = {
          last: ''
       }
    ]
-};
 
-export default (state = INITIAL_STATE, action = {}) => {
+});
+
+export default (state = initialState, action = {}) => {
    switch (action.type) {
       case ADD_TEXT:
-         return (() => {
 
-            let entities = _.cloneDeep(state.entities);
-
-            entities.push({
-               id: uuidV4(),
-               title: action.title,
-               typed: '',
-               last: action.text
-            });
-
-            return {
-               ...state,
-               entities
-            };
-
-         })();
+         return state.updateIn('entities', entities => entities.push(Immutable.Map({
+            id: uuidV4(),
+            title: action.title,
+            typed: '',
+            last: action.text
+         })));
 
       case SELECT_TEXT:
-         return {
-            ...state,
-            currentTextId: action.textId
-         }
+         return state.set('currentTextId', action.textId);
 
       case SELECT_LAST_TEXT:
-         return {
-            ...state,
-            currentTextId: state.entities[state.entities.length - 1].id
-         }
+         return state.set('currentTextId', state.get('entities').last().id);
 
       case REFRESH_TEXT:
-         return (() => {
 
-            let entities = _.cloneDeep(state.entities);
+         return state.updateIn('entities', entities => entities.map(text => {
 
-            let text = _.find(entities, {
-               id: action.textId
-            });
+            if (text.get('id') === action.textId) {
 
-            text.last = text.typed + text.last;
-            text.typed = '';
+               text = text.merge({
+                  typed: '',
+                  last: text.get('typed') + text.get('last'),
+               });
 
-            return {
-               ...state,
-               entities
-            };
+            }
 
-         })();
+            return text;
 
+         }));
 
       case TYPE_ON_ENTITIE:
-         return (() => {
 
-            let entities = _.cloneDeep(state.entities);
+         return state.updateIn('entities', entities => entities.map(text => {
 
-            let text = _.find(entities, {
-               id: action.textId
-            });
+            if (text.get('id') === action.textId) {
 
-            text.typed += text.last[0];
-            text.last = text.last.substring(1);
+               let last = text.get('last');
 
-            return {
-               ...state,
-               entities
-            };
+               text = text.merge({
+                  last: last.substring(1),
+                  typed: text.get('typed') + last[0]
+               });
 
-         })();
+            }
+
+            return text;
+
+         }));
 
       default:
          return state;
@@ -194,8 +177,8 @@ export function updateCharToType() {
    return (dispatch, getState) => {
 
       let state = getState();
-      let textId = state.textMode.currentTextId;
-      let entities = state.textMode.entities;
+      let textId = state.getIn(['textMode', 'currentTextId']);
+      let entities = state.getIn(['textMode', 'entities']);
 
       let idsChar = '';
 
@@ -204,7 +187,7 @@ export function updateCharToType() {
       });
 
       if (text.last) {
-         idsChar = getIdsFromCharacter(state.main.keys, text.last[0]);
+         idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), text.get('last')[0]);
       }
 
       dispatch(setIdsCharToType(idsChar));
@@ -215,10 +198,10 @@ export function updateCharToType() {
 export function typeTextMode(char) {
    return (dispatch, getState) => {
       let state = getState();
-      let textId = state.textMode.currentTextId;
-      let idsChar = getIdsFromCharacter(state.main.keys, char);
+      let textId = state.getIn(['textMode', 'currentTextId']);
+      let idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
-      const text = _.find(state.textMode.entities, {
+      const text = _.find(state.getIn(['textMode', 'entities']), {
          id: textId
       });
 
@@ -232,7 +215,7 @@ export function typeTextMode(char) {
 
       } else {
 
-         let pressedWrongKeys = sliceChar(state.main.pressedWrongKeys, idsChar);
+         let pressedWrongKeys = sliceChar(state.getIn(['main', 'pressedWrongKeys']).toJS(), idsChar);
 
          dispatch(pressWrongKeys(pressedWrongKeys.concat(idsChar)));
 

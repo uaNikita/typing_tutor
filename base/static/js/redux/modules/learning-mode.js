@@ -1,3 +1,6 @@
+import Immutable from 'immutable';
+import _ from 'lodash';
+
 const TYPE_ON_LESSON = 'learning-mode/TYPE_ON_LESSON';
 
 const SET_LEARNING_MODE = 'learning-mode/SET_LEARNING_MODE';
@@ -13,8 +16,6 @@ const SET_LETTERS_FREE = 'learning-mode/SET_LETTERS_FREE';
 const SET_MAX_LETTERS_IN_WORD_FREE = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FREE';
 const ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
 const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
-
-import _ from 'lodash';
 
 import {
    setIdsCharToType,
@@ -192,17 +193,17 @@ export function typeOnLesson() {
 export function updateCurrentLessonFromCurrentMode() {
    return (dispatch, getState) => {
 
-      const learningState = getState().learningMode;
+      const learningState = getState().get('learningMode');
 
       let lesson;
 
       switch (learningState.mode) {
          case 'fingers':
-            lesson = learningState.lessonFingers;
+            lesson = learningState.get('lessonFingers');
             break;
 
          case 'free':
-            lesson = learningState.lessonFree;
+            lesson = learningState.get('lessonFree');
             break;
       }
 
@@ -216,15 +217,15 @@ export function updateFingersLesson() {
 
       let state = getState();
 
-      let keys = state.main.keys;
+      let keys = state.getIn(['main', 'keys']).toJS();
 
       let fingersSet = getFingersSet(keys);
 
-      fingersSet.splice(state.learningMode.setSizeFingers);
+      fingersSet.splice(state.getIn(['learningMode', 'setSizeFingers']));
 
       fingersSet = _.concat.apply(null, fingersSet);
 
-      let lesson = generateLesson(state.learningMode.maxLettersInWordFingers, fingersSet);
+      let lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFingers']), fingersSet);
 
       dispatch(setLessonFingers(lesson));
    };
@@ -233,9 +234,9 @@ export function updateFingersLesson() {
 export function updateFreeLesson() {
    return (dispatch, getState) => {
 
-      let learningState = getState().learningMode;
+      let learningState = getState().get('learningMode');
 
-      let lesson = generateLesson(learningState.maxLettersInWordFree, learningState.lettersFree);
+      let lesson = generateLesson(learningState.get('maxLettersInWordFree'), learningState.get('lettersFree'));
 
       dispatch(setLessonFree(lesson));
    };
@@ -248,9 +249,10 @@ export function updateCharToType() {
 
       let idsChar = '';
 
-      if (state.learningMode.lessonRest) {
+      if (state.getIn(['learningMode', 'lessonRest'])) {
 
-         idsChar = getIdsFromCharacter(state.main.keys, state.learningMode.lessonRest[0]);
+         idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), state.getIn(['learningMode', 'lessonRest'])[0]);
+
       }
 
       dispatch(setIdsCharToType(idsChar));
@@ -263,11 +265,11 @@ export function typeLearningMode(char) {
 
       const state = getState();
 
-      if (state.learningMode.lessonRest) {
+      if (state.getIn(['learningMode', 'lessonRest'])) {
 
-         let idsChar = getIdsFromCharacter(state.main.keys, char);
+         let idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
-         if (state.learningMode.lessonRest[0] === char) {
+         if (state.getIn(['learningMode', 'lessonRest'])[0] === char) {
 
             dispatch(typeOnLesson());
 
@@ -277,7 +279,7 @@ export function typeLearningMode(char) {
 
          } else {
 
-            let pressedWrongKeys = sliceChar(state.main.pressedWrongKeys, idsChar);
+            let pressedWrongKeys = sliceChar(state.getIn(['main', 'pressedWrongKeys']).toJS(), idsChar);
 
             dispatch(pressWrongKeys(pressedWrongKeys.concat(idsChar)));
 
@@ -292,14 +294,14 @@ export function typeLearningMode(char) {
 
                dispatch(updateFingersLesson());
 
-               dispatch(setCurrentLesson(getState().learningMode.lessonFingers));
+               dispatch(setCurrentLesson(getState().getIn(['learningMode', 'lessonFingers'])));
 
                break;
             case 'free':
 
                dispatch(updateFreeLesson());
 
-               dispatch(setCurrentLesson(getState().learningMode.lessonFree));
+               dispatch(setCurrentLesson(getState().getIn(['learningMode', 'lessonFree'])));
 
                break;
          }
@@ -314,7 +316,7 @@ export function updateLearningState() {
 
       const state = getState();
 
-      let defaultKeys = _.filter(state.main.keys, {
+      let defaultKeys = _.filter(state.getIn(['main', 'keys']).toJS(), {
          row: 'middle',
          type: 'letter'
       });
@@ -336,7 +338,7 @@ export function updateLearningState() {
          return obj.key;
       });
 
-      let lesson = generateLesson(state.learningMode.maxLettersInWordFingers, letters);
+      let lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFingers']), letters);
 
       dispatch(setLessonFingers(lesson));
 
@@ -345,7 +347,7 @@ export function updateLearningState() {
       dispatch(setLettersFree(letters));
 
       // different lesson for free mode
-      lesson = generateLesson(state.learningMode.maxLettersInWordFree, letters);
+      lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFree']), letters);
 
       dispatch(setLessonFree(lesson));
 

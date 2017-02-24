@@ -8,10 +8,12 @@ import {updateCharToType} from '../redux/modules/learning-mode';
 
 const mapStateToProps = (state) => {
 
+   const stateLearningMode = state.get('learningMode');
+
    return {
-      lesson: state.learningMode.lessonRest,
-      learningMode: state.learningMode.mode,
-      mode: state.main.mode
+      lesson: stateLearningMode.get('lessonRest'),
+      learningMode: stateLearningMode.get('mode'),
+      mode: state.getIn(['main', 'mode'])
    };
 
 };

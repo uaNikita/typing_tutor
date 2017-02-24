@@ -7,7 +7,9 @@ const mapStateToProps = (state, ownProps) => {
 
    const id = ownProps.params.textId;
 
-   let text = _.find(state.textMode.entities, {
+   const stateTextMode = state.get('textMode');
+
+   let text = _.find(stateTextMode.get('entities'), {
       id
    });
 
@@ -18,7 +20,7 @@ const mapStateToProps = (state, ownProps) => {
       title: text.title,
       typed: text.typed,
       last: text.last,
-      currentTextId: state.textMode.currentTextId
+      currentTextId: stateTextMode.get('currentTextId')
    };
 
 };

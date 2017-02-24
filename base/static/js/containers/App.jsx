@@ -34,7 +34,11 @@ import {
    updateCharToType as updateCharToTypeFromLearningMode,
 } from '../redux/modules/learning-mode';
 
-const history = syncHistoryWithStore(browserHistory, store);
+const history = syncHistoryWithStore(browserHistory, store, {
+   selectLocationState (state) {
+      return state.get('routing').toJS();
+   }
+});
 
 // todo: написать проверку, где брать пользователя из кук и вытягивать данные из базы
 // если такого пользователя нет значит сгенерировать значения такие как уроки для мода лернинг и так далее
@@ -119,7 +123,7 @@ export default class App extends Component {
 
       store.dispatch(refreshCurrentLesson());
 
-      let path = '/settings/' + store.getState().main.mode + '-mode';
+      let path = '/settings/' + store.getState().getIn(['main', 'mode']) + '-mode';
 
       replace({
          pathname: path
@@ -128,7 +132,7 @@ export default class App extends Component {
    }
 
    _onLearningModeEnter(nextState, replace) {
-      let path = '/settings/learning-mode/' + store.getState().learningMode.mode;
+      let path = '/settings/learning-mode/' + store.getState().getIn(['learningMode', 'mode']);
 
       replace({
          pathname: path
@@ -139,13 +143,13 @@ export default class App extends Component {
 
       const state = store.getState();
 
-      if (state.learningMode.mode !== 'fingers') {
+      if (state.getIn(['learningMode', 'mode']) !== 'fingers') {
 
          store.dispatch(setLearningMode('fingers'));
 
          store.dispatch(updateCurrentLearningLessonFromCurrentLearningMode());
 
-         if (state.main.mode === 'learning') {
+         if (state.getIn(['main', 'mode']) === 'learning') {
             store.dispatch(updateCharToTypeFromLearningMode());
          }
 
@@ -157,13 +161,13 @@ export default class App extends Component {
 
       const state = store.getState();
 
-      if (state.learningMode.mode !== 'free') {
+      if (state.getIn(['learningMode', 'mode']) !== 'free') {
 
          store.dispatch(setLearningMode('free'));
 
          store.dispatch(updateCurrentLearningLessonFromCurrentLearningMode());
 
-         if (state.main.mode === 'learning') {
+         if (state.getIn(['main', 'mode']) === 'learning') {
             store.dispatch(updateCharToTypeFromLearningMode());
          }
 

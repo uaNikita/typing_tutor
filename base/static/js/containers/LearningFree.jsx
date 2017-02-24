@@ -11,11 +11,15 @@ import {
 } from '../redux/modules/learning-mode';
 
 const mapStateToProps = (state) => {
+
+   const stateLearningMode = state.get('learningMode');
+
    return {
-      maxLettersInWord: state.learningMode.maxLettersInWordFree,
-      keys: state.main.keys,
-      letters: state.learningMode.lettersFree
+      maxLettersInWord: stateLearningMode.get('maxLettersInWordFree'),
+      keys: state.getIn(['main', 'keys']).toJS(),
+      letters: stateLearningMode.get('lettersFree')
    };
+
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -7,11 +7,15 @@ import {updateLearningState, updateCharToType as updateCharToTypeFromLearningMod
 import {updateCharToType as updateCharToTypeFromTextMode} from '../redux/modules/text-mode';
 
 const mapStateToProps = (state) => {
+
+   const stateMain = state.get('main');
+
    return {
-      mode: state.main.mode,
-      keys: state.main.keys,
-      name: state.main.keyboard
+      mode: stateMain.get('mode'),
+      keys: stateMain.get('keys'),
+      name: stateMain.get('keyboard')
    }
+
 }
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {

@@ -3,22 +3,26 @@ import Home from '../components/Home.jsx'
 import {openModal} from '../redux/modules/main'
 
 const mapStateToProps = (state) => {
-  let spendTime = (Date.now() - state.main.startTypingTime) / (1000 * 60);
 
-  return {
-    successTypes: state.main.successTypes,
-    errorTypes: state.main.errorTypes,
-    speed: parseInt((state.main.successTypes + state.main.errorTypes) / spendTime, 10),
-    mode: state.main.mode
-  }
+   const stateMain = state.get('main');
+
+   const spendTime = (Date.now() - stateMain.get(['startTypingTime'])) / (1000 * 60);
+
+   return {
+      successTypes: stateMain.get('successTypes'),
+      errorTypes: stateMain.get('errorTypes'),
+      speed: parseInt((stateMain.get('successTypes') + stateMain.get('errorTypes')) / spendTime, 10),
+      mode: stateMain.get('mode')
+   }
+
 }
 
 const mapDispatchToProps = (dispatch) => {
-  return {
-    openModal: (name) => {
-      dispatch(openModal(name))
-    }
-  }
+   return {
+      openModal: (name) => {
+         dispatch(openModal(name))
+      }
+   }
 }
 
 export default connect(

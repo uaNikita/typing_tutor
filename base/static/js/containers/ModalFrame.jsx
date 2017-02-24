@@ -1,11 +1,15 @@
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import ModalFrame from '../components/ModalFrame.jsx';
 
 const mapStateToProps = (state) => {
-  return {
-    modalName: state.modal.name,
-    closable: state.modal.closable
-  }
+
+   const stateModal = state.get('modal');
+
+   return {
+      modalName: stateModal.get('name'),
+      closable: stateModal.get('closable')
+   }
+
 }
 
 export default connect(
