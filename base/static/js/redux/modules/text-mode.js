@@ -82,8 +82,7 @@ const initialState = Immutable.fromJS({
 export default (state = initialState, action = {}) => {
    switch (action.type) {
       case ADD_TEXT:
-
-         return state.updateIn('entities', entities => entities.push(Immutable.Map({
+         return state.update('entities', entities => entities.push(Immutable.Map({
             id: uuidV4(),
             title: action.title,
             typed: '',
@@ -94,11 +93,11 @@ export default (state = initialState, action = {}) => {
          return state.set('currentTextId', action.textId);
 
       case SELECT_LAST_TEXT:
-         return state.set('currentTextId', state.get('entities').last().id);
+         return state.set('currentTextId', state.get('entities').last().get('id'));
 
       case REFRESH_TEXT:
 
-         return state.updateIn('entities', entities => entities.map(text => {
+         return state.update('entities', entities => entities.map(text => {
 
             if (text.get('id') === action.textId) {
 
@@ -115,7 +114,7 @@ export default (state = initialState, action = {}) => {
 
       case TYPE_ON_ENTITIE:
 
-         return state.updateIn('entities', entities => entities.map(text => {
+         return state.update('entities', entities => entities.map(text => {
 
             if (text.get('id') === action.textId) {
 
@@ -178,15 +177,11 @@ export function updateCharToType() {
 
       let state = getState();
       let textId = state.getIn(['textMode', 'currentTextId']);
-      let entities = state.getIn(['textMode', 'entities']);
+      let text = state.getIn(['textMode', 'entities']).filter(obj => obj.get('id') === textId).get(0);
 
       let idsChar = '';
 
-      const text = _.find(entities, {
-         id: textId
-      });
-
-      if (text.last) {
+      if (text.get('last')) {
          idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), text.get('last')[0]);
       }
 
@@ -199,13 +194,11 @@ export function typeTextMode(char) {
    return (dispatch, getState) => {
       let state = getState();
       let textId = state.getIn(['textMode', 'currentTextId']);
-      let idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
+      let idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']), char);
 
-      const text = _.find(state.getIn(['textMode', 'entities']), {
-         id: textId
-      });
+      const text = state.getIn(['textMode', 'entities']).filter(obj => obj.get('id') === textId).get(0);
 
-      if (text.last[0] === char) {
+      if (text.get('last')[0] === char) {
 
          dispatch(typeOnEntitie(textId));
 
@@ -215,18 +208,10 @@ export function typeTextMode(char) {
 
       } else {
 
-         let pressedWrongKeys = sliceChar(state.getIn(['main', 'pressedWrongKeys']).toJS(), idsChar);
-
-         dispatch(pressWrongKeys(pressedWrongKeys.concat(idsChar)));
+         dispatch(pressWrongKeys(idsChar));
 
          dispatch(addErrorType());
 
       }
    };
-}
-
-export function initializeTextState() {
-   return (dispatch, getState) => {
-      dispatch(updateCharToType());
-   };
-}
+};

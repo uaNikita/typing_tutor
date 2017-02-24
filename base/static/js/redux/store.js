@@ -1,6 +1,6 @@
 import {createStore, applyMiddleware} from 'redux';
 import {combineReducers} from 'redux-immutable';
-import {reducer as reduxFormReducer} from 'redux-form';
+import {reducer as form} from 'redux-form';
 import {browserHistory} from 'react-router';
 import {routerMiddleware} from 'react-router-redux';
 import createLogger from 'redux-logger';
@@ -14,7 +14,7 @@ import main from './modules/main';
 
 let reducer = combineReducers({
    routing: routerReducer,
-   form: reduxFormReducer,
+   form,
    modal,
    textMode,
    learningMode,

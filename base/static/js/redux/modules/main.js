@@ -2,11 +2,13 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 
 const PRESS_KEYS = 'main/PRESS_KEYS';
+const UNPRESS_KEYS = 'main/UNPRESS_KEYS';
 const UPDATE_START_VARIABLES = 'main/UPDATE_START_VARIABLES';
 const SET_MODE = 'main/SET_MODE';
 const ACTION_METRONOME = 'main/ACTION_METRONOME';
 const SET_KEYBOARD = 'main/SET_KEYBOARD';
 const PRESS_WRONG_KEYS = 'main/PRESS_WRONG_KEYS';
+const UNPRESS_WRONG_KEYS = 'main/UNPRESS_WRONG_KEYS';
 const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
 const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
@@ -47,10 +49,16 @@ export default (state = initialState, action = {}) => {
 
      // todo: keys is set now, update action logic
       case PRESS_KEYS:
-         return state.set('pressedKeys', Immutable.Set(action.ids));
+         return state.update('pressedKeys', keys => keys.union(action.ids));
+
+      case UNPRESS_KEYS:
+         return state.update('pressedKeys', keys => keys.subtract(action.ids));
 
       case PRESS_WRONG_KEYS:
-         return state.set('pressedWrongKeys', Immutable.Set(action.ids));
+         return state.update('pressedWrongKeys', keys => keys.union(action.ids));
+
+      case UNPRESS_WRONG_KEYS:
+         return state.update('pressedWrongKeys', keys => keys.subtract(action.ids));
 
       case SET_IDS_CHAR_TO_TYPE:
          return state.set('idCharsToType', action.id);
@@ -100,6 +108,27 @@ export function pressKeys(ids) {
    };
 }
 
+export function unPressKeys(ids) {
+   return {
+      type: UNPRESS_KEYS,
+      ids
+   };
+}
+
+export function pressWrongKeys(ids) {
+   return {
+      type: PRESS_WRONG_KEYS,
+      ids
+   };
+}
+
+export function unPressWrongKeys(ids) {
+   return {
+      type: UNPRESS_WRONG_KEYS,
+      ids
+   };
+}
+
 export function updateStartVariables() {
    return {
       type: UPDATE_START_VARIABLES
@@ -118,27 +147,6 @@ export function setKeyboard(name) {
    return {
       type: SET_KEYBOARD,
       name
-   };
-}
-
-export function openModal(name, closable) {
-   return {
-      type: OPEN_MODAL,
-      name,
-      closable
-   };
-}
-
-export function closeModal() {
-   return {
-      type: CLOSE_MODAL
-   };
-}
-
-export function pressWrongKeys(ids) {
-   return {
-      type: PRESS_WRONG_KEYS,
-      ids
    };
 }
 
@@ -161,6 +169,21 @@ export function addErrorType() {
    };
 }
 
+
+export function openModal(name, closable) {
+   return {
+      type: OPEN_MODAL,
+      name,
+      closable
+   };
+}
+
+export function closeModal() {
+   return {
+      type: CLOSE_MODAL
+   };
+}
+
 export function typeChar(char) {
    return (dispatch, getState) => {
 
@@ -173,11 +196,9 @@ export function typeChar(char) {
       // unpress keys
       setTimeout(() => {
 
-         const stateMain = getState().get('main');
+         dispatch(unPressKeys(idsChar));
 
-         dispatch(pressKeys(sliceChar(stateMain.get('pressedKeys').toJS(), idsChar)));
-
-         dispatch(pressWrongKeys(sliceChar(stateMain.get('pressedWrongKeys').toJS(), idsChar)));
+         dispatch(unPressWrongKeys(idsChar));
 
       }, 100);
 

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import {Field, reduxForm} from 'redux-form'
+import {Field} from 'redux-form'
+import {reduxForm} from 'redux-form/immutable'
 
 import _ from 'lodash';
 import classNames from 'classNames';

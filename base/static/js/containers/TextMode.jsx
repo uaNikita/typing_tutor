@@ -8,7 +8,7 @@ const mapStateToProps = (state) => {
 
    const stateTextMode = state.get('textMode');
 
-   const texts = stateTextMode.get('entities').map(obj => {
+   const texts = stateTextMode.get('entities').toJS().map(obj => {
       return {
          textId: obj.id,
          title: obj.title,

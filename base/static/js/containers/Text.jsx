@@ -9,17 +9,13 @@ const mapStateToProps = (state, ownProps) => {
 
    const stateTextMode = state.get('textMode');
 
-   let text = _.find(stateTextMode.get('entities'), {
-      id
-   });
-
-   console.log(id, text);
+   const text = stateTextMode.get('entities').filter(obj => obj.get('id') === id).get(0);
 
    return {
       id,
-      title: text.title,
-      typed: text.typed,
-      last: text.last,
+      title: text.get('title'),
+      typed: text.get('typed'),
+      last: text.get('last'),
       currentTextId: stateTextMode.get('currentTextId')
    };
 

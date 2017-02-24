@@ -95,10 +95,10 @@ export default (state = initialState, action = {}) => {
          return state.set('lettersFree', action.letters);
 
       case ADD_LETTER_TO_FREE_LETTERS:
-         return state.updateIn('lettersFree', letters => letters.add(action.letter));
+         return state.update('lettersFree', letters => letters.add(action.letter));
 
       case REMOVE_LETTER_FROM_FREE_LETTERS:
-         return state.updateIn('lettersFree', letters => letters.delete(action.letter));
+         return state.update('lettersFree', letters => letters.delete(action.letter));
 
       default:
          return state;
@@ -279,9 +279,7 @@ export function typeLearningMode(char) {
 
          } else {
 
-            let pressedWrongKeys = sliceChar(state.getIn(['main', 'pressedWrongKeys']).toJS(), idsChar);
-
-            dispatch(pressWrongKeys(pressedWrongKeys.concat(idsChar)));
+            dispatch(pressWrongKeys(idsChar));
 
             dispatch(addErrorType());
 
