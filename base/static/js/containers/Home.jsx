@@ -6,7 +6,7 @@ const mapStateToProps = (state) => {
 
    const stateMain = state.get('main');
 
-   const spendTime = (Date.now() - stateMain.get(['startTypingTime'])) / (1000 * 60);
+   const spendTime = (Date.now() - stateMain.get('startTypingTime')) / (1000 * 60);
 
    return {
       successTypes: stateMain.get('successTypes'),

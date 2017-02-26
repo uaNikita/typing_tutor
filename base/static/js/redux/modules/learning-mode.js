@@ -197,7 +197,7 @@ export function updateCurrentLessonFromCurrentMode() {
 
       let lesson;
 
-      switch (learningState.mode) {
+      switch (learningState.get('mode')) {
          case 'fingers':
             lesson = learningState.get('lessonFingers');
             break;

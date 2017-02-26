@@ -31088,7 +31088,7 @@ function updateCurrentLessonFromCurrentMode() {
 
       var lesson = void 0;
 
-      switch (learningState.mode) {
+      switch (learningState.get('mode')) {
          case 'fingers':
             lesson = learningState.get('lessonFingers');
             break;
@@ -73464,7 +73464,7 @@ var mapStateToProps = function mapStateToProps(state) {
 
    var stateMain = state.get('main');
 
-   var spendTime = (Date.now() - stateMain.get(['startTypingTime'])) / (1000 * 60);
+   var spendTime = (Date.now() - stateMain.get('startTypingTime')) / (1000 * 60);
 
    return {
       successTypes: stateMain.get('successTypes'),
