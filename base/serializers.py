@@ -1,26 +1,33 @@
 from rest_framework import serializers
 from .models import Statistic
+from django.contrib.auth.models import User
 
-from django.contrib.auth import get_user_model
 
 class StatisticSerializer(serializers.ModelSerializer):
     class Meta:
         model = Statistic
-        fields = ('id', 'num_errors', 'num_characters', 'max_speed_learning', 'max_speed_text')
+        fields = ('num_errors', 'num_characters', 'max_speed_learning', 'max_speed_text')
 
 
 class UserSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True)
+    write_only_fields = ('password',)
 
     def create(self, validated_data):
-        user = get_user_model().objects.create(
-            username = validated_data['username']
+        user = User.objects.create(
+            username=validated_data['username']
         )
-
         user.set_password(validated_data['password'])
         user.save()
         return user
 
+    def validate(self, data):
+        """
+        Check that the start is before the stop.
+        """
+        if len(data['password']) < 10:
+            raise serializers.ValidationError("мало")
+        return data
+
     class Meta:
-        model = get_user_model()
+        model = User
         fields = ('username', 'password')
