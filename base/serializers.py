@@ -10,7 +10,14 @@ class StatisticSerializer(serializers.ModelSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    write_only_fields = ('password',)
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+        extra_kwargs = {
+            'password': {
+                'write_only': True
+            }
+        }
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -27,7 +34,3 @@ class UserSerializer(serializers.ModelSerializer):
         if len(data['password']) < 10:
             raise serializers.ValidationError("мало")
         return data
-
-    class Meta:
-        model = User
-        fields = ('username', 'password')

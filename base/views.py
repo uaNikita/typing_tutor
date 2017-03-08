@@ -14,6 +14,7 @@ class HomeView(TemplateView):
 class NotPaginatedSetPagination(pagination.PageNumberPagination):
     page_size = None
 
+
 class StatisticList(generics.ListCreateAPIView):
     model = Statistic
     serializer_class = StatisticSerializer
@@ -25,7 +26,12 @@ class StatisticList(generics.ListCreateAPIView):
         return queryset
 
 
+class IsNotAuthenticated(permissions.BasePermission):
+    def has_permission(self, request, view):
+        return not request.user.is_authenticated
+
+
 class CreateUserView(generics.CreateAPIView):
     model = User
-    permission_classes = (permissions.AllowAny,)
+    permission_classes = (IsNotAuthenticated,)
     serializer_class = UserSerializer
