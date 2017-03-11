@@ -66,4 +66,4 @@ class CreateUserView(generics.CreateAPIView):
         return user
 
     def perform_create(self, serializer):
-        user = self.create_inactive_user(serializer)
+        self.create_inactive_user(serializer)
