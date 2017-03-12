@@ -16,6 +16,9 @@ key - клавиша на клавиатуре, например 'Shift', 'Space
 
 4. Сделать апи для всех данных пользователя
 
+
+
+
     function fancyAlert(arg) {
       if(arg) {
         $.facebox({div:'#foo'})
