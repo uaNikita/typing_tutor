@@ -1,0 +1,38 @@
+{
+  "name": "typing-tutor-server",
+  "version": "1.0.0",
+  "description": "SPA Typing tutor. Server.",
+  "main": "",
+  "keywords": [],
+  "author": "Nikita Zhukov",
+  "license": "ISC",
+  "private": true,
+  "devDependencies": {
+    "express-generator": "*"
+  },
+  "scripts": {
+    "prod": "cross-env NODE_ENV=production nodemon app.js",
+    "dev": "cross-env NODE_ENV=development nodemon app.js"
+  },
+  "dependencies": {
+    "cross-env":"*",
+    "config": "*",
+    "body-parser": "*",
+    "cookie-parser": "*",
+    "express": "*",
+    "pug": "*",
+    "serve-favicon": "*",
+    "http-status": "*",
+    "mongodb": "*",
+    "bluebird": "*",
+    "mongoose": "*",
+    "nodemon": "*",
+    "bcrypt": "*",
+    "lodash": "*",
+    "passport": "*",
+    "passport-local": "*",
+    "express-session": "*",
+    "express-jwt": "*",
+    "jsonwebtoken": "*"
+  }
+}
