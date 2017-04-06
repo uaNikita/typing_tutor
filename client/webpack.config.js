@@ -44,9 +44,9 @@ module.exports = {
 
    // Options affecting the output.
    output: {
-      path: path.join(__dirname, 'build'),
+      path: path.join(__dirname, 'dist'),
       // The filename of the entry chunk as relative path inside the output.path directory.
-      filename: '[name].js'
+      filename: 'main.js'
    },
 
    watchOptions: {

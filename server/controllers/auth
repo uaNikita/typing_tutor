@@ -1,0 +1,102 @@
+let httpStatus = require('http-status');
+const Client = require('../models/client');
+
+const serializeUser = () => {
+   db.user.updateOrCreate(req.user, function (err, user) {
+      if (err) {
+         return next(err);
+      }
+      // we store information needed in token in req.user
+      req.user = {
+         id: user.id
+      };
+      next();
+   });
+}
+
+const serializeClient = () => {
+   if (req.query.permanent === 'true') {
+      db.client.updateOrCreate({
+         user: req.user
+      }, function (err, client) {
+         if (err) {
+            return next(err);
+         }
+         // we store information needed in token in req.user
+         req.user.clientId = client.id;
+         next();
+      });
+   } else {
+      next();
+   }
+}
+
+const generateAccessToken = () => {
+   req.token = req.token || {};
+   req.token.accessToken = jwt.sign({
+      id: req.user.id,
+      clientId: req.user.clientId
+   }, SECRET, {
+      expiresIn: TOKENTIME
+   });
+   next();
+}
+
+const generateRefreshToken = () => {
+   if (req.query.permanent === 'true') {
+      req.token.refreshToken = req.user.clientId.toString() + '.' + crypto.randomBytes(
+          40).toString('hex');
+      db.client.storeToken({
+         id: req.user.clientId,
+         refreshToken: req.token.refreshToken
+      }, next);
+   } else {
+      next();
+   }
+}
+
+const validateRefreshToken = () => {
+   db.client.findUserOfToken(req.body, function (err, user) {
+      if (err) {
+         return next(err);
+      }
+      req.user = user;
+      next();
+   });
+}
+
+const rejectToken = (req, res, next) => {
+
+   Client.remove({
+      token: req.body.refreshToken
+   })
+     .exec()
+     .then(() => {
+        res.status(httpStatus.OK);
+     })
+     .catch(e => next(e));
+
+}
+
+const auth = () => {
+
+}
+
+const token = () => {
+
+}
+
+module.exports = {
+   serializeUser,
+   serializeClient,
+   generateAccessToken,
+   generateRefreshToken,
+   validateRefreshToken,
+   auth,
+   token,
+   updateLearningMode,
+   getTextMode,
+   updateTextMode,
+   getStatistic,
+   updateStatistic
+};

@@ -1,0 +1,4 @@
+{
+  "database": "mongodb://localhost:27017/typing-tutor",
+  "saltRounds": 5
+}
