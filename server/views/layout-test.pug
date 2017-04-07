@@ -1,8 +1,33 @@
-doctype html
-html
-  head
-    title= title
-    link(rel='stylesheet', href='./main.css')
-    script(type='text/javascript', src='./main.js')
-  body
-    block content
+extends layout
+
+block content
+
+   h1= title
+   p Welcome to #{title}
+
+   form.create-user
+      label Email
+         input(type='text' name='email')
+      label Password
+         input(type='text' name='password')
+      input(type='submit' value='Signup')
+
+   | -----------
+
+   form.login-user(action='/api/auth/login' method='post')
+      label Email
+         input(type='text' name='email')
+      label Password
+         input(type='text' name='password')
+      input(type='submit' value='Login')
+
+   | -----------
+
+   div
+      input.get-data(type='button' value='Get my data')
+
+   | -----------
+
+   div
+      input.logout(type='button' value='Logout')
+
