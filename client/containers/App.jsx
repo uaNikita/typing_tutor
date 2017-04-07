@@ -1,11 +1,13 @@
 import React, {Component} from 'react';
 import {Provider} from 'react-redux';
-import {Router, Route, Redirect, IndexRoute, browserHistory} from 'react-router'
-import {syncHistoryWithStore} from 'react-router-redux'
+import {Router, Route} from 'react-router-dom'
+import {ConnectedRouter, push} from 'react-router-redux'
 import $ from 'jquery';
 
 // initialize perfect-scrollbar for $ in all project;
 import 'perfect-scrollbar/jquery';
+
+import browserHistory from '../utils/history'
 
 import Layout from '../containers/Layout.jsx';
 import Home from './Home.jsx';
@@ -21,30 +23,28 @@ import Keyboard from './Keyboard.jsx';
 import store from './../redux/store';
 
 import {
-   setMode,
-   typeChar,
-   updateStartVariables
+  setMode,
+  typeChar,
+  updateStartVariables
 } from '../redux/modules/main';
 
 import {
-   updateLearningState,
-   refreshCurrentLesson,
-   setMode as setLearningMode,
-   updateCurrentLessonFromCurrentMode as updateCurrentLearningLessonFromCurrentLearningMode,
-   updateCharToType as updateCharToTypeFromLearningMode,
+  updateLearningState,
+  refreshCurrentLesson,
+  setMode as setLearningMode,
+  updateCurrentLessonFromCurrentMode as updateCurrentLearningLessonFromCurrentLearningMode,
+  updateCharToType as updateCharToTypeFromLearningMode,
 } from '../redux/modules/learning-mode';
 
-const history = syncHistoryWithStore(browserHistory, store, {
-   selectLocationState (state) {
-      return state.get('routing').toJS();
-   }
-});
 
 // todo: написать проверку, где брать пользователя из кук и вытягивать данные из базы
 // если такого пользователя нет значит сгенерировать значения такие как уроки для мода лернинг и так далее
 // можно хранить статистику за последние сутки например и при входе в аккаунт берем последнюю версию и подгоняем все на нее
 // на данный момент что это за информация: это выбранная раскладка на клавиатуре и выбранный мод в лернинг моде,
 // ввести ограничения на 10 текстов не больше 10000 тысяч символов
+
+window.sss = store;
+window.ppp = push;
 
 store.dispatch(updateLearningState());
 
@@ -56,19 +56,19 @@ const $document = $(document);
 
 const keyPressHandler = e => {
 
-   if (e.which !== 32) {
-      store.dispatch(typeChar(String.fromCharCode(e.which)));
-   }
+  if (e.which !== 32) {
+    store.dispatch(typeChar(String.fromCharCode(e.which)));
+  }
 
 };
 
 const keyDownHandler = e => {
 
-   if (e.which == 32) {
-      e.preventDefault();
+  if (e.which == 32) {
+    e.preventDefault();
 
-      store.dispatch(typeChar(String.fromCharCode(e.which)));
-   }
+    store.dispatch(typeChar(String.fromCharCode(e.which)));
+  }
 
 }
 
@@ -77,107 +77,113 @@ export default class App extends Component {
    render() {
       return (
         <Provider store={store}>
-           <Router history={ history }>
-              <Route path="/" component={ Layout }>
-                 <IndexRoute
-                   component={ Home }
-                   onEnter={ this._onKeyboardEnter } />
-                 <Route path="settings" component={ Settings }>
-                    <IndexRoute onEnter={this._onSettingsEnter} />
+           <ConnectedRouter history={ browserHistory }>
+              <Layout>
 
-                    <Route path="learning-mode" component={ LearningMode }>
-                       <IndexRoute onEnter={this._onLearningModeEnter} />
-                       <Route path="fingers" component={ LearningFingers } onEnter={this._onLearningModeFingersEnter} />
-                       <Route path="free" component={ LearningFree } onEnter={this._onLearningModeFreeEnter} />
-                    </Route>
+                 <Route exact path="/" component={Home} onEnter={ this._onKeyboardEnter } />
+                 <Route path="/settings" component={ Settings }>
+                    <div>
+                       <Route exact path="/" onEnter={ this._onSettingsEnter } />
 
-                    <Route path="text-mode">
-                       <IndexRoute component={ TextMode } onEnter={this._onTextModeEnter} />
-                       <Route path="text/:textId" component={ Text } />
-                       <Route path="add-text" component={ AddText } />
-                    </Route>
+                       <Route path="/learning-mode" component={ LearningMode }>
+                          <div>
+                             <Route exact path="/" onEnter={ this._onLearningModeEnter } />
+                             <Route path="/fingers" component={ LearningFingers } onEnter={this._onLearningModeFingersEnter} />
+                             <Route path="/free" component={ LearningFree } onEnter={this._onLearningModeFreeEnter} />
+                          </div>
+                       </Route>
 
-                    <Route path="keyboard" component={ Keyboard } />
+                       <Route path="/text-mode">
+                          <div>
+                             <Route exact path="/" component={ TextMode } onEnter={ this._onTextModeEnter } />
+                             <Route path="/text/:textId" component={ Text } />
+                             <Route path="/add-text" component={ AddText } />
+                          </div>
+                       </Route>
+
+                       <Route path="/keyboard" component={ Keyboard } />
+                    </div>
                  </Route>
-              </Route>
-           </Router>
+
+              </Layout>
+           </ConnectedRouter>
         </Provider>
       );
    }
 
-   _onKeyboardEnter() {
+  _onKeyboardEnter() {
 
-      $document.on('keydown', keyDownHandler);
+    $document.on('keydown', keyDownHandler);
 
-      $document.on('keypress', keyPressHandler);
+    $document.on('keypress', keyPressHandler);
 
-      store.dispatch(updateStartVariables());
+    store.dispatch(updateStartVariables());
 
-   }
+  }
 
-   _onSettingsEnter(nextState, replace) {
+  _onSettingsEnter(nextState, replace) {
 
-      $document.off('keydown', keyDownHandler);
+    $document.off('keydown', keyDownHandler);
 
-      $document.off('keypress', keyPressHandler);
+    $document.off('keypress', keyPressHandler);
 
-      store.dispatch(refreshCurrentLesson());
+    store.dispatch(refreshCurrentLesson());
 
-      let path = '/settings/' + store.getState().getIn(['main', 'mode']) + '-mode';
+    let path = '/settings/' + store.getState().getIn(['main', 'mode']) + '-mode';
 
-      replace({
-         pathname: path
-      });
+    replace({
+      pathname: path
+    });
 
-   }
+  }
 
-   _onLearningModeEnter(nextState, replace) {
-      let path = '/settings/learning-mode/' + store.getState().getIn(['learningMode', 'mode']);
+  _onLearningModeEnter(nextState, replace) {
+    let path = '/settings/learning-mode/' + store.getState().getIn(['learningMode', 'mode']);
 
-      replace({
-         pathname: path
-      });
-   }
+    replace({
+      pathname: path
+    });
+  }
 
-   _onLearningModeFingersEnter() {
+  _onLearningModeFingersEnter() {
 
-      const state = store.getState();
+    const state = store.getState();
 
-      if (state.getIn(['learningMode', 'mode']) !== 'fingers') {
+    if (state.getIn(['learningMode', 'mode']) !== 'fingers') {
 
-         store.dispatch(setLearningMode('fingers'));
+      store.dispatch(setLearningMode('fingers'));
 
-         store.dispatch(updateCurrentLearningLessonFromCurrentLearningMode());
+      store.dispatch(updateCurrentLearningLessonFromCurrentLearningMode());
 
-         if (state.getIn(['main', 'mode']) === 'learning') {
-            store.dispatch(updateCharToTypeFromLearningMode());
-         }
-
+      if (state.getIn(['main', 'mode']) === 'learning') {
+        store.dispatch(updateCharToTypeFromLearningMode());
       }
 
-   }
+    }
 
-   _onLearningModeFreeEnter(nextState, replace) {
+  }
 
-      const state = store.getState();
+  _onLearningModeFreeEnter(nextState, replace) {
 
-      if (state.getIn(['learningMode', 'mode']) !== 'free') {
+    const state = store.getState();
 
-         store.dispatch(setLearningMode('free'));
+    if (state.getIn(['learningMode', 'mode']) !== 'free') {
 
-         store.dispatch(updateCurrentLearningLessonFromCurrentLearningMode());
+      store.dispatch(setLearningMode('free'));
 
-         if (state.getIn(['main', 'mode']) === 'learning') {
-            store.dispatch(updateCharToTypeFromLearningMode());
-         }
+      store.dispatch(updateCurrentLearningLessonFromCurrentLearningMode());
 
+      if (state.getIn(['main', 'mode']) === 'learning') {
+        store.dispatch(updateCharToTypeFromLearningMode());
       }
 
-   }
+    }
 
-   _onTextModeEnter() {
+  }
+
+  _onTextModeEnter() {
 
 
-   }
+  }
 
 }

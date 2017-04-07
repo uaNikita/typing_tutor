@@ -1,19 +1,19 @@
 import {createStore, applyMiddleware} from 'redux';
 import {combineReducers} from 'redux-immutable';
 import {reducer as form} from 'redux-form';
-import {browserHistory} from 'react-router';
-import {routerMiddleware} from 'react-router-redux';
-import createLogger from 'redux-logger';
+import { routerMiddleware, routerReducer } from 'react-router-redux';
+// import createLogger from 'redux-logger';
 import thunk from 'redux-thunk';
 
-import routerReducer from './modules/router';
 import modal from './modules/modal';
 import textMode from './modules/text-mode';
 import learningMode from './modules/learning-mode';
 import main from './modules/main';
 
+import browserHistory from '../utils/history'
+
 let reducer = combineReducers({
-   routing: routerReducer,
+   router: routerReducer,
    form,
    modal,
    textMode,
@@ -21,7 +21,7 @@ let reducer = combineReducers({
    main,
 })
 
-const logger = createLogger();
+// const logger = createLogger();
 
 let router = routerMiddleware(browserHistory);
 

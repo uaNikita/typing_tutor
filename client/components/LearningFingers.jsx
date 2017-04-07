@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import {Link} from 'react-router'
 import {filter, isArray, concat, clone} from 'lodash';
 import $ from 'jquery';
 import noUiSlider from 'nouislider';
