@@ -120,7 +120,7 @@ class LearningMode extends Component {
    }
 
    _handleModeClick(learningMode, e) {
-      
+
       e.preventDefault();
 
       this.props.setLearningMode(learningMode);

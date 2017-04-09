@@ -40,52 +40,10 @@ store.dispatch(setMode('learning'));
 
 store.dispatch(updateCharToTypeFromLearningMode());
 
-export default class App extends Component {
-
-   render() {
-      return (
-         <Provider store={store}>
-            <ConnectedRouter history={ browserHistory }>
-               <Route path="/" component={ Layout } />
-            </ConnectedRouter>
-         </Provider>
-      );
-   }
-
-   _onLearningModeFingersEnter() {
-
-      const state = store.getState();
-
-      if (state.getIn(['learningMode', 'mode']) !== 'fingers') {
-
-         store.dispatch(setLearningMode('fingers'));
-
-         store.dispatch(updateCurrentLearningLessonFromCurrentLearningMode());
-
-         if (state.getIn(['main', 'mode']) === 'learning') {
-            store.dispatch(updateCharToTypeFromLearningMode());
-         }
-
-      }
-
-   }
-
-   _onLearningModeFreeEnter(nextState, replace) {
-
-      const state = store.getState();
-
-      if (state.getIn(['learningMode', 'mode']) !== 'free') {
-
-         store.dispatch(setLearningMode('free'));
-
-         store.dispatch(updateCurrentLearningLessonFromCurrentLearningMode());
-
-         if (state.getIn(['main', 'mode']) === 'learning') {
-            store.dispatch(updateCharToTypeFromLearningMode());
-         }
-
-      }
-
-   }
-
-};
+export default () => (
+   <Provider store={store}>
+      <ConnectedRouter history={ browserHistory }>
+         <Route path="/" component={ Layout } />
+      </ConnectedRouter>
+   </Provider>
+);
