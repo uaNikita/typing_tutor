@@ -1,42 +1,14 @@
 'use strict';
 
 var path = require('path');
+var _ = require('lodash');
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var env = process.env.WEBPACK_ENV;
-var plugins = [
-   new ExtractTextPlugin('[name].css'),
-   new webpack.LoaderOptionsPlugin({
-      options: {
-         context: __dirname,
-         postcss: [
-            autoprefixer
-         ]
-      }
-   })
-];
 
-if (env === 'build') {
-
-   plugins = plugins.concat([
-      new webpack.DefinePlugin({
-         'process.env': {
-            'NODE_ENV': JSON.stringify('production')
-         }
-      }),
-      new webpack.NoEmitOnErrorsPlugin(),
-      new webpack.optimize.UglifyJsPlugin({
-         compressor: {
-            warnings: false
-         }
-      })
-   ]);
-
-}
-
-module.exports = {
+let config = {
    context: path.join(__dirname),
 
    // The entry point for the bundle.
@@ -53,7 +25,7 @@ module.exports = {
       aggregateTimeout: 100
    },
 
-   plugins: plugins,
+   devtool: 'eval',
 
    // Options affecting the normal modules
    module: {
@@ -64,7 +36,7 @@ module.exports = {
             loader: 'babel-loader',
             exclude: /node_modules/,
             query: {
-               plugins: ["transform-object-rest-spread"],
+               plugins: ['transform-object-rest-spread'],
                presets: ['es2015', 'react']
             }
          },
@@ -74,14 +46,14 @@ module.exports = {
                fallback: 'style-loader',
                use: [
                   {
-                     loader: "css-loader",
+                     loader: 'css-loader',
                      options: {
                         url: true,
-                        import: true,
+                        import: true
                      }
                   },
-                  "postcss-loader",
-                  "stylus-loader"
+                  'postcss-loader',
+                  'stylus-loader'
 
                ]
             })
@@ -93,44 +65,82 @@ module.exports = {
             })
          }, {
             test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-            loader: "url-loader",
+            loader: 'url-loader',
             query: {
-               limit: "10000",
-               mimetype: "application/font-woff",
-               name: "[name].[ext]"
+               limit: '10000',
+               mimetype: 'application/font-woff',
+               name: '[name].[ext]'
             }
          }, {
             test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-            loader: "url-loader",
+            loader: 'url-loader',
             query: {
-               limit: "10000",
-               mimetype: "application/font-woff",
-               name: "[name].[ext]"
+               limit: '10000',
+               mimetype: 'application/font-woff',
+               name: '[name].[ext]'
             }
          }, {
             test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-            loader: "url-loader",
+            loader: 'url-loader',
             query: {
-               limit: "10000",
-               mimetype: "application/octet-stream",
-               name: "[name].[ext]"
+               limit: '10000',
+               mimetype: 'application/octet-stream',
+               name: '[name].[ext]'
             }
          }, {
             test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
-            loader: "file-loader",
+            loader: 'file-loader',
             query: {
-               name: "[name].[ext]"
+               name: '[name].[ext]'
             }
          }, {
             test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-            loader: "url-loader",
+            loader: 'url-loader',
             query: {
-               limit: "10000",
-               mimetype: "image/svg+xml",
-               name: "[name].[ext]"
+               limit: '10000',
+               mimetype: 'image/svg+xml',
+               name: '[name].[ext]'
             }
          }
       ]
    }
 
 };
+
+let plugins = [
+   new ExtractTextPlugin('[name].css'),
+   new webpack.LoaderOptionsPlugin({
+      options: {
+         context: __dirname,
+         postcss: [
+            autoprefixer
+         ]
+      }
+   })
+];
+
+if (env === 'production') {
+
+   plugins = plugins.concat([
+      new webpack.DefinePlugin({
+         'process.env': {
+            'NODE_ENV': JSON.stringify('production')
+         }
+      }),
+      new webpack.NoEmitOnErrorsPlugin(),
+      new webpack.optimize.UglifyJsPlugin({
+         compressor: {
+            warnings: false
+         }
+      })
+   ]);
+
+   _.merge(config, {
+      devtool: 'source-map'
+   });
+
+}
+
+config.plugins = plugins;
+
+module.exports = config;

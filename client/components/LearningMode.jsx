@@ -1,21 +1,23 @@
 import React, { Component } from 'react';
 import { Route, NavLink, Redirect } from 'react-router-dom';
+import _ from 'lodash';
+import classNames from 'classNames';
 import LearningFingers from '../containers/LearningFingers.jsx';
 import LearningFree from '../containers/LearningFree.jsx';
 import Switcher from './Switcher.jsx';
-
 
 class LearningMode extends Component {
 
    render() {
       const {
          lesson,
+         learningMode,
          mode,
          match: {
             url
          }
       } = this.props;
-
+      
       let lessonKeys = lesson.split('').map((char, idx) => {
          if (char === ' ') {
             char = <span key={idx} className="learningarea__space">␣</span>;
@@ -23,8 +25,6 @@ class LearningMode extends Component {
 
          return char;
       });
-
-      let learningModePath = '/settings/learning-mode/';
 
       let switcherProps = {
          label: {
@@ -49,6 +49,45 @@ class LearningMode extends Component {
 
       }
 
+      let modes = [
+         {
+            id: 'fingers',
+            text: 'By fingers'
+         },
+         {
+            id: 'free',
+            text: 'Free'
+         }
+      ];
+
+      _.find(modes, { id: learningMode }).selected = true;
+
+      const links = modes.map((mode, i) => {
+
+         let className = 'menu__item';
+
+         if (mode.selected) {
+            className = classNames(className, 'menu__item_selected');
+         }
+
+         return <div className='settings-learning__modes-menu-item' key={i} onClick={this._handleModeClick.bind(this, mode.id)}>
+            <a className={className} href>{mode.text}</a>
+         </div>;
+
+      });
+
+
+      let Mode;
+
+      switch (learningMode) {
+         case 'fingers':
+            Mode = LearningFingers;
+            break;
+         case 'free':
+            Mode = LearningFree;
+            break;
+      }
+
       return (
 
          <div className="settings-learning">
@@ -62,32 +101,11 @@ class LearningMode extends Component {
             <div className="settings-learning__modes">
                <div className="settings-learning__modes-menu">
                   <h4 className="settings-learning__modes-menu-title">Keys set</h4>
-
-                  <div className='settings-learning__modes-menu-item'>
-                     <NavLink
-                        className="menu__item"
-                        activeClassName="menu__item_selected"
-                        to={learningModePath + 'fingers'}>
-                        By fingers
-                     </NavLink>
-                  </div>
-
-                  <div className='settings-learning__modes-menu-item'>
-                     <NavLink
-                        className="menu__item"
-                        activeClassName="menu__item_selected"
-                        to={learningModePath + 'free'}>
-                        Free
-                     </NavLink>
-                  </div>
+                  {links}
                </div>
 
                <div className="settings-learning__modes-content">
-
-                  <Redirect from={url} to={`${url}/${mode}`} />
-                  <Route path={`${url}/fingers`} component={ LearningFingers } />
-                  <Route path={`${url}/free`} component={ LearningFree } />
-
+                  <Mode />
                </div>
             </div>
 
@@ -97,7 +115,15 @@ class LearningMode extends Component {
 
    _onSwitcherChange() {
 
-      this.props.setMode('learning');
+      this.props.setMainMode('learning');
+
+   }
+
+   _handleModeClick(learningMode, e) {
+      
+      e.preventDefault();
+
+      this.props.setLearningMode(learningMode);
 
    }
 
