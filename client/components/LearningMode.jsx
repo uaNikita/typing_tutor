@@ -1,11 +1,20 @@
-import React, {Component} from 'react';
-import {Link} from 'react-router-dom';
+import React, { Component } from 'react';
+import { Route, NavLink, Redirect } from 'react-router-dom';
+import LearningFingers from '../containers/LearningFingers.jsx';
+import LearningFree from '../containers/LearningFree.jsx';
 import Switcher from './Switcher.jsx';
+
 
 class LearningMode extends Component {
 
    render() {
-      const {lesson, mode} = this.props;
+      const {
+         lesson,
+         mode,
+         match: {
+            url
+         }
+      } = this.props;
 
       let lessonKeys = lesson.split('').map((char, idx) => {
          if (char === ' ') {
@@ -23,7 +32,7 @@ class LearningMode extends Component {
          },
          input: {
             checked: true,
-            readOnly: true,
+            readOnly: true
          }
       };
 
@@ -32,55 +41,58 @@ class LearningMode extends Component {
          switcherProps.label.title = 'Learning mode off';
 
          switcherProps.input = {
-           ...switcherProps.input,
+            ...switcherProps.input,
             checked: false,
             readOnly: false,
             onChange: this._onSwitcherChange.bind(this)
-         }
+         };
 
       }
 
       return (
-        <div className="settings-learning">
 
-           <Switcher {...switcherProps} />
+         <div className="settings-learning">
 
-           <div className='learningarea'>
-              {lessonKeys}
-           </div>
+            <Switcher {...switcherProps} />
 
-           <div className="settings-learning__modes">
-              <div className="settings-learning__modes-menu">
-                 <h4 className="settings-learning__modes-menu-title">Keys set</h4>
+            <div className='learningarea'>
+               {lessonKeys}
+            </div>
 
-                 <div className='settings-learning__modes-menu-item'>
-                    <Link
-                      className="menu__item"
-                      activeClassName="menu__item_selected"
-                      to={learningModePath + 'fingers'}>
-                       By fingers
-                    </Link>
-                 </div>
+            <div className="settings-learning__modes">
+               <div className="settings-learning__modes-menu">
+                  <h4 className="settings-learning__modes-menu-title">Keys set</h4>
 
-                 <div className='settings-learning__modes-menu-item'>
-                    <Link
-                      className="menu__item"
-                      activeClassName="menu__item_selected"
-                      to={learningModePath + 'free'}>
-                       Free
-                    </Link>
-                 </div>
-              </div>
+                  <div className='settings-learning__modes-menu-item'>
+                     <NavLink
+                        className="menu__item"
+                        activeClassName="menu__item_selected"
+                        to={learningModePath + 'fingers'}>
+                        By fingers
+                     </NavLink>
+                  </div>
 
-              <div className="settings-learning__modes-content">
+                  <div className='settings-learning__modes-menu-item'>
+                     <NavLink
+                        className="menu__item"
+                        activeClassName="menu__item_selected"
+                        to={learningModePath + 'free'}>
+                        Free
+                     </NavLink>
+                  </div>
+               </div>
 
-                 { this.props.children }
+               <div className="settings-learning__modes-content">
 
-              </div>
-           </div>
+                  <Redirect from={url} to={`${url}/${mode}`} />
+                  <Route path={`${url}/fingers`} component={ LearningFingers } />
+                  <Route path={`${url}/free`} component={ LearningFree } />
 
-        </div>
-      )
+               </div>
+            </div>
+
+         </div>
+      );
    }
 
    _onSwitcherChange() {
@@ -91,4 +103,4 @@ class LearningMode extends Component {
 
 }
 
-export default LearningMode
+export default LearningMode;

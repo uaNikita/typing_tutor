@@ -23,7 +23,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
-app.get('/', function (req, res) {
+app.get('*', function (req, res) {
    res.render('index', {
       title: 'Typing tutor'
    });

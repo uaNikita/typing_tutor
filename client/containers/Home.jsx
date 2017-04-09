@@ -1,6 +1,10 @@
-import {connect} from 'react-redux'
-import Home from '../components/Home.jsx'
-import {openModal} from '../redux/modules/main'
+import { connect } from 'react-redux';
+import Home from '../components/Home.jsx';
+import { openModal } from '../redux/modules/main';
+
+import { updateStartVariables } from '../redux/modules/main';
+import { refreshCurrentLesson } from '../redux/modules/learning-mode';
+
 
 const mapStateToProps = (state) => {
 
@@ -13,19 +17,25 @@ const mapStateToProps = (state) => {
       errorTypes: stateMain.get('errorTypes'),
       speed: parseInt((stateMain.get('successTypes') + stateMain.get('errorTypes')) / spendTime, 10),
       mode: stateMain.get('mode')
-   }
+   };
 
-}
+};
 
 const mapDispatchToProps = (dispatch) => {
    return {
       openModal: (name) => {
-         dispatch(openModal(name))
+         dispatch(openModal(name));
+      },
+      updateStartVariables: (name) => {
+         dispatch(updateStartVariables(name));
+      },
+      refreshCurrentLesson: (name) => {
+         dispatch(refreshCurrentLesson(name));
       }
-   }
-}
+   };
+};
 
 export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Home)
+   mapStateToProps,
+   mapDispatchToProps
+)(Home);

@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import TextMode from '../components/TextMode.jsx';
+import Texts from '../components/Texts.jsx';
 
 import {setMode} from '../redux/modules/main';
 import {selectText, updateCharToType} from '../redux/modules/text-mode';
@@ -45,4 +45,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(TextMode)
+)(Texts)
