@@ -20,7 +20,7 @@ class ModalFrame extends Component {
 
     if (modalName) {
       let content = '';
-
+      
       if (['Login', 'ForgotPassword', 'Registration'].indexOf(modalName) + 1) {
         content = <Authorization />
       }

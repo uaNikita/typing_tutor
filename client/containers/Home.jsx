@@ -1,10 +1,9 @@
 import { connect } from 'react-redux';
 import Home from '../components/Home.jsx';
-import { openModal } from '../redux/modules/main';
+import { openModal } from '../redux/modules/modal';
 
-import { updateStartVariables } from '../redux/modules/main';
+import { typeChar, updateStartVariables } from '../redux/modules/main';
 import { refreshCurrentLesson } from '../redux/modules/learning-mode';
-
 
 const mapStateToProps = (state) => {
 
@@ -25,6 +24,9 @@ const mapDispatchToProps = (dispatch) => {
    return {
       openModal: (name) => {
          dispatch(openModal(name));
+      },
+      typeChar: (char) => {
+         dispatch(typeChar(char));
       },
       updateStartVariables: (name) => {
          dispatch(updateStartVariables(name));

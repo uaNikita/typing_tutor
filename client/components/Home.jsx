@@ -10,31 +10,42 @@ import Metronome from '../containers/Metronome.jsx';
 
 const $document = $(document);
 
-const keyPressHandler = e => {
-
-   if (e.which !== 32) {
-      store.dispatch(typeChar(String.fromCharCode(e.which)));
-   }
-
-};
-
-const keyDownHandler = e => {
-
-   if (e.which == 32) {
-      e.preventDefault();
-
-      store.dispatch(typeChar(String.fromCharCode(e.which)));
-   }
-
-};
-
 class Home extends Component {
+
+   constructor(props) {
+      super(props);
+
+      const {
+         typeChar
+      } = this.props;
+
+
+      this.keyPressHandler = e => {
+
+         if (e.which !== 32) {
+            typeChar(String.fromCharCode(e.which));
+         }
+
+      };
+
+      this.keyDownHandler = e => {
+
+         if (e.which == 32) {
+            e.preventDefault();
+
+            typeChar(String.fromCharCode(e.which));
+         }
+
+      };
+
+   }
+
 
    componentDidMount() {
 
-      $document.on('keydown', keyDownHandler);
+      $document.on('keydown', this.keyDownHandler);
 
-      $document.on('keypress', keyPressHandler);
+      $document.on('keypress', this.keyPressHandler);
 
       this.props.updateStartVariables();
 
@@ -42,9 +53,9 @@ class Home extends Component {
 
    componentWillUnmount() {
 
-      $document.off('keydown', keyDownHandler);
+      $document.off('keydown', this.keyDownHandler);
 
-      $document.off('keypress', keyPressHandler);
+      $document.off('keypress', this.keyPressHandler);
 
       this.props.refreshCurrentLesson();
 

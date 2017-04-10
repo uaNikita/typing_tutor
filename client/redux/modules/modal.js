@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 
-const OPEN_MODAL = 'OPEN_MODAL';
-const CLOSE_MODAL = 'CLOSE_MODAL';
+const OPEN_MODAL = 'modal/OPEN_MODAL';
+const CLOSE_MODAL = 'modal/CLOSE_MODAL';
 
 const initialState = Immutable.Map({
    name: '',
@@ -27,3 +27,17 @@ export default (state = initialState, action = {}) => {
 
    }
 };
+
+export function openModal(name, closable) {
+   return {
+      type: OPEN_MODAL,
+      name,
+      closable
+   };
+}
+
+export function closeModal() {
+   return {
+      type: CLOSE_MODAL
+   };
+}

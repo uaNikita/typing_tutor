@@ -4,7 +4,7 @@ import ModalFrame from '../components/ModalFrame.jsx';
 const mapStateToProps = (state) => {
 
    const stateModal = state.get('modal');
-
+   
    return {
       modalName: stateModal.get('name'),
       closable: stateModal.get('closable')

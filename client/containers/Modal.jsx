@@ -1,11 +1,6 @@
 import { connect } from 'react-redux'
 import Modal from '../components/Modal.jsx'
-import { closeModal } from '../redux/modules/main'
-
-const mapStateToProps = (state) => {
-  return {
-  }
-}
+import { closeModal } from '../redux/modules/modal'
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -16,6 +11,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps
 )(Modal)

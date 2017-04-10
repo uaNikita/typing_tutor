@@ -3,7 +3,6 @@ import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router-dom';
 import { ConnectedRouter, push } from 'react-router-redux';
 
-
 // initialize perfect-scrollbar for $ in all project;
 import 'perfect-scrollbar/jquery';
 
@@ -13,17 +12,11 @@ import Layout from '../containers/Layout.jsx';
 
 import store from './../redux/store';
 
-import {
-   setMode,
-   typeChar,
-   updateStartVariables
-} from '../redux/modules/main';
+import { setMode } from '../redux/modules/main';
 
 import {
    updateLearningState,
-   refreshCurrentLesson,
    setMode as setLearningMode,
-   updateCurrentLessonFromCurrentMode as updateCurrentLearningLessonFromCurrentLearningMode,
    updateCharToType as updateCharToTypeFromLearningMode
 } from '../redux/modules/learning-mode';
 

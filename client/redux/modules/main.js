@@ -169,21 +169,6 @@ export function addErrorType() {
    };
 }
 
-
-export function openModal(name, closable) {
-   return {
-      type: OPEN_MODAL,
-      name,
-      closable
-   };
-}
-
-export function closeModal() {
-   return {
-      type: CLOSE_MODAL
-   };
-}
-
 export function typeChar(char) {
    return (dispatch, getState) => {
 
