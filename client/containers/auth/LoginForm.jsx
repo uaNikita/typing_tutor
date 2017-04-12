@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Login from '../../components/auth/Login.jsx';
+import LoginForm from '../../components/auth/LoginForm.jsx';
 import { openModal } from '../../redux/modules/modal';
 
 const mapDispatchToProps = (dispatch) => {
@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
    null,
    mapDispatchToProps
-)(Login);
+)(LoginForm);
 
 
 

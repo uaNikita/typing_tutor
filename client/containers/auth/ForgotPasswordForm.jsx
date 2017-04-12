@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import ForgotPas from '../../components/auth/ForgotPas.jsx';
+import ForgotPasswordForm from '../../components/auth/ForgotPasswordForm.jsx';
 import { openModal } from '../../redux/modules/modal';
 
 const mapStateToProps = (state) => {
@@ -17,4 +17,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
    mapStateToProps,
    mapDispatchToProps
-)(ForgotPas);
+)(ForgotPasswordForm);

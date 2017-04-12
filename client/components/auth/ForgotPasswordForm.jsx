@@ -3,12 +3,15 @@ import { Field, reduxForm } from 'redux-form/immutable';
 import classNames from 'classNames';
 
 const validate = values => {
-   const errors = {};
-   if (!values.email) {
+
+   let errors = {};
+
+   if (!values.get('email')) {
       errors.email = 'Required';
    }
 
    return errors;
+
 };
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -16,7 +19,7 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 const asyncValidate = (values/*, dispatch */) => {
    return sleep(1000) // simulate server latency
       .then(() => {
-         if (!['john', 'paul', 'george', 'ringo'].includes(values.email)) {
+         if (!['john', 'paul', 'george', 'ringo'].includes(values.get('email'))) {
             return { email: 'That email does not exist' };
          }
       });
