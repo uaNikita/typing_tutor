@@ -22,16 +22,16 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
    return {
-      openModal: (name) => {
-         dispatch(openModal(name));
+      openModal(...args) {
+         dispatch(openModal(...args));
       },
-      typeChar: (char) => {
+      typeChar (char) {
          dispatch(typeChar(char));
       },
-      updateStartVariables: (name) => {
+      updateStartVariables (name) {
          dispatch(updateStartVariables(name));
       },
-      refreshCurrentLesson: (name) => {
+      refreshCurrentLesson (name)  {
          dispatch(refreshCurrentLesson(name));
       }
    };

@@ -1,8 +1,13 @@
-require('font-awesome/css/font-awesome.css');
-require('nouislider/distribute/nouislider.css');
-require('perfect-scrollbar/dist/css/perfect-scrollbar.css');
+import 'font-awesome/css/font-awesome.css';
+import 'nouislider/distribute/nouislider.css';
+import './stylus/main.styl';
 
-require('./stylus/main.styl');
+// initialize perfect-scrollbar for $ in all project;
+import 'perfect-scrollbar/dist/css/perfect-scrollbar.css';
+import 'perfect-scrollbar/jquery';
+
+// fetch polyfill
+import 'whatwg-fetch'
 
 import ReactDOM from 'react-dom';
 import React from 'react';

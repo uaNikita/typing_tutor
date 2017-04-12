@@ -4,12 +4,7 @@ let userCtrl = require('../controllers/user');
 
 const router = express.Router();
 
-
-
-
-
-
-router.post('/login', passport.authenticate('local', {session: false}), (req, res) => {
+router.post('/login', passport.authenticate('local'), (req, res) => {
    res.json('good');
 });
 

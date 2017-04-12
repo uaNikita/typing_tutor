@@ -7,12 +7,21 @@ class Registration extends Component {
       return (
          <div className="auth">
             <h3 className="auth__title">Registration</h3>
-            <RegistrationForm onSubmit={this.handleSubmit} />
+            <RegistrationForm onSubmit={this._handleSubmit} />
          </div>
       );
    }
 
-   handleSubmit() {
+   _handleSubmit() {
+
+      fetch('/signup')
+         .then(response => {
+            console.log('response', response);
+
+            return response.text();
+         });
+
+      console.log('_handleSubmit');
 
    }
 

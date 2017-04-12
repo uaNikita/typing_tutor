@@ -163,7 +163,7 @@ class RegistrationForm extends Component {
                Create a password for me
             </label>
 
-            <button className="button" type="submit" disabled={!valid || submitting}>Sign Up</button>
+            <button className="button" type="submit" disabled={ !valid || submitting }>Sign Up</button>
 
             <p className="auth__hint">Already registered? <a className="auth__link1" href onClick={ this._onLoginClick.bind(this) }>Log in now</a></p>
          </form>
@@ -205,6 +205,6 @@ class RegistrationForm extends Component {
 export default reduxForm({
    form: 'registration',
    validate,
-   asyncValidate,
-   asyncBlurFields: ['email']
+   // asyncValidate,
+   // asyncBlurFields: ['email']
 })(RegistrationForm);

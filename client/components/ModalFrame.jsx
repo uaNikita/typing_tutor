@@ -14,6 +14,8 @@ class ModalFrame extends Component {
       const leaveTimeout = 150;
       let modal;
 
+      console.log(modalName, closable);
+
       if (modalName) {
 
          let content;
@@ -24,11 +26,11 @@ class ModalFrame extends Component {
                content = <Login />;
                break;
 
-            case 'ForgotPassword':
+            case 'Registration':
                content = <Registration />;
                break;
 
-            case 'Registration':
+            case 'ForgotPassword':
                content = <ForgotPassword />;
                break;
 

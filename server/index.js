@@ -29,14 +29,14 @@ app.get('*', function (req, res) {
    });
 });
 
-// app.use(session({
-//    secret: 'white cat',
-//    resave: false,
-//    saveUninitialized: false
-// }));
-//
-// // Passport
-// require('./passport')(app);
+app.use(session({
+   secret: 'white cat',
+   resave: false,
+   saveUninitialized: false
+}));
+
+// Passport
+require('./passport')(app);
 //
 // /* GET home page. */
 // app.get('/', function(req, res, next) {

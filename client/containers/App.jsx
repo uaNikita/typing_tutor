@@ -3,9 +3,6 @@ import { Provider } from 'react-redux';
 import { Router, Route } from 'react-router-dom';
 import { ConnectedRouter, push } from 'react-router-redux';
 
-// initialize perfect-scrollbar for $ in all project;
-import 'perfect-scrollbar/jquery';
-
 import browserHistory from '../utils/history';
 
 import Layout from '../containers/Layout.jsx';

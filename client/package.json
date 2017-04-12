@@ -51,6 +51,7 @@
     "nouislider": "*",
     "lodash": "*",
     "font-awesome": "*",
-    "uuid ": "*"
+    "uuid ": "*",
+    "whatwg-fetch":"*"
   }
 }

@@ -125,13 +125,13 @@ class Home extends Component {
    _onLogInClick(e) {
       e.preventDefault();
 
-      this.props.openModal('Login');
+      this.props.openModal('Login', true);
    }
 
    _onSignUpClick(e) {
       e.preventDefault();
 
-      this.props.openModal('Registration');
+      this.props.openModal('Registration', true);
    }
 }
 

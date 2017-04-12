@@ -1,7 +1,7 @@
 let passport = require('passport');
 let User = require('../models/user');
 
-function logout(req, res, next, id) {
+let logout = function(req, res, next, id) {
 
    User.get(id)
       .then((user) => {
@@ -10,37 +10,7 @@ function logout(req, res, next, id) {
       })
       .catch(e => next(e));
 
-}
-
-/**
- * Load user and append to req.
- */
-function load(req, res, next, id) {
-
-   User.get(id)
-      .then((user) => {
-         req.user = user;
-         return next();
-      })
-      .catch(e => next(e));
-
-}
-
-/**
- * Get user
- * @returns {User}
- */
-function get(req, res) {
-
-   let r = 'none';
-
-   if (req.user) {
-      r = req.user;
-   }
-
-   return res.json(r);
-
-}
+};
 
 /**
  * Create new user

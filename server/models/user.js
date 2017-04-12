@@ -20,8 +20,8 @@ const UserSchema = new mongoose.Schema({
    password: {
       type: String,
       required: true,
-      minlength: [ 5, '`{PATH}` exceeds the minimum allowed length (5).' ],
-      maxlength: [ 20, '`{PATH} exceeds the maximum allowed length (20).' ]
+      minlength: [5, '`{PATH}` exceeds the minimum allowed length (5).'],
+      maxlength: [20, '`{PATH} exceeds the maximum allowed length (20).']
    },
    statistic: Array,
    mod1: {
@@ -82,7 +82,7 @@ UserSchema.methods.generateHash = password => {
 
 };
 
-UserSchema.methods.validPassword  = function (candidatePassword) {
+UserSchema.methods.validPassword = function(candidatePassword) {
 
    return bcrypt.compare(candidatePassword, this.password);
 
@@ -100,17 +100,13 @@ UserSchema.statics = {
       return this.findOne({ username: email })
          .exec()
          .then(user => {
-            
-            return new Promise((resolve, reject) => {
 
-               if (user) {
-                  const err = new APIError('That email is already taken', httpStatus.CONFLICT);
-                  reject(err);
-               } else {
-                  resolve();
-               }
-
-            });
+            if (user) {
+               const err = new APIError('That email is already taken', httpStatus.CONFLICT);
+               return Promise.reject(err);
+            } else {
+               return Promise.resolve(err);
+            }
 
          });
 
@@ -130,21 +126,8 @@ UserSchema.statics = {
             const err = new APIError('No such user exists!', httpStatus.Conflict);
             return Promise.reject(err);
          });
-   },
-
-   /**
-    * List users in descending order of 'createdAt' timestamp.
-    * @param {number} skip - Number of users to be skipped.
-    * @param {number} limit - Limit number of users to be returned.
-    * @returns {Promise<User[]>}
-    */
-   list({ skip = 0, limit = 50 } = {}) {
-      return this.find()
-         .sort({ createdAt: -1 })
-         .skip(skip)
-         .limit(limit)
-         .exec();
    }
+
 };
 
 /**
