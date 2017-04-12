@@ -2,10 +2,6 @@ import { connect } from 'react-redux';
 import Register from '../../components/auth/Register.jsx';
 import { openModal } from '../../redux/modules/modal';
 
-const mapStateToProps = (state) => {
-   return {};
-};
-
 const mapDispatchToProps = (dispatch) => {
    return {
       openModal: (name) => {
@@ -15,6 +11,6 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(
-   mapStateToProps,
+   null,
    mapDispatchToProps
 )(Register);
