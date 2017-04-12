@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Field } from 'redux-form';
-import { reduxForm } from 'redux-form/immutable';
+import { Field, reduxForm } from 'redux-form/immutable';
 import classNames from 'classNames';
 
 const validate = values => {
@@ -57,7 +56,8 @@ class RenderField extends Component {
    }
 }
 
-class ForgotPasForm extends Component {
+class ForgotPasswordForm extends Component {
+
    render() {
       return (
          <form className="auth__form auth__form_password-reset">
@@ -84,6 +84,7 @@ class ForgotPasForm extends Component {
 
       this.props.openModal('Login');
    }
+
 }
 
 export default reduxForm({
@@ -91,4 +92,4 @@ export default reduxForm({
    validate,
    asyncValidate,
    asyncBlurFields: ['email']
-})(ForgotPasForm);
+})(ForgotPasswordForm);

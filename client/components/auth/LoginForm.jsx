@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Field } from 'redux-form';
-import { reduxForm } from 'redux-form/immutable'
+import { Field, reduxForm } from 'redux-form/immutable'
 import classNames from 'classNames';
 
 const validate = values => {
@@ -55,7 +54,7 @@ class renderField extends Component {
 }
 
 
-class Login extends Component {
+class LoginForm extends Component {
 
    render() {
 
@@ -105,4 +104,4 @@ export default reduxForm({
    validate,
    asyncValidate,
    asyncBlurFields: ['email']
-})(Login);
+})(LoginForm);

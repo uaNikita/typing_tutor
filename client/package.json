@@ -41,6 +41,7 @@
     "react-router-dom": "*",
     "react-router-redux": "^5.0.0-alpha.4",
     "redux-immutable": "*",
+    "redux-immutablejs": "*",
     "immutable": "*",
     "classnames": "*",
     "password-generator": "*",

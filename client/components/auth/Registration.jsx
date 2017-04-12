@@ -1,14 +1,13 @@
 import React, { Component } from 'react';
-import RegisterForm from './RegisterForm.jsx';
+import RegistrationForm from './RegistrationForm.jsx';
 
-
-class Register extends Component {
+class Registration extends Component {
 
    render() {
       return (
          <div className="auth">
             <h3 className="auth__title">Registration</h3>
-            <RegisterForm onSubmit={this.handleSubmit} />
+            <RegistrationForm onSubmit={this.handleSubmit} />
          </div>
       );
    }
@@ -19,5 +18,4 @@ class Register extends Component {
 
 }
 
-
-export default Register;
+export default Registration;

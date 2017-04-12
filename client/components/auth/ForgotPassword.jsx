@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
-import ForgotPasForm from './ForgotPasForm.jsx';
+import ForgotPasswordForm from './ForgotPasswordForm.jsx';
 
-class ForgotPas extends Component {
+class ForgotPassword extends Component {
 
    render() {
       return (
          <div className="auth">
             <h3 className="auth__title">Password reset</h3>
-            <ForgotPasForm onSubmit={this.handleSubmit} />
+            <ForgotPasswordForm onSubmit={this.handleSubmit} />
          </div>
       );
    }
@@ -19,4 +19,4 @@ class ForgotPas extends Component {
 }
 
 
-export default ForgotPas;
+export default ForgotPassword;

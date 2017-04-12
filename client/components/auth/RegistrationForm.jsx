@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Field } from 'redux-form';
-import { reduxForm } from 'redux-form/immutable';
+import { Field, reduxForm } from 'redux-form/immutable';
 import classNames from 'classNames';
 import generatePassword from 'password-generator';
 
@@ -114,7 +113,7 @@ class RenderPasswordField extends Component {
    }
 }
 
-class Register extends Component {
+class RegistrationForm extends Component {
 
    constructor(props) {
       super(props);
@@ -205,4 +204,4 @@ export default reduxForm({
    validate,
    asyncValidate,
    asyncBlurFields: ['email']
-})(Register);
+})(RegistrationForm);
