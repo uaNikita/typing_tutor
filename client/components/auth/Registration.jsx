@@ -12,13 +12,17 @@ class Registration extends Component {
       );
    }
 
-   _handleSubmit() {
+   _handleSubmit(values) {
 
-      fetch('/signup')
+      fetch('/auth/signup', {
+         method: 'POST',
+         body: values.toJS()
+      })
          .then(response => {
-            console.log('response', response);
-
             return response.text();
+         })
+         .then(json => {
+            console.log('json', json);
          });
 
       console.log('_handleSubmit');
