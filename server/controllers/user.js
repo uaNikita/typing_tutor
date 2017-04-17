@@ -136,8 +136,6 @@ let getStatistic = (req, res, next) => {};
 let updateStatistic = (req, res, next) => {};
 
 module.exports = {
-   load,
-   get,
    create,
    update,
    list,

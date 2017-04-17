@@ -4,8 +4,8 @@ let userCtrl = require('../controllers/user');
 
 const router = express.Router();
 
-router.route('/')
-  .get(userCtrl.get)
+// router.route('/')
+//   .get(userCtrl.get)
 
 router.route('/text-mode')
   .get(userCtrl.getTextMode)

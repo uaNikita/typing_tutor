@@ -48,11 +48,11 @@ require('./passport')(app);
 //    res.render('test-page');
 // });
 //
-// let routes = require('./routes/index');
-// app.use('/api', routes);
-//
-//
-// // Errors
-// require('./errors')(app);
+let routes = require('./routes/index');
+app.use('/', routes);
+
+
+// Errors
+require('./errors')(app);
 
 app.listen(3000);

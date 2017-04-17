@@ -100,12 +100,12 @@ UserSchema.statics = {
       return this.findOne({ username: email })
          .exec()
          .then(user => {
-
+            
             if (user) {
                const err = new APIError('That email is already taken', httpStatus.CONFLICT);
                return Promise.reject(err);
             } else {
-               return Promise.resolve(err);
+               return Promise.resolve();
             }
 
          });

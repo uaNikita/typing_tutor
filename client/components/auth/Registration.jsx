@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import $ from 'jquery';
 import RegistrationForm from '../../containers/auth/RegistrationForm.jsx';
 
 class Registration extends Component {
@@ -14,18 +15,28 @@ class Registration extends Component {
 
    _handleSubmit(values) {
 
-      fetch('/auth/signup', {
-         method: 'POST',
-         body: values.toJS()
-      })
-         .then(response => {
-            return response.text();
-         })
-         .then(json => {
-            console.log('json', json);
-         });
+      // fetch('/auth/signup', {
+      //    method: 'POST',
+      //    body: values.toJS()
+      // })
+      //    .then(response => {
+      //       return response.text();
+      //    })
+      //    .then(json => {
+      //       console.log('json', json);
+      //    });
 
       console.log('_handleSubmit');
+
+      $.ajax({
+         method: 'POST',
+         url: '/auth/signup',
+         data: values.toJS()
+      })
+         .done(function() {
+            console.log('Data Saved');
+         });
+
 
    }
 
