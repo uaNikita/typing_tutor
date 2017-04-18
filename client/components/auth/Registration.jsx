@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import $ from 'jquery';
+import { SubmissionError } from 'redux-form/immutable';
 import RegistrationForm from '../../containers/auth/RegistrationForm.jsx';
 
 class Registration extends Component {
@@ -14,29 +15,28 @@ class Registration extends Component {
    }
 
    _handleSubmit(values) {
-
-      // fetch('/auth/signup', {
-      //    method: 'POST',
-      //    body: values.toJS()
-      // })
-      //    .then(response => {
-      //       return response.text();
-      //    })
-      //    .then(json => {
-      //       console.log('json', json);
-      //    });
-
-      console.log('_handleSubmit');
-
-      $.ajax({
+   
+      return fetch('/auth/signup', {
          method: 'POST',
-         url: '/auth/signup',
-         data: values.toJS()
+         headers: {
+            'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(values.toJS())
       })
-         .done(function() {
-            console.log('Data Saved');
-         });
+         .then(response => {
 
+            throw new SubmissionError({
+               email: 'User does not exist',
+               _error: 'Login failed!'
+            });
+
+            return response.json();
+
+         }).then(data => {
+
+            console.log('data', data, typeof data);
+
+         });
 
    }
 

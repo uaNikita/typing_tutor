@@ -21,15 +21,6 @@ const validate = values => {
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const asyncValidate = (values/*, dispatch */) => {
-   return sleep(1000) // simulate server latency
-      .then(() => {
-         if (!['john', 'paul', 'george', 'ringo'].includes(values.get('email'))) {
-            return { email: 'That username is taken' };
-         }
-      });
-};
-
 class RenderField extends Component {
 
    render() {
@@ -204,7 +195,7 @@ class RegistrationForm extends Component {
 
 export default reduxForm({
    form: 'registration',
-   validate,
+   validate
    // asyncValidate,
    // asyncBlurFields: ['email']
 })(RegistrationForm);
