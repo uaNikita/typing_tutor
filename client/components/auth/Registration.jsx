@@ -15,7 +15,7 @@ class Registration extends Component {
    }
 
    _handleSubmit(values) {
-   
+
       return fetch('/auth/signup', {
          method: 'POST',
          headers: {
@@ -25,6 +25,7 @@ class Registration extends Component {
       })
          .then(response => {
 
+            
             throw new SubmissionError({
                email: 'User does not exist',
                _error: 'Login failed!'
