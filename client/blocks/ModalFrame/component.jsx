@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import Modal from '../containers/Modal.jsx';
-import Login from './auth/Login.jsx';
-import Registration from './auth/Registration.jsx';
-import ForgotPassword from './auth/ForgotPassword.jsx';
+import Modal from '../../containers/Modal.jsx';
+import Login from '../authorization/Login/component.jsx';
+import Registration from '../authorization/Registration/component.jsx';
+import ForgotPassword from '../authorization/ForgotPassword/component.jsx';
 
 class ModalFrame extends Component {
    render() {

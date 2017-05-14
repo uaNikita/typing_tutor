@@ -25,7 +25,6 @@ class Registration extends Component {
       })
          .then(response => {
 
-            
             throw new SubmissionError({
                email: 'User does not exist',
                _error: 'Login failed!'

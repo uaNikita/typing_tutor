@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import ModalFrame from '../components/ModalFrame.jsx';
+import ModalFrame from './component.jsx';
 
 const mapStateToProps = (state) => {
 

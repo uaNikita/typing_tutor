@@ -4,7 +4,7 @@ import $ from 'jquery';
 import classNames from 'classNames';
 
 import Footer from './Footer.jsx';
-import ModalFrame from '../containers/ModalFrame.jsx';
+import ModalFrame from '../blocks/ModalFrame/container.jsx';
 import Home from '../containers/Home.jsx';
 import Settings from '../containers/Settings.jsx';
 
