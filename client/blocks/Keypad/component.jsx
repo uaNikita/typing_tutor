@@ -1,7 +1,7 @@
 import React, {PropTypes, Component} from 'react'
 import classNames from 'classNames';
 import _ from 'lodash';
-import Key from '../components/Key.jsx';
+import Key from '../Key/component.jsx';
 
 class KeyPad extends Component {
 

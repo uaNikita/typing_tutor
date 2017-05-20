@@ -1,6 +1,5 @@
 import {connect} from 'react-redux';
-import {find} from 'lodash';
-import KeyPad from '../components/Keypad.jsx';
+import KeyPad from './component.jsx';
 
 const mapStateToProps = (state) => {
 

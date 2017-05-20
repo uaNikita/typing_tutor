@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import ForgotPasswordForm from '../../components/auth/ForgotPasswordForm.jsx';
-import { openModal } from '../../redux/modules/modal';
+import ForgotPasswordForm from './component.jsx';
+import { openModal } from 'Redux/modules/modal';
 
 const mapStateToProps = (state) => {
    return {};

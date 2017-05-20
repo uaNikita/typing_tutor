@@ -11,7 +11,7 @@ import 'whatwg-fetch'
 
 import ReactDOM from 'react-dom';
 import React from 'react';
-import App from './containers/App.jsx';
+import App from './blocks/App.jsx';
 
 ReactDOM.render(
   <App />,

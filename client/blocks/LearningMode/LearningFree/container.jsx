@@ -1,6 +1,6 @@
 import {connect} from 'react-redux';
 import {find} from 'lodash';
-import LearningFree from '../components/LearningFree.jsx';
+import LearningFree from './component.jsx';
 import {
    addLetterToFreeLetters,
    removeLetterFromFreeLetters,
@@ -8,7 +8,7 @@ import {
    updateFreeLesson,
    updateCurrentLessonFromCurrentMode,
    updateCharToType
-} from '../redux/modules/learning-mode';
+} from 'Redux/modules/learning-mode';
 
 const mapStateToProps = (state) => {
 

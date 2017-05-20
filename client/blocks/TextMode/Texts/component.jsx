@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Link} from 'react-router-dom';
 import classNames from 'classNames';
 
-import Switcher from './Switcher.jsx';
+import Switcher from '../../Switcher.jsx';
 
 class Texts extends Component {
 

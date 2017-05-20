@@ -1,21 +1,21 @@
-import React, { Component } from 'react';
+import React  from 'react';
 import { Provider } from 'react-redux';
-import { Router, Route } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 import { ConnectedRouter, push } from 'react-router-redux';
 
 import browserHistory from '../utils/history';
 
-import Layout from '../containers/Layout.jsx';
+import Layout from './Layout/container.jsx';
 
-import store from './../redux/store';
+import store from 'Redux/store';
 
-import { setMode } from '../redux/modules/main';
+import { setMode } from 'Redux/modules/main';
 
 import {
    updateLearningState,
    setMode as setLearningMode,
    updateCharToType as updateCharToTypeFromLearningMode
-} from '../redux/modules/learning-mode';
+} from 'Redux/modules/learning-mode';
 
 
 // todo: написать проверку, где брать пользователя из кук и вытягивать данные из базы

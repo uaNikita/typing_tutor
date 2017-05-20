@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import classNames from 'classNames';
-import keyboards from '../constants/keyboards';
+import keyboards from '../../constants/keyboards';
 
-import Key from './Key.jsx';
+import Key from '../Key/component.jsx';
 
 class Keyboard extends Component {
 

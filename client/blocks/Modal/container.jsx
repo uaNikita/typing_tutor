@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
-import Modal from '../components/Modal.jsx'
-import { closeModal } from '../redux/modules/modal'
+import Modal from '../Modal/component.jsx'
+import { closeModal } from 'Redux/modules/modal'
 
 const mapDispatchToProps = (dispatch) => {
   return {

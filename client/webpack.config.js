@@ -27,6 +27,13 @@ let config = {
 
    devtool: 'eval',
 
+   resolve: {
+      alias: {
+         Blocks: path.resolve(__dirname, 'blocks/'),
+         Redux: path.resolve(__dirname, 'redux/')
+      }
+   },
+
    // Options affecting the normal modules
    module: {
       // A array of automatically applied loaders.

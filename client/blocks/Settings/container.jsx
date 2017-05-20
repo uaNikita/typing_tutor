@@ -1,5 +1,5 @@
 import {connect} from 'react-redux';
-import Settings from '../components/Settings.jsx';
+import Settings from '../Settings/component.jsx';
 
 const mapStateToProps = (state) => {
 

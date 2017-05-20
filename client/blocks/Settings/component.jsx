@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Redirect, Route, Link, NavLink } from 'react-router-dom';
-import LearningMode from '../containers/LearningMode.jsx';
-import TextMode from '../components/TextMode.jsx';
-import Keyboard from '../containers/Keyboard.jsx';
+import LearningMode from '../LearningMode/container.jsx';
+import TextMode from '../TextMode/component.jsx';
+import Keyboard from '../Keyboard/container.jsx';
 
-import store from './../redux/store';
+import store from 'Redux/store';
 
 class Settings extends Component {
    

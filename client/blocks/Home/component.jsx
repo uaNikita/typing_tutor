@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 import $ from 'jquery';
 
-import Textarea from '../containers/Textarea.jsx';
-import Learningarea from '../containers/Learningarea.jsx';
-import Keypad from '../containers/Keypad.jsx';
-import Metronome from '../containers/Metronome.jsx';
+import Textarea from '../Textarea/container.jsx';
+import Learningarea from '../Learningarea/container.jsx';
+import Keypad from '../Keypad/container.jsx';
+import Metronome from '../Metronome/container.jsx';
 
 const $document = $(document);
 

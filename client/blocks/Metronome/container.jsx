@@ -1,6 +1,6 @@
 import {connect} from 'react-redux'
-import Metronome from '../components/Metronome.jsx'
-import {actionMetronome} from '../redux/modules/main'
+import Metronome from '../Metronome/component.jsx'
+import {actionMetronome} from 'Redux/modules/main'
 
 const mapStateToProps = (state) => {
 

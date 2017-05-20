@@ -3,7 +3,7 @@ import {filter, isArray, concat, clone} from 'lodash';
 import $ from 'jquery';
 import noUiSlider from 'nouislider';
 import classNames from 'classNames';
-import Key from './Key.jsx';
+import Key from '../../Key/component.jsx';
 
 class LearningFingers extends Component {
 

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import RegistrationForm from '../../components/auth/RegistrationForm.jsx';
-import { openModal } from '../../redux/modules/modal';
+import RegistrationForm from './component.jsx';
+import { openModal } from 'Redux/modules/modal';
 
 const mapDispatchToProps = (dispatch) => {
    return {

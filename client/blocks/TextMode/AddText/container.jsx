@@ -1,7 +1,7 @@
 import {connect} from 'react-redux'
 import {push} from 'react-router-redux'
-import AddText from '../components/AddText.jsx'
-import {addText, selectLastText} from '../redux/modules/text-mode'
+import AddText from './component.jsx'
+import {addText, selectLastText} from 'Redux/modules/text-mode'
 
 const mapDispatchToProps = (dispatch) => {
    return {

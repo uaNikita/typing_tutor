@@ -1,8 +1,8 @@
 import {connect} from 'react-redux';
-import Texts from '../components/Texts.jsx';
+import Texts from './component.jsx';
 
-import {setMode} from '../redux/modules/main';
-import {selectText, updateCharToType} from '../redux/modules/text-mode';
+import {setMode} from 'Redux/modules/main';
+import {selectText, updateCharToType} from 'Redux/modules/text-mode';
 
 const mapStateToProps = (state) => {
 

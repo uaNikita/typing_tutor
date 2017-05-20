@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
-import Modal from '../../containers/Modal.jsx';
+import Modal from '../Modal/container.jsx';
 import Login from '../authorization/Login/component.jsx';
 import Registration from '../authorization/Registration/component.jsx';
 import ForgotPassword from '../authorization/ForgotPassword/component.jsx';

@@ -1,15 +1,15 @@
 import {connect} from 'react-redux';
 import {find, concat} from 'lodash';
-import LearningFingers from '../components/LearningFingers.jsx';
+import LearningFingers from './component.jsx';
 import {
    setSetSizeFingers,
    setMaxLettersInWordFingers,
    updateFingersLesson,
    updateCurrentLessonFromCurrentMode,
    updateCharToType
-} from '../redux/modules/learning-mode';
+} from 'Redux/modules/learning-mode';
 
-import {getFingersSet} from "../utils";
+import {getFingersSet} from "../../../utils";
 
 const mapStateToProps = (state) => {
 

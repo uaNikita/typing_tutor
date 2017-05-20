@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import Home from '../components/Home.jsx';
-import { openModal } from '../redux/modules/modal';
+import Home from './component.jsx';
+import { openModal } from 'Redux/modules/modal';
 
-import { typeChar, updateStartVariables } from '../redux/modules/main';
-import { refreshCurrentLesson } from '../redux/modules/learning-mode';
+import { typeChar, updateStartVariables } from 'Redux/modules/main';
+import { refreshCurrentLesson } from 'Redux/modules/learning-mode';
 
 const mapStateToProps = (state) => {
 

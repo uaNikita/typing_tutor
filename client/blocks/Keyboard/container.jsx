@@ -1,10 +1,10 @@
 import {connect} from 'react-redux';
 import {find} from 'lodash';
-import Keyboard from '../components/Keyboard.jsx';
+import Keyboard from './component.jsx';
 
-import {setKeyboard} from '../redux/modules/main';
-import {updateLearningState, updateCharToType as updateCharToTypeFromLearningMode} from '../redux/modules/learning-mode';
-import {updateCharToType as updateCharToTypeFromTextMode} from '../redux/modules/text-mode';
+import {setKeyboard} from 'Redux/modules/main';
+import {updateLearningState, updateCharToType as updateCharToTypeFromLearningMode} from 'Redux/modules/learning-mode';
+import {updateCharToType as updateCharToTypeFromTextMode} from 'Redux/modules/text-mode';
 
 const mapStateToProps = (state) => {
 

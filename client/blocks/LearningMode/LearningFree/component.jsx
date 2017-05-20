@@ -3,7 +3,7 @@ import classNames from 'classNames';
 import {assign} from 'lodash';
 import $ from 'jquery';
 import noUiSlider from 'nouislider';
-import Key from './Key.jsx';
+import Key from '../../Key/component.jsx';
 
 class LearningFree extends Component {
 

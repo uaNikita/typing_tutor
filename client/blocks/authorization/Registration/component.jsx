@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
 import { SubmissionError } from 'redux-form/immutable';
-import RegistrationForm from '../../containers/auth/RegistrationForm.jsx';
+import RegistrationForm from '../RegistrationForm/container.jsx';
 
 class Registration extends Component {
 

@@ -3,12 +3,10 @@ import { Route } from 'react-router-dom';
 import $ from 'jquery';
 import classNames from 'classNames';
 
-import Footer from './Footer.jsx';
-import ModalFrame from '../blocks/ModalFrame/container.jsx';
-import Home from '../containers/Home.jsx';
-import Settings from '../containers/Settings.jsx';
-
-
+import Footer from '../Footer.jsx';
+import ModalFrame from '../ModalFrame/container.jsx';
+import Home from '../Home/container.jsx';
+import Settings from '../Settings/container.jsx';
 
 class Layout extends Component {
 

@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 
-import AddTextForm from '../components/AddTextForm.jsx';
+import AddTextForm from '../AddTextForm.jsx';
 
 class AddText extends Component {
 
