@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 
-import LearningMode from '../components/LearningMode.jsx';
-import { setMode } from '../redux/modules/main';
+import LearningMode from './component.jsx';
+import { setMode } from 'Redux/modules/main';
 import {
    setMode as setLearningMode,
    updateCurrentLessonFromCurrentMode,
    updateCharToType
-} from '../redux/modules/learning-mode';
+} from 'Redux/modules/learning-mode';
 
 
 const mapStateToProps = (state) => {

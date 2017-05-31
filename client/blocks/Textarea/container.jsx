@@ -1,5 +1,5 @@
 import {connect} from 'react-redux'
-import Textarea from '../components/Textarea.jsx'
+import Textarea from '../Textarea/component.jsx'
 
 const mapStateToProps = (state) => {
 

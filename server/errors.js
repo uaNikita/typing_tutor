@@ -9,9 +9,9 @@ module.exports = (app) => {
 
       if (err instanceof mongoose.Error.ValidationError) {
 
-         const unifiedErrorMessage = _.map(err.errors, error => error.message);
+         const errorMessages = _.mapValues(err.errors, o => o.message);
 
-         const error = new APIError(unifiedErrorMessage);
+         const error = new APIError(errorMessages);
 
          return next(error);
 

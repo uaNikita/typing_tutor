@@ -24,7 +24,7 @@ let create = (req, res, next) => {
       .then(() => {
 
          const user = new User({
-            username: req.body.email,
+            email: req.body.email,
             password: req.body.password
          });
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import Texts from '../containers/Texts.jsx';
-import Text from '../containers/Text.jsx';
-import AddText from '../containers/AddText.jsx';
+import Texts from './Texts/container.jsx';
+import Text from './Text/container.jsx';
+import AddText from './AddText/container.jsx';
 
 const TextMode = ({ match: { url } }) => (
    <div>

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Route, NavLink, Redirect } from 'react-router-dom';
 import _ from 'lodash';
 import classNames from 'classNames';
-import LearningFingers from '../containers/LearningFingers.jsx';
-import LearningFree from '../containers/LearningFree.jsx';
-import Switcher from './Switcher.jsx';
+import LearningFingers from './LearningFingers/container.jsx';
+import LearningFree from './LearningFree/container.jsx';
+import Switcher from '../Switcher.jsx';
 
 class LearningMode extends Component {
 

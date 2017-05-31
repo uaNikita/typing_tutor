@@ -9,7 +9,7 @@ let APIError = require('../helpers/APIError');
  * User Schema
  */
 const UserSchema = new mongoose.Schema({
-   username: {
+   email: {
       type: String,
       required: true,
       match: [
@@ -77,15 +77,11 @@ UserSchema.pre('save', function(next) {
  * Methods
  */
 UserSchema.methods.generateHash = password => {
-
    return bcrypt.hash(password, config.get('saltRounds'));
-
 };
 
 UserSchema.methods.validPassword = function(candidatePassword) {
-
    return bcrypt.compare(candidatePassword, this.password);
-
 };
 
 UserSchema.methods.getLearningMode = (candidatePassword, cb) => {};

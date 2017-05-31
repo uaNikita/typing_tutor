@@ -23,14 +23,11 @@ class Registration extends Component {
          body: JSON.stringify(values.toJS())
       })
          .then(response => {
-
-            throw new SubmissionError({
-               email: 'User does not exist',
-               _error: 'Login failed!'
-            });
+            // throw new SubmissionError({
+            //    email: 'User does not exist'
+            // });
 
             return response.json();
-
          }).then(data => {
 
             console.log('data', data, typeof data);
