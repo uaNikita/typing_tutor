@@ -5,48 +5,63 @@ let APIError = require('./helpers/APIError');
 
 module.exports = (app) => {
 
-   app.use((err, req, res, next) => {
+  // catch 404 and forward to error handler
+  app.use((req, res, next) => {
 
-      if (err instanceof mongoose.Error.ValidationError) {
+    const err = new APIError({
+      message: 'API not found',
+      status: httpStatus.NOT_FOUND
+    });
 
-         const errorMessages = _.mapValues(err.errors, o => o.message);
+    return next(err);
 
-         const error = new APIError(errorMessages);
+  });
 
-         return next(error);
+  app.use((err, req, res, next) => {
 
-      }
+    if (err instanceof mongoose.Error.ValidationError) {
 
-      if (!(err instanceof APIError)) {
+      const errors = _.mapValues(err.errors, o => o.message);
 
-         const apiError = new APIError(err.message, err.status);
+      const apiError = new APIError({
+        message: 'validation error',
+        status: httpStatus.BAD_REQUEST,
+        errors
+      });
 
-         return next(apiError);
+      return next(apiError);
 
-      }
+    }
 
-      return next(err);
+    if (!(err instanceof APIError)) {
 
-   });
+      const apiError = new APIError({
+        message: err.message,
+        status: err.status
+      });
 
-   // catch 404 and forward to error handler
-   app.use((req, res, next) => {
+      return next(apiError);
 
-      const err = new APIError('API not found', httpStatus.NOT_FOUND);
+    }
 
-      return next(err);
+    return next(err);
 
-   });
+  });
 
-   // error handler
-   app.use((err, req, res, next) => {
 
-      let response = {
-         message: err.message
-      };
+  // error handler
+  app.use((err, req, res, next) => {
 
-      res.status(err.status).json(response);
+    let response = {
+      message: err.message
+    };
 
-   });
+    if (err.errors) {
+      response.errors = err.errors;
+    }
+
+    res.status(err.status).json(response);
+
+  });
 
 };

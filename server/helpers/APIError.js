@@ -4,13 +4,14 @@ let httpStatus = require('http-status');
  * @extends Error
  */
 class ExtendableError extends Error {
-   constructor(message, status) {
-      super(message);
-      this.name = this.constructor.name;
-      this.message = message;
-      this.status = status;
-      Error.captureStackTrace(this, this.constructor.name);
-   }
+  constructor(message, status, errors) {
+    super(message);
+    this.name = this.constructor.name;
+    this.message = message;
+    this.status = status;
+    this.errors = errors;
+    Error.captureStackTrace(this, this.constructor);
+  }
 }
 
 /**
@@ -18,14 +19,23 @@ class ExtendableError extends Error {
  * @extends ExtendableError
  */
 class APIError extends ExtendableError {
-   /**
-    * Creates an API error.
-    * @param {string} message - Error message.
-    * @param {number} status - HTTP status code of error.
-    */
-   constructor(message, status = httpStatus.INTERNAL_SERVER_ERROR) {
-      super(message, status);
-   }
+  /**
+   * Creates an API error.
+   * @param options - Error message, HTTP status code of error, errors description
+   */
+  constructor(options) {
+    let {
+            message,
+            status,
+            errors
+          } = options;
+
+    if (!status) {
+      status = httpStatus.INTERNAL_SERVER_ERROR
+    }
+
+    super(message, status, errors);
+  }
 }
 
 module.exports = APIError;
