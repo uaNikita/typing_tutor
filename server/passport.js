@@ -5,10 +5,6 @@ let User = require('./models/user');
 const expressJwt = require('express-jwt');
 const jwt = require('jsonwebtoken');
 
-
-
-
-
 module.exports = (app) => {
 
    app.use(passport.initialize());
@@ -29,7 +25,7 @@ module.exports = (app) => {
       passwordField: 'password'
    }, (email, password, done) => {
       
-      User.findOne({ username: email })
+      User.findOne({ email })
          .exec()
          .then(user => {
             

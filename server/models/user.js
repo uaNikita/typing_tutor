@@ -23,6 +23,15 @@ const UserSchema = new mongoose.Schema({
       minlength: [5, '`{PATH}` exceeds the minimum allowed length (5).'],
       maxlength: [20, '`{PATH} exceeds the maximum allowed length (20).']
    },
+   refreshToken: {
+      token: {
+         type: String
+      },
+      created: {
+         type: Date,
+         default: Date.now
+      }
+   },
    statistic: Array,
    mod1: {
       mod1val1: {
@@ -92,20 +101,24 @@ UserSchema.methods.getLearningMode = (candidatePassword, cb) => {};
 UserSchema.statics = {
 
    isNotExist(email) {
-
-      return this.findOne({ username: email })
+      return this.findOne({ email })
          .exec()
          .then(user => {
-            
+
             if (user) {
-               const err = new APIError('That email is already taken', httpStatus.CONFLICT);
+               const err = new APIError({
+                  message: 'That email is already taken',
+                  errors: {
+                     email: 'Email is already taken'
+                  },
+                  status: httpStatus.CONFLICT
+               });
                return Promise.reject(err);
             } else {
                return Promise.resolve();
             }
 
          });
-
    },
    /**
     * Get user

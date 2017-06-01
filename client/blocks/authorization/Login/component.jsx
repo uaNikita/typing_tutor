@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { SubmissionError } from 'redux-form/immutable';
 import LoginForm from '../LoginForm/container.jsx';
 
 class Login extends Component {
@@ -12,9 +13,25 @@ class Login extends Component {
       );
    }
 
-   handleSubmit() {
+   handleSubmit(values) {
 
-     console.log(123);
+      return fetch('/auth/login', {
+         method: 'POST',
+         headers: {
+            'Content-Type': 'application/json'
+         },
+         body: JSON.stringify(values.toJS())
+      })
+         .then(response => response.json())
+         .then(data => {
+
+            console.log('data', data);
+
+            if (data.errors) {
+               throw new SubmissionError(data.errors);
+            }
+
+         });
      
    }
 

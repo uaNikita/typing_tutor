@@ -20,6 +20,8 @@ let logout = function(req, res, next, id) {
  */
 let create = (req, res, next) => {
 
+   // console.log(123534);
+   
    User.isNotExist(req.body.email)
       .then(() => {
 
