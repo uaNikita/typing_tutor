@@ -8,25 +8,26 @@ const jwt = require('jsonwebtoken');
 module.exports = (app) => {
 
    app.use(passport.initialize());
-   app.use(passport.session());
 
-   passport.serializeUser((user, done) => {
-      console.log('serializeUser');
-      
-      done(null, user.id);
-   });
-
-   passport.deserializeUser(function(id, done) {
-      console.log('deserializeUser');
-      User.findById(id, (err, user) => {
-         done(err, user);
-      });
-   });
+   // passport.serializeUser((user, done) => {
+   //    console.log('serializeUser');
+   //
+   //    done(null, user.id);
+   // });
+   //
+   // passport.deserializeUser(function(id, done) {
+   //    console.log('deserializeUser');
+   //    User.findById(id, (err, user) => {
+   //       done(err, user);
+   //    });
+   // });
 
    passport.use(new LocalStrategy({
       usernameField: 'email',
       passwordField: 'password'
    }, (email, password, done) => {
+
+      console.log(111);
 
       User.findOne({ email })
          .exec()

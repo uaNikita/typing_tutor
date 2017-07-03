@@ -3,6 +3,8 @@ import { Provider } from 'react-redux';
 import { Route } from 'react-router-dom';
 import { ConnectedRouter, push } from 'react-router-redux';
 
+import './field.styl'
+
 import browserHistory from '../utils/history';
 
 import Layout from './Layout/container.jsx';

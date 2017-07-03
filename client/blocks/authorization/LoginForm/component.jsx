@@ -36,23 +36,32 @@ class renderField extends Component {
             input,
             label,
             type,
+            className,
             meta: {
               asyncValidating,
               touched,
-              error
+              error,
+              valid
             }
           } = this.props;
 
-    var rowClass = 'auth__row';
+    var fieldClass = 'field';
 
     if (asyncValidating) {
-      rowClass = classNames(rowClass, 'async-validating');
+      fieldClass = classNames(fieldClass, `${fieldClass}_async-validating`);
+    }
+    else if (valid) {
+      fieldClass = classNames(fieldClass, `${fieldClass}_valid`);
+    }
+
+    if (className) {
+      fieldClass = classNames(fieldClass, className);
     }
 
     return (
-      <div className={rowClass}>
+      <div className={fieldClass}>
         {touched && error && <p className="error">{error}</p>}
-        <input className="auth__control" {...input} type={type} placeholder={label} />
+        <input className="field__control" {...input} type={type} placeholder={label} />
       </div>
     );
   }
@@ -72,9 +81,10 @@ class LoginForm extends Component {
     return (
       <form className="auth__form" onSubmit={ handleSubmit(this._handleSubmit) }>
 
-        <Field name="email" component={renderField} type="email" label="Email" />
+        <Field className="auth__row" name="email" component={renderField} type="email" label="Email" />
 
-        <Field name="password" component={renderField} type="password" label="Password" />
+        <Field className="auth__row" name="password" component={renderField} type="password" label="Password" />
+
         <p className="auth__fp-wrap">
           <a className="auth__fp" href onClick={ this._onForgotClickHandler.bind(this) }>Forgot password?</a>
         </p>

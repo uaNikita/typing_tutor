@@ -10,6 +10,8 @@ router.post('/login', passport.authenticate('local'), (req, res) => {
 
 router.post('/signup', userCtrl.create);
 
+router.post('/token', userCtrl.createNewTokens);
+
 router.get('/logout', (req, res) => {
 
    req.logout();

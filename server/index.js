@@ -30,7 +30,7 @@ app.get('*', function (req, res) {
 });
 
 app.use(session({
-   secret: 'white cat',
+   secret: config.get('secretKey'),
    resave: false,
    saveUninitialized: false
 }));

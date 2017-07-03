@@ -7,32 +7,30 @@
   "author": "Nikita Zhukov",
   "license": "ISC",
   "private": true,
-  "devDependencies": {
-    "express-generator": "*"
-  },
   "scripts": {
     "prod": "cross-env NODE_ENV=production node index.js",
     "start": "cross-env NODE_ENV=development nodemon index.js"
   },
   "dependencies": {
-    "cross-env":"*",
-    "config": "*",
-    "body-parser": "*",
-    "cookie-parser": "*",
-    "express": "*",
-    "pug": "*",
-    "serve-favicon": "*",
+    "bcrypt": "1.0.2",
+    "bluebird": "3.5.0",
+    "body-parser": "1.17.1",
+    "config": "1.25.1",
+    "cookie-parser": "1.4.3",
+    "cross-env": "4.0.0",
+    "crypto": "0.0.3",
+    "express": "4.15.2",
+    "express-jwt": "5.1.0",
+    "express-session": "1.15.2",
     "http-status": "*",
+    "jsonwebtoken": "7.3.0",
+    "lodash": "4.17.4",
     "mongodb": "*",
-    "bluebird": "*",
-    "mongoose": "*",
-    "nodemon": "*",
-    "bcrypt": "*",
-    "lodash": "*",
-    "passport": "*",
-    "passport-local": "*",
-    "express-session": "*",
-    "express-jwt": "*",
-    "jsonwebtoken": "*"
+    "mongoose": "4.9.3",
+    "nodemon": "1.11.0",
+    "passport": "0.3.2",
+    "passport-local": "1.0.0",
+    "pug": "0.1.0",
+    "serve-favicon": "2.4.2"
   }
 }

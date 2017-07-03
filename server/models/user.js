@@ -24,13 +24,8 @@ const UserSchema = new mongoose.Schema({
       maxlength: [20, '`{PATH} exceeds the maximum allowed length (20).']
    },
    refreshToken: {
-      token: {
-         type: String
-      },
-      created: {
-         type: Date,
-         default: Date.now
-      }
+      token:  String,
+      created: Date
    },
    statistic: Array,
    mod1: {
@@ -120,11 +115,7 @@ UserSchema.statics = {
 
          });
    },
-   /**
-    * Get user
-    * @param {ObjectId} id - The objectId of user.
-    * @returns {Promise<User, APIError>}
-    */
+
    get(id) {
       return this.findById(id)
          .exec()
@@ -132,7 +123,7 @@ UserSchema.statics = {
             if (user) {
                return user;
             }
-            const err = new APIError('No such user exists!', httpStatus.Conflict);
+            const err = new APIError('No such user exists!', httpStatus.CONFLICT);
             return Promise.reject(err);
          });
    }

@@ -4,13 +4,15 @@ import Text from './component.jsx'
 import {selectText, refreshText} from 'Redux/modules/text-mode'
 
 const mapStateToProps = (state, ownProps) => {
-
-   const id = ownProps.params.textId;
+  
+   const id = ownProps.match.params.textId;
 
    const stateTextMode = state.get('textMode');
 
-   const text = stateTextMode.get('entities').filter(obj => obj.get('id') === id).get(0);
+   const text = stateTextMode.get('entities').filter(obj => {return obj.get('id') === parseInt(id, 10)}).get(0);
 
+   console.log('text', text);
+   
    return {
       id,
       title: text.get('title'),

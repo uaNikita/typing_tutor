@@ -66,6 +66,7 @@ let config = {
             {
               loader: 'postcss-loader',
               options: {
+                sourceMap: true,
                 plugins: [
                   autoprefixer()
                 ]

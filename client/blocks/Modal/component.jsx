@@ -1,5 +1,7 @@
 import React, {Component} from 'react'
 
+import './modal.styl';
+
 class Modal extends Component {
   render() {
     const {closable, children} = this.props;
