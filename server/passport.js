@@ -11,10 +11,13 @@ module.exports = (app) => {
    app.use(passport.session());
 
    passport.serializeUser((user, done) => {
+      console.log('serializeUser');
+      
       done(null, user.id);
    });
 
    passport.deserializeUser(function(id, done) {
+      console.log('deserializeUser');
       User.findById(id, (err, user) => {
          done(err, user);
       });
@@ -24,7 +27,7 @@ module.exports = (app) => {
       usernameField: 'email',
       passwordField: 'password'
    }, (email, password, done) => {
-      
+
       User.findOne({ email })
          .exec()
          .then(user => {

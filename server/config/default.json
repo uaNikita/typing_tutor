@@ -1,4 +1,5 @@
 {
   "database": "mongodb://localhost:27017/typing-tutor",
-  "saltRounds": 5
+  "saltRounds": 5,
+  "sekretKey": "white cat"
 }

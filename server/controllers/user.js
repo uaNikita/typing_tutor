@@ -1,4 +1,5 @@
 let passport = require('passport');
+const jsonwebtoken = require('jsonwebtoken');
 let User = require('../models/user');
 
 let logout = function(req, res, next, id) {
@@ -12,6 +13,14 @@ let logout = function(req, res, next, id) {
 
 };
 
+const generateAccessToken = userId => {
+   return jsonwebtoken.sign({
+      id: userId
+   }, 'server secret', {
+      expiresInMinutes: 15
+   });
+};
+
 /**
  * Create new user
  * @property {string} req.body.username - The username of user.
@@ -21,7 +30,7 @@ let logout = function(req, res, next, id) {
 let create = (req, res, next) => {
 
    // console.log(123534);
-   
+
    User.isNotExist(req.body.email)
       .then(() => {
 
@@ -39,7 +48,11 @@ let create = (req, res, next) => {
 
             if (err) return;
 
-            res.json('OK');
+            res.json({
+               email: savedUser.email,
+               refreshToken: 'refreshToken',
+               accessToken: generateAccessToken(savedUser.id)
+            });
 
          });
 
