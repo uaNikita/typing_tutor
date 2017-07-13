@@ -35,7 +35,7 @@ let config = {
   },
 
   plugins: [
-    new ExtractTextPlugin('[name].css'),
+    new ExtractTextPlugin('[name].css')
   ],
 
   // Options affecting the normal modules
@@ -44,12 +44,14 @@ let config = {
     rules: [
       {
         test: /\.jsx?$/,
-        loader: 'babel-loader',
         exclude: /node_modules/,
-        query: {
-          plugins: ['transform-object-rest-spread'],
-          presets: ['es2015', 'react']
-        }
+        enforce: 'pre',
+        use: 'eslint-loader'
+      },
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/
       },
       {
         test: /\.styl$/,
@@ -75,50 +77,39 @@ let config = {
             'stylus-loader'
           ]
         })
-      }, {
+      },
+      {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: 'css-loader'
         })
-      }, {
-        test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        query: {
-          limit: '10000',
-          mimetype: 'application/font-woff',
-          name: '[name].[ext]'
-        }
-      }, {
-        test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        query: {
-          limit: '10000',
-          mimetype: 'application/font-woff',
-          name: '[name].[ext]'
-        }
-      }, {
-        test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        query: {
-          limit: '10000',
-          mimetype: 'application/octet-stream',
-          name: '[name].[ext]'
-        }
-      }, {
-        test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+      },
+      {
+        test: /\.(woff|woff2|ttf|eot)$/,
         loader: 'file-loader',
-        query: {
+        options: {
+          outputPath: './fonts/',
           name: '[name].[ext]'
         }
-      }, {
-        test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
-        loader: 'url-loader',
-        query: {
-          limit: '10000',
-          mimetype: 'image/svg+xml',
-          name: '[name].[ext]'
-        }
+      },
+      {
+        test: /\.(jpg|png|svg)$/,
+        use: [
+          {
+            loader: 'file-loader',
+            options: {
+              outputPath: './images/',
+              name: '[name].[ext]'
+            }
+          },
+          {
+            loader: 'image-webpack-loader',
+            options: {
+              progressive: true
+            }
+          }
+        ]
       }
     ]
   }
@@ -132,7 +123,6 @@ if (isProduction) {
         'NODE_ENV': JSON.stringify('production')
       }
     }),
-    new webpack.NoEmitOnErrorsPlugin(),
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false
