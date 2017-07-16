@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
-import { RenderField } from './RenderField.jsx';
+import RenderField from 'Blocks/RenderField/component.jsx';
 
 const validate = values => {
   const errors = {};

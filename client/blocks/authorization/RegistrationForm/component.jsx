@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 import generatePassword from 'password-generator';
 
-import RenderField from './RenderField.jsx';
+import RenderField from 'Blocks/RenderField/component.jsx';
 import RenderPasswordField from './RenderPasswordField.jsx';
 
 const validate = values => {

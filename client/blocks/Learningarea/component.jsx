@@ -1,11 +1,13 @@
 import React, { Component } from 'react';
 
 class Learningarea extends Component {
-  getCharsMarkup = string => string.split('').map(char => {
+  getCharsMarkup = string => string.split('').map((char, i) => {
     let c = char;
 
     if (char === ' ') {
-      c = <span key={char} className="learningarea__space">␣</span>;
+      const key = char + i;
+
+      c = <span key={key} className="learningarea__space">␣</span>;
     }
 
     return c;
