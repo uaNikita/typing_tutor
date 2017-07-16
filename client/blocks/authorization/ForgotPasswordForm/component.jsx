@@ -1,98 +1,59 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
-import classNames from 'classNames';
+
+import RenderField from './RenderField.jsx';
 
 const validate = values => {
+  const errors = {};
 
-   let errors = {};
+  if (!values.get('email')) {
+    errors.email = 'Required';
+  }
 
-   if (!values.get('email')) {
-      errors.email = 'Required';
-   }
-
-   return errors;
-
+  return errors;
 };
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
-const asyncValidate = (values/*, dispatch */) => {
-   return sleep(1000) // simulate server latency
-      .then(() => {
-         if (!['john', 'paul', 'george', 'ringo'].includes(values.get('email'))) {
-            return { email: 'That email does not exist' };
-         }
-      });
-};
-
-class RenderField extends Component {
-
-   render() {
-      const {
-         input,
-         label,
-         type,
-         meta: {
-            asyncValidating,
-            touched,
-            error
-         }
-      } = this.props;
-
-      let rowClass = 'auth__row';
-
-      if (asyncValidating) {
-         rowClass = classNames(rowClass, 'async-validating');
-      }
-
-      return (
-         <div className={rowClass}>
-            {touched && error && <p className="error">{error}</p>}
-            <input
-               className="auth__control"
-               {...input}
-               type={type}
-               placeholder={label}
-            />
-         </div>
-      );
-   }
-}
+const asyncValidate = values => sleep(1000)
+  .then(() => {
+    if (!['john', 'paul', 'george', 'ringo'].includes(values.get('email'))) {
+      return { email: 'That email does not exist' };
+    }
+  });
 
 class ForgotPasswordForm extends Component {
+  onBackClickHandler = e => {
+    e.preventDefault();
 
-   render() {
-      return (
-         <form className="auth__form auth__form_password-reset">
-            <Field
-               name="email"
-               component={RenderField}
-               type="email"
-               label="Email"
-            />
+    this.props.openModal('Login');
+  }
 
-            <div className="auth__button-wrap">
-               <button className="button">Send new password</button>
-            </div>
+  render() {
+    return (
+      <form className="auth__form auth__form_password-reset">
+        <Field
+          name="email"
+          component={RenderField}
+          type="email"
+          label="Email"
+        />
 
-            <p className="auth__hint">
-               ← <a className="auth__link2" href onClick={ this._onBackClickHandler.bind(this) }>Back</a>
-            </p>
-         </form>
-      );
-   }
+        <div className="auth__button-wrap">
+          <button className="button">Send new password</button>
+        </div>
 
-   _onBackClickHandler(e) {
-      e.preventDefault();
-
-      this.props.openModal('Login');
-   }
-
+        <p className="auth__hint">
+          ← <a className="auth__link2" href onClick={this.onBackClickHandler}>Back</a>
+        </p>
+      </form>
+    );
+  }
 }
 
 export default reduxForm({
-   form: 'forgot-password',
-   validate,
-   asyncValidate,
-   asyncBlurFields: ['email']
+  form: 'forgot-password',
+  validate,
+  asyncValidate,
+  asyncBlurFields: ['email'],
 })(ForgotPasswordForm);

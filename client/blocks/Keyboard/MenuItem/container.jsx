@@ -6,26 +6,22 @@ import {
   updateCharToType as updateCharToTypeFromLearningMode,
 } from 'Redux/modules/learning-mode';
 import { updateCharToType as updateCharToTypeFromTextMode } from 'Redux/modules/text-mode';
-import Keyboard from './component.jsx';
+import MenuItem from './component.jsx';
 
 const mapStateToProps = state => {
   const stateMain = state.get('main');
 
   return {
     mode: stateMain.get('mode'),
-    keys: stateMain.get('keys'),
-    name: stateMain.get('keyboard'),
   };
 };
 
 const mergeProps = (stateProps, dispatchProps) => {
   const { dispatch } = dispatchProps;
 
-  const { mode, keys, name } = stateProps;
+  const { mode } = stateProps;
 
   return {
-    keys,
-    name,
     setKeyboard: boardName => {
       dispatch(setKeyboard(boardName));
 
@@ -50,5 +46,5 @@ export default connect(
   mapStateToProps,
   null,
   mergeProps,
-)(Keyboard);
+)(MenuItem);
 

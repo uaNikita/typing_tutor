@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import classNames from 'classNames';
+import classNames from 'classnames';
 
 const getElement = (el, type, value, error, classNameCtrl, onKeyUp, placeholder)=> {
   let cls = 'ctrl';

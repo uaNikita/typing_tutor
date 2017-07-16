@@ -1,115 +1,102 @@
-import {find, forEach, filter, random, times, concat} from 'lodash';
+import { forEach, filter, random, times } from 'lodash';
 
 export function getIdsFromCharacter(keys, сharacter) {
-   let charsToType = [];
+  const charsToType = [];
 
-   keys.forEach(obj => {
+  keys.forEach(obj => {
+    // check if it upper case letter
+    if (obj.shiftKey === сharacter) {
+      charsToType.push(obj.id);
 
-      // check if it upper case letter
-      if (obj.shiftKey === сharacter) {
-         charsToType.push(obj.id);
-
-         if (obj.hand === 'left') {
-            charsToType.push('Right Shift');
-         } else if (obj.hand === 'right') {
-            charsToType.push('Left Shift');
-         }
-
-      } else if (obj.key === сharacter) {
-         charsToType.push(obj.id);
+      if (obj.hand === 'left') {
+        charsToType.push('Right Shift');
       }
+      else if (obj.hand === 'right') {
+        charsToType.push('Left Shift');
+      }
+    }
+    else if (obj.key === сharacter) {
+      charsToType.push(obj.id);
+    }
+  });
 
-   });
-
-   return charsToType;
+  return charsToType;
 }
 
 export function sliceChar(chars, idChars) {
+  let newChars = chars.slice();
 
-   let newChars = chars.slice();
+  forEach(idChars, id => {
+    const index = newChars.indexOf(id);
 
-   forEach(idChars, id => {
-      let index = newChars.indexOf(id);
+    if (index + 1) {
+      newChars = [
+        ...newChars.slice(0, index),
+        ...newChars.slice(index + 1),
+      ];
+    }
+  });
 
-      if (index + 1) {
-         newChars = [
-            ...newChars.slice(0, index),
-            ...newChars.slice(index + 1)
-         ];
-      }
-
-   });
-
-   return newChars;
+  return newChars;
 }
 
 export const generateLesson = (() => {
-   let minWordLength = 3;
-   let maxChars = 50;
+  const minWordLength = 3;
+  const maxChars = 50;
 
-   return (maxLettersInWord, letters) => {
-      let lesson = '';
-      let wordLength;
+  return (maxLettersInWord, letters) => {
+    let lesson = '';
+    let wordLength;
 
-      while (lesson.length <= maxChars) {
-         wordLength = random(minWordLength, maxLettersInWord);
+    const addLetter = () => {
+      lesson += letters[random(0, letters.length - 1)];
+    };
 
-         if (lesson.length + wordLength > maxChars) {
-            wordLength = maxChars - lesson.length;
+    while (lesson.length <= maxChars) {
+      wordLength = random(minWordLength, maxLettersInWord);
 
-            if (wordLength < 3) {
-               break;
-            }
-         }
+      if (lesson.length + wordLength > maxChars) {
+        wordLength = maxChars - lesson.length;
 
-         times(wordLength, () => {
-            let idxLetter = random(0, letters.length - 1);
-
-            lesson += letters[idxLetter];
-         });
-
-         lesson += ' ';
-
+        if (wordLength < 3) {
+          break;
+        }
       }
 
-      lesson = lesson.slice(0, -1);
+      times(wordLength, addLetter);
 
-      return lesson;
-   };
+      lesson += ' ';
+    }
+
+    lesson = lesson.slice(0, -1);
+
+    return lesson;
+  };
 })();
 
 export function getFingersSet(keys) {
-   var fingers = ['index', 'middle', 'ring', 'pinky'];
-   var rows = ['middle', 'top', 'bottom'];
-   var hands = ['left', 'right'];
+  const fingers = ['index', 'middle', 'ring', 'pinky'];
+  const rows = ['middle', 'top', 'bottom'];
+  const hands = ['left', 'right'];
 
-   let lettersSet = [];
+  const lettersSet = [];
 
-   rows.forEach(row => {
+  rows.forEach(row => {
+    fingers.forEach(finger => {
+      hands.forEach(hand => {
+        const keysArr = filter(keys, {
+          row,
+          finger,
+          hand,
+          type: 'letter',
+        }).map(obj => obj.key);
 
-      fingers.forEach(finger => {
-
-         hands.forEach(hand => {
-
-            let keysArr = filter(keys, {
-               row: row,
-               finger: finger,
-               hand: hand,
-               type: 'letter'
-            }).map(obj => {
-               return obj.key;
-            });
-
-            if (keysArr.length) {
-               lettersSet.push(keysArr);
-            }
-
-         });
-
+        if (keysArr.length) {
+          lettersSet.push(keysArr);
+        }
       });
+    });
+  });
 
-   });
-
-   return lettersSet;
-
+  return lettersSet;
 }

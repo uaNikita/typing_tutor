@@ -35,12 +35,13 @@ class Metronome extends Component {
   componentDidUpdate() {
     if (this.state.status) {
       this.playWithInterval();
-    } else {
+    }
+    else {
       this.stopPlaying();
     }
   }
 
-  onClickHandler = (e) => {
+  onClickHandler = e => {
     e.preventDefault();
 
     this.setState({
@@ -85,7 +86,8 @@ class Metronome extends Component {
 
     if (this.state.status) {
       btnClass = classNames(btnClass, 'fa-pause');
-    } else {
+    }
+    else {
       btnClass = classNames(btnClass, 'fa-play');
     }
 
@@ -95,7 +97,7 @@ class Metronome extends Component {
 
         <div className="metronome__range-wrap">
           <h5 className="metronome__title">Volume</h5>
-          <div className="metronome__range" ref={(c) => { this.metronomeRange = c; }} />
+          <div className="metronome__range" ref={c => { this.metronomeRange = c; }} />
         </div>
       </div>
     );

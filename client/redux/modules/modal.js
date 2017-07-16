@@ -4,40 +4,38 @@ const OPEN_MODAL = 'modal/OPEN_MODAL';
 const CLOSE_MODAL = 'modal/CLOSE_MODAL';
 
 const initialState = Immutable.Map({
-   name: '',
+  name: '',
 
-   closable: true,
+  closable: true,
 });
 
 
 export default (state = initialState, action = {}) => {
-   switch (action.type) {
+  switch (action.type) {
+    case OPEN_MODAL:
+      return state.merge({
+        name: action.name,
+        closable: !!action.closable,
+      });
 
-      case OPEN_MODAL:
-         return state.merge({
-            name: action.name,
-            closable: !!action.closable
-         });
+    case CLOSE_MODAL:
+      return state.set('name', '');
 
-      case CLOSE_MODAL:
-         return state.set('name', '');
-
-      default:
-         return state;
-
-   }
+    default:
+      return state;
+  }
 };
 
 export function openModal(name, closable) {
-   return {
-      type: OPEN_MODAL,
-      name,
-      closable
-   };
+  return {
+    type: OPEN_MODAL,
+    name,
+    closable,
+  };
 }
 
 export function closeModal() {
-   return {
-      type: CLOSE_MODAL
-   };
+  return {
+    type: CLOSE_MODAL,
+  };
 }

@@ -1,17 +1,16 @@
-import {connect} from 'react-redux'
-import Textarea from '../Learningarea/component.jsx'
+import { connect } from 'react-redux';
+import Textarea from '../Learningarea/component.jsx';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
+  const stateLearningMode = state.get('learningMode');
 
-   const stateLearningMode = state.get('learningMode');
-
-   return {
-      lessonTyped: stateLearningMode.get('lessonTyped'),
-      lessonLast: stateLearningMode.get('lessonRest'),
-   }
-
-}
+  return {
+    lessonTyped: stateLearningMode.get('lessonTyped'),
+    lessonLast: stateLearningMode.get('lessonRest'),
+  };
+};
 
 export default connect(
-  mapStateToProps
-)(Textarea)
+  mapStateToProps,
+)(Textarea);
+

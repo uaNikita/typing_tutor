@@ -1,75 +1,52 @@
-import React, {Component} from 'react';
-import classNames from 'classNames';
+import React from 'react';
 import keyboards from '../../constants/keyboards';
 
 import Key from '../Key/component.jsx';
+import MenuItem from './MenuItem/container.jsx';
 
-class Keyboard extends Component {
+const Keyboard = props => {
+  const { keys, name } = props;
 
-   render() {
+  const keyNodes = keys.map(obj => {
+    const keyProps = {
+      className: 'keyboard__key',
+      'data-key': obj.id,
+    };
 
-      const {keys, name} = this.props;
+    return (
+      <Key
+        key={obj.id}
+        keyProps={keyProps}
+        type={obj.type}
+        char={obj.key}
+        shiftChar={obj.shiftKey}
+      />
+    );
+  });
 
-      let keyNodes = keys.map(obj => {
-         let keyProps = {
-            className: 'keyboard__key',
-            'data-key': obj.id
-         };
+  const menuItems = keyboards.map(kb => {
+    let selected;
 
-         return <Key
-           key={obj.id}
-           keyProps={keyProps}
-           type={obj.type}
-           char={obj.key}
-           shiftChar={obj.shiftKey}
-         />
+    if (kb.name === name) {
+      selected = true;
+    }
 
-      })
+    return <MenuItem selected={selected} name={kb.name} />;
+  });
 
-      let menuItems = keyboards.map((kb, i) => {
+  return (
+    <div className="keyboard-layout">
 
-         let props = {
-            key: i,
-            className: 'menu__item'
-         };
+      <menu className="keyboard-layout__types menu">
+        {menuItems}
+      </menu>
 
-         if (kb.name === name) {
+      <div className="keyboard">
+        {keyNodes}
+      </div>
 
-            props.className = classNames(props.className, 'menu__item_selected');
+    </div>
+  );
+};
 
-         } else {
-
-            props.onClick = this._onClickNameHandler.bind(this, kb.name);
-
-         }
-
-         return <a {...props}>{kb.name}</a>
-
-      })
-
-
-      return (
-        <div className='keyboard-layout'>
-
-           <menu className='keyboard-layout__types menu'>
-              {menuItems}
-           </menu>
-
-           <div className='keyboard'>
-              {keyNodes}
-           </div>
-
-        </div>
-      )
-
-   }
-
-   _onClickNameHandler(name) {
-
-      this.props.setKeyboard(name);
-
-   }
-
-}
-
-export default Keyboard
+export default Keyboard;

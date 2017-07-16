@@ -1,59 +1,53 @@
-import {connect} from 'react-redux';
-import {find, concat} from 'lodash';
-import LearningFingers from './component.jsx';
+import { connect } from 'react-redux';
 import {
-   setSetSizeFingers,
-   setMaxLettersInWordFingers,
-   updateFingersLesson,
-   updateCurrentLessonFromCurrentMode,
-   updateCharToType
+  setSetSizeFingers,
+  setMaxLettersInWordFingers,
+  updateFingersLesson,
+  updateCurrentLessonFromCurrentMode,
+  updateCharToType,
 } from 'Redux/modules/learning-mode';
 
-import {getFingersSet} from "../../../utils";
+import { getFingersSet } from 'Utils';
 
-const mapStateToProps = (state) => {
+import LearningFingers from './component.jsx';
 
-   const keys = state.getIn(['main', 'keys']).toJS();
-   
-   const stateLearningMode = state.get('learningMode');
+const mapStateToProps = state => {
+  const keys = state.getIn(['main', 'keys']).toJS();
 
-   return {
-      setSizeFingers: stateLearningMode.get('setSizeFingers'),
-      maxLettersInWord: stateLearningMode.get('maxLettersInWordFingers'),
-      fingersSet: getFingersSet(keys),
-      keys
-   };
+  const stateLearningMode = state.get('learningMode');
 
+  return {
+    setSizeFingers: stateLearningMode.get('setSizeFingers'),
+    maxLettersInWord: stateLearningMode.get('maxLettersInWordFingers'),
+    fingersSet: getFingersSet(keys),
+    keys,
+  };
 };
 
-const mapDispatchToProps = (dispatch) => {
-   return {
-      setFingersSetSize: (size) => {
+const mapDispatchToProps = dispatch => (
+  {
+    setFingersSetSize: size => {
+      dispatch(setSetSizeFingers(size));
 
-         dispatch(setSetSizeFingers(size));
+      dispatch(updateFingersLesson());
 
-         dispatch(updateFingersLesson());
+      dispatch(updateCurrentLessonFromCurrentMode());
 
-         dispatch(updateCurrentLessonFromCurrentMode());
+      dispatch(updateCharToType());
+    },
+    setMaxLettersInWord: length => {
+      dispatch(setMaxLettersInWordFingers(length));
 
-         dispatch(updateCharToType());
+      dispatch(updateFingersLesson());
 
-      },
-      setMaxLettersInWord: (length) => {
+      dispatch(updateCurrentLessonFromCurrentMode());
 
-         dispatch(setMaxLettersInWordFingers(length));
-
-         dispatch(updateFingersLesson());
-
-         dispatch(updateCurrentLessonFromCurrentMode());
-
-         dispatch(updateCharToType());
-
-      }
-   };
-};
+      dispatch(updateCharToType());
+    },
+  }
+);
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(LearningFingers);

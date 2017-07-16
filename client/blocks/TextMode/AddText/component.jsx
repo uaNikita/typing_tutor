@@ -1,39 +1,32 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 import AddTextForm from '../AddTextForm.jsx';
 
 class AddText extends Component {
+  textFormHandleSubmit = values => {
+    const { addText, selectAddedText, goToTextList } = this.props;
 
-   render() {
+    addText(values.title, values.text);
 
-      return (
-        <div className="add-text">
+    if (values['select-text']) {
+      selectAddedText();
+    }
 
-           <AddTextForm
-             className="settings-text__add-text-form"
-             onSubmit={ this._textFormHandleSubmit.bind(this) }
-           />
+    goToTextList();
+  };
 
-        </div>
-      )
-   }
+  render() {
+    return (
+      <div className="add-text">
 
-   _textFormHandleSubmit(values) {
+        <AddTextForm
+          className="settings-text__add-text-form"
+          onSubmit={this.textFormHandleSubmit}
+        />
 
-      const {addText, selectAddedText, goToTextList} = this.props;
-
-      addText(values.title, values.text);
-
-      if (values['select-text']) {
-
-         selectAddedText();
-
-      }
-
-      goToTextList();
-
-   }
-
+      </div>
+    );
+  }
 }
 
-export default AddText
+export default AddText;

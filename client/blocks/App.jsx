@@ -1,24 +1,22 @@
-import React  from 'react';
+import React from 'react';
 import { Provider } from 'react-redux';
 import { Route } from 'react-router-dom';
-import { ConnectedRouter, push } from 'react-router-redux';
+import { ConnectedRouter } from 'react-router-redux';
 
-import './field.styl'
-
-import browserHistory from '../utils/history';
-
-import Layout from './Layout/container.jsx';
+import browserHistory from 'Utils/history';
 
 import store from 'Redux/store';
 
 import { setMode } from 'Redux/modules/main';
 
 import {
-   updateLearningState,
-   setMode as setLearningMode,
-   updateCharToType as updateCharToTypeFromLearningMode
+  updateLearningState,
+  updateCharToType as updateCharToTypeFromLearningMode,
 } from 'Redux/modules/learning-mode';
 
+import Layout from './Layout/container.jsx';
+
+import './field.styl';
 
 // todo: написать проверку, где брать пользователя из кук и вытягивать данные из базы
 // если такого пользователя нет значит сгенерировать значения такие как уроки для мода лернинг и так далее
@@ -33,9 +31,9 @@ store.dispatch(setMode('learning'));
 store.dispatch(updateCharToTypeFromLearningMode());
 
 export default () => (
-   <Provider store={store}>
-      <ConnectedRouter history={ browserHistory }>
-         <Route path="/" component={ Layout } />
-      </ConnectedRouter>
-   </Provider>
+  <Provider store={store}>
+    <ConnectedRouter history={browserHistory}>
+      <Route path="/" component={Layout} />
+    </ConnectedRouter>
+  </Provider>
 );

@@ -1,68 +1,63 @@
-import React, {PropTypes, Component} from 'react'
-import classNames from 'classNames';
+import React from 'react';
+import classNames from 'classnames';
 import _ from 'lodash';
 import Key from '../Key/component.jsx';
 
-class KeyPad extends Component {
+const KeyPad = props => {
+  const {
+    keys,
+    pressedKeys,
+    pressedWrongKeys,
+    idCharsToType,
+  } = props;
 
-   render() {
+  const keysNode = keys.map(obj => {
+    const isPressed = pressedKeys.indexOf(obj.id) + 1;
+    const isWrong = pressedWrongKeys.indexOf(obj.id) + 1;
+    let needToType = false;
 
-      const {
-              keys,
-              pressedKeys,
-              pressedWrongKeys,
-              idCharsToType
-            } = this.props
+    _.forEach(idCharsToType, value => {
+      if (obj.id === value) {
+        needToType = true;
+        return false;
+      }
+    });
 
-      let keysNode = keys.map(obj => {
-         let isPressed = pressedKeys.indexOf(obj.id) + 1;
-         let isWrong = pressedWrongKeys.indexOf(obj.id) + 1;
-         let needToType = false;
+    const className = classNames('keypad__key', {
+      keypad__pressed: isPressed,
+      keypad__wrong: isWrong,
+      'keypad__to-type': needToType,
+    });
 
-         _.forEach(idCharsToType, value => {
-            if (obj.id === value) {
-               needToType = true;
-               return false;
-            }
-         });
+    let finger = obj.finger;
 
-         let className = classNames('keypad__key', {
-            'keypad__pressed': isPressed,
-            'keypad__wrong': isWrong,
-            'keypad__to-type': needToType
-         });
+    if (finger === 'index') {
+      finger = `${obj.hand}-${finger}`;
+    }
 
-         let finger = obj.finger;
+    const keyProps = {
+      className,
+      'data-key': obj.id,
+      'data-finger': finger,
+    };
 
-         if (finger === 'index') {
-            finger = obj.hand + '-' + finger;
-         }
+    return (
+      <Key
+        key={obj.id}
+        keyProps={keyProps}
+        type={obj.type}
+        char={obj.key}
+        shiftChar={obj.shiftKey}
+        classNameShift="keypad__shift"
+      />
+    );
+  });
 
-         let keyProps = {
-            className: className,
-            'data-key': obj.id,
-            'data-finger': finger
-         };
+  return (
+    <div className="keypad">
+      {keysNode}
+    </div>
+  );
+};
 
-         return <Key
-           key={obj.id}
-           keyProps={keyProps}
-           type={obj.type}
-           char={obj.key}
-           shiftChar={obj.shiftKey}
-           classNameShift='keypad__shift'
-         />
-
-      })
-
-      return (
-        <div className='keypad'>
-           {keysNode}
-        </div>
-      )
-
-   }
-
-}
-
-export default KeyPad
+export default KeyPad;

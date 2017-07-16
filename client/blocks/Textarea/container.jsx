@@ -1,19 +1,19 @@
-import {connect} from 'react-redux'
-import Textarea from '../Textarea/component.jsx'
+import { connect } from 'react-redux';
 
-const mapStateToProps = (state) => {
+import Textarea from '../Textarea/component.jsx';
 
-   const stateTextMode = state.get('textMode');
+const mapStateToProps = state => {
+  const stateTextMode = state.get('textMode');
 
-   const text = stateTextMode.get('entities').filter(obj => obj.get('id') === stateTextMode.get('currentTextId')).get(0);
+  const text = stateTextMode.get('entities').filter(obj => obj.get('id') === stateTextMode.get('currentTextId')).get(0);
 
-   return {
-      typed: text.get('typed'),
-      nonTyped: text.get('last')
-   }
-
-}
+  return {
+    typed: text.get('typed'),
+    nonTyped: text.get('last'),
+  };
+};
 
 export default connect(
-  mapStateToProps
-)(Textarea)
+  mapStateToProps,
+)(Textarea);
+

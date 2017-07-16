@@ -1,18 +1,16 @@
 import { connect } from 'react-redux';
 
-import { setMode } from 'Redux/modules/main';
 import {
   setMode as setLearningMode,
   updateCurrentLessonFromCurrentMode,
   updateCharToType,
 } from 'Redux/modules/learning-mode';
-import LearningMode from './component.jsx';
+import ModeItem from './component.jsx';
 
 const mapStateToProps = state => {
   const stateLearningMode = state.get('learningMode');
 
   return {
-    lesson: stateLearningMode.get('lessonRest'),
     learningMode: stateLearningMode.get('mode'),
     mode: state.getIn(['main', 'mode']),
   };
@@ -20,10 +18,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => (
   {
-    localSetMode(mode) {
-      dispatch(setMode(mode));
-    },
-
     localSetLearningMode(learningMode) {
       dispatch(setLearningMode(learningMode));
     },
@@ -41,7 +35,6 @@ const mapDispatchToProps = dispatch => (
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   const { mode } = stateProps;
   const {
-    localSetMode,
     localSetLearningMode,
     localUpdateCurrentLessonFromCurrentMode,
     localUpdateCharToType,
@@ -49,14 +42,7 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
 
   return {
     ...stateProps,
-
-    setMainMode(mainMode) {
-      localSetMode(mainMode);
-
-      localUpdateCharToType();
-    },
-
-    localSetLearningMode(learningMode) {
+    setLearningMode(learningMode) {
       localSetLearningMode(learningMode);
 
       localUpdateCurrentLessonFromCurrentMode();
@@ -65,7 +51,6 @@ const mergeProps = (stateProps, dispatchProps, ownProps) => {
         localUpdateCharToType();
       }
     },
-
     ...ownProps,
   };
 };
@@ -74,4 +59,4 @@ export default connect(
   mapStateToProps,
   mapDispatchToProps,
   mergeProps,
-)(LearningMode);
+)(ModeItem);

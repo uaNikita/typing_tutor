@@ -1,27 +1,35 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class Texts extends Component {
+  onClickSelectText(id, e) {
+    e.preventDefault();
+
+    this.props.selectText(this.props.id);
+  }
 
   render() {
     const {
-            id,
-            title,
-            typed,
-            last,
-            currentTextId,
-            refreshText
-          } = this.props;
+      id,
+      title,
+      typed,
+      last,
+      currentTextId,
+      refreshText,
+    } = this.props;
+
+    let refresh;
 
     if (typed) {
-      var refresh = <span onClick={() => refreshText(id)} className="text__reload fa fa-refresh" />;
+      refresh = <a href onClick={() => refreshText(id)} className="text__reload fa fa-refresh" />;
     }
 
-    var select;
+    let select;
 
     if (id === currentTextId) {
       select = <span className="text__select text__select_selected">This text is selected</span>;
-    } else {
-      select = <a onClick={this._onClickSelectText.bind(this, id)} className="text__select" href>Select this text to type</a>;
+    }
+    else {
+      select = <a onClick={this.onClickSelectText} className="text__select" href>Select this text to type</a>;
     }
 
     return (
@@ -38,14 +46,8 @@ class Texts extends Component {
         <span className="text__typed">{typed}</span>
         <span className="text__last">{last}</span>
       </div>
-    )
-  }
-
-  _onClickSelectText(id, e) {
-    e.preventDefault();
-
-    this.props.selectText(id);
+    );
   }
 }
 
-export default Texts
+export default Texts;

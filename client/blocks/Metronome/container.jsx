@@ -1,27 +1,27 @@
-import {connect} from 'react-redux'
-import Metronome from '../Metronome/component.jsx'
-import {actionMetronome} from 'Redux/modules/main'
+import { connect } from 'react-redux';
 
-const mapStateToProps = (state) => {
+import { actionMetronome } from 'Redux/modules/main';
+import Metronome from '../Metronome/component.jsx';
 
-   const stateMain = state.get('main');
+const mapStateToProps = state => {
+  const stateMain = state.get('main');
 
-   return {
-      status: stateMain.get('metronomeStatus'),
-      interval: stateMain.get('metronomeInterval'),
-   }
+  return {
+    status: stateMain.get('metronomeStatus'),
+    interval: stateMain.get('metronomeInterval'),
+  };
+};
 
-}
-
-const mapDispatchToProps = (dispatch) => {
-   return {
-      actionMetronome: (action, value) => {
-         dispatch(actionMetronome(action, value))
-      }
-   }
-}
+const mapDispatchToProps = dispatch => (
+  {
+    actionMetronome: (action, value) => {
+      dispatch(actionMetronome(action, value));
+    },
+  }
+);
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
-)(Metronome)
+  mapDispatchToProps,
+)(Metronome);
+

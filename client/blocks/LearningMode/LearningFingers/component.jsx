@@ -1,148 +1,147 @@
-import React, {Component} from 'react';
-import {filter, isArray, concat, clone} from 'lodash';
+import React, { Component } from 'react';
+import { concat, clone } from 'lodash';
 import $ from 'jquery';
 import noUiSlider from 'nouislider';
-import classNames from 'classNames';
+import classNames from 'classnames';
 import Key from '../../Key/component.jsx';
 
 class LearningFingers extends Component {
+  componentDidMount() {
+    const self = this;
 
-   componentDidMount() {
-      let self = this;
+    const { fingersSet, setSizeFingers, maxLettersInWord } = this.props;
 
-      const {fingersSet, setSizeFingers, maxLettersInWord} = this.props;
+    const $noUiValueMaxLettersInWord = $('<span class="noUi-value" />');
 
-      let $noUiValueMaxLettersInWord = $('<span class="noUi-value" />');
+    // max word length range
+    noUiSlider.create(this.maxLettersInWordRange, {
+      start: [maxLettersInWord],
+      step: 1,
+      connect: 'lower',
+      range: {
+        min: 3,
+        max: 10,
+      },
+    });
 
-      // max word length range
-      noUiSlider.create(this._maxLettersInWordRange, {
-         start  : [maxLettersInWord],
-         step   : 1,
-         connect: 'lower',
-         range  : {
-            'min': 3,
-            'max': 10
-         }
-      });
+    $noUiValueMaxLettersInWord.text(maxLettersInWord);
 
-      $noUiValueMaxLettersInWord.text(maxLettersInWord);
+    $(this.maxLettersInWordRange)
+      .find('.noUi-handle')
+      .append($noUiValueMaxLettersInWord);
 
-      $(this._maxLettersInWordRange)
-        .find('.noUi-handle')
-        .append($noUiValueMaxLettersInWord);
+    this.maxLettersInWordRange.noUiSlider.on('slide', (values, handle) => {
+      const val = parseInt(values[handle], 10);
 
-      this._maxLettersInWordRange.noUiSlider.on('slide', function (values, handle) {
-         let val = parseInt(values[handle], 10);
+      self.props.setMaxLettersInWord(val);
 
-         self.props.setMaxLettersInWord(val);
-
-         $noUiValueMaxLettersInWord.text(val);
-      });
+      $noUiValueMaxLettersInWord.text(val);
+    });
 
 
-      let $noUiValueFingersSet = $('<span class="noUi-value" />');
+    const $noUiValueFingersSet = $('<span class="noUi-value" />');
 
-      noUiSlider.create(this._fingersRange, {
-         start  : [setSizeFingers],
-         step   : 1,
-         connect: 'lower',
-         range  : {
-            'min': 1,
-            'max': fingersSet.length
-         }
-      });
+    noUiSlider.create(this.fingersRange, {
+      start: [setSizeFingers],
+      step: 1,
+      connect: 'lower',
+      range: {
+        min: 1,
+        max: fingersSet.length,
+      },
+    });
 
-      $noUiValueFingersSet.text(setSizeFingers);
+    $noUiValueFingersSet.text(setSizeFingers);
 
-      $(this._fingersRange)
-        .find('.noUi-handle')
-        .append($noUiValueFingersSet);
+    $(this.fingersRange)
+      .find('.noUi-handle')
+      .append($noUiValueFingersSet);
 
-      this._fingersRange.noUiSlider.on('slide', (values, handle) => {
-         let val = parseInt(values[handle], 10);
-         
-         self.props.setFingersSetSize(val);
+    this.fingersRange.noUiSlider.on('slide', (values, handle) => {
+      const val = parseInt(values[handle], 10);
 
-         $noUiValueFingersSet.text(val);
-      });
-   }
+      self.props.setFingersSetSize(val);
 
-   render() {
+      $noUiValueFingersSet.text(val);
+    });
+  }
 
-      const {keys, fingersSet, setSizeFingers} = this.props;
+  render() {
+    const { keys, fingersSet, setSizeFingers } = this.props;
 
-      let selectedLetters = clone(fingersSet);
+    let selectedLetters = clone(fingersSet);
 
-      selectedLetters.splice(setSizeFingers);
+    selectedLetters.splice(setSizeFingers);
 
-      selectedLetters = concat.apply(null, selectedLetters);
-      
-      let keyNodes = keys.map(obj => {
-         let className = 'keyboard__key';
+    selectedLetters = concat(...selectedLetters);
 
-         if (obj.type === 'letter') {
-            if (selectedLetters.indexOf(obj.key) + 1) {
-               className = classNames(className, 'keyboard__key_selected')
-            }
-         } else {
-            className = classNames(className, 'keyboard__key_disabled')
-         }
+    const keyNodes = keys.map(obj => {
+      let className = 'keyboard__key';
 
-         let finger = obj.finger;
+      if (obj.type === 'letter') {
+        if (selectedLetters.indexOf(obj.key) + 1) {
+          className = classNames(className, 'keyboard__key_selected');
+        }
+      }
+      else {
+        className = classNames(className, 'keyboard__key_disabled');
+      }
 
-         if (finger === 'index') {
-            finger = obj.hand + '-' + finger;
-         }
+      let finger = obj.finger;
 
-         let keyProps = {
-            className    : className,
-            'data-key'   : obj.id,
-            'data-finger': finger
-         };
+      if (finger === 'index') {
+        finger = `${obj.hand}-${finger}`;
+      }
 
-         return <Key
-           key={obj.id}
-           keyProps={keyProps}
-           type={obj.type}
-           char={obj.key}
-           shiftChar={obj.shiftKey}
-         />
-
-      });
-
+      const keyProps = {
+        className,
+        'data-key': obj.id,
+        'data-finger': finger,
+      };
 
       return (
-        <div>
+        <Key
+          key={obj.id}
+          keyProps={keyProps}
+          type={obj.type}
+          char={obj.key}
+          shiftChar={obj.shiftKey}
+        />
+      );
+    });
 
-           <div className="settings-learning__item">
-              <label htmlFor="" className="settings-learning__label">
-                 Max word length:
-              </label>
-              <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-                 <div
-                   className="settings-learning__range settings-learning__max-word-length"
-                   ref={(c) => this._maxLettersInWordRange = c }></div>
-              </div>
-           </div>
 
-           <div className="settings-learning__item">
-              <label htmlFor="" className="settings-learning__label">
-                 Extend fingers set:
-              </label>
-              <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-                 <div className="settings-learning__range" ref={(c) => this._fingersRange = c }></div>
-              </div>
-           </div>
+    return (
+      <div>
 
-           <div className="keyboard">
-              {keyNodes}
-           </div>
-
+        <div className="settings-learning__item">
+          <label htmlFor="" className="settings-learning__label">
+            Max word length:
+          </label>
+          <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+            <div
+              className="settings-learning__range settings-learning__max-word-length"
+              ref={c => { this.maxLettersInWordRange = c; }} />
+          </div>
         </div>
-      )
-   }
 
+        <div className="settings-learning__item">
+          <label htmlFor="" className="settings-learning__label">
+            Extend fingers set:
+          </label>
+          <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+            <div className="settings-learning__range" ref={c => { this.fingersRange = c; }} />
+          </div>
+        </div>
+
+        <div className="keyboard">
+          {keyNodes}
+        </div>
+
+      </div>
+    );
+  }
 }
 
 
-export default LearningFingers
+export default LearningFingers;

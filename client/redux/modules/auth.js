@@ -1,4 +1,4 @@
-import {forEach, assign} from 'lodash';
+import { forEach, assign } from 'lodash';
 
 const SEND_LOGIN_REQUEST = 'auth/SEND_LOGIN_REQUEST';
 const RECEIVE_LOGIN_ANSWER = 'auth/RECEIVE_LOGIN_ANSWER';
@@ -8,45 +8,45 @@ const SEND_PASSWORD_RESET_REQUEST = 'auth/SEND_PASSWORD_RESET_REQUEST';
 const RECEIVE_PASSWORD_RESET_ANSWER = 'auth/RECEIVE_PASSWORD_RESET_ANSWER';
 
 const INITIAL_STATE = {
-   email: '',
-   loginLoading: false,
-   regLoading: false
+  email: '',
+  loginLoading: false,
+  regLoading: false
 };
 
 export default (state = INITIAL_STATE, action = {}) => {
-   switch (action.type) {
+  switch (action.type) {
 
-      case SEND_LOGIN_REQUEST:
-         return {
-            ...state
-         }
+    case SEND_LOGIN_REQUEST:
+      return {
+        ...state
+      };
 
 
-      case RECEIVE_LOGIN_ANSWER:
-         return {
-            ...state,
-            keyboardName: action.name
-         }
+    case RECEIVE_LOGIN_ANSWER:
+      return {
+        ...state,
+        keyboardName: action.name
+      };
 
-      default:
-         return state;
-   }
+    default:
+      return state;
+  }
 };
 
 function sendLoginRequest(login, pass) {
-   return {
-      type: SEND_LOGIN_REQUEST,
-      login,
-      pass
-   };
+  return {
+    type: SEND_LOGIN_REQUEST,
+    login,
+    pass
+  };
 }
 
 let receiveLoginAnswer = (success, errors) => {
-   return {
-      type: RECEIVE_LOGIN_ANSWER,
-      success,
-      errors
-   };
+  return {
+    type: RECEIVE_LOGIN_ANSWER,
+    success,
+    errors
+  };
 };
 
 // const mapDispatchToProps = (dispatch) => {

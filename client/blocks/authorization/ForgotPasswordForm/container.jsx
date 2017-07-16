@@ -1,20 +1,17 @@
 import { connect } from 'react-redux';
-import ForgotPasswordForm from './component.jsx';
+
 import { openModal } from 'Redux/modules/modal';
+import ForgotPasswordForm from './component.jsx';
 
-const mapStateToProps = (state) => {
-   return {};
-};
-
-const mapDispatchToProps = (dispatch) => {
-   return {
-      openModal: (name) => {
-         dispatch(openModal(name));
-      }
-   };
-};
+const mapDispatchToProps = dispatch => (
+  {
+    openModal: name => {
+      dispatch(openModal(name));
+    },
+  }
+);
 
 export default connect(
-   mapStateToProps,
-   mapDispatchToProps
+  null,
+  mapDispatchToProps,
 )(ForgotPasswordForm);

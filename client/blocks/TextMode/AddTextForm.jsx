@@ -17,7 +17,7 @@ const ruCharacters = ['а-я'];
 
 const allCharacters = _.concat(specisalCharacters, enCharacters, ruCharacters);
 
-const getWrongCharsError = (text) => {
+const getWrongCharsError = text => {
   const re = new RegExp(`[^${allCharacters.join('')}]`, 'ig');
 
   let result = '';
@@ -39,7 +39,7 @@ const getWrongCharsError = (text) => {
   return result;
 };
 
-const validate = (values) => {
+const validate = values => {
   const errors = {};
 
   if (!values.title) {
@@ -67,7 +67,7 @@ const validate = (values) => {
   return errors;
 };
 
-const RenderField = (props) => {
+const RenderField = props => {
   const {
     input,
     placeholder,
@@ -125,7 +125,7 @@ const RenderField = (props) => {
   );
 };
 
-const AddTextForm = (props) => {
+const AddTextForm = props => {
   const { handleSubmit } = props;
 
   return (

@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Footer = (props) => (
+const Switcher = props => (
   <label className="switcher" {...props.label}>
-     <input type="radio" {...props.input} />
-     <span className="switcher__bg"></span>
-     <span className="switcher__toggle"></span>
+    <input type="radio" {...props.input} />
+    <span className="switcher__bg" />
+    <span className="switcher__toggle" />
   </label>
 );
 
-export default Footer
+export default Switcher;

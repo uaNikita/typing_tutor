@@ -1,16 +1,17 @@
-import { connect } from 'react-redux'
-import Modal from '../Modal/component.jsx'
-import { closeModal } from 'Redux/modules/modal'
+import { connect } from 'react-redux';
 
-const mapDispatchToProps = (dispatch) => {
-  return {
+import { closeModal } from 'Redux/modules/modal';
+import Modal from '../Modal/component.jsx';
+
+const mapDispatchToProps = dispatch => (
+  {
     closeModal: () => {
-      dispatch(closeModal())
-    }
+      dispatch(closeModal());
+    },
   }
-}
+);
 
 export default connect(
   null,
-  mapDispatchToProps
-)(Modal)
+  mapDispatchToProps,
+)(Modal);

@@ -1,47 +1,42 @@
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 
 class Learningarea extends Component {
+  getCharsMarkup = string => string.split('').map(char => {
+    let c = char;
+
+    if (char === ' ') {
+      c = <span key={char} className="learningarea__space">␣</span>;
+    }
+
+    return c;
+  });
 
   render() {
     let typed = '';
     let last = '';
 
-    const {lessonTyped, lessonLast} = this.props
+    const { lessonTyped, lessonLast } = this.props;
 
     if (lessonTyped) {
-      let chars = this._getCharsMarkup(lessonTyped)
+      const chars = this.getCharsMarkup(lessonTyped);
 
-      typed = <span className="learningarea__typed">{chars}</span>
+      typed = <span className="learningarea__typed">{chars}</span>;
     }
 
     if (lessonLast) {
-      let chars = this._getCharsMarkup(lessonLast)
+      const chars = this.getCharsMarkup(lessonLast);
 
-      last = <span className="learningarea__non-typed">{chars}</span>
+      last = <span className="learningarea__non-typed">{chars}</span>;
     }
 
     return (
-      <div className='learningarea'>
+      <div className="learningarea">
         { typed }
-        <span className="learningarea__cursor"></span>
+        <span className="learningarea__cursor" />
         { last }
       </div>
-    )
-  }
-
-  _getCharsMarkup(string) {
-
-    return string.split('').map((char, idx) => {
-
-      if (char === ' ') {
-        char = <span key={idx} className="learningarea__space">␣</span>
-      }
-
-      return char;
-
-    });
-
+    );
   }
 }
 
-export default Learningarea
+export default Learningarea;

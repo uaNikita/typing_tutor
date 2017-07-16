@@ -1,66 +1,59 @@
-import {connect} from 'react-redux';
-import {find} from 'lodash';
-import LearningFree from './component.jsx';
+import { connect } from 'react-redux';
+
 import {
-   addLetterToFreeLetters,
-   removeLetterFromFreeLetters,
-   setMaxLettersInWordFree,
-   updateFreeLesson,
-   updateCurrentLessonFromCurrentMode,
-   updateCharToType
+  addLetterToFreeLetters,
+  removeLetterFromFreeLetters,
+  setMaxLettersInWordFree,
+  updateFreeLesson,
+  updateCurrentLessonFromCurrentMode,
+  updateCharToType,
 } from 'Redux/modules/learning-mode';
 
-const mapStateToProps = (state) => {
+import LearningFree from './component.jsx';
 
-   const stateLearningMode = state.get('learningMode');
+const mapStateToProps = state => {
+  const stateLearningMode = state.get('learningMode');
 
-   return {
-      maxLettersInWord: stateLearningMode.get('maxLettersInWordFree'),
-      keys: state.getIn(['main', 'keys']).toJS(),
-      letters: stateLearningMode.get('lettersFree')
-   };
-
+  return {
+    maxLettersInWord: stateLearningMode.get('maxLettersInWordFree'),
+    keys: state.getIn(['main', 'keys']).toJS(),
+    letters: stateLearningMode.get('lettersFree'),
+  };
 };
 
-const mapDispatchToProps = (dispatch) => {
-   return {
-      addLetter: (letter) => {
+const mapDispatchToProps = dispatch => (
+  {
+    addLetter: letter => {
+      dispatch(addLetterToFreeLetters(letter));
 
-         dispatch(addLetterToFreeLetters(letter));
+      dispatch(updateFreeLesson());
 
-         dispatch(updateFreeLesson());
+      dispatch(updateCurrentLessonFromCurrentMode());
 
-         dispatch(updateCurrentLessonFromCurrentMode());
+      dispatch(updateCharToType());
+    },
+    removeLetter: letter => {
+      dispatch(removeLetterFromFreeLetters(letter));
 
-         dispatch(updateCharToType());
+      dispatch(updateFreeLesson());
 
-      },
-      removeLetter: (letter) => {
+      dispatch(updateCurrentLessonFromCurrentMode());
 
-         dispatch(removeLetterFromFreeLetters(letter));
+      dispatch(updateCharToType());
+    },
+    setMaxLettersInWord: length => {
+      dispatch(setMaxLettersInWordFree(length));
 
-         dispatch(updateFreeLesson());
+      dispatch(updateFreeLesson());
 
-         dispatch(updateCurrentLessonFromCurrentMode());
+      dispatch(updateCurrentLessonFromCurrentMode());
 
-         dispatch(updateCharToType());
-
-      },
-      setMaxLettersInWord: (length) => {
-
-         dispatch(setMaxLettersInWordFree(length));
-
-         dispatch(updateFreeLesson());
-
-         dispatch(updateCurrentLessonFromCurrentMode());
-
-         dispatch(updateCharToType());
-
-      }
-   };
-};
+      dispatch(updateCharToType());
+    },
+  }
+);
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps
+  mapDispatchToProps,
 )(LearningFree);

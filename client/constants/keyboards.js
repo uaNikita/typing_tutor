@@ -5,14 +5,14 @@ import ruTypewriter from './keyboards/ru-typewriter';
 export default [
   {
     name: 'US',
-    keys: us
+    keys: us,
   },
   {
     name: 'Russian',
-    keys: ru
+    keys: ru,
   },
   {
     name: 'Russian typewriter',
-    keys: ruTypewriter
-  }
+    keys: ruTypewriter,
+  },
 ];

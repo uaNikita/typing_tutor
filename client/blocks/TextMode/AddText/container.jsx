@@ -1,29 +1,24 @@
-import {connect} from 'react-redux'
-import {push} from 'react-router-redux'
-import AddText from './component.jsx'
-import {addText, selectLastText} from 'Redux/modules/text-mode'
+import { connect } from 'react-redux';
+import { push } from 'react-router-redux';
 
-const mapDispatchToProps = (dispatch) => {
-   return {
-      addText: (title, text) => {
+import { addText, selectLastText } from 'Redux/modules/text-mode';
+import AddText from './component.jsx';
 
-         dispatch(addText(title, text));
-
-      },
-      selectAddedText: () => {
-
-         dispatch(selectLastText());
-
-      },
-      goToTextList: () => {
-
-         dispatch(push('/settings/text-mode'));
-
-      }
-   }
-}
+const mapDispatchToProps = dispatch => (
+  {
+    addText: (title, text) => {
+      dispatch(addText(title, text));
+    },
+    selectAddedText: () => {
+      dispatch(selectLastText());
+    },
+    goToTextList: () => {
+      dispatch(push('/settings/text-mode'));
+    },
+  }
+);
 
 export default connect(
   null,
-  mapDispatchToProps
-)(AddText)
+  mapDispatchToProps,
+)(AddText);

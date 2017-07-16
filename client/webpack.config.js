@@ -30,7 +30,8 @@ let config = {
   resolve: {
     alias: {
       Blocks: path.resolve(__dirname, 'blocks/'),
-      Redux: path.resolve(__dirname, 'redux/')
+      Redux: path.resolve(__dirname, 'redux/'),
+      Utils: path.resolve(__dirname, 'utils/')
     }
   },
 

@@ -1,16 +1,16 @@
 import { connect } from 'react-redux';
-import RegistrationForm from './component.jsx';
 import { openModal } from 'Redux/modules/modal';
+import RegistrationForm from './component.jsx';
 
-const mapDispatchToProps = (dispatch) => {
-   return {
-      openModal: (name) => {
-         dispatch(openModal(name));
-      }
-   };
-};
+const mapDispatchToProps = dispatch => (
+  {
+    openModal: name => {
+      dispatch(openModal(name));
+    },
+  }
+);
 
 export default connect(
-   null,
-   mapDispatchToProps
+  null,
+  mapDispatchToProps,
 )(RegistrationForm);
