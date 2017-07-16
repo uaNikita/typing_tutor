@@ -19,13 +19,15 @@ const RenderField = props => {
     },
   } = props;
 
+  const showError = touched && !active && error;
+
   const fieldClass = classNames(
     classNames('field', className),
     {
-      control_active: active,
-      control_error: touched && error,
-      control_valid: touched && !active && valid,
-      'control_async-validating': asyncValidating,
+      field_active: active,
+      field_error: showError,
+      field_valid: touched && !active && valid,
+      'field_async-validating': asyncValidating,
     },
   );
 
@@ -33,7 +35,7 @@ const RenderField = props => {
 
   if (type === 'select') {
     control = (
-      <select name="industry" className="control__select" {...input}>
+      <select name="industry" className="field__select" {...input}>
         {children}
       </select>
     );
@@ -44,7 +46,7 @@ const RenderField = props => {
 
   return (
     <div className={fieldClass}>
-      {touched && error && <p className="error">{error}</p>}
+      {showError && <p className="error">{error}</p>}
       {control}
     </div>
   );

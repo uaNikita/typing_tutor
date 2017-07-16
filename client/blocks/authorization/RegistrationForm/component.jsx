@@ -2,15 +2,21 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 import generatePassword from 'password-generator';
 
+import { email as regexEmail } from 'Utils/regularExpresions';
 import RenderField from 'Blocks/RenderField/component.jsx';
-import RenderPasswordField from './RenderPasswordField.jsx';
 
 const validate = values => {
   const errors = {};
 
-  if (!values.get('email')) {
+  const email = values.get('email');
+
+  if (!email) {
     errors.email = 'Required';
   }
+  else if (!regexEmail.test(email)) {
+    errors.email = 'Email isn\'t valid';
+  }
+
   if (!values.get('password')) {
     errors.password = 'Required';
   }
@@ -22,7 +28,7 @@ class RegistrationForm extends Component {
   state = {
     password: '',
     createPassword: false,
-  }
+  };
 
   onCreatePasswordChange = () => {
     let password = '';
@@ -31,17 +37,19 @@ class RegistrationForm extends Component {
       password = generatePassword(5, false, /[\w\d]/);
     }
 
+    this.props.array.insert('password', 0, password);
+
     this.setState({
       createPassword: !this.state.createPassword,
       password,
     });
-  }
+  };
 
   onLoginClick = e => {
     e.preventDefault();
 
     this.props.openModal('Login');
-  }
+  };
 
   passwordChange = () => {
     if (this.state.createPassword) {
@@ -50,7 +58,7 @@ class RegistrationForm extends Component {
         password: '',
       });
     }
-  }
+  };
 
   render() {
     const {
@@ -62,6 +70,7 @@ class RegistrationForm extends Component {
     return (
       <form className="auth__form" onSubmit={handleSubmit}>
         <Field
+          className="auth__row"
           name="email"
           component={RenderField}
           type="email"
@@ -69,12 +78,11 @@ class RegistrationForm extends Component {
         />
 
         <Field
+          className="auth__row"
           name="password"
-          component={RenderPasswordField}
-          type="password"
+          component={RenderField}
+          type="text"
           label="Password"
-          generatedPassword={this.state.password}
-          onPasswordChange={this.passwordChange}
         />
 
         <label className="auth__cp">
