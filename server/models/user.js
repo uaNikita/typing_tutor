@@ -1,6 +1,6 @@
 let Promise = require('bluebird');
 let mongoose = require('mongoose');
-let bcrypt = require('bcrypt');
+let bcrypt = require('bcryptjs');
 let config = require('config');
 let httpStatus = require('http-status');
 let APIError = require('../helpers/APIError');

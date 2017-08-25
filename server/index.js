@@ -3,11 +3,14 @@ let express = require('express');
 let bodyParser = require('body-parser');
 let cookieParser = require('cookie-parser');
 let session = require('express-session');
+var flash = require('connect-flash');
 let mongoose = require('mongoose');
 let config = require('config');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.get('database'));
+mongoose.connect(config.get('database'), {
+  useMongoClient: true,
+});
 mongoose.connection.on('error', () => {
    throw new Error(`unable to connect to database: ${config.db}`);
 });
@@ -21,6 +24,7 @@ app.set('view engine', 'pug');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+app.use(flash());
 app.use(express.static(path.join(__dirname, '../client/dist')));
 
 app.get('*', function (req, res) {

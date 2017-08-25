@@ -7,20 +7,20 @@ module.exports = (app) => {
 
   // catch 404 and forward to error handler
   app.use((req, res, next) => {
-
+    console.log(1);
     const err = new APIError({
       message: 'API not found',
       status: httpStatus.NOT_FOUND
     });
 
     return next(err);
-
   });
 
   app.use((err, req, res, next) => {
-
+    
+    console.log(2);
+    
     if (err instanceof mongoose.Error.ValidationError) {
-
       const errors = _.mapValues(err.errors, o => o.message);
 
       const apiError = new APIError({
@@ -30,22 +30,18 @@ module.exports = (app) => {
       });
 
       return next(apiError);
-
     }
 
     if (!(err instanceof APIError)) {
-
       const apiError = new APIError({
         message: err.message,
         status: err.status
       });
 
       return next(apiError);
-
     }
 
     return next(err);
-
   });
 
 

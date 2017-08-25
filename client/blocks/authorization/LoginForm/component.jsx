@@ -37,10 +37,6 @@ class LoginForm extends Component {
     this.props.openModal('Registration');
   };
 
-  handleSubmit() {
-    this.a = 1;
-  }
-
   render() {
     const {
       handleSubmit,
@@ -49,7 +45,7 @@ class LoginForm extends Component {
     } = this.props;
 
     return (
-      <form className="auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
+      <form className="auth__form" onSubmit={handleSubmit}>
 
         <Field className="auth__row" name="email" component={RenderField} type="email" label="Email" />
 
@@ -73,6 +69,6 @@ class LoginForm extends Component {
 export default reduxForm({
   form: 'login',
   validate,
-  asyncValidate,
-  asyncBlurFields: ['email'],
+  // asyncValidate,
+  // asyncBlurFields: ['email'],
 })(LoginForm);

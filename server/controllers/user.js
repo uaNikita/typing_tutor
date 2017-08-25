@@ -31,11 +31,9 @@ let create = (req, res, next) => {
 
   User.isNotExist(req.body.email)
     .then(() => {
+      const { email, password } = req.body;
 
-      const user = new User({
-        email: req.body.email,
-        password: req.body.password,
-      });
+      const user = new User({ email, password });
 
       user.refreshToken = {
         token: generateRefreshToken(user.get('id')),
@@ -43,10 +41,8 @@ let create = (req, res, next) => {
       };
 
       return user.save();
-
     })
     .then(savedUser => {
-
       res.json({
         email: savedUser.get('email'),
         refreshToken: savedUser.get('refreshToken.token'),
@@ -119,8 +115,8 @@ let update = (req, res, next) => {
  * @returns {User[]}
  */
 let list = (req, res, next) => {
-  const {limit = 50, skip = 0} = req.query;
-  User.list({limit, skip})
+  const { limit = 50, skip = 0 } = req.query;
+  User.list({ limit, skip })
     .then(users => res.json(users))
     .catch(e => next(e));
 };
