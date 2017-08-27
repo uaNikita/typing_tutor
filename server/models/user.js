@@ -30,10 +30,10 @@ const UserSchema = new mongoose.Schema({
  * - virtuals
  */
 
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', function(next) {
   // only hash the password if it has been modified (or is new)
   if (!this.isModified('password')) return next();
-  
+
   this.generateHash(this.password)
     .then(hash => {
       this.password = hash;
@@ -49,7 +49,7 @@ UserSchema.methods.generateHash = password => {
   return bcrypt.hash(password, config.get('saltRounds'));
 };
 
-UserSchema.methods.validPassword = function (candidatePassword) {
+UserSchema.methods.validPassword = function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
@@ -76,7 +76,7 @@ UserSchema.statics = {
     });
   },
 
-  get(id) {
+  get (id) {
     return this.findById(id)
       .exec()
       .then((user) => {

@@ -3,7 +3,7 @@ import { SubmissionError } from 'redux-form/immutable';
 import RegistrationForm from '../RegistrationForm/container.jsx';
 
 class Registration extends Component {
-  handleSubmit = values => fetch('/auth/signup', {
+  handleSubmit = values => fetch('/signup', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

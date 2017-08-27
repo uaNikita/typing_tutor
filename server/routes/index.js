@@ -1,15 +1,25 @@
 let express = require('express');
-let authRoutes = require('./auth');
-let userRoutes = require('./user');
+const config = require('config');
+const expressJwt = require('express-jwt');
+let passport = require('passport');
+
+let { login, create, getTokens } = require('../controllers/user');
 
 const router = express.Router();
+const authenticate = expressJwt({
+  secret: config.get('secretKey'),
+});
 
-// mount auth routes at /auth
-router.use('/auth', authRoutes);
+router.post('/login', passport.authenticate('local'), login);
 
-// mount user routes at /users
-router.use('/user', userRoutes);
+router.post('/signup', create);
 
-// todo: add token
+router.get('/logout', (req, res) => {
+  req.logout();
+
+  return res.json('ok');
+});
+
+router.post('/tokens', authenticate, getTokens);
 
 module.exports = router;

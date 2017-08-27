@@ -1,34 +1,35 @@
-const jsonwebtoken = require('jsonwebtoken');
+const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
-let config = require('config');
-let User = require('../models/user');
-let Client = require('../models/Client');
+const config = require('config');
+const User = require('../models/user');
+const Client = require('../models/Client');
 
-const generateAccessToken = obj => jsonwebtoken.sign(obj, config.get('secretKey'), { expiresIn: '15m' });
+const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: '1d' });
 
-const generateRefreshToken = userId => {
-  return `${userId.toString()}.${crypto.randomBytes(40).toString('hex')}`;
+const generateRefreshToken = clientId => {
+  return `${clientId.toString()}.${crypto.randomBytes(40).toString('hex')}`;
 };
 
 const createClient = userId => {
   const client = new Client({
     user: userId,
-    refresh: {
-      token: generateRefreshToken(user.get('id'))
-    },
   });
+
+  client.refresh = {
+    token: generateRefreshToken(client.get('id')),
+  };
 
   client.access = {
     token: generateAccessToken({
-      userId: userId,
+      id: userId,
       clientId: client.get('id'),
     }),
   };
 
-  return client.save()
+  return client.save();
 };
 
-let create = (req, res, next) => {
+const create = (req, res, next) => {
   const { email, password } = req.body;
 
   User.isNotExist(email)
@@ -49,8 +50,10 @@ let create = (req, res, next) => {
     .catch(e => next(e));
 };
 
-let login = (req, res, next) => {
-  createClient(req.user.get('id'))
+const login = (req, res, next) => {
+  const { user } = req;
+
+  createClient(user.get('id'))
     .then((client) => {
       res.json({
         email: user.get('email'),
@@ -63,7 +66,7 @@ let login = (req, res, next) => {
     .catch(e => next(e));
 };
 
-let logout = function (req, res, next, id) {
+let logout = function(req, res, next, id) {
   User.get(id)
     .then((user) => {
       req.user = user;
@@ -72,36 +75,34 @@ let logout = function (req, res, next, id) {
     .catch(e => next(e));
 };
 
-let createNewTokens = (req, res, next) => {
-  User.find(req.id)
-    .then(user => {
+const getTokens = (req, res, next) => {
+  const { clientId } = req.user;
 
-      if ('token' === user.get('refreshToken.token')) {
-        const newRefreshToken = generateRefreshToken(user.get('id'));
+  console.log('clientId', clientId);
 
-        user.refreshToken = {
-          token: newRefreshToken,
-          created: new Date
-        };
+  Client
+    .get(clientId)
+    .then(client => {
+      const userId = client.get('user');
 
-        res.json({
-          refreshToken: newRefreshToken,
-          accessToken: generateAccessToken(savedUser.id)
-        });
+      client.refresh.token = generateRefreshToken(userId);
+      client.access.token = generateAccessToken({
+        id: userId,
+        clientId: client.get('id'),
+      });
 
-      } else {
-        const err = new APIError({
-          message: 'Wrong refres token',
-          status: httpStatus.CONFLICT
-        });
-
-        return Promise.reject(err);
-      }
-
+      return client.save();
+    })
+    .then(client => {
+      
+     
+      res.json({
+        refresh: client.get('refresh.token'),
+        access: client.get('refresh.access'),
+      });
     })
     .catch(e => next(e));
-
-}
+};
 
 let update = (req, res, next) => {
   const user = req.user;
@@ -138,65 +139,8 @@ let remove = (req, res, next) => {
     .catch(e => next(e));
 };
 
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-let getLearningMode = (req, res, next) => {};
-
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-let updateLearningMode = (req, res, next) => {};
-
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-let getTextMode = (req, res, next) => {};
-
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-let updateTextMode = (req, res, next) => {};
-
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-let getStatistic = (req, res, next) => {};
-
-/**
- *
- * @param req
- * @param res
- * @param next
- */
-let updateStatistic = (req, res, next) => {};
-
 module.exports = {
   create,
   login,
-  update,
-  createNewTokens,
-  list,
-  remove,
-  getLearningMode,
-  updateLearningMode,
-  getTextMode,
-  updateTextMode,
-  getStatistic,
-  updateStatistic
+  getTokens,
 };

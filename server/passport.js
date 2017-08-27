@@ -4,9 +4,6 @@ let User = require('./models/user');
 let httpStatus = require('http-status');
 let APIError = require('./helpers/APIError');
 
-const expressJwt = require('express-jwt');
-const jwt = require('jsonwebtoken');
-
 module.exports = (app) => {
   app.use(passport.initialize());
 

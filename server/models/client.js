@@ -13,7 +13,7 @@ const ClientSchema = new mongoose.Schema({
     time: {
       type: Date,
       default: Date.now,
-      expires: '30d',
+      expires: '20s',
     },
   },
   access: {
@@ -24,8 +24,13 @@ const ClientSchema = new mongoose.Schema({
     time: {
       type: Date,
       default: Date.now,
-      expires: '15m',
+      expires: '20s',
     },
+  },
+  time: {
+    type: Date,
+    default: Date.now,
+    expires: '1s',
   },
 });
 
@@ -33,18 +38,18 @@ const ClientSchema = new mongoose.Schema({
  * Statics
  */
 ClientSchema.statics = {
-  get(id) {
-    return this.find(id)
+  get (id) {
+    return this.findById(id)
       .exec()
-      .then((user) => {
-        if (user) {
-          return user;
+      .then(client => {
+        if (client) {
+          return client;
         }
-        const err = new APIError({
-          message: 'No such user exists!',
+
+        throw new APIError({
+          message: 'No such client exists',
           status: httpStatus.CONFLICT,
         });
-        return Promise.reject(err);
       });
   }
 };

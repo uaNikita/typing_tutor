@@ -41,20 +41,9 @@ app.use(session({
 
 // Passport
 require('./passport')(app);
-//
-// /* GET home page. */
-// app.get('/', function(req, res, next) {
-//    res.render('index', { title: 'Express' });
-// });
-//
-//
-// app.get('/test-page', function(req, res) {
-//    res.render('test-page');
-// });
-//
+
 let routes = require('./routes/index');
 app.use('/', routes);
-
 
 // Errors
 require('./errors')(app);
