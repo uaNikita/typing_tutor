@@ -7,6 +7,7 @@ import { typeTextMode } from './text-mode';
 import { typeLearningMode } from './learning-mode';
 import { getIdsFromCharacter } from '../../utils';
 
+const SET_BEARER_TOKEN = 'main/SET_BEARER_TOKEN';
 const PRESS_KEYS = 'main/PRESS_KEYS';
 const UNPRESS_KEYS = 'main/UNPRESS_KEYS';
 const UPDATE_START_VARIABLES = 'main/UPDATE_START_VARIABLES';
@@ -42,11 +43,15 @@ const initialState = Immutable.Map({
 
   // text, learning
   mode: 'text',
+
+  bearerToken: false,
 });
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    // todo: keys is set now, update action logic
+    case SET_BEARER_TOKEN:
+      return state.set('bearerToken', action.token);
+
     case PRESS_KEYS:
       return state.update('pressedKeys', keys => keys.union(action.ids));
 
@@ -92,80 +97,64 @@ export default (state = initialState, action = {}) => {
   }
 };
 
-export function setMode(mode) {
-  return {
-    type: SET_MODE,
-    mode,
-  };
-}
 
-export function pressKeys(ids) {
-  return {
-    type: PRESS_KEYS,
-    ids,
-  };
-}
+export const setBearerToken = token => ({
+  type: SET_BEARER_TOKEN,
+  token,
+});
 
-export function unPressKeys(ids) {
-  return {
-    type: UNPRESS_KEYS,
-    ids,
-  };
-}
+export const setMode = mode => ({
+  type: SET_MODE,
+  mode,
+});
 
-export function pressWrongKeys(ids) {
-  return {
-    type: PRESS_WRONG_KEYS,
-    ids,
-  };
-}
+export const pressKeys = ids => ({
+  type: PRESS_KEYS,
+  ids,
+});
 
-export function unPressWrongKeys(ids) {
-  return {
-    type: UNPRESS_WRONG_KEYS,
-    ids,
-  };
-}
+export const unPressKeys = ids => ({
+  type: UNPRESS_KEYS,
+  ids,
+});
 
-export function updateStartVariables() {
-  return {
-    type: UPDATE_START_VARIABLES,
-  };
-}
+export const pressWrongKeys = ids => ({
+  type: PRESS_WRONG_KEYS,
+  ids,
+});
 
-export function actionMetronome(action, value) {
-  return {
-    type: ACTION_METRONOME,
-    action,
-    value,
-  };
-}
+export const unPressWrongKeys = ids => ({
+  type: UNPRESS_WRONG_KEYS,
+  ids,
+});
 
-export function setKeyboard(name) {
-  return {
-    type: SET_KEYBOARD,
-    name,
-  };
-}
+export const updateStartVariables = () => ({
+  type: UPDATE_START_VARIABLES,
+});
 
-export function setIdsCharToType(id) {
-  return {
-    type: SET_IDS_CHAR_TO_TYPE,
-    id,
-  };
-}
+export const actionMetronome = (action, value) => ({
+  type: ACTION_METRONOME,
+  action,
+  value,
+});
 
-export function addSuccesType() {
-  return {
-    type: ADD_SUCCESS_TYPE,
-  };
-}
+export const setKeyboard = name => ({
+  type: SET_KEYBOARD,
+  name,
+});
 
-export function addErrorType() {
-  return {
-    type: ADD_ERROR_TYPE,
-  };
-}
+export const setIdsCharToType = id => ({
+  type: SET_IDS_CHAR_TO_TYPE,
+  id,
+});
+
+export const addSuccesType = () => ({
+  type: ADD_SUCCESS_TYPE,
+});
+
+export const addErrorType = () => ({
+  type: ADD_ERROR_TYPE,
+});
 
 export function typeChar(char) {
   return (dispatch, getState) => {
