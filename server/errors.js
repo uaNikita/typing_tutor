@@ -17,8 +17,7 @@ module.exports = (app) => {
   });
 
   app.use((err, req, res, next) => {
-    
-    console.log(2);
+    console.log('err', err);
     
     if (err instanceof mongoose.Error.ValidationError) {
       const errors = _.mapValues(err.errors, o => o.message);

@@ -1,73 +1,79 @@
-let passport = require('passport');
 const jsonwebtoken = require('jsonwebtoken');
 const crypto = require('crypto');
 let config = require('config');
 let User = require('../models/user');
+let Client = require('../models/Client');
+
+const generateAccessToken = obj => jsonwebtoken.sign(obj, config.get('secretKey'), { expiresIn: '15m' });
+
+const generateRefreshToken = userId => {
+  return `${userId.toString()}.${crypto.randomBytes(40).toString('hex')}`;
+};
+
+const createClient = userId => {
+  const client = new Client({
+    user: userId,
+    refresh: {
+      token: generateRefreshToken(user.get('id'))
+    },
+  });
+
+  client.access = {
+    token: generateAccessToken({
+      userId: userId,
+      clientId: client.get('id'),
+    }),
+  };
+
+  return client.save()
+};
+
+let create = (req, res, next) => {
+  const { email, password } = req.body;
+
+  User.isNotExist(email)
+    .then(() => {
+      const user = new User({ email, password });
+
+      return Promise.all([user.save(), createClient(user.get('id'))]);
+    })
+    .then(([user, client]) => {
+      res.json({
+        email: user.get('email'),
+        tokens: {
+          refresh: client.get('refresh.token'),
+          access: client.get('access.token'),
+        },
+      });
+    })
+    .catch(e => next(e));
+};
+
+let login = (req, res, next) => {
+  createClient(req.user.get('id'))
+    .then((client) => {
+      res.json({
+        email: user.get('email'),
+        tokens: {
+          refresh: client.get('refresh.token'),
+          access: client.get('access.token'),
+        },
+      });
+    })
+    .catch(e => next(e));
+};
 
 let logout = function (req, res, next, id) {
-
   User.get(id)
     .then((user) => {
       req.user = user;
       return next();
     })
     .catch(e => next(e));
-
-};
-
-const generateAccessToken = userId => {
-  return jsonwebtoken.sign({
-    id: userId
-  }, config.get('secretKey'), {
-    expiresIn: '15m'
-  });
-};
-
-const generateRefreshToken = userId => {
-  return `${userId.toString()}.${crypto.randomBytes(40).toString('hex')}`;
-};
-
-let create = (req, res, next) => {
-
-  User.isNotExist(req.body.email)
-    .then(() => {
-      const { email, password } = req.body;
-
-      const user = new User({ email, password });
-
-      user.refreshToken = {
-        token: generateRefreshToken(user.get('id')),
-        created: new Date
-      };
-
-      return user.save();
-    })
-    .then(savedUser => {
-      res.json({
-        email: savedUser.get('email'),
-        refreshToken: savedUser.get('refreshToken.token'),
-        accessToken: generateAccessToken(savedUser.id)
-      });
-
-    })
-    .catch(e => next(e));
-
-};
-
-let login = (req, res, next) => {
-  // const user = req.user;
-  //
-  // user.email = req.body.email;
-  // user.password = req.body.password;
-  //
-  // user.save()
-  //   .then(savedUser => res.json(savedUser))
-  //   .catch(e => next(e));
 };
 
 let createNewTokens = (req, res, next) => {
-
-  User.get(req.id)
+  User.find(req.id)
     .then(user => {
 
       if ('token' === user.get('refreshToken.token')) {
@@ -182,6 +188,7 @@ let updateStatistic = (req, res, next) => {};
 
 module.exports = {
   create,
+  login,
   update,
   createNewTokens,
   list,

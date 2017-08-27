@@ -1,11 +1,11 @@
-let path = require('path');
-let express = require('express');
-let bodyParser = require('body-parser');
-let cookieParser = require('cookie-parser');
-let session = require('express-session');
-var flash = require('connect-flash');
-let mongoose = require('mongoose');
-let config = require('config');
+const path = require('path');
+const express = require('express');
+const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
+const session = require('express-session');
+const flash = require('connect-flash');
+const mongoose = require('mongoose');
+const config = require('config');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.get('database'), {
