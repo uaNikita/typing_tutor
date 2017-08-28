@@ -67,18 +67,32 @@ const login = (req, res, next) => {
     .catch(e => next(e));
 };
 
-let logout = function (req, res, next, id) {
-  User.get(id)
-    .then((user) => {
-      req.user = user;
-      return next();
+let logout = function (req, res, next) {
+  const { clientId } = req.user;
+
+  Promise
+    .all([Client.get(clientId), Access.findByClient(clientId)])
+    .then(([client, access]) => {
+      if (!client) {
+        throw new APIError({
+          message: 'No such client exists',
+          status: httpStatus.CONFLICT,
+        });
+      }
+
+      return Promise.all([client.remove().exec(), access.remove().exec()])
+    })
+    .then(() => {
+      res.json(httpStatus[200]);
     })
     .catch(e => next(e));
 };
 
-const getTokens = (req, res, next) =>
+const getTokens = (req, res, next) => {
+  const token = req.get('Authorization').replace('Bearer ', '');
+
   Client
-    .findByToken(req.body.token)
+    .findByToken(token)
     .then(client => {
       // client.token = generateRefreshToken(client.get('id'));
 
@@ -112,6 +126,7 @@ const getTokens = (req, res, next) =>
       });
     })
     .catch(e => next(e));
+}
 
 let update = (req, res, next) => {
   const user = req.user;

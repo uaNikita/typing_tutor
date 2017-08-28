@@ -23,6 +23,20 @@ const ClientSchema = new mongoose.Schema({
  * Statics
  */
 ClientSchema.statics = {
+  get(id) {
+    return this.findById(id)
+      .exec()
+      .then(client => {
+        let result = Promise.resolve();
+
+        if (client) {
+          result = client;
+        }
+
+        return result;
+      });
+  },
+
   findByToken(token) {
     return this.find({ token })
       .exec()
@@ -36,7 +50,7 @@ ClientSchema.statics = {
           status: httpStatus.UNAUTHORIZED,
         });
       });
-  }
+  },
 };
 
 module.exports = mongoose.model('Client', ClientSchema);

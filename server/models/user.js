@@ -82,10 +82,12 @@ UserSchema.statics = {
         if (user) {
           return user;
         }
+
         const err = new APIError({
           message: 'No such user exists!',
           status: httpStatus.CONFLICT,
         });
+
         return Promise.reject(err);
       });
   }

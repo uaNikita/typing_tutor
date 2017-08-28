@@ -14,10 +14,10 @@ router.post('/signup', create);
 
 router.post('/login', passport.authenticate('local'), login);
 
-router.get('/logout', passport.authenticate('local'), logout);
+router.get('/logout', authenticate, logout);
 
 router.post('/tokens', getTokens);
 
-// router.post('/protected-route', authenticate, getTokens);
+router.post('/protected-route', authenticate, getTokens);
 
 module.exports = router;
