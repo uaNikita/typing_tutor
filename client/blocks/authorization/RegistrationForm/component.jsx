@@ -3,7 +3,15 @@ import { Field, reduxForm } from 'redux-form/immutable';
 import generatePassword from 'password-generator';
 
 import { email as regexEmail } from 'Utils/regularExpresions';
+import { requestJSON } from 'Utils/requestAPI';
 import RenderField from 'Blocks/RenderField/component.jsx';
+
+const asyncValidate = values => requestJSON('check-email', {
+  email: values.get('email'),
+})
+  .then(() => {
+    // console.log(res);
+  });
 
 const validate = values => {
   const errors = {};
@@ -105,6 +113,6 @@ class RegistrationForm extends Component {
 export default reduxForm({
   form: 'registration',
   validate,
-  // asyncValidate,
-  // asyncBlurFields: ['email']
+  asyncValidate,
+  asyncBlurFields: ['email'],
 })(RegistrationForm);

@@ -4,7 +4,13 @@ import AddTextForm from '../AddTextForm.jsx';
 
 class AddText extends Component {
   textFormHandleSubmit = values => {
-    const { addText, selectAddedText, goToTextList } = this.props;
+    const {
+      addText,
+      selectAddedText,
+      history: {
+        push,
+      },
+    } = this.props;
 
     addText(values.title, values.text);
 
@@ -12,7 +18,7 @@ class AddText extends Component {
       selectAddedText();
     }
 
-    goToTextList();
+    push('/settings/text-mode');
   };
 
   render() {

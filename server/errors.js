@@ -3,8 +3,7 @@ let _ = require('lodash');
 let httpStatus = require('http-status');
 let APIError = require('./helpers/APIError');
 
-module.exports = (app) => {
-
+module.exports = app => {
   // catch 404 and forward to error handler
   app.use((req, res, next) => {
     console.log(1);

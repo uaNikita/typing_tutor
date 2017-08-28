@@ -1,9 +1,6 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { Route } from 'react-router-dom';
-import { ConnectedRouter } from 'react-router-redux';
-
-import browserHistory from 'Utils/history';
+import { Route, BrowserRouter } from 'react-router-dom';
 
 import store from 'Redux/store';
 
@@ -30,8 +27,8 @@ store.dispatch(updateCharToTypeFromLearningMode());
 
 export default () => (
   <Provider store={store}>
-    <ConnectedRouter history={browserHistory}>
+    <BrowserRouter>
       <Route path="/" component={Layout} />
-    </ConnectedRouter>
+    </BrowserRouter>
   </Provider>
 );

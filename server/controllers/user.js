@@ -94,7 +94,7 @@ const getTokens = (req, res, next) => {
   Client
     .findByToken(token)
     .then(client => {
-      // client.token = generateRefreshToken(client.get('id'));
+      client.token = generateRefreshToken(client.get('id'));
 
       return Promise.all([client, Access.findByClient(client.get('id'))]);
     })

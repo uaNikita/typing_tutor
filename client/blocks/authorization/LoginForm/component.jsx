@@ -15,15 +15,6 @@ const validate = values => {
   return errors;
 };
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-const asyncValidate = values => sleep(1000)
-  .then(() => {
-    if (!['john@test.com', 'paul@test.com', 'george@test.com', 'ringo@test.com'].includes(values.get('email'))) {
-      return { email: 'That username is taken' };
-    }
-  });
-
 class LoginForm extends Component {
   onForgotClickHandler = e => {
     e.preventDefault();
@@ -69,6 +60,4 @@ class LoginForm extends Component {
 export default reduxForm({
   form: 'login',
   validate,
-  // asyncValidate,
-  // asyncBlurFields: ['email'],
 })(LoginForm);
