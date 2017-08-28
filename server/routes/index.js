@@ -3,23 +3,21 @@ const config = require('config');
 const expressJwt = require('express-jwt');
 let passport = require('passport');
 
-let { login, create, getTokens } = require('../controllers/user');
+let { create, login, logout, getTokens } = require('../controllers/user');
 
 const router = express.Router();
 const authenticate = expressJwt({
   secret: config.get('secretKey'),
 });
 
-router.post('/login', passport.authenticate('local'), login);
-
 router.post('/signup', create);
 
-router.get('/logout', (req, res) => {
-  req.logout();
+router.post('/login', passport.authenticate('local'), login);
 
-  return res.json('ok');
-});
+router.get('/logout', passport.authenticate('local'), logout);
 
-router.post('/tokens', authenticate, getTokens);
+router.post('/tokens', getTokens);
+
+// router.post('/protected-route', authenticate, getTokens);
 
 module.exports = router;

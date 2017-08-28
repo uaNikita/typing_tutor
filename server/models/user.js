@@ -1,9 +1,8 @@
-let Promise = require('bluebird');
-let mongoose = require('mongoose');
-let bcrypt = require('bcryptjs');
-let config = require('config');
-let httpStatus = require('http-status');
-let APIError = require('../helpers/APIError');
+const mongoose = require('mongoose');
+const bcrypt = require('bcryptjs');
+const config = require('config');
+const httpStatus = require('http-status');
+const APIError = require('../helpers/APIError');
 
 const UserSchema = new mongoose.Schema({
   email: {

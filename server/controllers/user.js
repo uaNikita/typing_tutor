@@ -2,7 +2,8 @@ const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const config = require('config');
 const User = require('../models/user');
-const Client = require('../models/Client');
+const Client = require('../models/client');
+const Access = require('../models/access');
 
 const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: '1d' });
 
@@ -15,18 +16,18 @@ const createClient = userId => {
     user: userId,
   });
 
-  client.refresh = {
-    token: generateRefreshToken(client.get('id')),
-  };
+  client.token = generateRefreshToken(client.get('id'));
 
-  client.access = {
-    token: generateAccessToken({
-      id: userId,
-      clientId: client.get('id'),
-    }),
-  };
+  const access = new Access({
+    client: client.get('id'),
+  });
 
-  return client.save();
+  access.token = generateAccessToken({
+    id: userId,
+    clientId: client.get('id'),
+  });
+
+  return [client.save(), access.save()];
 };
 
 const create = (req, res, next) => {
@@ -36,14 +37,14 @@ const create = (req, res, next) => {
     .then(() => {
       const user = new User({ email, password });
 
-      return Promise.all([user.save(), createClient(user.get('id'))]);
+      return Promise.all([user.save(), ...createClient(user.get('id'))]);
     })
-    .then(([user, client]) => {
+    .then(([user, client, access]) => {
       res.json({
         email: user.get('email'),
         tokens: {
-          refresh: client.get('refresh.token'),
-          access: client.get('access.token'),
+          refresh: client.get('token'),
+          access: access.get('token'),
         },
       });
     })
@@ -54,19 +55,19 @@ const login = (req, res, next) => {
   const { user } = req;
 
   createClient(user.get('id'))
-    .then((client) => {
+    .then((client, access) => {
       res.json({
         email: user.get('email'),
         tokens: {
-          refresh: client.get('refresh.token'),
-          access: client.get('access.token'),
+          refresh: client.get('token'),
+          access: access.get('token'),
         },
       });
     })
     .catch(e => next(e));
 };
 
-let logout = function(req, res, next, id) {
+let logout = function (req, res, next, id) {
   User.get(id)
     .then((user) => {
       req.user = user;
@@ -75,34 +76,42 @@ let logout = function(req, res, next, id) {
     .catch(e => next(e));
 };
 
-const getTokens = (req, res, next) => {
-  const { clientId } = req.user;
-
-  console.log('clientId', clientId);
-
+const getTokens = (req, res, next) =>
   Client
-    .get(clientId)
+    .findByToken(req.body.token)
     .then(client => {
-      const userId = client.get('user');
+      // client.token = generateRefreshToken(client.get('id'));
 
-      client.refresh.token = generateRefreshToken(userId);
-      client.access.token = generateAccessToken({
-        id: userId,
-        clientId: client.get('id'),
-      });
-
-      return client.save();
+      return Promise.all([client, Access.findByClient(client.get('id'))]);
     })
-    .then(client => {
-      
-     
+    .then(([client, access]) => {
+      let newAccess = access;
+
+      if (newAccess) {
+        newAccess.token = generateAccessToken({
+          id: client.get('user'),
+          clientId: client.get('id'),
+        });
+      }
+      else {
+        newAccess = new Access({
+          client: client.get('id'),
+          token: generateAccessToken({
+            id: client.get('user'),
+            clientId: client.get('id'),
+          }),
+        });
+      }
+
+      return Promise.all([client.save(), newAccess.save()]);
+    })
+    .then(([client, access]) => {
       res.json({
-        refresh: client.get('refresh.token'),
-        access: client.get('refresh.access'),
+        refresh: client.get('token'),
+        access: access.get('token'),
       });
     })
     .catch(e => next(e));
-};
 
 let update = (req, res, next) => {
   const user = req.user;
@@ -142,5 +151,6 @@ let remove = (req, res, next) => {
 module.exports = {
   create,
   login,
+  logout,
   getTokens,
 };

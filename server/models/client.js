@@ -1,36 +1,21 @@
-let mongoose = require('mongoose');
+const mongoose = require('mongoose');
+const httpStatus = require('http-status');
+const APIError = require('../helpers/APIError');
 
 const ClientSchema = new mongoose.Schema({
   user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  token: {
     type: String,
     required: true,
   },
-  refresh: {
-    token: {
-      type: String,
-      required: true,
-    },
-    time: {
-      type: Date,
-      default: Date.now,
-      expires: '20s',
-    },
-  },
-  access: {
-    token: {
-      type: String,
-      required: true,
-    },
-    time: {
-      type: Date,
-      default: Date.now,
-      expires: '20s',
-    },
-  },
-  time: {
+  createdAt: {
     type: Date,
     default: Date.now,
-    expires: '1s',
+    expires: '30d',
   },
 });
 
@@ -38,17 +23,17 @@ const ClientSchema = new mongoose.Schema({
  * Statics
  */
 ClientSchema.statics = {
-  get (id) {
-    return this.findById(id)
+  findByToken(token) {
+    return this.find({ token })
       .exec()
       .then(client => {
-        if (client) {
-          return client;
+        if (client.length) {
+          return client[0];
         }
 
         throw new APIError({
-          message: 'No such client exists',
-          status: httpStatus.CONFLICT,
+          message: httpStatus['401'],
+          status: httpStatus.UNAUTHORIZED,
         });
       });
   }
