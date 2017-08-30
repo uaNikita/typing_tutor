@@ -9,21 +9,7 @@ var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 
 var isProduction = process.env.WEBPACK_ENV === 'production' ? true : false;
 
-let config = {
-  context: path.join(__dirname),
-
-  entry: path.join(__dirname, 'client', 'index.jsx'),
-
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'main.js'
-  },
-
-  watchOptions: {
-    aggregateTimeout: 100
-  },
-
-  devtool: isProduction ? 'source-map' : 'eval',
+const commonConfig = {
 
   resolve: {
     alias: {
@@ -36,22 +22,43 @@ let config = {
     }
   },
 
+  watchOptions: {
+    aggregateTimeout: 100
+  }
+
+};
+
+const restCssLoders = [
+  {
+    loader: 'postcss-loader',
+    options: {
+      sourceMap: true,
+      plugins: [
+        autoprefixer()
+      ]
+    }
+  },
+  'stylus-loader'
+];
+
+let clientConfig = {
+  context: path.join(__dirname),
+
+  entry: path.join(__dirname, 'client', 'entry.jsx'),
+
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'main.js'
+  },
+
+  devtool: isProduction ? 'source-map' : 'eval',
+
   plugins: [
     new ExtractTextPlugin('[name].css'),
     new webpack.DefinePlugin({
       BROWSER: true,
     }),
     isProduction ? () => {} : new OpenBrowserPlugin({ url: 'http://localhost:5550' }),
-    isProduction ? new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    }) : () => {},
-    isProduction ? new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        warnings: false
-      }
-    }) : () => {},
   ],
 
   // Options affecting the normal modules
@@ -81,16 +88,7 @@ let config = {
                 import: true
               }
             },
-            {
-              loader: 'postcss-loader',
-              options: {
-                sourceMap: true,
-                plugins: [
-                  autoprefixer()
-                ]
-              }
-            },
-            'stylus-loader'
+            ...restCssLoders
           ]
         })
       },
@@ -122,7 +120,11 @@ let config = {
           {
             loader: 'image-webpack-loader',
             options: {
-              progressive: true
+              query: {
+                mozjpeg: {
+                  progressive: true,
+                },
+              }
             }
           }
         ]
@@ -131,4 +133,76 @@ let config = {
   }
 };
 
-module.exports = config;
+const nodeExternals = require('webpack-node-externals');
+
+let serverConfig = {
+  entry: path.join(__dirname, 'server', 'entry.jsx'),
+
+  output: {
+    path: path.join(__dirname, 'dist'),
+    filename: 'compiledServer.js',
+    libraryTarget: 'umd'
+  },
+
+  plugins: [
+    new webpack.DefinePlugin({
+      BROWSER: false,
+    }),
+  ],
+
+  target: 'node',
+
+  externals: [nodeExternals()],
+
+  module: {
+    rules: [
+      {
+        test: /\.jsx?$/,
+        use: 'babel-loader',
+        exclude: /node_modules/
+      },
+      {
+        test: /^((?!module).)+styl$/,
+        use: 'null-loader'
+      },
+      {
+        test: /module\.styl$/,
+        use: [
+          {
+            loader: 'css-loader/locals',
+            options: {
+              modules: true,
+              localIdentName: '[name]__[local]___[hash:base64:5]'
+            }
+          },
+          ...restCssLoders
+        ]
+      },
+      {
+        test: /\.(css|woff|woff2|ttf|eot|jpg|png|svg)$/,
+        use: 'null-loader'
+      },
+    ]
+  }
+};
+
+if (isProduction) {
+  const productionPlugins = [
+    new webpack.DefinePlugin({
+      'process.env.NODE_ENV': JSON.stringify('production'),
+    }),
+    new webpack.optimize.UglifyJsPlugin({
+      compressor: {
+        warnings: false
+      }
+    })
+  ]
+
+  clientConfig.plugins = clientConfig.plugins.concat(productionPlugins);
+  serverConfig.plugins = serverConfig.plugins.concat(productionPlugins);
+}
+
+module.exports = [
+  _.merge({}, commonConfig, clientConfig),
+  _.merge({}, commonConfig, serverConfig)
+];
