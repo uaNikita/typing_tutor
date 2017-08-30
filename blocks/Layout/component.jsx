@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router-dom';
-import $ from 'jquery';
 import classNames from 'classnames';
 
 import Footer from '../Footer.jsx';
@@ -10,16 +9,16 @@ import Settings from '../Settings/container.jsx';
 
 class Layout extends Component {
   componentDidUpdate() {
-    const $body = $('body');
+    const bodyClassList = document.body.classList;
     const bodyModalClass = 'modal__open';
 
-    if ($body.hasClass(bodyModalClass)) {
+    if (bodyClassList.contains(bodyModalClass)) {
       if (!this.props.modalName) {
-        $body.removeClass(bodyModalClass);
+        bodyClassList.remove(bodyModalClass);
       }
     }
     else if (this.props.modalName) {
-      $body.addClass(bodyModalClass);
+      bodyClassList.add(bodyModalClass);
     }
   }
 

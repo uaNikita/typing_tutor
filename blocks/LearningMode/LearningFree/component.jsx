@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
-import $ from 'jquery';
 import noUiSlider from 'nouislider';
 import KeyItem from './KeyItem.jsx';
 
@@ -10,7 +9,8 @@ class LearningFree extends Component {
 
     const { maxLettersInWord } = this.props;
 
-    const $noUiValueMaxLettersInWord = $('<span class="noUi-value" />');
+    const noUiValueMaxLettersInWord = document.createElement('span');
+    noUiValueMaxLettersInWord.className = 'noUi-value';
 
     // max word length range
     noUiSlider.create(this.maxLettersInWordRange, {
@@ -23,18 +23,18 @@ class LearningFree extends Component {
       },
     });
 
-    $noUiValueMaxLettersInWord.text(maxLettersInWord);
+    noUiValueMaxLettersInWord.innerHTML = maxLettersInWord;
 
-    $(this.maxLettersInWordRange)
-      .find('.noUi-handle')
-      .append($noUiValueMaxLettersInWord);
+    this.maxLettersInWordRange
+      .querySelector('.noUi-handle')
+      .appendChild(noUiValueMaxLettersInWord);
 
     this.maxLettersInWordRange.noUiSlider.on('slide', (values, handle) => {
       const val = parseInt(values[handle], 10);
 
       self.props.setMaxLettersInWord(val);
 
-      $noUiValueMaxLettersInWord.text(val);
+      noUiValueMaxLettersInWord.innerHTML = val;
     });
   }
 

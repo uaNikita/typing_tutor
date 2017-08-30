@@ -11,7 +11,7 @@ class Metronome extends Component {
       status: 0,
     };
 
-    this.audio = new Audio('media/metronome2.mp3');
+    // this.audio = new Audio('media/metronome2.mp3');
   }
 
   componentDidMount() {

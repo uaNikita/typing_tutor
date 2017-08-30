@@ -4,6 +4,8 @@
   "description": "SPA Typing tutor. Client.",
   "main": "",
   "scripts": {
+    "start": "cross-env NODE_ENV=development nodemon server/index.js",
+    "start-prod": "node NODE_ENV=production server/index.js",
     "build": "cross-env WEBPACK_ENV=production webpack --progress",
     "dev": "cross-env WEBPACK_ENV=development webpack --progress --watch"
   },
@@ -69,6 +71,7 @@
     "react": "^15.6.1",
     "react-addons-css-transition-group": "^15.6.0",
     "react-dom": "^15.6.1",
+    "react-helmet": "^5.2.0",
     "react-redux": "^5.0.6",
     "react-router-dom": "^4.2.2",
     "redux": "^3.7.2",

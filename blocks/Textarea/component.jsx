@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import $ from 'jquery';
+// import $ from 'jquery';
 
 class Textarea extends Component {
-  componentDidMount() {
-    const $content = $(this.content);
-
-    const cursorOffsetTop = $(this.cursor).offset().top;
-
-    $content.scrollTop(cursorOffsetTop - $content.offset().top - 80);
-
-    $content.perfectScrollbar();
-  }
+  // componentDidMount() {
+  //   const $content = $(this.content);
+  //
+  //   const cursorOffsetTop = $(this.cursor).offset().top;
+  //
+  //   $content.scrollTop(cursorOffsetTop - $content.offset().top - 80);
+  //
+  //   $content.perfectScrollbar();
+  // }
 
   render() {
     const { typed, nonTyped } = this.props;

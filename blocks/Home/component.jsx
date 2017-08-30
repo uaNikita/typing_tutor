@@ -1,14 +1,10 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
-import $ from 'jquery';
-
 import Textarea from '../Textarea/container.jsx';
 import Learningarea from '../Learningarea/container.jsx';
 import Keypad from '../Keypad/container.jsx';
 import Metronome from '../Metronome/container.jsx';
-
-const $document = $(document);
 
 class Home extends Component {
   constructor(props) {
@@ -34,17 +30,15 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    $document.on('keydown', this.keyDownHandler);
-
-    $document.on('keypress', this.keyPressHandler);
+    this.home.addEventListener('keydown', this.keyDownHandler);
+    this.home.addEventListener('keypress', this.keyPressHandler);
 
     this.props.updateStartVariables();
   }
 
   componentWillUnmount() {
-    $document.off('keydown', this.keyDownHandler);
-
-    $document.off('keypress', this.keyPressHandler);
+    this.home.removeEventListener('keydown', this.keyDownHandler);
+    this.home.removeEventListener('keypress', this.keyPressHandler);
 
     this.props.refreshCurrentLesson();
   }
@@ -82,7 +76,7 @@ class Home extends Component {
     }
 
     return (
-      <div className="home">
+      <div className="home" ref={el => { this.home = el; }}>
         <div className="home__head">
           <Link className="home__settings fa fa-bars" to="/settings" />
 

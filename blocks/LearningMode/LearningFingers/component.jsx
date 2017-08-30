@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { concat, clone } from 'lodash';
-import $ from 'jquery';
 import noUiSlider from 'nouislider';
 import classNames from 'classnames';
 import Key from '../../Key/component.jsx';
@@ -11,7 +10,8 @@ class LearningFingers extends Component {
 
     const { fingersSet, setSizeFingers, maxLettersInWord } = this.props;
 
-    const $noUiValueMaxLettersInWord = $('<span class="noUi-value" />');
+    const noUiValueMaxLettersInWord = document.createElement('span');
+    noUiValueMaxLettersInWord.className = 'noUi-value';
 
     // max word length range
     noUiSlider.create(this.maxLettersInWordRange, {
@@ -24,22 +24,22 @@ class LearningFingers extends Component {
       },
     });
 
-    $noUiValueMaxLettersInWord.text(maxLettersInWord);
+    noUiValueMaxLettersInWord.innerHTML = maxLettersInWord;
 
-    $(this.maxLettersInWordRange)
-      .find('.noUi-handle')
-      .append($noUiValueMaxLettersInWord);
+    this.maxLettersInWordRange
+      .querySelector('.noUi-handle')
+      .appendChild(noUiValueMaxLettersInWord);
 
     this.maxLettersInWordRange.noUiSlider.on('slide', (values, handle) => {
       const val = parseInt(values[handle], 10);
 
       self.props.setMaxLettersInWord(val);
 
-      $noUiValueMaxLettersInWord.text(val);
+      noUiValueMaxLettersInWord.innerHTML = val;
     });
 
-
-    const $noUiValueFingersSet = $('<span class="noUi-value" />');
+    const noUiValueFingersSet = document.createElement('span');
+    noUiValueFingersSet.className = 'noUi-value';
 
     noUiSlider.create(this.fingersRange, {
       start: [setSizeFingers],
@@ -51,18 +51,18 @@ class LearningFingers extends Component {
       },
     });
 
-    $noUiValueFingersSet.text(setSizeFingers);
+    noUiValueFingersSet.innerHTML = setSizeFingers;
 
-    $(this.fingersRange)
-      .find('.noUi-handle')
-      .append($noUiValueFingersSet);
+    this.fingersRange
+      .querySelector('.noUi-handle')
+      .appendChild(noUiValueFingersSet);
 
     this.fingersRange.noUiSlider.on('slide', (values, handle) => {
       const val = parseInt(values[handle], 10);
 
       self.props.setFingersSetSize(val);
 
-      $noUiValueFingersSet.text(val);
+      noUiValueFingersSet.innerHTML = val;
     });
   }
 
