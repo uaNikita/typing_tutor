@@ -96,7 +96,7 @@ const getTokens = (req, res, next) => {
     .then(client => {
       client.token = generateRefreshToken(client.get('id'));
 
-      return Promise.all([client, Access.findByClient(client.get('id'))]);
+      return Promise.all([client.save(), Access.findByClient(client.get('id'))]);
     })
     .then(([client, access]) => {
       let newAccess = access;
@@ -117,7 +117,7 @@ const getTokens = (req, res, next) => {
         });
       }
 
-      return Promise.all([client.save(), newAccess.save()]);
+      return Promise.all([client, newAccess.save()]);
     })
     .then(([client, access]) => {
       res.json({
@@ -136,19 +136,6 @@ let update = (req, res, next) => {
 
   user.save()
     .then(savedUser => res.json(savedUser))
-    .catch(e => next(e));
-};
-
-/**
- * Get user list.
- * @property {number} req.query.skip - Number of users to be skipped.
- * @property {number} req.query.limit - Limit number of users to be returned.
- * @returns {User[]}
- */
-let list = (req, res, next) => {
-  const { limit = 50, skip = 0 } = req.query;
-  User.list({ limit, skip })
-    .then(users => res.json(users))
     .catch(e => next(e));
 };
 

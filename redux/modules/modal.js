@@ -15,11 +15,14 @@ export default (state = initialState, action = {}) => {
     case OPEN_MODAL:
       return state.merge({
         name: action.name,
-        closable: !!action.closable,
+        closable: action.closable === undefined ? true : action.closable,
       });
 
     case CLOSE_MODAL:
-      return state.set('name', '');
+      return state.merge({
+        name: '',
+        closable: true,
+      });
 
     default:
       return state;

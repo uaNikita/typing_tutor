@@ -77,7 +77,7 @@ let clientConfig = {
         loader: 'babel-loader',
       },
       {
-        test: /\.styl$/,
+        test: /^((?!module).)+styl/,
         loader: ExtractTextPlugin.extract({
           fallback: 'style-loader',
           use: [
@@ -86,6 +86,23 @@ let clientConfig = {
               options: {
                 url: true,
                 import: true
+              }
+            },
+            ...restCssLoders
+          ]
+        })
+      },
+      {
+        test: /module\.styl$/,
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [
+            {
+              loader: 'css-loader',
+              options: {
+                modules: true,
+                importLoaders: 1,
+                localIdentName: '[name]__[local]___[hash:base64:5]'
               }
             },
             ...restCssLoders
@@ -196,7 +213,7 @@ if (isProduction) {
         warnings: false
       }
     })
-  ]
+  ];
 
   clientConfig.plugins = clientConfig.plugins.concat(productionPlugins);
   serverConfig.plugins = serverConfig.plugins.concat(productionPlugins);

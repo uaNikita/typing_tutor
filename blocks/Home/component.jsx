@@ -5,14 +5,13 @@ import Textarea from '../Textarea/container.jsx';
 import Learningarea from '../Learningarea/container.jsx';
 import Keypad from '../Keypad/container.jsx';
 import Metronome from '../Metronome/container.jsx';
+import UserMenu from '../UserMenu/container';
 
 class Home extends Component {
   constructor(props) {
     super(props);
 
-    const {
-      typeChar,
-    } = this.props;
+    const { typeChar } = this.props;
 
     this.keyPressHandler = e => {
       if (e.which !== 32) {
@@ -43,19 +42,6 @@ class Home extends Component {
     this.props.refreshCurrentLesson();
   }
 
-
-  onLogInClick = e => {
-    e.preventDefault();
-
-    this.props.openModal('Login', true);
-  };
-
-  onSignUpClick = e => {
-    e.preventDefault();
-
-    this.props.openModal('Registration', true);
-  };
-
   render() {
     let area;
 
@@ -82,11 +68,7 @@ class Home extends Component {
 
           <div className="home__buttons">
             <Metronome />
-            <div className="home__auth">
-              <a className="home__auth-link" href onClick={this.onLogInClick}>Log In</a>
-              <span className="home__auth-or">or</span>
-              <a className="home__auth-link" href onClick={this.onSignUpClick}>Sign Up</a>
-            </div>
+            <UserMenu />
           </div>
 
         </div>

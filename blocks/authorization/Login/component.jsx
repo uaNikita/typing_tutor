@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { SubmissionError } from 'redux-form/immutable';
-import LoginForm from '../LoginForm/container.jsx';
+import LoginForm from '../LoginForm/container';
 
 class Login extends Component {
   handleSubmit = values => fetch('/login', {
