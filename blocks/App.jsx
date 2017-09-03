@@ -2,7 +2,7 @@ import React from 'react';
 import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
-import Layout from 'Blocks/Layout/container.jsx';
+import Layout from 'Blocks/Layout/container';
 
 const App = () => (
   <div>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import ForgotPasswordForm from '../ForgotPasswordForm/container.jsx';
+import ForgotPasswordForm from '../ForgotPasswordForm/container';
 
 class ForgotPassword extends Component {
   handleSubmit = () => {

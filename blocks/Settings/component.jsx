@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import { Redirect, Route, Link, NavLink } from 'react-router-dom';
 
 // import store from 'Redux/store';
-import LearningMode from '../LearningMode/container.jsx';
+import LearningMode from '../LearningMode/container';
 import TextMode from '../TextMode/component.jsx';
-import Keyboard from '../Keyboard/container.jsx';
+import Keyboard from '../Keyboard/container';
 
 class Settings extends Component {
   onLearningModeEnter = () => {

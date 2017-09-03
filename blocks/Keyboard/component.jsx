@@ -2,7 +2,7 @@ import React from 'react';
 import keyboards from '../../constants/keyboards';
 
 import Key from '../Key/component.jsx';
-import MenuItem from './MenuItem/container.jsx';
+import MenuItem from './MenuItem/container';
 
 const Keyboard = props => {
   const { keys, name } = props;

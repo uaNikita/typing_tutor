@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
-import LearningFingers from './LearningFingers/container.jsx';
-import LearningFree from './LearningFree/container.jsx';
-import ModeItem from './ModeItem/container.jsx';
+import LearningFingers from './LearningFingers/container';
+import LearningFree from './LearningFree/container';
+import ModeItem from './ModeItem/container';
 import Switcher from '../Switcher.jsx';
 
 class LearningMode extends Component {
