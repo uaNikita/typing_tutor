@@ -37,23 +37,6 @@ module.exports = app => {
       return next(apiError);
     }
 
-    return next(err);
+    res.status(err.status).json(err);
   });
-
-
-  // error handler
-  app.use((err, req, res, next) => {
-
-    let response = {
-      message: err.message
-    };
-
-    if (err.errors) {
-      response.errors = err.errors;
-    }
-
-    res.status(err.status).json(response);
-
-  });
-
 };

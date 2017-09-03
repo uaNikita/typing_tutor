@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
+import CSSModules from 'react-css-modules';
 
 import Textarea from '../Textarea/container.jsx';
 import Learningarea from '../Learningarea/container.jsx';
@@ -7,7 +8,9 @@ import Keypad from '../Keypad/container.jsx';
 import Metronome from '../Metronome/container.jsx';
 import UserMenu from '../UserMenu/container';
 
-class Home extends Component {
+import styles from './home.module.styl';
+
+class Block extends Component {
   constructor(props) {
     super(props);
 
@@ -62,18 +65,18 @@ class Home extends Component {
     }
 
     return (
-      <div className="home" ref={el => { this.home = el; }}>
-        <div className="home__head">
-          <Link className="home__settings fa fa-bars" to="/settings" />
+      <div styleName="content" ref={el => { this.home = el; }}>
+        <div styleName="head">
+          <Link styleName="settings" className="fa fa-bars" to="/settings" />
 
-          <div className="home__buttons">
+          <div styleName="buttons">
             <Metronome />
             <UserMenu />
           </div>
 
         </div>
 
-        <div className="home__typing-info">
+        <div styleName="typing-info">
           <p className="num-chars">
             <i className="fa fa-file-text-o num-chars__icon" />
             {successTypes}
@@ -98,4 +101,4 @@ class Home extends Component {
   }
 }
 
-export default Home;
+export default CSSModules(Block, styles);

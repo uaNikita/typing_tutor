@@ -17,9 +17,13 @@ const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
 const asyncValidate = values => sleep(1000)
   .then(() => {
+    let result = false;
+
     if (!['john', 'paul', 'george', 'ringo'].includes(values.get('email'))) {
-      return { email: 'That email does not exist' };
+      result = { email: 'That email does not exist' };
     }
+
+    return result;
   });
 
 class ForgotPasswordForm extends Component {
@@ -27,7 +31,7 @@ class ForgotPasswordForm extends Component {
     e.preventDefault();
 
     this.props.openModal('Login');
-  }
+  };
 
   render() {
     return (

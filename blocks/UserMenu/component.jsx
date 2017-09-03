@@ -1,21 +1,16 @@
 import React, { Component } from 'react';
 
-import CSSModules from 'react-css-modules';
-import styles from './user-menu.module.styl';
-
-console.log(styles);
-
 class Block extends Component {
   handleLogIn = e => {
     e.preventDefault();
-    
-    this.props.openModal('Login', true);
+
+    this.props.openModal('Login');
   };
 
   handleSignUp = e => {
     e.preventDefault();
 
-    this.props.openModal('Registration', true);
+    this.props.openModal('Registration');
   };
 
   handleLogout = e => {
@@ -28,7 +23,7 @@ class Block extends Component {
     const { email, name } = this.props;
 
     let content = (
-      <div styleName="content">
+      <div>
         <a className="auth-link" href onClick={this.handleLogIn}>Log In</a> or <a className="auth-link" href onClick={this.handleSignUp}>Sign Up</a>
       </div>
     );
@@ -45,4 +40,4 @@ class Block extends Component {
   }
 }
 
-export default CSSModules(Block, styles);
+export default Block;

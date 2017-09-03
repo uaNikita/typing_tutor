@@ -15,12 +15,7 @@
       "error",
       "as-needed"
     ],
-    "arrow-body-style": [
-      "error",
-      "as-needed"
-    ],
     "import/extensions": "off",
-    "consistent-return": "off",
     "max-len": "off",
     "react/prop-types": "off",
     "react/jsx-closing-bracket-location": "off",

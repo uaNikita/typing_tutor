@@ -19,15 +19,7 @@ const parseResponseAndHandleError = response => {
   }
 
   return res.then(resError => {
-    let error = new Error(response.statusText);
-
-    error = {
-      ...error,
-      status: response.status,
-      response: resError,
-    };
-
-    throw error;
+    throw resError;
   });
 };
 
@@ -43,14 +35,21 @@ const parseResponseAndHandleError = response => {
 //   throw error;
 // };
 
-export const requestJSON = (url, params) => fetch(url, _.merge({
-  headers: {
-    'Content-Type': 'application/json',
-  },
-}, params))
-  .then(parseResponseAndHandleError);
-// .catch(checkIsUnauthorized);
+export const requestJSON = (url, params) => {
+  const newParams = _.merge({
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  }, params);
+
+  if (typeof newParams.body === 'object') {
+    newParams.body = JSON.stringify(newParams.body);
+  }
+
+  return fetch(url, newParams)
+    .then(parseResponseAndHandleError);
+};
 
 export const requestText = (url, params) => fetch(url, params)
   .then(parseResponseAndHandleError);
-// .catch(checkIsUnauthorized);

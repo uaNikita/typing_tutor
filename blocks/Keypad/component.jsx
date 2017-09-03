@@ -17,10 +17,14 @@ const KeyPad = props => {
     let needToType = false;
 
     _.forEach(idCharsToType, value => {
+      let result = true;
+
       if (obj.id === value) {
         needToType = true;
-        return false;
+        result = false;
       }
+
+      return result;
     });
 
     const className = classNames('keypad__key', {

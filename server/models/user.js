@@ -62,7 +62,6 @@ UserSchema.statics = {
     return this.findOne({ email }).exec().then(user => {
       if (user) {
         const err = new APIError({
-          message: 'That email is already taken',
           errors: {
             email: 'Email is already taken'
           },
