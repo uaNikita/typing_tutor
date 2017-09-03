@@ -40,28 +40,28 @@ app.use((req, res) => {
     res.status(301).set('Location', context.url);
 
     res.end();
-  } else {
-    const helmet = Helmet.renderStatic();
+  }
+  else {
+    const { title, meta, link, script } = Helmet.renderStatic();
 
     res.send(`
-    <!doctype html>
-    <html>
-      <head>
-        ${helmet.title.toString()}
-        ${helmet.meta.toString()}
-        ${helmet.script.toString()}
-        ${helmet.link.toString()}
-      </head>
-      <body>
-        <div id='root'>${renderToString(compiledApp(req.url, context))}</div>
-        <script>
-          // WARNING: See the following for security issues around embedding JSON in HTML:
-          // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
-          window.PRELOADED_STATE = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
-        </script>
-        <script type="text/javascript" src="/main.js"></script>
-      </body>
-    </html>
+      <!doctype html>
+      <html>
+        <head>
+          ${title.toString()}
+          ${meta.toString()}
+          ${link.toString()}
+          <script>
+            // WARNING: See the following for security issues around embedding JSON in HTML:
+            // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
+            window.PRELOADED_STATE = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
+          </script>
+          ${script.toString()}
+        </head>
+        <body>
+          <div id='root'>${renderToString(compiledApp(req.url, context))}</div>
+        </body>
+      </html>
     `);
   }
 });

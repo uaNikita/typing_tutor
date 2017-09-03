@@ -23,18 +23,6 @@ const parseResponseAndHandleError = response => {
   });
 };
 
-// const checkIsUnauthorized = error => {
-//   if (error.status === 401) {
-//     console.log(401);
-//   }
-//
-//   if (error.status === 500) {
-//     console.log(500);
-//   }
-//
-//   throw error;
-// };
-
 export const requestJSON = (url, params) => {
   const newParams = _.merge({
     method: 'POST',
