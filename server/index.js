@@ -36,6 +36,8 @@ app.use('/', require('./routes/index'));
 app.use((req, res) => {
   const context = {};
 
+  const html = renderToString(compiledApp(req.url, context));
+
   if (context.url) {
     res.status(301).set('Location', context.url);
 
@@ -59,7 +61,7 @@ app.use((req, res) => {
           ${script.toString()}
         </head>
         <body>
-          <div id='root'>${renderToString(compiledApp(req.url, context))}</div>
+          <div id='root'>${html}</div>
         </body>
       </html>
     `);
