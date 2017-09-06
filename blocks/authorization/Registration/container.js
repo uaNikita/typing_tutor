@@ -5,18 +5,12 @@ import RegistrationForm from './component.jsx';
 const mapDispatchToProps = dispatch => ({
   setEmail: email => {
     dispatch(setEmail(email));
-
-    localStorage.setItem('email', email);
   },
   setBearerToken: token => {
     dispatch(setBearerToken(token));
-
-    localStorage.setItem('bearerToken', token);
   },
   setAccessToken: token => {
     dispatch(setAccessToken(token));
-
-    localStorage.setItem('accessToken', token);
   },
 });
 

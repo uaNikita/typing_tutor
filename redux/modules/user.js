@@ -34,22 +34,38 @@ export default (state = initialState, action = {}) => {
   }
 };
 
-export const setEmail = email => ({
-  type: SET_EMAIL,
-  email,
-});
+export const setEmail = email => {
+  localStorage.setItem('email', email);
 
-export const setBearerToken = token => ({
-  type: SET_BEARER_TOKEN,
-  token,
-});
+  return {
+    type: SET_EMAIL,
+    email,
+  };
+};
 
-export const setAccessToken = token => ({
-  type: SET_ACCESS_TOKEN,
-  token,
-});
+export const setBearerToken = token => {
+  localStorage.setItem('bearerToken', token);
 
-export const setName = name => ({
-  type: SET_NAME,
-  name,
-});
+  return {
+    type: SET_BEARER_TOKEN,
+    token,
+  };
+};
+
+export const setAccessToken = token => {
+  localStorage.setItem('accessToken', token);
+
+  return {
+    type: SET_ACCESS_TOKEN,
+    token,
+  };
+};
+
+export const setName = name => {
+  localStorage.setItem('name', name);
+
+  return {
+    type: SET_NAME,
+    name,
+  };
+};
