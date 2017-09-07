@@ -53,6 +53,7 @@ class Block extends Component {
       errorTypes,
       speed,
       mode,
+      email,
     } = this.props;
 
     switch (mode) {
@@ -70,7 +71,7 @@ class Block extends Component {
           <Link styleName="settings" className="fa fa-bars" to="/settings" />
 
           <div styleName="buttons">
-            <Metronome />
+            {email && <Metronome />}
             <UserMenu />
           </div>
 

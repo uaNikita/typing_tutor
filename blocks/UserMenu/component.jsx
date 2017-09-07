@@ -24,13 +24,13 @@ class Block extends Component {
 
     let content = (
       <div>
-        <a className="auth-link" href onClick={this.handleLogIn}>Log In</a> or <a className="auth-link" href onClick={this.handleSignUp}>Sign Up</a>
+        <a href onClick={this.handleLogIn}>Log In</a> or <a href onClick={this.handleSignUp}>Sign Up</a>
       </div>
     );
 
     if (email) {
       content = (
-        <div className="auth">
+        <div className="user-menu">
           {name || email} - <a href onClick={this.handleLogout}>Log out</a>
         </div>
       );

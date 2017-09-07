@@ -14,6 +14,7 @@ const mapStateToProps = state => {
     errorTypes: stateMain.get('errorTypes'),
     speed: parseInt((stateMain.get('successTypes') + stateMain.get('errorTypes')) / spendTime, 10),
     mode: stateMain.get('mode'),
+    email: state.getIn(['user', 'email']),
   };
 };
 
