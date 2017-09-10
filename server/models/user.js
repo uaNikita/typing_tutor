@@ -67,14 +67,16 @@ UserSchema.statics = {
           },
           status: httpStatus.CONFLICT
         });
+        
         return Promise.reject(err);
-      } else {
+      }
+      else {
         return Promise.resolve();
       }
     });
   },
 
-  get (id) {
+  get(id) {
     return this.findById(id)
       .exec()
       .then((user) => {

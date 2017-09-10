@@ -3,14 +3,19 @@ import { Field, reduxForm } from 'redux-form/immutable';
 import generatePassword from 'password-generator';
 
 import { email as regexEmail } from 'Utils/regularExpresions';
-import { requestJSON } from 'Utils/requestAPI';
+import { fetchJSON } from 'Utils/requestAPI';
 import RenderField from 'Blocks/RenderField/component.jsx';
 
-const asyncValidate = values => requestJSON('check-email', {
-  email: values.get('email'),
+const asyncValidate = values => fetchJSON('check-email', {
+  body: {
+    email: values.get('email'),
+  },
 })
-  .then(() => {
-    // console.log(res);
+  .then(() => {})
+  .catch(({ errors }) => {
+    if (errors) {
+      throw errors;
+    }
   });
 
 const validate = values => {

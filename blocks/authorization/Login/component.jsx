@@ -1,16 +1,13 @@
 import React, { Component } from 'react';
 import { SubmissionError } from 'redux-form/immutable';
+
+import fetchJSON from 'Utils/requestAPI';
 import LoginForm from '../LoginForm/container';
 
 class Login extends Component {
-  handleSubmit = values => fetch('/login', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(values.toJS()),
+  handleSubmit = values => fetchJSON('/login', {
+    body: values.toJS(),
   })
-    .then(response => response.json())
     .then(data => {
       if (data.errors) {
         throw new SubmissionError(data.errors);

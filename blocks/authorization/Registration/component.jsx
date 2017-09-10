@@ -1,31 +1,33 @@
 import React, { Component } from 'react';
 import { SubmissionError } from 'redux-form/immutable';
-import { requestJSON } from 'Utils/requestAPI';
+import { fetchJSON } from 'Utils/requestAPI';
 
 import RegistrationForm from '../RegistrationForm/container';
 
 class Registration extends Component {
-  handleSubmit = values => {
-    const { setEmail, setBearerToken, setAccessToken } = this.props;
-
-    return requestJSON('/signup', {
-      body: values.toJS(),
-    })
-      .then(data => {
-        setEmail(data.email);
-        setBearerToken(data.tokens.refresh);
-        setAccessToken(data.tokens.access);
-      })
-      .catch(data => {
-        throw new SubmissionError(data.errors);
-      });
+  state = {
+    submitted: false,
   };
 
+  handleSubmit = values => fetchJSON('/signup', {
+    body: values.toJS(),
+  }, true)
+    .then(() => this.setState({ submitted: true }))
+    .catch(data => {
+      throw new SubmissionError(data.errors);
+    });
+
   render() {
+    let content = <RegistrationForm onSubmit={this.handleSubmit} />;
+
+    if (this.state.submitted) {
+      content = 'Email was sent';
+    }
+
     return (
       <div className="auth">
         <h3 className="auth__title">Registration</h3>
-        <RegistrationForm onSubmit={this.handleSubmit} />
+        {content}
       </div>
     );
   }

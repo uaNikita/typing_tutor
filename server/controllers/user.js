@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const config = require('config');
+let httpStatus = require('http-status');
 const User = require('../models/user');
 const Client = require('../models/client');
 const Access = require('../models/access');
@@ -39,35 +40,21 @@ const create = (req, res, next) => {
 
       return Promise.all([user.save(), ...createClient(user.get('id'))]);
     })
-    .then(([user, client, access]) => {
-      res.json({
-        email: user.get('email'),
-        tokens: {
-          refresh: client.get('token'),
-          access: access.get('token'),
-        },
-      });
-    })
+    .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
-const login = (req, res, next) => {
-  const { user } = req;
-
-  createClient(user.get('id'))
+const login = (req, res, next) =>
+  createClient(req.user.get('id'))
     .then((client, access) => {
       res.json({
-        email: user.get('email'),
-        tokens: {
-          refresh: client.get('token'),
-          access: access.get('token'),
-        },
+        refresh: client.get('token'),
+        access: access.get('token'),
       });
     })
     .catch(e => next(e));
-};
 
-let logout = function (req, res, next) {
+let logout = function(req, res, next) {
   const { clientId } = req.user;
 
   Promise
@@ -80,7 +67,7 @@ let logout = function (req, res, next) {
         });
       }
 
-      return Promise.all([client.remove().exec(), access.remove().exec()])
+      return Promise.all([client.remove().exec(), access.remove().exec()]);
     })
     .then(() => {
       res.json(httpStatus[200]);
@@ -126,7 +113,15 @@ const getTokens = (req, res, next) => {
       });
     })
     .catch(e => next(e));
-}
+};
+
+const checkEmail = (req, res, next) => {
+  User.isNotExist(req.body.email)
+    .then(() => {
+      res.json(httpStatus[200]);
+    })
+    .catch(e => next(e));
+};
 
 let update = (req, res, next) => {
   const user = req.user;
@@ -155,4 +150,5 @@ module.exports = {
   login,
   logout,
   getTokens,
+  checkEmail,
 };

@@ -31,7 +31,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 // Passport
 require('./passport')(app);
 
-app.use('/', require('./routes/index'));
+app.use('/', require('./routes'));
 
 app.use((req, res) => {
   const context = {};

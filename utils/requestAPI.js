@@ -1,6 +1,17 @@
 import 'whatwg-fetch';
 import _ from 'lodash';
 
+import { setTokens } from 'ReduxUtils/modules/user';
+import store, { dispatch } from 'Utils/store';
+
+const getBearerToken = () => {
+  store.getState().getIn(['user', 'bearerToken']);
+};
+
+const getAccessToken = () => {
+  store.getState().getIn(['user', 'accessToken']);
+};
+
 const parseResponse = response => {
   const contentType = response.headers.get('content-type');
 
@@ -23,13 +34,17 @@ const parseResponseAndHandleError = response => {
   });
 };
 
-export const requestJSON = (url, params) => {
+const requestJSON = (url, params, isOpenRoute) => {
   const newParams = _.merge({
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
   }, params);
+
+  if (isOpenRoute) {
+    newParams.headers.Authorization = `bearer ${getAccessToken()}`;
+  }
 
   if (typeof newParams.body === 'object') {
     newParams.body = JSON.stringify(newParams.body);
@@ -38,6 +53,27 @@ export const requestJSON = (url, params) => {
   return fetch(url, newParams)
     .then(parseResponseAndHandleError);
 };
+
+export const fetchJSON = (url, params) => requestJSON(url, params)
+  .catch(error => {
+    let promise;
+
+    if (error.status === 401) {
+      promise = requestJSON('tokens', {
+        Authorization: `bearer ${getBearerToken()}`,
+      })
+        .then(({ refresh, access }) => {
+          dispatch(setTokens(refresh, access));
+
+          return fetchJSON(url, params);
+        });
+    }
+    else {
+      promise = Promise.reject(error);
+    }
+
+    return promise;
+  });
 
 export const requestText = (url, params) => fetch(url, params)
   .then(parseResponseAndHandleError);

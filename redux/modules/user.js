@@ -61,6 +61,11 @@ export const setAccessToken = token => {
   };
 };
 
+export const setTokens = (bearerToken, accessToken) => dispatch => {
+  dispatch(setBearerToken(bearerToken));
+  dispatch(setAccessToken(accessToken));
+};
+
 export const setName = name => {
   localStorage.setItem('name', name);
 
