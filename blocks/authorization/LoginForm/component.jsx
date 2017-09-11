@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 import RenderField from 'Blocks/RenderField/component.jsx';
+import Button from 'Blocks/Button/component.jsx';
 
 const validate = values => {
   const errors = {};
@@ -32,7 +33,7 @@ class LoginForm extends Component {
     const {
       handleSubmit,
       submitting,
-      valid,
+      invalid,
     } = this.props;
 
     return (
@@ -46,7 +47,7 @@ class LoginForm extends Component {
           <a className="auth__fp" href onClick={this.onForgotClickHandler}>Forgot password?</a>
         </p>
 
-        <button className="button" type="submit" disabled={!valid || submitting}>Log In</button>
+        <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
 
         <p className="auth__hint">
           Not yet registered? <a className="auth__link1" href onClick={this.onRegClickHandler}>Registration</a>

@@ -14,7 +14,9 @@ class Registration extends Component {
   }, true)
     .then(() => this.setState({ submitted: true }))
     .catch(data => {
-      throw new SubmissionError(data.errors);
+      if (data.errors) {
+        throw new SubmissionError(data.errors);
+      }
     });
 
   render() {

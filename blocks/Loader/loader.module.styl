@@ -1,0 +1,24 @@
+.root
+   position: absolute;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+.loader
+   width: 30px;
+   height: 30px;
+   position: absolute;
+   display: flex;
+   align-content: center;
+   top: 50%;
+   left: 50%;
+   margin-top: -15px;
+   margin-left: -15px;
+   text-align: center;
+   font-size: 30px;
+   animation: loader 4s infinite linear;
+@keyframes loader
+   from
+      transform: rotate(0);
+   to
+      transform: rotate(360deg);

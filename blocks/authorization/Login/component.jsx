@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
 import { SubmissionError } from 'redux-form/immutable';
 
-import fetchJSON from 'Utils/requestAPI';
+import { fetchJSON } from 'Utils/requestAPI';
 import LoginForm from '../LoginForm/container';
 
 class Login extends Component {
   handleSubmit = values => fetchJSON('/login', {
     body: values.toJS(),
   })
-    .then(data => {
+    .then(() => {
+      console.log(12345);
+    })
+    .catch(data => {
       if (data.errors) {
         throw new SubmissionError(data.errors);
       }
