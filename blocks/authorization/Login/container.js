@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
+import { closeModal } from 'ReduxUtils/modules/modal';
 import { setEmail, setBearerToken, setAccessToken } from 'ReduxUtils/modules/user';
-import RegistrationForm from './component.jsx';
+import Component from './component.jsx';
 
 const mapDispatchToProps = dispatch => ({
   setEmail: email => {
@@ -12,9 +13,12 @@ const mapDispatchToProps = dispatch => ({
   setAccessToken: token => {
     dispatch(setAccessToken(token));
   },
+  closeModal() {
+    dispatch(closeModal());
+  },
 });
 
 export default connect(
   null,
   mapDispatchToProps,
-)(RegistrationForm);
+)(Component);

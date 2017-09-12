@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { SubmissionError } from 'redux-form/immutable';
 import { fetchJSON } from 'Utils/requestAPI';
 
-import RegistrationForm from '../RegistrationForm/container';
+import RegistrationForm from './RegistrationForm/container';
 
 class Registration extends Component {
   state = {

@@ -2,8 +2,8 @@ import React from 'react';
 import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import Modal from '../Modal/container';
-import Login from '../authorization/Login/component.jsx';
-import Registration from '../authorization/Registration/container';
+import Login from '../authorization/Login/container';
+import Registration from '../authorization/Registration.jsx';
 import ForgotPassword from '../authorization/ForgotPassword/component.jsx';
 
 const ModalFrame = props => {

@@ -13,13 +13,13 @@ const initialState = Immutable.Map({
 export default (state = initialState, action = {}) => {
   switch (action.type) {
     case OPEN_MODAL:
-      return state.merge({
+      return state.set({
         name: action.name,
         closable: action.closable === undefined ? true : action.closable,
       });
 
     case CLOSE_MODAL:
-      return state.merge({
+      return state.set({
         name: '',
         closable: true,
       });

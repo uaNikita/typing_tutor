@@ -5,17 +5,32 @@ import { fetchJSON } from 'Utils/requestAPI';
 import LoginForm from '../LoginForm/container';
 
 class Login extends Component {
-  handleSubmit = values => fetchJSON('/login', {
-    body: values.toJS(),
-  })
-    .then(() => {
-      console.log(12345);
-    })
-    .catch(data => {
-      if (data.errors) {
-        throw new SubmissionError(data.errors);
+  handleSubmit = values => {
+
+    const {
+      props: {
+        setEmail,
+        setBearerToken,
+        setAccessToken,
+        closeModal,
       }
-    });
+    } = this;
+
+    return fetchJSON('/login', {
+      body: values.toJS(),
+    })
+      .then(({ bearer, access }) => {
+        setEmail(values.get('email'))
+        setBearerToken(bearer);
+        setAccessToken(access);
+        closeModal();
+      })
+      .catch(data => {
+        if (data.errors) {
+          throw new SubmissionError(data.errors);
+        }
+      });
+  }
 
   render() {
     return (
