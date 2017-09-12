@@ -4,9 +4,7 @@ let httpStatus = require('http-status');
 let APIError = require('./helpers/APIError');
 
 module.exports = app => {
-  // catch 404 and forward to error handler
   app.use((req, res, next) => {
-    console.log(1);
     const err = new APIError({
       message: 'API not found',
       status: httpStatus.NOT_FOUND
@@ -37,6 +35,6 @@ module.exports = app => {
       return next(apiError);
     }
 
-    res.status(err.status).json(err);
+    res.status(err.status).json(_.assign({ message: err.message }, err));
   });
 };

@@ -6,21 +6,20 @@ import LoginForm from '../LoginForm/container';
 
 class Login extends Component {
   handleSubmit = values => {
-
     const {
       props: {
         setEmail,
         setBearerToken,
         setAccessToken,
         closeModal,
-      }
+      },
     } = this;
 
     return fetchJSON('/login', {
       body: values.toJS(),
     })
       .then(({ bearer, access }) => {
-        setEmail(values.get('email'))
+        setEmail(values.get('email'));
         setBearerToken(bearer);
         setAccessToken(access);
         closeModal();
@@ -30,7 +29,7 @@ class Login extends Component {
           throw new SubmissionError(data.errors);
         }
       });
-  }
+  };
 
   render() {
     return (

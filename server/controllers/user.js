@@ -44,15 +44,14 @@ const create = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const login = (req, res, next) =>
-  createClient(req.user.get('id'))
-    .then((client, access) => {
-      res.json({
-        refresh: client.get('token'),
-        access: access.get('token'),
-      });
-    })
-    .catch(e => next(e));
+const login = (req, res, next) => Promise.all(createClient(req.user.get('id')))
+  .then(([client, access]) => {
+    res.json({
+      refresh: client.get('token'),
+      access: access.get('token'),
+    });
+  })
+  .catch(e => next(e));
 
 let logout = function(req, res, next) {
   const { clientId } = req.user;

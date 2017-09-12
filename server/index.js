@@ -33,6 +33,42 @@ require('./passport')(app);
 
 app.use('/', require('./routes'));
 
+// app.use((req, res, next) => {
+//   if (req.cookies.NEYBER_authData && req.originalUrl !== '/ssopageresolver') {
+//     const authData = JSON.parse(req.cookies.NEYBER_authData);
+//
+//     dispatch(setBearerToken(authData.access_token));
+//
+//     dispatch(setProfileFields({
+//       id: authData.profileId,
+//       tenantName: authData.tenantName,
+//       firstName: authData.firstName,
+//       email: authData.email,
+//     }));
+//
+//     dispatch(setRegistrationStatuses(
+//       authData.registrationServerStatus,
+//       authData.registrationClientStatuses
+//     ));
+//   }
+//   else {
+//     res.clearCookie('NEYBER_authData');
+//
+//     dispatch(setBearerToken(false));
+//
+//     dispatch(setProfileFields({
+//       id: false,
+//       tenantName: false,
+//       firstName: false,
+//       email: false,
+//     }));
+//
+//     dispatch(setRegistrationStatuses(false, {}));
+//   }
+//
+//   next();
+// });
+
 app.use((req, res) => {
   const context = {};
 

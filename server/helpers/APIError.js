@@ -34,6 +34,8 @@ class APIError extends ExtendableError {
       status = httpStatus.INTERNAL_SERVER_ERROR
     }
 
+    console.log('message', message);
+    
     super(message, status, errors);
   }
 }

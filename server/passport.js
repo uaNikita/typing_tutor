@@ -31,7 +31,9 @@ module.exports = (app) => {
           }
           else {
             done(new APIError({
-              message: 'Incorrect password',
+              errors: {
+                password: 'Incorrect password'
+              },
               status: httpStatus.BAD_REQUEST
             }));
           }
@@ -40,7 +42,9 @@ module.exports = (app) => {
       })
       .catch(() => {
         done(new APIError({
-          message: 'Incorrect username',
+          errors: {
+            email: 'Incorrect email'
+          },
           status: httpStatus.BAD_REQUEST
         }));
       });
