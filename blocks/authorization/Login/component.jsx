@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { SubmissionError } from 'redux-form/immutable';
 
-import { fetchJSON } from 'Utils/requestAPI';
 import LoginForm from '../LoginForm/container';
 
 class Login extends Component {
@@ -11,6 +10,7 @@ class Login extends Component {
         setEmail,
         setBearerToken,
         setAccessToken,
+        fetchJSON,
         closeModal,
       },
     } = this;

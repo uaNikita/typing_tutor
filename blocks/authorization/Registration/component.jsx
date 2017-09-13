@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
 import { SubmissionError } from 'redux-form/immutable';
-import { fetchJSON } from 'Utils/requestAPI';
 
-import RegistrationForm from './RegistrationForm/container';
+import RegistrationForm from '../RegistrationForm/container';
 
 class Registration extends Component {
   state = {
     submitted: false,
   };
 
-  handleSubmit = values => fetchJSON('/signup', {
+  handleSubmit = values => this.props.fetchJSON('/signup', {
     body: values.toJS(),
   }, true)
     .then(() => this.setState({ submitted: true }))

@@ -17,7 +17,7 @@ import 'whatwg-fetch';
 
 import App from 'Blocks/App.jsx';
 
-import store from 'Utils/store';
+import store from './store';
 
 render(
   <Provider store={store}>

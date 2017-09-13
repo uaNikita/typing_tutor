@@ -7,8 +7,9 @@ const Helmet = require('react-helmet').Helmet;
 const renderToString = require('react-dom/server').renderToString;
 
 const compiledServer = require('../dist/compiledServer');
-const store = compiledServer.store;
 const compiledApp = compiledServer.app;
+const createStore = compiledServer.createStore;
+const reducer = compiledServer.reducer;
 
 process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
 const config = require('config');
@@ -72,7 +73,8 @@ app.use('/', require('./routes'));
 app.use((req, res) => {
   const context = {};
 
-  const html = renderToString(compiledApp(req.url, context));
+  const store = createStore(reducer);
+  const html = renderToString(compiledApp(req.url, context, store));
 
   if (context.url) {
     res.status(301).set('Location', context.url);
@@ -92,7 +94,7 @@ app.use((req, res) => {
           <script>
             // WARNING: See the following for security issues around embedding JSON in HTML:
             // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
-            window.PRELOADED_STATE = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
+            window.PRELOADED_STATE = ${JSON.stringify(createStore(reducer).getState()).replace(/</g, '\\u003c')}
           </script>
           ${script.toString()}
         </head>

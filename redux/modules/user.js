@@ -1,8 +1,7 @@
 import Immutable from 'immutable';
 
 const SET_EMAIL = 'user/SET_EMAIL';
-const SET_BEARER_TOKEN = 'user/SET_BEARER_TOKEN';
-const SET_ACCESS_TOKEN = 'user/SET_ACCESS_TOKEN';
+
 const SET_NAME = 'user/SET_NAME';
 
 const initialState = Immutable.Map({
@@ -20,11 +19,6 @@ export default (state = initialState, action = {}) => {
     case SET_EMAIL:
       return state.set('email', action.email);
 
-    case SET_BEARER_TOKEN:
-      return state.set('bearerToken', action.token);
-
-    case SET_ACCESS_TOKEN:
-      return state.set('accessToken', action.email);
 
     case SET_NAME:
       return state.set('name', action.name);
@@ -41,29 +35,6 @@ export const setEmail = email => {
     type: SET_EMAIL,
     email,
   };
-};
-
-export const setBearerToken = token => {
-  localStorage.setItem('bearerToken', token);
-
-  return {
-    type: SET_BEARER_TOKEN,
-    token,
-  };
-};
-
-export const setAccessToken = token => {
-  localStorage.setItem('accessToken', token);
-
-  return {
-    type: SET_ACCESS_TOKEN,
-    token,
-  };
-};
-
-export const setTokens = (bearerToken, accessToken) => dispatch => {
-  dispatch(setBearerToken(bearerToken));
-  dispatch(setAccessToken(accessToken));
 };
 
 export const setName = name => {

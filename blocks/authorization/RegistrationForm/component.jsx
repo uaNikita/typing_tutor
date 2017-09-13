@@ -3,10 +3,9 @@ import { Field, reduxForm } from 'redux-form/immutable';
 import generatePassword from 'password-generator';
 
 import { email as regexEmail } from 'Utils/regularExpresions';
-import { fetchJSON } from 'Utils/requestAPI';
 import RenderField from 'Blocks/RenderField/component.jsx';
 
-const asyncValidate = values => fetchJSON('check-email', {
+const asyncValidate = values => this.props.fetchJSON('check-email', {
   body: {
     email: values.get('email'),
   },
