@@ -64,9 +64,8 @@ const parseResponseAndHandleError = response => {
   });
 };
 
-
 const requestJSON =
-  (url, params, isOpenRoute) =>
+  (url, params) =>
     (dispatch, getState) => {
       const newParams = _.merge({
         method: 'POST',
@@ -75,7 +74,7 @@ const requestJSON =
         },
       }, params);
 
-      if (isOpenRoute) {
+      if (!newParams.headers.Authorization) {
         newParams.headers.Authorization = `bearer ${getState().getIn(['fetch', 'accessToken'])}`;
       }
 
@@ -90,23 +89,26 @@ const requestJSON =
 export const fetchJSON =
   (...args) =>
     (dispatch, getState) =>
-      requestJSON().catch(error => {
-        let promise;
+      dispatch(requestJSON(...args))
+        .catch(error => {
+          let promise;
 
-        if (error.status === 401) {
-          promise = requestJSON('tokens', {
-            Authorization: `bearer ${getState().getIn(['fetch', 'bearerToken'])}`,
-          })
-            .then(({ refresh, access }) => {
-              dispatch(setRefreshToken(refresh));
-              dispatch(setAccessToken(access));
+          if (error.status === 401) {
+            promise = dispatch(requestJSON('tokens', {
+              headers: {
+                Authorization: `bearer ${getState().getIn(['fetch', 'bearerToken'])}`,
+              }
+            }))
+              .then(({ refresh, access }) => {
+                dispatch(setRefreshToken(refresh));
+                dispatch(setAccessToken(access));
 
-              return fetchJSON(...args);
-            });
-        }
-        else {
-          promise = Promise.reject(error);
-        }
+                return dispatch(fetchJSON(...args));
+              });
+          }
+          else {
+            promise = Promise.reject(error);
+          }
 
-        return promise;
-      });
+          return promise;
+        });

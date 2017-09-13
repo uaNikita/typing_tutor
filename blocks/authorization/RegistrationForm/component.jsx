@@ -5,18 +5,6 @@ import generatePassword from 'password-generator';
 import { email as regexEmail } from 'Utils/regularExpresions';
 import RenderField from 'Blocks/RenderField/component.jsx';
 
-const asyncValidate = values => this.props.fetchJSON('check-email', {
-  body: {
-    email: values.get('email'),
-  },
-})
-  .then(() => {})
-  .catch(({ errors }) => {
-    if (errors) {
-      throw errors;
-    }
-  });
-
 const validate = values => {
   const errors = {};
 
@@ -117,6 +105,5 @@ class RegistrationForm extends Component {
 export default reduxForm({
   form: 'registration',
   validate,
-  asyncValidate,
   asyncBlurFields: ['email'],
 })(RegistrationForm);
