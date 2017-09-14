@@ -1,4 +1,6 @@
 import Immutable from 'immutable';
+import { updateAuthCookie } from 'Utils/userCookie';
+
 
 const SET_EMAIL = 'user/SET_EMAIL';
 
@@ -29,7 +31,7 @@ export default (state = initialState, action = {}) => {
 };
 
 export const setEmail = email => {
-  localStorage.setItem('email', email);
+  updateAuthCookie({ email });
 
   return {
     type: SET_EMAIL,
@@ -38,7 +40,7 @@ export const setEmail = email => {
 };
 
 export const setName = name => {
-  localStorage.setItem('name', name);
+  updateAuthCookie({ name });
 
   return {
     type: SET_NAME,

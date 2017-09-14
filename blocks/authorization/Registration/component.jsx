@@ -11,7 +11,9 @@ class Registration extends Component {
   handleSubmit = values => this.props.fetchJSON('/signup', {
     body: values.toJS(),
   }, true)
-    .then(() => this.setState({ submitted: true }))
+    .then(() => this.setState({
+      submitted: true,
+    }))
     .catch(data => {
       if (data.errors) {
         throw new SubmissionError(data.errors);

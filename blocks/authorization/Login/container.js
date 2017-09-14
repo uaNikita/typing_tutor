@@ -14,9 +14,7 @@ const mapDispatchToProps = dispatch => ({
   setAccessToken: token => {
     dispatch(setAccessToken(token));
   },
-  fetchJSON: (...args) => {
-    dispatch(fetchJSON(...args));
-  },
+  fetchJSON: (...args) => dispatch(fetchJSON(...args)),
   closeModal() {
     dispatch(closeModal());
   },

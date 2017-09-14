@@ -65,17 +65,18 @@ const parseResponseAndHandleError = response => {
 };
 
 const requestJSON =
-  (url, params) =>
+  (url, params, withoutAuthorization) =>
     (dispatch, getState) => {
       const newParams = _.merge({
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          Authorization: `bearer ${getState().getIn(['fetch', 'accessToken'])}`,
         },
       }, params);
 
-      if (!newParams.headers.Authorization) {
-        newParams.headers.Authorization = `bearer ${getState().getIn(['fetch', 'accessToken'])}`;
+      if (withoutAuthorization) {
+        delete newParams.headers.Authorization;
       }
 
       if (typeof newParams.body === 'object') {
@@ -97,7 +98,7 @@ export const fetchJSON =
             promise = dispatch(requestJSON('tokens', {
               headers: {
                 Authorization: `bearer ${getState().getIn(['fetch', 'bearerToken'])}`,
-              }
+              },
             }))
               .then(({ refresh, access }) => {
                 dispatch(setRefreshToken(refresh));
