@@ -1,6 +1,4 @@
 import Immutable from 'immutable';
-import { updateAuthCookie } from 'Utils/userCookie';
-
 
 const SET_EMAIL = 'user/SET_EMAIL';
 
@@ -30,20 +28,12 @@ export default (state = initialState, action = {}) => {
   }
 };
 
-export const setEmail = email => {
-  updateAuthCookie({ email });
+export const setEmail = email => ({
+  type: SET_EMAIL,
+  email,
+});
 
-  return {
-    type: SET_EMAIL,
-    email,
-  };
-};
-
-export const setName = name => {
-  updateAuthCookie({ name });
-
-  return {
-    type: SET_NAME,
-    name,
-  };
-};
+export const setName = name => ({
+  type: SET_NAME,
+  name,
+});

@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
+import Cookie from 'js-cookie';
 
 const SET_REFRESH_TOKEN = 'fetch/SET_REFRESH_TOKEN';
 const SET_ACCESS_TOKEN = 'fetch/SET_ACCESS_TOKEN';
@@ -23,9 +24,8 @@ export default (state = initialState, action = {}) => {
   }
 };
 
-
 export const setRefreshToken = token => {
-  localStorage.setItem('bearerToken', token);
+  Cookie.set('tt_refresh', token);
 
   return {
     type: SET_REFRESH_TOKEN,
@@ -34,7 +34,7 @@ export const setRefreshToken = token => {
 };
 
 export const setAccessToken = token => {
-  localStorage.setItem('accessToken', token);
+  Cookie.set('tt_access', token);
 
   return {
     type: SET_ACCESS_TOKEN,
