@@ -10,8 +10,9 @@ const compiledServer = require('../dist/compiledServer');
 const compiledApp = compiledServer.app;
 const createStore = compiledServer.createStore;
 const reducer = compiledServer.reducer;
-const setRefreshToken = compiledServer.setRefreshToken;
-const setAccessToken = compiledServer.setAccessToken;
+// const setRefreshToken = compiledServer.setRefreshToken;
+// const setAccessToken = compiledServer.setAccessToken;
+// const getUser = compiledServer.getUser;
 
 process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
 const config = require('config');
@@ -47,14 +48,16 @@ app.use((req, res) => {
     tt_access,
   } = req.cookies;
 
-  if (tt_refresh) {
-    dispatch(setRefreshToken(tt_refresh));
-  }
+  // if (tt_refresh) {
+  //   dispatch(setRefreshToken(tt_refresh));
+  //
+  //   if (tt_access) {
+  //     dispatch(setAccessToken(tt_access));
+  //   }
+  //
+  //   dispatch(getUser());
+  // }
 
-  if (tt_access) {
-    dispatch(setRefreshToken(tt_access));
-  }
-  
   const html = renderToString(compiledApp(req.url, context, store));
 
   if (context.url) {

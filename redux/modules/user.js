@@ -1,15 +1,13 @@
 import Immutable from 'immutable';
 
-const SET_EMAIL = 'user/SET_EMAIL';
+import { fetchJSON } from './fetch';
 
+
+const SET_EMAIL = 'user/SET_EMAIL';
 const SET_NAME = 'user/SET_NAME';
 
 const initialState = Immutable.Map({
   email: false,
-
-  bearerToken: false,
-
-  accessToken: false,
 
   name: false,
 });
@@ -37,3 +35,11 @@ export const setName = name => ({
   type: SET_NAME,
   name,
 });
+
+export const getUser = () =>
+  dispatch =>
+    dispatch(fetchJSON(('/user')))
+      .then(({ email, name }) => {
+        dispatch(setEmail(email));
+        dispatch(setName(name));
+      });

@@ -13,7 +13,7 @@ import 'perfect-scrollbar/jquery';
 import 'Static/stylus/main.styl';
 
 import 'babel-polyfill';
-import 'whatwg-fetch';
+import 'isomorphic-fetch';
 
 import App from 'Blocks/App.jsx';
 

@@ -10,44 +10,42 @@ const ModalFrame = props => {
   const { modalName, closable } = props;
   const appearTimeout = 150;
   const leaveTimeout = 150;
-  let modal;
+  let modal = null;
 
   if (modalName) {
-    let content;
-
     switch (modalName) {
       case 'Login':
-        content = <Login />;
+        modal = <Login />;
         break;
 
       case 'Registration':
-        content = <Registration />;
+        modal = <Registration />;
         break;
 
       case 'ForgotPassword':
-        content = <ForgotPassword />;
+        modal = <ForgotPassword />;
         break;
     }
 
-    modal = (
-      <Modal className="container" closable={closable}>
-        {content}
-      </Modal>
-    );
+    if (modal) {
+      modal = (
+        <ReactCSSTransitionGroup
+          component="div"
+          className="modal__frame"
+          transitionName="modal"
+          transitionEnterTimeout={appearTimeout}
+          transitionAppearTimeout={appearTimeout}
+          transitionLeaveTimeout={leaveTimeout}
+          transitionAppear={true}>
+          <Modal className="container" closable={closable}>
+            {modal}
+          </Modal>
+        </ReactCSSTransitionGroup>
+      );
+    }
   }
 
-  return (
-    <ReactCSSTransitionGroup
-      component="div"
-      className="modal__frame"
-      transitionName="modal"
-      transitionEnterTimeout={appearTimeout}
-      transitionAppearTimeout={appearTimeout}
-      transitionLeaveTimeout={leaveTimeout}
-      transitionAppear={true}>
-      {modal}
-    </ReactCSSTransitionGroup>
-  );
+  return modal;
 };
 
 export default ModalFrame;

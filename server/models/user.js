@@ -19,6 +19,9 @@ const UserSchema = new mongoose.Schema({
     minlength: [5, '`{PATH}` exceeds the minimum allowed length (5).'],
     maxlength: [20, '`{PATH} exceeds the maximum allowed length (20).']
   },
+  name:{
+    type: String,
+  }
 });
 
 

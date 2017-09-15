@@ -20,6 +20,8 @@ router.get('/logout', authenticate, user.logout);
 
 router.post('/tokens', user.getTokens);
 
+router.post('/user', authenticate, user.getData);
+
 router.post('/protected-route', authenticate, user.getTokens);
 
 module.exports = router;

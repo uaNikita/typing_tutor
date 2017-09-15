@@ -8,7 +8,7 @@ class Login extends Component {
     const {
       props: {
         setEmail,
-        setBearerToken,
+        setRefreshToken,
         setAccessToken,
         fetchJSON,
         closeModal,
@@ -18,9 +18,9 @@ class Login extends Component {
     return fetchJSON('/login', {
       body: values.toJS(),
     })
-      .then(({ bearer, access }) => {
-        setEmail(values.get('email'));
-        setBearerToken(bearer);
+      .then(({ email, refresh, access }) => {
+        setEmail(email);
+        setRefreshToken(refresh);
         setAccessToken(access);
         closeModal();
       })

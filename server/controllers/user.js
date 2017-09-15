@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const config = require('config');
@@ -31,6 +32,21 @@ const createClient = userId => {
   return [client.save(), access.save()];
 };
 
+const getUser = id =>
+  User.get(id)
+    .then(({ email, name }) => {
+      let response = { email };
+
+      if (name) {
+        response = {
+          ...response,
+          name,
+        };
+      }
+
+      return response;
+    });
+
 const create = (req, res, next) => {
   const { email, password } = req.body;
 
@@ -44,16 +60,21 @@ const create = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const login = (req, res, next) => Promise.all(createClient(req.user.get('id')))
-  .then(([client, access]) => {
-    res.json({
-      refresh: client.get('token'),
-      access: access.get('token'),
-    });
-  })
-  .catch(e => next(e));
+const login = (req, res, next) => {
+  const userId = req.user.get('id');
 
-let logout = function(req, res, next) {
+  Promise.all([...createClient(userId), getUser(userId)])
+    .then(([client, access, user]) => {
+      res.json({
+        refresh: client.get('token'),
+        access: access.get('token'),
+        ...user,
+      });
+    })
+    .catch(e => next(e));
+};
+
+let logout = function (req, res, next) {
   const { clientId } = req.user;
 
   Promise
@@ -133,16 +154,12 @@ let update = (req, res, next) => {
     .catch(e => next(e));
 };
 
-/**
- * Delete user.
- * @returns {User}
- */
-let remove = (req, res, next) => {
-  const user = req.user;
-  user.remove()
-    .then(deletedUser => res.json(deletedUser))
+const getData = (req, res, next) =>
+  getUser(req.user.id)
+    .then(user => {
+      res.json(user);
+    })
     .catch(e => next(e));
-};
 
 module.exports = {
   create,
@@ -150,4 +167,5 @@ module.exports = {
   logout,
   getTokens,
   checkEmail,
+  getData,
 };

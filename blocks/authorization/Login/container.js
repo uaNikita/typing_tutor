@@ -1,23 +1,15 @@
 import { connect } from 'react-redux';
-import { fetchJSON } from 'ReduxUtils/modules/fetch';
+import { fetchJSON, setRefreshToken, setAccessToken } from 'ReduxUtils/modules/fetch';
+import { setEmail } from 'ReduxUtils/modules/user';
 import { closeModal } from 'ReduxUtils/modules/modal';
-import { setEmail, setBearerToken, setAccessToken } from 'ReduxUtils/modules/user';
 import Component from './component.jsx';
 
 const mapDispatchToProps = dispatch => ({
-  setEmail: email => {
-    dispatch(setEmail(email));
-  },
-  setBearerToken: token => {
-    dispatch(setBearerToken(token));
-  },
-  setAccessToken: token => {
-    dispatch(setAccessToken(token));
-  },
+  setRefreshToken: token => dispatch(setRefreshToken(token)),
+  setAccessToken: token => dispatch(setAccessToken(token)),
+  setEmail: email => dispatch(setEmail(email)),
   fetchJSON: (...args) => dispatch(fetchJSON(...args)),
-  closeModal() {
-    dispatch(closeModal());
-  },
+  closeModal: () => dispatch(closeModal()),
 });
 
 export default connect(
