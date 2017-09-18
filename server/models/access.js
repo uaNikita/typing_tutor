@@ -22,20 +22,8 @@ const AccessSchema = new mongoose.Schema({
  */
 AccessSchema.statics = {
   findByClient(client) {
-    return this.find({ client })
-      .exec()
-      .then(access => {
-        let result = Promise.resolve();
-
-        if (access.length) {
-          result = access[0];
-        }
-
-        return result;
-      })
-      .catch(() => {
-        return Promise.resolve();
-      });
+    return this.findOne({ client })
+      .exec();
   }
 };
 

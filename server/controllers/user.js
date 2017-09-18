@@ -32,7 +32,7 @@ const createClient = userId => {
   return [client.save(), access.save()];
 };
 
-const getUser = id =>
+const getUserDataById = id =>
   User.get(id)
     .then(({ email, name }) => {
       let response = { email };
@@ -63,7 +63,7 @@ const create = (req, res, next) => {
 const login = (req, res, next) => {
   const userId = req.user.get('id');
 
-  Promise.all([...createClient(userId), getUser(userId)])
+  Promise.all([...createClient(userId), getUserDataById(userId)])
     .then(([client, access, user]) => {
       res.json({
         refresh: client.get('token'),
@@ -74,24 +74,14 @@ const login = (req, res, next) => {
     .catch(e => next(e));
 };
 
-let logout = function (req, res, next) {
+let logout = (req, res, next) => {
   const { clientId } = req.user;
 
-  Promise
-    .all([Client.get(clientId), Access.findByClient(clientId)])
-    .then(([client, access]) => {
-      if (!client) {
-        throw new APIError({
-          message: 'No such client exists',
-          status: httpStatus.CONFLICT,
-        });
-      }
-
-      return Promise.all([client.remove().exec(), access.remove().exec()]);
-    })
-    .then(() => {
-      res.json(httpStatus[200]);
-    })
+  Client.get(clientId)
+    .then(client => client.remove().exec())
+    .then(() => Access.findByClient(clientId))
+    .then(access => access.remove().exec())
+    .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
@@ -103,34 +93,31 @@ const getTokens = (req, res, next) => {
     .then(client => {
       client.token = generateRefreshToken(client.get('id'));
 
-      return Promise.all([client.save(), Access.findByClient(client.get('id'))]);
-    })
-    .then(([client, access]) => {
-      let newAccess = access;
+      return client.save()
+        .then(client => Access.findByClient(client.get('id')))
+        .then(access => {
+          access.token = generateAccessToken({
+            id: client.get('user'),
+            clientId: client.get('id'),
+          });
 
-      if (newAccess) {
-        newAccess.token = generateAccessToken({
-          id: client.get('user'),
-          clientId: client.get('id'),
-        });
-      }
-      else {
-        newAccess = new Access({
+          return access;
+        })
+        .catch(() => new Access({
           client: client.get('id'),
           token: generateAccessToken({
             id: client.get('user'),
             clientId: client.get('id'),
           }),
+        }))
+        .then(access => access.save())
+        .then(access => {
+          res.json({
+            refresh: client.get('token'),
+            access: access.get('token'),
+          });
         });
-      }
 
-      return Promise.all([client, newAccess.save()]);
-    })
-    .then(([client, access]) => {
-      res.json({
-        refresh: client.get('token'),
-        access: access.get('token'),
-      });
     })
     .catch(e => next(e));
 };
@@ -154,11 +141,25 @@ let update = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const getData = (req, res, next) =>
-  getUser(req.user.id)
-    .then(user => {
-      res.json(user);
-    })
+const getUserByRefreshToken = (req, res, next) =>
+  Client
+    .findByToken(req.body.token)
+    .then(client => getUserDataById(client.get('user'))
+      .then(user => Access.findByClient(client.get('id'))
+        .then(() => res.json(user))
+        .catch(() => new Access({
+            client: client.get('id'),
+            token: generateAccessToken({
+              id: client.get('user'),
+              clientId: client.get('id'),
+            }),
+          })
+          .save()
+          .then(access => res.json({
+            ...user,
+            access
+          }))
+        )))
     .catch(e => next(e));
 
 module.exports = {
@@ -167,5 +168,5 @@ module.exports = {
   logout,
   getTokens,
   checkEmail,
-  getData,
+  getUserByRefreshToken,
 };

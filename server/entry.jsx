@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import reducer from 'ReduxUtils/reducer';
 import { setRefreshToken, setAccessToken } from 'ReduxUtils/modules/fetch';
-import { getUser } from 'ReduxUtils/modules/user';
+import { getUserByRefreshToken } from 'ReduxUtils/modules/user';
 
 import App from 'Blocks/App.jsx';
 
@@ -22,7 +22,7 @@ export {
   reducer,
   setRefreshToken,
   setAccessToken,
-  getUser,
+  getUserByRefreshToken,
 };
 
 

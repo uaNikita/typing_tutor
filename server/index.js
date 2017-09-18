@@ -12,7 +12,7 @@ const createStore = compiledServer.createStore;
 const reducer = compiledServer.reducer;
 // const setRefreshToken = compiledServer.setRefreshToken;
 // const setAccessToken = compiledServer.setAccessToken;
-// const getUser = compiledServer.getUser;
+// const getUserByRefreshToken = compiledServer.getUserByRefreshToken;
 
 process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
 const config = require('config');
@@ -43,20 +43,17 @@ app.use((req, res) => {
   const store = createStore(reducer);
   const dispatch = store.dispatch;
 
-  const {
-    tt_refresh,
-    tt_access,
-  } = req.cookies;
+  const { tt_refresh } = req.cookies;
 
-  // if (tt_refresh) {
-  //   dispatch(setRefreshToken(tt_refresh));
-  //
-  //   if (tt_access) {
-  //     dispatch(setAccessToken(tt_access));
-  //   }
-  //
-  //   dispatch(getUser());
-  // }
+  if (tt_refresh) {
+    dispatch(setRefreshToken(tt_refresh));
+
+    const access = dispatch(getUserByRefreshToken(tt_refresh));
+
+    if (access) {
+      dispatch(setAccessToken(access));
+    }
+  }
 
   const html = renderToString(compiledApp(req.url, context, store));
 
