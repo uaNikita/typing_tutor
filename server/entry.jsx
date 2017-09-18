@@ -1,8 +1,7 @@
 import React from 'react';
-import { createStore } from 'redux';
+import reducer from 'ReduxUtils/reducer';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
-import reducer from 'ReduxUtils/reducer';
 import { setRefreshToken, setAccessToken } from 'ReduxUtils/modules/fetch';
 import { getUserByRefreshToken } from 'ReduxUtils/modules/user';
 
@@ -18,7 +17,6 @@ const app = (url, context, store) => (
 
 export {
   app,
-  createStore,
   reducer,
   setRefreshToken,
   setAccessToken,

@@ -24,7 +24,12 @@ AccessSchema.statics = {
   findByClient(client) {
     return this.findOne({ client })
       .exec();
-  }
+  },
+
+  findByToken(token) {
+    return this.findOne({ token })
+      .exec()
+  },
 };
 
 module.exports = mongoose.model('Access', AccessSchema);

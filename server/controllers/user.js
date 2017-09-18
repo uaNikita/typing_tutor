@@ -142,24 +142,8 @@ let update = (req, res, next) => {
 };
 
 const getUserByRefreshToken = (req, res, next) =>
-  Client
-    .findByToken(req.body.token)
-    .then(client => getUserDataById(client.get('user'))
-      .then(user => Access.findByClient(client.get('id'))
-        .then(() => res.json(user))
-        .catch(() => new Access({
-            client: client.get('id'),
-            token: generateAccessToken({
-              id: client.get('user'),
-              clientId: client.get('id'),
-            }),
-          })
-          .save()
-          .then(access => res.json({
-            ...user,
-            access
-          }))
-        )))
+  getUserDataById(req.user.id)
+    .then(data => res.json(data))
     .catch(e => next(e));
 
 module.exports = {

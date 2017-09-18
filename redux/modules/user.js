@@ -36,12 +36,13 @@ export const setName = name => ({
   name,
 });
 
-export const getUserByRefreshToken = token =>
+export const getUserByRefreshToken = () =>
   dispatch =>
-    dispatch(fetchJSON(('/user', { body: { token }, })))
-      .then(({ email, name, access }) => {
+    dispatch(fetchJSON('/user'))
+      .then(({ email, name }) => {
         dispatch(setEmail(email));
-        dispatch(setName(name));
 
-        return access;
+        if (name) {
+          dispatch(setName(name));
+        }
       });

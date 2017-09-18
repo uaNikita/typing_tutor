@@ -71,7 +71,7 @@ const requestJSON =
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `bearer ${getState().getIn(['fetch', 'accessToken'])}`,
+          Authorization: `Bearer ${getState().getIn(['fetch', 'accessToken'])}`,
         },
       }, params);
 
@@ -83,7 +83,13 @@ const requestJSON =
         newParams.body = JSON.stringify(newParams.body);
       }
 
-      return fetch(url, newParams)
+      let newUrl = url;
+
+      if (!BROWSER) {
+        newUrl = `http://localhost:5550${newUrl}`;
+      }
+
+      return fetch(newUrl, newParams)
         .then(parseResponseAndHandleError);
     };
 
@@ -95,9 +101,9 @@ export const fetchJSON =
           let promise;
 
           if (error.status === 401) {
-            promise = dispatch(requestJSON('tokens', {
+            promise = dispatch(requestJSON('/tokens', {
               headers: {
-                Authorization: `bearer ${getState().getIn(['fetch', 'bearerToken'])}`,
+                Authorization: `Bearer ${getState().getIn(['fetch', 'bearerToken'])}`,
               },
             }))
               .then(({ refresh, access }) => {
