@@ -141,7 +141,7 @@ let update = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const getUserByRefreshToken = (req, res, next) =>
+const getUserData = (req, res, next) =>
   getUserDataById(req.user.id)
     .then(data => res.json(data))
     .catch(e => next(e));
@@ -152,5 +152,5 @@ module.exports = {
   logout,
   getTokens,
   checkEmail,
-  getUserByRefreshToken,
+  getUserData,
 };

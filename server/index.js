@@ -17,7 +17,7 @@ const {
   reducer,
   setRefreshToken,
   setAccessToken,
-  getUserByRefreshToken
+  getUserData
 } = require('../dist/compiledServer');
 
 process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
@@ -61,7 +61,7 @@ app.use((req, res) => {
         dispatch(setAccessToken(tt_access));
       }
 
-      dispatch(getUserByRefreshToken())
+      dispatch(getUserData())
         .then(resolve, resolve);
     }
 

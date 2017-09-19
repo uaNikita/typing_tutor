@@ -36,7 +36,7 @@ export const setName = name => ({
   name,
 });
 
-export const getUserByRefreshToken = () =>
+export const getUserData = () =>
   dispatch =>
     dispatch(fetchJSON('/user'))
       .then(({ email, name }) => {

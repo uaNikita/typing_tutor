@@ -20,7 +20,7 @@ router.get('/logout', authenticate, user.logout);
 
 router.post('/tokens', user.getTokens);
 
-router.post('/user', authenticate, user.getUserByRefreshToken);
+router.post('/user', authenticate, user.getUserData);
 
 router.post('/protected-route', authenticate, user.getTokens);
 
