@@ -12,7 +12,7 @@ const authenticate = expressJwt({
 
 router.post('/check-email', user.checkEmail);
 
-router.post('/signup', user.create);
+router.post('/signup', user.register);
 
 router.post('/login', passport.authenticate('local'), user.login);
 

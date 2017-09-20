@@ -46,10 +46,9 @@ app.use('/', require('./routes'));
 
 app.use((req, res) => {
   const context = {};
-
+console.log(11111);
   const store = createStore(reducer, applyMiddleware(thunk));
   const { dispatch } = store;
-
 
   new Promise((resolve, reject) => {
     const { tt_refresh, tt_access } = req.cookies;
@@ -63,6 +62,9 @@ app.use((req, res) => {
 
       dispatch(getUserData())
         .then(resolve, resolve);
+    }
+    else {
+      resolve();
     }
 
   })

@@ -2,7 +2,8 @@ const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const config = require('config');
-let httpStatus = require('http-status');
+const httpStatus = require('http-status');
+const nodemailer = require('nodemailer');
 const User = require('../models/user');
 const Client = require('../models/client');
 const Access = require('../models/access');
@@ -47,16 +48,49 @@ const getUserDataById = id =>
       return response;
     });
 
-const create = (req, res, next) => {
+const register = (req, res, next) => {
   const { email, password } = req.body;
 
   User.isNotExist(email)
     .then(() => {
       const user = new User({ email, password });
 
-      return Promise.all([user.save(), ...createClient(user.get('id'))]);
+      return user.save();
     })
-    .then(() => res.json(httpStatus[200]))
+    .then(() => {
+      const transporter = nodemailer.createTransport({
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
+        auth: {
+          user: 'nikita.zhukov@neyber.co.uk',
+          pass: 'VsirfExtysq5',
+        }
+      });
+
+      const mailOptions = {
+        from: '"Fred Foo 👻" <nikita.zhukov@neyber.co.uk>',
+        to: 'nikita.zhukov@gmail.com',
+        subject: 'Hello ✔',
+        text: 'Hello world?',
+        html: '<b>Hello world?</b>'
+      };
+
+      // send mail with defined transport object
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.log(error);
+          res.json(httpStatus[400]);
+        }
+        else {
+          console.log('1111');
+          res.json(httpStatus[200]);
+        }
+      });
+
+      res.json(httpStatus[200])
+
+    })
     .catch(e => next(e));
 };
 
@@ -147,7 +181,7 @@ const getUserData = (req, res, next) =>
     .catch(e => next(e));
 
 module.exports = {
-  create,
+  register,
   login,
   logout,
   getTokens,
