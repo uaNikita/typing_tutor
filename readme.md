@@ -8,6 +8,7 @@ key - клавиша на клавиатуре, например 'Shift', 'Space
 
 ####Statuses:
 
+
 Status | First Header | Second Header
 ---: | :--- | :---
 200 | OK | Eyerything is working
