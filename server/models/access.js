@@ -22,21 +22,14 @@ const AccessSchema = new mongoose.Schema({
  */
 AccessSchema.statics = {
   findByClient(client) {
-    return this.find({ client })
+    return this.findOne({ client })
+      .exec();
+  },
+
+  findByToken(token) {
+    return this.findOne({ token })
       .exec()
-      .then(access => {
-        let result = Promise.resolve();
-
-        if (access.length) {
-          result = access[0];
-        }
-
-        return result;
-      })
-      .catch(() => {
-        return Promise.resolve();
-      });
-  }
+  },
 };
 
 module.exports = mongoose.model('Access', AccessSchema);

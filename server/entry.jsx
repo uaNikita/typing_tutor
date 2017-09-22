@@ -1,10 +1,9 @@
 import React from 'react';
-import { createStore } from 'redux';
+import reducer from 'ReduxUtils/reducer';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
-import reducer from 'ReduxUtils/reducer';
 import { setRefreshToken, setAccessToken } from 'ReduxUtils/modules/fetch';
-import { getUser } from 'ReduxUtils/modules/user';
+import { getUserData } from 'ReduxUtils/modules/user';
 
 import App from 'Blocks/App.jsx';
 
@@ -18,11 +17,10 @@ const app = (url, context, store) => (
 
 export {
   app,
-  createStore,
   reducer,
   setRefreshToken,
   setAccessToken,
-  getUser,
+  getUserData,
 };
 
 

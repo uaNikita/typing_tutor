@@ -19,7 +19,11 @@ const UserSchema = new mongoose.Schema({
     minlength: [5, '`{PATH}` exceeds the minimum allowed length (5).'],
     maxlength: [20, '`{PATH} exceeds the maximum allowed length (20).']
   },
-  name:{
+  active: {
+    type: Boolean,
+    default: false,
+  },
+  name: {
     type: String,
   }
 });
@@ -32,7 +36,7 @@ const UserSchema = new mongoose.Schema({
  * - virtuals
  */
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
   // only hash the password if it has been modified (or is new)
   if (!this.isModified('password')) return next();
 
@@ -51,7 +55,7 @@ UserSchema.methods.generateHash = password => {
   return bcrypt.hash(password, config.get('saltRounds'));
 };
 
-UserSchema.methods.validPassword = function(candidatePassword) {
+UserSchema.methods.validPassword = function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
@@ -70,7 +74,7 @@ UserSchema.statics = {
           },
           status: httpStatus.CONFLICT
         });
-        
+
         return Promise.reject(err);
       }
       else {

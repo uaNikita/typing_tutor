@@ -25,16 +25,7 @@ const ClientSchema = new mongoose.Schema({
 ClientSchema.statics = {
   get(id) {
     return this.findById(id)
-      .exec()
-      .then(client => {
-        let result = Promise.resolve();
-
-        if (client) {
-          result = client;
-        }
-
-        return result;
-      });
+      .exec();
   },
 
   findByToken(token) {

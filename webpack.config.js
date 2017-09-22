@@ -6,6 +6,7 @@ var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var OpenBrowserPlugin = require('open-browser-webpack-plugin');
+var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var isProduction = process.env.WEBPACK_ENV === 'production' ? true : false;
 
@@ -54,6 +55,10 @@ let clientConfig = {
   devtool: isProduction ? 'source-map' : 'eval',
 
   plugins: [
+    new CopyWebpackPlugin([{
+      from: path.resolve(__dirname, 'static/favicon.ico'),
+      to: path.resolve(__dirname, 'dist/favicon.ico')
+    }]),
     new ExtractTextPlugin('[name].css'),
     new webpack.DefinePlugin({
       BROWSER: true,

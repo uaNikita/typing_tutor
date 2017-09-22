@@ -36,10 +36,13 @@ export const setName = name => ({
   name,
 });
 
-export const getUser = () =>
+export const getUserData = () =>
   dispatch =>
-    dispatch(fetchJSON(('/user')))
+    dispatch(fetchJSON('/user'))
       .then(({ email, name }) => {
         dispatch(setEmail(email));
-        dispatch(setName(name));
+
+        if (name) {
+          dispatch(setName(name));
+        }
       });
