@@ -5,7 +5,7 @@ key - клавиша на клавиатуре, например 'Shift', 'Space
 Поэтому везде в constants/keyboards поля обозначены через key и shiftKey, это логично. 
 'Shift' например это не character.
 
-#### Statuses
+### Statuses
 
 Status | First Header | Second Header
 ---: | :--- | :---
