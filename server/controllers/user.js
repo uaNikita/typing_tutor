@@ -48,6 +48,19 @@ const getUserDataById = id =>
       return response;
     });
 
+const transporter = (({ user, clientId, clientSecret, refreshToken }) => nodemailer.createTransport({
+  host: 'smtp.gmail.com',
+  port: 465,
+  secure: true,
+  auth: {
+    type: 'OAuth2',
+    user,
+    clientId,
+    clientSecret,
+    refreshToken,
+  }
+}))(config.get('mail'));
+
 const register = (req, res, next) => {
   const { email, password } = req.body;
 
@@ -58,38 +71,29 @@ const register = (req, res, next) => {
       return user.save();
     })
     .then(() => {
-      const transporter = nodemailer.createTransport({
-        host: 'smtp.gmail.com',
-        port: 465,
-        secure: true,
-        auth: {
-          user: 'nikita.zhukov@neyber.co.uk',
-          pass: 'VsirfExtysq5',
-        }
-      });
-
       const mailOptions = {
-        from: '"Fred Foo 👻" <nikita.zhukov@neyber.co.uk>',
-        to: 'nikita.zhukov@gmail.com',
-        subject: 'Hello ✔',
+        from: 'TouchToType',
+        to: 'touchtotype@gmail.com',
+        subject: 'Hello',
         text: 'Hello world?',
         html: '<b>Hello world?</b>'
       };
 
-      // send mail with defined transport object
-      transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-          console.log(error);
-          res.json(httpStatus[400]);
-        }
-        else {
-          console.log('1111');
-          res.json(httpStatus[200]);
-        }
-      });
+      return new Promise((resolve, reject) => {
+        transporter.sendMail(mailOptions, error => {
+          if (error) {
+            throw new APIError({
+              message: 'We can not verify your email now. Please try again later.',
+              status: httpStatus.SERVICE_UNAVAILABLE,
+            });
+          }
+          else {
+            res.json(httpStatus[200]);
 
-      res.json(httpStatus[200])
-
+            resolve();
+          }
+        });
+      })
     })
     .catch(e => next(e));
 };
