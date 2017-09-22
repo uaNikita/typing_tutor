@@ -6,8 +6,7 @@ key - клавиша на клавиатуре, например 'Shift', 'Space
 'Shift' например это не character.
 
 
-####Statuses:
-
+####Statuses
 
 Status | First Header | Second Header
 ---: | :--- | :---
