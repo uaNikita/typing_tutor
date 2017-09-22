@@ -9,7 +9,7 @@ key - клавиша на клавиатуре, например 'Shift', 'Space
 ####Statuses:
 
 Status | First Header | Second Header
-:--- | :- | ---
+---: | :--- | :---
 200 | OK | Eyerything is working
 201 | OK | New resource has been created
 204 | OK | The resource was successfully deleted
