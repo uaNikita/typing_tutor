@@ -5,12 +5,13 @@ const config = require('config');
 const httpStatus = require('http-status');
 const nodemailer = require('nodemailer');
 const User = require('../models/user');
+const Verification = require('../models/verification');
 const Client = require('../models/client');
 const Access = require('../models/access');
 
 const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: '1d' });
 
-const generateRefreshToken = clientId => {
+const generateTokenWithId = clientId => {
   return `${clientId.toString()}.${crypto.randomBytes(40).toString('hex')}`;
 };
 
@@ -19,7 +20,7 @@ const createClient = userId => {
     user: userId,
   });
 
-  client.token = generateRefreshToken(client.get('id'));
+  client.token = generateTokenWithId(client.get('id'));
 
   const access = new Access({
     client: client.get('id'),
@@ -68,7 +69,12 @@ const register = (req, res, next) => {
     .then(() => {
       const user = new User({ email, password });
 
-      return user.save();
+      const verificaton = new Verification({
+        user: user.get('id'),
+        token: crypto.randomBytes(40).toString('hex'),
+      });
+
+      return Promise.all([user.save(), verificaton.save()]);
     })
     .then(() => {
       const mailOptions = {
@@ -93,7 +99,7 @@ const register = (req, res, next) => {
             resolve();
           }
         });
-      })
+      });
     })
     .catch(e => next(e));
 };
@@ -129,7 +135,7 @@ const getTokens = (req, res, next) => {
   Client
     .findByToken(token)
     .then(client => {
-      client.token = generateRefreshToken(client.get('id'));
+      client.token = generateTokenWithId(client.get('id'));
 
       return client.save()
         .then(client => Access.findByClient(client.get('id')))
