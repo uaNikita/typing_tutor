@@ -12,7 +12,7 @@ const Access = require('../models/access');
 const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: '1d' });
 
 const generateTokenWithId = clientId => {
-  return `${clientId.toString()}.${crypto.randomBytes(40).toString('hex')}`;
+  return clientId.toString() + crypto.randomBytes(40).toString('hex');
 };
 
 const createClient = userId => {
@@ -67,22 +67,28 @@ const register = (req, res, next) => {
 
   User.isNotExist(email)
     .then(() => {
-      const user = new User({ email, password });
+      const user = new User({
+        email,
+        password
+      });
 
       const verificaton = new Verification({
         user: user.get('id'),
-        token: crypto.randomBytes(40).toString('hex'),
+        type: 'email'
       });
+
+      verificaton.token = verificaton.get('id') + crypto.randomBytes(40).toString('hex');
 
       return Promise.all([user.save(), verificaton.save()]);
     })
-    .then(() => {
+    .then(([user, verificaton]) => {
       const mailOptions = {
         from: 'TouchToType',
-        to: 'touchtotype@gmail.com',
-        subject: 'Hello',
-        text: 'Hello world?',
-        html: '<b>Hello world?</b>'
+        to: email,
+        subject: 'Email verification',
+        html: `Hello, we just need to check this email belongs to you.
+                <br>
+                <p style="margin: 20px 0 10px;"><a style="padding: 10px 20px; border-radius: 4px; background-color: #33c3f0; color: #fff; text-decoration:none;" href="${req.get('origin')}/verify?token=${verificaton.get('token')}">Verify your email address</a></p>`,
       };
 
       return new Promise((resolve, reject) => {

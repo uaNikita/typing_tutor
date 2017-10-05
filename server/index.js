@@ -36,7 +36,7 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(favicon(path.join(__dirname, '../dist/favicon.ico')));
+app.use(favicon(path.join(__dirname, '../dist/favicon.png')));
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // Passport
@@ -46,7 +46,7 @@ app.use('/', require('./routes'));
 
 app.use((req, res) => {
   const context = {};
-console.log(11111);
+
   const store = createStore(reducer, applyMiddleware(thunk));
   const { dispatch } = store;
 
