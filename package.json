@@ -84,6 +84,7 @@
     "redux-immutable": "^4.0.0",
     "redux-thunk": "^2.2.0",
     "serve-favicon": "^2.4.4",
+    "url-search-params": "^0.10.0",
     "uuid": "^3.1.0",
     "webpack-node-externals": "^1.6.0"
   }

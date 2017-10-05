@@ -7,18 +7,20 @@ const Loader = ({ className, size }) => {
   let style;
 
   if (size) {
+    const s = parseInt(size, 10);
+
     style = {
-      width: size,
-      height: size,
-      marginTop: -(size / 2),
-      marginLeft: -(size / 2),
-      fontSize: size,
+      width: s,
+      height: s,
+      marginTop: -(s / 2),
+      marginLeft: -(s / 2),
+      borderWidth: s / 10,
     };
   }
 
   return (
     <span className={className} styleName="root">
-      <span styleName="loader" className="fa fa-spinner fa-spin" style={style} />
+      <span styleName="loader" style={style} />
     </span>
   );
 };

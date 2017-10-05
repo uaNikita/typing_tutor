@@ -5,18 +5,20 @@
    bottom: 0;
    left: 0;
 .loader
-   width: 30px;
-   height: 30px;
+   width: 15px;
+   height: 15px;
    position: absolute;
-   display: flex;
-   align-content: center;
-   top: 50%;
-   left: 50%;
-   margin-top: -15px;
-   margin-left: -15px;
-   text-align: center;
-   font-size: 30px;
-   animation: loader 4s infinite linear;
+   top: 50%
+   left: 50%
+   margin-top: -(@height/ 2);
+   margin-left: -(@height/ 2);
+   box-sizing border-box
+   border-radius: 50%;
+   border: 2px solid transparent;
+   border-top-color: #000;
+   border-bottom-color: @border-top-color;
+   content ''
+   animation: loader 1s infinite linear
 @keyframes loader
    from
       transform: rotate(0);

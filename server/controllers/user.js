@@ -87,7 +87,7 @@ const register = (req, res, next) => {
         to: email,
         subject: 'Email verification',
         html: `Hello, we just need to check this email belongs to you.
-                <br>
+                <br/>
                 <p style="margin: 20px 0 10px;"><a style="padding: 10px 20px; border-radius: 4px; background-color: #33c3f0; color: #fff; text-decoration:none;" href="${req.get('origin')}/verify?token=${verificaton.get('token')}">Verify your email address</a></p>`,
       };
 

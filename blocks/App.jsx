@@ -3,6 +3,7 @@ import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import Layout from 'Blocks/Layout/container';
+import VerifyPage from 'Blocks/VerifyPage/component.jsx';
 
 const App = () => (
   <div>
@@ -14,7 +15,8 @@ const App = () => (
       <script type="text/javascript" defer src="/main.js" />
     </Helmet>
 
-    <Route path="/" component={Layout} />
+    <Route exact path="/" component={Layout} />
+    <Route path="/verify" component={VerifyPage} />
   </div>
 );
 

@@ -56,8 +56,8 @@ let clientConfig = {
 
   plugins: [
     new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, 'static/favicon.ico'),
-      to: path.resolve(__dirname, 'dist/favicon.ico')
+      from: path.resolve(__dirname, 'static/favicon.png'),
+      to: path.resolve(__dirname, 'dist/favicon.png')
     }]),
     new ExtractTextPlugin('[name].css'),
     new webpack.DefinePlugin({
