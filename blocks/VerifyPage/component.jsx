@@ -26,7 +26,7 @@ class Block extends Component {
   render() {
     return (
       <div styleName="root">
-        <Loader size="60"/>
+        <Loader size="60" />
       </div>
     );
   }

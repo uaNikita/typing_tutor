@@ -12,8 +12,6 @@ const Loader = ({ className, size }) => {
     style = {
       width: s,
       height: s,
-      marginTop: -(s / 2),
-      marginLeft: -(s / 2),
       borderWidth: s / 10,
     };
   }

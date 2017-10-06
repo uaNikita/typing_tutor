@@ -1,4 +1,7 @@
 .root
+   display: flex
+   justify-content center
+   align-items center
    position: absolute;
    top: 0;
    right: 0;
@@ -7,17 +10,10 @@
 .loader
    width: 15px;
    height: 15px;
-   position: absolute;
-   top: 50%
-   left: 50%
-   margin-top: -(@height/ 2);
-   margin-left: -(@height/ 2);
-   box-sizing border-box
    border-radius: 50%;
    border: 2px solid transparent;
    border-top-color: #000;
    border-bottom-color: @border-top-color;
-   content ''
    animation: loader 1s infinite linear
 @keyframes loader
    from
