@@ -10,6 +10,7 @@ class Block extends Component {
   componentDidMount() {
     const {
       props: {
+        fetchJSON,
         location: {
           search,
         },
@@ -19,7 +20,23 @@ class Block extends Component {
     const token = new URLSearchParams(search.slice(1)).get('token');
 
     if (token) {
-      console.log(111);
+      fetchJSON('/verify-token', {
+        body: {
+          token,
+        },
+      })
+        .then(({ type }) => {
+          switch (type) {
+            case 'email':
+              console.log(1);
+              break;
+            case 'password-reset':
+              console.log(2);
+              break;
+          }
+        })
+        .catch(() => {
+        });
     }
   }
 

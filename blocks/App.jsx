@@ -3,7 +3,7 @@ import { Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import Layout from 'Blocks/Layout/container';
-import VerifyPage from 'Blocks/VerifyPage/component.jsx';
+import VerifyPage from 'Blocks/VerifyPage/container';
 
 const App = () => (
   <div>
