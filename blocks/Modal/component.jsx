@@ -16,7 +16,7 @@ class Modal extends Component {
 
     if (closable) {
       overlay = <div className="modal__overlay" onClick={this.onCloseHandler} />;
-      close = <a href className="modal__close fa fa-times" onClick={this.onCloseHandler} />;
+      close = <a href="" className="modal__close fa fa-times" onClick={this.onCloseHandler} />;
     }
 
     return (

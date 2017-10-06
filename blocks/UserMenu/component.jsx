@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-class Block extends Component {
+class UserMenu extends Component {
   handleLogIn = e => {
     e.preventDefault();
 
@@ -24,14 +24,14 @@ class Block extends Component {
 
     let content = (
       <div>
-        <a href onClick={this.handleLogIn}>Log In</a> or <a href onClick={this.handleSignUp}>Sign Up</a>
+        <a href="" onClick={this.handleLogIn}>Log In</a> or <a href="" onClick={this.handleSignUp}>Sign Up</a>
       </div>
     );
 
     if (email) {
       content = (
         <div className="user-menu">
-          {name || email} - <a href onClick={this.handleLogout}>Log out</a>
+          {name || email} - <a href="" onClick={this.handleLogout}>Log out</a>
         </div>
       );
     }
@@ -40,4 +40,4 @@ class Block extends Component {
   }
 }
 
-export default Block;
+export default UserMenu;

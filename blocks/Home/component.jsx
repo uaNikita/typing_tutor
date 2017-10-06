@@ -10,7 +10,7 @@ import UserMenu from '../UserMenu/container';
 
 import styles from './home.module.styl';
 
-class Block extends Component {
+class Home extends Component {
   constructor(props) {
     super(props);
 
@@ -102,4 +102,4 @@ class Block extends Component {
   }
 }
 
-export default CSSModules(Block, styles);
+export default CSSModules(Home, styles);

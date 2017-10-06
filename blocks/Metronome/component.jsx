@@ -93,7 +93,7 @@ class Metronome extends Component {
 
     return (
       <div className="metronome">
-        <a href className={btnClass} onClick={this.onClickHandler} />
+        <a href="" className={btnClass} onClick={this.onClickHandler} />
 
         <div className="metronome__range-wrap">
           <h5 className="metronome__title">Volume</h5>

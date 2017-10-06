@@ -1,9 +1,18 @@
 const _ = require('lodash');
+const path = require('path');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const config = require('config');
 const httpStatus = require('http-status');
 const nodemailer = require('nodemailer');
+const fs = require('fs');
+let verifyEmailTemlFn;
+fs.readFile(path.resolve(__dirname, '../email-templates/verify-email.html'), 'utf8', (err, data) => {
+  if (err) throw err;
+
+  verifyEmailTemlFn = _.template(data)
+});
+
 const User = require('../models/user');
 const Verification = require('../models/verification');
 const Client = require('../models/client');
@@ -86,9 +95,10 @@ const register = (req, res, next) => {
         from: 'TouchToType',
         to: email,
         subject: 'Email verification',
-        html: `Hello, we just need to check this email belongs to you.
-                <br/>
-                <p style="margin: 20px 0 10px;"><a style="padding: 10px 20px; border-radius: 4px; background-color: #33c3f0; color: #fff; text-decoration:none;" href="${req.get('origin')}/verify?token=${verificaton.get('token')}">Verify your email address</a></p>`,
+        html: verifyEmailTemlFn({
+          origin: req.get('origin'),
+          token: verificaton.get('token'),
+        }),
       };
 
       return new Promise((resolve, reject) => {

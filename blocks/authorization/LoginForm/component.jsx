@@ -44,13 +44,13 @@ class LoginForm extends Component {
         <Field className="auth__row" name="password" component={RenderField} type="password" label="Password" />
 
         <p className="auth__fp-wrap">
-          <a className="auth__fp" href onClick={this.onForgotClickHandler}>Forgot password?</a>
+          <a className="auth__fp" href="" onClick={this.onForgotClickHandler}>Forgot password?</a>
         </p>
 
         <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
 
         <p className="auth__hint">
-          Not yet registered? <a className="auth__link1" href onClick={this.onRegClickHandler}>Registration</a>
+          Not yet registered? <a className="auth__link1" href="" onClick={this.onRegClickHandler}>Registration</a>
         </p>
       </form>
     );

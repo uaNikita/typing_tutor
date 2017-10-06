@@ -96,7 +96,7 @@ class RegistrationForm extends Component {
 
         <button className="button" type="submit" disabled={!valid || submitting}>Sign Up</button>
 
-        <p className="auth__hint">Already registered? <a className="auth__link1" href onClick={this.onLoginClick}>Log in now</a></p>
+        <p className="auth__hint">Already registered? <a className="auth__link1" href="" onClick={this.onLoginClick}>Log in now</a></p>
       </form>
     );
   }

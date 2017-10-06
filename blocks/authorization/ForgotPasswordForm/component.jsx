@@ -48,7 +48,7 @@ class ForgotPasswordForm extends Component {
         </div>
 
         <p className="auth__hint">
-          ← <a className="auth__link2" href onClick={this.onBackClickHandler}>Back</a>
+          ← <a className="auth__link2" href="" onClick={this.onBackClickHandler}>Back</a>
         </p>
       </form>
     );
