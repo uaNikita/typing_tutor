@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import './modal.styl';
+
+const appearTimeout = 150;
+const leaveTimeout = 150;
 
 class Modal extends Component {
   onCloseHandler = e => {
@@ -20,6 +24,14 @@ class Modal extends Component {
     }
 
     return (
+      <ReactCSSTransitionGroup
+        component="div"
+        className="modal__frame"
+        transitionName="modal"
+        transitionEnterTimeout={appearTimeout}
+        transitionAppearTimeout={appearTimeout}
+        transitionLeaveTimeout={leaveTimeout}
+        transitionAppear={true}>
       <div className="modal">
         {overlay}
         <div className="modal__content">
@@ -27,6 +39,7 @@ class Modal extends Component {
           {children}
         </div>
       </div>
+      </ReactCSSTransitionGroup>
     );
   }
 }

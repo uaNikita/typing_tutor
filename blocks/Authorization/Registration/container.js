@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
 import { fetchJSON } from 'ReduxUtils/modules/fetch';
 import { openModal } from 'ReduxUtils/modules/modal';
-import RegistrationForm from './component.jsx';
+import Component from './component.jsx';
 
 const mapDispatchToProps = dispatch => ({
+  fetchJSON: (...args) => dispatch(fetchJSON(...args)),
   asyncValidate: values => dispatch(fetchJSON('check-email', {
     body: {
       email: values.get('email'),
@@ -23,4 +24,4 @@ const mapDispatchToProps = dispatch => ({
 export default connect(
   null,
   mapDispatchToProps,
-)(RegistrationForm);
+)(Component);

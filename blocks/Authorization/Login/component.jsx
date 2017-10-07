@@ -1,22 +1,9 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form/immutable';
+import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import RenderField from 'Blocks/RenderField/component.jsx';
 import Button from 'Blocks/Button/component.jsx';
 
-const validate = values => {
-  const errors = {};
-
-  if (!values.get('email')) {
-    errors.email = 'Required';
-  }
-  if (!values.get('password')) {
-    errors.password = 'Required';
-  }
-
-  return errors;
-};
-
-class LoginForm extends Component {
+class Login extends Component {
   onForgotClickHandler = e => {
     e.preventDefault();
 
@@ -29,6 +16,33 @@ class LoginForm extends Component {
     this.props.openModal('Registration');
   };
 
+  handleSubmit = values => {
+    const {
+      props: {
+        setEmail,
+        setRefreshToken,
+        setAccessToken,
+        fetchJSON,
+        closeModal,
+      },
+    } = this;
+
+    return fetchJSON('/login', {
+      body: values.toJS(),
+    })
+      .then(({ email, refresh, access }) => {
+        setEmail(email);
+        setRefreshToken(refresh);
+        setAccessToken(access);
+        closeModal();
+      })
+      .catch(data => {
+        if (data.errors) {
+          throw new SubmissionError(data.errors);
+        }
+      });
+  };
+
   render() {
     const {
       handleSubmit,
@@ -37,7 +51,8 @@ class LoginForm extends Component {
     } = this.props;
 
     return (
-      <form className="auth__form" onSubmit={handleSubmit}>
+      <form className="auth auth__form" onSubmit={handleSubmit}>
+        <h3 className="auth__title">Log In</h3>
 
         <Field className="auth__row" name="email" component={RenderField} type="email" label="Email" />
 
@@ -57,8 +72,20 @@ class LoginForm extends Component {
   }
 }
 
+const validate = values => {
+  const errors = {};
+
+  if (!values.get('email')) {
+    errors.email = 'Required';
+  }
+  if (!values.get('password')) {
+    errors.password = 'Required';
+  }
+
+  return errors;
+};
 
 export default reduxForm({
   form: 'login',
   validate,
-})(LoginForm);
+})(Login);

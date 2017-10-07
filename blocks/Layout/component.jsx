@@ -3,7 +3,6 @@ import { Route } from 'react-router-dom';
 import classNames from 'classnames';
 
 import Footer from '../Footer.jsx';
-import ModalFrame from '../ModalFrame/container';
 import Home from '../Home/container';
 import Settings from '../Settings/container';
 
@@ -38,8 +37,6 @@ class Layout extends Component {
 
           <Footer />
         </div>
-
-        <ModalFrame />
       </div>
     );
   }
