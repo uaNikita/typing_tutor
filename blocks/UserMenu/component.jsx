@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 
 class UserMenu extends Component {
   handleLogIn = e => {
@@ -24,7 +25,9 @@ class UserMenu extends Component {
 
     let content = (
       <div>
-        <a href="" onClick={this.handleLogIn}>Log In</a> or <a href="" onClick={this.handleSignUp}>Sign Up</a>
+        <Link to="auth/login">Log In</Link>
+        or
+        <Link to="auth/registration">Sign Up</Link>
       </div>
     );
 

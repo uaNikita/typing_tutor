@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import { fetchJSON } from 'ReduxUtils/modules/fetch';
-import { openModal } from 'ReduxUtils/modules/modal';
 import Component from './component.jsx';
 
 const mapDispatchToProps = dispatch => ({
@@ -16,9 +15,6 @@ const mapDispatchToProps = dispatch => ({
         throw errors;
       }
     }),
-  openModal: name => {
-    dispatch(openModal(name));
-  },
 });
 
 export default connect(

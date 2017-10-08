@@ -9,8 +9,6 @@ const leaveTimeout = 150;
 class Modal extends Component {
   onCloseHandler = e => {
     e.preventDefault();
-
-    this.props.closeModal();
   };
 
   render() {
@@ -32,13 +30,13 @@ class Modal extends Component {
         transitionAppearTimeout={appearTimeout}
         transitionLeaveTimeout={leaveTimeout}
         transitionAppear={true}>
-      <div className="modal">
-        {overlay}
-        <div className="modal__content">
-          {close}
-          {children}
+        <div className="modal">
+          {overlay}
+          <div className="modal__content">
+            {close}
+            {children}
+          </div>
         </div>
-      </div>
       </ReactCSSTransitionGroup>
     );
   }

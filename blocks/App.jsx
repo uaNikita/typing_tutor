@@ -4,10 +4,10 @@ import { Helmet } from 'react-helmet';
 
 import Layout from 'Blocks/Layout/container';
 import VerifyPage from 'Blocks/VerifyPage/container';
-import Authorization from 'Blocks/Authorization/component';
+import Authorization from 'Blocks/Authorization/component.jsx';
 
 class App extends Component {
-  previousLocation = this.props.location;
+
 
   componentWillUpdate(nextProps) {
     const { location } = this.props;
@@ -19,6 +19,8 @@ class App extends Component {
       this.previousLocation = this.props.location;
     }
   }
+
+  previousLocation = this.props.location;
 
   render() {
     const { location } = this.props;
@@ -45,7 +47,7 @@ class App extends Component {
 
         {isModal ?
           <Switch location={isModal ? this.previousLocation : location}>
-            <Route path='/auth/' component={Authorization} />
+            <Route path="/auth/" component={Authorization} />
           </Switch>
           : null}
       </div>

@@ -23,7 +23,6 @@ class Login extends Component {
         setRefreshToken,
         setAccessToken,
         fetchJSON,
-        closeModal,
       },
     } = this;
 
@@ -34,7 +33,6 @@ class Login extends Component {
         setEmail(email);
         setRefreshToken(refresh);
         setAccessToken(access);
-        closeModal();
       })
       .catch(data => {
         if (data.errors) {

@@ -51,26 +51,30 @@ app.use((req, res) => {
   const { dispatch } = store;
 
   new Promise((resolve, reject) => {
-    const { tt_refresh, tt_access } = req.cookies;
-
-    if (tt_refresh) {
-      dispatch(setRefreshToken(tt_refresh));
-
-      if (tt_access) {
-        dispatch(setAccessToken(tt_access));
-      }
-
-      dispatch(getUserData())
-        .then(resolve, resolve);
-    }
-    else {
+    // const { tt_refresh, tt_access } = req.cookies;
+    //
+    // if (tt_refresh) {
+    //   dispatch(setRefreshToken(tt_refresh));
+    //
+    //   if (tt_access) {
+    //     dispatch(setAccessToken(tt_access));
+    //   }
+    //
+    //   dispatch(getUserData())
+    //     .then(resolve, resolve);
+    // }
+    // else {
       resolve();
-    }
+    // }
 
   })
     .then(() => {
+      console.log(4343);
+
       const html = renderToString(compiledApp(req.url, context, store));
 
+      console.log(context.url);
+      
       if (context.url) {
         res.status(301).set('Location', context.url);
 
