@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import generatePassword from 'password-generator';
 
@@ -25,12 +26,6 @@ class Registration extends Component {
       createPassword: !this.state.createPassword,
       password,
     });
-  };
-
-  onLoginClick = e => {
-    e.preventDefault();
-
-    this.props.openModal('Login');
   };
 
   passwordChange = () => {
@@ -88,7 +83,7 @@ class Registration extends Component {
 
         <button className="button" type="submit" disabled={!valid || submitting}>Sign Up</button>
 
-        <p className="auth__hint">Already registered? <a className="auth__link1" href="" onClick={this.onLoginClick}>Log in now</a></p>
+        <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/auth/login', state: { modal: true } }}>Log in now</Link></p>
       </form>
     );
 

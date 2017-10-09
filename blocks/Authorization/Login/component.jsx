@@ -1,21 +1,10 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import RenderField from 'Blocks/RenderField/component.jsx';
 import Button from 'Blocks/Button/component.jsx';
 
 class Login extends Component {
-  onForgotClickHandler = e => {
-    e.preventDefault();
-
-    this.props.openModal('ForgotPassword');
-  };
-
-  onRegClickHandler = e => {
-    e.preventDefault();
-
-    this.props.openModal('Registration');
-  };
-
   handleSubmit = values => {
     const {
       props: {
@@ -57,13 +46,13 @@ class Login extends Component {
         <Field className="auth__row" name="password" component={RenderField} type="password" label="Password" />
 
         <p className="auth__fp-wrap">
-          <a className="auth__fp" href="" onClick={this.onForgotClickHandler}>Forgot password?</a>
+          <Link to={{ pathname: '/auth/forgot-password', state: { modal: true } }} className="auth__fp">Forgot password?</Link>
         </p>
 
         <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
 
         <p className="auth__hint">
-          Not yet registered? <a className="auth__link1" href="" onClick={this.onRegClickHandler}>Registration</a>
+          Not yet registered? <Link to={{ pathname: '/auth/registration', state: { modal: true } }} className="auth__link1">Registration</Link>
         </p>
       </form>
     );

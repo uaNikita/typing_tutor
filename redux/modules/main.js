@@ -19,6 +19,7 @@ const UNPRESS_WRONG_KEYS = 'main/UNPRESS_WRONG_KEYS';
 const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
 const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
+const SET_LAST_NO_MODAL_LOCATION = 'main/SET_LAST_NO_MODAL_LOCATION';
 
 const initialState = Immutable.Map({
   keyboard: 'US',
@@ -45,6 +46,8 @@ const initialState = Immutable.Map({
   mode: 'text',
 
   bearerToken: false,
+
+  lastNoModalLocation: undefined,
 });
 
 export default (state = initialState, action = {}) => {
@@ -91,6 +94,9 @@ export default (state = initialState, action = {}) => {
         keyboard: action.name,
         keys: Immutable.List(_.find(keyboards, { name: action.name }).keys),
       });
+
+    case SET_LAST_NO_MODAL_LOCATION:
+      return state.set('lastNoModalLocation', action.location);
 
     default:
       return state;
@@ -154,6 +160,11 @@ export const addSuccesType = () => ({
 
 export const addErrorType = () => ({
   type: ADD_ERROR_TYPE,
+});
+
+export const setLastNoModalLocation = location => ({
+  type: SET_LAST_NO_MODAL_LOCATION,
+  location,
 });
 
 export function typeChar(char) {

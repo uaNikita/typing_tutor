@@ -11,7 +11,14 @@ class Modal extends Component {
   onCloseHandler = e => {
     e.preventDefault();
 
-    this.props.history.goBack();
+    const {
+      history: {
+        replace,
+      },
+      lastNoModalLocation,
+    } = this.props;
+
+    replace(lastNoModalLocation.pathname);
   };
 
   render() {

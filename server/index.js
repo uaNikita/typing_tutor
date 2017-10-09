@@ -79,10 +79,10 @@ app.use((req, res) => {
                     </body>
                   </html>`);
     }
-  }
+  };
 
   const { tt_refresh, tt_access } = req.cookies;
-
+  
   if (tt_refresh) {
     dispatch(setRefreshToken(tt_refresh));
 
@@ -91,7 +91,8 @@ app.use((req, res) => {
     }
 
     dispatch(getUserData())
-      .then(sendRes);
+      .then(sendRes)
+      .catch(() => {});
   }
   else {
     sendRes();

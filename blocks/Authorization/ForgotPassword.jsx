@@ -7,7 +7,7 @@ class ForgotPassword extends Component {
   onBackClickHandler = e => {
     e.preventDefault();
 
-    this.props.openModal('Login');
+    this.props.history.goBack();
   };
 
   handleSubmit = () => {
