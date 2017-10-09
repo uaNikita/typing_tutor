@@ -10,7 +10,7 @@ const leaveTimeout = 150;
 class Modal extends Component {
   onCloseHandler = e => {
     e.preventDefault();
-    
+
     this.props.history.goBack();
   };
 

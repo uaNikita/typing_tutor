@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Switch } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import Modal from 'Blocks/Modal/component.jsx';
 import Login from './Login/container';

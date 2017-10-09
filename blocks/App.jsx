@@ -7,8 +7,6 @@ import VerifyPage from 'Blocks/VerifyPage/container';
 import Authorization from 'Blocks/Authorization/component.jsx';
 
 class App extends Component {
-  location = this.props.location;
-
   componentWillUpdate(nextProps) {
     const { location } = this.props;
 
@@ -21,6 +19,8 @@ class App extends Component {
 
     this.location = this.isModal ? this.previousLocation : nextProps.location;
   }
+
+  location = this.props.location;
 
   render() {
     return (
