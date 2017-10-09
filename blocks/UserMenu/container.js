@@ -1,5 +1,4 @@
 import { connect } from 'react-redux';
-import { openModal } from 'ReduxUtils/modules/modal';
 import { setEmail, setBearerToken, setAccessToken } from 'ReduxUtils/modules/user';
 import Component from './component.jsx';
 
@@ -13,9 +12,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  openModal(...args) {
-    dispatch(openModal(...args));
-  },
   logout() {
     dispatch(setEmail(false));
     dispatch(setBearerToken(false));

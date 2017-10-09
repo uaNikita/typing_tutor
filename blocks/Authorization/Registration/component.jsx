@@ -1,33 +1,16 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form/immutable';
+import { Link } from 'react-router-dom';
+import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import generatePassword from 'password-generator';
 
 import { email as regexEmail } from 'Utils/regularExpresions';
 import RenderField from 'Blocks/RenderField/component.jsx';
 
-const validate = values => {
-  const errors = {};
-
-  const email = values.get('email');
-
-  if (!email) {
-    errors.email = 'Required';
-  }
-  else if (!regexEmail.test(email)) {
-    errors.email = 'Email isn\'t valid';
-  }
-
-  if (!values.get('password')) {
-    errors.password = 'Required';
-  }
-
-  return errors;
-};
-
-class RegistrationForm extends Component {
+class Registration extends Component {
   state = {
     password: '',
     createPassword: false,
+    submitted: false,
   };
 
   onCreatePasswordChange = () => {
@@ -45,12 +28,6 @@ class RegistrationForm extends Component {
     });
   };
 
-  onLoginClick = e => {
-    e.preventDefault();
-
-    this.props.openModal('Login');
-  };
-
   passwordChange = () => {
     if (this.state.createPassword) {
       this.setState({
@@ -60,6 +37,16 @@ class RegistrationForm extends Component {
     }
   };
 
+  handleSubmit = values => this.props.fetchJSON('/signup', { body: values.toJS() }, true)
+    .then(() => this.setState({
+      submitted: true,
+    }))
+    .catch(data => {
+      if (data.errors) {
+        throw new SubmissionError(data.errors);
+      }
+    });
+
   render() {
     const {
       handleSubmit,
@@ -67,7 +54,7 @@ class RegistrationForm extends Component {
       valid,
     } = this.props;
 
-    return (
+    let content = (
       <form className="auth__form" onSubmit={handleSubmit}>
         <Field
           className="auth__row"
@@ -96,14 +83,44 @@ class RegistrationForm extends Component {
 
         <button className="button" type="submit" disabled={!valid || submitting}>Sign Up</button>
 
-        <p className="auth__hint">Already registered? <a className="auth__link1" href="" onClick={this.onLoginClick}>Log in now</a></p>
+        <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/auth/login', state: { modal: true } }}>Log in now</Link></p>
       </form>
+    );
+
+    if (this.state.submitted) {
+      content = 'Email was sent';
+    }
+
+    return (
+      <div className="auth">
+        <h3 className="auth__title">Registration</h3>
+        {content}
+      </div>
     );
   }
 }
+
+const validate = values => {
+  const errors = {};
+
+  const email = values.get('email');
+
+  if (!email) {
+    errors.email = 'Required';
+  }
+  else if (!regexEmail.test(email)) {
+    errors.email = 'Email isn\'t valid';
+  }
+
+  if (!values.get('password')) {
+    errors.password = 'Required';
+  }
+
+  return errors;
+};
 
 export default reduxForm({
   form: 'registration',
   validate,
   asyncBlurFields: ['email'],
-})(RegistrationForm);
+})(Registration);

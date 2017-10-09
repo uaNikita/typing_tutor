@@ -1,34 +1,48 @@
 import React, { Component } from 'react';
+import { withRouter } from 'react-router-dom';
+import ReactCSSTransitionGroup from 'react-addons-css-transition-group';
 
 import './modal.styl';
+
+const appearTimeout = 150;
+const leaveTimeout = 150;
 
 class Modal extends Component {
   onCloseHandler = e => {
     e.preventDefault();
 
-    this.props.closeModal();
+    const {
+      history: {
+        replace,
+      },
+      lastNoModalLocation,
+    } = this.props;
+
+    replace(lastNoModalLocation.pathname);
   };
 
   render() {
-    const { closable, children } = this.props;
-    let overlay = <div className="modal__overlay" />;
-    let close = '';
-
-    if (closable) {
-      overlay = <div className="modal__overlay" onClick={this.onCloseHandler} />;
-      close = <a href="" className="modal__close fa fa-times" onClick={this.onCloseHandler} />;
-    }
+    const { children } = this.props;
 
     return (
-      <div className="modal">
-        {overlay}
-        <div className="modal__content">
-          {close}
-          {children}
+      <ReactCSSTransitionGroup
+        component="div"
+        className="modal__frame"
+        transitionName="modal"
+        transitionEnterTimeout={appearTimeout}
+        transitionAppearTimeout={appearTimeout}
+        transitionLeaveTimeout={leaveTimeout}
+        transitionAppear={true}>
+        <div className="modal">
+          <div className="modal__overlay" onClick={this.onCloseHandler} />
+          <div className="modal__content">
+            <a href="" className="modal__close fa fa-times" onClick={this.onCloseHandler} />
+            {children}
+          </div>
         </div>
-      </div>
+      </ReactCSSTransitionGroup>
     );
   }
 }
 
-export default Modal;
+export default withRouter(Modal);

@@ -28,8 +28,10 @@ class Block extends Component {
         .then(({ type }) => {
           switch (type) {
             case 'email':
+
               break;
             case 'password-reset':
+
               break;
           }
         })

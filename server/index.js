@@ -50,58 +50,53 @@ app.use((req, res) => {
   const store = createStore(reducer, applyMiddleware(thunk));
   const { dispatch } = store;
 
-  new Promise((resolve, reject) => {
-    const { tt_refresh, tt_access } = req.cookies;
+  const sendRes = () => {
+    const html = renderToString(compiledApp(req.url, context, store));
 
-    if (tt_refresh) {
-      dispatch(setRefreshToken(tt_refresh));
+    if (context.url) {
+      res.status(301).set('Location', context.url);
 
-      if (tt_access) {
-        dispatch(setAccessToken(tt_access));
-      }
-
-      dispatch(getUserData())
-        .then(resolve, resolve);
+      res.end();
     }
     else {
-      resolve();
+      const { title, meta, link, script } = Helmet.renderStatic();
+
+      res.send(`<!doctype html>
+                  <html>
+                    <head>
+                      ${title.toString()}
+                      ${meta.toString()}
+                      ${link.toString()}
+                      <script>
+                        // WARNING: See the following for security issues around embedding JSON in HTML:
+                        // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
+                        window.PRELOADED_STATE = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
+                      </script>
+                      ${script.toString()}
+                    </head>
+                    <body>
+                      <div id='root'>${html}</div>
+                    </body>
+                  </html>`);
+    }
+  };
+
+  const { tt_refresh, tt_access } = req.cookies;
+  
+  if (tt_refresh) {
+    dispatch(setRefreshToken(tt_refresh));
+
+    if (tt_access) {
+      dispatch(setAccessToken(tt_access));
     }
 
-  })
-    .then(() => {
-      const html = renderToString(compiledApp(req.url, context, store));
-
-      if (context.url) {
-        res.status(301).set('Location', context.url);
-
-        res.end();
-      }
-      else {
-        const { title, meta, link, script } = Helmet.renderStatic();
-
-        res.send(`
-                  <!doctype html>
-                    <html>
-                      <head>
-                        ${title.toString()}
-                        ${meta.toString()}
-                        ${link.toString()}
-                        <script>
-                          // WARNING: See the following for security issues around embedding JSON in HTML:
-                          // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
-                          window.PRELOADED_STATE = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
-                        </script>
-                        ${script.toString()}
-                      </head>
-                      <body>
-                        <div id='root'>${html}</div>
-                      </body>
-                    </html>
-                  `);
-      }
-    });
-
-
+    dispatch(getUserData())
+      .then(sendRes)
+      .catch(() => {});
+  }
+  else {
+    sendRes();
+  }
 });
 
 
