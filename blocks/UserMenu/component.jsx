@@ -25,9 +25,9 @@ class UserMenu extends Component {
 
     let content = (
       <div>
-        <Link to="auth/login">Log In</Link>
-        or
-        <Link to="auth/registration">Sign Up</Link>
+        <Link to={{ pathname: '/auth/login', state: { modal: true } }}>Log In</Link>
+        {' or '}
+        <Link to={{ pathname: '/auth/registration', state: { modal: true } }}>Sign Up</Link>
       </div>
     );
 

@@ -6,13 +6,11 @@ import Login from './Login/container';
 import Registration from './Registration/container';
 import ForgotPassword from './ForgotPassword.jsx';
 
-const Authorization = () => (
+const Authorization = ({ match: { url } }) => (
   <Modal>
-    <Switch>
-      <Route path={'/login'} component={Login} />
-      <Route path={'/registration'} component={Registration} />
-      <Route path={'/forgot-password'} component={ForgotPassword} />
-    </Switch>
+    <Route path={`${url}/login`} component={Login} />
+    <Route path={`${url}/registration`} component={Registration} />
+    <Route path={`${url}/forgot-password`} component={ForgotPassword} />
   </Modal>
 );
 

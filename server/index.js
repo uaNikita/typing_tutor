@@ -50,62 +50,52 @@ app.use((req, res) => {
   const store = createStore(reducer, applyMiddleware(thunk));
   const { dispatch } = store;
 
-  new Promise((resolve, reject) => {
-    // const { tt_refresh, tt_access } = req.cookies;
-    //
-    // if (tt_refresh) {
-    //   dispatch(setRefreshToken(tt_refresh));
-    //
-    //   if (tt_access) {
-    //     dispatch(setAccessToken(tt_access));
-    //   }
-    //
-    //   dispatch(getUserData())
-    //     .then(resolve, resolve);
-    // }
-    // else {
-      resolve();
-    // }
+  const sendRes = () => {
+    const html = renderToString(compiledApp(req.url, context, store));
 
-  })
-    .then(() => {
-      console.log(4343);
+    if (context.url) {
+      res.status(301).set('Location', context.url);
 
-      const html = renderToString(compiledApp(req.url, context, store));
+      res.end();
+    }
+    else {
+      const { title, meta, link, script } = Helmet.renderStatic();
 
-      console.log(context.url);
-      
-      if (context.url) {
-        res.status(301).set('Location', context.url);
+      res.send(`<!doctype html>
+                  <html>
+                    <head>
+                      ${title.toString()}
+                      ${meta.toString()}
+                      ${link.toString()}
+                      <script>
+                        // WARNING: See the following for security issues around embedding JSON in HTML:
+                        // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
+                        window.PRELOADED_STATE = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
+                      </script>
+                      ${script.toString()}
+                    </head>
+                    <body>
+                      <div id='root'>${html}</div>
+                    </body>
+                  </html>`);
+    }
+  }
 
-        res.end();
-      }
-      else {
-        const { title, meta, link, script } = Helmet.renderStatic();
+  const { tt_refresh, tt_access } = req.cookies;
 
-        res.send(`
-                  <!doctype html>
-                    <html>
-                      <head>
-                        ${title.toString()}
-                        ${meta.toString()}
-                        ${link.toString()}
-                        <script>
-                          // WARNING: See the following for security issues around embedding JSON in HTML:
-                          // http://redux.js.org/docs/recipes/ServerRendering.html#security-considerations
-                          window.PRELOADED_STATE = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
-                        </script>
-                        ${script.toString()}
-                      </head>
-                      <body>
-                        <div id='root'>${html}</div>
-                      </body>
-                    </html>
-                  `);
-      }
-    });
+  if (tt_refresh) {
+    dispatch(setRefreshToken(tt_refresh));
 
+    if (tt_access) {
+      dispatch(setAccessToken(tt_access));
+    }
 
+    dispatch(getUserData())
+      .then(sendRes);
+  }
+  else {
+    sendRes();
+  }
 });
 
 

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, withRouter } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import Layout from 'Blocks/Layout/container';
@@ -7,29 +7,22 @@ import VerifyPage from 'Blocks/VerifyPage/container';
 import Authorization from 'Blocks/Authorization/component.jsx';
 
 class App extends Component {
-
+  location = this.props.location;
 
   componentWillUpdate(nextProps) {
     const { location } = this.props;
+
     // set previousLocation if props.location is not modal
-    if (
-      nextProps.history.action !== 'POP' &&
-      (!location.state || !location.state.modal)
-    ) {
+    if (nextProps.history.action !== 'POP' && (!location.state || !location.state.modal)) {
       this.previousLocation = this.props.location;
     }
+
+    this.isModal = nextProps.location.state && nextProps.location.state.modal && this.previousLocation !== nextProps.location;
+
+    this.location = this.isModal ? this.previousLocation : nextProps.location;
   }
 
-  previousLocation = this.props.location;
-
   render() {
-    const { location } = this.props;
-    const isModal = !!(
-      location.state &&
-      location.state.modal &&
-      this.previousLocation !== location
-    );
-
     return (
       <div>
         <Helmet>
@@ -40,19 +33,15 @@ class App extends Component {
           <script type="text/javascript" defer src="/main.js" />
         </Helmet>
 
-        <Switch location={isModal ? this.previousLocation : location}>
+        <Switch location={this.location}>
           <Route path="/verify" component={VerifyPage} />
           <Route path="/" component={Layout} />
         </Switch>
 
-        {isModal ?
-          <Switch location={isModal ? this.previousLocation : location}>
-            <Route path="/auth/" component={Authorization} />
-          </Switch>
-          : null}
+        {this.isModal ? <Route path="/auth/" component={Authorization} /> : null}
       </div>
     );
   }
 }
 
-export default App;
+export default withRouter(App);
