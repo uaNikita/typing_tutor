@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
-const APIError = require('../helpers/APIError');
+const APIError = require('../utils/APIError');
 
 const ClientSchema = new mongoose.Schema({
   user: {

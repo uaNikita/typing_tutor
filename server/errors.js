@@ -1,7 +1,7 @@
 let mongoose = require('mongoose');
 let _ = require('lodash');
 let httpStatus = require('http-status');
-let APIError = require('./helpers/APIError');
+let APIError = require('./utils/APIError');
 
 module.exports = app => {
   app.use((req, res, next) => {

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require('config');
 const httpStatus = require('http-status');
-const APIError = require('../helpers/APIError');
+const APIError = require('../utils/APIError');
 
 const UserSchema = new mongoose.Schema({
   email: {
@@ -16,6 +16,11 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
+    minlength: [5, '`{PATH}` exceeds the minimum allowed length (5).'],
+    maxlength: [20, '`{PATH} exceeds the maximum allowed length (20).']
+  },
+  newPassword: {
+    type: String,
     minlength: [5, '`{PATH}` exceeds the minimum allowed length (5).'],
     maxlength: [20, '`{PATH} exceeds the maximum allowed length (20).']
   },

@@ -2,7 +2,7 @@ let passport = require('passport');
 let LocalStrategy = require('passport-local').Strategy;
 let User = require('./models/user');
 let httpStatus = require('http-status');
-let APIError = require('./helpers/APIError');
+let APIError = require('./utils/APIError');
 
 module.exports = (app) => {
   app.use(passport.initialize());

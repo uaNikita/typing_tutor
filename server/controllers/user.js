@@ -1,17 +1,10 @@
-const _ = require('lodash');
-const path = require('path');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const config = require('config');
 const httpStatus = require('http-status');
-const nodemailer = require('nodemailer');
-const fs = require('fs');
-let verifyEmailTemlFn;
-fs.readFile(path.resolve(__dirname, '../email-templates/verify-email.html'), 'utf8', (err, data) => {
-  if (err) throw err;
 
-  verifyEmailTemlFn = _.template(data)
-});
+const emailTemplates = require('../email-templates');
+const transporter = require('../utils/transporter');
 
 const User = require('../models/user');
 const Verification = require('../models/verification');
@@ -58,19 +51,6 @@ const getUserDataById = id =>
       return response;
     });
 
-const transporter = (({ user, clientId, clientSecret, refreshToken }) => nodemailer.createTransport({
-  host: 'smtp.gmail.com',
-  port: 465,
-  secure: true,
-  auth: {
-    type: 'OAuth2',
-    user,
-    clientId,
-    clientSecret,
-    refreshToken,
-  }
-}))(config.get('mail'));
-
 const register = (req, res, next) => {
   const { email, password } = req.body;
 
@@ -81,23 +61,23 @@ const register = (req, res, next) => {
         password
       });
 
-      const verificaton = new Verification({
+      const verification = new Verification({
         user: user.get('id'),
         type: 'email'
       });
 
-      verificaton.token = verificaton.get('id') + crypto.randomBytes(40).toString('hex');
+      verification.token = verification.get('id') + crypto.randomBytes(40).toString('hex');
 
-      return Promise.all([user.save(), verificaton.save()]);
+      return Promise.all([user.save(), verification.save()]);
     })
-    .then(([user, verificaton]) => {
+    .then(([user, verification]) => {
       const mailOptions = {
         from: 'TouchToType',
         to: email,
         subject: 'Email verification',
-        html: verifyEmailTemlFn({
+        html: emailTemplates.verifyEmailFn({
           origin: req.get('origin'),
-          token: verificaton.get('token'),
+          token: verification.get('token'),
         }),
       };
 
@@ -190,21 +170,36 @@ const checkEmail = (req, res, next) => {
     .catch(e => next(e));
 };
 
-let update = (req, res, next) => {
-  const user = req.user;
-
-  user.email = req.body.email;
-  user.password = req.body.password;
-
-  user.save()
-    .then(savedUser => res.json(savedUser))
-    .catch(e => next(e));
-};
-
 const getUserData = (req, res, next) =>
   getUserDataById(req.user.id)
     .then(data => res.json(data))
     .catch(e => next(e));
+
+const verifyToken = (req, res, next) => {
+  Verification.findByToken(req.body.token)
+    .then(verification => {
+      const type = verification.get('type');
+      const user = verification.get('user');
+
+      switch (type) {
+        case 'email':
+          user.active = true;
+          break;
+        case 'password':
+          user.password = user.newPassword;
+          user.newPassword = undefined;
+          break;
+      }
+
+      return Promise.all([user.save(), verification.remove().exec()])
+        .then(() => {
+          console.log(user);
+
+          res.json(type);
+        });
+    })
+    .catch(e => next(e));
+};
 
 module.exports = {
   register,
@@ -213,4 +208,5 @@ module.exports = {
   getTokens,
   checkEmail,
   getUserData,
+  verifyToken,
 };

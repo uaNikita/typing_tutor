@@ -16,4 +16,14 @@ const VerificationSchema = new mongoose.Schema({
   },
 });
 
+/**
+ * Statics
+ */
+VerificationSchema.statics = {
+  findByToken(token) {
+    return this.findOne({ token })
+      .exec()
+  },
+};
+
 module.exports = mongoose.model('Verification', VerificationSchema);

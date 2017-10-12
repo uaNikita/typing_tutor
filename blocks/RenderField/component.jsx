@@ -1,55 +1,94 @@
-import React from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import './field.styl';
 
-const RenderField = props => {
-  const {
-    input,
-    label,
-    type,
-    className,
-    children,
-    meta: {
-      asyncValidating,
-      touched,
-      error,
-      active,
-      valid,
-    },
-  } = props;
 
-  const showError = touched && !active && error;
+class RenderField extends Component {
+  state = {
+    showPassword: false,
+  };
 
-  const fieldClass = classNames(
-    classNames('field', className),
-    {
-      field_active: active,
-      field_error: showError,
-      field_valid: touched && !active && valid,
-      'field_async-validating': asyncValidating,
-    },
-  );
+  passwordHandleClick = e => {
+    e.preventDefault();
 
-  let control;
+    this.setState({
+      showPassword: !this.state.showPassword,
+    });
+  };
 
-  if (type === 'select') {
-    control = (
-      <select name="industry" className="field__select" {...input}>
-        {children}
-      </select>
+  render() {
+    const {
+      props: {
+        input,
+        label,
+        type,
+        className,
+        children,
+        meta: {
+          asyncValidating,
+          touched,
+          error,
+          active,
+          valid,
+        },
+      },
+      state: {
+        showPassword,
+      },
+    } = this;
+
+    const showError = touched && !active && error;
+
+    const fieldClass = classNames(
+      classNames('field', className),
+      {
+        field_active: active,
+        field_error: showError,
+        field_valid: touched && !active && valid,
+        'field_async-validating': asyncValidating,
+      },
+    );
+
+    const controlProps = {
+      ...input,
+      className: 'field__text',
+      placeholder: label,
+      type,
+    };
+
+    let control = <input {...controlProps} />;
+
+    if (type === 'select') {
+      control = (
+        <select name="industry" className="field__select" {...input}>
+          {children}
+        </select>
+      );
+    }
+    else if (type === 'password') {
+      let eyeClassName = 'field__eye fa fa-eye';
+
+      if (showPassword) {
+        controlProps.type = 'text';
+
+        eyeClassName += '-slash';
+      }
+
+      control = [
+        <input key="input" {...controlProps} />,
+        <a href="" key="eye" className={eyeClassName} onClick={this.passwordHandleClick} />,
+      ];
+    }
+
+    return (
+      <div className={fieldClass}>
+        {showError && <p className="error">{error}</p>}
+        {control}
+      </div>
     );
   }
-  else {
-    control = <input className="field__text" {...input} placeholder={label} type={type} />;
-  }
+}
 
-  return (
-    <div className={fieldClass}>
-      {showError && <p className="error">{error}</p>}
-      {control}
-    </div>
-  );
-};
 
 export default RenderField;
