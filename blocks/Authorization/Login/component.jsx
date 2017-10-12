@@ -75,4 +75,5 @@ const validate = values => {
 export default reduxForm({
   form: 'login',
   validate,
+  asyncBlurFields: ['email'],
 })(Login);

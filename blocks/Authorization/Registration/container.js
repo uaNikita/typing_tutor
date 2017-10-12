@@ -9,7 +9,6 @@ const mapDispatchToProps = dispatch => ({
       email: values.get('email'),
     },
   }))
-    .then(() => {})
     .catch(({ errors }) => {
       if (errors) {
         throw errors;
