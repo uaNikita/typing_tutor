@@ -4,7 +4,7 @@ import { Route } from 'react-router-dom';
 import Modal from 'Blocks/Modal/container';
 import Login from './Login/container';
 import Registration from './Registration/container';
-import ForgotPassword from './ForgotPassword.jsx';
+import ForgotPassword from './ForgotPassword/container';
 
 const Authorization = ({ match: { url } }) => (
   <Modal>
