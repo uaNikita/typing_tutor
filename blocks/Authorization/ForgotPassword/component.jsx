@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 
 import RenderField from 'Blocks/RenderField/component.jsx';
-import PasswordField from 'Blocks/PasswordField/component.jsx';
 
 class ForgotPassword extends Component {
   onBackClickHandler = e => {
