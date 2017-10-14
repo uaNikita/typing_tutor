@@ -37,7 +37,7 @@ class Registration extends Component {
     }
   };
 
-  handleSubmit = values => this.props.fetchJSON('/signup', { body: values.toJS() }, true)
+  handleSubmit = values => this.props.fetchJSON('/auth/signup', { body: values.toJS() }, true)
     .then(() => this.setState({
       submitted: true,
     }))

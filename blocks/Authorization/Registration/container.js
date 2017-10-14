@@ -4,11 +4,12 @@ import Component from './component.jsx';
 
 const mapDispatchToProps = dispatch => ({
   fetchJSON: (...args) => dispatch(fetchJSON(...args)),
-  asyncValidate: values => dispatch(fetchJSON('check-email', {
+  asyncValidate: values => dispatch(fetchJSON('/auth/check-email', {
     body: {
       email: values.get('email'),
     },
   }))
+    .then(() => {})
     .catch(({ errors }) => {
       if (errors) {
         throw errors;

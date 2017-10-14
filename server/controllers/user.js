@@ -192,11 +192,7 @@ const verifyToken = (req, res, next) => {
       }
 
       return Promise.all([user.save(), verification.remove().exec()])
-        .then(() => {
-          console.log(user);
-
-          res.json(type);
-        });
+        .then(() => res.json(type));
     })
     .catch(e => next(e));
 };
