@@ -3,6 +3,7 @@ import { Switch, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import Layout from 'Blocks/Layout/container';
+import Modal from 'Blocks/Modal/container';
 import VerifyPage from 'Blocks/VerifyPage/container';
 import Authorization from 'Blocks/Authorization/component.jsx';
 
@@ -24,10 +25,16 @@ class App extends Component {
   render() {
     const {
       location,
+      location: {
+        state
+      },
+      history: {
+        action,
+      },
       lastNoModalLocation,
     } = this.props;
 
-    const isModal = location.state && location.state.modal;
+    const isModal = action !== 'POP' && state && state.modal;
 
     return [
       <Helmet key="helmet">
@@ -40,10 +47,15 @@ class App extends Component {
 
       <Switch key="switch" location={isModal ? lastNoModalLocation : location}>
         <Route path="/verify" component={VerifyPage} />
+        <Route path="/auth" component={Authorization} />
         <Route path="/" component={Layout} />
       </Switch>,
 
-      isModal ? <Route key="modals" path="/auth/" component={Authorization} /> : null,
+      isModal ? <Route key="modals" path="/auth" render={() => (
+        <Modal>
+          <Authorization />
+        </Modal>
+      )} /> : null,
     ];
   }
 }

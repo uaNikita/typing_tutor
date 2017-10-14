@@ -55,7 +55,7 @@ class Registration extends Component {
     } = this.props;
 
     let content = (
-      <form className="auth__form" onSubmit={handleSubmit}>
+      <form className="auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
         <Field
           className="auth__row"
           name="email"

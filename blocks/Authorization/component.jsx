@@ -1,17 +1,16 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Switch, withRouter } from 'react-router-dom';
 
-import Modal from 'Blocks/Modal/container';
 import Login from './Login/container';
 import Registration from './Registration/container';
 import ForgotPassword from './ForgotPassword/container';
 
 const Authorization = ({ match: { url } }) => (
-  <Modal>
+  <Switch>
     <Route path={`${url}/login`} component={Login} />
     <Route path={`${url}/registration`} component={Registration} />
     <Route path={`${url}/forgot-password`} component={ForgotPassword} />
-  </Modal>
+  </Switch>
 );
 
-export default Authorization;
+export default withRouter(Authorization);
