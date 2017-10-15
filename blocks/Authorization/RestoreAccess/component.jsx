@@ -3,7 +3,7 @@ import { Field, reduxForm } from 'redux-form/immutable';
 
 import RenderField from 'Blocks/RenderField/component.jsx';
 
-class ForgotPassword extends Component {
+class RestoreAccess extends Component {
   onBackClickHandler = e => {
     e.preventDefault();
 
@@ -32,13 +32,6 @@ class ForgotPassword extends Component {
           label="Email"
         />
 
-        <Field
-          name="new-password"
-          component={RenderField}
-          type="password"
-          label="New password"
-        />
-
         <div className="auth__button-wrap">
           <button className="button">Send new password</button>
         </div>
@@ -58,9 +51,6 @@ const validate = values => {
   if (!values.get('email')) {
     errors.email = 'Required';
   }
-  if (!values.get('new-password')) {
-    errors.password = 'Required';
-  }
 
   return errors;
 };
@@ -79,8 +69,8 @@ const asyncValidate = values => sleep(1000)
   });
 
 export default reduxForm({
-  form: 'forgot-password',
+  form: 'restore-access',
   validate,
   asyncValidate,
   asyncBlurFields: ['email'],
-})(ForgotPassword);
+})(RestoreAccess);

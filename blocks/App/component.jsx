@@ -8,7 +8,7 @@ import VerifyPage from 'Blocks/VerifyPage/container';
 import Authorization from 'Blocks/Authorization/component.jsx';
 import Home from 'Blocks/Home/container';
 import Settings from 'Blocks/Settings/container';
-import Footer from '../Footer.jsx';
+import Footer from 'Blocks/Footer/component.jsx';
 
 class App extends Component {
   componentWillMount() {

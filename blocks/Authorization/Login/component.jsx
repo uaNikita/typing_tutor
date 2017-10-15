@@ -46,7 +46,9 @@ class Login extends Component {
         <Field className="auth__row" name="password" component={RenderField} type="password" label="Password" />
 
         <p className="auth__fp-wrap">
-          <Link to={{ pathname: '/auth/forgot-password', state: { modal: true } }} className="auth__fp">Forgot password?</Link>
+          <Link
+            to={{ pathname: '/auth/restore-access', state: { modal: true } }}
+            className="auth__fp">Restore access?</Link>
         </p>
 
         <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>

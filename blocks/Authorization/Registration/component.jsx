@@ -64,14 +64,6 @@ class Registration extends Component {
           label="Email"
         />
 
-        <Field
-          className="auth__row"
-          name="password"
-          component={RenderField}
-          type="text"
-          label="Password"
-        />
-
         <label className="auth__cp">
           <input
             className="auth__cp-control"
@@ -110,10 +102,6 @@ const validate = values => {
   }
   else if (!regexEmail.test(email)) {
     errors.email = 'Email isn\'t valid';
-  }
-
-  if (!values.get('password')) {
-    errors.password = 'Required';
   }
 
   return errors;

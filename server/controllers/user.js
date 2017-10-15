@@ -58,7 +58,7 @@ const register = (req, res, next) => {
     .then(() => {
       const user = new User({
         email,
-        password
+        password: crypto.randomBytes(5).toString('hex'),
       });
 
       const verification = new Verification({
