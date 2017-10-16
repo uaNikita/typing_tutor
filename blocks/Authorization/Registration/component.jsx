@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
-import generatePassword from 'password-generator';
 
 import { email as regexEmail } from 'Utils/regularExpresions';
 import RenderField from 'Blocks/RenderField/component.jsx';
@@ -13,20 +12,20 @@ class Registration extends Component {
     submitted: false,
   };
 
-  onCreatePasswordChange = () => {
-    let password = '';
-
-    if (!this.state.createPassword) {
-      password = generatePassword(5, false, /[\w\d]/);
-    }
-
-    this.props.array.insert('password', 0, password);
-
-    this.setState({
-      createPassword: !this.state.createPassword,
-      password,
-    });
-  };
+  // onCreatePasswordChange = () => {
+  //   let password = '';
+  //
+  //   if (!this.state.createPassword) {
+  //     password = generatePassword(5, false, /[\w\d]/);
+  //   }
+  //
+  //   this.props.array.insert('password', 0, password);
+  //
+  //   this.setState({
+  //     createPassword: !this.state.createPassword,
+  //     password,
+  //   });
+  // };
 
   passwordChange = () => {
     if (this.state.createPassword) {
@@ -69,7 +68,8 @@ class Registration extends Component {
             className="auth__cp-control"
             type="checkbox"
             checked={this.state.createPassword}
-            onChange={this.onCreatePasswordChange} />
+            // onChange={this.onCreatePasswordChange}
+          />
           Create a password for me
         </label>
 

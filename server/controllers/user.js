@@ -5,6 +5,7 @@ const httpStatus = require('http-status');
 
 const emailTemplates = require('../email-templates');
 const transporter = require('../utils/transporter');
+const getRandomPassword = require('../utils/getRandomPassword');
 
 const User = require('../models/user');
 const Verification = require('../models/verification');
@@ -52,13 +53,13 @@ const getUserDataById = id =>
     });
 
 const register = (req, res, next) => {
-  const { email, password } = req.body;
+  const { email } = req.body;
 
   User.isNotExist(email)
     .then(() => {
       const user = new User({
         email,
-        password: crypto.randomBytes(5).toString('hex'),
+        password: getRandomPassword(),
       });
 
       const verification = new Verification({
