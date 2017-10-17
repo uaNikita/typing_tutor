@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
+
+import { validateEmail, validatePassword } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component.jsx';
 import Button from 'Blocks/Button/component.jsx';
 
@@ -61,18 +63,10 @@ class Login extends Component {
   }
 }
 
-const validate = values => {
-  const errors = {};
-
-  if (!values.get('email')) {
-    errors.email = 'Required';
-  }
-  if (!values.get('password')) {
-    errors.password = 'Required';
-  }
-
-  return errors;
-};
+const validate = values => ({
+  ...validateEmail(values.get('email')),
+  ...validatePassword(values.get('password')),
+});
 
 export default reduxForm({
   form: 'login',

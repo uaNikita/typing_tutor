@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 
+import { validateEmail } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component.jsx';
 
 class RestoreAccess extends Component {
@@ -45,15 +46,9 @@ class RestoreAccess extends Component {
   }
 }
 
-const validate = values => {
-  const errors = {};
-
-  if (!values.get('email')) {
-    errors.email = 'Required';
-  }
-
-  return errors;
-};
+const validate = values => ({
+  ...validateEmail(values.get('email')),
+});
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
