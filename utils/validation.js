@@ -20,6 +20,8 @@ const password = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{3,}$/;
 // const dateOfBirth = /^\d{2}\/\d{2}\/\d{4}$/;
 
 
+requiredError = 'Please fill out this field';
+
 module.exports = {
   title: {
     required: 'Please select your title',
