@@ -6,40 +6,7 @@ import { email as regexEmail } from 'Utils/regularExpresions';
 import RenderField from 'Blocks/RenderField/component.jsx';
 
 class Registration extends Component {
-  state = {
-    password: '',
-    createPassword: false,
-    submitted: false,
-  };
-
-  // onCreatePasswordChange = () => {
-  //   let password = '';
-  //
-  //   if (!this.state.createPassword) {
-  //     password = generatePassword(5, false, /[\w\d]/);
-  //   }
-  //
-  //   this.props.array.insert('password', 0, password);
-  //
-  //   this.setState({
-  //     createPassword: !this.state.createPassword,
-  //     password,
-  //   });
-  // };
-
-  passwordChange = () => {
-    if (this.state.createPassword) {
-      this.setState({
-        createPassword: false,
-        password: '',
-      });
-    }
-  };
-
   handleSubmit = values => this.props.fetchJSON('/auth/signup', { body: values.toJS() }, true)
-    .then(() => this.setState({
-      submitted: true,
-    }))
     .catch(data => {
       if (data.errors) {
         throw new SubmissionError(data.errors);
@@ -63,25 +30,11 @@ class Registration extends Component {
           label="Email"
         />
 
-        <label className="auth__cp">
-          <input
-            className="auth__cp-control"
-            type="checkbox"
-            checked={this.state.createPassword}
-            // onChange={this.onCreatePasswordChange}
-          />
-          Create a password for me
-        </label>
-
         <button className="button" type="submit" disabled={!valid || submitting}>Sign Up</button>
 
         <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/auth/login', state: { modal: true } }}>Log in now</Link></p>
       </form>
     );
-
-    if (this.state.submitted) {
-      content = 'Email was sent';
-    }
 
     return (
       <div className="auth">

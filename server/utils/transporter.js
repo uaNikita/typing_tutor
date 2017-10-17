@@ -1,7 +1,9 @@
 const nodemailer = require('nodemailer');
 const config = require('config');
 
-const transporter = (({ user, clientId, clientSecret, refreshToken }) => nodemailer.createTransport({
+const { user, clientId, clientSecret, refreshToken } = config.get('mail');
+
+const transporter = nodemailer.createTransport({
   host: 'smtp.gmail.com',
   port: 465,
   secure: true,
@@ -11,7 +13,7 @@ const transporter = (({ user, clientId, clientSecret, refreshToken }) => nodemai
     clientId,
     clientSecret,
     refreshToken,
-  }
-}))(config.get('mail'));
+  },
+});
 
 module.exports = transporter;

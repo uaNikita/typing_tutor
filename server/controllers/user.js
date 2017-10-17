@@ -57,47 +57,53 @@ const register = (req, res, next) => {
 
   User.isNotExist(email)
     .then(() => {
+      const password = getRandomPassword();
+
       const user = new User({
         email,
-        password: getRandomPassword(),
+        password,
       });
 
       const verification = new Verification({
         user: user.get('id'),
-        type: 'email'
+        type: 'email',
       });
 
       verification.token = verification.get('id') + crypto.randomBytes(40).toString('hex');
 
-      return Promise.all([user.save(), verification.save()]);
-    })
-    .then(([user, verification]) => {
-      const mailOptions = {
-        from: 'TouchToType',
-        to: email,
-        subject: 'Email verification',
-        html: emailTemplates.verifyEmailFn({
-          origin: req.get('origin'),
-          token: verification.get('token'),
-        }),
-      };
+      return Promise.all([user.save(), verification.save()])
+        .then(([user, verification]) => {
+          const mailOptions = {
+            from: config.get('mail.from'),
+            to: email,
+            subject: 'Email verification',
+            html: emailTemplates.verifyEmailFn({
+              origin: req.get('origin'),
+              token: verification.get('token'),
+              password,
+            }),
+          };
 
-      return new Promise((resolve, reject) => {
-        transporter.sendMail(mailOptions, error => {
-          if (error) {
-            throw new APIError({
-              message: 'We can not verify your email now. Please try again later.',
-              status: httpStatus.SERVICE_UNAVAILABLE,
-            });
-          }
-          else {
-            res.json(httpStatus[200]);
+          console.log(mailOptions);
 
-            resolve();
-          }
-        });
-      });
+          transporter.sendMail(mailOptions, error => {
+            if (error) {
+              throw new APIError({
+                message: 'We can not verify your email now. Please try again later.',
+                status: httpStatus.SERVICE_UNAVAILABLE,
+              });
+            }
+            else {
+              console.log(1);
+
+              res.json(httpStatus[200]);
+
+              resolve();
+            }
+          });
+        })
     })
+
     .catch(e => next(e));
 };
 
