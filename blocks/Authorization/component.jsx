@@ -5,6 +5,8 @@ import Login from './Login/container';
 import Registration from './Registration/container';
 import RestoreAccess from './RestoreAccess/container';
 
+import './auth.styl';
+
 const Authorization = ({ match: { url } }) => (
   <Switch>
     <Route path={`${url}/login`} component={Login} />

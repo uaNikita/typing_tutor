@@ -37,7 +37,14 @@ class Login extends Component {
       handleSubmit,
       submitting,
       invalid,
+      isModal,
     } = this.props;
+
+    const state = { modal: false };
+
+    if (isModal) {
+      state.modal = true;
+    }
 
     return (
       <form className="auth auth__form" onSubmit={handleSubmit}>
@@ -49,14 +56,14 @@ class Login extends Component {
 
         <p className="auth__fp-wrap">
           <Link
-            to={{ pathname: '/auth/restore-access', state: { modal: true } }}
+            to={{ pathname: '/auth/restore-access', state }}
             className="auth__fp">Restore access?</Link>
         </p>
 
         <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
 
         <p className="auth__hint">
-          Not yet registered? <Link to={{ pathname: '/auth/registration', state: { modal: true } }} className="auth__link1">Registration</Link>
+          Not yet registered? <Link to={{ pathname: '/auth/registration', state }} className="auth__link1">Registration</Link>
         </p>
       </form>
     );

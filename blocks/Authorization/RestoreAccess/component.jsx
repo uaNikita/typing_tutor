@@ -1,16 +1,11 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form/immutable';
 
 import { validateEmail } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component.jsx';
 
 class RestoreAccess extends Component {
-  onBackClickHandler = e => {
-    e.preventDefault();
-
-    this.props.history.goBack();
-  };
-
   handleSubmit = () => {
     this.a = 1;
   };
@@ -19,8 +14,15 @@ class RestoreAccess extends Component {
     const {
       props: {
         handleSubmit,
+        isModal,
       },
     } = this;
+
+    const state = { modal: false };
+
+    if (isModal) {
+      state.modal = true;
+    }
 
     return (
       <form className="auth auth__form auth__form_password-reset" onSubmit={handleSubmit(this.handleSubmit)}>
@@ -38,7 +40,7 @@ class RestoreAccess extends Component {
         </div>
 
         <p className="auth__hint">
-          ← <a className="auth__link2" href="" onClick={this.onBackClickHandler}>Back</a>
+          <Link className="auth__link2" to={{ pathname: '/auth/login', state }}>Log in now</Link>
         </p>
 
       </form>

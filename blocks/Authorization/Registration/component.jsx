@@ -18,7 +18,14 @@ class Registration extends Component {
       handleSubmit,
       submitting,
       valid,
+      isModal,
     } = this.props;
+
+    const state = { modal: false };
+
+    if (isModal) {
+      state.modal = true;
+    }
 
     return (
       <div className="auth">
@@ -34,7 +41,7 @@ class Registration extends Component {
 
           <button className="button" type="submit" disabled={!valid || submitting}>Sign Up</button>
 
-          <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/auth/login', state: { modal: true } }}>Log in now</Link></p>
+          <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/auth/login', state }}>Log in now</Link></p>
         </form>
       </div>
     );

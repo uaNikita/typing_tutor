@@ -3,6 +3,10 @@ import { fetchJSON, setRefreshToken, setAccessToken } from 'ReduxUtils/modules/f
 import { setEmail } from 'ReduxUtils/modules/user';
 import Component from './component.jsx';
 
+const mapStateToProps = state => ({
+  isModal: state.getIn(['main', 'isModal']),
+});
+
 const mapDispatchToProps = dispatch => ({
   setRefreshToken: token => dispatch(setRefreshToken(token)),
   setAccessToken: token => dispatch(setAccessToken(token)),
@@ -21,6 +25,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(Component);

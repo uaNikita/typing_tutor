@@ -11,33 +11,55 @@ import Settings from 'Blocks/Settings/container';
 import Footer from 'Blocks/Footer/component.jsx';
 
 class App extends Component {
-  componentWillMount() {
+  state = {
+    lastNoModalLocation: this.props.lastNoModalLocation,
+    isModal: this.props.isModal,
+  }
+
+  componentDidMount() {
     const { location, setLastNoModalLocation } = this.props;
 
     setLastNoModalLocation(location);
   }
 
-  componentWillReceiveProps() {
-    const { location, setLastNoModalLocation } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const {
+      location,
+      history: {
+        action,
+      },
+      setLastNoModalLocation,
+      setIsModal,
+    } = nextProps;
 
-    if (!location.state || !location.state.modal) {
-      setLastNoModalLocation(location);
+    let isModal = false;
+
+    if (action !== 'POP' && location.state && location.state.modal) {
+      isModal = true;
     }
+    else {
+      setLastNoModalLocation(location);
+
+      this.setState({
+        lastNoModalLocation: location,
+      });
+    }
+
+    setIsModal(isModal);
+
+    this.setState({ isModal });
   }
 
   render() {
     const {
-      location,
-      location: {
-        state,
+      props: {
+        location,
       },
-      history: {
-        action,
+      state: {
+        lastNoModalLocation,
+        isModal,
       },
-      lastNoModalLocation,
-    } = this.props;
-
-    const isModal = action !== 'POP' && state && state.modal;
+    } = this;
 
     const layoutClass = classNames('layout', {
       layout_modal: isModal,
