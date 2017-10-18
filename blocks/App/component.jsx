@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Switch, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
+import { CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
 
 import Modal from 'Blocks/Modal/container';
@@ -65,6 +66,8 @@ class App extends Component {
       layout_modal: isModal,
     });
 
+    console.log(isModal);
+
     return (
       <div className={layoutClass}>
         <div className="layout__content">
@@ -86,14 +89,14 @@ class App extends Component {
           <Footer />
         </div>
 
-        {isModal ? <Route
-          key="modals"
-          path="/auth"
-          render={() => (
-            <Modal>
-              <Authorization />
-            </Modal>
-          )} /> : null}
+        <CSSTransition
+          in={isModal}
+          classNames="fade"
+          timeout={10000}>
+          <Modal>
+            <Route path="/auth" component={Authorization} />
+          </Modal>
+        </CSSTransition>
       </div>
     );
   }
