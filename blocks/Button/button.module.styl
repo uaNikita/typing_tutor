@@ -1,18 +1,14 @@
-.button {
+.button
    position: relative;
-
-   &_loader {
-      .content {
+   &_loader
+      .content
          opacity: 0
-      }
-      .loader {
-         display: block
-      }
-   }
-}
-.content {
+      .loader
+         display: flex;
+.content
    display: inline
-}
-.loader {
+.loader
    display: none
-}
+   [class^="loader-module__loader"]
+      border-top-color: #fff;
+      border-bottom-color: #fff;

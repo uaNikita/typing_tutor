@@ -16,6 +16,8 @@ const Loader = ({ className, size }) => {
     };
   }
 
+  console.log(className);
+  
   return (
     <span className={className} styleName="root">
       <span styleName="loader" style={style} />

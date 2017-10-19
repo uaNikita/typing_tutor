@@ -4,9 +4,17 @@ import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 
 import { validateEmail } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component.jsx';
+import Button from 'Blocks/Button/component.jsx';
 
 class Registration extends Component {
+  state = {
+    submitted: false,
+  };
+
   handleSubmit = values => this.props.fetchJSON('/auth/signup', { body: values.toJS() }, true)
+    .then(() => this.setState({
+      submitted: true,
+    }))
     .catch(data => {
       if (data.errors) {
         throw new SubmissionError(data.errors);
@@ -17,7 +25,7 @@ class Registration extends Component {
     const {
       handleSubmit,
       submitting,
-      valid,
+      invalid,
       isModal,
     } = this.props;
 
@@ -27,22 +35,34 @@ class Registration extends Component {
       state.modal = true;
     }
 
+
+    let content = (
+      <form className="auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
+        <Field
+          className="auth__row"
+          name="email"
+          component={RenderField}
+          type="email"
+          label="Email"
+        />
+
+        <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
+
+        <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/auth/login', state }}>Log in now</Link></p>
+      </form>
+    );
+
+    if (this.state.submitted) {
+      content = (
+        <p>You’ve got mail, <br />
+          Please click the link in the email we just sent you so we can verify your account.</p>
+      );
+    }
+
     return (
       <div className="auth">
         <h3 className="auth__title">Registration</h3>
-        <form className="auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
-          <Field
-            className="auth__row"
-            name="email"
-            component={RenderField}
-            type="email"
-            label="Email"
-          />
-
-          <button className="button" type="submit" disabled={!valid || submitting}>Sign Up</button>
-
-          <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/auth/login', state }}>Log in now</Link></p>
-        </form>
+        {content}
       </div>
     );
   }
