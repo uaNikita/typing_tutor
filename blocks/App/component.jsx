@@ -66,8 +66,6 @@ class App extends Component {
       layout_modal: isModal,
     });
 
-    console.log('isModal', isModal);
-
     return (
       <div className={layoutClass}>
         <div className="layout__content">
@@ -89,14 +87,21 @@ class App extends Component {
           <Footer />
         </div>
 
-        <TransitionGroup>
-          <CSSTransition
+        <TransitionGroup>{
+          isModal ? <CSSTransition
             key={location.key}
-            classNames="fade"
-            timeout={1000}>
-            <Route path="/auth" component={Authorization} />
-          </CSSTransition>
-        </TransitionGroup>
+            classNames="modal"
+            timeout={100}>
+            <Route
+              location={location}
+              path="/auth"
+              render={() => (
+                <Modal>
+                  <Authorization />
+                </Modal>
+              )} />
+          </CSSTransition> : null
+        }</TransitionGroup>
       </div>
     );
   }

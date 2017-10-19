@@ -15,10 +15,6 @@
       height 100%
       content ''
    &__
-      &open
-         overflow: hidden;
-         &-content
-            filter: blur(10px);
       &overlay
          position fixed
          top: 0
@@ -55,17 +51,17 @@
          opacity: 1;
       &-active
          opacity: 1;
-         transition: opacity .1s ease-in;
+         transition: opacity .1s linear;
          .modal__overlay
             opacity: 1;
-            transition: opacity .1s ease-in;
-   &-leave
+            transition: opacity .1s linear;
+   &-exit
       opacity: 1;
       .modal__overlay
          opacity: 1;
-   &-leave-active
+   &-exit-active
       opacity: 0.01;
-      transition: opacity .1s ease-out;
+      transition: opacity .1s linear;
       .modal__overlay
          opacity: 0.01;
-         transition: opacity .1s ease-out;
+         transition: opacity .1s linear;
