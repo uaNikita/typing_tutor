@@ -2,7 +2,6 @@ import Immutable from 'immutable';
 
 import { fetchJSON } from './fetch';
 
-
 const SET_EMAIL = 'user/SET_EMAIL';
 const SET_NAME = 'user/SET_NAME';
 

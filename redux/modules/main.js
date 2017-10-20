@@ -109,7 +109,6 @@ export default (state = initialState, action = {}) => {
   }
 };
 
-
 export const setBearerToken = token => ({
   type: SET_BEARER_TOKEN,
   token,

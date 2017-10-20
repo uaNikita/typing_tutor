@@ -84,8 +84,6 @@ const register = (req, res, next) => {
             }),
           };
 
-          console.log(mailOptions);
-
           transporter.sendMail(mailOptions, error => {
             if (error) {
               throw new APIError({
@@ -94,8 +92,6 @@ const register = (req, res, next) => {
               });
             }
             else {
-              console.log(1);
-
               res.json(httpStatus[200]);
 
               resolve();

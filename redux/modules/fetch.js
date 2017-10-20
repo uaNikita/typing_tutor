@@ -2,6 +2,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import Cookie from 'js-cookie';
 
+const CLEAR_STATE = 'tokens/CLEAR_STATE';
 const SET_REFRESH_TOKEN = 'fetch/SET_REFRESH_TOKEN';
 const SET_ACCESS_TOKEN = 'fetch/SET_ACCESS_TOKEN';
 
@@ -13,6 +14,9 @@ const initialState = Immutable.Map({
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
+    case CLEAR_STATE:
+      return state.merge(initialState);
+
     case SET_REFRESH_TOKEN:
       return state.set('refreshToken', action.token);
 
@@ -23,6 +27,10 @@ export default (state = initialState, action = {}) => {
       return state;
   }
 };
+
+export const clearState = () => ({
+  type: CLEAR_STATE,
+});
 
 export const setRefreshToken = token => {
   Cookie.set('tt_refresh', token);
@@ -101,7 +109,7 @@ export const fetchJSON =
           let promise;
 
           if (error.status === 401) {
-            promise = dispatch(requestJSON('/tokens', {
+            promise = dispatch(requestJSON('/auth/tokens', {
               headers: {
                 Authorization: `Bearer ${getState().getIn(['fetch', 'bearerToken'])}`,
               },
@@ -111,6 +119,9 @@ export const fetchJSON =
                 dispatch(setAccessToken(access));
 
                 return dispatch(fetchJSON(...args));
+              })
+              .catch(() => {
+                dispatch(clearState());
               });
           }
           else {

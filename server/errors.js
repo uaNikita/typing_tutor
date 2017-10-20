@@ -5,16 +5,19 @@ let APIError = require('./utils/APIError');
 
 module.exports = app => {
   app.use((req, res, next) => {
-    const err = new APIError({
+    const apiError = new APIError({
       message: 'API not found',
       status: httpStatus.NOT_FOUND
     });
 
-    return next(err);
+    next(apiError);
   });
 
   app.use((err, req, res, next) => {
-    if (err instanceof mongoose.Error.ValidationError) {
+    if (err instanceof APIError) {
+      next(err);
+    }
+    else if (err instanceof mongoose.Error.ValidationError) {
       const errors = _.mapValues(err.errors, o => o.message);
 
       const apiError = new APIError({
@@ -23,18 +26,19 @@ module.exports = app => {
         errors
       });
 
-      return next(apiError);
+      next(apiError);
     }
-
-    if (!(err instanceof APIError)) {
+    else {
       const apiError = new APIError({
         message: err.message,
         status: err.status
       });
 
-      return next(apiError);
+      next(apiError);
     }
+  });
 
+  app.use((err, req, res, next) => {
     res.status(err.status).json(_.assign({ message: err.message }, err));
   });
 };
