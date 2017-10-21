@@ -12,16 +12,6 @@ const mapDispatchToProps = dispatch => ({
   setAccessToken: token => dispatch(setAccessToken(token)),
   setEmail: email => dispatch(setEmail(email)),
   fetchJSON: (...args) => dispatch(fetchJSON(...args)),
-  asyncValidate: values => dispatch(fetchJSON('check-email', {
-    body: {
-      email: values.get('email'),
-    },
-  }))
-    .catch(({ errors }) => {
-      if (errors) {
-        throw errors;
-      }
-    }),
 });
 
 export default connect(

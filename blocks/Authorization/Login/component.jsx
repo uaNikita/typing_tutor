@@ -7,6 +7,10 @@ import RenderField from 'Blocks/RenderField/component.jsx';
 import Button from 'Blocks/Button/component.jsx';
 
 class Login extends Component {
+  state = {
+    accountIsNotActive: false,
+  };
+
   handleSubmit = values => {
     const {
       props: {
@@ -17,7 +21,7 @@ class Login extends Component {
       },
     } = this;
 
-    return fetchJSON('/login', {
+    return fetchJSON('/auth/login', {
       body: values.toJS(),
     })
       .then(({ email, refresh, access }) => {
@@ -26,10 +30,20 @@ class Login extends Component {
         setAccessToken(access);
       })
       .catch(data => {
+        if (data.status === 403) {
+          this.setState({
+            accountIsNotActive: true,
+          });
+        }
+
         if (data.errors) {
           throw new SubmissionError(data.errors);
         }
       });
+  };
+
+  handleSendVerifyLink = () => {
+    console.log('handleSendVerifyLink');
   };
 
   render() {
@@ -46,10 +60,8 @@ class Login extends Component {
       state.modal = true;
     }
 
-    return (
-      <form className="auth auth__form" onSubmit={handleSubmit}>
-        <h3 className="auth__title">Log In</h3>
-
+    let content = (
+      <form className="auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
         <Field className="auth__row" name="email" component={RenderField} type="email" label="Email" />
 
         <Field className="auth__row" name="password" component={RenderField} type="password" label="Password" />
@@ -67,6 +79,22 @@ class Login extends Component {
         </p>
       </form>
     );
+
+    if (this.state.accountIsNotActive) {
+      content = [
+        <p key="email-not-verified">Your account email is not verified, <br />
+          Please click the link bellow and we will send you a link to verify email.</p>,
+        <button key="verify-link" className="button" onClick={this.handleSendVerifyLink}>Send verify link</button>,
+      ];
+    }
+
+    return (
+      <div className="auth">
+        <h3 className="auth__title">Log In</h3>
+
+        {content}
+      </div>
+    );
   }
 }
 
@@ -78,5 +106,4 @@ const validate = values => ({
 export default reduxForm({
   form: 'login',
   validate,
-  asyncBlurFields: ['email'],
 })(Login);

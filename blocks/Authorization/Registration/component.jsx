@@ -35,7 +35,6 @@ class Registration extends Component {
       state.modal = true;
     }
 
-
     let content = (
       <form className="auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
         <Field

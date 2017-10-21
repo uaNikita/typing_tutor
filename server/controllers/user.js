@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const config = require('config');
@@ -7,6 +8,7 @@ const emailTemplates = require('../email-templates');
 const transporter = require('../utils/transporter');
 const getRandomPassword = require('../utils/getRandomPassword');
 
+const APIError = require('../utils/APIError');
 const User = require('../models/user');
 const Verification = require('../models/verification');
 const Client = require('../models/client');
@@ -36,21 +38,6 @@ const createClient = userId => {
 
   return [client.save(), access.save()];
 };
-
-const getUserDataById = id =>
-  User.get(id)
-    .then(({ email, name }) => {
-      let response = { email };
-
-      if (name) {
-        response = {
-          ...response,
-          name,
-        };
-      }
-
-      return response;
-    });
 
 const register = (req, res, next) => {
   const { email } = req.body;
@@ -97,7 +84,7 @@ const register = (req, res, next) => {
               resolve();
             }
           });
-        })
+        });
     })
 
     .catch(e => next(e));
@@ -106,13 +93,24 @@ const register = (req, res, next) => {
 const login = (req, res, next) => {
   const userId = req.user.get('id');
 
-  Promise.all([...createClient(userId), getUserDataById(userId)])
-    .then(([client, access, user]) => {
-      res.json({
-        refresh: client.get('token'),
-        access: access.get('token'),
-        ...user,
-      });
+  User.get(userId)
+    .then(user => {
+
+      if (!user.get('active')) {
+        throw new APIError({
+          message: 'Your account is not active',
+          status: httpStatus.FORBIDDEN,
+        });
+      }
+
+      return Promise.all([...createClient(user.get('id'))])
+        .then(([client, access]) => {
+          res.json({
+            refresh: client.get('token'),
+            access: access.get('token'),
+            ...user,
+          });
+        });
     })
     .catch(e => next(e));
 };
@@ -174,8 +172,14 @@ const checkEmail = (req, res, next) => {
 };
 
 const getUserData = (req, res, next) =>
-  getUserDataById(req.user.id)
-    .then(data => res.json(data))
+  User.get(req.user.id)
+    .then(({ email, name }) => {
+      let response = { email };
+
+      _.assign(response, name && { name });
+
+      res.json(response);
+    })
     .catch(e => next(e));
 
 const verifyToken = (req, res, next) => {
