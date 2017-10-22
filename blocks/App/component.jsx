@@ -15,7 +15,7 @@ class App extends Component {
   state = {
     lastNoModalLocation: this.props.lastNoModalLocation,
     isModal: this.props.isModal,
-  }
+  };
 
   componentDidMount() {
     const { location, setLastNoModalLocation } = this.props;
@@ -87,11 +87,11 @@ class App extends Component {
           <Footer />
         </div>
 
-        <TransitionGroup>{
-          isModal ? <CSSTransition
+        <TransitionGroup>
+          {isModal ? <CSSTransition
             key={location.key}
             classNames="modal"
-            timeout={100}>
+            timeout={250}>
             <Route
               location={location}
               path="/auth"
@@ -100,8 +100,8 @@ class App extends Component {
                   <Authorization />
                 </Modal>
               )} />
-          </CSSTransition> : null
-        }</TransitionGroup>
+          </CSSTransition> : null}
+        </TransitionGroup>
       </div>
     );
   }

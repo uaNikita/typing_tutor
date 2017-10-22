@@ -9,6 +9,7 @@ import Button from 'Blocks/Button/component.jsx';
 class Login extends Component {
   state = {
     accountIsNotActive: false,
+    submittedVerifyLink: false,
   };
 
   handleSubmit = values => {
@@ -20,6 +21,10 @@ class Login extends Component {
         fetchJSON,
       },
     } = this;
+
+    console.log(values.get('email'));
+
+    this.email = values.get('email');
 
     return fetchJSON('/auth/login', {
       body: values.toJS(),
@@ -43,7 +48,25 @@ class Login extends Component {
   };
 
   handleSendVerifyLink = () => {
+    console.log('this.email', this.email);
+
+    this.props.fetchJSON('/auth/verify-email', {
+        body: {
+          email: this.email
+        },
+      })
+      .then(() => this.setState({
+        submittedVerifyLink: true,
+      }))
+      .catch(data => {
+        if (data.errors) {
+          throw new SubmissionError(data.errors);
+        }
+      });
+
     console.log('handleSendVerifyLink');
+
+
   };
 
   render() {
@@ -80,7 +103,13 @@ class Login extends Component {
       </form>
     );
 
-    if (this.state.accountIsNotActive) {
+    if (this.state.submittedVerifyLink) {
+      content = (
+        <p>You’ve got mail, <br />
+          Please click the link in the email we just sent you so we can verify your account.</p>
+      );
+    }
+    else if (this.state.accountIsNotActive) {
       content = [
         <p key="email-not-verified">Your account email is not verified, <br />
           Please click the link bellow and we will send you a link to verify email.</p>,

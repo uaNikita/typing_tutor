@@ -8,6 +8,7 @@
    text-align center
    white-space nowrap
    z-index: 1
+   transition: opacity .25s linear;
    &:after
       display inline-block
       vertical-align middle
@@ -45,23 +46,34 @@
          text-align: center;
          text-decoration: none
          color #000
-   &-enter, &-appear
-      opacity: 0.01;
-      .modal__overlay
-         opacity: 1;
+   &-enter
+      opacity: 0;
+      .modal__content
+         animation modalComeIn .25s linear
       &-active
          opacity: 1;
-         transition: opacity .1s linear;
-         .modal__overlay
-            opacity: 1;
-            transition: opacity .1s linear;
    &-exit
-      opacity: 1;
-      .modal__overlay
-         opacity: 1;
-   &-exit-active
-      opacity: 0.01;
-      transition: opacity .1s linear;
-      .modal__overlay
-         opacity: 0.01;
-         transition: opacity .1s linear;
+      .modal__content
+         animation modalHeadOut .25s linear
+      &-active
+         opacity: 0;
+
+@keyframes modalComeIn {
+   0% {
+      transform: scale(.8);
+   }
+   65.5% {
+      transform: scale(1.03, 1.03);
+   }
+   100% {
+      transform scale(1, 1);
+   }
+}
+@keyframes modalHeadOut {
+   0% {
+      transform translateY(0) scale(1, 1);
+   }
+   100% {
+      transform translateY(35px) scale(.97, .97);
+   }
+}

@@ -8,9 +8,11 @@ const authenticate = require('../utils/authenticate');
 
 router.post('/check-email', user.checkEmail);
 
-router.post('/verify-token', user.verifyToken);
-
 router.post('/signup', user.register);
+
+router.post('/verify-email', user.verifyEmail);
+
+router.post('/verify-token', user.verifyToken);
 
 router.post('/login', passport.authenticate('local'), user.login);
 

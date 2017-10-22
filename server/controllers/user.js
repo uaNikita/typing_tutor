@@ -63,8 +63,8 @@ const register = (req, res, next) => {
           const mailOptions = {
             from: config.get('mail.from'),
             to: email,
-            subject: 'Email verification',
-            html: emailTemplates.verifyEmailFn({
+            subject: 'Acoount registration',
+            html: emailTemplates.registrationFn({
               origin: req.get('origin'),
               token: verification.get('token'),
               password,
@@ -89,6 +89,50 @@ const register = (req, res, next) => {
 
     .catch(e => next(e));
 };
+
+const verifyEmail = (req, res, next) => {
+  const { email } = req.body;
+
+  User.findByEmail(email)
+    .then(user => {
+      const verification = new Verification({
+        user: user.get('id'),
+        type: 'email',
+      });
+
+      verification.token = verification.get('id') + crypto.randomBytes(40).toString('hex');
+
+      return verification.save()
+        .then(verification => {
+          const mailOptions = {
+            from: config.get('mail.from'),
+            to: email,
+            subject: 'Email verification',
+            html: emailTemplates.verifyEmailFn({
+              origin: req.get('origin'),
+              token: verification.get('token'),
+            }),
+          };
+
+          transporter.sendMail(mailOptions, error => {
+            if (error) {
+              throw new APIError({
+                message: 'We can not verify your email now. Please try again later.',
+                status: httpStatus.SERVICE_UNAVAILABLE,
+              });
+            }
+            else {
+              res.json(httpStatus[200]);
+
+              resolve();
+            }
+          });
+        });
+    })
+
+    .catch(e => next(e));
+};
+
 
 const login = (req, res, next) => {
   const userId = req.user.get('id');
@@ -206,6 +250,7 @@ const verifyToken = (req, res, next) => {
 
 module.exports = {
   register,
+  verifyEmail,
   login,
   logout,
   getTokens,

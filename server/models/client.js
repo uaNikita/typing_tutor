@@ -29,11 +29,11 @@ ClientSchema.statics = {
   },
 
   findByToken(token) {
-    return this.find({ token })
+    return this.findOne({ token })
       .exec()
       .then(client => {
-        if (client.length) {
-          return client[0];
+        if (client) {
+          return client;
         }
 
         throw new APIError({
