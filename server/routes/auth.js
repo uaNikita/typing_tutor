@@ -12,6 +12,8 @@ router.post('/signup', user.register);
 
 router.post('/verify-email', user.verifyEmail);
 
+router.post('/restore-access', user.restoreAccess);
+
 router.post('/verify-token', user.verifyToken);
 
 router.post('/login', passport.authenticate('local'), user.login);

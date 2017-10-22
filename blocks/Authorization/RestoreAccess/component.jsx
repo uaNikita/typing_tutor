@@ -4,16 +4,27 @@ import { Field, reduxForm } from 'redux-form/immutable';
 
 import { validateEmail } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component.jsx';
+import Button from 'Blocks/Button/component.jsx';
 
 class RestoreAccess extends Component {
-  handleSubmit = () => {
-    this.a = 1;
+  handleSubmit = values => {
+    const {
+      props: {
+        fetchJSON,
+      },
+    } = this;
+
+    return fetchJSON('/auth/restore-access', {
+      body: values.toJS(),
+    });
   };
 
   render() {
     const {
       props: {
         handleSubmit,
+        submitting,
+        invalid,
         isModal,
       },
     } = this;
@@ -36,7 +47,7 @@ class RestoreAccess extends Component {
         />
 
         <div className="auth__button-wrap">
-          <button className="button">Send new password</button>
+          <Button type="submit" disabled={invalid} isLoader={submitting}>Restore access</Button>
         </div>
 
         <p className="auth__hint">
@@ -52,22 +63,7 @@ const validate = values => ({
   ...validateEmail(values.get('email')),
 });
 
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-const asyncValidate = values => sleep(1000)
-  .then(() => {
-    let result = false;
-
-    if (!['john', 'paul', 'george', 'ringo'].includes(values.get('email'))) {
-      result = { email: 'That email does not exist' };
-    }
-
-    return result;
-  });
-
 export default reduxForm({
   form: 'restore-access',
   validate,
-  asyncValidate,
-  asyncBlurFields: ['email'],
 })(RestoreAccess);

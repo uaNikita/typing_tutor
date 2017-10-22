@@ -78,11 +78,8 @@ const register = (req, res, next) => {
                 status: httpStatus.SERVICE_UNAVAILABLE,
               });
             }
-            else {
-              res.json(httpStatus[200]);
 
-              resolve();
-            }
+            res.json(httpStatus[200]);
           });
         });
     })
@@ -121,11 +118,8 @@ const verifyEmail = (req, res, next) => {
                 status: httpStatus.SERVICE_UNAVAILABLE,
               });
             }
-            else {
-              res.json(httpStatus[200]);
 
-              resolve();
-            }
+            res.json(httpStatus[200]);
           });
         });
     })
@@ -133,6 +127,51 @@ const verifyEmail = (req, res, next) => {
     .catch(e => next(e));
 };
 
+const restoreAccess = (req, res, next) => {
+  const { email } = req.body;
+
+  User.findByEmail(email)
+    .then(user => {
+      const password = getRandomPassword();
+
+      user.password = password;
+
+      const verification = new Verification({
+        user: user.get('id'),
+        type: 'email',
+      });
+
+      verification.token = verification.get('id') + crypto.randomBytes(40).toString('hex');
+
+      return Promise.all([user.save(), verification.save()])
+        .then(([user, verification]) => {
+          const mailOptions = {
+            from: config.get('mail.from'),
+            to: email,
+            subject: 'Restore access',
+            html: emailTemplates.restoreAccessFn({
+              origin: req.get('origin'),
+              token: verification.get('token'),
+              password,
+            }),
+          };
+
+          transporter.sendMail(mailOptions, error => {
+            if (error) {
+              throw new APIError({
+                message: 'We can not verify your email now. Please try again later.',
+                status: httpStatus.SERVICE_UNAVAILABLE,
+              });
+            }
+
+            res.json(httpStatus[200]);
+
+          });
+        });
+    })
+
+    .catch(e => next(e));
+};
 
 const login = (req, res, next) => {
   const userId = req.user.get('id');
@@ -251,6 +290,7 @@ const verifyToken = (req, res, next) => {
 module.exports = {
   register,
   verifyEmail,
+  restoreAccess,
   login,
   logout,
   getTokens,

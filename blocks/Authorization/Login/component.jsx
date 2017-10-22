@@ -22,8 +22,6 @@ class Login extends Component {
       },
     } = this;
 
-    console.log(values.get('email'));
-
     this.email = values.get('email');
 
     return fetchJSON('/auth/login', {
@@ -48,25 +46,20 @@ class Login extends Component {
   };
 
   handleSendVerifyLink = () => {
-    console.log('this.email', this.email);
+    const {
+      props: {
+        fetchJSON,
+      },
+    } = this;
 
-    this.props.fetchJSON('/auth/verify-email', {
-        body: {
-          email: this.email
-        },
-      })
+    fetchJSON('/auth/verify-email', {
+      body: {
+        email: this.email,
+      },
+    })
       .then(() => this.setState({
         submittedVerifyLink: true,
-      }))
-      .catch(data => {
-        if (data.errors) {
-          throw new SubmissionError(data.errors);
-        }
-      });
-
-    console.log('handleSendVerifyLink');
-
-
+      }));
   };
 
   render() {
