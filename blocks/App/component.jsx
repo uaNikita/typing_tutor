@@ -8,7 +8,11 @@ import Modal from 'Blocks/Modal/container';
 import VerifyPage from 'Blocks/VerifyPage/container';
 import Authorization from 'Blocks/Authorization/component.jsx';
 import Home from 'Blocks/Home/container';
-import Settings from 'Blocks/Settings/container';
+import Menu from 'Blocks/Menu/component.jsx';
+import LearningMode from 'Blocks/LearningMode/container';
+import TextMode from 'Blocks/TextMode/component.jsx';
+import Keyboard from 'Blocks/Keyboard/container';
+import MyProfile from 'Blocks/MyProfile/container';
 import Footer from 'Blocks/Footer/component.jsx';
 
 class App extends Component {
@@ -80,8 +84,19 @@ class App extends Component {
           <Switch key="switch" location={isModal ? lastNoModalLocation : location}>
             <Route path="/verify" component={VerifyPage} />
             <Route path="/auth" component={Authorization} />
-            <Route path="/settings" component={Settings} />,
-            <Route exact path="/" component={Home} />,
+            <Route exact path="/" component={Home} />
+
+            <Route
+              path="/"
+              render={({ url }) => [
+                <Menu />,
+                <Route path="/learning-mode" component={LearningMode} />,
+                <Route path={`${url}/learning-mode`} component={LearningMode} />,
+                <Route path={`${url}/text-mode`} component={TextMode} />,
+                <Route path={`${url}/keyboard`} component={Keyboard} />,
+                <Route path={`${url}/my-profile`} component={MyProfile} />,
+              ]} />
+
           </Switch>
 
           <Footer />
