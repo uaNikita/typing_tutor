@@ -12,7 +12,7 @@ import Menu from 'Blocks/Menu/component.jsx';
 import LearningMode from 'Blocks/LearningMode/container';
 import TextMode from 'Blocks/TextMode/component.jsx';
 import Keyboard from 'Blocks/Keyboard/container';
-import MyProfile from 'Blocks/MyProfile/container';
+import MyProfilePages from 'Blocks/MyProfilePages/container';
 import Footer from 'Blocks/Footer/component.jsx';
 
 class App extends Component {
@@ -88,13 +88,12 @@ class App extends Component {
 
             <Route
               path="/"
-              render={({ url }) => [
-                <Menu />,
-                <Route path="/learning-mode" component={LearningMode} />,
-                <Route path={`${url}/learning-mode`} component={LearningMode} />,
-                <Route path={`${url}/text-mode`} component={TextMode} />,
-                <Route path={`${url}/keyboard`} component={Keyboard} />,
-                <Route path={`${url}/my-profile`} component={MyProfile} />,
+              render={() => [
+                <Menu key="menu" />,
+                <Route key="learning-mode" path={'/learning-mode'} component={LearningMode} />,
+                <Route key="text-mode" path={'/text-mode'} component={TextMode} />,
+                <Route key="keyboard" path={'/keyboard'} component={Keyboard} />,
+                <Route key="my-profile" path={'/my-profile'} component={MyProfilePages} />,
               ]} />
 
           </Switch>

@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import _ from 'lodash';
+import SubMenu from 'Blocks/SubMenu/component.jsx';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
 import ModeItem from './ModeItem/container';
@@ -8,7 +9,7 @@ import Switcher from '../Switcher.jsx';
 class LearningMode extends Component {
   onSwitcherChange = () => {
     this.props.setMainMode('learning');
-  }
+  };
 
   render() {
     const {
@@ -87,6 +88,18 @@ class LearningMode extends Component {
         <div className="settings-learning__modes">
           <div className="settings-learning__modes-menu">
             <h4 className="settings-learning__modes-menu-title">Keys set</h4>
+
+            <SubMenu links={[
+              {
+                url: '/learning-mode/fingers',
+                text: 'By fingers',
+              },
+              {
+                url: '/learning-mode/free',
+                text: 'Free',
+              },
+            ]} />
+
             {links}
           </div>
 
