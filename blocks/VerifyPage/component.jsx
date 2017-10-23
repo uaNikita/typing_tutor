@@ -44,20 +44,24 @@ class Block extends Component {
       },
     } = this;
 
-    let text = 'Thank you,';
+    let text;
 
     switch (verified) {
       case 'email':
-        text = `${text} your email was succesfully verified`;
+        text = 'your email was succesfully verified';
         break;
       case 'password-reset':
-        text = `${text} you can use your new password from now`;
+        text = 'you can use your new password from now';
         break;
     }
 
     const redirect = ([
-      <p>{text}</p>,
-      <Link to="/">Continue</Link>,
+      <p>
+        Thank you,
+        <br />
+        {text}
+      </p>,
+      <Link className="buttom" to="/">Continue</Link>,
     ]);
 
     return (

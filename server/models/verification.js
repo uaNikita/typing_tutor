@@ -23,6 +23,16 @@ VerificationSchema.statics = {
   findByToken(token) {
     return this.findOne({ token })
       .exec()
+      .then(verification => {
+        if (verification) {
+          return verification;
+        }
+
+        throw new APIError({
+          message: httpStatus['404'],
+          status: httpStatus.NOT_FOUND,
+        });
+      });
   },
 };
 
