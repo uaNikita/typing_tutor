@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
+
 import SubMenu from 'Blocks/SubMenu/component.jsx';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
-import ModeItem from './ModeItem/container';
 import Switcher from '../Switcher.jsx';
 
 class LearningMode extends Component {
@@ -49,21 +48,6 @@ class LearningMode extends Component {
       };
     }
 
-    const modes = [
-      {
-        id: 'fingers',
-        text: 'By fingers',
-      },
-      {
-        id: 'free',
-        text: 'Free',
-      },
-    ];
-
-    _.find(modes, { id: learningMode }).selected = true;
-
-    const links = modes.map(m => <ModeItem id={m.id} selected={m.selected} text={m.text} />);
-
     let Mode;
 
     switch (learningMode) {
@@ -76,7 +60,6 @@ class LearningMode extends Component {
     }
 
     return (
-
       <div className="settings-learning">
 
         <Switcher {...switcherProps} />
@@ -99,8 +82,6 @@ class LearningMode extends Component {
                 text: 'Free',
               },
             ]} />
-
-            {links}
           </div>
 
           <div className="settings-learning__modes-content">

@@ -17,7 +17,7 @@ const Menu = () => (
       <NavLink styleName="menu__nav-item" activeClassName="settings__nav-item--selected" to="/keyboard">
         Keyboard Layout
       </NavLink>
-      <NavLink styleName="menu__nav-item" activeClassName="settings__nav-item--selected" to="/my-profile">
+      <NavLink styleName="menu__nav-item" activeClassName="settings__nav-item--selected" to="/profile">
         My profile
       </NavLink>
     </div>

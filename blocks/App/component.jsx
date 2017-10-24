@@ -90,10 +90,12 @@ class App extends Component {
               path="/"
               render={() => [
                 <Menu key="menu" />,
-                <Route key="learning-mode" path={'/learning-mode'} component={LearningMode} />,
-                <Route key="text-mode" path={'/text-mode'} component={TextMode} />,
-                <Route key="keyboard" path={'/keyboard'} component={Keyboard} />,
-                <Route key="my-profile" path={'/my-profile'} component={MyProfilePages} />,
+                <Switch key="switch">
+                  <Route key="learning-mode" path="/learning-mode" component={LearningMode} />
+                  <Route key="text-mode" path="/text-mode" component={TextMode} />
+                  <Route key="keyboard" path="/keyboard" component={Keyboard} />
+                  <Route key="profile" path="/profile" component={MyProfilePages} />
+                </Switch>,
               ]} />
 
           </Switch>
