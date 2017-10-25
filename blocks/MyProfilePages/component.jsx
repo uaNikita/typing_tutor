@@ -1,14 +1,13 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
-import { Route } from 'react-router-dom';
+import { Switch, Route, NavLink } from 'react-router-dom';
 
-import SubMenu from 'Blocks/SubMenu/component.jsx';
 import Profile from './Profile/container';
 import Account from './Account/container';
 
 import styles from './my-profile-pages.module.styl';
 
-const menuItems = [
+const menuLinks = [
   {
     url: '',
     text: 'Profile',
@@ -20,20 +19,25 @@ const menuItems = [
 ];
 
 const MyProfilePages = ({ match: { url } }) => {
-
-  const items = menuItems.map(link => ({
-    ...link,
-    url: url + link.url,
-  }));
-
-  console.log(111, items);
+  const links = menuLinks.map(({ url: linkUrl, text }) => (
+    <NavLink
+      key={linkUrl}
+      className="submenu-link"
+      activeClassName="submenu-link_selected"
+      to={url + linkUrl}
+      exact>
+      {text}
+    </NavLink>
+  ));
 
   return (
     <div className="sub-layout">
-      <SubMenu items={items} />
+      {links}
       <div className="sub-layout__content">
-        <Route path={url} component={Profile} />
-        <Route path={`${url}/account`} component={Account} />
+        <Switch>
+          <Route path={`${url}/account`} component={Account} />
+          <Route path={url} exact component={Profile} />
+        </Switch>
       </div>
     </div>
   );

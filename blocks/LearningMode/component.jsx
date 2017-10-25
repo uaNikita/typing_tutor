@@ -1,9 +1,20 @@
 import React, { Component } from 'react';
+import { NavLink } from 'react-router-dom';
 
-import SubMenu from 'Blocks/SubMenu/component.jsx';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
 import Switcher from '../Switcher.jsx';
+
+const menuLinks = [
+  {
+    url: '/fingers',
+    text: 'By fingers',
+  },
+  {
+    url: '/free',
+    text: 'Free',
+  },
+];
 
 class LearningMode extends Component {
   onSwitcherChange = () => {
@@ -15,6 +26,9 @@ class LearningMode extends Component {
       lesson,
       learningMode,
       mode,
+      match: {
+        url,
+      },
     } = this.props;
 
     const lessonKeys = lesson.split('').map(char => {
@@ -59,6 +73,16 @@ class LearningMode extends Component {
         break;
     }
 
+    const links = menuLinks.map(({ url: linkUrl, text }) => (
+      <NavLink
+        key={linkUrl}
+        className="submenu-link"
+        activeClassName="submenu-link_selected"
+        to={url + linkUrl}>
+        {text}
+      </NavLink>
+    ));
+
     return (
       <div className="settings-learning">
 
@@ -71,17 +95,7 @@ class LearningMode extends Component {
         <div className="settings-learning__modes">
           <div className="settings-learning__modes-menu">
             <h4 className="settings-learning__modes-menu-title">Keys set</h4>
-
-            <SubMenu links={[
-              {
-                url: '/learning-mode/fingers',
-                text: 'By fingers',
-              },
-              {
-                url: '/learning-mode/free',
-                text: 'Free',
-              },
-            ]} />
+            {links}
           </div>
 
           <div className="settings-learning__modes-content">

@@ -4,7 +4,7 @@ import CSSModules from 'react-css-modules';
 import styles from './profile.module.styl';
 
 const Profile = () => (
-  <div>test</div>
+  <div>Profile</div>
 );
 
 export default CSSModules(Profile, styles);
