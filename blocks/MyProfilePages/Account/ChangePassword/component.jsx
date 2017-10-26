@@ -29,22 +29,41 @@ class ChangePassword extends Component {
 
     return (
       <form styleName="root" onSubmit={handleSubmit(this.handleSubmit)}>
-        Change password
+        <h3 styleName="title">Change password</h3>
+
         <Field name="old-password" component={RenderField} type="password" label="Old password" />
         <Field name="new-password" component={RenderField} type="password" label="New password" />
         <Field name="confirm-new-password" component={RenderField} type="password" label="Confirm new password" />
 
-        <Button type="submit" disabled={invalid} isLoader={submitting}>Update password</Button>
+        <Button
+          styleName="button"
+          type="submit"
+          disabled={invalid}
+          isLoader={submitting}>
+          Update password
+        </Button>
       </form>
     );
   }
 }
 
-const validate = values => ({
-  ...validatePassword('old-password', values.get('old-password')),
-  ...validatePassword('new-password', values.get('new-password')),
-  ...validatePassword('confirm-new-password', values.get('confirm-new-password')),
-});
+const validate = values => {
+  const errors = {};
+
+  const newPassword = values.get('new-password');
+  const confirmNewPassword = values.get('confirm-new-password');
+
+  if (newPassword !== confirmNewPassword) {
+    errors['confirm-new-password'] = 'Password does not match';
+  }
+
+  return {
+    ...errors,
+    ...validatePassword('old-password', values.get('old-password')),
+    ...validatePassword('new-password', values.get('new-password')),
+    ...validatePassword('confirm-new-password', values.get('confirm-new-password')),
+  };
+};
 
 export default reduxForm({
   form: 'change-password',

@@ -4,22 +4,33 @@ import CSSModules from 'react-css-modules';
 
 import styles from './menu.module.styl';
 
+const links = [
+  {
+    href: '/learning-mode',
+    text: 'Learning mode',
+  },
+  {
+    href: '/text-mode',
+    text: 'Text mode',
+  },
+  {
+    href: '/keyboard',
+    text: 'Keyboard layout',
+  },
+  {
+    href: '/profile',
+    text: 'My profile',
+  },
+];
+
 const Menu = () => (
-  <nav styleName="menu__nav">
-    <div styleName="menu__nav-in">
-      <Link styleName="menu__home" className="fa fa-keyboard-o" to="/" />
-      <NavLink styleName="menu__nav-item" activeClassName="settings__nav-item--selected" to="/learning-mode">
-        Learning mode
-      </NavLink>
-      <NavLink styleName="menu__nav-item" activeClassName="settings__nav-item--selected" to="/text-mode">
-        Text mode
-      </NavLink>
-      <NavLink styleName="menu__nav-item" activeClassName="settings__nav-item--selected" to="/keyboard">
-        Keyboard Layout
-      </NavLink>
-      <NavLink styleName="menu__nav-item" activeClassName="settings__nav-item--selected" to="/profile">
-        My profile
-      </NavLink>
+  <nav styleName="nav">
+    <Link styleName="home" className="fa fa-keyboard-o" to="/" />
+
+    <div>
+      {links.map(({ href, text }) => (
+        <NavLink styleName="item" activeClassName="item_selected" to={href}>{text}</NavLink>
+      ))}
     </div>
   </nav>
 );

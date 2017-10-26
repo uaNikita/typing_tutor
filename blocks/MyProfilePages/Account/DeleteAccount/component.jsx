@@ -5,7 +5,9 @@ import styles from './delete-account.module.styl';
 
 const DeleteAccount = () => (
   <div>
-    DeleteAccount
+    <h3 styleName="title">Change password</h3>
+
+    <button className="button">Delete account</button>
   </div>
 );
 
