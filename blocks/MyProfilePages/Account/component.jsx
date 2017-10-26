@@ -1,14 +1,11 @@
 import React from 'react';
-import CSSModules from 'react-css-modules';
 
 import ChangePassword from './ChangePassword/container';
 import DeleteAccount from './DeleteAccount/container';
 
-import styles from './account.module.styl';
+const Account = () => ([
+  <ChangePassword key="change-password" />,
+  <DeleteAccount key="delete-account" />,
+]);
 
-const Account = () => [
-  <ChangePassword />,
-  <DeleteAccount />,
-];
-
-export default CSSModules(Account, styles);
+export default Account;

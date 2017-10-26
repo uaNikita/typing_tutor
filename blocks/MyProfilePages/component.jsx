@@ -32,7 +32,9 @@ const MyProfilePages = ({ match: { url } }) => {
 
   return (
     <div className="sub-layout">
-      {links}
+      <nav className="sub-layout__menu">
+        {links}
+      </nav>
       <div className="sub-layout__content">
         <Switch>
           <Route path={`${url}/account`} component={Account} />

@@ -66,7 +66,7 @@ class Home extends Component {
     }
 
     return (
-      <div styleName="content" ref={el => { this.home = el; }}>
+      <div ref={el => { this.home = el; }}>
         <div styleName="head">
           <Link styleName="settings" className="fa fa-bars" to="/learning-mode" />
 

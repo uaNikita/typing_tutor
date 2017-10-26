@@ -13,17 +13,17 @@ export const validateEmail = email => {
   return errors;
 };
 
-export const validatePassword = password => {
+export const validatePassword = (name, val) => {
   const errors = {};
 
-  if (!password) {
-    errors.password = requiredError;
+  if (!val) {
+    errors[name] = requiredError;
   }
-  else if (password.length < 5) {
-    errors.password = 'Must have 5 or more characters';
+  else if (val.length < 5) {
+    errors[name] = 'Must have 5 or more characters';
   }
-  else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/.test(password)) {
-    errors.password = 'Must contain one upper and lower letters, one number';
+  else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/.test(val)) {
+    errors[name] = 'Must contain one upper and lower letters, one number';
   }
 
   return errors;
