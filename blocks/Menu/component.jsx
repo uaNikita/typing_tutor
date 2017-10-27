@@ -29,7 +29,7 @@ const Menu = () => (
 
     <div>
       {links.map(({ href, text }) => (
-        <NavLink styleName="item" activeClassName="item_selected" to={href}>{text}</NavLink>
+        <NavLink key={href} styleName="item" activeClassName="item_selected" to={href}>{text}</NavLink>
       ))}
     </div>
   </nav>
