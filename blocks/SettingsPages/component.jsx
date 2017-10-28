@@ -1,16 +1,16 @@
 import React from 'react';
 import CSSModules from 'react-css-modules';
-import { Switch, Route, NavLink } from 'react-router-dom';
+import { Switch, Redirect, Route, NavLink } from 'react-router-dom';
 
-import Profile from './Profile/container';
+import Keyboard from './Keyboard/container';
 import Account from './Account/container';
 
 import styles from './my-profile-pages.module.styl';
 
 const menuLinks = [
   {
-    url: '',
-    text: 'Profile',
+    url: '/keyboard',
+    text: 'Keyboard layout',
   },
   {
     url: '/account',
@@ -18,7 +18,7 @@ const menuLinks = [
   },
 ];
 
-const MyProfilePages = ({ match: { url } }) => {
+const SettingsPages = ({ match: { url } }) => {
   const links = menuLinks.map(({ url: linkUrl, text }) => (
     <NavLink
       key={linkUrl}
@@ -37,12 +37,13 @@ const MyProfilePages = ({ match: { url } }) => {
       </nav>
       <div className="sub-layout__content">
         <Switch>
+          <Redirect exact from={url} to={`${url}/keyboard`} />
+          <Route path={`${url}/keyboard`} component={Keyboard} />
           <Route path={`${url}/account`} component={Account} />
-          <Route path={url} exact component={Profile} />
         </Switch>
       </div>
     </div>
   );
 };
 
-export default CSSModules(MyProfilePages, styles);
+export default CSSModules(SettingsPages, styles);

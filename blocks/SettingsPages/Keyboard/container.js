@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 
   return {
     mode: stateMain.get('mode'),
-    keys: stateMain.get('keys'),
+    keys: stateMain.get('keys').toJS(),
     name: stateMain.get('keyboard'),
   };
 };

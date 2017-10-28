@@ -11,8 +11,8 @@ import Home from 'Blocks/Home/container';
 import Menu from 'Blocks/Menu/component.jsx';
 import LearningMode from 'Blocks/LearningMode/container';
 import TextMode from 'Blocks/TextMode/component.jsx';
-import Keyboard from 'Blocks/Keyboard/container';
-import MyProfilePages from 'Blocks/MyProfilePages/container';
+import ProfilePage from 'Blocks/ProfilePage/container';
+import SettingsPages from 'Blocks/SettingsPages/container';
 import Footer from 'Blocks/Footer/component.jsx';
 
 class App extends Component {
@@ -93,8 +93,8 @@ class App extends Component {
                 <Switch key="switch">
                   <Route key="learning-mode" path="/learning-mode" component={LearningMode} />
                   <Route key="text-mode" path="/text-mode" component={TextMode} />
-                  <Route key="keyboard" path="/keyboard" component={Keyboard} />
-                  <Route key="profile" path="/profile" component={MyProfilePages} />
+                  <Route key="settings" path="/settings" component={SettingsPages} />
+                  <Route key="profile" path="/profile" component={ProfilePage} />
                 </Switch>,
               ]} />
 

@@ -14,8 +14,8 @@ const links = [
     text: 'Text mode',
   },
   {
-    href: '/keyboard',
-    text: 'Keyboard layout',
+    href: '/settings',
+    text: 'Settings',
   },
   {
     href: '/profile',
