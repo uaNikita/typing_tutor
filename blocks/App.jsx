@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { withRouter, Switch, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
 
+import GlobalMessage from 'Blocks/GlobalMessage/container';
 import Modal from 'Blocks/Modal/component.jsx';
 import VerifyPage from 'Blocks/VerifyPage/container';
 import Authorization from 'Blocks/Authorization/component.jsx';
@@ -17,15 +18,9 @@ import Footer from 'Blocks/Footer/component.jsx';
 
 class App extends Component {
   state = {
-    lastNoModalLocation: this.props.lastNoModalLocation,
-    isModal: this.props.isModal,
+    lastNoModalLocation: this.props.location,
+    isModal: false,
   };
-
-  componentDidMount() {
-    const { location, setLastNoModalLocation } = this.props;
-
-    setLastNoModalLocation(location);
-  }
 
   componentWillReceiveProps(nextProps) {
     const {
@@ -33,8 +28,6 @@ class App extends Component {
       history: {
         action,
       },
-      setLastNoModalLocation,
-      setIsModal,
     } = nextProps;
 
     let isModal = false;
@@ -43,25 +36,25 @@ class App extends Component {
       isModal = true;
     }
     else {
-      setLastNoModalLocation(location);
-
       this.setState({
         lastNoModalLocation: location,
       });
     }
-
-    setIsModal(isModal);
 
     this.setState({ isModal });
   }
 
   handlerClose = () => {
     const {
-      history: {
-        replace,
+      props: {
+        history: {
+          replace,
+        },
       },
-      lastNoModalLocation,
-    } = this.props;
+      state: {
+        lastNoModalLocation,
+      },
+    } = this;
 
     replace(lastNoModalLocation.pathname);
   };
@@ -81,22 +74,22 @@ class App extends Component {
       layout_modal: isModal,
     });
 
-    return (
-      <div className={layoutClass}>
-        <div className="layout__content">
-          <Helmet key="helmet">
-            <meta charSet="utf-8" />
-            <title>Typing tutor</title>
-            <meta name="viewport" content="width=device-width,initial-scale=1" />
-            <link rel="stylesheet" type="text/css" href="/main.css" />
-            <script type="text/javascript" defer src="/main.js" />
-          </Helmet>
+    return [
+      <Helmet key="helmet">
+        <meta charSet="utf-8" />
+        <title>Typing tutor</title>
+        <meta name="viewport" content="width=device-width,initial-scale=1" />
+        <link rel="stylesheet" type="text/css" href="/main.css" />
+        <script type="text/javascript" defer src="/main.js" />
+      </Helmet>,
+      <div key="content" className={layoutClass}>
+        <GlobalMessage />
 
+        <div className="layout__content">
           <Switch key="switch" location={isModal ? lastNoModalLocation : location}>
             <Route path="/verify" component={VerifyPage} />
             <Route path="/auth" component={Authorization} />
             <Route exact path="/" component={Home} />
-
             <Route
               path="/"
               render={() => [
@@ -108,7 +101,6 @@ class App extends Component {
                   <Route key="profile" path="/profile" component={ProfilePage} />
                 </Switch>,
               ]} />
-
           </Switch>
 
           <Footer />
@@ -129,9 +121,9 @@ class App extends Component {
               )} />
           </CSSTransition> : null}
         </TransitionGroup>
-      </div>
-    );
+      </div>,
+    ];
   }
 }
 
-export default App;
+export default withRouter(App);
