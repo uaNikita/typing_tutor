@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
 
-import Modal from 'Blocks/Modal/container';
+import Modal from 'Blocks/Modal/component.jsx';
 import VerifyPage from 'Blocks/VerifyPage/container';
 import Authorization from 'Blocks/Authorization/component.jsx';
 import Home from 'Blocks/Home/container';
@@ -54,6 +54,17 @@ class App extends Component {
 
     this.setState({ isModal });
   }
+
+  handlerClose = () => {
+    const {
+      history: {
+        replace,
+      },
+      lastNoModalLocation,
+    } = this.props;
+
+    replace(lastNoModalLocation.pathname);
+  };
 
   render() {
     const {
@@ -112,7 +123,7 @@ class App extends Component {
               location={location}
               path="/auth"
               render={() => (
-                <Modal>
+                <Modal onClose={this.handlerClose}>
                   <Authorization />
                 </Modal>
               )} />
