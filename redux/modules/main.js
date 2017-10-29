@@ -7,7 +7,6 @@ import { typeTextMode } from './text-mode';
 import { typeLearningMode } from './learning-mode';
 import { getIdsFromCharacter } from '../../utils';
 
-const SET_BEARER_TOKEN = 'main/SET_BEARER_TOKEN';
 const PRESS_KEYS = 'main/PRESS_KEYS';
 const UNPRESS_KEYS = 'main/UNPRESS_KEYS';
 const UPDATE_START_VARIABLES = 'main/UPDATE_START_VARIABLES';
@@ -19,6 +18,7 @@ const UNPRESS_WRONG_KEYS = 'main/UNPRESS_WRONG_KEYS';
 const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
 const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
+const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
 
 const initialState = Immutable.Map({
   keyboard: 'US',
@@ -44,14 +44,11 @@ const initialState = Immutable.Map({
   // text, learning
   mode: 'text',
 
-  bearerToken: false,
+  globalMessage: 'Test',
 });
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case SET_BEARER_TOKEN:
-      return state.set('bearerToken', action.token);
-
     case PRESS_KEYS:
       return state.update('pressedKeys', keys => keys.union(action.ids));
 
@@ -92,15 +89,13 @@ export default (state = initialState, action = {}) => {
         keys: Immutable.List(_.find(keyboards, { name: action.name }).keys),
       });
 
+    case SET_GLOBAL_MESSAGE:
+      return state.set('globalMessage', action.message);
+
     default:
       return state;
   }
 };
-
-export const setBearerToken = token => ({
-  type: SET_BEARER_TOKEN,
-  token,
-});
 
 export const setMode = mode => ({
   type: SET_MODE,
@@ -153,6 +148,11 @@ export const addSuccesType = () => ({
 
 export const addErrorType = () => ({
   type: ADD_ERROR_TYPE,
+});
+
+export const setGlobalMessage = message => ({
+  type: SET_GLOBAL_MESSAGE,
+  message,
 });
 
 export function typeChar(char) {

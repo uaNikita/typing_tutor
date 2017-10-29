@@ -4,13 +4,22 @@ import CSSModules from 'react-css-modules';
 
 import styles from './global-message.module.styl';
 
-const GlobalMessage = ({ message }) => (
+import './global-message.styl';
+
+const GlobalMessage = ({ message, close }) => (
   <TransitionGroup>
     {message ? <CSSTransition
-      classNames="modal"
+      key={message}
+      classNames="global-message"
       timeout={250}>
       <div styleName="root">
-        {message}
+        <div styleName="content">
+          <i styleName="icon" className="fa fa-bullhorn" />
+
+          {message}
+
+          <i onClick={close}>close</i>
+        </div>
       </div>
     </CSSTransition> : null}
   </TransitionGroup>

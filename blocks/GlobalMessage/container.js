@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
 
-import { typeChar } from 'ReduxUtils/modules/main';
+import { setGlobalMessage } from 'ReduxUtils/modules/main';
 import Component from './component.jsx';
 
 const mapStateToProps = state => ({
-  message: state.getIn(['user', 'email']),
+  message: state.getIn(['main', 'globalMessage']),
 });
 
 const mapDispatchToProps = dispatch => ({
-  close: char => dispatch(typeChar(char)),
+  close: () => dispatch(setGlobalMessage('')),
 });
 
 export default connect(
