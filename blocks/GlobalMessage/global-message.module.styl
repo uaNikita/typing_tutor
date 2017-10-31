@@ -11,12 +11,17 @@
       .icon, .close
          transform: scale(0)
          transition transform --globalMessageAnimationTime linear --globalMessageAnimationTimeDelay
+      .progress
+         width 0
+
       &_active
          transform: translateY(0);
          .content
             opacity: 1;
          .icon, .close
             transform: scale(1)
+         .progress
+            width 100%
    &-exit
       transform: translateY(0);
       transition transform --globalMessageAnimationTime linear
@@ -53,3 +58,14 @@
    text-align: center;
    border-bottom: none
    color: #fff;
+.progress
+   width 0
+   height: 4px
+   position: absolute;
+   bottom: 0
+   left: 0
+   background: rgba(255, 255, 255, .5)
+   transition width 5s linear
+.entered
+   .progress
+      width 100%
