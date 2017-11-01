@@ -1,0 +1,14 @@
+--globalMessageAnimationTime = .3s
+
+.animation
+   &-enter
+      transform: translateY(-100%);
+      transition transform --globalMessageAnimationTime linear
+      &_active
+         transform: translateY(0);
+         z-index:1;
+   &-exit
+      transform: translateY(0);
+      transition transform --globalMessageAnimationTime linear
+      &_active
+         transform: translateY(-100%);

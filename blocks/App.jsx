@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
 
-import GlobalMessage from 'Blocks/GlobalMessage/container';
+import GlobalMessageTransitionGroup from 'Blocks/GlobalMessageTransitionGroup/container';
 import Modal from 'Blocks/Modal/component.jsx';
 import VerifyPage from 'Blocks/VerifyPage/container';
 import Authorization from 'Blocks/Authorization/component.jsx';
@@ -83,7 +83,7 @@ class App extends Component {
         <script type="text/javascript" defer src="/main.js" />
       </Helmet>,
       <div key="content" className={layoutClass}>
-        <GlobalMessage />
+        <GlobalMessageTransitionGroup />
 
         <div className="layout__content">
           <Switch key="switch" location={isModal ? lastNoModalLocation : location}>

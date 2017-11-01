@@ -35,14 +35,6 @@ class Home extends Component {
     this.home.addEventListener('keydown', this.keyDownHandler);
     this.home.addEventListener('keypress', this.keyPressHandler);
 
-
-    let c = 1;
-
-    this.home.addEventListener('click', () => {
-      c += 1;
-      this.props.setGlobalMessage('test test test test test test test test test test ' + c);
-    });
-
     this.props.updateStartVariables();
   }
 

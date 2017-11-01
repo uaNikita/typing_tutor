@@ -1,0 +1,48 @@
+.root
+   position: fixed;
+   top: 0
+   left: 0
+   right: 0
+   background-color: green;
+.content
+   max-width: 1200px;
+   min-width: 770px
+   display: flex
+   align-items: center;
+   position: relative;
+   margin-left: auto;
+   margin-right: @margin-left;
+   padding: 15px 35px
+   color: #fff
+   opacity: 0;
+   transition opacity .3s linear
+.icon, .close
+   width: 30px;
+   font-size: @width;
+   line-height: @width;
+   transition transform .3s linear
+.icon
+   margin-right: 15px
+   transform: scale(0)
+.close
+   position: absolute;
+   top: 13px;
+   right: 35px;
+   text-align: center;
+   border-bottom: none
+   color: #fff;
+.progress
+   width 0
+   height: 4px
+   position: absolute;
+   bottom: 0
+   left: 0
+   background: rgba(255, 255, 255, .5)
+   transition width 5s linear .1s
+   &.entered
+      width 100%
+.entered
+   opacity: 1
+   .icon, .close
+      transform: scale(1)
+      
