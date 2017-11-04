@@ -1,6 +1,5 @@
 import React from 'react';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
-import CSSModules from 'react-css-modules';
 
 import GlobalMessage from './GlobalMessage/container';
 import styles from './global-message-transition-group.module.styl';
@@ -24,4 +23,4 @@ const GlobalMessageTransitionGroup = ({ message }) => (
   </TransitionGroup>
 );
 
-export default CSSModules(GlobalMessageTransitionGroup, styles);
+export default GlobalMessageTransitionGroup;

@@ -45,7 +45,7 @@ class Registration extends Component {
           label="Email"
         />
 
-        <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
+        <Button type="submit" disabled={invalid} isLoader={submitting}>Sign up</Button>
 
         <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/auth/login', state }}>Log in now</Link></p>
       </form>

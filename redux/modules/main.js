@@ -44,7 +44,7 @@ const initialState = Immutable.Map({
   // text, learning
   mode: 'text',
 
-  globalMessage: 'Test',
+  globalMessage: false,
 });
 
 export default (state = initialState, action = {}) => {

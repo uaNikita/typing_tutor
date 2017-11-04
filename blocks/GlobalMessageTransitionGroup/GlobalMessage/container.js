@@ -8,7 +8,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  close: () => dispatch(setGlobalMessage('')),
+  close: () => dispatch(setGlobalMessage(false)),
 });
 
 export default connect(

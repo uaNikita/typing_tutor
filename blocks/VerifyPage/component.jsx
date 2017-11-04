@@ -66,6 +66,8 @@ class Block extends Component {
 
     return (
       <div styleName="root">
+        <Link to="/" styleName="home-link">TouchToType</Link>
+
         {verified ? redirect : <Loader size="60" />}
       </div>
     );

@@ -82,29 +82,36 @@ class App extends Component {
         <link rel="stylesheet" type="text/css" href="/main.css" />
         <script type="text/javascript" defer src="/main.js" />
       </Helmet>,
-      <div key="content" className={layoutClass}>
+      <div className={layoutClass}>
         <GlobalMessageTransitionGroup />
 
-        <div className="layout__content">
-          <Switch key="switch" location={isModal ? lastNoModalLocation : location}>
-            <Route path="/verify" component={VerifyPage} />
-            <Route path="/auth" component={Authorization} />
-            <Route exact path="/" component={Home} />
-            <Route
-              path="/"
-              render={() => [
-                <Menu key="menu" />,
-                <Switch key="switch">
-                  <Route key="learning-mode" path="/learning-mode" component={LearningMode} />
-                  <Route key="text-mode" path="/text-mode" component={TextMode} />
-                  <Route key="settings" path="/settings" component={SettingsPages} />
-                  <Route key="profile" path="/profile" component={ProfilePage} />
-                </Switch>,
-              ]} />
-          </Switch>
+        <Switch key="content">
+          <Route path="/verify" component={VerifyPage} />
 
-          <Footer />
-        </div>
+          <Route
+            path="/"
+            render={() => (
+              <div className="layout__content">
+                <Switch key="switch" location={isModal ? lastNoModalLocation : location}>
+                  <Route path="/auth" component={Authorization} />
+                  <Route exact path="/" component={Home} />
+                  <Route
+                    path="/"
+                    render={() => [
+                      <Menu key="menu" />,
+                      <Switch key="switch">
+                        <Route key="learning-mode" path="/learning-mode" component={LearningMode} />
+                        <Route key="text-mode" path="/text-mode" component={TextMode} />
+                        <Route key="settings" path="/settings" component={SettingsPages} />
+                        <Route key="profile" path="/profile" component={ProfilePage} />
+                      </Switch>,
+                    ]} />
+                </Switch>
+
+                <Footer />
+              </div>
+            )} />
+        </Switch>
 
         <TransitionGroup>
           {isModal ? <CSSTransition
