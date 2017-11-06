@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const APIError = require('../utils/APIError');
 
 const VerificationSchema = new mongoose.Schema({
   user: {
@@ -22,6 +23,7 @@ const VerificationSchema = new mongoose.Schema({
 VerificationSchema.statics = {
   findByToken(token) {
     return this.findOne({ token })
+      .populate('user')
       .exec()
       .then(verification => {
         if (verification) {

@@ -16,13 +16,9 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: true,
-    minlength: [5, '`{PATH}` exceeds the minimum allowed length (5).'],
-    maxlength: [20, '`{PATH} exceeds the maximum allowed length (20).']
   },
   newPassword: {
     type: String,
-    minlength: [5, '`{PATH}` exceeds the minimum allowed length (5).'],
-    maxlength: [20, '`{PATH} exceeds the maximum allowed length (20).']
   },
   active: {
     type: Boolean,

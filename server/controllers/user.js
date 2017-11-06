@@ -52,7 +52,7 @@ const register = (req, res, next) => {
       });
 
       const verification = new Verification({
-        user: user.get('id'),
+        user,
         type: 'email',
       });
 
@@ -137,7 +137,7 @@ const restoreAccess = (req, res, next) => {
       user.password = password;
 
       const verification = new Verification({
-        user: user.get('id'),
+        user,
         type: 'email',
       });
 
@@ -265,9 +265,10 @@ const getUserData = (req, res, next) =>
     })
     .catch(e => next(e));
 
-const verifyToken = (req, res, next) => {
+const verifyToken = (req, res, next) =>
   Verification.findByToken(req.body.token)
     .then(verification => {
+
       const type = verification.get('type');
       const user = verification.get('user');
 
@@ -285,7 +286,7 @@ const verifyToken = (req, res, next) => {
         .then(() => res.json(type));
     })
     .catch(e => next(e));
-};
+
 
 module.exports = {
   register,

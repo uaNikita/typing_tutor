@@ -11,6 +11,4 @@ router.post('/user', authenticate, user.getUserData);
 
 router.post('/protected-route', authenticate, user.getTokens);
 
-router.post('/verify-token', user.verifyToken);
-
 module.exports = router;

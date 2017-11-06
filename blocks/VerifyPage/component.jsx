@@ -25,12 +25,12 @@ class Block extends Component {
     const token = new URLSearchParams(search.slice(1)).get('token');
 
     if (token) {
-      fetchJSON('/verify-token', {
+      fetchJSON('/auth/verify-token', {
         body: {
           token,
         },
       })
-        .then(({ type }) => this.setState({
+        .then(type => this.setState({
           verified: type,
         }))
         .catch(() => {});
@@ -56,12 +56,12 @@ class Block extends Component {
     }
 
     const redirect = ([
-      <p>
+      <p key="text">
         Thank you,
         <br />
         {text}
       </p>,
-      <Link className="buttom" to="/">Continue</Link>,
+      <Link key="link" className="buttom" to="/">Continue</Link>,
     ]);
 
     return (
