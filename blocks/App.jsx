@@ -82,7 +82,8 @@ class App extends Component {
         <link rel="stylesheet" type="text/css" href="/main.css" />
         <script type="text/javascript" defer src="/main.js" />
       </Helmet>,
-      <div className={layoutClass}>
+
+      <div key="layout" className={layoutClass}>
         <GlobalMessageTransitionGroup />
 
         <Switch key="content">

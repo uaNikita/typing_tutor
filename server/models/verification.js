@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const httpStatus = require('http-status');
 const APIError = require('../utils/APIError');
 
 const VerificationSchema = new mongoose.Schema({

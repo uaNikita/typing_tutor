@@ -16,7 +16,6 @@ export default (state = initialState, action = {}) => {
     case SET_EMAIL:
       return state.set('email', action.email);
 
-
     case SET_NAME:
       return state.set('name', action.name);
 

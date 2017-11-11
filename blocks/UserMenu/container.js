@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { setEmail, setBearerToken, setAccessToken } from 'ReduxUtils/modules/user';
+import { setEmail } from 'ReduxUtils/modules/user';
+import { setRefreshToken, setAccessToken } from 'ReduxUtils/modules/fetch';
 import Component from './component.jsx';
 
 const mapStateToProps = state => {
@@ -14,7 +15,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   logout() {
     dispatch(setEmail(false));
-    dispatch(setBearerToken(false));
+    dispatch(setRefreshToken(false));
     dispatch(setAccessToken(false));
   },
 });

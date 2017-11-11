@@ -7,7 +7,7 @@ import Loader from '../Loader/component.jsx';
 
 import styles from './verify-page.module.styl';
 
-class Block extends Component {
+class VerifyPage extends Component {
   state = {
     verified: false,
   }
@@ -56,7 +56,7 @@ class Block extends Component {
     }
 
     const redirect = ([
-      <p key="text">
+      <p key="text" styleName="text">
         Thank you,
         <br />
         {text}
@@ -66,12 +66,12 @@ class Block extends Component {
 
     return (
       <div styleName="root">
-        <Link to="/" styleName="home-link">TouchToType</Link>
+        <Link key="home-link" to="/" styleName="home-link">TouchToType</Link>
 
-        {verified ? redirect : <Loader size="60" />}
+        {verified ? redirect : <Loader key="loader" size="60" />}
       </div>
     );
   }
 }
 
-export default CSSModules(Block, styles);
+export default CSSModules(VerifyPage, styles);

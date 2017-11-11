@@ -191,7 +191,7 @@ const login = (req, res, next) => {
           res.json({
             refresh: client.get('token'),
             access: access.get('token'),
-            ...user,
+            ...user.toObject(),
           });
         });
     })
@@ -268,7 +268,6 @@ const getUserData = (req, res, next) =>
 const verifyToken = (req, res, next) =>
   Verification.findByToken(req.body.token)
     .then(verification => {
-
       const type = verification.get('type');
       const user = verification.get('user');
 
