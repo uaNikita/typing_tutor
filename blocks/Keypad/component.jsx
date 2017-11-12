@@ -33,7 +33,7 @@ const KeyPad = props => {
       'keypad__to-type': needToType,
     });
 
-    let finger = obj.finger;
+    let { finger } = obj;
 
     if (finger === 'index') {
       finger = `${obj.hand}-${finger}`;

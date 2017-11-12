@@ -22,10 +22,15 @@ class ChangePassword extends Component {
 
   render() {
     const {
-      handleSubmit,
-      submitting,
-      invalid,
-    } = this.props;
+      props: {
+        handleSubmit,
+        submitting,
+        invalid,
+      },
+      state: {
+        submitted,
+      },
+    } = this;
 
     return (
       <form styleName="root" onSubmit={handleSubmit(this.handleSubmit)}>
@@ -42,6 +47,8 @@ class ChangePassword extends Component {
           isLoader={submitting}>
           Update password
         </Button>
+
+        {submitted ? 1 : ''}
       </form>
     );
   }

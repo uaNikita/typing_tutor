@@ -41,16 +41,14 @@ class Metronome extends Component {
     }
   }
 
-  onClickHandler = e => {
-    e.preventDefault();
-
+  onClickHandler = () => {
     this.setState({
       status: !this.state.status,
     });
   };
 
   playFromBegin() {
-    const audio = this.audio;
+    const { audio } = this;
 
     audio.pause();
 
@@ -93,7 +91,7 @@ class Metronome extends Component {
 
     return (
       <div className="metronome">
-        <a href="" className={btnClass} onClick={this.onClickHandler} />
+        <button className={btnClass} onClick={this.onClickHandler} />
 
         <div className="metronome__range-wrap">
           <h5 className="metronome__title">Volume</h5>

@@ -115,19 +115,21 @@ class App extends Component {
         </Switch>
 
         <TransitionGroup>
-          {isModal ? <CSSTransition
-            key={location.key}
-            classNames="modal"
-            timeout={250}>
-            <Route
-              location={location}
-              path="/auth"
-              render={() => (
-                <Modal onClose={this.handlerClose}>
-                  <Authorization />
-                </Modal>
-              )} />
-          </CSSTransition> : null}
+          {isModal ?
+            <CSSTransition
+              key={location.key}
+              classNames="modal"
+              timeout={250}>
+              <Route
+                location={location}
+                path="/auth"
+                render={() => (
+                  <Modal onClose={this.handlerClose}>
+                    <Authorization />
+                  </Modal>
+                )} />
+            </CSSTransition>
+            : null}
         </TransitionGroup>
       </div>,
     ];

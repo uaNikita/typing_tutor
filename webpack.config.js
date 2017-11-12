@@ -5,7 +5,6 @@ var _ = require('lodash');
 var webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var OpenBrowserPlugin = require('open-browser-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
 var isProduction = process.env.WEBPACK_ENV === 'production' ? true : false;
@@ -64,7 +63,6 @@ let clientConfig = {
     new webpack.DefinePlugin({
       BROWSER: true,
     }),
-    isProduction ? () => {} : new OpenBrowserPlugin({ url: 'http://localhost:5550' }),
   ],
 
   // Options affecting the normal modules
@@ -85,7 +83,6 @@ let clientConfig = {
       {
         test: /^((?!module).)+styl/,
         loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
           use: [
             {
               loader: 'css-loader',
@@ -101,7 +98,6 @@ let clientConfig = {
       {
         test: /module\.styl$/,
         use: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
           use: [
             {
               loader: 'css-loader',
@@ -118,7 +114,6 @@ let clientConfig = {
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract({
-          fallback: 'style-loader',
           use: 'css-loader'
         })
       },

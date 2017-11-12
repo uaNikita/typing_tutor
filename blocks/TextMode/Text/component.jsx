@@ -20,7 +20,7 @@ class Texts extends Component {
     let refresh;
 
     if (typed) {
-      refresh = <a href="" onClick={() => refreshText(id)} className="text__reload fa fa-refresh" />;
+      refresh = <button onClick={() => refreshText(id)} className="text__reload fa fa-refresh" />;
     }
 
     let select;

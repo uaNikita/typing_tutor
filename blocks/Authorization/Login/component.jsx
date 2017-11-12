@@ -85,7 +85,9 @@ class Login extends Component {
         <p className="auth__fp-wrap">
           <Link
             to={{ pathname: '/auth/restore-access', state }}
-            className="auth__fp">Restore access?</Link>
+            className="auth__fp">
+            Restore access?
+          </Link>
         </p>
 
         <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
@@ -98,14 +100,18 @@ class Login extends Component {
 
     if (this.state.submittedVerifyLink) {
       content = (
-        <p>You’ve got mail, <br />
-          Please click the link in the email we just sent you so we can verify your account.</p>
+        <p>
+          You’ve got mail, <br />
+          Please click the link in the email we just sent you so we can verify your account.
+        </p>
       );
     }
     else if (this.state.accountIsNotActive) {
       content = [
-        <p key="email-not-verified">Your account email is not verified, <br />
-          Please click the link bellow and we will send you a link to verify email.</p>,
+        <p key="email-not-verified">
+          Your account email is not verified, <br />
+          Please click the link bellow and we will send you a link to verify email.
+        </p>,
         <button key="verify-link" className="button" onClick={this.handleSendVerifyLink}>Send verify link</button>,
       ];
     }

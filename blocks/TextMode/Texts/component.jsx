@@ -8,7 +8,7 @@ import Switcher from '../../Switcher.jsx';
 class Texts extends Component {
   onSwitcherChange = () => {
     this.props.setMode('text');
-  }
+  };
 
   onHandleTextClick(textId, e) {
     if (e.target.nodeName.toLowerCase() === 'a') {
@@ -46,12 +46,12 @@ class Texts extends Component {
     let addTextLink;
 
     if (texts.length < 10) {
-      addTextLink = <Link to={'/settings/text-mode/add-text'}>Add new text</Link>;
+      addTextLink = <Link to="/settings/text-mode/add-text">Add new text</Link>;
     }
 
     const textEls = texts.map(obj => {
       const clsN = 'settings-text__text';
-      const textId = obj.textId;
+      const { textId } = obj;
 
       const props = {
         id: textId,

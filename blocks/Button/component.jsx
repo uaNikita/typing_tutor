@@ -6,7 +6,12 @@ import Loader from '../Loader/component.jsx';
 
 import styles from './button.module.styl';
 
-const Button = ({ className, children, isLoader, ...rest }) => (
+const Button = ({
+  className,
+  children,
+  isLoader,
+  ...rest
+}) => (
   <button
     className={classNames('button', className)}
     styleName={classNames('button', {

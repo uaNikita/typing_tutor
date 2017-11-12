@@ -1,28 +1,16 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { withRouter } from 'react-router-dom';
 
 import './modal.styl';
 
-class Modal extends Component {
-  handlerClose = e => {
-    e.preventDefault();
-
-    this.props.onClose();
-  };
-
-  render() {
-    const { children, onClose } = this.props;
-
-    return (
-      <div className="modal">
-        <div className="modal__overlay" onClick={onClose} />
-        <div className="modal__content">
-          <a href="" className="modal__close fa fa-times" onClick={this.handlerClose} />
-          {children}
-        </div>
-      </div>
-    );
-  }
-}
+const Modal = ({ children, onClose }) => (
+  <div className="modal">
+    <div className="modal__overlay" onClick={onClose} />
+    <div className="modal__content">
+      <button className="modal__close fa fa-times" onClick={onClose} />
+      {children}
+    </div>
+  </div>
+);
 
 export default withRouter(Modal);

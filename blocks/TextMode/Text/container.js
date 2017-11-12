@@ -18,16 +18,14 @@ const mapStateToProps = (state, ownProps) => {
   };
 };
 
-const mapDispatchToProps = dispatch => (
-  {
-    selectText: textId => {
-      dispatch(selectText(textId));
-    },
-    refreshText: textId => {
-      dispatch(refreshText(textId));
-    },
-  }
-);
+const mapDispatchToProps = dispatch => ({
+  selectText: textId => {
+    dispatch(selectText(textId));
+  },
+  refreshText: textId => {
+    dispatch(refreshText(textId));
+  },
+});
 
 export default connect(
   mapStateToProps,

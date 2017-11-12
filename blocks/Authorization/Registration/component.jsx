@@ -53,8 +53,10 @@ class Registration extends Component {
 
     if (this.state.submitted) {
       content = (
-        <p>You’ve got mail, <br />
-          Please click the link in the email we just sent you so we can verify your account.</p>
+        <p>
+          You’ve got mail, <br />
+          Please click the link in the email we just sent you so we can verify your account.
+        </p>
       );
     }
 

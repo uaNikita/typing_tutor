@@ -14,14 +14,12 @@ class UserMenu extends Component {
     this.props.openModal('Registration');
   };
 
-  handleLogout = e => {
-    e.preventDefault();
-
-    this.props.logout();
-  };
-
   render() {
-    const { email, name } = this.props;
+    const {
+      email,
+      name,
+      logout,
+    } = this.props;
 
     let content = (
       <div>
@@ -34,7 +32,7 @@ class UserMenu extends Component {
     if (email) {
       content = (
         <div className="user-menu">
-          {name || email} - <a href="" onClick={this.handleLogout}>Log out</a>
+          {name || email} - <button onClick={logout}>Log out</button>
         </div>
       );
     }

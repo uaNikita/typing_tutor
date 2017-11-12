@@ -87,7 +87,7 @@ class LearningFingers extends Component {
         className = classNames(className, 'keyboard__key_disabled');
       }
 
-      let finger = obj.finger;
+      let { finger } = obj;
 
       if (finger === 'index') {
         finger = `${obj.hand}-${finger}`;

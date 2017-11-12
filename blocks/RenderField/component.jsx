@@ -9,9 +9,7 @@ class RenderField extends Component {
     showPassword: false,
   };
 
-  passwordHandleClick = e => {
-    e.preventDefault();
-
+  passwordHandleClick = () => {
     this.setState({
       showPassword: !this.state.showPassword,
     });
@@ -77,7 +75,7 @@ class RenderField extends Component {
 
       control = [
         <input key="input" {...controlProps} />,
-        <a href="" key="eye" className={eyeClassName} onClick={this.passwordHandleClick} />,
+        <button key="eye" className={eyeClassName} onClick={this.passwordHandleClick} />,
       ];
     }
 

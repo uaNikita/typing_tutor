@@ -26,16 +26,11 @@ class GlobalMessage extends Component {
     }, 5300);
   }
 
-  handleClose = e => {
-    e.preventDefault();
-
-    this.props.close();
-  };
-
   render() {
     const {
       props: {
         message,
+        close,
       },
       state: {
         entered,
@@ -47,7 +42,7 @@ class GlobalMessage extends Component {
         <div styleName={classNames('content', { entered })}>
           <i styleName="icon" className="fa fa-bullhorn" />
           {message}
-          <a href="" onClick={this.handleClose} className="fa fa-times" styleName="close" />
+          <button onClick={close} className="fa fa-times" styleName="close" />
         </div>
         <div styleName={classNames('progress', { entered })} />
       </div>

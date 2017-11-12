@@ -10,6 +10,4 @@ const initialState = Immutable.fromJS(window.PRELOADED_STATE);
 delete window.PRELOADED_STATE;
 
 // Create Redux store with initial state
-export default createStore(reducer, initialState, applyMiddleware(
-  thunk,
-));
+export default createStore(reducer, initialState, applyMiddleware(thunk));
