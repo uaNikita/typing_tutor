@@ -2,6 +2,7 @@ import Immutable from 'immutable';
 
 import { fetchJSON } from './fetch';
 
+const SET_DATA = 'user/SET_DATA';
 const SET_EMAIL = 'user/SET_EMAIL';
 const SET_NAME = 'user/SET_NAME';
 
@@ -13,6 +14,9 @@ const initialState = Immutable.Map({
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
+    case SET_DATA:
+      return state.merge(action.data);
+
     case SET_EMAIL:
       return state.set('email', action.email);
 
@@ -23,6 +27,11 @@ export default (state = initialState, action = {}) => {
       return state;
   }
 };
+
+export const setData = data => ({
+  type: SET_DATA,
+  data,
+});
 
 export const setEmail = email => ({
   type: SET_EMAIL,

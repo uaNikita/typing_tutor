@@ -10,12 +10,13 @@ import styles from './verify-page.module.styl';
 class VerifyPage extends Component {
   state = {
     verified: false,
-  }
+  };
 
   componentDidMount() {
     const {
       props: {
         fetchJSON,
+        setAllData,
         location: {
           search,
         },
@@ -31,7 +32,7 @@ class VerifyPage extends Component {
         },
       })
         .then(data => {
-          console.log(data);
+          setAllData(data);
 
           this.setState({
             verified: data.type,

@@ -3,6 +3,7 @@ import _ from 'lodash';
 
 import keyboards from '../../constants/keyboards';
 
+import { setData as setUserData } from './user';
 import { typeTextMode } from './text-mode';
 import { typeLearningMode } from './learning-mode';
 import { getIdsFromCharacter } from '../../utils';
@@ -19,7 +20,7 @@ const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
 const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
 const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
-// const SET_USER_DATA = 'main/SET_USER_DATA';
+const SET_DATA = 'main/SET_DATA';
 
 const initialState = Immutable.Map({
   keyboard: 'US',
@@ -50,6 +51,9 @@ const initialState = Immutable.Map({
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
+    case SET_DATA:
+      return state.merge(action.data);
+
     case PRESS_KEYS:
       return state.update('pressedKeys', keys => keys.union(action.ids));
 
@@ -97,6 +101,11 @@ export default (state = initialState, action = {}) => {
       return state;
   }
 };
+
+export const setData = data => ({
+  type: SET_DATA,
+  data,
+});
 
 export const setMode = mode => ({
   type: SET_MODE,
@@ -181,3 +190,7 @@ export function typeChar(char) {
     }
   };
 }
+
+export const setAllData = data => dispatch => {
+  dispatch(setUserData(data));
+};
