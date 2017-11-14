@@ -19,6 +19,7 @@ const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
 const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
 const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
+// const SET_USER_DATA = 'main/SET_USER_DATA';
 
 const initialState = Immutable.Map({
   keyboard: 'US',

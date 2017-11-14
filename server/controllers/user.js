@@ -281,11 +281,12 @@ const verifyToken = (req, res, next) =>
           break;
       }
 
-      return Promise.all([user.save(), verification.remove().exec()])
-        .then(() => {
-
-
+      return Promise.all([...createClient(user.get('id')), user.save(),
+        // verification.remove().exec()
+      ])
+        .then(([client, access]) => {
           res.json({
+            type,
             refresh: client.get('token'),
             access: access.get('token'),
             ...user.toObject(),

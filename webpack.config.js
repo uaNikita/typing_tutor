@@ -10,7 +10,6 @@ var CopyWebpackPlugin = require('copy-webpack-plugin');
 var isProduction = process.env.WEBPACK_ENV === 'production' ? true : false;
 
 const commonConfig = {
-
   resolve: {
     alias: {
       ReduxUtils: path.resolve(__dirname, 'redux/'),
@@ -26,7 +25,6 @@ const commonConfig = {
   watchOptions: {
     aggregateTimeout: 100
   }
-
 };
 
 const restCssLoders = [

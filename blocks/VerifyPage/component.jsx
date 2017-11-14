@@ -30,9 +30,13 @@ class VerifyPage extends Component {
           token,
         },
       })
-        .then(type => this.setState({
-          verified: type,
-        }))
+        .then(data => {
+          console.log(data);
+
+          this.setState({
+            verified: data.type,
+          });
+        })
         .catch(() => {});
     }
   }
