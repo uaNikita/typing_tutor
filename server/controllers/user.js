@@ -282,7 +282,15 @@ const verifyToken = (req, res, next) =>
       }
 
       return Promise.all([user.save(), verification.remove().exec()])
-        .then(() => res.json(type));
+        .then(() => {
+
+
+          res.json({
+            refresh: client.get('token'),
+            access: access.get('token'),
+            ...user.toObject(),
+          });
+        });
     })
     .catch(e => next(e));
 
