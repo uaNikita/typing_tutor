@@ -5,30 +5,8 @@ const httpStatus = require('http-status');
 const APIError = require('../utils/APIError');
 
 const UserSchema = new mongoose.Schema({
-  email: {
-    type: String,
-    required: true,
-    match: [
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-      '{PATH} is not a valid'
-    ]
-  },
-  password: {
-    type: String,
-    required: true,
-  },
-  newPassword: {
-    type: String,
-  },
-  active: {
-    type: Boolean,
-    default: false,
-  },
-  name: {
-    type: String,
-  },
-  profile:{
-    name:String,
+  profile: {
+    name: String,
     email: {
       type: String,
       required: true,
@@ -37,7 +15,18 @@ const UserSchema = new mongoose.Schema({
         '{PATH} is not a valid'
       ]
     },
-  }
+    password: {
+      type: String,
+      required: true,
+    },
+  },
+  newPassword: {
+    type: String,
+  },
+  active: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 UserSchema.set('toObject', {
@@ -86,7 +75,7 @@ UserSchema.methods.getLearningMode = (candidatePassword, cb) => {};
  */
 UserSchema.statics = {
   isNotExist(email) {
-    return this.findOne({ email }).exec().then(user => {
+    return this.findOne({ profile: { email } }).exec().then(user => {
       if (user) {
         const err = new APIError({
           errors: {
@@ -104,7 +93,7 @@ UserSchema.statics = {
   },
 
   findByEmail(email) {
-    return this.findOne({ email })
+    return this.findOne({ profile: { email } })
       .exec()
       .then(user => {
         if (user) {

@@ -192,5 +192,5 @@ export function typeChar(char) {
 }
 
 export const setAllData = data => dispatch => {
-  dispatch(setUserData(data));
+  dispatch(setUserData(data.profile));
 };

@@ -47,8 +47,10 @@ const register = (req, res, next) => {
       const password = getRandomPassword();
 
       const user = new User({
-        email,
-        password,
+        profile: {
+          email,
+          password,
+        }
       });
 
       const verification = new Verification({
@@ -254,17 +256,6 @@ const checkEmail = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const getUserData = (req, res, next) =>
-  User.get(req.user.id)
-    .then(({ email, name }) => {
-      let response = { email };
-
-      _.assign(response, name && { name });
-
-      res.json(response);
-    })
-    .catch(e => next(e));
-
 const verifyToken = (req, res, next) =>
   Verification.findByToken(req.body.token)
     .then(verification => {
@@ -304,6 +295,5 @@ module.exports = {
   logout,
   getTokens,
   checkEmail,
-  getUserData,
   verifyToken,
 };
