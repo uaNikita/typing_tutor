@@ -1,7 +1,5 @@
 import Immutable from 'immutable';
 
-import { fetchJSON } from './fetch';
-
 const SET_DATA = 'user/SET_DATA';
 const SET_EMAIL = 'user/SET_EMAIL';
 const SET_NAME = 'user/SET_NAME';
@@ -43,13 +41,3 @@ export const setName = name => ({
   name,
 });
 
-export const getUserData = () =>
-  dispatch =>
-    dispatch(fetchJSON('/user'))
-      .then(({ email, name }) => {
-        dispatch(setEmail(email));
-
-        if (name) {
-          dispatch(setName(name));
-        }
-      });

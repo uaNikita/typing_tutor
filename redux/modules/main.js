@@ -3,7 +3,9 @@ import _ from 'lodash';
 
 import keyboards from '../../constants/keyboards';
 
+import { fetchJSON, setData as setFetchData } from './fetch';
 import { setData as setUserData } from './user';
+
 import { typeTextMode } from './text-mode';
 import { typeLearningMode } from './learning-mode';
 import { getIdsFromCharacter } from '../../utils';
@@ -192,5 +194,16 @@ export function typeChar(char) {
 }
 
 export const setAllData = data => dispatch => {
+  // todo: plase server set tokens here
+
+  if (data.tokens) {
+    dispatch(setFetchData(data.tokens));
+  }
+
   dispatch(setUserData(data.profile));
 };
+
+export const requestAllData = () =>
+  dispatch =>
+    dispatch(fetchJSON('/user'))
+      .then(data => dispatch(setAllData(data)));

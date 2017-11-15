@@ -7,7 +7,7 @@ const SET_REFRESH_TOKEN = 'fetch/SET_REFRESH_TOKEN';
 const SET_ACCESS_TOKEN = 'fetch/SET_ACCESS_TOKEN';
 
 const initialState = Immutable.Map({
-  bearerToken: false,
+  refreshToken: false,
 
   accessToken: false,
 });
@@ -48,6 +48,11 @@ export const setAccessToken = token => {
     type: SET_ACCESS_TOKEN,
     token,
   };
+};
+
+export const setData = ({ refresh, access }) => dispatch => {
+  dispatch(setRefreshToken(refresh));
+  dispatch(setAccessToken(access));
 };
 
 const parseResponse = response => {
@@ -111,7 +116,7 @@ export const fetchJSON =
           if (error.status === 401) {
             promise = dispatch(requestJSON('/auth/tokens', {
               headers: {
-                Authorization: `Bearer ${getState().getIn(['fetch', 'bearerToken'])}`,
+                Authorization: `Bearer ${getState().getIn(['fetch', 'refreshToken'])}`,
               },
             }))
               .then(({ refresh, access }) => {

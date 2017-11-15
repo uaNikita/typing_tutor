@@ -17,7 +17,7 @@ const {
   reducer,
   setRefreshToken,
   setAccessToken,
-  getUserData
+  requestAllData
 } = require('../dist/compiledServer');
 
 process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
@@ -83,6 +83,9 @@ app.use((req, res) => {
   
   const { tt_refresh, tt_access } = req.cookies;
 
+  // console.log('tt_refresh', tt_refresh);
+  // console.log('tt_access', tt_access);
+
   if (tt_refresh) {
     dispatch(setRefreshToken(tt_refresh));
 
@@ -90,7 +93,7 @@ app.use((req, res) => {
       dispatch(setAccessToken(tt_access));
     }
 
-    dispatch(getUserData())
+    dispatch(requestAllData())
       .then(sendRes)
       .catch(() => {
         res.clearCookie('tt_refresh');

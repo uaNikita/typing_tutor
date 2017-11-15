@@ -191,8 +191,10 @@ const login = (req, res, next) => {
       return Promise.all([...createClient(user.get('id'))])
         .then(([client, access]) => {
           res.json({
-            refresh: client.get('token'),
-            access: access.get('token'),
+            tokens:{
+              refresh: client.get('token'),
+              access: access.get('token'),
+            },
             ...user.toObject(),
           });
         });
@@ -256,6 +258,11 @@ const checkEmail = (req, res, next) => {
     .catch(e => next(e));
 };
 
+const getUserData = (req, res, next) =>
+  User.get(req.user.id)
+    .then((user) => res.json(user.toObject()))
+    .catch(e => next(e));
+
 const verifyToken = (req, res, next) =>
   Verification.findByToken(req.body.token)
     .then(verification => {
@@ -278,8 +285,10 @@ const verifyToken = (req, res, next) =>
         .then(([client, access]) => {
           res.json({
             type,
-            refresh: client.get('token'),
-            access: access.get('token'),
+            tokens:{
+              refresh: client.get('token'),
+              access: access.get('token'),
+            },
             ...user.toObject(),
           });
         });
@@ -295,5 +304,6 @@ module.exports = {
   logout,
   getTokens,
   checkEmail,
+  getUserData,
   verifyToken,
 };
