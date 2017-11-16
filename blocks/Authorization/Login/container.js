@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { fetchJSON, setRefreshToken, setAccessToken } from 'ReduxUtils/modules/fetch';
-import { setEmail } from 'ReduxUtils/modules/user';
+import { setAllData } from 'ReduxUtils/modules/main';
 import Component from './component.jsx';
 
 const mapStateToProps = state => ({
@@ -8,10 +8,14 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setRefreshToken: token => dispatch(setRefreshToken(token)),
-  setAccessToken: token => dispatch(setAccessToken(token)),
-  setEmail: email => dispatch(setEmail(email)),
   fetchJSON: (...args) => dispatch(fetchJSON(...args)),
+  setData: ({ tokens: { refresh, access }, ...rest }) => {
+    dispatch(setRefreshToken(refresh));
+
+    dispatch(setAccessToken(access));
+
+    dispatch(setAllData(rest));
+  },
 });
 
 export default connect(

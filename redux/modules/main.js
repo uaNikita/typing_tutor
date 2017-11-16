@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import keyboards from '../../constants/keyboards';
 
-import { fetchJSON, setData as setFetchData } from './fetch';
+import { fetchJSON } from './fetch';
 import { setData as setUserData } from './user';
 
 import { typeTextMode } from './text-mode';
@@ -167,38 +167,34 @@ export const setGlobalMessage = message => ({
   message,
 });
 
-export function typeChar(char) {
-  return (dispatch, getState) => {
-    const state = getState();
+export const typeChar = char => (dispatch, getState) => {
+  const state = getState();
 
-    const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
+  const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
-    dispatch(pressKeys(idsChar));
+  dispatch(pressKeys(idsChar));
 
-    // unpress keys
-    setTimeout(() => {
-      dispatch(unPressKeys(idsChar));
+  // unpress keys
+  setTimeout(() => {
+    dispatch(unPressKeys(idsChar));
 
-      dispatch(unPressWrongKeys(idsChar));
-    }, 100);
+    dispatch(unPressWrongKeys(idsChar));
+  }, 100);
 
-    switch (state.getIn(['main', 'mode'])) {
-      case 'text':
-        dispatch(typeTextMode(char));
-        break;
-      case 'learning':
-        dispatch(typeLearningMode(char));
-        break;
-    }
-  };
-}
+  switch (state.getIn(['main', 'mode'])) {
+    case 'text':
+      dispatch(typeTextMode(char));
+      break;
+    case 'learning':
+      dispatch(typeLearningMode(char));
+      break;
+  }
+};
+
 
 export const setAllData = data => dispatch => {
-  // todo: plase server set tokens here
 
-  if (data.tokens) {
-    dispatch(setFetchData(data.tokens));
-  }
+  console.log('profile', data);
 
   dispatch(setUserData(data.profile));
 };

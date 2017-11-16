@@ -15,9 +15,7 @@ class Login extends Component {
   handleSubmit = values => {
     const {
       props: {
-        setEmail,
-        setRefreshToken,
-        setAccessToken,
+        setData,
         fetchJSON,
       },
     } = this;
@@ -27,11 +25,7 @@ class Login extends Component {
     return fetchJSON('/auth/login', {
       body: values.toJS(),
     })
-      .then(({ email, refresh, access }) => {
-        setEmail(email);
-        setRefreshToken(refresh);
-        setAccessToken(access);
-      })
+      .then((...args) => setData(...args))
       .catch(data => {
         if (data.status === 403) {
           this.setState({

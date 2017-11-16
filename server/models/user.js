@@ -47,11 +47,11 @@ UserSchema.set('toObject', {
 
 UserSchema.pre('save', function (next) {
   // only hash the password if it has been modified (or is new)
-  if (!this.isModified('password')) return next();
+    if (!this.isModified('profile.password')) return next();
 
-  this.generateHash(this.password)
+  this.generateHash(this.profile.password)
     .then(hash => {
-      this.password = hash;
+      this.profile.password = hash;
       next();
     })
     .catch(err => next(err));
@@ -65,7 +65,7 @@ UserSchema.methods.generateHash = password => {
 };
 
 UserSchema.methods.validPassword = function (candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.password);
+  return bcrypt.compare(candidatePassword, this.profile.password);
 };
 
 UserSchema.methods.getLearningMode = (candidatePassword, cb) => {};

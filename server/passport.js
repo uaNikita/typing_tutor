@@ -22,7 +22,7 @@ module.exports = (app) => {
     passwordField: 'password',
     session: false,
   }, (email, password, done) => {
-    User.findOne({ email })
+    User.findOne({ 'profile.email': email })
       .exec()
       .then(user => {
         user.validPassword(password).then(valid => {
