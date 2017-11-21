@@ -14,7 +14,7 @@ import 'Static/stylus/main.styl';
 import 'babel-polyfill';
 import 'isomorphic-fetch';
 
-import App from 'Blocks/App.jsx';
+import App from 'Blocks/App/container';
 
 import store from './store';
 

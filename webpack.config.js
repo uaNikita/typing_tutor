@@ -31,7 +31,6 @@ const restCssLoders = [
   {
     loader: 'postcss-loader',
     options: {
-      sourceMap: true,
       plugins: [
         autoprefixer()
       ]
@@ -49,8 +48,6 @@ let clientConfig = {
     path: path.join(__dirname, 'dist'),
     filename: 'main.js'
   },
-
-  devtool: isProduction ? 'source-map' : 'eval',
 
   plugins: [
     new CopyWebpackPlugin([{

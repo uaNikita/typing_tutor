@@ -17,10 +17,11 @@ import SettingsPages from 'Blocks/SettingsPages/container';
 import Footer from 'Blocks/Footer/component.jsx';
 
 class App extends Component {
-  state = {
-    lastNoModalLocation: this.props.location,
-    isModal: false,
-  };
+  componentDidMount() {
+    const { location, setLastNoModalLocation } = this.props;
+
+    setLastNoModalLocation(location);
+  }
 
   componentWillReceiveProps(nextProps) {
     const {
@@ -28,6 +29,8 @@ class App extends Component {
       history: {
         action,
       },
+      setLastNoModalLocation,
+      setIsModal,
     } = nextProps;
 
     let isModal = false;
@@ -36,12 +39,10 @@ class App extends Component {
       isModal = true;
     }
     else {
-      this.setState({
-        lastNoModalLocation: location,
-      });
+      setLastNoModalLocation(location);
     }
 
-    this.setState({ isModal });
+    setIsModal(isModal);
   }
 
   handlerClose = () => {
@@ -50,8 +51,6 @@ class App extends Component {
         history: {
           replace,
         },
-      },
-      state: {
         lastNoModalLocation,
       },
     } = this;
@@ -62,13 +61,19 @@ class App extends Component {
   render() {
     const {
       props: {
+        history: {
+          action,
+        },
         location,
-      },
-      state: {
         lastNoModalLocation,
-        isModal,
       },
     } = this;
+
+    let isModal;
+
+    if (action !== 'POP' && location.state && location.state.modal) {
+      isModal = true;
+    }
 
     const layoutClass = classNames('layout', {
       layout_modal: isModal,
@@ -94,7 +99,7 @@ class App extends Component {
             render={() => (
               <div className="layout__content">
                 <Switch key="switch" location={isModal ? lastNoModalLocation : location}>
-                  <Route path="/auth" component={Authorization} />
+                  <Route path="/auth" render={props => <Authorization {...props} />} />
                   <Route exact path="/" component={Home} />
                   <Route
                     path="/"
@@ -120,14 +125,9 @@ class App extends Component {
               key={location.key}
               classNames="modal"
               timeout={250}>
-              <Route
-                location={location}
-                path="/auth"
-                render={() => (
-                  <Modal onClose={this.handlerClose}>
-                    <Authorization />
-                  </Modal>
-                )} />
+              <Modal onClose={this.handlerClose}>
+                <Route path="/auth" location={location} render={props => <Authorization {...props} />} />
+              </Modal>
             </CSSTransition>
             : null}
         </TransitionGroup>
