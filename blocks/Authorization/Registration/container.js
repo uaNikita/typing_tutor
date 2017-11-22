@@ -13,10 +13,11 @@ const mapDispatchToProps = dispatch => ({
       email: values.get('email'),
     },
   }))
-    .then(() => {})
-    .catch(({ errors }) => {
-      if (errors) {
-        throw errors;
+    .then(res => {
+      if (res === 200) {
+        throw new Error({
+          email: 'Email is already taken',
+        });
       }
     }),
 });

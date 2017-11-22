@@ -189,7 +189,7 @@ const login = (req, res, next) => {
       return Promise.all([...createClient(user.get('id'))])
         .then(([client, access]) => {
           res.json({
-            tokens:{
+            tokens: {
               refresh: client.get('token'),
               access: access.get('token'),
             },
@@ -248,21 +248,17 @@ const getTokens = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const checkEmail = (req, res, next) => {
-  User.findByEmail(req.body.email)
-    .then(() => {
-      res.json(httpStatus[200]);
-    })
-    .catch(() => {
-
-    });
-
-  User.isNotExist(req.body.email)
-    .then(() => {
-      res.json(httpStatus[200]);
+const checkEmail = (req, res, next) =>
+  User.findOne({ 'profile.email': req.body.email })
+    .then(user => {
+      if (user) {
+        res.json(httpStatus[200]);
+      }
+      else {
+        res.json(httpStatus[404]);
+      }
     })
     .catch(e => next(e));
-};
 
 const getUserData = (req, res, next) =>
   User.get(req.user.id)
@@ -291,7 +287,7 @@ const verifyToken = (req, res, next) =>
         .then(([client, access]) => {
           res.json({
             type,
-            tokens:{
+            tokens: {
               refresh: client.get('token'),
               access: access.get('token'),
             },

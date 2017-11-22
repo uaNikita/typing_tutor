@@ -78,22 +78,7 @@ UserSchema.statics = {
     return this.findOne({ profile: { email } })
       .exec()
       .then(user => {
-      if (user) {
-        throw new APIError({
-          errors: {
-            email: 'Email is already taken'
-          },
-          status: httpStatus.CONFLICT
-        });
-      }
-    });
-  },
-
-  isExist(email) {
-    return this.findOne({ profile: { email } })
-      .exec()
-      .then(user => {
-        if (!user) {
+        if (user) {
           throw new APIError({
             errors: {
               email: 'Email is already taken'
