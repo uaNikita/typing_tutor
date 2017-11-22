@@ -125,7 +125,6 @@ const verifyEmail = (req, res, next) => {
           });
         });
     })
-
     .catch(e => next(e));
 };
 
@@ -136,7 +135,7 @@ const restoreAccess = (req, res, next) => {
     .then(user => {
       const password = getRandomPassword();
 
-      user.password = password;
+      user.profile.password = password;
 
       const verification = new Verification({
         user,
@@ -167,7 +166,6 @@ const restoreAccess = (req, res, next) => {
             }
 
             res.json(httpStatus[200]);
-
           });
         });
     })
@@ -251,6 +249,14 @@ const getTokens = (req, res, next) => {
 };
 
 const checkEmail = (req, res, next) => {
+  User.findByEmail(req.body.email)
+    .then(() => {
+      res.json(httpStatus[200]);
+    })
+    .catch(() => {
+
+    });
+
   User.isNotExist(req.body.email)
     .then(() => {
       res.json(httpStatus[200]);

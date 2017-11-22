@@ -17,6 +17,10 @@ import SettingsPages from 'Blocks/SettingsPages/container';
 import Footer from 'Blocks/Footer/component.jsx';
 
 class App extends Component {
+  state = {
+    isModal: this.props.isModal,
+  }
+
   componentDidMount() {
     const { location, setLastNoModalLocation } = this.props;
 
@@ -43,6 +47,8 @@ class App extends Component {
     }
 
     setIsModal(isModal);
+
+    this.setState({ isModal });
   }
 
   handlerClose = () => {
@@ -61,19 +67,13 @@ class App extends Component {
   render() {
     const {
       props: {
-        history: {
-          action,
-        },
         location,
         lastNoModalLocation,
       },
+      state: {
+        isModal,
+      },
     } = this;
-
-    let isModal;
-
-    if (action !== 'POP' && location.state && location.state.modal) {
-      isModal = true;
-    }
 
     const layoutClass = classNames('layout', {
       layout_modal: isModal,

@@ -47,7 +47,7 @@ UserSchema.set('toObject', {
 
 UserSchema.pre('save', function (next) {
   // only hash the password if it has been modified (or is new)
-    if (!this.isModified('profile.password')) return next();
+  if (!this.isModified('profile.password')) return next();
 
   this.generateHash(this.profile.password)
     .then(hash => {
@@ -75,25 +75,37 @@ UserSchema.methods.getLearningMode = (candidatePassword, cb) => {};
  */
 UserSchema.statics = {
   isNotExist(email) {
-    return this.findOne({ profile: { email } }).exec().then(user => {
+    return this.findOne({ profile: { email } })
+      .exec()
+      .then(user => {
       if (user) {
-        const err = new APIError({
+        throw new APIError({
           errors: {
             email: 'Email is already taken'
           },
           status: httpStatus.CONFLICT
         });
-
-        return Promise.reject(err);
-      }
-      else {
-        return Promise.resolve();
       }
     });
   },
 
-  findByEmail(email) {
+  isExist(email) {
     return this.findOne({ profile: { email } })
+      .exec()
+      .then(user => {
+        if (!user) {
+          throw new APIError({
+            errors: {
+              email: 'Email is already taken'
+            },
+            status: httpStatus.CONFLICT
+          });
+        }
+      });
+  },
+
+  findByEmail(email) {
+    return this.findOne({ 'profile.email': email })
       .exec()
       .then(user => {
         if (user) {

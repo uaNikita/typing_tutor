@@ -53,7 +53,6 @@ class RestoreAccess extends Component {
         <p className="auth__hint">
           <Link className="auth__link2" to={{ pathname: '/auth/login', state }}>Log in now</Link>
         </p>
-
       </form>
     );
   }
