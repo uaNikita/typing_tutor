@@ -14,7 +14,7 @@ export const validateEmail = email => {
 };
 
 validateEmail.existError = 'Email is already exist';
-validateEmail.nonExistError = 'Email is already exist';
+validateEmail.nonExistError = 'Email is not already exist';
 
 export const validatePassword = (name, val) => {
   const errors = {};

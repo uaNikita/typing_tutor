@@ -1,6 +1,7 @@
 import { connect } from 'react-redux';
 import { fetchJSON, setRefreshToken, setAccessToken } from 'ReduxUtils/modules/fetch';
 import { setAllData } from 'ReduxUtils/modules/main';
+import { validateEmail } from 'Utils/validation';
 import Component from './component.jsx';
 
 const mapStateToProps = state => ({
@@ -16,6 +17,20 @@ const mapDispatchToProps = dispatch => ({
 
     dispatch(setAllData(rest));
   },
+  asyncValidate: values => dispatch(fetchJSON('/auth/check-email', {
+    body: {
+      email: values.get('email'),
+    },
+  }))
+    .then(res => {
+      if (res === 'OK') {
+        const error = {
+          email: validateEmail.existError,
+        };
+
+        throw error;
+      }
+    }),
 });
 
 export default connect(

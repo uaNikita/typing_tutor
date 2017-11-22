@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import { fetchJSON } from 'ReduxUtils/modules/fetch';
+import { validateEmail } from 'Utils/validation';
 import Component from './component.jsx';
 
 const mapStateToProps = state => ({
@@ -14,10 +15,12 @@ const mapDispatchToProps = dispatch => ({
     },
   }))
     .then(res => {
-      if (res === 200) {
-        throw new Error({
-          email: 'Email is already taken',
-        });
+      if (res === 'OK') {
+        const error = {
+          email: validateEmail.existError,
+        };
+
+        throw error;
       }
     }),
 });
