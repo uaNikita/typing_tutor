@@ -5,6 +5,7 @@ import { validateEmail } from 'Utils/validation';
 import Component from './component.jsx';
 
 const mapStateToProps = state => ({
+  lastNoModalLocation: state.getIn(['main', 'lastNoModalLocation']),
   isModal: state.getIn(['main', 'isModal']),
 });
 
@@ -23,9 +24,9 @@ const mapDispatchToProps = dispatch => ({
     },
   }))
     .then(res => {
-      if (res === 'OK') {
+      if (res === 'Not Found') {
         const error = {
-          email: validateEmail.existError,
+          email: validateEmail.nonExistError,
         };
 
         throw error;

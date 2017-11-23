@@ -15,8 +15,13 @@ class Login extends Component {
   handleSubmit = values => {
     const {
       props: {
+        history: {
+          replace,
+        },
         setData,
         fetchJSON,
+        isModal,
+        lastNoModalLocation,
       },
     } = this;
 
@@ -25,7 +30,16 @@ class Login extends Component {
     return fetchJSON('/auth/login', {
       body: values.toJS(),
     })
-      .then((...args) => setData(...args))
+      .then((...args) => {
+        setData(...args);
+
+        if (isModal) {
+          replace(lastNoModalLocation.pathname);
+        }
+        else {
+          replace('/');
+        }
+      })
       .catch(data => {
         if (data.status === 403) {
           this.setState({
