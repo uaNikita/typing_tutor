@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import Textarea from '../Textarea/container';
-import Learningarea from '../Learningarea/container';
-import Keypad from '../Keypad/container';
-import Metronome from '../Metronome/container';
-import UserMenu from '../UserMenu/container';
+import Textarea from 'Blocks/Textarea/container';
+import Learningarea from 'Blocks/Learningarea/container';
+import Keypad from 'Blocks/Keypad/container';
+import Metronome from 'Blocks/Metronome/container';
+import UserMenu from 'Blocks/UserMenu/container';
 
 import styles from './home.module.styl';
 

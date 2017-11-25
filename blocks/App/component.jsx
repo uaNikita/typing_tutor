@@ -9,7 +9,7 @@ import Modal from 'Blocks/Modal/component.jsx';
 import VerifyPage from 'Blocks/VerifyPage/container';
 import Authorization from 'Blocks/Authorization/component.jsx';
 import Home from 'Blocks/Home/container';
-import Menu from 'Blocks/Menu/component.jsx';
+import Menu from 'Blocks/Menu/container';
 import LearningMode from 'Blocks/LearningMode/container';
 import TextMode from 'Blocks/TextMode/component.jsx';
 import ProfilePage from 'Blocks/ProfilePage/container';

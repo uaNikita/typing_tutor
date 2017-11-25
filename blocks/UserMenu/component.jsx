@@ -1,44 +1,26 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 
-class UserMenu extends Component {
-  handleLogIn = e => {
-    e.preventDefault();
+import styles from './user-menu.module.styl';
 
-    this.props.openModal('Login');
-  };
+const UserMenu = ({ email, name, logout }) => {
+  let content = [
+    <Link key="log-in" to={{ pathname: '/auth/login', state: { modal: true } }}>Log In</Link>,
+    'or',
+    <Link key="sign-up" to={{ pathname: '/auth/registration', state: { modal: true } }}>Sign Up</Link>,
+  ];
 
-  handleSignUp = e => {
-    e.preventDefault();
+  if (email) {
+    const nickname = name || email;
 
-    this.props.openModal('Registration');
-  };
-
-  render() {
-    const {
-      email,
-      name,
-      logout,
-    } = this.props;
-
-    let content = (
-      <div>
-        <Link to={{ pathname: '/auth/login', state: { modal: true } }}>Log In</Link>
-        {' or '}
-        <Link to={{ pathname: '/auth/registration', state: { modal: true } }}>Sign Up</Link>
-      </div>
-    );
-
-    if (email) {
-      content = (
-        <div className="user-menu">
-          {name || email} - <button onClick={logout}>Log out</button>
-        </div>
-      );
-    }
-
-    return content;
+    content = [
+      <span key="nickname" className={styles.avatar}>{nickname[0]}</span>,
+      <button key="log-out" onClick={logout}>Log out</button>,
+    ];
   }
-}
+
+  return content;
+};
+
 
 export default UserMenu;
