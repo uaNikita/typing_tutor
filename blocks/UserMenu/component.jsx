@@ -6,7 +6,7 @@ import styles from './user-menu.module.styl';
 const UserMenu = ({ email, name, logout }) => {
   let content = [
     <Link key="log-in" to={{ pathname: '/auth/login', state: { modal: true } }}>Log In</Link>,
-    'or',
+    '\u00A0or\u00A0',
     <Link key="sign-up" to={{ pathname: '/auth/registration', state: { modal: true } }}>Sign Up</Link>,
   ];
 

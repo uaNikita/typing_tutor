@@ -19,10 +19,6 @@ const links = [
     href: '/settings',
     text: 'Settings',
   },
-  {
-    href: '/profile',
-    text: 'My profile',
-  },
 ];
 
 const Menu = ({ email }) => (
