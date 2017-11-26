@@ -31,7 +31,7 @@ class Home extends Component {
       <header styleName="root">
         {email && <Metronome />}
 
-        <button className="fa fa-bars" onClick={this.hanldeClickMenu} />
+        <button className={`${styles.button} fa fa-bars`} onClick={this.hanldeClickMenu} />
 
         {navOpen ? (
           <nav styleName="items">
