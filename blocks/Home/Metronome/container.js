@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
 import { actionMetronome } from 'ReduxUtils/modules/main';
-import Metronome from '../Metronome/component.jsx';
+import Component from './component.jsx';
 
 const mapStateToProps = state => {
   const stateMain = state.get('main');
@@ -12,16 +12,14 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => (
-  {
-    actionMetronome: (action, value) => {
-      dispatch(actionMetronome(action, value));
-    },
-  }
-);
+const mapDispatchToProps = dispatch => ({
+  actionMetronome: (action, value) => {
+    dispatch(actionMetronome(action, value));
+  },
+});
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Metronome);
+)(Component);
 

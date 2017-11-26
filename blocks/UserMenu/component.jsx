@@ -15,7 +15,7 @@ const UserMenu = ({ email, name, logout }) => {
 
     content = [
       <span key="nickname" className={styles.avatar}>{nickname[0]}</span>,
-      <button key="log-out" onClick={logout}>Log out</button>,
+      <button key="log-out" className={`${styles['log-out']} fa fa-sign-out`} onClick={logout} />,
     ];
   }
 

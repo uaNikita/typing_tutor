@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
 import Textarea from 'Blocks/Textarea/container';
 import Learningarea from 'Blocks/Learningarea/container';
 import Keypad from 'Blocks/Keypad/container';
-import Metronome from 'Blocks/Metronome/container';
-import UserMenu from 'Blocks/UserMenu/container';
+import Header from './Header/container';
 
 import styles from './home.module.styl';
 
@@ -53,7 +51,6 @@ class Home extends Component {
       errorTypes,
       speed,
       mode,
-      email,
     } = this.props;
 
     switch (mode) {
@@ -67,15 +64,7 @@ class Home extends Component {
 
     return (
       <div ref={el => { this.home = el; }}>
-        <div styleName="head">
-          <Link styleName="settings" className="fa fa-bars" to="/learning-mode" />
-
-          <div styleName="buttons">
-            {email && <Metronome />}
-            <UserMenu />
-          </div>
-
-        </div>
+        <Header />
 
         <div styleName="typing-info">
           <p className="num-chars">

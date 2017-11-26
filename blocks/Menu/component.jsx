@@ -3,23 +3,9 @@ import { Link, NavLink } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
 import UserMenu from 'Blocks/UserMenu/container';
+import links from 'Utils/nav';
 
 import styles from './menu.module.styl';
-
-const links = [
-  {
-    href: '/learning-mode',
-    text: 'Learning mode',
-  },
-  {
-    href: '/text-mode',
-    text: 'Text mode',
-  },
-  {
-    href: '/settings',
-    text: 'Settings',
-  },
-];
 
 const Menu = ({ email }) => (
   <nav styleName="nav">
@@ -27,10 +13,10 @@ const Menu = ({ email }) => (
 
     <div styleName="items">
       {links.map(({ href, text }) => (
-        <NavLink key={href} styleName="item" activeClassName="item_selected" to={href}>{text}</NavLink>
+        <NavLink key={href} styleName="item" activeClassName={styles.item_selected} to={href}>{text}</NavLink>
       ))}
 
-      {email && <NavLink key="/profile" styleName="item" activeClassName="item_selected" to="/profile">My profile</NavLink>}
+      {email && <NavLink key="/profile" styleName="item" activeClassName={styles.item_selected} to="/profile">My profile</NavLink>}
 
       <UserMenu key="user-menu" />
     </div>
