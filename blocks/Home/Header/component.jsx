@@ -3,6 +3,7 @@ import { NavLink } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
 import links from 'Utils/nav';
+import AuthInfo from 'Blocks/AuthInfo/container';
 import Metronome from '../Metronome/container';
 import styles from './home-header.module.styl';
 
@@ -29,25 +30,29 @@ class Home extends Component {
 
     return (
       <header styleName="root">
-        {email && <Metronome />}
+        <div className="nav">
+          <button className={`${styles.button} fa fa-bars`} onClick={this.hanldeClickMenu} />
 
-        <button className={`${styles.button} fa fa-bars`} onClick={this.hanldeClickMenu} />
+          {navOpen ? (
+            <nav styleName="items">
+              {links.map(({ href, text, personal }) => {
+                let navLink = <NavLink key={href} styleName="item" activeClassName={styles.item_selected} to={href}>{text}</NavLink>;
 
-        {navOpen ? (
-          <nav styleName="items">
-            {links.map(({ href, text, forAuthorized }) => {
-              let navLink = (
-                <NavLink key={href} styleName="item" activeClassName={styles.item_selected} to={href}>{text}</NavLink>
-              );
+                if (personal && !email) {
+                  navLink = null;
+                }
 
-              if (forAuthorized && !email) {
-                navLink = null;
-              }
+                return navLink;
+              })}
+            </nav>
+          ) : null}
+        </div>
 
-              return navLink;
-            })}
-          </nav>
-        ) : null}
+        <div styleName="actions">
+          {email && <Metronome />}
+
+          <AuthInfo />
+        </div>
       </header>
     );
   }

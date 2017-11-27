@@ -12,8 +12,13 @@ export default [
     text: 'Settings',
   },
   {
-    forAuthorized: true,
-    href: '/settings',
-    text: 'Settings',
+    personal: true,
+    href: '/profile',
+    text: 'My profile',
+  },
+  {
+    personal: true,
+    href: '/log-out',
+    text: 'Log out',
   },
 ];
