@@ -6,7 +6,7 @@ import { validateEmail, validatePassword } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component.jsx';
 import Button from 'Blocks/Button/component.jsx';
 
-class Login extends Component {
+class SignIn extends Component {
   state = {
     accountIsNotActive: false,
     submittedVerifyLink: false,
@@ -92,7 +92,7 @@ class Login extends Component {
 
         <p className="auth__fp-wrap">
           <Link
-            to={{ pathname: '/auth/restore-access', state }}
+            to={{ pathname: '/restore-access', state }}
             className="auth__fp">
             Restore access?
           </Link>
@@ -101,7 +101,7 @@ class Login extends Component {
         <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
 
         <p className="auth__hint">
-          Not yet registered? <Link to={{ pathname: '/auth/registration', state }} className="auth__link1">Registration</Link>
+          Not yet registered? <Link to={{ pathname: '/sign-up', state }} className="auth__link1">Registration</Link>
         </p>
       </form>
     );
@@ -140,7 +140,7 @@ const validate = values => ({
 });
 
 export default reduxForm({
-  form: 'login',
+  form: 'sign-in',
   validate,
   asyncBlurFields: ['email'],
-})(Login);
+})(SignIn);

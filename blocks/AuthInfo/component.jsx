@@ -5,9 +5,9 @@ import styles from './user-menu.module.styl';
 
 const AuthInfo = ({ email, name }) => {
   let content = [
-    <Link key="log-in" to={{ pathname: '/auth/login', state: { modal: true } }}>Log In</Link>,
+    <Link key="log-in" to={{ pathname: '/sign-in', state: { modal: true } }}>Log In</Link>,
     '\u00A0or\u00A0',
-    <Link key="sign-up" to={{ pathname: '/auth/registration', state: { modal: true } }}>Sign Up</Link>,
+    <Link key="sign-up" to={{ pathname: '/sign-up', state: { modal: true } }}>Sign Up</Link>,
   ];
 
   if (email) {

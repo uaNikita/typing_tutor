@@ -3,11 +3,11 @@ import { withRouter, Switch, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 import GlobalMessageTransitionGroup from 'Blocks/GlobalMessageTransitionGroup/container';
 import Modal from 'Blocks/Modal/component.jsx';
 import VerifyPage from 'Blocks/VerifyPage/container';
-import Authorization from 'Blocks/Authorization/component.jsx';
 import Home from 'Blocks/Home/container';
 import Menu from 'Blocks/Menu/container';
 import LearningMode from 'Blocks/LearningMode/container';
@@ -15,6 +15,11 @@ import TextMode from 'Blocks/TextMode/component.jsx';
 import ProfilePage from 'Blocks/ProfilePage/container';
 import SettingsPages from 'Blocks/SettingsPages/container';
 import Footer from 'Blocks/Footer/component.jsx';
+import authorizationRoutes from 'Blocks/Authorization/routes';
+
+const modalsRoutes = [
+  ...authorizationRoutes,
+];
 
 class App extends Component {
   state = {
@@ -79,6 +84,30 @@ class App extends Component {
       layout_modal: isModal,
     });
 
+    let modal = null;
+
+    if (isModal) {
+      const {
+        path,
+        component,
+        nonCloseable,
+      } = _.find(modalsRoutes, { path: location.pathname });
+
+      const modalProps = {};
+
+      if (!nonCloseable) {
+        modalProps.onClose = this.handlerClose;
+      }
+
+      modal = (
+        <CSSTransition key={location.key} classNames="modal" timeout={250}>
+          <Modal {...modalProps}>
+            <Route location={location} path={path} component={component} />
+          </Modal>
+        </CSSTransition>
+      );
+    }
+
     return [
       <Helmet key="helmet">
         <meta charSet="utf-8" />
@@ -99,7 +128,7 @@ class App extends Component {
             render={() => (
               <div className="layout__content">
                 <Switch key="switch" location={isModal ? lastNoModalLocation : location}>
-                  <Route path="/auth" render={props => <Authorization {...props} />} />
+                  {modalsRoutes.map(({ path, component }) => <Route key={path} path={path} component={component} />)}
                   <Route exact path="/" component={Home} />
                   <Route
                     path="/"
@@ -119,18 +148,7 @@ class App extends Component {
             )} />
         </Switch>
 
-        <TransitionGroup>
-          {isModal ?
-            <CSSTransition
-              key={location.key}
-              classNames="modal"
-              timeout={250}>
-              <Modal onClose={this.handlerClose}>
-                <Route path="/auth" location={location} render={props => <Authorization {...props} />} />
-              </Modal>
-            </CSSTransition>
-            : null}
-        </TransitionGroup>
+        <TransitionGroup>{modal}</TransitionGroup>
       </div>,
     ];
   }

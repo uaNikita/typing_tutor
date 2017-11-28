@@ -6,7 +6,7 @@ import { validateEmail } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component.jsx';
 import Button from 'Blocks/Button/component.jsx';
 
-class Registration extends Component {
+class SignOut extends Component {
   state = {
     submitted: false,
   };
@@ -47,7 +47,7 @@ class Registration extends Component {
 
         <Button type="submit" disabled={invalid} isLoader={submitting}>Sign up</Button>
 
-        <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/auth/login', state }}>Log in now</Link></p>
+        <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/sign-in', state }}>Log in now</Link></p>
       </form>
     );
 
@@ -62,8 +62,7 @@ class Registration extends Component {
 
     return (
       <div className="auth">
-        <h3 className="auth__title">Registration</h3>
-        {content}
+        SignOut
       </div>
     );
   }
@@ -74,7 +73,7 @@ const validate = values => ({
 });
 
 export default reduxForm({
-  form: 'registration',
+  form: 'sign-out',
   validate,
   asyncBlurFields: ['email'],
-})(Registration);
+})(SignOut);
