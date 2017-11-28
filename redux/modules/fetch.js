@@ -2,6 +2,11 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import Cookie from 'js-cookie';
 
+import { clearState as clearLearningState } from './learning-mode';
+import { clearState as clearTextState } from './text-mode';
+import { clearState as clearUserState } from './user';
+import { clearState as clearMainState } from './main';
+
 const CLEAR_STATE = 'tokens/CLEAR_STATE';
 const SET_REFRESH_TOKEN = 'fetch/SET_REFRESH_TOKEN';
 const SET_ACCESS_TOKEN = 'fetch/SET_ACCESS_TOKEN';
@@ -125,9 +130,7 @@ export const fetchJSON =
 
                 return dispatch(fetchJSON(...args));
               })
-              .catch(() => {
-                dispatch(clearState());
-              });
+              .catch(() => dispatch(clearState()));
           }
           else {
             promise = Promise.reject(error);
@@ -135,3 +138,14 @@ export const fetchJSON =
 
           return promise;
         });
+
+export const logOut = () => dispatch => {
+  Cookie.remove('tt_refresh');
+  Cookie.remove('tt_access');
+
+  dispatch(clearState());
+  dispatch(clearLearningState());
+  dispatch(clearTextState());
+  dispatch(clearUserState());
+  dispatch(clearMainState());
+};

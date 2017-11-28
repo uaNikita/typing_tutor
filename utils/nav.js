@@ -1,24 +1,25 @@
 export default [
   {
-    href: '/learning-mode',
+    pathname: '/learning-mode',
     text: 'Learning mode',
   },
   {
-    href: '/text-mode',
+    pathname: '/text-mode',
     text: 'Text mode',
   },
   {
-    href: '/settings',
+    pathname: '/settings',
     text: 'Settings',
   },
   {
     personal: true,
-    href: '/profile',
+    pathname: '/profile',
     text: 'My profile',
   },
   {
     personal: true,
-    href: '/log-out',
-    text: 'Log out',
+    pathname: '/sign-out',
+    state: { modal: true },
+    text: 'Sign out',
   },
 ];

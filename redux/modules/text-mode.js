@@ -9,6 +9,7 @@ import {
   addErrorType,
 } from './main';
 
+const CLEAR_STATE = 'text-mode/CLEAR_STATE';
 const SELECT_TEXT = 'text-mode/SELECT_TEXT';
 const SELECT_LAST_TEXT = 'text-mode/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
@@ -78,6 +79,9 @@ const initialState = Immutable.fromJS({
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
+    case CLEAR_STATE:
+      return state.merge(initialState);
+
     case ADD_TEXT:
       return state.update('entities', entities => entities.push(Immutable.Map({
         id: uuidV4(),
@@ -127,6 +131,10 @@ export default (state = initialState, action = {}) => {
       return state;
   }
 };
+
+export const clearState = () => ({
+  type: CLEAR_STATE,
+});
 
 export function addText(title, text) {
   return {

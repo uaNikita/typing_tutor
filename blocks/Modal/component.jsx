@@ -5,16 +5,18 @@ import './modal.styl';
 
 const Modal = ({ children, nonCloseable, onClose }) => {
   const props = {};
+  let closeButton = null;
 
   if (!nonCloseable) {
     props.onClick = onClose;
+    closeButton = <button className="modal__close fa fa-times" {...props} />;
   }
 
   return (
     <div className="modal">
       <div className="modal__overlay" {...props} />
       <div className="modal__content">
-        <button className="modal__close fa fa-times" {...props} />
+        {closeButton}
         {children}
       </div>
     </div>

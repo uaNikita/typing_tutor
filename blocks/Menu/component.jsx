@@ -12,8 +12,19 @@ const Menu = ({ email }) => (
     <Link styleName="home" className="fa fa-keyboard-o" to="/" />
 
     <div styleName="items">
-      {links.map(({ href, text, personal }) => {
-        let navLink = <NavLink key={href} styleName="item" activeClassName={styles.item_selected} to={href}>{text}</NavLink>;
+      {links.map(({ pathname, state, text, personal }) => {
+        let navLink = (
+          <NavLink
+            key={pathname}
+            styleName="item"
+            activeClassName={styles.item_selected}
+            to={{
+              pathname,
+              state,
+            }}>
+            {text}
+          </NavLink>
+        );
 
         if (personal && !email) {
           navLink = null;

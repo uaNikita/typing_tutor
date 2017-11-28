@@ -10,6 +10,7 @@ import { typeTextMode } from './text-mode';
 import { typeLearningMode } from './learning-mode';
 import { getIdsFromCharacter } from '../../utils';
 
+const CLEAR_STATE = 'main/CLEAR_STATE';
 const PRESS_KEYS = 'main/PRESS_KEYS';
 const UNPRESS_KEYS = 'main/UNPRESS_KEYS';
 const UPDATE_START_VARIABLES = 'main/UPDATE_START_VARIABLES';
@@ -59,6 +60,9 @@ const initialState = Immutable.Map({
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
+    case CLEAR_STATE:
+      return state.merge(initialState);
+
     case SET_DATA:
       return state.merge(action.data);
 
@@ -115,6 +119,10 @@ export default (state = initialState, action = {}) => {
       return state;
   }
 };
+
+export const clearState = () => ({
+  type: CLEAR_STATE,
+});
 
 export const setData = data => ({
   type: SET_DATA,

@@ -14,6 +14,7 @@ import {
   getFingersSet,
 } from '../../utils';
 
+const CLEAR_STATE = 'learning-mode/CLEAR_STATE';
 const TYPE_ON_LESSON = 'learning-mode/TYPE_ON_LESSON';
 
 const SET_LEARNING_MODE = 'learning-mode/SET_LEARNING_MODE';
@@ -53,6 +54,9 @@ const initialState = Immutable.Map({
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
+    case CLEAR_STATE:
+      return state.merge(initialState);
+
     case REFRESH_CURRENT_LESSON:
       return state.merge({
         lessonTyped: '',
@@ -102,6 +106,10 @@ export default (state = initialState, action = {}) => {
       return state;
   }
 };
+
+export const clearState = () => ({
+  type: CLEAR_STATE,
+});
 
 export function setMode(mode) {
   return {

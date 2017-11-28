@@ -93,7 +93,7 @@ class App extends Component {
         nonCloseable,
       } = _.find(modalsRoutes, { path: location.pathname });
 
-      const modalProps = {};
+      const modalProps = { nonCloseable };
 
       if (!nonCloseable) {
         modalProps.onClose = this.handlerClose;
