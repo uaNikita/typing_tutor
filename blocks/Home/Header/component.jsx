@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
 import links from 'Utils/nav';
@@ -37,16 +37,15 @@ class Home extends Component {
             <nav styleName="items">
               {links.map(({ pathname, state, text, personal }) => {
                 let navLink = (
-                  <NavLink
+                  <Link
                     key={pathname}
                     styleName="item"
-                    activeClassName={styles.item_selected}
                     to={{
                       pathname,
                       state,
                     }}>
                     {text}
-                  </NavLink>
+                  </Link>
                 );
 
                 if (personal && !email) {

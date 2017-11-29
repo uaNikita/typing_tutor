@@ -3,7 +3,6 @@ import CSSModules from 'react-css-modules';
 import { Switch, Redirect, Route, NavLink } from 'react-router-dom';
 
 import Keyboard from './Keyboard/container';
-import Account from './Account/container';
 
 import styles from './my-profile-pages.module.styl';
 
@@ -11,10 +10,6 @@ const menuLinks = [
   {
     url: '/keyboard',
     text: 'Keyboard layout',
-  },
-  {
-    url: '/account',
-    text: 'Account',
   },
 ];
 
@@ -39,7 +34,6 @@ const SettingsPages = ({ match: { url } }) => {
         <Switch>
           <Redirect exact from={url} to={`${url}/keyboard`} />
           <Route path={`${url}/keyboard`} component={Keyboard} />
-          <Route path={`${url}/account`} component={Account} />
         </Switch>
       </div>
     </div>

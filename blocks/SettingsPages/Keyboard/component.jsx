@@ -6,6 +6,8 @@ import RenderField from 'Blocks/RenderField/component.jsx';
 
 import Key from 'Blocks/Key/component.jsx';
 
+import styles from './keyboard.module.styl';
+
 class Keyboard extends Component {
   handleOnChange = e => {
     this.props.setKeyboard(e.target.value);
@@ -35,22 +37,19 @@ class Keyboard extends Component {
       );
     });
 
-    return (
-      <div className="keyboard-layout">
-        <Field
-          onChange={this.handleOnChange}
-          name="email"
-          component={RenderField}
-          type="select"
-          label="Layout">
-          {keyboards.map(({ name: kbName }) => <option key={kbName} value={kbName}>{kbName}</option>)}
-        </Field>
+    return [
+      <Field
+        className={styles.field}
+        onChange={this.handleOnChange}
+        name="email"
+        component={RenderField}
+        type="select"
+        label="Layout">
+        {keyboards.map(({ name: kbName }) => <option key={kbName} value={kbName}>{kbName}</option>)}
+      </Field>,
 
-        <div className="keyboard">
-          {keyNodes}
-        </div>
-      </div>
-    );
+      <div className="keyboard">{keyNodes}</div>,
+    ];
   }
 }
 

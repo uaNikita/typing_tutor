@@ -10,6 +10,10 @@ import { validatePassword } from 'Utils/validation';
 import styles from './change-password.module.styl';
 
 class ChangePassword extends Component {
+  state = {
+    submitted: false,
+  }
+
   handleSubmit = values => this.props.fetchJSON('/auth/signup', { body: values.toJS() }, true)
     .then(() => this.setState({
       submitted: true,
