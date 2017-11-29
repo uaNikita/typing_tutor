@@ -39,6 +39,7 @@ class Keyboard extends Component {
 
     return [
       <Field
+        key="field"
         className={styles.field}
         onChange={this.handleOnChange}
         name="email"
@@ -48,7 +49,7 @@ class Keyboard extends Component {
         {keyboards.map(({ name: kbName }) => <option key={kbName} value={kbName}>{kbName}</option>)}
       </Field>,
 
-      <div className="keyboard">{keyNodes}</div>,
+      <div key="keyboard" className="keyboard">{keyNodes}</div>,
     ];
   }
 }

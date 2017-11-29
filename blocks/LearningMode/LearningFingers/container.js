@@ -24,28 +24,26 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => (
-  {
-    setFingersSetSize: size => {
-      dispatch(setSetSizeFingers(size));
+const mapDispatchToProps = dispatch => ({
+  setFingersSetSize: size => {
+    dispatch(setSetSizeFingers(size));
 
-      dispatch(updateFingersLesson());
+    dispatch(updateFingersLesson());
 
-      dispatch(updateCurrentLessonFromCurrentMode());
+    dispatch(updateCurrentLessonFromCurrentMode());
 
-      dispatch(updateCharToType());
-    },
-    setMaxLettersInWord: length => {
-      dispatch(setMaxLettersInWordFingers(length));
+    dispatch(updateCharToType());
+  },
+  setMaxLettersInWord: length => {
+    dispatch(setMaxLettersInWordFingers(length));
 
-      dispatch(updateFingersLesson());
+    dispatch(updateFingersLesson());
 
-      dispatch(updateCurrentLessonFromCurrentMode());
+    dispatch(updateCurrentLessonFromCurrentMode());
 
-      dispatch(updateCharToType());
-    },
-  }
-);
+    dispatch(updateCharToType());
+  },
+});
 
 export default connect(
   mapStateToProps,

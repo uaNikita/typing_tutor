@@ -85,7 +85,6 @@ class LearningMode extends Component {
 
     return (
       <div className="settings-learning">
-
         <Switcher {...switcherProps} />
 
         <div className="learningarea">
@@ -102,7 +101,6 @@ class LearningMode extends Component {
             <Mode />
           </div>
         </div>
-
       </div>
     );
   }

@@ -12,8 +12,8 @@ import Home from 'Blocks/Home/container';
 import Menu from 'Blocks/Menu/container';
 import LearningMode from 'Blocks/LearningMode/container';
 import TextMode from 'Blocks/TextMode/component.jsx';
-import ProfilePage from 'Blocks/ProfilePage/container';
-import SettingsPages from 'Blocks/SettingsPages/container';
+import ProfilePages from 'Blocks/ProfilePages/component.jsx';
+import SettingsPages from 'Blocks/SettingsPages/component.jsx';
 import Footer from 'Blocks/Footer/component.jsx';
 import authorizationRoutes from 'Blocks/Authorization/routes';
 
@@ -138,7 +138,7 @@ class App extends Component {
                         <Route key="learning-mode" path="/learning-mode" component={LearningMode} />
                         <Route key="text-mode" path="/text-mode" component={TextMode} />
                         <Route key="settings" path="/settings" component={SettingsPages} />
-                        <Route key="profile" path="/profile" component={ProfilePage} />
+                        <Route key="profile" path="/profile" component={ProfilePages} />
                       </Switch>,
                     ]} />
                 </Switch>

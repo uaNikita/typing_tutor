@@ -111,35 +111,31 @@ class LearningFingers extends Component {
     });
 
 
-    return (
-      <div>
-
-        <div className="settings-learning__item">
-          <label htmlFor="" className="settings-learning__label">
-            Max word length:
-          </label>
-          <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-            <div
-              className="settings-learning__range settings-learning__max-word-length"
-              ref={c => { this.maxLettersInWordRange = c; }} />
-          </div>
+    return [
+      <div key="length" className="settings-learning__item">
+        <label htmlFor="" className="settings-learning__label">
+          Max word length:
+        </label>
+        <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+          <div
+            className="settings-learning__range settings-learning__max-word-length"
+            ref={c => { this.maxLettersInWordRange = c; }} />
         </div>
+      </div>,
 
-        <div className="settings-learning__item">
-          <label htmlFor="" className="settings-learning__label">
-            Extend fingers set:
-          </label>
-          <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-            <div className="settings-learning__range" ref={c => { this.fingersRange = c; }} />
-          </div>
+      <div key="fingers" className="settings-learning__item">
+        <label htmlFor="" className="settings-learning__label">
+          Extend fingers set:
+        </label>
+        <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+          <div className="settings-learning__range" ref={c => { this.fingersRange = c; }} />
         </div>
+      </div>,
 
-        <div className="keyboard">
-          {keyNodes}
-        </div>
-
-      </div>
-    );
+      <div key="keyboard" className="keyboard">
+        {keyNodes}
+      </div>,
+    ];
   }
 }
 

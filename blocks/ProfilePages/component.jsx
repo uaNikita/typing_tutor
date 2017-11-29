@@ -1,12 +1,12 @@
 import React from 'react';
 import { Switch, Redirect, Route, NavLink } from 'react-router-dom';
 
-import Keyboard from './Keyboard/container';
+import Account from './Account/component.jsx';
 
 const menuLinks = [
   {
-    url: '/keyboard',
-    text: 'Keyboard layout',
+    url: '/account',
+    text: 'Account',
   },
 ];
 
@@ -28,8 +28,8 @@ const SettingsPages = ({ match: { url } }) => {
       </nav>
       <div className="sub-layout__content">
         <Switch>
-          <Redirect exact from={url} to={`${url}/keyboard`} />
-          <Route path={`${url}/keyboard`} component={Keyboard} />
+          <Redirect exact from={url} to={`${url}/account`} />
+          <Route path={`${url}/account`} component={Account} />
         </Switch>
       </div>
     </div>
