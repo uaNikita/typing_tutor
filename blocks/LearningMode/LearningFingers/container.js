@@ -32,7 +32,7 @@ const mapDispatchToProps = dispatch => ({
 
     dispatch(updateCurrentLessonFromCurrentMode());
 
-    dispatch(updateCharToType());
+    // dispatch(updateCharToType());
   },
   setMaxLettersInWord: length => {
     dispatch(setMaxLettersInWordFingers(length));

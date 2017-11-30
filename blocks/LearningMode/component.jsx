@@ -31,11 +31,11 @@ class LearningMode extends Component {
       },
     } = this.props;
 
-    const lessonKeys = lesson.split('').map(char => {
+    const lessonKeys = lesson.split('').map((char, i) => ({ id: i, char })).map(({ id, char }) => {
       let charEl = char;
 
       if (char === ' ') {
-        charEl = <span key={char} className="learningarea__space">␣</span>;
+        charEl = <span key={id} className="learningarea__space">␣</span>;
       }
 
       return charEl;

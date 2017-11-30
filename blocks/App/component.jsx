@@ -9,7 +9,7 @@ import GlobalMessageTransitionGroup from 'Blocks/GlobalMessageTransitionGroup/co
 import Modal from 'Blocks/Modal/component.jsx';
 import VerifyPage from 'Blocks/VerifyPage/container';
 import Home from 'Blocks/Home/container';
-import Menu from 'Blocks/Menu/container';
+import Header from 'Blocks/Header/component.jsx';
 import LearningMode from 'Blocks/LearningMode/container';
 import TextMode from 'Blocks/TextMode/component.jsx';
 import ProfilePages from 'Blocks/ProfilePages/component.jsx';
@@ -133,7 +133,7 @@ class App extends Component {
                   <Route
                     path="/"
                     render={() => [
-                      <Menu key="menu" />,
+                      <Header key="header" />,
                       <Switch key="switch">
                         <Route key="learning-mode" path="/learning-mode" component={LearningMode} />
                         <Route key="text-mode" path="/text-mode" component={TextMode} />

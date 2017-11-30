@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import links from 'Utils/nav';
+import Menu from 'Blocks/Menu.jsx';
 import AuthInfo from 'Blocks/AuthInfo/container';
 import Metronome from '../Metronome/container';
 import styles from './home-header.module.styl';
@@ -20,9 +19,6 @@ class Home extends Component {
 
   render() {
     const {
-      props: {
-        email,
-      },
       state: {
         navOpen,
       },
@@ -35,31 +31,13 @@ class Home extends Component {
 
           {navOpen ? (
             <nav styleName="items">
-              {links.map(({ pathname, state, text, personal }) => {
-                let navLink = (
-                  <Link
-                    key={pathname}
-                    styleName="item"
-                    to={{
-                      pathname,
-                      state,
-                    }}>
-                    {text}
-                  </Link>
-                );
-
-                if (personal && !email) {
-                  navLink = null;
-                }
-
-                return navLink;
-              })}
+              <Menu />
             </nav>
           ) : null}
         </div>
 
         <div styleName="actions">
-          {email && <Metronome />}
+          <Metronome />
 
           <AuthInfo />
         </div>

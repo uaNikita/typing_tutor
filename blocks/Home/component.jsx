@@ -4,7 +4,7 @@ import CSSModules from 'react-css-modules';
 import Textarea from 'Blocks/Textarea/container';
 import Learningarea from 'Blocks/Learningarea/container';
 import Keypad from 'Blocks/Keypad/container';
-import Header from './Header/container';
+import Header from './Header/component.jsx';
 
 import styles from './home.module.styl';
 
