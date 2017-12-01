@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import Menu from 'Blocks/Menu.jsx';
+import Menu from 'Blocks/Menu/container';
 import AuthInfo from 'Blocks/AuthInfo/container';
 
 import styles from './header.module.styl';

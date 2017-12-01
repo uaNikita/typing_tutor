@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CSSModules from 'react-css-modules';
 
 import styles from './user-menu.module.styl';
 
@@ -13,11 +14,10 @@ const AuthInfo = ({ email, name }) => {
   if (email) {
     const nickname = name || email;
 
-    content = <span className={styles.avatar}>{nickname[0]}</span>;
+    content = <span styleName="avatar">{nickname[0]}</span>;
   }
 
-  return content;
+  return <div styleName="auth-info">{content}</div>;
 };
 
-
-export default AuthInfo;
+export default CSSModules(AuthInfo, styles);

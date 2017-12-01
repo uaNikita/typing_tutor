@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 
-import Menu from 'Blocks/Menu.jsx';
+import Menu from 'Blocks/Menu/container';
 import AuthInfo from 'Blocks/AuthInfo/container';
 import Metronome from '../Metronome/container';
 import styles from './home-header.module.styl';
