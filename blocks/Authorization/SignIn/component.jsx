@@ -18,7 +18,7 @@ class SignIn extends Component {
         history: {
           replace,
         },
-        setData,
+        setAllWithAuth,
         fetchJSON,
         isModal,
         lastNoModalLocation,
@@ -30,8 +30,8 @@ class SignIn extends Component {
     return fetchJSON('/auth/login', {
       body: values.toJS(),
     })
-      .then((...args) => {
-        setData(...args);
+      .then(data => {
+        setAllWithAuth(data);
 
         if (isModal) {
           replace(lastNoModalLocation.pathname);

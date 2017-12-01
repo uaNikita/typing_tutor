@@ -17,7 +17,7 @@ const {
   reducer,
   setRefreshToken,
   setAccessToken,
-  requestAllData
+  requestAllWithoutAuth
 } = require('../dist/compiledServer');
 
 process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
@@ -80,20 +80,17 @@ app.use((req, res) => {
                   </html>`);
     }
   };
-  
-  const { tt_refresh, tt_access } = req.cookies;
 
-  // console.log('tt_refresh', tt_refresh);
-  // console.log('tt_access', tt_access);
+  const { tt_access, tt_refresh } = req.cookies;
 
-  if (tt_refresh) {
-    dispatch(setRefreshToken(tt_refresh));
+  if (tt_access) {
+    dispatch(setAccessToken(tt_access));
 
-    if (tt_access) {
-      dispatch(setAccessToken(tt_access));
+    if (tt_refresh) {
+      dispatch(setRefreshToken(tt_refresh));
     }
-
-    dispatch(requestAllData())
+    
+    dispatch(requestAllWithoutAuth())
       .then(sendRes)
       .catch(() => {
         res.clearCookie('tt_refresh');

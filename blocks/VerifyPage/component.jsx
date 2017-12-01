@@ -16,7 +16,7 @@ class VerifyPage extends Component {
     const {
       props: {
         fetchJSON,
-        setAllData,
+        setAllWithAuth,
         location: {
           search,
         },
@@ -32,7 +32,7 @@ class VerifyPage extends Component {
         },
       })
         .then(data => {
-          setAllData(data);
+          setAllWithAuth(data);
 
           this.setState({
             verified: data.type,

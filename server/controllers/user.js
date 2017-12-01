@@ -243,7 +243,6 @@ const getTokens = (req, res, next) => {
             access: access.get('token'),
           });
         });
-
     })
     .catch(e => next(e));
 };
@@ -262,7 +261,7 @@ const checkEmail = (req, res, next) =>
 
 const getUserData = (req, res, next) =>
   User.get(req.user.id)
-    .then((user) => res.json(user.toObject()))
+    .then(user => res.json(user.toObject()))
     .catch(e => next(e));
 
 const verifyToken = (req, res, next) =>

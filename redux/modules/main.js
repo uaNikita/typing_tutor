@@ -3,11 +3,11 @@ import _ from 'lodash';
 
 import keyboards from '../../constants/keyboards';
 
-import { fetchJSON } from './fetch';
+import { fetchJSON, setAccessToken, setRefreshToken } from './fetch';
 import { setData as setUserData } from './user';
-
 import { typeTextMode } from './text-mode';
 import { typeLearningMode } from './learning-mode';
+
 import { getIdsFromCharacter } from '../../utils';
 
 const CLEAR_STATE = 'main/CLEAR_STATE';
@@ -222,11 +222,19 @@ export const typeChar = char => (dispatch, getState) => {
   }
 };
 
-export const setAllData = data => dispatch => {
+export const setAllWithoutAuth = data => dispatch => {
   dispatch(setUserData(data.profile));
 };
 
-export const requestAllData = () =>
+export const setAllWithAuth = ({ tokens: { refresh, access }, ...rest }) => dispatch => {
+  dispatch(setRefreshToken(refresh));
+
+  dispatch(setAccessToken(access));
+
+  dispatch(setAllWithoutAuth(rest));
+};
+
+export const requestAllWithoutAuth = () =>
   dispatch =>
     dispatch(fetchJSON('/user'))
-      .then(data => dispatch(setAllData(data)));
+      .then(data => dispatch(setAllWithoutAuth(data)));
