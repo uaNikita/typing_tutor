@@ -5,11 +5,11 @@ import nav from 'Utils/nav';
 
 const modes = [
   {
-    pathname: '/learning-mode',
+    pathname: '/modes/learning',
     text: 'learning',
   },
   {
-    pathname: '/text-mode',
+    pathname: '/modes/text',
     text: 'text',
   },
 ];

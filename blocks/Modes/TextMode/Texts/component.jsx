@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
+import Switcher from 'Blocks/Switcher/component.jsx';
 import Text from './Text.jsx';
-import Switcher from '../../Switcher.jsx';
 
 class Texts extends Component {
   onSwitcherChange = () => {

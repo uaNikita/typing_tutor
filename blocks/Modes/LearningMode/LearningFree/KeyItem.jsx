@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Key from '../../Key/component.jsx';
+import Key from 'Blocks/Key/component.jsx';
 
 class KeyItem extends Component {
   handleClick() {

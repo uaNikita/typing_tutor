@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { concat, clone } from 'lodash';
 import noUiSlider from 'nouislider';
 import classNames from 'classnames';
-import Key from '../../Key/component.jsx';
+import Key from 'Blocks/Key/component.jsx';
 
 class LearningFingers extends Component {
   componentDidMount() {

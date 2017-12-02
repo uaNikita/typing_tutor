@@ -10,8 +10,7 @@ import Modal from 'Blocks/Modal/component.jsx';
 import VerifyPage from 'Blocks/VerifyPage/container';
 import Home from 'Blocks/Home/container';
 import Header from 'Blocks/Header/component.jsx';
-import LearningMode from 'Blocks/LearningMode/container';
-import TextMode from 'Blocks/TextMode/component.jsx';
+import Modes from 'Blocks/Modes/component.jsx';
 import ProfilePages from 'Blocks/ProfilePages/component.jsx';
 import SettingsPages from 'Blocks/SettingsPages/component.jsx';
 import Footer from 'Blocks/Footer/component.jsx';
@@ -135,8 +134,7 @@ class App extends Component {
                     render={() => [
                       <Header key="header" />,
                       <Switch key="switch">
-                        <Route key="learning-mode" path="/learning-mode" component={LearningMode} />
-                        <Route key="text-mode" path="/text-mode" component={TextMode} />
+                        <Route key="modes" path="/modes" component={Modes} />
                         <Route key="settings" path="/settings" component={SettingsPages} />
                         <Route key="profile" path="/profile" component={ProfilePages} />
                       </Switch>,

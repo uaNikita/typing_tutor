@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 
+import Switcher from 'Blocks/Switcher/component.jsx';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
-import Switcher from '../Switcher.jsx';
 
 const menuLinks = [
   {
@@ -17,9 +17,7 @@ const menuLinks = [
 ];
 
 class LearningMode extends Component {
-  onSwitcherChange = () => {
-    this.props.setMainMode('learning');
-  };
+  onSwitcherChange = () => this.props.setMainMode('learning');
 
   render() {
     const {
@@ -41,21 +39,13 @@ class LearningMode extends Component {
       return charEl;
     });
 
-    const switcherProps = {
-      label: {
-        title: 'Learning mode on',
-      },
-      input: {
-        checked: true,
-        readOnly: true,
-      },
+    let switcherPropsInput = {
+      checked: true,
+      readOnly: true,
     };
 
     if (mode !== 'learning') {
-      switcherProps.label.title = 'Learning mode off';
-
-      switcherProps.input = {
-        ...switcherProps.input,
+      switcherPropsInput = {
         checked: false,
         readOnly: false,
         onChange: this.onSwitcherChange,
@@ -85,7 +75,7 @@ class LearningMode extends Component {
 
     return (
       <div className="settings-learning">
-        <Switcher {...switcherProps} />
+        <Switcher {...switcherPropsInput} />
 
         <div className="learningarea">
           {lessonKeys}
