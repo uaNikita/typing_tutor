@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import CSSModules from 'react-css-modules';
 
 import Textarea from 'Blocks/Textarea/container';
 import Learningarea from 'Blocks/Learningarea/container';
@@ -15,12 +14,17 @@ class Home extends Component {
     const { typeChar } = this.props;
 
     this.keyPressHandler = e => {
+
+      console.log('keyPressHandler');
+
       if (e.which !== 32) {
         typeChar(String.fromCharCode(e.which));
       }
     };
 
     this.keyDownHandler = e => {
+      console.log('keyDownHandler');
+
       if (e.which === 32) {
         e.preventDefault();
 
@@ -30,15 +34,15 @@ class Home extends Component {
   }
 
   componentDidMount() {
-    this.home.addEventListener('keydown', this.keyDownHandler);
-    this.home.addEventListener('keypress', this.keyPressHandler);
+    document.addEventListener('keydown', this.keyDownHandler);
+    document.addEventListener('keypress', this.keyPressHandler);
 
     this.props.updateStartVariables();
   }
 
   componentWillUnmount() {
-    this.home.removeEventListener('keydown', this.keyDownHandler);
-    this.home.removeEventListener('keypress', this.keyPressHandler);
+    document.removeEventListener('keydown', this.keyDownHandler);
+    document.removeEventListener('keypress', this.keyPressHandler);
 
     this.props.refreshCurrentLesson();
   }
@@ -55,40 +59,38 @@ class Home extends Component {
 
     switch (mode) {
       case 'text':
-        area = <Textarea />;
+        area = <Textarea key="textarea" />;
         break;
       case 'learning':
-        area = <Learningarea />;
+        area = <Learningarea key="learningarea" />;
         break;
     }
 
-    return (
-      <div ref={el => { this.home = el; }}>
-        <Header />
+    return [
+      <Header key="header" />,
 
-        <div styleName="typing-info">
-          <p className="num-chars">
-            <i className="fa fa-file-text-o num-chars__icon" />
-            {successTypes}
-          </p>
+      <div key="typing-info" className={styles['typing-info']}>
+        <p className="num-chars">
+          <i className="fa fa-file-text-o num-chars__icon" />
+          {successTypes}
+        </p>
 
-          <p className="speed">
-            <i className="fa fa-tachometer speed__icon" />
-            {speed} зн/мин
-          </p>
+        <p className="speed">
+          <i className="fa fa-tachometer speed__icon" />
+          {speed} зн/мин
+        </p>
 
-          <p className="error-key">
-            <i className="fa fa-minus-square-o error-key__icon" />
-            {errorTypes}
-          </p>
-        </div>
+        <p className="error-key">
+          <i className="fa fa-minus-square-o error-key__icon" />
+          {errorTypes}
+        </p>
+      </div>,
 
-        {area}
+      area,
 
-        <Keypad />
-      </div>
-    );
+      <Keypad key="keypad" />,
+    ];
   }
 }
 
-export default CSSModules(Home, styles);
+export default Home;

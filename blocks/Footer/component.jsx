@@ -6,13 +6,11 @@ import styles from './footer.module.styl';
 
 const Footer = () => (
   <footer styleName="footer">
-    <p>
-      © 2016 Touch to type
-      <br />
-      <a styleName="footer__link" href="mailto:info@touchtotype.com">info@touchtotype.com</a>
-      <br />
-      <Link styleName="footer__link" to="/help">Help</Link>
-    </p>
+    © 2016 Touch to type
+    <br />
+    <a href="mailto:info@touchtotype.com">info@touchtotype.com</a>
+    <br />
+    <Link to="/help">Help</Link>
   </footer>
 );
 
