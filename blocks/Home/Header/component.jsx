@@ -31,7 +31,7 @@ class Home extends Component {
 
           {navOpen ? (
             <nav styleName="items">
-              <Menu />
+              <Menu className={styles.item} />
             </nav>
           ) : null}
         </div>
