@@ -20,7 +20,14 @@ class Texts extends Component {
 
   render() {
     const self = this;
-    const { texts, currentTextId, mode } = this.props;
+    const {
+      texts,
+      currentTextId,
+      mode,
+      match: {
+        url,
+      },
+    } = this.props;
 
     const switcherProps = {
       label: {
@@ -46,7 +53,7 @@ class Texts extends Component {
     let addTextLink;
 
     if (texts.length < 10) {
-      addTextLink = <Link to="/settings/text-mode/add-text">Add new text</Link>;
+      addTextLink = <Link to={`${url}/add-text`}>Add new text</Link>;
     }
 
     const textEls = texts.map(obj => {

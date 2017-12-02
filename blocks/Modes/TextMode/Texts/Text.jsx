@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 
 class Text extends Component {
   onClick() {
@@ -13,12 +13,15 @@ class Text extends Component {
       className,
       onClick,
       text,
+      match: {
+        url,
+      },
     } = this.props;
 
     return (
       <div key={id} title={title} className={className} onClick={onClick}>
         <h3 className="settings-text__text-title">
-          <Link to={`/settings/text-mode/text/${id}`}>
+          <Link to={`${url}/${id}`}>
             {title}
           </Link>
         </h3>
@@ -32,4 +35,4 @@ class Text extends Component {
   }
 }
 
-export default Text;
+export default withRouter(Text);

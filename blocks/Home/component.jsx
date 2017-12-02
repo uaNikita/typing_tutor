@@ -14,17 +14,12 @@ class Home extends Component {
     const { typeChar } = this.props;
 
     this.keyPressHandler = e => {
-
-      console.log('keyPressHandler');
-
       if (e.which !== 32) {
         typeChar(String.fromCharCode(e.which));
       }
     };
 
     this.keyDownHandler = e => {
-      console.log('keyDownHandler');
-
       if (e.which === 32) {
         e.preventDefault();
 
