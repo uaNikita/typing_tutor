@@ -18,7 +18,7 @@ class AddText extends Component {
       selectAddedText();
     }
 
-    push('/settings/text-mode');
+    push('/modes/text');
   };
 
   render() {

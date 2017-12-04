@@ -1,53 +1,51 @@
-import React, { Component } from 'react';
+import React from 'react';
+import CSSModules from 'react-css-modules';
 
-class Texts extends Component {
-  onClickSelectText(id, e) {
-    e.preventDefault();
+import styles from './text.module.styl';
 
-    this.props.selectText(this.props.id);
+const Text = props => {
+  const {
+    id,
+    title,
+    typed,
+    last,
+    currentTextId,
+    refreshText,
+    selectText,
+  } = props;
+
+  let refresh;
+
+  if (typed) {
+    refresh = <button onClick={() => refreshText(id)} className="fa fa-refresh" styleName="text__reload" />;
   }
 
-  render() {
-    const {
-      id,
-      title,
-      typed,
-      last,
-      currentTextId,
-      refreshText,
-    } = this.props;
+  let select;
 
-    let refresh;
+  if (id === currentTextId) {
+    select = <span styleName="text__select text__select_selected">This text is selected</span>;
+  }
+  else {
+    select = <button onClick={selectText(id)} styleName="text__select" href>Select this text to type</button>;
+  }
 
-    if (typed) {
-      refresh = <button onClick={() => refreshText(id)} className="text__reload fa fa-refresh" />;
-    }
-
-    let select;
-
-    if (id === currentTextId) {
-      select = <span className="text__select text__select_selected">This text is selected</span>;
-    }
-    else {
-      select = <a onClick={this.onClickSelectText} className="text__select" href>Select this text to type</a>;
-    }
-
-    return (
-      <div className="text">
-        <div className="text__buttons">
-          {refresh}
-          {select}
-        </div>
-
-        <h3 className="text__title">
-          {title}
-        </h3>
-
-        <span className="text__typed">{typed}</span>
-        <span className="text__last">{last}</span>
+  return (
+    <div styleName="text">
+      <div styleName="text__buttons">
+        {refresh}
+        {select}
       </div>
-    );
-  }
-}
 
-export default Texts;
+      <h3 styleName="text__title">
+        {title}
+      </h3>
+
+      <span styleName="text__typed">{typed}</span>
+      {last}
+    </div>
+  );
+};
+
+export default CSSModules(Text, styles, {
+  allowMultiple: true,
+});

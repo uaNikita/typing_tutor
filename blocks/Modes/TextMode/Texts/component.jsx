@@ -10,19 +10,11 @@ class Texts extends Component {
     this.props.setMode('text');
   };
 
-  onHandleTextClick(textId, e) {
-    if (e.target.nodeName.toLowerCase() === 'a') {
-      return;
-    }
-
-    this.props.selectText(textId);
-  }
-
   render() {
-    const self = this;
     const {
       texts,
       currentTextId,
+      selectText,
       mode,
       match: {
         url,
@@ -71,29 +63,25 @@ class Texts extends Component {
         props.className = classNames(props.className, 'settings-text__text_selected');
       }
       else {
-        props.onClick = self.onHandleTextClick;
+        props.onClick = selectText;
       }
 
       return (
-        <Text {...props} />
+        <Text key={textId} {...props} />
       );
     });
 
     return (
       <div className="settings-text">
-
         <div className="settings-text__actions">
-
           <Switcher {...switcherProps} />
 
           {addTextLink}
-
         </div>
 
         <div className="settings-text__texts">
           {textEls}
         </div>
-
       </div>
 
     );
