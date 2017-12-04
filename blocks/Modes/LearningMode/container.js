@@ -18,25 +18,12 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => (
-  {
-    localSetMode(mode) {
-      dispatch(setMode(mode));
-    },
-
-    localSetLearningMode(learningMode) {
-      dispatch(setLearningMode(learningMode));
-    },
-
-    localUpdateCurrentLessonFromCurrentMode() {
-      dispatch(updateCurrentLessonFromCurrentMode());
-    },
-
-    localUpdateCharToType() {
-      dispatch(updateCharToType());
-    },
-  }
-);
+const mapDispatchToProps = dispatch => ({
+  localSetMode: (...args) => dispatch(setMode(...args)),
+  localSetLearningMode: (...args) => dispatch(setLearningMode(...args)),
+  localUpdateCurrentLessonFromCurrentMode: () => dispatch(updateCurrentLessonFromCurrentMode()),
+  localUpdateCharToType: () => dispatch(updateCharToType()),
+});
 
 const mergeProps = (stateProps, dispatchProps, ownProps) => {
   const { mode } = stateProps;

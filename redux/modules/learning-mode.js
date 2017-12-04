@@ -1,18 +1,8 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import {
-  setIdsCharToType,
-  pressWrongKeys,
-  addSuccesType,
-  addErrorType,
-} from './main';
-
-import {
-  getIdsFromCharacter,
-  generateLesson,
-  getFingersSet,
-} from '../../utils';
+import { setIdsCharToType, pressWrongKeys } from './main';
+import { getIdsFromCharacter, generateLesson, getFingersSet } from '../../utils';
 
 const CLEAR_STATE = 'learning-mode/CLEAR_STATE';
 const TYPE_ON_LESSON = 'learning-mode/TYPE_ON_LESSON';
@@ -30,6 +20,8 @@ const SET_LETTERS_FREE = 'learning-mode/SET_LETTERS_FREE';
 const SET_MAX_LETTERS_IN_WORD_FREE = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FREE';
 const ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
 const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
+const ADD_SUCCESS_TYPE = 'learning-mode/ADD_SUCCESS_TYPE';
+const ADD_ERROR_TYPE = 'learning-mode/ADD_ERROR_TYPE';
 
 const initialState = Immutable.Map({
   // fingers, free,
@@ -50,6 +42,10 @@ const initialState = Immutable.Map({
   lessonTyped: '',
 
   lessonRest: '',
+
+  successTypes: 0,
+
+  errorTypes: 0,
 });
 
 export default (state = initialState, action = {}) => {
@@ -102,6 +98,12 @@ export default (state = initialState, action = {}) => {
     case REMOVE_LETTER_FROM_FREE_LETTERS:
       return state.update('lettersFree', letters => letters.delete(action.letter));
 
+    case ADD_SUCCESS_TYPE:
+      return state.set('successTypes', state.get('successTypes') + 1);
+
+    case ADD_ERROR_TYPE:
+      return state.set('errorTypes', state.get('errorTypes') + 1);
+
     default:
       return state;
   }
@@ -111,87 +113,71 @@ export const clearState = () => ({
   type: CLEAR_STATE,
 });
 
-export function setMode(mode) {
-  return {
-    type: SET_LEARNING_MODE,
-    mode,
-  };
-}
+export const setMode = mode => ({
+  type: SET_LEARNING_MODE,
+  mode,
+});
 
-export function setCurrentLesson(lesson) {
-  return {
-    type: SET_CURRENT_LESSON,
-    lesson,
-  };
-}
+export const setCurrentLesson = lesson => ({
+  type: SET_CURRENT_LESSON,
+  lesson,
+});
 
-export function refreshCurrentLesson() {
-  return {
-    type: REFRESH_CURRENT_LESSON,
-  };
-}
+export const refreshCurrentLesson = () => ({
+  type: REFRESH_CURRENT_LESSON,
+});
 
-export function setMaxLettersInWordFingers(length) {
-  return {
-    type: SET_MAX_LETTERS_IN_WORD_FINGERS,
-    length,
-  };
-}
+export const setMaxLettersInWordFingers = length => ({
+  type: SET_MAX_LETTERS_IN_WORD_FINGERS,
+  length,
+});
 
-export function setMaxLettersInWordFree(length) {
-  return {
-    type: SET_MAX_LETTERS_IN_WORD_FREE,
-    length,
-  };
-}
+export const setMaxLettersInWordFree = length => ({
+  type: SET_MAX_LETTERS_IN_WORD_FREE,
+  length,
+});
 
-export function setLessonFingers(lesson) {
-  return {
-    type: SET_LESSON_FINGERS,
-    lesson,
-  };
-}
+export const setLessonFingers = lesson => ({
+  type: SET_LESSON_FINGERS,
+  lesson,
+});
 
-export function setSetSizeFingers(size) {
-  return {
-    type: SET_SET_SIZE_FINGERS,
-    size,
-  };
-}
+export const setSetSizeFingers = size => ({
+  type: SET_SET_SIZE_FINGERS,
+  size,
+});
 
-export function setLessonFree(lesson) {
-  return {
-    type: SET_LESSON_FREE,
-    lesson,
-  };
-}
+export const setLessonFree = lesson => ({
+  type: SET_LESSON_FREE,
+  lesson,
+});
 
-export function setLettersFree(letters) {
-  return {
-    type: SET_LETTERS_FREE,
-    letters,
-  };
-}
+export const setLettersFree = letters => ({
+  type: SET_LETTERS_FREE,
+  letters,
+});
 
-export function addLetterToFreeLetters(letter) {
-  return {
-    type: ADD_LETTER_TO_FREE_LETTERS,
-    letter,
-  };
-}
+export const addLetterToFreeLetters = letter => ({
+  type: ADD_LETTER_TO_FREE_LETTERS,
+  letter,
+});
 
-export function removeLetterFromFreeLetters(letter) {
-  return {
-    type: REMOVE_LETTER_FROM_FREE_LETTERS,
-    letter,
-  };
-}
+export const removeLetterFromFreeLetters = letter => ({
+  type: REMOVE_LETTER_FROM_FREE_LETTERS,
+  letter,
+});
 
-export function typeOnLesson() {
-  return {
-    type: TYPE_ON_LESSON,
-  };
-}
+export const typeOnLesson = () => ({
+  type: TYPE_ON_LESSON,
+});
+
+export const addSuccesType = () => ({
+  type: ADD_SUCCESS_TYPE,
+});
+
+export const addErrorType = () => ({
+  type: ADD_ERROR_TYPE,
+});
 
 export function updateCurrentLessonFromCurrentMode() {
   return (dispatch, getState) => {
@@ -278,14 +264,12 @@ export function typeLearningMode(char) {
     else {
       switch (state.learningMode.mode) {
         case 'fingers':
-
           dispatch(updateFingersLesson());
 
           dispatch(setCurrentLesson(getState().getIn(['learningMode', 'lessonFingers'])));
 
           break;
         case 'free':
-
           dispatch(updateFreeLesson());
 
           dispatch(setCurrentLesson(getState().getIn(['learningMode', 'lessonFree'])));
