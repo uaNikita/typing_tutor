@@ -20,6 +20,7 @@ const SET_LETTERS_FREE = 'learning-mode/SET_LETTERS_FREE';
 const SET_MAX_LETTERS_IN_WORD_FREE = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FREE';
 const ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
 const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
+
 const ADD_SUCCESS_TYPE = 'learning-mode/ADD_SUCCESS_TYPE';
 const ADD_ERROR_TYPE = 'learning-mode/ADD_ERROR_TYPE';
 
@@ -179,140 +180,129 @@ export const addErrorType = () => ({
   type: ADD_ERROR_TYPE,
 });
 
-export function updateCurrentLessonFromCurrentMode() {
-  return (dispatch, getState) => {
-    const learningState = getState().get('learningMode');
+export const updateCurrentLessonFromCurrentMode = () => (dispatch, getState) => {
+  const learningState = getState().get('learningMode');
 
-    let lesson;
+  let lesson;
 
-    switch (learningState.get('mode')) {
-      case 'fingers':
-        lesson = learningState.get('lessonFingers');
-        break;
+  switch (learningState.get('mode')) {
+    case 'fingers':
+      lesson = learningState.get('lessonFingers');
+      break;
 
-      case 'free':
-        lesson = learningState.get('lessonFree');
-        break;
-    }
+    case 'free':
+      lesson = learningState.get('lessonFree');
+      break;
+  }
 
-    dispatch(setCurrentLesson(lesson));
-  };
-}
+  dispatch(setCurrentLesson(lesson));
+};
 
-export function updateFingersLesson() {
-  return (dispatch, getState) => {
-    const state = getState();
+export const updateFingersLesson = () => (dispatch, getState) => {
+  const state = getState();
 
-    const keys = state.getIn(['main', 'keys']).toJS();
+  const keys = state.getIn(['main', 'keys']).toJS();
 
-    let fingersSet = getFingersSet(keys);
+  let fingersSet = getFingersSet(keys);
 
-    fingersSet.splice(state.getIn(['learningMode', 'setSizeFingers']));
+  fingersSet.splice(state.getIn(['learningMode', 'setSizeFingers']));
 
-    fingersSet = _.concat.apply(null, fingersSet);
+  fingersSet = _.concat.apply(null, fingersSet);
 
-    const lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFingers']), fingersSet);
+  const lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFingers']), fingersSet);
 
-    dispatch(setLessonFingers(lesson));
-  };
-}
+  dispatch(setLessonFingers(lesson));
+};
 
-export function updateFreeLesson() {
-  return (dispatch, getState) => {
-    const learningState = getState().get('learningMode');
 
-    const lesson = generateLesson(learningState.get('maxLettersInWordFree'), learningState.get('lettersFree'));
+export const updateFreeLesson = () => (dispatch, getState) => {
+  const learningState = getState().get('learningMode');
 
-    dispatch(setLessonFree(lesson));
-  };
-}
+  const lesson = generateLesson(learningState.get('maxLettersInWordFree'), learningState.get('lettersFree'));
 
-export function updateCharToType() {
-  return (dispatch, getState) => {
-    const state = getState();
+  dispatch(setLessonFree(lesson));
+};
 
-    let idsChar = '';
+export const updateCharToType = () => (dispatch, getState) => {
+  const state = getState();
 
-    if (state.getIn(['learningMode', 'lessonRest'])) {
-      idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), state.getIn(['learningMode', 'lessonRest'])[0]);
-    }
+  let idsChar = '';
 
-    dispatch(setIdsCharToType(idsChar));
-  };
-}
+  if (state.getIn(['learningMode', 'lessonRest'])) {
+    idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), state.getIn(['learningMode', 'lessonRest'])[0]);
+  }
 
-export function typeLearningMode(char) {
-  return (dispatch, getState) => {
-    const state = getState();
+  dispatch(setIdsCharToType(idsChar));
+};
 
-    if (state.getIn(['learningMode', 'lessonRest'])) {
-      const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
+export const typeLearningMode = char => (dispatch, getState) => {
+  const state = getState();
 
-      if (state.getIn(['learningMode', 'lessonRest'])[0] === char) {
-        dispatch(typeOnLesson());
+  if (state.getIn(['learningMode', 'lessonRest'])) {
+    const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
-        dispatch(addSuccesType());
+    if (state.getIn(['learningMode', 'lessonRest'])[0] === char) {
+      dispatch(typeOnLesson());
 
-        dispatch(updateCharToType());
-      }
-      else {
-        dispatch(pressWrongKeys(idsChar));
+      dispatch(addSuccesType());
 
-        dispatch(addErrorType());
-      }
+      dispatch(updateCharToType());
     }
     else {
-      switch (state.learningMode.mode) {
-        case 'fingers':
-          dispatch(updateFingersLesson());
+      dispatch(pressWrongKeys(idsChar));
 
-          dispatch(setCurrentLesson(getState().getIn(['learningMode', 'lessonFingers'])));
-
-          break;
-        case 'free':
-          dispatch(updateFreeLesson());
-
-          dispatch(setCurrentLesson(getState().getIn(['learningMode', 'lessonFree'])));
-
-          break;
-      }
+      dispatch(addErrorType());
     }
-  };
-}
+  }
+  else {
+    switch (state.learningMode.mode) {
+      case 'fingers':
+        dispatch(updateFingersLesson());
 
-export function updateLearningState() {
-  return (dispatch, getState) => {
-    const state = getState();
+        dispatch(setCurrentLesson(getState().getIn(['learningMode', 'lessonFingers'])));
 
-    const defaultKeys = _.filter(state.getIn(['main', 'keys']).toJS(), {
-      row: 'middle',
-      type: 'letter',
-    });
+        break;
+      case 'free':
+        dispatch(updateFreeLesson());
 
-    const size = _(defaultKeys)
-      .map(o => ({
-        finger: o.finger,
-        hand: o.hand,
-      }))
-      .uniqWith(_.isEqual)
-      .value()
-      .length;
+        dispatch(setCurrentLesson(getState().getIn(['learningMode', 'lessonFree'])));
 
-    dispatch(setSetSizeFingers(size));
+        break;
+    }
+  }
+};
 
-    const letters = defaultKeys.map(obj => obj.key);
+export const updateLearningState = () => (dispatch, getState) => {
+  const state = getState();
 
-    let lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFingers']), letters);
+  const defaultKeys = _.filter(state.getIn(['main', 'keys']).toJS(), {
+    row: 'middle',
+    type: 'letter',
+  });
 
-    dispatch(setLessonFingers(lesson));
+  const size = _(defaultKeys)
+    .map(o => ({
+      finger: o.finger,
+      hand: o.hand,
+    }))
+    .uniqWith(_.isEqual)
+    .value()
+    .length;
 
-    dispatch(setCurrentLesson(lesson));
+  dispatch(setSetSizeFingers(size));
 
-    dispatch(setLettersFree(letters));
+  const letters = defaultKeys.map(obj => obj.key);
 
-    // different lesson for free mode
-    lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFree']), letters);
+  let lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFingers']), letters);
 
-    dispatch(setLessonFree(lesson));
-  };
-}
+  dispatch(setLessonFingers(lesson));
+
+  dispatch(setCurrentLesson(lesson));
+
+  dispatch(setLettersFree(letters));
+
+  // different lesson for free mode
+  lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFree']), letters);
+
+  dispatch(setLessonFree(lesson));
+};

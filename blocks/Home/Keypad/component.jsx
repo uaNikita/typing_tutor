@@ -1,7 +1,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import _ from 'lodash';
-import Key from '../Key/component.jsx';
+
+import Key from 'Blocks/Key/component.jsx';
 
 const KeyPad = props => {
   const {

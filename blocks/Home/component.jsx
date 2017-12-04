@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 
-import Textarea from 'Blocks/Textarea/container';
-import Learningarea from 'Blocks/Learningarea/container';
-import Keypad from 'Blocks/Keypad/container';
+import Keypad from './Keypad/container';
+import Learningarea from './Learningarea/container';
+import Textarea from './Textarea/container';
 import Header from './Header/component.jsx';
 
 import styles from './home.module.styl';
