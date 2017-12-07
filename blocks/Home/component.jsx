@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
 
 import Keypad from './Keypad/container';
-import Learningarea from './Learningarea/container';
-import Textarea from './Textarea/container';
+import LearningArea from './LearningArea/container';
+import TextArea from './TextArea/container';
 import Header from './Header/component.jsx';
-
-import styles from './home.module.styl';
 
 class Home extends Component {
   constructor(props) {
@@ -43,46 +41,22 @@ class Home extends Component {
   }
 
   render() {
-    let area;
+    const { mode } = this.props;
 
-    const {
-      successTypes,
-      errorTypes,
-      speed,
-      mode,
-    } = this.props;
+    let area;
 
     switch (mode) {
       case 'text':
-        area = <Textarea key="textarea" />;
+        area = <TextArea key="textarea" />;
         break;
       case 'learning':
-        area = <Learningarea key="learningarea" />;
+        area = <LearningArea key="learningarea" />;
         break;
     }
 
     return [
       <Header key="header" />,
-
-      <div key="typing-info" className={styles['typing-info']}>
-        <p className="num-chars">
-          <i className="fa fa-file-text-o num-chars__icon" />
-          {successTypes}
-        </p>
-
-        <p className="speed">
-          <i className="fa fa-tachometer speed__icon" />
-          {speed} зн/мин
-        </p>
-
-        <p className="error-key">
-          <i className="fa fa-minus-square-o error-key__icon" />
-          {errorTypes}
-        </p>
-      </div>,
-
       area,
-
       <Keypad key="keypad" />,
     ];
   }

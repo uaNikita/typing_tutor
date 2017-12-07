@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { NavLink } from 'react-router-dom';
 
 import Switcher from 'Blocks/Switcher/component.jsx';
+import LearningView from 'Blocks/LearningView/component.jsx';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
 
@@ -28,16 +29,6 @@ class LearningMode extends Component {
         url,
       },
     } = this.props;
-
-    const lessonKeys = lesson.split('').map((char, i) => ({ id: i, char })).map(({ id, char }) => {
-      let charEl = char;
-
-      if (char === ' ') {
-        charEl = <span key={id} className="learningarea__space">␣</span>;
-      }
-
-      return charEl;
-    });
 
     let switcherPropsInput = {
       checked: true,
@@ -77,9 +68,7 @@ class LearningMode extends Component {
       <div className="settings-learning">
         <Switcher {...switcherPropsInput} />
 
-        <div className="learningarea">
-          {lessonKeys}
-        </div>
+        <LearningView lesson={lesson} />
 
         <div className="settings-learning__modes">
           <div className="settings-learning__modes-menu">

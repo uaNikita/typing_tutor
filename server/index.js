@@ -17,6 +17,7 @@ const {
   reducer,
   setRefreshToken,
   setAccessToken,
+  init,
   requestAllWithoutAuth
 } = require('../dist/compiledServer');
 
@@ -100,6 +101,8 @@ app.use((req, res) => {
       });
   }
   else {
+    dispatch(init());
+
     sendRes();
   }
 });

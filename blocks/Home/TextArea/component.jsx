@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-// import $ from 'jquery';
 
-class Textarea extends Component {
+import Statistic from '../Statistic/component.jsx';
+
+class TextArea extends Component {
   // componentDidMount() {
   //   const $content = $(this.content);
   //
@@ -13,18 +14,20 @@ class Textarea extends Component {
   // }
 
   render() {
-    const { typed, nonTyped } = this.props;
+    const { successTypes, speed, errorTypes, typed, nonTyped } = this.props;
 
-    return (
-      <div className="textarea">
+    return [
+      <Statistic key="statistic" hits={successTypes} speed={speed} errors={errorTypes} />,
+
+      <div key="textarea" className="textarea">
         <div className="textarea__content" ref={el => { this.content = el; }}>
           <span className="textarea__typed">{typed}</span>
           <span className="textarea__cursor" ref={el => { this.cursor = el; }} />
           <span className="textarea__non-typed">{nonTyped}</span>
         </div>
-      </div>
-    );
+      </div>,
+    ];
   }
 }
 
-export default Textarea;
+export default TextArea;

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import Textarea from '../Textarea/component.jsx';
+import Component from './component.jsx';
 
 const mapStateToProps = state => {
   const stateTextMode = state.get('textMode');
@@ -15,5 +15,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-)(Textarea);
+)(Component);
 

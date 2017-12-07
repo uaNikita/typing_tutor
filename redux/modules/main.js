@@ -222,10 +222,14 @@ export const typeChar = char => (dispatch, getState) => {
   }
 };
 
+export const init = () => dispatch => {
+  dispatch(updateLearningState());
+};
+
 export const setAllWithoutAuth = data => dispatch => {
   dispatch(setUserData(data.profile));
 
-  dispatch(updateLearningState());
+  dispatch(init());
 };
 
 export const setAllWithAuth = ({ tokens: { refresh, access }, ...rest }) => dispatch => {
