@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 
-import { setMode } from 'ReduxUtils/modules/main';
 import {
   setMode as setLearningMode,
   updateCurrentLessonFromCurrentMode,
@@ -19,7 +18,6 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  localSetMode: (...args) => dispatch(setMode(...args)),
   localSetLearningMode: (...args) => dispatch(setLearningMode(...args)),
   localUpdateCurrentLessonFromCurrentMode: () => dispatch(updateCurrentLessonFromCurrentMode()),
   localUpdateCharToType: () => dispatch(updateCharToType()),

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
+import ModeButton from '../../ModeButton/container';
 import Text from './Text.jsx';
 
 const Texts = props => {
@@ -9,28 +10,10 @@ const Texts = props => {
     texts,
     currentTextId,
     selectText,
-    mode,
     match: {
       url,
     },
-    setMode,
   } = props;
-
-  let button = {
-    props: {
-      onClick: () => setMode('text'),
-    },
-    text: 'Turn on',
-  };
-
-  if (mode === 'text') {
-    button = {
-      props: {
-        disabled: true,
-      },
-      text: 'Turned on',
-    };
-  }
 
   let addTextLink;
 
@@ -64,7 +47,7 @@ const Texts = props => {
   return (
     <div className="settings-text">
       <div className="settings-text__actions">
-        <button className="button" {...button.props}>{button.text}</button>
+        <ModeButton to="text" />
 
         {addTextLink}
       </div>

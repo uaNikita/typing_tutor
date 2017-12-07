@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 
-import { setMode } from 'ReduxUtils/modules/main';
-import { selectText, updateCharToType } from 'ReduxUtils/modules/text-mode';
+import { selectText } from 'ReduxUtils/modules/text-mode';
 import Texts from './component.jsx';
 
 const mapStateToProps = state => {
@@ -16,22 +15,14 @@ const mapStateToProps = state => {
   return {
     texts,
     currentTextId: stateTextMode.get('currentTextId'),
-    mode: state.getIn(['main', 'mode']),
   };
 };
 
-const mapDispatchToProps = dispatch => (
-  {
-    selectText: textId => {
-      dispatch(selectText(textId));
-    },
-    setMode: mode => {
-      dispatch(setMode(mode));
-
-      dispatch(updateCharToType());
-    },
-  }
-);
+const mapDispatchToProps = dispatch => ({
+  selectText: textId => {
+    dispatch(selectText(textId));
+  },
+});
 
 
 export default connect(

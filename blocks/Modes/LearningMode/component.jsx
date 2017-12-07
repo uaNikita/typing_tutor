@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { NavLink } from 'react-router-dom';
 
-import Switcher from 'Blocks/Switcher/component.jsx';
 import LearningView from 'Blocks/LearningView/component.jsx';
+import ModeButton from '../ModeButton/container';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
 
@@ -17,72 +17,55 @@ const menuLinks = [
   },
 ];
 
-class LearningMode extends Component {
-  onSwitcherChange = () => this.props.setMainMode('learning');
+const LearningMode = props => {
+  const {
+    lesson,
+    learningMode,
+    match: {
+      url,
+    },
+  } = props;
 
-  render() {
-    const {
-      lesson,
-      learningMode,
-      mode,
-      match: {
-        url,
-      },
-    } = this.props;
+  let Mode;
 
-    let switcherPropsInput = {
-      checked: true,
-      readOnly: true,
-    };
+  switch (learningMode) {
+    case 'fingers':
+      Mode = LearningFingers;
+      break;
+    case 'free':
+      Mode = LearningFree;
+      break;
+  }
 
-    if (mode !== 'learning') {
-      switcherPropsInput = {
-        checked: false,
-        readOnly: false,
-        onChange: this.onSwitcherChange,
-      };
-    }
+  const links = menuLinks.map(({ url: linkUrl, text }) => (
+    <NavLink
+      key={linkUrl}
+      className="submenu-link"
+      activeClassName="submenu-link_selected"
+      to={url + linkUrl}>
+      {text}
+    </NavLink>
+  ));
 
-    let Mode;
+  return (
+    <div className="settings-learning">
+      <ModeButton to="learning" />
 
-    switch (learningMode) {
-      case 'fingers':
-        Mode = LearningFingers;
-        break;
-      case 'free':
-        Mode = LearningFree;
-        break;
-    }
+      <LearningView lesson={lesson} />
 
-    const links = menuLinks.map(({ url: linkUrl, text }) => (
-      <NavLink
-        key={linkUrl}
-        className="submenu-link"
-        activeClassName="submenu-link_selected"
-        to={url + linkUrl}>
-        {text}
-      </NavLink>
-    ));
+      <div className="settings-learning__modes">
+        <div className="settings-learning__modes-menu">
+          <h4 className="settings-learning__modes-menu-title">Keys set</h4>
+          {links}
+        </div>
 
-    return (
-      <div className="settings-learning">
-        <Switcher {...switcherPropsInput} />
-
-        <LearningView lesson={lesson} />
-
-        <div className="settings-learning__modes">
-          <div className="settings-learning__modes-menu">
-            <h4 className="settings-learning__modes-menu-title">Keys set</h4>
-            {links}
-          </div>
-
-          <div className="settings-learning__modes-content">
-            <Mode />
-          </div>
+        <div className="settings-learning__modes-content">
+          <Mode />
         </div>
       </div>
-    );
-  }
-}
+    </div>
+  );
+};
+
 
 export default LearningMode;
