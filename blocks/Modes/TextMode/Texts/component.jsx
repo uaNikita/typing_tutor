@@ -1,91 +1,79 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 
-import Switcher from 'Blocks/Switcher/component.jsx';
 import Text from './Text.jsx';
 
-class Texts extends Component {
-  onSwitcherChange = () => {
-    this.props.setMode('text');
+const Texts = props => {
+  const {
+    texts,
+    currentTextId,
+    selectText,
+    mode,
+    match: {
+      url,
+    },
+    setMode,
+  } = props;
+
+  let button = {
+    props: {
+      onClick: () => setMode('text'),
+    },
+    text: 'Turn on',
   };
 
-  render() {
-    const {
-      texts,
-      currentTextId,
-      selectText,
-      mode,
-      match: {
-        url,
+  if (mode === 'text') {
+    button = {
+      props: {
+        disabled: true,
       },
-    } = this.props;
+      text: 'Turned on',
+    };
+  }
 
-    const switcherProps = {
-      label: {
-        title: 'Learning mode on',
-      },
-      input: {
-        checked: true,
-        readOnly: true,
-      },
+  let addTextLink;
+
+  if (texts.length < 10) {
+    addTextLink = <Link to={`${url}/add-text`}>Add new text</Link>;
+  }
+
+  const textEls = texts.map(obj => {
+    const clsN = 'settings-text__text';
+    const { textId } = obj;
+
+    const textProps = {
+      id: textId,
+      title: obj.title,
+      className: clsN,
+      text: obj.text,
     };
 
-    if (mode !== 'text') {
-      switcherProps.label.title = 'Learning mode off';
-
-      switcherProps.input = {
-        ...switcherProps.input,
-        checked: false,
-        readOnly: false,
-        onChange: this.onSwitcherChange,
-      };
+    if (textId === currentTextId) {
+      textProps.className = classNames(textProps.className, 'settings-text__text_selected');
     }
-
-    let addTextLink;
-
-    if (texts.length < 10) {
-      addTextLink = <Link to={`${url}/add-text`}>Add new text</Link>;
+    else {
+      textProps.onClick = selectText;
     }
-
-    const textEls = texts.map(obj => {
-      const clsN = 'settings-text__text';
-      const { textId } = obj;
-
-      const props = {
-        id: textId,
-        title: obj.title,
-        className: clsN,
-        text: obj.text,
-      };
-
-      if (textId === currentTextId) {
-        props.className = classNames(props.className, 'settings-text__text_selected');
-      }
-      else {
-        props.onClick = selectText;
-      }
-
-      return (
-        <Text key={textId} {...props} />
-      );
-    });
 
     return (
-      <div className="settings-text">
-        <div className="settings-text__actions">
-          <Switcher {...switcherProps} />
+      <Text key={textId} {...textProps} />
+    );
+  });
 
-          {addTextLink}
-        </div>
+  return (
+    <div className="settings-text">
+      <div className="settings-text__actions">
+        <button className="button" {...button.props}>{button.text}</button>
 
-        <div className="settings-text__texts">
-          {textEls}
-        </div>
+        {addTextLink}
       </div>
 
-    );
-  }
-}
+      <div className="settings-text__texts">
+        {textEls}
+      </div>
+    </div>
+  );
+};
 
 export default Texts;
