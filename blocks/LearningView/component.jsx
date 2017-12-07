@@ -26,10 +26,16 @@ class Learningarea extends Component {
       content = this.getCharsMarkup(lesson);
     }
     else {
+      let typed = null;
+
+      if (lesson.typed.length) {
+        typed = <span key="typed" styleName="typed">{this.getCharsMarkup(lesson.typed)}</span>;
+      }
+
       content = [
-        <span key="typed" styleName="typed">{this.getCharsMarkup(lesson.typed)}</span>,
+        typed,
         <span key="cursor" styleName="cursor" />,
-        <span key="last" styleName="non-typed">{this.getCharsMarkup(lesson.last)}</span>,
+        this.getCharsMarkup(lesson.rest),
       ];
     }
 

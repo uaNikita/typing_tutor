@@ -6,7 +6,7 @@ const mapStateToProps = state => {
 
   return {
     lessonTyped: stateLearningMode.get('lessonTyped'),
-    lessonLast: stateLearningMode.get('lessonRest'),
+    lessonRest: stateLearningMode.get('lessonRest'),
   };
 };
 
