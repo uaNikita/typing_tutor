@@ -1,10 +1,13 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
+import CSSModules from 'react-css-modules';
 
 import LearningView from 'Blocks/LearningView/component.jsx';
 import ModeButton from '../ModeButton/container';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
+
+import styles from './learning-mode.module.styl';
 
 const menuLinks = [
   {
@@ -48,18 +51,18 @@ const LearningMode = props => {
   ));
 
   return (
-    <div className="settings-learning">
+    <div>
       <ModeButton to="learning" />
 
       <LearningView lesson={lesson} />
 
-      <div className="settings-learning__modes">
-        <div className="settings-learning__modes-menu">
-          <h4 className="settings-learning__modes-menu-title">Keys set</h4>
+      <div styleName="modes">
+        <div styleName="menu">
+          <h4 styleName="title">Keys set</h4>
           {links}
         </div>
 
-        <div className="settings-learning__modes-content">
+        <div styleName="content">
           <Mode />
         </div>
       </div>
@@ -67,5 +70,4 @@ const LearningMode = props => {
   );
 };
 
-
-export default LearningMode;
+export default CSSModules(LearningMode, styles);
