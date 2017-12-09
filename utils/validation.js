@@ -1,13 +1,25 @@
 export const requiredError = 'Please fill out this field';
 
-export const validateEmail = email => {
+
+export const validateField = (name, val) => {
   const errors = {};
 
-  if (!email) {
-    errors.email = requiredError;
+  if (!val) {
+    errors[name] = requiredError;
   }
-  else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(email)) {
-    errors.email = 'Please enter a valid email address';
+
+  return errors;
+};
+
+
+export const validateEmail = (name, val) => {
+  const errors = {};
+
+  if (!val) {
+    errors[name] = requiredError;
+  }
+  else if (!/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(val)) {
+    errors[name] = 'Please enter a valid email address';
   }
 
   return errors;

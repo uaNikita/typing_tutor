@@ -135,8 +135,8 @@ class SignIn extends Component {
 }
 
 const validate = values => ({
-  ...validateEmail(values.get('email')),
-  ...validatePassword(values.get('password')),
+  ...validateEmail('email', values.get('email')),
+  ...validatePassword('password', values.get('password')),
 });
 
 export default reduxForm({

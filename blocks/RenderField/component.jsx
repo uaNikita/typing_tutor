@@ -78,6 +78,9 @@ class RenderField extends Component {
         <button key="eye" className={eyeClassName} onClick={this.passwordHandleClick} />,
       ];
     }
+    else if (type === 'textarea') {
+      control = <textarea {...controlProps} />;
+    }
 
     return (
       <div className={fieldClass}>

@@ -70,7 +70,7 @@ class SignUp extends Component {
 }
 
 const validate = values => ({
-  ...validateEmail(values.get('email')),
+  ...validateEmail('email', values.get('email')),
 });
 
 export default reduxForm({
