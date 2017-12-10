@@ -11,16 +11,15 @@ const mapStateToProps = (state, ownProps) => {
 
   return {
     id,
-    title: text.get('title'),
     typed: text.get('typed'),
     last: text.get('last'),
-    currentTextId: stateTextMode.get('currentTextId'),
+    selectedId: stateTextMode.get('selectedId'),
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  selectText: textId => dispatch(selectText(textId)),
-  refreshText: textId => dispatch(refreshText(textId)),
+  selectText: (...args) => dispatch(selectText(...args)),
+  refreshText: (...args) => dispatch(refreshText(...args)),
 });
 
 export default connect(

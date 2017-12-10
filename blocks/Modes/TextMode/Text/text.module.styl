@@ -1,36 +1,19 @@
-.text
-   width: 840px;
-   margin: 0 auto;
-   position: relative
-   &__
-      &title
-         font-size: 18px;
-         margin-bottom: 10px;
-      &typed
-         opacity: 0.3
-      &reload
-         width: 25px;
-         height: @width;
-         background-color: rgba(255, 255, 255, 0.8);
-         box-shadow: 0 0 5px rgba(255, 255, 255, 0.9);
-         border-radius: 50%;
-         font-size: 20px;
-         line-height: 25px;
-         text-align: center;
-         color: #33c3f0;
-         cursor: pointer
-         z-index: 1
-      &buttons
-         height: 30px
-         display: flex
-         justify-content flex-end
-         align-items center
-         margin-bottom: 10px
-         > *
-            margin: 0 5px;
-            &:last-child
-               margin-right: 0
-      &select
-         display: block
-         &_selected
-            opacity: 0.4
+.typed
+   opacity: 0.3
+.reload
+   width: 25px;
+   height: @width;
+   background-color: rgba(255, 255, 255, 0.8);
+   box-shadow: 0 0 5px rgba(255, 255, 255, 0.9);
+   border-radius: 50%;
+   font-size: 20px;
+   line-height: 25px;
+   text-align: center;
+   color: #33c3f0;
+   cursor: pointer
+   z-index: 1
+.actions
+   display flex
+   justify-content space-between
+   align-items center
+   margin-bottom 20px

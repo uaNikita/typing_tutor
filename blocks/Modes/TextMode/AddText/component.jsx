@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { Field } from 'redux-form';
-import { reduxForm } from 'redux-form/immutable';
+import { Field, reduxForm } from 'redux-form/immutable';
 import CSSModules from 'react-css-modules';
 // import _ from 'lodash';
 
@@ -8,7 +7,6 @@ import RenderField from 'Blocks/RenderField/component.jsx';
 import { validateField } from 'Utils/validation';
 
 import styles from './add-text.module.styl';
-
 
 // const specisalCharacters = [
 //   '\\s', '!', '@', '#', '\\$', '%', '\\^', '&', '\\*', '\\(', '\\)', '_',
@@ -101,13 +99,6 @@ class AddText extends Component {
     return (
       <form onSubmit={handleSubmit(this.textFormHandleSubmit)}>
         <Field
-          name="title"
-          type="text"
-          placeholder="Title"
-          component={RenderField}
-        />
-
-        <Field
           name="text"
           type="textarea"
           placeholder="Text"
@@ -134,7 +125,6 @@ class AddText extends Component {
 }
 
 const validate = values => ({
-  ...validateField('title', values.get('title')),
   ...validateField('text', values.get('text')),
 });
 

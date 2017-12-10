@@ -1,15 +1,14 @@
 import React from 'react';
-import CSSModules from 'react-css-modules';
+import classNames from 'classnames';
 
 import styles from './text.module.styl';
 
 const Text = props => {
   const {
     id,
-    title,
     typed,
     last,
-    currentTextId,
+    selectedId,
     refreshText,
     selectText,
   } = props;
@@ -17,35 +16,34 @@ const Text = props => {
   let refresh;
 
   if (typed) {
-    refresh = <button onClick={() => refreshText(id)} className="fa fa-refresh" styleName="text__reload" />;
+    refresh = <button onClick={() => refreshText(id)} className={classNames('fa fa-refresh', styles.reload)} />;
   }
 
-  let select;
+  let button = {
+    props: {
+      onClick: () => selectText(id),
+    },
+    text: 'Select',
+  };
 
-  if (id === currentTextId) {
-    select = <span styleName="text__select text__select_selected">This text is selected</span>;
+  if (id === selectedId) {
+    button = {
+      props: {
+        disabled: true,
+      },
+      text: 'Selected',
+    };
   }
-  else {
-    select = <button onClick={selectText(id)} styleName="text__select" href>Select this text to type</button>;
-  }
 
-  return (
-    <div styleName="text">
-      <div styleName="text__buttons">
-        {refresh}
-        {select}
-      </div>
+  return [
+    <div key="actions" className={styles.actions}>
+      <button className="button" {...button.props}>{button.text}</button>
 
-      <h3 styleName="text__title">
-        {title}
-      </h3>
-
-      <span styleName="text__typed">{typed}</span>
-      {last}
-    </div>
-  );
+      {refresh}
+    </div>,
+    <span key="typed" className={styles.typed}>{typed}</span>,
+    last,
+  ];
 };
 
-export default CSSModules(Text, styles, {
-  allowMultiple: true,
-});
+export default Text;
