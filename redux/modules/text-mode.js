@@ -52,17 +52,16 @@ export default (state = initialState, action = {}) => {
       })));
 
     case SELECT_TEXT:
-      return state.set('currentTextId', action.textId);
+      return state.set('selectedId', action.id);
 
     case SELECT_LAST_TEXT:
-      return state.set('currentTextId', state.get('entities').last().get('id'));
+      return state.set('selectedId', state.get('entities').last().get('id'));
 
     case REFRESH_TEXT:
-
       return state.update('entities', entities => entities.map(text => {
         let t = text;
 
-        if (text.get('id') === action.textId) {
+        if (text.get('id') === action.id) {
           t = text.merge({
             typed: '',
             last: text.get('typed') + text.get('last'),
@@ -76,7 +75,7 @@ export default (state = initialState, action = {}) => {
       return state.update('entities', entities => entities.map(text => {
         let t = text;
 
-        if (text.get('id') === action.textId) {
+        if (text.get('id') === action.id) {
           const last = text.get('last');
 
           t = text.merge({
@@ -97,61 +96,49 @@ export const clearState = () => ({
   type: CLEAR_STATE,
 });
 
-export function addText(title, text) {
-  return {
-    type: ADD_TEXT,
-    title,
-    text,
-  };
-}
+export const addText = (title, text) => ({
+  type: ADD_TEXT,
+  title,
+  text,
+});
 
-export function selectText(textId) {
-  return {
-    type: SELECT_TEXT,
-    textId,
-  };
-}
+export const selectText = id => ({
+  type: SELECT_TEXT,
+  id,
+});
 
-export function selectLastText() {
-  return {
-    type: SELECT_LAST_TEXT,
-  };
-}
+export const selectLastText = () => ({
+  type: SELECT_LAST_TEXT,
+});
 
-export function refreshText(textId) {
-  return {
-    type: REFRESH_TEXT,
-    textId,
-  };
-}
+export const refreshText = id => ({
+  type: REFRESH_TEXT,
+  id,
+});
 
-export function typeOnEntitie(textId) {
-  return {
-    type: TYPE_ON_ENTITIE,
-    textId,
-  };
-}
+export const typeOnEntitie = id => ({
+  type: TYPE_ON_ENTITIE,
+  id,
+});
 
-export function updateCharToType() {
-  return (dispatch, getState) => {
-    const state = getState();
-    const textId = state.getIn(['textMode', 'currentTextId']);
-    const text = state.getIn(['textMode', 'entities']).filter(obj => obj.get('id') === textId).get(0);
+export const updateCharToType = () => (dispatch, getState) => {
+  const state = getState();
+  const textId = state.getIn(['textMode', 'selectedId']);
+  const text = state.getIn(['textMode', 'entities']).filter(obj => obj.get('id') === textId).get(0);
 
-    let idsChar = '';
+  let idsChar = '';
 
-    if (text.get('last')) {
-      idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), text.get('last')[0]);
-    }
+  if (text.get('last')) {
+    idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), text.get('last')[0]);
+  }
 
-    dispatch(setIdsCharToType(idsChar));
-  };
-}
+  dispatch(setIdsCharToType(idsChar));
+};
 
 export function typeTextMode(char) {
   return (dispatch, getState) => {
     const state = getState();
-    const textId = state.getIn(['textMode', 'currentTextId']);
+    const textId = state.getIn(['textMode', 'selectedId']);
     const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']), char);
 
     const text = state.getIn(['textMode', 'entities']).filter(obj => obj.get('id') === textId).get(0);
