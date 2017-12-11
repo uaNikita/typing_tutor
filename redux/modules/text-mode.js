@@ -46,7 +46,6 @@ export default (state = initialState, action = {}) => {
     case ADD_TEXT:
       return state.update('entities', entities => entities.push(Immutable.Map({
         id: uuidV4(),
-        title: action.title,
         typed: '',
         last: action.text,
       })));
@@ -96,9 +95,8 @@ export const clearState = () => ({
   type: CLEAR_STATE,
 });
 
-export const addText = (title, text) => ({
+export const addText = text => ({
   type: ADD_TEXT,
-  title,
   text,
 });
 

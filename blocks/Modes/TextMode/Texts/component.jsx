@@ -27,7 +27,7 @@ const Texts = props => {
   ));
 
   return [
-    <div className={styles.actions}>
+    <div key="actions" className={styles.actions}>
       <ModeButton to="text" />
 
       {addTextLink}
