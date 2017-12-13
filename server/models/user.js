@@ -43,7 +43,6 @@ const UserSchema = new mongoose.Schema({
         type: Number,
         default: selectedId,
       },
-
       entities: {
         type: Array,
         default: entities,
