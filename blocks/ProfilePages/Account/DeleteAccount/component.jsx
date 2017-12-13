@@ -4,8 +4,9 @@ import CSSModules from 'react-css-modules';
 
 import RenderField from 'Blocks/RenderField/component.jsx';
 import ModalSimple from 'Blocks/ModalSimple.jsx';
+import Button from 'Blocks/Button/component.jsx';
 
-import { validatePassword } from 'Utils/validation';
+import { validateField, validatePassword } from 'Utils/validation';
 
 import styles from './delete-account.module.styl';
 
@@ -14,48 +15,63 @@ class DeleteAccount extends Component {
     modal: false,
   };
 
-  handleClickButton = () => {
-    this.setState({
-      modal: true,
-    });
-  };
+  handleClickButton = () => this.setState({
+    modal: true,
+  });
 
-  handlerCloseModal = () => {
-    this.setState({
-      modal: false,
-    });
+  handlerCloseModal = () => this.setState({
+    modal: false,
+  });
+
+  handleSubmit = () => {
+
   };
 
   render() {
     const {
+      props: {
+        handleSubmit,
+        submitting,
+        invalid,
+      },
       state: {
         modal,
       },
     } = this;
 
     return (
-      <div>
+      <form onSubmit={handleSubmit(this.handleSubmit)}>
         <h3 styleName="title">Delete Account</h3>
 
-        <button className="button" onClick={this.handleClickButton}>Delete account</button>
+        <button styleName="button" onClick={this.handleClickButton}>Delete account</button>
 
         <ModalSimple active={modal} onClose={this.handlerCloseModal}>
           Are you sure you want to do this?
 
-          To verify, type delete my account below:
+          To verify, type <span styleName="delete-text">delete my account</span> below:
           <Field name="delete-my-account" component={RenderField} type="text" />
 
           Confirm your password:
           <Field name="confirm-new-password" component={RenderField} type="password" label="Confirm your password" />
+
+          <Button type="submit" disabled={invalid} isLoader={submitting}>Delete my account</Button>
         </ModalSimple>
-      </div>
+      </form>
     );
   }
 }
 
 
 const validate = values => {
-  const errors = {};
+  const deleteMyAccountValue = values.get('delete-my-account');
+
+  const errors = {
+    ...validateField('delete-my-account', deleteMyAccountValue),
+  };
+
+  if (!errors['delete-my-account'] && deleteMyAccountValue !== 'delete my account') {
+    errors['delete-my-account'] = 'Message is wrong';
+  }
 
   return {
     ...errors,
