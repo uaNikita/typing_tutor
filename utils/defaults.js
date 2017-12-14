@@ -1,6 +1,6 @@
 export default {
   text: {
-    selectedId: 2,
+    selectedId: 0,
 
     entities: [
       {

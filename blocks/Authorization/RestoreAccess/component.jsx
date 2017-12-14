@@ -7,17 +7,10 @@ import RenderField from 'Blocks/RenderField/component.jsx';
 import Button from 'Blocks/Button/component.jsx';
 
 class RestoreAccess extends Component {
-  handleSubmit = values => {
-    const {
-      props: {
-        fetchJSON,
-      },
-    } = this;
-
-    return fetchJSON('/auth/restore-access', {
+  handleSubmit = values =>
+    this.props.fetchJSON('/auth/restore-access', {
       body: values.toJS(),
     });
-  };
 
   render() {
     const {

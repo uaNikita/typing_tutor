@@ -5,7 +5,7 @@ import keyboards from '../../constants/keyboards';
 
 import { fetchJSON, setAccessToken, setRefreshToken } from './fetch';
 import { setData as setUserData } from './user';
-import { typeTextMode } from './text-mode';
+import { setData as setTextData, typeTextMode } from './text-mode';
 import { typeLearningMode, updateLearningState } from './learning-mode';
 
 import { getIdsFromCharacter } from '../../utils';
@@ -228,6 +228,8 @@ export const init = () => dispatch => {
 
 export const setAllWithoutAuth = data => dispatch => {
   dispatch(setUserData(data.profile));
+
+  dispatch(setTextData(data.modes.text));
 
   dispatch(init());
 };

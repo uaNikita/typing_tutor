@@ -1,15 +1,16 @@
 const crypto = require('crypto');
-const httpStatus = require('http-status');
 
-const User = require('../models/user');
+const User = require('../../models/user');
 
-const addText = (req, res, next) => {
+const add = (req, res, next) => {
   const {
-    text,
-    select,
     user: {
       id,
-    }
+    },
+    body: {
+      text,
+      select,
+    },
   } = req;
 
   User.get(id)
@@ -31,7 +32,6 @@ const addText = (req, res, next) => {
     .catch(e => next(e));
 }
 
-
 module.exports = {
-  addText,
+  add,
 };

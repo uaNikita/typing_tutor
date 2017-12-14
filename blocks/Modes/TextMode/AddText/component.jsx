@@ -3,6 +3,7 @@ import { Field, reduxForm } from 'redux-form/immutable';
 import CSSModules from 'react-css-modules';
 
 import RenderField from 'Blocks/RenderField/component.jsx';
+import Button from 'Blocks/Button/component.jsx';
 import { validateField } from 'Utils/validation';
 
 import styles from './add-text.module.styl';
@@ -10,26 +11,34 @@ import styles from './add-text.module.styl';
 class AddText extends Component {
   textFormHandleSubmit = values => {
     const {
+      fetchJSON,
       addText,
-      selectAddedText,
+      selectText,
       history: {
         push,
       },
     } = this.props;
 
-    addText(values.toJS().text);
+    const body = values.toJS();
 
-    if (values['select-text']) {
-      selectAddedText();
-    }
+    return fetchJSON('/text/add', { body })
+      .then(id => {
+        addText(id, body.text);
 
-    push('/modes/text');
+        if (body.select) {
+          selectText(id);
+        }
+
+        push('/modes/text');
+      });
   };
 
   render() {
     const {
       props: {
         handleSubmit,
+        invalid,
+        submitting,
       },
     } = this;
 
@@ -44,12 +53,12 @@ class AddText extends Component {
         />
 
         <div styleName="actions">
-          <button type="submit" className="button" title="Add text">Add text</button>
+          <Button type="submit" className="button" disabled={invalid} isLoader={submitting}>Add text</Button>
 
           <label styleName="select">
             <Field
               styleName="select-input"
-              name="select-text"
+              name="select"
               component="input"
               type="checkbox"
             />

@@ -1,5 +1,4 @@
 import Immutable from 'immutable';
-import uuidV4 from 'uuid/v4';
 
 import { getIdsFromCharacter } from 'Utils';
 import defaults from 'Utils/defaults';
@@ -11,12 +10,12 @@ import {
 } from './main';
 
 const CLEAR_STATE = 'text-mode/CLEAR_STATE';
+const SET_DATA = 'text-mode/SET_DATA';
 const SELECT_TEXT = 'text-mode/SELECT_TEXT';
 const SELECT_LAST_TEXT = 'text-mode/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
 const ADD_TEXT = 'text-mode/ADD_TEXT';
 const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
-
 
 const {
   text: {
@@ -36,9 +35,12 @@ export default (state = initialState, action = {}) => {
     case CLEAR_STATE:
       return state.merge(initialState);
 
+    case SET_DATA:
+      return state.merge(action.data);
+
     case ADD_TEXT:
       return state.update('entities', ents => ents.push(Immutable.Map({
-        id: uuidV4(),
+        id: action.id,
         typed: '',
         last: action.text,
       })));
@@ -88,8 +90,14 @@ export const clearState = () => ({
   type: CLEAR_STATE,
 });
 
-export const addText = text => ({
+export const setData = data => ({
+  type: SET_DATA,
+  data,
+});
+
+export const addText = (id, text) => ({
   type: ADD_TEXT,
+  id,
   text,
 });
 
@@ -126,25 +134,23 @@ export const updateCharToType = () => (dispatch, getState) => {
   dispatch(setIdsCharToType(idsChar));
 };
 
-export function typeTextMode(char) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const textId = state.getIn(['textMode', 'selectedId']);
-    const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']), char);
+export const typeTextMode = char => (dispatch, getState) => {
+  const state = getState();
+  const textId = state.getIn(['textMode', 'selectedId']);
+  const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']), char);
 
-    const text = state.getIn(['textMode', 'entities']).filter(obj => obj.get('id') === textId).get(0);
+  const text = state.getIn(['textMode', 'entities']).filter(obj => obj.get('id') === textId).get(0);
 
-    if (text.get('last')[0] === char) {
-      dispatch(typeOnEntitie(textId));
+  if (text.get('last')[0] === char) {
+    dispatch(typeOnEntitie(textId));
 
-      dispatch(addSuccesType());
+    dispatch(addSuccesType());
 
-      dispatch(updateCharToType());
-    }
-    else {
-      dispatch(pressWrongKeys(idsChar));
+    dispatch(updateCharToType());
+  }
+  else {
+    dispatch(pressWrongKeys(idsChar));
 
-      dispatch(addErrorType());
-    }
-  };
-}
+    dispatch(addErrorType());
+  }
+};

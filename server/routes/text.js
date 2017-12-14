@@ -1,14 +1,10 @@
-let express = require('express');
+const express = require('express');
 
 const authenticate = require('../utils/authenticate');
-let user = require('../controllers/user');
+const text = require('../controllers/modes/text');
 
 const router = express.Router();
 
-router.use('/auth', require('./auth'));
-
-router.post('/user', authenticate, user.getUserData);
-
-router.post('/text', authenticate, require('./modes/text'));
+router.post('/add', authenticate, text.add);
 
 module.exports = router;

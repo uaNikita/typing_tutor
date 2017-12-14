@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.use('/auth', require('./auth'));
 
-router.post('/user', authenticate, user.getUserData);
+router.use('/text', require('./text'));
 
-router.post('/protected-route', authenticate, user.getTokens);
+router.post('/user', authenticate, user.getUserData);
 
 module.exports = router;
