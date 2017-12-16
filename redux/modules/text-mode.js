@@ -101,6 +101,23 @@ export const addText = (id, text) => ({
   text,
 });
 
+export const processAddText= body => (dispatch, getState) => {
+
+  if (getState().getIn(['user', 'email'])) {
+    dispatch(fetchJSON('/text/add', { body }))
+      .then(id => {
+        dispatch(addText(id, body.text));
+
+        if (body.select) {
+          dispatch(selectText(id));
+        }
+      });
+  }
+  else {
+
+  }
+};
+
 export const selectText = id => ({
   type: SELECT_TEXT,
   id,
