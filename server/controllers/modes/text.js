@@ -1,25 +1,26 @@
-const crypto = require('crypto');
+const httpStatus = require('http-status');
 
 const User = require('../../models/user');
 
 const add = (req, res, next) => {
   const {
-    user: {
-      id,
-    },
+    user,
     body: {
+      id,
       text,
       select,
     },
   } = req;
 
-  User.get(id)
+  console.log(id, text, select);
+
+  User.get(user.id)
     .then(user => {
       const entity = {
-        id: crypto.randomBytes(40).toString('hex'),
+        id,
         typed: '',
         last: text,
-      }
+      };
 
       user.modes.text.entities.push(entity);
 
@@ -27,10 +28,10 @@ const add = (req, res, next) => {
         user.modes.selectedId = entity.id;
       }
 
-      return user.save().then(() => res.json(entity.id));
+      return user.save().then(() => res.json(httpStatus[200]));
     })
     .catch(e => next(e));
-}
+};
 
 module.exports = {
   add,

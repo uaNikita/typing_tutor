@@ -23,7 +23,7 @@ const modalsRoutes = [
 class App extends Component {
   state = {
     isModal: this.props.isModal,
-  }
+  };
 
   componentDidMount() {
     const { location, setLastNoModalLocation } = this.props;
@@ -37,6 +37,7 @@ class App extends Component {
       history: {
         action,
       },
+      isModal: currentIsModal,
       setLastNoModalLocation,
       setIsModal,
     } = nextProps;
@@ -50,9 +51,11 @@ class App extends Component {
       setLastNoModalLocation(location);
     }
 
-    setIsModal(isModal);
+    if (currentIsModal !== isModal) {
+      setIsModal(isModal);
 
-    this.setState({ isModal });
+      this.setState({ isModal });
+    }
   }
 
   handlerClose = () => {

@@ -2,7 +2,9 @@ import Immutable from 'immutable';
 
 import { getIdsFromCharacter } from 'Utils';
 import defaults from 'Utils/defaults';
+import { fetchJSON } from './fetch';
 import {
+  processAction,
   setIdsCharToType,
   pressWrongKeys,
   addSuccesType,
@@ -39,11 +41,19 @@ export default (state = initialState, action = {}) => {
       return state.merge(action.data);
 
     case ADD_TEXT:
-      return state.update('entities', ents => ents.push(Immutable.Map({
-        id: action.id,
-        typed: '',
-        last: action.text,
-      })));
+      return state.update('entities', ents => {
+
+        console.log('ADD_TEXT');
+        console.log(ents.findLast());
+        console.log(action.text);
+
+
+        return ents.push(Immutable.Map({
+          id: 'action.id',
+          typed: '',
+          last: action.text,
+        }));
+      });
 
     case SELECT_TEXT:
       return state.set('selectedId', action.id);
@@ -95,28 +105,10 @@ export const setData = data => ({
   data,
 });
 
-export const addText = (id, text) => ({
+export const addText = text => ({
   type: ADD_TEXT,
-  id,
   text,
 });
-
-export const processAddText= body => (dispatch, getState) => {
-
-  if (getState().getIn(['user', 'email'])) {
-    dispatch(fetchJSON('/text/add', { body }))
-      .then(id => {
-        dispatch(addText(id, body.text));
-
-        if (body.select) {
-          dispatch(selectText(id));
-        }
-      });
-  }
-  else {
-
-  }
-};
 
 export const selectText = id => ({
   type: SELECT_TEXT,
@@ -136,6 +128,29 @@ export const typeOnEntitie = id => ({
   type: TYPE_ON_ENTITIE,
   id,
 });
+
+export const processAddText = body => dispatch => {
+  const actions = () => {
+    const { text, select } = body;
+
+    console.log(1111);
+
+    dispatch(addText(text));
+
+    // if (select) {
+    //   dispatch(selectText(id));
+    // }
+  };
+
+  return dispatch(processAction(
+    () => dispatch(fetchJSON('/text/add', { body })).then(() => actions()),
+    () => {
+      actions();
+
+      return Promise.reslove();
+    },
+  ));
+};
 
 export const updateCharToType = () => (dispatch, getState) => {
   const state = getState();

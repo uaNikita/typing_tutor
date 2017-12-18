@@ -198,6 +198,19 @@ export const setIsModal = modal => ({
   modal,
 });
 
+export const processAction = (authActions, nonAuthActions) => (dispatch, getState) => {
+  console.log(1);
+  let actions = authActions;
+
+  if (!getState().getIn(['user', 'email'])) {
+    actions = nonAuthActions;
+
+    window.localStorage.setItem('touchToType', JSON.stringify(getState().toJS()));
+  }
+
+  return actions();
+};
+
 export const typeChar = char => (dispatch, getState) => {
   const state = getState();
 
@@ -246,3 +259,4 @@ export const requestAllWithoutAuth = () =>
   dispatch =>
     dispatch(fetchJSON('/user'))
       .then(data => dispatch(setAllWithoutAuth(data)));
+
