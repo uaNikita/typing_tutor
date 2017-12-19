@@ -41,19 +41,11 @@ export default (state = initialState, action = {}) => {
       return state.merge(action.data);
 
     case ADD_TEXT:
-      return state.update('entities', ents => {
-
-        console.log('ADD_TEXT');
-        console.log(ents.findLast());
-        console.log(action.text);
-
-
-        return ents.push(Immutable.Map({
-          id: 'action.id',
-          typed: '',
-          last: action.text,
-        }));
-      });
+      return state.update('entities', ents => ents.push(Immutable.Map({
+        id: ents.last().get('id') + 1,
+        typed: '',
+        last: action.text,
+      })));
 
     case SELECT_TEXT:
       return state.set('selectedId', action.id);
@@ -129,17 +121,14 @@ export const typeOnEntitie = id => ({
   id,
 });
 
-export const processAddText = body => dispatch => {
+export const processAddText = body => (dispatch, getState) => {
   const actions = () => {
     const { text, select } = body;
-
-    console.log(1111);
-
     dispatch(addText(text));
 
-    // if (select) {
-    //   dispatch(selectText(id));
-    // }
+    if (select) {
+      dispatch(selectText(getState().getIn(['textMode', 'entities']).last().get('id')));
+    }
   };
 
   return dispatch(processAction(
@@ -147,7 +136,7 @@ export const processAddText = body => dispatch => {
     () => {
       actions();
 
-      return Promise.reslove();
+      return Promise.resolve();
     },
   ));
 };

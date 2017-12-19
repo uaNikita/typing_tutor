@@ -11,9 +11,7 @@ import styles from './add-text.module.styl';
 class AddText extends Component {
   textFormHandleSubmit = values => {
     const {
-      fetchJSON,
-      addText,
-      selectText,
+      processAddText,
       history: {
         push,
       },
@@ -21,16 +19,8 @@ class AddText extends Component {
 
     const body = values.toJS();
 
-    return fetchJSON('/text/add', { body })
-      .then(id => {
-        addText(id, body.text);
-
-        if (body.select) {
-          selectText(id);
-        }
-
-        push('/modes/text');
-      });
+    return processAddText(body)
+      .then(() => push('/modes/text'));
   };
 
   render() {

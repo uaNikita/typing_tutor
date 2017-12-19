@@ -199,16 +199,18 @@ export const setIsModal = modal => ({
 });
 
 export const processAction = (authActions, nonAuthActions) => (dispatch, getState) => {
-  console.log(1);
-  let actions = authActions;
+  let actions;
 
-  if (!getState().getIn(['user', 'email'])) {
-    actions = nonAuthActions;
+  if (getState().getIn(['user', 'email'])) {
+    actions = authActions();
+  }
+  else {
+    actions = nonAuthActions();
 
     window.localStorage.setItem('touchToType', JSON.stringify(getState().toJS()));
   }
 
-  return actions();
+  return actions;
 };
 
 export const typeChar = char => (dispatch, getState) => {
