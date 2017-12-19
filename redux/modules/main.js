@@ -207,7 +207,12 @@ export const processAction = (authActions, nonAuthActions) => (dispatch, getStat
   else {
     actions = nonAuthActions();
 
-    window.localStorage.setItem('touchToType', JSON.stringify(getState().toJS()));
+    const state = getState().toJS();
+
+    delete state.fetch;
+    delete state.form;
+    
+    window.localStorage.setItem('touchToType', JSON.stringify(state));
   }
 
   return actions;
