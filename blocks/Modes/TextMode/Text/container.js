@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectText, refreshText } from 'ReduxUtils/modules/text-mode';
+import { processSelectText, processRefreshText } from 'ReduxUtils/modules/text-mode';
 import Text from './component.jsx';
 
 const mapStateToProps = (state, ownProps) => {
@@ -18,8 +18,8 @@ const mapStateToProps = (state, ownProps) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  selectText: (...args) => dispatch(selectText(...args)),
-  refreshText: (...args) => dispatch(refreshText(...args)),
+  selectText: (...args) => dispatch(processSelectText(...args)),
+  refreshText: (...args) => dispatch(processRefreshText(...args)),
 });
 
 export default connect(

@@ -121,24 +121,40 @@ export const typeOnEntitie = id => ({
   id,
 });
 
-export const processAddText = body => (dispatch, getState) => {
-  const actions = () => {
-    const { text, select } = body;
-    dispatch(addText(text));
+export const processAddText = data => (dispatch, getState) => {
+  const { text, select } = data;
 
-    if (select) {
-      dispatch(selectText(getState().getIn(['textMode', 'entities']).last().get('id')));
-    }
+  dispatch(addText(text));
+
+  const id = getState().getIn(['textMode', 'entities']).last().get('id');
+
+  if (select) {
+    dispatch(selectText(id));
+  }
+
+  const body = {
+    id,
+    text,
+    select,
   };
 
-  return dispatch(processAction(
-    () => dispatch(fetchJSON('/text/add', { body })).then(() => actions()),
-    () => {
-      actions();
+  return dispatch(processAction(() => dispatch(fetchJSON('/text/add', { body }))));
+};
 
-      return Promise.resolve();
-    },
-  ));
+export const processSelectText = id => dispatch => {
+  dispatch(selectText(id));
+
+  const body = { id };
+
+  return dispatch(processAction(() => dispatch(fetchJSON('/text/select', { body }))));
+};
+
+export const processRefreshText = id => dispatch => {
+  dispatch(refreshText(id));
+
+  const body = { id };
+
+  return dispatch(processAction(() => dispatch(fetchJSON('/text/refresh', { body }))));
 };
 
 export const updateCharToType = () => (dispatch, getState) => {

@@ -16,4 +16,10 @@ if (!initialState.user.email) {
   }
 }
 
-export default createStore(reducer, Immutable.fromJS(initialState), applyMiddleware(thunk));
+initialState = Immutable.fromJS(initialState);
+
+const setsPath = [['main', 'pressedKeys'], ['main', 'pressedWrongKeys'], ['learningMode', 'lettersFree']];
+
+initialState = setsPath.reduce((state, path) => state.setIn(path, Immutable.Set(state.getIn(path))), initialState);
+
+export default createStore(reducer, initialState, applyMiddleware(thunk));

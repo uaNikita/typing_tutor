@@ -67,7 +67,7 @@ export default (state = initialState, action = {}) => {
       return state.merge(action.data);
 
     case PRESS_KEYS:
-      return state.update('pressedKeys', keys => keys.union(action.ids));
+      return state.update('pressedKeys', keys => keys.union(Immutable.Set(action.ids)));
 
     case UNPRESS_KEYS:
       return state.update('pressedKeys', keys => keys.subtract(action.ids));
@@ -198,20 +198,20 @@ export const setIsModal = modal => ({
   modal,
 });
 
-export const processAction = (authActions, nonAuthActions) => (dispatch, getState) => {
+export const processAction = authActions => (dispatch, getState) => {
   let actions;
 
   if (getState().getIn(['user', 'email'])) {
     actions = authActions();
   }
   else {
-    actions = nonAuthActions();
+    actions = Promise.resolve();
 
     const state = getState().toJS();
 
     delete state.fetch;
     delete state.form;
-    
+
     window.localStorage.setItem('touchToType', JSON.stringify(state));
   }
 

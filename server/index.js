@@ -48,7 +48,7 @@ app.use('/', require('./routes'));
 app.use((req, res) => {
   const context = {};
 
-  // find solution to this
+  // todo: find solution to this
   if (req.url.indexOf('validateNextState.js.map') + 1) {
     res.end();
 
@@ -56,6 +56,8 @@ app.use((req, res) => {
   }
 
   const store = createStore(reducer, applyMiddleware(thunk));
+
+
   const { dispatch } = store;
 
   const sendRes = () => {
@@ -99,7 +101,7 @@ app.use((req, res) => {
     }
 
     dispatch(requestAllWithoutAuth())
-      .then(sendRes)
+      .then(() => sendRes())
       .catch(() => {
         res.clearCookie('tt_refresh');
         res.clearCookie('tt_access');
