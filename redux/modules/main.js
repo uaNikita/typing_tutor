@@ -67,7 +67,7 @@ export default (state = initialState, action = {}) => {
       return state.merge(action.data);
 
     case PRESS_KEYS:
-      return state.update('pressedKeys', keys => keys.union(Immutable.Set(action.ids)));
+      return state.update('pressedKeys', keys => keys.union(action.ids));
 
     case UNPRESS_KEYS:
       return state.update('pressedKeys', keys => keys.subtract(action.ids));

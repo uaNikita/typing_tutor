@@ -142,7 +142,7 @@ export const processAddText = data => (dispatch, getState) => {
 };
 
 export const processSelectText = id => dispatch => {
-  dispatch(selectText(id));
+  dispatch(selectText(parseInt(id, 10)));
 
   const body = { id };
 

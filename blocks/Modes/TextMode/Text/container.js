@@ -3,11 +3,13 @@ import { processSelectText, processRefreshText } from 'ReduxUtils/modules/text-m
 import Text from './component.jsx';
 
 const mapStateToProps = (state, ownProps) => {
-  const id = ownProps.match.params.textId;
+  const id = parseInt(ownProps.match.params.textId, 10);
 
   const stateTextMode = state.get('textMode');
 
-  const text = stateTextMode.get('entities').filter(obj => obj.get('id') === parseInt(id, 10)).get(0);
+  const text = stateTextMode.get('entities')
+    .filter(obj => obj.get('id') === id)
+    .get(0);
 
   return {
     id,

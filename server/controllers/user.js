@@ -39,6 +39,38 @@ const createClient = userId => {
   return [client.save(), access.save()];
 };
 
+const login = (req, res, next) =>
+  User.get(req.user.get('id'))
+    .then(user => {
+
+      if (!user.get('active')) {
+        throw new APIError({
+          message: 'Your account is not active',
+          status: httpStatus.FORBIDDEN,
+        });
+      }
+
+      return Promise.all([...createClient(user.get('id'))])
+        .then(([client, access]) => {
+          res.json({
+            tokens: {
+              refresh: client.get('token'),
+              access: access.get('token'),
+            },
+            ...user.toObject(),
+          });
+        });
+    })
+    .catch(e => next(e));
+
+const logout = (req, res, next) =>
+  Client.get(req.user.clientId)
+    .then(client => client.remove().exec())
+    .then(() => Access.findByClient(clientId))
+    .then(access => access.remove().exec())
+    .then(() => res.json(httpStatus[200]))
+    .catch(e => next(e));
+
 const register = (req, res, next) => {
   const { email } = req.body;
 
@@ -173,44 +205,6 @@ const restoreAccess = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const login = (req, res, next) => {
-  const userId = req.user.get('id');
-
-  User.get(userId)
-    .then(user => {
-
-      if (!user.get('active')) {
-        throw new APIError({
-          message: 'Your account is not active',
-          status: httpStatus.FORBIDDEN,
-        });
-      }
-
-      return Promise.all([...createClient(user.get('id'))])
-        .then(([client, access]) => {
-          res.json({
-            tokens: {
-              refresh: client.get('token'),
-              access: access.get('token'),
-            },
-            ...user.toObject(),
-          });
-        });
-    })
-    .catch(e => next(e));
-};
-
-let logout = (req, res, next) => {
-  const { clientId } = req.user;
-
-  Client.get(clientId)
-    .then(client => client.remove().exec())
-    .then(() => Access.findByClient(clientId))
-    .then(access => access.remove().exec())
-    .then(() => res.json(httpStatus[200]))
-    .catch(e => next(e));
-};
-
 const getTokens = (req, res, next) => {
   const token = req.get('Authorization').replace('Bearer ', '');
 
@@ -281,8 +275,8 @@ const verifyToken = (req, res, next) =>
       }
 
       return Promise.all([...createClient(user.get('id')), user.save(),
-        // verification.remove().exec()
-      ])
+          // verification.remove().exec()
+        ])
         .then(([client, access]) => {
           res.json({
             type,
@@ -295,6 +289,10 @@ const verifyToken = (req, res, next) =>
         });
     })
     .catch(e => next(e));
+
+
+
+
 
 
 module.exports = {
