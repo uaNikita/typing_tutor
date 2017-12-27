@@ -43,7 +43,7 @@ app.use(express.static(path.join(__dirname, '../dist')));
 // Passport
 require('./passport')(app);
 
-app.use('/', require('./routes'));
+app.use('/', require('./controllers'));
 
 app.use((req, res) => {
   const context = {};

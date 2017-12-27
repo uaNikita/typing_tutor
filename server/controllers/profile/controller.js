@@ -1,7 +1,12 @@
 const _ = require('lodash');
 const httpStatus = require('http-status');
 
-const User = require('../models/user');
+const User = require('../../models/user');
+
+const getAllData = (req, res, next) =>
+  User.get(req.user.id)
+    .then(user => res.json(user.toObject()))
+    .catch(e => next(e));
 
 const changePassword = (req, res, next) => {
   const {
@@ -35,5 +40,6 @@ const changePassword = (req, res, next) => {
 };
 
 module.exports = {
+  getAllData,
   changePassword,
 };

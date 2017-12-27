@@ -4,15 +4,15 @@ const crypto = require('crypto');
 const config = require('config');
 const httpStatus = require('http-status');
 
-const emailTemplates = require('../email-templates');
-const transporter = require('../utils/transporter');
-const getRandomPassword = require('../utils/getRandomPassword');
+const emailTemplates = require('../../email-templates');
+const transporter = require('../../utils/transporter');
+const getRandomPassword = require('../../utils/getRandomPassword');
 
-const APIError = require('../utils/APIError');
-const User = require('../models/user');
-const Verification = require('../models/verification');
-const Client = require('../models/client');
-const Access = require('../models/access');
+const APIError = require('../../utils/APIError');
+const User = require('../../models/user');
+const Verification = require('../../models/verification');
+const Client = require('../../models/client');
+const Access = require('../../models/access');
 
 const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: '1d' });
 

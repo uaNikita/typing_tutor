@@ -1,7 +1,7 @@
 const _ = require('lodash');
 const httpStatus = require('http-status');
 
-const User = require('../../models/user');
+const User = require('../../../models/user');
 
 const add = (req, res, next) => {
   const {
