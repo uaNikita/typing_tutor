@@ -13,12 +13,13 @@ import { getIdsFromCharacter } from '../../utils';
 const CLEAR_STATE = 'main/CLEAR_STATE';
 const PRESS_KEYS = 'main/PRESS_KEYS';
 const UNPRESS_KEYS = 'main/UNPRESS_KEYS';
-const UPDATE_START_VARIABLES = 'main/UPDATE_START_VARIABLES';
+const ZEROING_STATISTIC = 'main/ZEROING_STATISTIC';
 const SET_MODE = 'main/SET_MODE';
 const ACTION_METRONOME = 'main/ACTION_METRONOME';
 const SET_KEYBOARD = 'main/SET_KEYBOARD';
 const PRESS_WRONG_KEYS = 'main/PRESS_WRONG_KEYS';
 const UNPRESS_WRONG_KEYS = 'main/UNPRESS_WRONG_KEYS';
+const SET_START_TYPING_TIME = 'main/SET_START_TYPING_TIME';
 const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
 const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
@@ -78,6 +79,9 @@ export default (state = initialState, action = {}) => {
     case UNPRESS_WRONG_KEYS:
       return state.update('pressedWrongKeys', keys => keys.subtract(action.ids));
 
+    case SET_START_TYPING_TIME:
+      return state.set('startTypingTime', action.time);
+
     case SET_IDS_CHAR_TO_TYPE:
       return state.set('idCharsToType', action.id);
 
@@ -87,9 +91,8 @@ export default (state = initialState, action = {}) => {
     case ADD_ERROR_TYPE:
       return state.set('errorTypes', state.get('errorTypes') + 1);
 
-    case UPDATE_START_VARIABLES:
+    case ZEROING_STATISTIC:
       return state.merge({
-        startTypingTime: Date.now(),
         successTypes: 0,
         errorTypes: 0,
       });
@@ -154,8 +157,10 @@ export const unPressWrongKeys = ids => ({
   ids,
 });
 
-export const updateStartVariables = () => ({
-  type: UPDATE_START_VARIABLES,
+
+export const setStartTypingTime = time => ({
+  type: SET_START_TYPING_TIME,
+  time,
 });
 
 export const actionMetronome = (action, value) => ({
@@ -182,11 +187,14 @@ export const addErrorType = () => ({
   type: ADD_ERROR_TYPE,
 });
 
+export const zeroingStatic = () => ({
+  type: ZEROING_STATISTIC,
+});
+
 export const setGlobalMessage = message => ({
   type: SET_GLOBAL_MESSAGE,
   message,
 });
-
 
 export const setLastNoModalLocation = location => ({
   type: SET_LAST_NO_MODAL_LOCATION,

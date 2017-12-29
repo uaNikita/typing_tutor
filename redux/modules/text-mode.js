@@ -18,6 +18,7 @@ const SELECT_LAST_TEXT = 'text-mode/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
 const ADD_TEXT = 'text-mode/ADD_TEXT';
 const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
+const SET_STATISTIC = 'text-mode/SET_STATISTIC';
 
 const {
   text: {
@@ -30,6 +31,16 @@ const initialState = Immutable.fromJS({
   selectedId,
 
   entities,
+
+  statistic: {
+    '2015-03-25': [
+      {
+        successes: 1,
+        errors: 1,
+        speed: 123,
+      },
+    ],
+  },
 });
 
 export default (state = initialState, action = {}) => {
@@ -83,6 +94,9 @@ export default (state = initialState, action = {}) => {
         return t;
       }));
 
+    case SET_STATISTIC:
+      return state.set('selectedId', state.get('entities').last().get('id'));
+
     default:
       return state;
   }
@@ -119,6 +133,12 @@ export const refreshText = id => ({
 export const typeOnEntitie = id => ({
   type: TYPE_ON_ENTITIE,
   id,
+});
+
+export const setStatistic = (i, statistic) => ({
+  type: SET_STATISTIC,
+  i,
+  statistic,
 });
 
 export const processAddText = data => (dispatch, getState) => {
@@ -176,7 +196,10 @@ export const typeTextMode = char => (dispatch, getState) => {
   const textId = state.getIn(['textMode', 'selectedId']);
   const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']), char);
 
-  const text = state.getIn(['textMode', 'entities']).filter(obj => obj.get('id') === textId).get(0);
+  const text = state
+    .getIn(['textMode', 'entities'])
+    .filter(obj => obj.get('id') === textId)
+    .get(0);
 
   if (text.get('last')[0] === char) {
     dispatch(typeOnEntitie(textId));
@@ -190,4 +213,6 @@ export const typeTextMode = char => (dispatch, getState) => {
 
     dispatch(addErrorType());
   }
+
+  // todo: setStatistic
 };

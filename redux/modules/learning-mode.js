@@ -1,7 +1,12 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import { setIdsCharToType, pressWrongKeys } from './main';
+import {
+  setIdsCharToType,
+  pressWrongKeys,
+  addSuccesType,
+  addErrorType,
+} from './main';
 import { getIdsFromCharacter, generateLesson, getFingersSet } from '../../utils';
 
 const CLEAR_STATE = 'learning-mode/CLEAR_STATE';
@@ -21,8 +26,7 @@ const SET_MAX_LETTERS_IN_WORD_FREE = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FREE
 const ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
 const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
 
-const ADD_SUCCESS_TYPE = 'learning-mode/ADD_SUCCESS_TYPE';
-const ADD_ERROR_TYPE = 'learning-mode/ADD_ERROR_TYPE';
+const SET_STATISTIC = 'text-mode/SET_STATISTIC';
 
 const initialState = Immutable.Map({
   // fingers, free,
@@ -43,10 +47,6 @@ const initialState = Immutable.Map({
   lessonTyped: '',
 
   lessonRest: '',
-
-  successTypes: 0,
-
-  errorTypes: 0,
 });
 
 export default (state = initialState, action = {}) => {
@@ -99,11 +99,8 @@ export default (state = initialState, action = {}) => {
     case REMOVE_LETTER_FROM_FREE_LETTERS:
       return state.update('lettersFree', letters => letters.delete(action.letter));
 
-    case ADD_SUCCESS_TYPE:
-      return state.set('successTypes', state.get('successTypes') + 1);
-
-    case ADD_ERROR_TYPE:
-      return state.set('errorTypes', state.get('errorTypes') + 1);
+    case SET_STATISTIC:
+      return state.set('selectedId', state.get('entities').last().get('id'));
 
     default:
       return state;
@@ -172,12 +169,10 @@ export const typeOnLesson = () => ({
   type: TYPE_ON_LESSON,
 });
 
-export const addSuccesType = () => ({
-  type: ADD_SUCCESS_TYPE,
-});
-
-export const addErrorType = () => ({
-  type: ADD_ERROR_TYPE,
+export const setStatistic = (i, statistic) => ({
+  type: SET_STATISTIC,
+  i,
+  statistic,
 });
 
 export const updateCurrentLessonFromCurrentMode = () => (dispatch, getState) => {

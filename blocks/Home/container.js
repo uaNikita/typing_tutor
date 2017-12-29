@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 
-import { typeChar, updateStartVariables, setGlobalMessage } from 'ReduxUtils/modules/main';
-import { refreshCurrentLesson } from 'ReduxUtils/modules/learning-mode';
+import { typeChar, setStartTypingTime, setGlobalMessage } from 'ReduxUtils/modules/main';
 import Component from './component.jsx';
 
 const mapStateToProps = state => {
@@ -20,8 +19,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   typeChar: (...args) => dispatch(typeChar(...args)),
-  updateStartVariables: (...args) => dispatch(updateStartVariables(...args)),
-  refreshCurrentLesson: (...args) => dispatch(refreshCurrentLesson(...args)),
+  setStartTypingTime: (...args) => dispatch(setStartTypingTime(...args)),
   setGlobalMessage: (...args) => dispatch(setGlobalMessage(...args)),
 });
 

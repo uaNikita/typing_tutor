@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import _ from 'lodash';
 
 import Keypad from './Keypad/container';
 import LearningArea from './LearningArea/container';
@@ -6,39 +7,37 @@ import TextArea from './TextArea/container';
 import Header from './Header/component.jsx';
 
 class Home extends Component {
-  constructor(props) {
-    super(props);
-
-    const { typeChar } = this.props;
-
-    this.keyPressHandler = e => {
-      if (e.which !== 32) {
-        typeChar(String.fromCharCode(e.which));
-      }
-    };
-
-    this.keyDownHandler = e => {
-      if (e.which === 32) {
-        e.preventDefault();
-
-        typeChar(String.fromCharCode(e.which));
-      }
-    };
-  }
-
   componentDidMount() {
-    document.addEventListener('keydown', this.keyDownHandler);
-    document.addEventListener('keypress', this.keyPressHandler);
+    this.setStartTypingTime();
 
-    this.props.updateStartVariables();
+    document.addEventListener('keydown', e => {
+      this.setStartTypingTime();
+
+      this.keyDownHandler(e);
+    });
+    document.addEventListener('keypress', this.keyPressHandler);
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.keyDownHandler);
     document.removeEventListener('keypress', this.keyPressHandler);
-
-    this.props.refreshCurrentLesson();
   }
+
+  setStartTypingTime = _.once(() => this.props.setStartTypingTime(Date.now()));
+
+  keyDownHandler = e => {
+    if (e.which === 32) {
+      e.preventDefault();
+
+      this.props.typeChar(String.fromCharCode(e.which));
+    }
+  };
+
+  keyPressHandler = e => {
+    if (e.which !== 32) {
+      this.props.typeChar(String.fromCharCode(e.which));
+    }
+  };
 
   render() {
     const { mode } = this.props;
