@@ -1,6 +1,11 @@
 import { connect } from 'react-redux';
 
-import { typeChar, setStartTypingTime, setGlobalMessage } from 'ReduxUtils/modules/main';
+import {
+  typeChar,
+  setStartTypingTime,
+  zeroingStatic,
+  setGlobalMessage,
+} from 'ReduxUtils/modules/main';
 import Component from './component.jsx';
 
 const mapStateToProps = state => {
@@ -17,6 +22,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   typeChar: (...args) => dispatch(typeChar(...args)),
   setStartTypingTime: (...args) => dispatch(setStartTypingTime(...args)),
+  zeroingStatic: (...args) => dispatch(zeroingStatic(...args)),
   setGlobalMessage: (...args) => dispatch(setGlobalMessage(...args)),
 });
 

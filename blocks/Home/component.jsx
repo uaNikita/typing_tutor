@@ -16,6 +16,8 @@ class Home extends Component {
   componentWillUnmount() {
     document.removeEventListener('keydown', this.keyDownHandler);
     document.removeEventListener('keypress', this.keyPressHandler);
+
+    this.props.zeroingStatic();
   }
 
   setStartTypingTime = _.once(() => {
@@ -59,7 +61,9 @@ class Home extends Component {
     let speed = '-';
 
     if (this.startTypingTime) {
-      speed = (Date.now() - this.startTypingTime) / (1000 * 60);
+      const time = (Date.now() - this.startTypingTime) / (1000 * 60);
+
+      speed = Math.round((successTypes + errorTypes) / time);
     }
 
     return [
