@@ -10,8 +10,6 @@ const mapStateToProps = state => {
     .get(0);
 
   return {
-    successTypes: stateTextMode.get('successTypes'),
-    errorTypes: stateTextMode.get('errorTypes'),
     typed: text.get('typed'),
     nonTyped: text.get('last'),
   };

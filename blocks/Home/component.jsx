@@ -4,17 +4,12 @@ import _ from 'lodash';
 import Keypad from './Keypad/container';
 import LearningArea from './LearningArea/container';
 import TextArea from './TextArea/container';
+import Statistic from './Statistic/component.jsx';
 import Header from './Header/component.jsx';
 
 class Home extends Component {
   componentDidMount() {
-    this.setStartTypingTime();
-
-    document.addEventListener('keydown', e => {
-      this.setStartTypingTime();
-
-      this.keyDownHandler(e);
-    });
+    document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandler);
   }
 
@@ -23,24 +18,32 @@ class Home extends Component {
     document.removeEventListener('keypress', this.keyPressHandler);
   }
 
-  setStartTypingTime = _.once(() => this.props.setStartTypingTime(Date.now()));
+  setStartTypingTime = _.once(() => {
+    this.startTypingTime = Date.now();
+  });
 
   keyDownHandler = e => {
     if (e.which === 32) {
       e.preventDefault();
+
+      this.setStartTypingTime();
 
       this.props.typeChar(String.fromCharCode(e.which));
     }
   };
 
   keyPressHandler = e => {
-    if (e.which !== 32) {
-      this.props.typeChar(String.fromCharCode(e.which));
-    }
+    this.setStartTypingTime();
+
+    this.props.typeChar(String.fromCharCode(e.which));
   };
 
   render() {
-    const { mode } = this.props;
+    const {
+      mode,
+      successTypes,
+      errorTypes,
+    } = this.props;
 
     let area;
 
@@ -53,8 +56,15 @@ class Home extends Component {
         break;
     }
 
+    let speed = '-';
+
+    if (this.startTypingTime) {
+      speed = (Date.now() - this.startTypingTime) / (1000 * 60);
+    }
+
     return [
       <Header key="header" />,
+      <Statistic key="statistic" hits={successTypes} speed={speed} errors={errorTypes} />,
       area,
       <Keypad key="keypad" />,
     ];
