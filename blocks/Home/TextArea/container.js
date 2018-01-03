@@ -1,5 +1,7 @@
 import { connect } from 'react-redux';
 
+import { startNewSession } from 'ReduxUtils/modules/text-mode';
+
 import Component from './component.jsx';
 
 const mapStateToProps = state => {
@@ -15,6 +17,11 @@ const mapStateToProps = state => {
   };
 };
 
+const mapDispatchToProps = dispatch => ({
+  startNewSession: (...args) => dispatch(startNewSession(...args)),
+});
+
 export default connect(
   mapStateToProps,
+  mapDispatchToProps,
 )(Component);

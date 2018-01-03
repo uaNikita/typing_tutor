@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import moment from 'moment';
 
 import { getIdsFromCharacter } from 'Utils';
 import defaults from 'Utils/defaults';
@@ -18,6 +19,7 @@ const SELECT_LAST_TEXT = 'text-mode/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
 const ADD_TEXT = 'text-mode/ADD_TEXT';
 const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
+const SET_SESSION_ID = 'text-mode/SET_SESSION_ID';
 const SET_STATISTIC = 'text-mode/SET_STATISTIC';
 
 const {
@@ -32,15 +34,20 @@ const initialState = Immutable.fromJS({
 
   entities,
 
-  statistic: {
-    '2015-03-25': [
-      {
-        successes: 1,
-        errors: 1,
-        speed: 123,
-      },
-    ],
-  },
+  sessionId: undefined,
+
+  statistic: [
+    {
+      date: '2015-03-25',
+      data: [
+        {
+          successes: 1,
+          errors: 1,
+          time: 566464,
+        },
+      ],
+    },
+  ],
 });
 
 export default (state = initialState, action = {}) => {
@@ -94,6 +101,9 @@ export default (state = initialState, action = {}) => {
         return t;
       }));
 
+    case SET_SESSION_ID:
+      return state.set('sessionId', action.id);
+
     case SET_STATISTIC:
       return state.set('selectedId', state.get('entities').last().get('id'));
 
@@ -135,11 +145,28 @@ export const typeOnEntitie = id => ({
   id,
 });
 
+export const setSessionId = id => ({
+  type: SET_SESSION_ID,
+  id,
+});
+
 export const setStatistic = (i, statistic) => ({
   type: SET_STATISTIC,
   i,
   statistic,
 });
+
+export const startNewSession = () => (dispatch, getState) => {
+  const now = moment().format('YYYY-DD-MM');
+
+  const statistic = getState()
+    .getIn(['textMode', 'statistic'])
+    .find(obj => obj.get('date') === now);
+
+  const index = statistic ? statistic.get('data').size : 0;
+
+  dispatch(setSessionId(index));
+};
 
 export const processAddText = data => (dispatch, getState) => {
   const { text, select } = data;

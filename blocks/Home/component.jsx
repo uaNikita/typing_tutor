@@ -4,10 +4,14 @@ import _ from 'lodash';
 import Keypad from './Keypad/container';
 import LearningArea from './LearningArea/container';
 import TextArea from './TextArea/container';
-import Statistic from './Statistic/component.jsx';
+import Statistic from './Statistic/container';
 import Header from './Header/component.jsx';
 
 class Home extends Component {
+  state = {
+    startTypingTime: undefined,
+  }
+
   componentDidMount() {
     document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandler);
@@ -20,9 +24,7 @@ class Home extends Component {
     this.props.zeroingStatic();
   }
 
-  setStartTypingTime = _.once(() => {
-    this.startTypingTime = Date.now();
-  });
+  setStartTypingTime = _.once(() => this.setState({ startTypingTime: Date.now() }));
 
   keyDownHandler = e => {
     if (e.which === 32) {
@@ -42,10 +44,13 @@ class Home extends Component {
 
   render() {
     const {
-      mode,
-      successTypes,
-      errorTypes,
-    } = this.props;
+      props: {
+        mode,
+      },
+      state: {
+        startTypingTime,
+      },
+    } = this;
 
     let area;
 
@@ -58,17 +63,9 @@ class Home extends Component {
         break;
     }
 
-    let speed = '-';
-
-    if (this.startTypingTime) {
-      const time = (Date.now() - this.startTypingTime) / (1000 * 60);
-
-      speed = Math.round((successTypes + errorTypes) / time);
-    }
-
     return [
       <Header key="header" />,
-      <Statistic key="statistic" hits={successTypes} speed={speed} errors={errorTypes} />,
+      <Statistic key="statistic" startTypingTime={startTypingTime} />,
       area,
       <Keypad key="keypad" />,
     ];

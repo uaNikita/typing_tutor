@@ -12,8 +12,6 @@ const mapStateToProps = state => {
   const stateMain = state.get('main');
 
   return {
-    successTypes: stateMain.get('successTypes'),
-    errorTypes: stateMain.get('errorTypes'),
     mode: stateMain.get('mode'),
     email: state.getIn(['user', 'email']),
   };
