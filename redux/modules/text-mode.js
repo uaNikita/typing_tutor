@@ -20,7 +20,7 @@ const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
 const ADD_TEXT = 'text-mode/ADD_TEXT';
 const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
 const SET_SESSION_ID = 'text-mode/SET_SESSION_ID';
-const SET_STATISTIC = 'text-mode/SET_STATISTIC';
+const ADD_STATISTIC = 'text-mode/ADD_STATISTIC';
 
 const {
   text: {
@@ -41,7 +41,7 @@ const initialState = Immutable.fromJS({
       date: '2015-03-25',
       data: [
         {
-          successes: 1,
+          hits: 1,
           errors: 1,
           time: 566464,
         },
@@ -104,8 +104,31 @@ export default (state = initialState, action = {}) => {
     case SET_SESSION_ID:
       return state.set('sessionId', action.id);
 
-    case SET_STATISTIC:
-      return state.set('selectedId', state.get('entities').last().get('id'));
+    case ADD_STATISTIC:
+      return state.update('statistic', dates => {
+        const now = moment().format('YYYY-DD-MM');
+
+        let newDates = dates;
+
+        if (!newDates.filter(date => date.get('date') === now).size) {
+          newDates = dates.push(Immutable.fromJS({
+            date: now,
+            data: [],
+          }));
+        }
+
+        const dateIndex = newDates.findIndex(date => date.get('date') === now);
+
+        return newDates.update(dateIndex, date => date.update('data', data => {
+          let newData = data;
+
+          if (!newData.get(action.sessionId)) {
+            newData = data.push(Immutable.Map({}));
+          }
+
+          return newData.set(action.sessionId, Immutable.Map(action.statistic));
+        }));
+      });
 
     default:
       return state;
@@ -150,9 +173,9 @@ export const setSessionId = id => ({
   id,
 });
 
-export const setStatistic = (i, statistic) => ({
-  type: SET_STATISTIC,
-  i,
+export const addStatistic = (sessionId, statistic) => ({
+  type: ADD_STATISTIC,
+  sessionId,
   statistic,
 });
 
@@ -166,6 +189,19 @@ export const startNewSession = () => (dispatch, getState) => {
   const index = statistic ? statistic.get('data').size : 0;
 
   dispatch(setSessionId(index));
+};
+
+export const processAddStatistic = statistic => (dispatch, getState) => {
+  const sessionId = getState().getIn(['textMode', 'sessionId']);
+
+  dispatch(addStatistic(sessionId, statistic));
+
+  const body = {
+    sessionId,
+    statistic,
+  };
+
+  return dispatch(processAction(() => dispatch(fetchJSON('/text/statistic', { body }))));
 };
 
 export const processAddText = data => (dispatch, getState) => {
@@ -241,5 +277,8 @@ export const typeTextMode = char => (dispatch, getState) => {
     dispatch(addErrorType());
   }
 
-  // todo: setStatistic
+  dispatch(processAddStatistic({
+    hits: state.getIn(['main', 'successTypes']),
+    errors: state.getIn(['main', 'errorTypes']),
+  }));
 };
