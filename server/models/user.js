@@ -46,7 +46,10 @@ const UserSchema = new mongoose.Schema({
       entities: {
         type: Array,
         default: entities,
-      }
+      },
+      statistic: {
+        type: Array,
+      },
     },
     learning: {},
   }

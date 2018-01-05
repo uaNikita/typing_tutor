@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import moment from 'moment';
+import _ from 'lodash';
 
 import { getIdsFromCharacter } from 'Utils';
 import defaults from 'Utils/defaults';
@@ -43,7 +44,8 @@ const initialState = Immutable.fromJS({
         {
           hits: 1,
           errors: 1,
-          time: 566464,
+          start: 9879,
+          end: 8787978789,
         },
       ],
     },
@@ -119,7 +121,7 @@ export default (state = initialState, action = {}) => {
 
         const dateIndex = newDates.findIndex(date => date.get('date') === now);
 
-        return newDates.update(dateIndex, date => date.update('data', data => {
+        return newDates.updateIn([dateIndex, 'data'], data => {
           let newData = data;
 
           if (!newData.get(action.sessionId)) {
@@ -127,7 +129,7 @@ export default (state = initialState, action = {}) => {
           }
 
           return newData.set(action.sessionId, Immutable.Map(action.statistic));
-        }));
+        });
       });
 
     default:
@@ -254,6 +256,12 @@ export const updateCharToType = () => (dispatch, getState) => {
   dispatch(setIdsCharToType(idsChar));
 };
 
+const setStatistic = _.throttle(
+  (dispatch, statistic) => dispatch(processAddStatistic(statistic)),
+  2000,
+  { leading: false },
+);
+
 export const typeTextMode = char => (dispatch, getState) => {
   const state = getState();
   const textId = state.getIn(['textMode', 'selectedId']);
@@ -277,8 +285,12 @@ export const typeTextMode = char => (dispatch, getState) => {
     dispatch(addErrorType());
   }
 
-  dispatch(processAddStatistic({
-    hits: state.getIn(['main', 'successTypes']),
-    errors: state.getIn(['main', 'errorTypes']),
-  }));
+  const stateMain = getState().get('main');
+
+  setStatistic(dispatch, {
+    hits: stateMain.get('successTypes'),
+    errors: stateMain.get('errorTypes'),
+    start: stateMain.get('startTypingTime'),
+    end: Date.now(),
+  });
 };

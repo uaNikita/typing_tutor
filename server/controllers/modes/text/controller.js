@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 const httpStatus = require('http-status');
 
 const User = require('../../../models/user');
@@ -72,8 +73,50 @@ const refresh = (req, res, next) => {
     .catch(e => next(e));
 };
 
+const statistic = (req, res, next) => {
+  const {
+    user,
+    body: {
+      sessionId,
+      statistic,
+    },
+  } = req;
+
+  User.get(user.id)
+    .then(user => {
+      const currentStatistic = user.modes.text.statistic;
+
+      const now = moment().format('YYYY-DD-MM');
+
+      let data = _.find(currentStatistic, { date: now });
+
+      if (!data) {
+        data = {
+          date: now,
+          data: [],
+        };
+
+        currentStatistic.push(data);
+      }
+
+      let session = data[sessionId] || {};
+
+      if (!session) {
+        session = {};
+
+        data.push(session);
+      }
+
+      _.assign(session, statistic);
+
+      return user.save().then(() => res.json(httpStatus[200]));
+    })
+    .catch(e => next(e));
+};
+
 module.exports = {
   add,
   select,
   refresh,
+  statistic,
 };

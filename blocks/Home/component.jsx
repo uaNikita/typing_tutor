@@ -8,10 +8,6 @@ import Statistic from './Statistic/container';
 import Header from './Header/component.jsx';
 
 class Home extends Component {
-  state = {
-    startTypingTime: undefined,
-  }
-
   componentDidMount() {
     document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandler);
@@ -24,7 +20,7 @@ class Home extends Component {
     this.props.zeroingStatic();
   }
 
-  setStartTypingTime = _.once(() => this.setState({ startTypingTime: Date.now() }));
+  setStartTypingTime = _.once(() => this.props.setStartTypingTime(Date.now()));
 
   keyDownHandler = e => {
     if (e.which === 32) {
@@ -47,9 +43,6 @@ class Home extends Component {
       props: {
         mode,
       },
-      state: {
-        startTypingTime,
-      },
     } = this;
 
     let area;
@@ -65,7 +58,7 @@ class Home extends Component {
 
     return [
       <Header key="header" />,
-      <Statistic key="statistic" startTypingTime={startTypingTime} />,
+      <Statistic key="statistic" />,
       area,
       <Keypad key="keypad" />,
     ];
