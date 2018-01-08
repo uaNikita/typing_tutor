@@ -7,7 +7,7 @@ const mapStateToProps = state => {
   const stateMain = state.get('main');
 
   return {
-    successTypes: stateMain.get('successTypes'),
+    hits: stateMain.get('hits'),
   };
 };
 

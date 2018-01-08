@@ -47,16 +47,22 @@ const UserSchema = new mongoose.Schema({
         type: Array,
         default: entities,
       },
-      statistic: {
-        type: Array,
-      },
+      statistic: [{
+        date: String,
+        data: [{
+          hits: Number,
+          typos: Number,
+          start: Number,
+          end: Number,
+        }],
+      }],
     },
     learning: {},
   }
 });
 
 UserSchema.set('toObject', {
-  transform: function (doc, ret) {
+  transform: function(doc, ret) {
     delete ret._id;
     delete ret.__v;
     delete ret.profile.password;
@@ -73,7 +79,7 @@ UserSchema.set('toObject', {
  * - virtuals
  */
 
-UserSchema.pre('save', function (next) {
+UserSchema.pre('save', function(next) {
   // only hash the password if it has been modified (or is new)
   if (!this.isModified('profile.password')) return next();
 
@@ -92,7 +98,7 @@ UserSchema.methods.generateHash = password => {
   return bcrypt.hash(password, config.get('saltRounds'));
 };
 
-UserSchema.methods.validPassword = function (candidatePassword) {
+UserSchema.methods.validPassword = function(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.profile.password);
 };
 

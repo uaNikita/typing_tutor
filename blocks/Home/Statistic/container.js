@@ -7,8 +7,8 @@ const mapStateToProps = state => {
 
   return {
     startTypingTime: stateMain.get('startTypingTime'),
-    hits: stateMain.get('successTypes'),
-    errors: stateMain.get('errorTypes'),
+    hits: stateMain.get('hits'),
+    errors: stateMain.get('typos'),
   };
 };
 

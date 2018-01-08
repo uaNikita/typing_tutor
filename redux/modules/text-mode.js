@@ -288,8 +288,8 @@ export const typeTextMode = char => (dispatch, getState) => {
   const stateMain = getState().get('main');
 
   setStatistic(dispatch, {
-    hits: stateMain.get('successTypes'),
-    errors: stateMain.get('errorTypes'),
+    hits: stateMain.get('hits'),
+    typos: stateMain.get('typos'),
     start: stateMain.get('startTypingTime'),
     end: Date.now(),
   });

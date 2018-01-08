@@ -39,9 +39,9 @@ const initialState = Immutable.Map({
 
   startTypingTime: 1461228933292,
 
-  successTypes: 0,
+  hits: 0,
 
-  errorTypes: 0,
+  typos: 0,
 
   idCharsToType: '',
 
@@ -86,15 +86,15 @@ export default (state = initialState, action = {}) => {
       return state.set('idCharsToType', action.id);
 
     case ADD_SUCCESS_TYPE:
-      return state.set('successTypes', state.get('successTypes') + 1);
+      return state.set('hits', state.get('hits') + 1);
 
     case ADD_ERROR_TYPE:
-      return state.set('errorTypes', state.get('errorTypes') + 1);
+      return state.set('typos', state.get('typos') + 1);
 
     case ZEROING_STATISTIC:
       return state.merge({
-        successTypes: 0,
-        errorTypes: 0,
+        hits: 0,
+        typos: 0,
       });
 
     case SET_MODE:
@@ -219,8 +219,8 @@ export const processAction = authActions => (dispatch, getState) => {
 
     delete state.fetch;
     delete state.form;
-    delete state.main.successTypes;
-    delete state.main.errorTypes;
+    delete state.main.hits;
+    delete state.main.typos;
 
     window.localStorage.setItem('touchToType', JSON.stringify(state));
   }
