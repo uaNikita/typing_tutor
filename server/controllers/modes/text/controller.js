@@ -81,38 +81,34 @@ const statistic = (req, res, next) => {
       statistic,
     },
   } = req;
-  
+
   User.get(user.id)
     .then(user => {
       const currentStatistic = user.modes.text.statistic;
-      
+
       const now = moment().format('YYYY-DD-MM');
 
       let data = _.find(currentStatistic, { date: now });
 
       if (!data) {
-        data = {
+        currentStatistic.push({
           date: now,
           data: [],
-        };
+        });
 
-        currentStatistic.push(data);
+        data = currentStatistic[currentStatistic.length - 1];
       }
-      
-      console.log(data.data, sessionId);
 
       let session = data.data[sessionId];
 
       if (!session) {
-        session = {};
+        data.data.push({});
 
-        data.data.push(session);
+        session = data.data[data.data.length - 1];
       }
 
-      console.log('statistic', statistic);
-      
       _.assign(session, statistic);
-      
+
       return user.save().then(() => res.json(httpStatus[200]));
     })
     .catch(e => next(e));
