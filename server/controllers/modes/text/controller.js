@@ -3,6 +3,7 @@ const moment = require('moment');
 const httpStatus = require('http-status');
 
 const User = require('../../../models/user');
+const Statistic = require('../../../models/statistic');
 
 const add = (req, res, next) => {
   const {
@@ -77,39 +78,42 @@ const statistic = (req, res, next) => {
   const {
     user,
     body: {
+      mode,
       sessionId,
-      statistic,
+      statistic: newsStatistic,
     },
   } = req;
 
-  User.get(user.id)
-    .then(user => {
-      const currentStatistic = user.modes.text.statistic;
+  Statistic
+    .findOne({
+      user: user.id,
+      date: Date.now(),
+    })
+    .exec()
+    .then(statistic => {
+      let data = statistic[mode].text;
 
-      const now = moment().format('YYYY-DD-MM');
-
-      let data = _.find(currentStatistic, { date: now });
-
-      if (!data) {
-        currentStatistic.push({
-          date: now,
-          data: [],
-        });
-
-        data = currentStatistic[currentStatistic.length - 1];
-      }
-
-      let session = data.data[sessionId];
+      let session = data[sessionId];
 
       if (!session) {
-        data.data.push({});
+        data.push({});
 
-        session = data.data[data.data.length - 1];
+        session = data[data.length - 1];
       }
 
-      _.assign(session, statistic);
+      _.assign(session, newsStatistic);
 
-      return user.save().then(() => res.json(httpStatus[200]));
+      return statistic.save().then(() => res.json(httpStatus[200]));
+    })
+    .catch(() => {
+      const statistic = new Statistic({
+        user: user.get('id'),
+        modes: {},
+      });
+
+      statistic.modes[mode] = [newsStatistic];
+
+      return statistic.save().then(() => res.json(httpStatus[200]));
     })
     .catch(e => next(e));
 };

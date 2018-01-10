@@ -8,6 +8,7 @@ const StatisticSchema = new mongoose.Schema({
   },
   date: {
     type: Date,
+    default: () => moment().startOf('day').toDate(),
     required: true,
   },
   modes: {

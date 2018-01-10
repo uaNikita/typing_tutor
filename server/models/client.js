@@ -16,6 +16,7 @@ const ClientSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
     expires: '30d',
+    required: true,
   },
 });
 
