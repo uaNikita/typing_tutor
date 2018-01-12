@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import moment from 'moment';
 import _ from 'lodash';
 
 import keyboards from '../../constants/keyboards';
@@ -9,6 +10,7 @@ import { setData as setTextData, typeTextMode } from './text-mode';
 import { typeLearningMode, updateLearningState } from './learning-mode';
 
 import { getIdsFromCharacter } from '../../utils';
+
 
 const CLEAR_STATE = 'main/CLEAR_STATE';
 const PRESS_KEYS = 'main/PRESS_KEYS';
@@ -27,6 +29,7 @@ const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
 const SET_DATA = 'main/SET_DATA';
 const SET_LAST_NO_MODAL_LOCATION = 'main/SET_LAST_NO_MODAL_LOCATION';
 const SET_IS_MODAL = 'main/SET_IS_MODAL';
+const ADD_STATISTIC = 'text-mode/ADD_STATISTIC';
 
 const initialState = Immutable.Map({
   keyboard: 'US',
@@ -57,6 +60,8 @@ const initialState = Immutable.Map({
   lastNoModalLocation: undefined,
 
   iaModal: false,
+
+  statistic: [],
 });
 
 export default (state = initialState, action = {}) => {
@@ -117,6 +122,41 @@ export default (state = initialState, action = {}) => {
 
     case SET_IS_MODAL:
       return state.set('isModal', action.modal);
+
+    case ADD_STATISTIC:
+      return state.update('statistic', dates => {
+        const now = moment().startOf('day').toDate();
+
+        let newDates = dates;
+
+        if (!newDates.filter(date => date.get('date') === now).get(0)) {
+          newDates = dates.push(Immutable.fromJS({
+            date: now,
+            modes: {},
+          }));
+        }
+
+        return newDates.update('modes', modes => {
+          let newModes = modes;
+
+          if (!newModes.get(action.mode)) {
+            const mode = {};
+            mode[action.mode] = Immutable.List([]);
+
+            newModes = modes.merge(mode);
+          }
+
+          return newModes.update(action.mode, data => {
+            let newData = data;
+
+            if (!newData.get(action.sessionId)) {
+              newData = data.push(Immutable.Map({}));
+            }
+
+            return newData.set(action.sessionId, Immutable.Map(action.statistic));
+          });
+        });
+      });
 
     default:
       return state;
@@ -250,6 +290,45 @@ export const typeChar = char => (dispatch, getState) => {
       dispatch(typeLearningMode(char));
       break;
   }
+
+  // const setStatistic = _.throttle(
+  //   (dispatch, statistic) => dispatch(processAddStatistic(statistic)),
+  //   2000,
+  //   { leading: false },
+  // );
+  //
+  // setStatistic();
+};
+
+export const addStatistic = (mode, sessionId, statistic) => ({
+  type: ADD_STATISTIC,
+  mode,
+  sessionId,
+  statistic,
+});
+
+export const processAddStatistic = () => (dispatch, getState) => {
+  const stateMain = getState().get('main');
+
+  const mode = stateMain.get('mode');
+  const sessionId = getState().getIn([`${mode}Mode`, 'sessionId']);
+
+  const statistic = {
+    hits: stateMain.get('hits'),
+    typos: stateMain.get('typos'),
+    start: stateMain.get('startTypingTime'),
+    end: Date.now(),
+  };
+
+  dispatch(addStatistic(mode, sessionId, statistic));
+
+  const body = {
+    mode,
+    sessionId,
+    statistic,
+  };
+
+  return dispatch(processAction(() => dispatch(fetchJSON('/statistic', { body }))));
 };
 
 export const init = () => dispatch => {

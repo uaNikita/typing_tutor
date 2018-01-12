@@ -47,15 +47,6 @@ const UserSchema = new mongoose.Schema({
         type: Array,
         default: entities,
       },
-      statistic: [{
-        date: String,
-        data: [{
-          hits: Number,
-          typos: Number,
-          start: Number,
-          end: Number,
-        }],
-      }],
     },
     learning: {},
   }

@@ -2,11 +2,38 @@ const _ = require('lodash');
 const httpStatus = require('http-status');
 
 const User = require('../../models/user');
+const Statistic = require('../../models/statistic');
 
-const getAllData = (req, res, next) =>
-  User.get(req.user.id)
-    .then(user => res.json(user.toObject()))
+const getAllData = (req, res, next) => {
+
+  console.log(12222);
+
+  Promise.all([User.get(req.user.id), Statistic.findOne({ user: req.user.id }).exec()])
+    .then(([user, statistic]) => {
+      res.json(user.toObject());
+    })
     .catch(e => next(e));
+
+  // User.get(req.user.id)
+  //   .then(user => {
+  //
+  //     Statistic
+  //       .findOne({ user: user.id })
+  //       .exec()
+  //       .then((...args) => {
+  //         console.log(1111111111);
+  //         console.log(args);
+  //       })
+  //       .catch(e => {
+  //         console.log(2222222222);
+  //         console.log(e);
+  //       });
+  //
+  //     res.json(user.toObject())
+  //   })
+  //   .catch(e => next(e));
+}
+
 
 const changePassword = (req, res, next) => {
   const {

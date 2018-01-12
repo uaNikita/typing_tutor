@@ -17,4 +17,19 @@ const StatisticSchema = new mongoose.Schema({
   },
 });
 
+/**
+ * Statics
+ */
+StatisticSchema.statics = {
+  findByUser(client) {
+    return this.findOne({ client })
+      .exec();
+  },
+
+  findByToken(token) {
+    return this.findOne({ token })
+      .exec()
+  },
+};
+
 module.exports = mongoose.model('Statistic', StatisticSchema);

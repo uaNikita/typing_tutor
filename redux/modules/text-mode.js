@@ -1,6 +1,5 @@
 import Immutable from 'immutable';
 import moment from 'moment';
-import _ from 'lodash';
 
 import { getIdsFromCharacter } from 'Utils';
 import defaults from 'Utils/defaults';
@@ -21,7 +20,6 @@ const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
 const ADD_TEXT = 'text-mode/ADD_TEXT';
 const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
 const SET_SESSION_ID = 'text-mode/SET_SESSION_ID';
-const ADD_STATISTIC = 'text-mode/ADD_STATISTIC';
 
 const {
   text: {
@@ -36,20 +34,6 @@ const initialState = Immutable.fromJS({
   entities,
 
   sessionId: undefined,
-
-  statistic: [
-    {
-      date: '2015-03-25',
-      data: [
-        {
-          hits: 1,
-          errors: 1,
-          start: 9879,
-          end: 8787978789,
-        },
-      ],
-    },
-  ],
 });
 
 export default (state = initialState, action = {}) => {
@@ -106,32 +90,6 @@ export default (state = initialState, action = {}) => {
     case SET_SESSION_ID:
       return state.set('sessionId', action.id);
 
-    case ADD_STATISTIC:
-      return state.update('statistic', dates => {
-        const now = moment().format('YYYY-DD-MM');
-
-        let newDates = dates;
-
-        if (!newDates.filter(date => date.get('date') === now).size) {
-          newDates = dates.push(Immutable.fromJS({
-            date: now,
-            data: [],
-          }));
-        }
-
-        const dateIndex = newDates.findIndex(date => date.get('date') === now);
-
-        return newDates.updateIn([dateIndex, 'data'], data => {
-          let newData = data;
-
-          if (!newData.get(action.sessionId)) {
-            newData = data.push(Immutable.Map({}));
-          }
-
-          return newData.set(action.sessionId, Immutable.Map(action.statistic));
-        });
-      });
-
     default:
       return state;
   }
@@ -175,35 +133,17 @@ export const setSessionId = id => ({
   id,
 });
 
-export const addStatistic = (sessionId, statistic) => ({
-  type: ADD_STATISTIC,
-  sessionId,
-  statistic,
-});
-
 export const startNewSession = () => (dispatch, getState) => {
-  const now = moment().format('YYYY-DD-MM');
+  const now = moment().startOf('day').toDate();
 
   const statistic = getState()
-    .getIn(['textMode', 'statistic'])
-    .find(obj => obj.get('date') === now);
+    .getIn(['main', 'statistic'])
+    .find(obj => obj.get('date') === now)
+    .getIn(['modes', 'text']);
 
-  const index = statistic ? statistic.get('data').size : 0;
+  const index = statistic ? statistic.get('data').count() : 0;
 
   dispatch(setSessionId(index));
-};
-
-export const processAddStatistic = statistic => (dispatch, getState) => {
-  const sessionId = getState().getIn(['textMode', 'sessionId']);
-
-  dispatch(addStatistic(sessionId, statistic));
-
-  const body = {
-    sessionId,
-    statistic,
-  };
-
-  return dispatch(processAction(() => dispatch(fetchJSON('/text/statistic', { body }))));
 };
 
 export const processAddText = data => (dispatch, getState) => {
@@ -256,12 +196,6 @@ export const updateCharToType = () => (dispatch, getState) => {
   dispatch(setIdsCharToType(idsChar));
 };
 
-const setStatistic = _.throttle(
-  (dispatch, statistic) => dispatch(processAddStatistic(statistic)),
-  2000,
-  { leading: false },
-);
-
 export const typeTextMode = char => (dispatch, getState) => {
   const state = getState();
   const textId = state.getIn(['textMode', 'selectedId']);
@@ -284,13 +218,4 @@ export const typeTextMode = char => (dispatch, getState) => {
 
     dispatch(addErrorType());
   }
-
-  const stateMain = getState().get('main');
-
-  setStatistic(dispatch, {
-    hits: stateMain.get('hits'),
-    typos: stateMain.get('typos'),
-    start: stateMain.get('startTypingTime'),
-    end: Date.now(),
-  });
 };
