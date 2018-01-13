@@ -3,7 +3,6 @@ const moment = require('moment');
 const httpStatus = require('http-status');
 
 const User = require('../../../models/user');
-const Statistic = require('../../../models/statistic');
 
 const add = (req, res, next) => {
   const {
@@ -74,53 +73,8 @@ const refresh = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const statistic = (req, res, next) => {
-  const {
-    user,
-    body: {
-      mode,
-      sessionId,
-      statistic: newsStatistic,
-    },
-  } = req;
-
-  Statistic
-    .findOne({
-      user: user.id,
-      date: Date.now(),
-    })
-    .exec()
-    .then(statistic => {
-      let data = statistic[mode].text;
-
-      let session = data[sessionId];
-
-      if (!session) {
-        data.push({});
-
-        session = data[data.length - 1];
-      }
-
-      _.assign(session, newsStatistic);
-
-      return statistic.save().then(() => res.json(httpStatus[200]));
-    })
-    .catch(() => {
-      const statistic = new Statistic({
-        user: user.get('id'),
-        modes: {},
-      });
-
-      statistic.modes[mode] = [newsStatistic];
-
-      return statistic.save().then(() => res.json(httpStatus[200]));
-    })
-    .catch(e => next(e));
-};
-
 module.exports = {
   add,
   select,
   refresh,
-  statistic,
 };

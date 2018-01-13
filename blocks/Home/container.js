@@ -5,6 +5,7 @@ import {
   setStartTypingTime,
   zeroingStatic,
   setGlobalMessage,
+  startNewSession,
 } from 'ReduxUtils/modules/main';
 import Component from './component.jsx';
 
@@ -22,6 +23,7 @@ const mapDispatchToProps = dispatch => ({
   setStartTypingTime: (...args) => dispatch(setStartTypingTime(...args)),
   zeroingStatic: (...args) => dispatch(zeroingStatic(...args)),
   setGlobalMessage: (...args) => dispatch(setGlobalMessage(...args)),
+  startNewSession: (...args) => dispatch(startNewSession(...args)),
 });
 
 export default connect(

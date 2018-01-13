@@ -29,7 +29,8 @@ const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
 const SET_DATA = 'main/SET_DATA';
 const SET_LAST_NO_MODAL_LOCATION = 'main/SET_LAST_NO_MODAL_LOCATION';
 const SET_IS_MODAL = 'main/SET_IS_MODAL';
-const ADD_STATISTIC = 'text-mode/ADD_STATISTIC';
+const SET_SESSION_ID = 'main/SET_SESSION_ID';
+const ADD_STATISTIC = 'main/ADD_STATISTIC';
 
 const initialState = Immutable.Map({
   keyboard: 'US',
@@ -123,37 +124,50 @@ export default (state = initialState, action = {}) => {
     case SET_IS_MODAL:
       return state.set('isModal', action.modal);
 
+    case SET_SESSION_ID:
+      return state.set('sessionId', action.id);
+
     case ADD_STATISTIC:
       return state.update('statistic', dates => {
+        const {
+          mode,
+          sessionId,
+          statistic,
+        } = action;
+
         const now = moment().startOf('day').toDate();
 
         let newDates = dates;
 
-        if (!newDates.filter(date => date.get('date') === now).get(0)) {
+        let dateIndex = newDates.findIndex(date => date.get('date') === now);
+
+        if (dateIndex === -1) {
           newDates = dates.push(Immutable.fromJS({
             date: now,
             modes: {},
           }));
+
+          dateIndex = newDates.count() - 1;
         }
 
-        return newDates.update('modes', modes => {
+        return newDates.updateIn([dateIndex, 'modes'], modes => {
           let newModes = modes;
 
-          if (!newModes.get(action.mode)) {
-            const mode = {};
-            mode[action.mode] = Immutable.List([]);
+          if (!newModes.get(mode)) {
+            const newMode = {};
+            newMode[mode] = Immutable.List([]);
 
-            newModes = modes.merge(mode);
+            newModes = modes.merge(newMode);
           }
 
-          return newModes.update(action.mode, data => {
+          return newModes.update(mode, data => {
             let newData = data;
 
-            if (!newData.get(action.sessionId)) {
+            if (!newData.get(sessionId)) {
               newData = data.push(Immutable.Map({}));
             }
 
-            return newData.set(action.sessionId, Immutable.Map(action.statistic));
+            return newData.set(sessionId, Immutable.Map(statistic));
           });
         });
       });
@@ -268,6 +282,68 @@ export const processAction = authActions => (dispatch, getState) => {
   return actions;
 };
 
+export const setSessionId = id => ({
+  type: SET_SESSION_ID,
+  id,
+});
+
+export const startNewSession = () => (dispatch, getState) => {
+  const now = moment().startOf('day').toDate();
+  const stateMain = getState().get('main');
+  const mode = stateMain.get('mode');
+
+  const date = stateMain
+    .get('statistic')
+    .find(obj => obj.get('date') === now);
+
+  let statistic;
+
+  if (date) {
+    statistic = date.getIn(['modes', mode]);
+  }
+
+  const index = statistic ? statistic.get('data').count() : 0;
+
+  dispatch(setSessionId(index));
+};
+
+export const addStatistic = (mode, sessionId, statistic) => ({
+  type: ADD_STATISTIC,
+  mode,
+  sessionId,
+  statistic,
+});
+
+export const processAddStatistic = () => (dispatch, getState) => {
+  const stateMain = getState().get('main');
+
+  const mode = stateMain.get('mode');
+  const sessionId = stateMain.get('sessionId');
+
+  const statistic = {
+    hits: stateMain.get('hits'),
+    typos: stateMain.get('typos'),
+    start: stateMain.get('startTypingTime'),
+    end: Date.now(),
+  };
+
+  dispatch(addStatistic(mode, sessionId, statistic));
+
+  const body = {
+    mode,
+    sessionId,
+    statistic,
+  };
+
+  return dispatch(processAction(() => dispatch(fetchJSON('/profile/statistic', { body }))));
+};
+
+const addStatisticWithTimeout = _.throttle(
+  dispatch => dispatch(processAddStatistic()),
+  2000,
+  { leading: false },
+);
+
 export const typeChar = char => (dispatch, getState) => {
   const state = getState();
 
@@ -291,44 +367,7 @@ export const typeChar = char => (dispatch, getState) => {
       break;
   }
 
-  // const setStatistic = _.throttle(
-  //   (dispatch, statistic) => dispatch(processAddStatistic(statistic)),
-  //   2000,
-  //   { leading: false },
-  // );
-  //
-  // setStatistic();
-};
-
-export const addStatistic = (mode, sessionId, statistic) => ({
-  type: ADD_STATISTIC,
-  mode,
-  sessionId,
-  statistic,
-});
-
-export const processAddStatistic = () => (dispatch, getState) => {
-  const stateMain = getState().get('main');
-
-  const mode = stateMain.get('mode');
-  const sessionId = getState().getIn([`${mode}Mode`, 'sessionId']);
-
-  const statistic = {
-    hits: stateMain.get('hits'),
-    typos: stateMain.get('typos'),
-    start: stateMain.get('startTypingTime'),
-    end: Date.now(),
-  };
-
-  dispatch(addStatistic(mode, sessionId, statistic));
-
-  const body = {
-    mode,
-    sessionId,
-    statistic,
-  };
-
-  return dispatch(processAction(() => dispatch(fetchJSON('/statistic', { body }))));
+  addStatisticWithTimeout(dispatch);
 };
 
 export const init = () => dispatch => {

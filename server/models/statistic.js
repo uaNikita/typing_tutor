@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const moment = require('moment');
 
 const StatisticSchema = new mongoose.Schema({
   user: {
@@ -16,20 +17,5 @@ const StatisticSchema = new mongoose.Schema({
     learning: Array,
   },
 });
-
-/**
- * Statics
- */
-StatisticSchema.statics = {
-  findByUser(client) {
-    return this.findOne({ client })
-      .exec();
-  },
-
-  findByToken(token) {
-    return this.findOne({ token })
-      .exec()
-  },
-};
 
 module.exports = mongoose.model('Statistic', StatisticSchema);

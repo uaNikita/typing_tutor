@@ -9,6 +9,8 @@ import Header from './Header/component.jsx';
 
 class Home extends Component {
   componentDidMount() {
+    this.props.startNewSession();
+
     document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandler);
   }

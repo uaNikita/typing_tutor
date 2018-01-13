@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const moment = require('moment');
 const httpStatus = require('http-status');
 
 const User = require('../../models/user');
@@ -66,7 +67,63 @@ const changePassword = (req, res, next) => {
     .catch(e => next(e));
 };
 
+const statistic = (req, res, next) => {
+  const {
+    user,
+    body: {
+      mode,
+      sessionId,
+      statistic: newsStatistic,
+    },
+  } = req;
+
+  console.log(mode, sessionId, newsStatistic);
+
+  Statistic
+    .findOne({
+      user: user.id,
+      date: moment().startOf('day').toDate(),
+    })
+    .exec()
+    .then(statistic => {
+      console.log('statistic1', JSON.stringify(statistic));
+
+      if (statistic) {
+        let data = statistic.modes[mode];
+
+        let session = data[sessionId];
+
+        if (!session) {
+          data.push({});
+
+          session = data[data.length - 1];
+        }
+
+        _.assign(session, newsStatistic);
+
+        console.log('statistic2', JSON.stringify(statistic));
+
+        return statistic.save().then(() => res.json(httpStatus[200]));
+      }
+      else {
+        const statistic = new Statistic({
+          user: user.id,
+          modes: {},
+        });
+
+        statistic.modes[mode] = [newsStatistic];
+
+        return statistic.save().then(() => res.json(httpStatus[200]));
+      }
+    })
+    .catch(e => {
+      console.log('e', e);
+    })
+    .catch(e => next(e));
+};
+
 module.exports = {
   getAllData,
   changePassword,
+  statistic,
 };

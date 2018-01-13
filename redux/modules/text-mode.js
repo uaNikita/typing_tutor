@@ -1,5 +1,4 @@
 import Immutable from 'immutable';
-import moment from 'moment';
 
 import { getIdsFromCharacter } from 'Utils';
 import defaults from 'Utils/defaults';
@@ -19,7 +18,6 @@ const SELECT_LAST_TEXT = 'text-mode/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
 const ADD_TEXT = 'text-mode/ADD_TEXT';
 const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
-const SET_SESSION_ID = 'text-mode/SET_SESSION_ID';
 
 const {
   text: {
@@ -87,9 +85,6 @@ export default (state = initialState, action = {}) => {
         return t;
       }));
 
-    case SET_SESSION_ID:
-      return state.set('sessionId', action.id);
-
     default:
       return state;
   }
@@ -127,24 +122,6 @@ export const typeOnEntitie = id => ({
   type: TYPE_ON_ENTITIE,
   id,
 });
-
-export const setSessionId = id => ({
-  type: SET_SESSION_ID,
-  id,
-});
-
-export const startNewSession = () => (dispatch, getState) => {
-  const now = moment().startOf('day').toDate();
-
-  const statistic = getState()
-    .getIn(['main', 'statistic'])
-    .find(obj => obj.get('date') === now)
-    .getIn(['modes', 'text']);
-
-  const index = statistic ? statistic.get('data').count() : 0;
-
-  dispatch(setSessionId(index));
-};
 
 export const processAddText = data => (dispatch, getState) => {
   const { text, select } = data;
