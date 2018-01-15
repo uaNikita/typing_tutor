@@ -86,8 +86,6 @@ const statistic = (req, res, next) => {
     })
     .exec()
     .then(statistic => {
-      console.log('statistic1', JSON.stringify(statistic));
-
       if (statistic) {
         let data = statistic.modes[mode];
 
@@ -99,9 +97,7 @@ const statistic = (req, res, next) => {
           session = data[data.length - 1];
         }
 
-        _.assign(session, newsStatistic);
-
-        console.log('statistic2', JSON.stringify(statistic));
+        data.set(sessionId, _.assign(session, newsStatistic));
 
         return statistic.save().then(() => res.json(httpStatus[200]));
       }
@@ -115,9 +111,6 @@ const statistic = (req, res, next) => {
 
         return statistic.save().then(() => res.json(httpStatus[200]));
       }
-    })
-    .catch(e => {
-      console.log('e', e);
     })
     .catch(e => next(e));
 };
