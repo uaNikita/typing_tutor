@@ -11,7 +11,6 @@ import { typeLearningMode, updateLearningState } from './learning-mode';
 
 import { getIdsFromCharacter } from '../../utils';
 
-
 const CLEAR_STATE = 'main/CLEAR_STATE';
 const PRESS_KEYS = 'main/PRESS_KEYS';
 const UNPRESS_KEYS = 'main/UNPRESS_KEYS';
@@ -130,6 +129,7 @@ export default (state = initialState, action = {}) => {
     case ADD_STATISTIC:
       return state.update('statistic', dates => {
         const {
+          keyboard,
           mode,
           sessionId,
           statistic,
@@ -144,31 +144,19 @@ export default (state = initialState, action = {}) => {
         if (dateIndex === -1) {
           newDates = dates.push(Immutable.fromJS({
             date: now,
-            modes: {},
           }));
 
           dateIndex = newDates.count() - 1;
         }
 
-        return newDates.updateIn([dateIndex, 'modes'], modes => {
-          let newModes = modes;
+        return newDates.updateIn([dateIndex, keyboard, mode], mode => {
+          let newMode = mode;
 
-          if (!newModes.get(mode)) {
-            const newMode = {};
-            newMode[mode] = Immutable.List([]);
-
-            newModes = modes.merge(newMode);
+          if (!newMode) {
+            newMode = Immutable.List([]);
           }
 
-          return newModes.update(mode, data => {
-            let newData = data;
-
-            if (!newData.get(sessionId)) {
-              newData = data.push(Immutable.Map({}));
-            }
-
-            return newData.set(sessionId, Immutable.Map(statistic));
-          });
+          newMode.set(sessionId, Immutable.Map(statistic))
         });
       });
 
@@ -290,6 +278,7 @@ export const setSessionId = id => ({
 export const startNewSession = () => (dispatch, getState) => {
   const now = moment().startOf('day').toDate();
   const stateMain = getState().get('main');
+  const keyboard = stateMain.get('keyboard');
   const mode = stateMain.get('mode');
 
   const date = stateMain
@@ -299,7 +288,7 @@ export const startNewSession = () => (dispatch, getState) => {
   let statistic;
 
   if (date) {
-    statistic = date.getIn(['modes', mode]);
+    statistic = date.getIn([keyboard, mode]);
   }
 
   const index = statistic ? statistic.get('data').count() : 0;
@@ -307,16 +296,15 @@ export const startNewSession = () => (dispatch, getState) => {
   dispatch(setSessionId(index));
 };
 
-export const addStatistic = (mode, sessionId, statistic) => ({
+export const addStatistic = obj => ({
   type: ADD_STATISTIC,
-  mode,
-  sessionId,
-  statistic,
+  ...obj,
 });
 
 export const processAddStatistic = () => (dispatch, getState) => {
   const stateMain = getState().get('main');
 
+  const keyboard = stateMain.get('keyboard');
   const mode = stateMain.get('mode');
   const sessionId = stateMain.get('sessionId');
 
@@ -327,13 +315,14 @@ export const processAddStatistic = () => (dispatch, getState) => {
     end: Date.now(),
   };
 
-  dispatch(addStatistic(mode, sessionId, statistic));
-
   const body = {
+    keyboard,
     mode,
     sessionId,
     statistic,
   };
+
+  dispatch(addStatistic(body));
 
   return dispatch(processAction(() => dispatch(fetchJSON('/profile/statistic', { body }))));
 };

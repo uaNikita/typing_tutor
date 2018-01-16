@@ -12,10 +12,6 @@ const StatisticSchema = new mongoose.Schema({
     default: () => moment().startOf('day').toDate(),
     required: true,
   },
-  modes: {
-    text: Array,
-    learning: Array,
-  },
 });
 
 module.exports = mongoose.model('Statistic', StatisticSchema);
