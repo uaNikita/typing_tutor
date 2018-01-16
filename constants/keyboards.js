@@ -1,18 +1,18 @@
-import us from './keyboards/us';
-import ru from './keyboards/ru';
-import ruTypewriter from './keyboards/ru-typewriter';
+import english from './keyboards/english';
+import russian from './keyboards/russian';
+import russianTypewriter from './keyboards/russian_typewriter';
 
 export default [
   {
-    name: 'US',
-    keys: us,
+    name: 'english',
+    keys: english,
   },
   {
-    name: 'Russian',
-    keys: ru,
+    name: 'russian',
+    keys: russian,
   },
   {
-    name: 'Russian typewriter',
-    keys: ruTypewriter,
+    name: 'russian-typewriter',
+    keys: russianTypewriter,
   },
 ];
