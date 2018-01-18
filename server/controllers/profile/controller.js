@@ -6,9 +6,6 @@ const User = require('../../models/user');
 const Statistic = require('../../models/statistic');
 
 const getAllData = (req, res, next) => {
-
-  console.log(12222);
-
   Promise.all([User.get(req.user.id), Statistic.findOne({ user: req.user.id }).exec()])
     .then(([user, statistic]) => {
       res.json(user.toObject());
@@ -71,13 +68,12 @@ const statistic = (req, res, next) => {
   const {
     user,
     body: {
+      keyboard,
       mode,
       sessionId,
-      statistic: newsStatistic,
+      statistic: clientStatistic,
     },
   } = req;
-
-  console.log(mode, sessionId, newsStatistic);
 
   Statistic
     .findOne({
@@ -87,29 +83,25 @@ const statistic = (req, res, next) => {
     .exec()
     .then(statistic => {
       if (statistic) {
-        let data = statistic.modes[mode];
+        const modePath = `${keyboard}.${mode}`;
 
-        let session = data[sessionId];
-
-        if (!session) {
-          data.push({});
-
-          session = data[data.length - 1];
+        if (!statistic.get(modePath)) {
+          statistic.set(modePath, [clientStatistic])
         }
-
-        data.set(sessionId, _.assign(session, newsStatistic));
+        else {
+          statistic.set(`${modePath}.${sessionId}`, clientStatistic)
+        }
 
         return statistic.save().then(() => res.json(httpStatus[200]));
       }
       else {
-        const statistic = new Statistic({
+        const newStatistic = {
           user: user.id,
-          modes: {},
-        });
+        };
 
-        statistic.modes[mode] = [newsStatistic];
+        _.set(newStatistic, `${keyboard}.${mode}`, [clientStatistic]);
 
-        return statistic.save().then(() => res.json(httpStatus[200]));
+        new Statistic(newStatistic, { strict: false }).save().then(() => res.json(httpStatus[200]));
       }
     })
     .catch(e => next(e));

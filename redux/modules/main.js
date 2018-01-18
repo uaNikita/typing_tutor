@@ -32,9 +32,9 @@ const SET_SESSION_ID = 'main/SET_SESSION_ID';
 const ADD_STATISTIC = 'main/ADD_STATISTIC';
 
 const initialState = Immutable.Map({
-  keyboard: 'US',
+  keyboard: 'english',
 
-  keys: Immutable.List(_.find(keyboards, { name: 'US' }).keys),
+  keys: Immutable.List(_.find(keyboards, { name: 'english' }).keys),
 
   pressedKeys: Immutable.Set([]),
 
@@ -128,13 +128,6 @@ export default (state = initialState, action = {}) => {
 
     case ADD_STATISTIC:
       return state.update('statistic', dates => {
-        const {
-          keyboard,
-          mode,
-          sessionId,
-          statistic,
-        } = action;
-
         const now = moment().startOf('day').toDate();
 
         let newDates = dates;
@@ -149,14 +142,14 @@ export default (state = initialState, action = {}) => {
           dateIndex = newDates.count() - 1;
         }
 
-        return newDates.updateIn([dateIndex, keyboard, mode], mode => {
+        return newDates.updateIn([dateIndex, action.keyboard, action.mode], mode => {
           let newMode = mode;
 
           if (!newMode) {
             newMode = Immutable.List([]);
           }
 
-          newMode.set(sessionId, Immutable.Map(statistic))
+          newMode.set(action.sessionId, Immutable.Map(action.statistic));
         });
       });
 
