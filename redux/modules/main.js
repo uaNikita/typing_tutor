@@ -22,8 +22,8 @@ const PRESS_WRONG_KEYS = 'main/PRESS_WRONG_KEYS';
 const UNPRESS_WRONG_KEYS = 'main/UNPRESS_WRONG_KEYS';
 const SET_START_TYPING_TIME = 'main/SET_START_TYPING_TIME';
 const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
-const ADD_SUCCESS_TYPE = 'main/ADD_SUCCESS_TYPE';
-const ADD_ERROR_TYPE = 'main/ADD_ERROR_TYPE';
+const ADD_HIT = 'main/ADD_HIT';
+const ADD_TYPO = 'main/ADD_TYPO';
 const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
 const SET_DATA = 'main/SET_DATA';
 const SET_LAST_NO_MODAL_LOCATION = 'main/SET_LAST_NO_MODAL_LOCATION';
@@ -41,6 +41,12 @@ const initialState = Immutable.Map({
   pressedWrongKeys: Immutable.Set([]),
 
   startTypingTime: 1461228933292,
+
+  sessionStatistic: {
+    hits: Immutable.List([]),
+    typos: Immutable.List([]),
+    start: undefined,
+  },
 
   hits: 0,
 
@@ -64,6 +70,25 @@ const initialState = Immutable.Map({
   statistic: [],
 });
 
+const updateSessionStatisticPresses = (state, name, character) =>
+  state.updateIn(['sessionStatistic', name], presses => {
+    const index = presses.findIndex(c => c.get('character') === character);
+
+    let newPresses;
+
+    if (index === -1) {
+      newPresses = presses.push({
+        character,
+        presses: 1,
+      });
+    }
+    else {
+      newPresses = presses.updateIn([index, 'presses'], p => p + 1);
+    }
+
+    return newPresses;
+  });
+
 export default (state = initialState, action = {}) => {
   switch (action.type) {
     case CLEAR_STATE:
@@ -85,21 +110,22 @@ export default (state = initialState, action = {}) => {
       return state.update('pressedWrongKeys', keys => keys.subtract(action.ids));
 
     case SET_START_TYPING_TIME:
-      return state.set('startTypingTime', action.time);
+      return state.set(['sessionStatistic', 'startTypingTime'], action.time);
 
     case SET_IDS_CHAR_TO_TYPE:
       return state.set('idCharsToType', action.id);
 
-    case ADD_SUCCESS_TYPE:
-      return state.set('hits', state.get('hits') + 1);
+    case ADD_HIT:
+      return updateSessionStatisticPresses(state, 'hits', action.character);
 
-    case ADD_ERROR_TYPE:
-      return state.set('typos', state.get('typos') + 1);
+    case ADD_TYPO:
+      return updateSessionStatisticPresses(state, 'typos', action.character);
 
     case ZEROING_STATISTIC:
-      return state.merge({
-        hits: 0,
-        typos: 0,
+      return state.set('sessionStatistic', {
+        hits: Immutable.List([]),
+        typos: Immutable.List([]),
+        start: undefined,
       });
 
     case SET_MODE:
@@ -128,15 +154,15 @@ export default (state = initialState, action = {}) => {
 
     case ADD_STATISTIC:
       return state.update('statistic', dates => {
-        const now = moment().startOf('day').toDate();
+        const thisDay = moment().startOf('day').toDate();
 
         let newDates = dates;
 
-        let dateIndex = newDates.findIndex(date => date.get('date') === now);
+        let dateIndex = newDates.findIndex(date => date.get('date') === thisDay);
 
         if (dateIndex === -1) {
           newDates = dates.push(Immutable.fromJS({
-            date: now,
+            date: thisDay,
           }));
 
           dateIndex = newDates.count() - 1;
@@ -192,7 +218,6 @@ export const unPressWrongKeys = ids => ({
   ids,
 });
 
-
 export const setStartTypingTime = time => ({
   type: SET_START_TYPING_TIME,
   time,
@@ -214,12 +239,14 @@ export const setIdsCharToType = id => ({
   id,
 });
 
-export const addSuccesType = () => ({
-  type: ADD_SUCCESS_TYPE,
+export const addHit = character => ({
+  type: ADD_HIT,
+  character,
 });
 
-export const addErrorType = () => ({
-  type: ADD_ERROR_TYPE,
+export const addTypo = character => ({
+  type: ADD_TYPO,
+  character,
 });
 
 export const zeroingStatic = () => ({
@@ -254,8 +281,7 @@ export const processAction = authActions => (dispatch, getState) => {
 
     delete state.fetch;
     delete state.form;
-    delete state.main.hits;
-    delete state.main.typos;
+    delete state.sessionStatistic;
 
     window.localStorage.setItem('touchToType', JSON.stringify(state));
   }
@@ -297,22 +323,14 @@ export const addStatistic = obj => ({
 export const processAddStatistic = () => (dispatch, getState) => {
   const stateMain = getState().get('main');
 
-  const keyboard = stateMain.get('keyboard');
-  const mode = stateMain.get('mode');
-  const sessionId = stateMain.get('sessionId');
-
-  const statistic = {
-    hits: stateMain.get('hits'),
-    typos: stateMain.get('typos'),
-    start: stateMain.get('startTypingTime'),
-    end: Date.now(),
-  };
-
   const body = {
-    keyboard,
-    mode,
-    sessionId,
-    statistic,
+    keyboard: stateMain.get('keyboard'),
+    mode: stateMain.get('mode'),
+    sessionId: stateMain.get('sessionId'),
+    statistic: {
+      ...stateMain.get('startTypingTime').toJS(),
+      end: Date.now(),
+    },
   };
 
   dispatch(addStatistic(body));

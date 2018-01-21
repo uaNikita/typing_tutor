@@ -7,8 +7,8 @@ import {
   processAction,
   setIdsCharToType,
   pressWrongKeys,
-  addSuccesType,
-  addErrorType,
+  addHit,
+  addTypo,
 } from './main';
 
 const CLEAR_STATE = 'text-mode/CLEAR_STATE';
@@ -186,13 +186,13 @@ export const typeTextMode = char => (dispatch, getState) => {
   if (text.get('last')[0] === char) {
     dispatch(typeOnEntitie(textId));
 
-    dispatch(addSuccesType());
+    dispatch(addHit(char));
 
     dispatch(updateCharToType());
   }
   else {
     dispatch(pressWrongKeys(idsChar));
 
-    dispatch(addErrorType());
+    dispatch(addTypo(char));
   }
 };
