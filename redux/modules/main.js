@@ -31,20 +31,18 @@ const SET_IS_MODAL = 'main/SET_IS_MODAL';
 const SET_SESSION_ID = 'main/SET_SESSION_ID';
 const ADD_STATISTIC = 'main/ADD_STATISTIC';
 
-const initialState = Immutable.Map({
+const initialState = Immutable.fromJS({
   keyboard: 'english',
 
-  keys: Immutable.List(_.find(keyboards, { name: 'english' }).keys),
+  keys: _.find(keyboards, { name: 'english' }).keys,
 
   pressedKeys: Immutable.Set([]),
 
   pressedWrongKeys: Immutable.Set([]),
 
-  startTypingTime: 1461228933292,
-
   sessionStatistic: {
-    hits: Immutable.List([]),
-    typos: Immutable.List([]),
+    hits: [],
+    typos: [],
     start: undefined,
   },
 
@@ -77,10 +75,10 @@ const updateSessionStatisticPresses = (state, name, character) =>
     let newPresses;
 
     if (index === -1) {
-      newPresses = presses.push({
+      newPresses = presses.push(Immutable.Map({
         character,
         presses: 1,
-      });
+      }));
     }
     else {
       newPresses = presses.updateIn([index, 'presses'], p => p + 1);
@@ -110,7 +108,7 @@ export default (state = initialState, action = {}) => {
       return state.update('pressedWrongKeys', keys => keys.subtract(action.ids));
 
     case SET_START_TYPING_TIME:
-      return state.set(['sessionStatistic', 'startTypingTime'], action.time);
+      return state.set(['sessionStatistic', 'start'], action.time);
 
     case SET_IDS_CHAR_TO_TYPE:
       return state.set('idCharsToType', action.id);
@@ -328,7 +326,7 @@ export const processAddStatistic = () => (dispatch, getState) => {
     mode: stateMain.get('mode'),
     sessionId: stateMain.get('sessionId'),
     statistic: {
-      ...stateMain.get('startTypingTime').toJS(),
+      ...stateMain.get('sessionStatistic').toJS(),
       end: Date.now(),
     },
   };
