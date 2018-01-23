@@ -5,7 +5,7 @@ import _ from 'lodash';
 import keyboards from '../../constants/keyboards';
 
 import { fetchJSON, setAccessToken, setRefreshToken } from './fetch';
-import { setData as setUserData } from './user';
+import { setData as setUserData, addStatistic } from './user';
 import { setData as setTextData, typeTextMode } from './text-mode';
 import { typeLearningMode, updateLearningState } from './learning-mode';
 
@@ -29,7 +29,6 @@ const SET_DATA = 'main/SET_DATA';
 const SET_LAST_NO_MODAL_LOCATION = 'main/SET_LAST_NO_MODAL_LOCATION';
 const SET_IS_MODAL = 'main/SET_IS_MODAL';
 const SET_SESSION_ID = 'main/SET_SESSION_ID';
-const ADD_STATISTIC = 'main/ADD_STATISTIC';
 
 const initialState = Immutable.fromJS({
   keyboard: 'english',
@@ -149,33 +148,6 @@ export default (state = initialState, action = {}) => {
 
     case SET_SESSION_ID:
       return state.set('sessionId', action.id);
-
-    case ADD_STATISTIC:
-      return state.update('statistic', dates => {
-        const thisDay = moment().startOf('day').toDate();
-
-        let newDates = dates;
-
-        let dateIndex = newDates.findIndex(date => date.get('date') === thisDay);
-
-        if (dateIndex === -1) {
-          newDates = dates.push(Immutable.fromJS({
-            date: thisDay,
-          }));
-
-          dateIndex = newDates.count() - 1;
-        }
-
-        return newDates.updateIn([dateIndex, action.keyboard, action.mode], mode => {
-          let newMode = mode;
-
-          if (!newMode) {
-            newMode = Immutable.List([]);
-          }
-
-          newMode.set(action.sessionId, Immutable.Map(action.statistic));
-        });
-      });
 
     default:
       return state;
@@ -312,11 +284,6 @@ export const startNewSession = () => (dispatch, getState) => {
 
   dispatch(setSessionId(index));
 };
-
-export const addStatistic = obj => ({
-  type: ADD_STATISTIC,
-  ...obj,
-});
 
 export const processAddStatistic = () => (dispatch, getState) => {
   const stateMain = getState().get('main');

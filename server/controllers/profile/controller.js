@@ -6,58 +6,49 @@ const User = require('../../models/user');
 const Statistic = require('../../models/statistic');
 
 const getAllData = (req, res, next) => {
-  Promise.all([User.get(req.user.id), Statistic.findOne({ user: req.user.id }).exec()])
+  const {
+    user: {
+      id: userId,
+    }
+  } = req;
+
+  Promise.all([User.get(userId), Statistic.findOne({ user: userId }).exec()])
     .then(([user, statistic]) => {
-      res.json(user.toObject());
+      const data = user.toObject();
+
+      data.profile.statistic = statistic.toObject()
+
+      res.json(data);
     })
     .catch(e => next(e));
-
-  // User.get(req.user.id)
-  //   .then(user => {
-  //
-  //     Statistic
-  //       .findOne({ user: user.id })
-  //       .exec()
-  //       .then((...args) => {
-  //         console.log(1111111111);
-  //         console.log(args);
-  //       })
-  //       .catch(e => {
-  //         console.log(2222222222);
-  //         console.log(e);
-  //       });
-  //
-  //     res.json(user.toObject())
-  //   })
-  //   .catch(e => next(e));
-}
-
+};
 
 const changePassword = (req, res, next) => {
   const {
-    user,
+    user: {
+      id: userId,
+    },
     body: {
-      id,
-      text,
-      select,
+      old_password,
+      new_password,
     },
   } = req;
 
-  User.get(user.id)
+  User.get(userId)
     .then(user => {
-      const entity = {
-        id,
-        typed: '',
-        last: text,
-      };
-
-      const textMode = user.modes.text;
-
-      textMode.entities.push(entity);
-
-      if (select) {
-        textMode.selectedId = entity.id;
-      }
+      user.validPassword(old_password).then(valid => {
+        if (valid) {
+          user.profile.password = new_password;
+        }
+        else {
+          throw new APIError({
+            errors: {
+              old_password: 'Incorrect password'
+            },
+            status: httpStatus.BAD_REQUEST
+          });
+        }
+      });
 
       return user.save().then(() => res.json(httpStatus[200]));
     })

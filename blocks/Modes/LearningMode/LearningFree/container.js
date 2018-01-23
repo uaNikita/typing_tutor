@@ -21,37 +21,35 @@ const mapStateToProps = state => {
   };
 };
 
-const mapDispatchToProps = dispatch => (
-  {
-    addLetter: letter => {
-      dispatch(addLetterToFreeLetters(letter));
+const mapDispatchToProps = dispatch => ({
+  addLetter: letter => {
+    dispatch(addLetterToFreeLetters(letter));
 
-      dispatch(updateFreeLesson());
+    dispatch(updateFreeLesson());
 
-      dispatch(updateCurrentLessonFromCurrentMode());
+    dispatch(updateCurrentLessonFromCurrentMode());
 
-      dispatch(updateCharToType());
-    },
-    removeLetter: letter => {
-      dispatch(removeLetterFromFreeLetters(letter));
+    dispatch(updateCharToType());
+  },
+  removeLetter: letter => {
+    dispatch(removeLetterFromFreeLetters(letter));
 
-      dispatch(updateFreeLesson());
+    dispatch(updateFreeLesson());
 
-      dispatch(updateCurrentLessonFromCurrentMode());
+    dispatch(updateCurrentLessonFromCurrentMode());
 
-      dispatch(updateCharToType());
-    },
-    setMaxLettersInWord: length => {
-      dispatch(setMaxLettersInWordFree(length));
+    dispatch(updateCharToType());
+  },
+  setMaxLettersInWord: length => {
+    dispatch(setMaxLettersInWordFree(length));
 
-      dispatch(updateFreeLesson());
+    dispatch(updateFreeLesson());
 
-      dispatch(updateCurrentLessonFromCurrentMode());
+    dispatch(updateCurrentLessonFromCurrentMode());
 
-      dispatch(updateCharToType());
-    },
-  }
-);
+    dispatch(updateCharToType());
+  },
+});
 
 export default connect(
   mapStateToProps,

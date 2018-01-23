@@ -14,15 +14,21 @@ class ChangePassword extends Component {
     submitted: false,
   }
 
-  handleSubmit = values => this.props.fetchJSON('/auth/signup', { body: values.toJS() }, true)
-    .then(() => this.setState({
-      submitted: true,
-    }))
-    .catch(data => {
-      if (data.errors) {
-        throw new SubmissionError(data.errors);
-      }
-    });
+  handleSubmit = values => {
+    const body = values.toJS();
+
+    delete body.confirm_new_password;
+
+    this.props.fetchJSON('/profile/change-password', { body }, true)
+      .then(() => this.setState({
+        submitted: true,
+      }))
+      .catch(data => {
+        if (data.errors) {
+          throw new SubmissionError(data.errors);
+        }
+      });
+  }
 
   render() {
     const {
@@ -40,9 +46,9 @@ class ChangePassword extends Component {
       <form styleName="root" onSubmit={handleSubmit(this.handleSubmit)}>
         <h3 styleName="title">Change password</h3>
 
-        <Field name="old-password" component={RenderField} type="password" label="Old password" />
-        <Field name="new-password" component={RenderField} type="password" label="New password" />
-        <Field name="confirm-new-password" component={RenderField} type="password" label="Confirm new password" />
+        <Field name="old_password" component={RenderField} type="password" label="Old password" />
+        <Field name="new_password" component={RenderField} type="password" label="New password" />
+        <Field name="confirm_new_password" component={RenderField} type="password" label="Confirm new password" />
 
         <Button
           styleName="button"

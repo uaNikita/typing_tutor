@@ -16,4 +16,12 @@ const StatisticSchema = new mongoose.Schema({
   strict: false,
 });
 
+StatisticSchema.set('toObject', {
+  transform: function(doc, ret) {
+    delete ret._id;
+    delete ret.__v;
+    delete ret.user;
+  }
+});
+
 module.exports = mongoose.model('Statistic', StatisticSchema);

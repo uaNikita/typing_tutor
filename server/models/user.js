@@ -58,8 +58,6 @@ UserSchema.set('toObject', {
     delete ret.__v;
     delete ret.profile.password;
     delete ret.active;
-
-    // console.log(JSON.stringify(ret));
   }
 });
 
