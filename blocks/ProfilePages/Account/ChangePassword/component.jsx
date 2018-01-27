@@ -12,17 +12,14 @@ import styles from './change-password.module.styl';
 class ChangePassword extends Component {
   state = {
     submitted: false,
-  }
+  };
 
   handleSubmit = values => {
     const body = values.toJS();
 
     delete body.confirm_new_password;
 
-    
-    console.log('body',body);
-    
-    this.props.fetchJSON('/profile/change-password', { body }, true)
+    this.props.fetchJSON('/profile/change-password', { body })
       .then(() => this.setState({
         submitted: true,
       }))
@@ -31,7 +28,7 @@ class ChangePassword extends Component {
           throw new SubmissionError(data.errors);
         }
       });
-  }
+  };
 
   render() {
     const {
@@ -74,7 +71,7 @@ const validate = values => {
   const confirmNewPassword = values.get('confirm_new_password');
 
   if (newPassword !== confirmNewPassword) {
-    errors['confirm_new_password'] = 'Password does not match';
+    errors.confirm_new_password = 'Password does not match';
   }
 
   return {

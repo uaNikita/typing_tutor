@@ -16,7 +16,9 @@ const getAllData = (req, res, next) => {
     .then(([user, statistic]) => {
       const data = user.toObject();
 
-      data.profile.statistic = statistic.toObject()
+      if (statistic) {
+        data.profile.statistic = statistic.toObject();
+      }
 
       res.json(data);
     })
@@ -34,14 +36,14 @@ const changePassword = (req, res, next) => {
     },
   } = req;
 
-  console.log(old_password,new_password);
-  
   User.get(userId)
-    .then(user => {
+    .then(user =>
       user.validPassword(old_password)
         .then(valid => {
           if (valid) {
             user.profile.password = new_password;
+
+            return user.save().then(() => res.json(httpStatus[200]));
           }
           else {
             throw new APIError({
@@ -51,10 +53,7 @@ const changePassword = (req, res, next) => {
               status: httpStatus.BAD_REQUEST
             });
           }
-        });
-
-      return user.save().then(() => res.json(httpStatus[200]));
-    })
+        }))
     .catch(e => next(e));
 };
 
@@ -80,10 +79,10 @@ const statistic = (req, res, next) => {
         const modePath = `${keyboard}.${mode}`;
 
         if (!statistic.get(modePath)) {
-          statistic.set(modePath, [clientStatistic])
+          statistic.set(modePath, [clientStatistic]);
         }
         else {
-          statistic.set(`${modePath}.${sessionId}`, clientStatistic)
+          statistic.set(`${modePath}.${sessionId}`, clientStatistic);
         }
 
         return statistic.save().then(() => res.json(httpStatus[200]));
