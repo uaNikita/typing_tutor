@@ -19,6 +19,9 @@ class ChangePassword extends Component {
 
     delete body.confirm_new_password;
 
+    
+    console.log('body',body);
+    
     this.props.fetchJSON('/profile/change-password', { body }, true)
       .then(() => this.setState({
         submitted: true,
@@ -67,18 +70,18 @@ class ChangePassword extends Component {
 const validate = values => {
   const errors = {};
 
-  const newPassword = values.get('new-password');
-  const confirmNewPassword = values.get('confirm-new-password');
+  const newPassword = values.get('new_password');
+  const confirmNewPassword = values.get('confirm_new_password');
 
   if (newPassword !== confirmNewPassword) {
-    errors['confirm-new-password'] = 'Password does not match';
+    errors['confirm_new_password'] = 'Password does not match';
   }
 
   return {
     ...errors,
-    ...validatePassword('old-password', values.get('old-password')),
-    ...validatePassword('new-password', values.get('new-password')),
-    ...validatePassword('confirm-new-password', values.get('confirm-new-password')),
+    ...validatePassword('old_password', values.get('old_password')),
+    ...validatePassword('new_password', values.get('new_password')),
+    ...validatePassword('confirm_new_password', values.get('confirm_new_password')),
   };
 };
 

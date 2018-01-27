@@ -93,6 +93,8 @@ app.use((req, res) => {
 
   const { tt_access, tt_refresh } = req.cookies;
 
+  console.log(tt_access, tt_refresh);
+  
   if (tt_access) {
     dispatch(setAccessToken(tt_access));
 
@@ -106,6 +108,8 @@ app.use((req, res) => {
         res.clearCookie('tt_refresh');
         res.clearCookie('tt_access');
 
+        console.log(111);
+        
         sendRes();
       });
   }

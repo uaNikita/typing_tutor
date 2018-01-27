@@ -34,21 +34,24 @@ const changePassword = (req, res, next) => {
     },
   } = req;
 
+  console.log(old_password,new_password);
+  
   User.get(userId)
     .then(user => {
-      user.validPassword(old_password).then(valid => {
-        if (valid) {
-          user.profile.password = new_password;
-        }
-        else {
-          throw new APIError({
-            errors: {
-              old_password: 'Incorrect password'
-            },
-            status: httpStatus.BAD_REQUEST
-          });
-        }
-      });
+      user.validPassword(old_password)
+        .then(valid => {
+          if (valid) {
+            user.profile.password = new_password;
+          }
+          else {
+            throw new APIError({
+              errors: {
+                old_password: 'Incorrect password'
+              },
+              status: httpStatus.BAD_REQUEST
+            });
+          }
+        });
 
       return user.save().then(() => res.json(httpStatus[200]));
     })
