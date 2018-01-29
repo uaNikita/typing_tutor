@@ -1,9 +1,10 @@
 import React from 'react';
+import classNames from 'classnames';
 import { withRouter } from 'react-router-dom';
 
 import './modal.styl';
 
-const Modal = ({ children, nonCloseable, onClose }) => {
+const Modal = ({ children, nonCloseable, onClose, className }) => {
   const props = {};
   let closeButton = null;
 
@@ -13,7 +14,7 @@ const Modal = ({ children, nonCloseable, onClose }) => {
   }
 
   return (
-    <div className="modal">
+    <div className={classNames('modal', className)}>
       <div className="modal__overlay" {...props} />
       <div className="modal__content">
         {closeButton}

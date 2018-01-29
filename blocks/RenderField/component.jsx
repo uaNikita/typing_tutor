@@ -84,8 +84,8 @@ class RenderField extends Component {
 
     return (
       <div className={fieldClass}>
-        {showError && <p className="error">{error}</p>}
         {control}
+        {showError && <p className="error">{error}</p>}
       </div>
     );
   }

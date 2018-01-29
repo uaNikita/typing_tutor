@@ -43,16 +43,19 @@ class DeleteAccount extends Component {
       <form onSubmit={handleSubmit(this.handleSubmit)}>
         <h3 styleName="title">Delete Account</h3>
 
-        <button styleName="button" onClick={this.handleClickButton}>Delete account</button>
+        <button className="button" styleName="button" onClick={this.handleClickButton}>Delete account</button>
 
-        <ModalSimple active={modal} onClose={this.handlerCloseModal}>
+        <ModalSimple active={modal} onClose={this.handlerCloseModal} >
           Are you sure you want to do this?
+          <br />
 
           To verify, type <span styleName="delete-text">delete my account</span> below:
           <Field name="delete-my-account" component={RenderField} type="text" />
 
-          Confirm your password:
-          <Field name="confirm-new-password" component={RenderField} type="password" label="Confirm your password" />
+          <div styleName="confirm">
+            Confirm your password:
+            <Field name="confirm-new-password" component={RenderField} type="password" label="Confirm your password" />
+          </div>
 
           <Button type="submit" disabled={invalid} isLoader={submitting}>Delete my account</Button>
         </ModalSimple>

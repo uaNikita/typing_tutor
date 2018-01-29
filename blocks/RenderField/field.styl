@@ -1,6 +1,8 @@
 .field
    position: relative
-   padding-top:13px;
+   margin-top: 2px
+   margin-bottom: 2px
+   padding-bottom:13px;
    &[disabled]
       background-color: #f4f4f4;
    &::placeholder
@@ -47,7 +49,7 @@
          width: 20px;
          height: @width;
          position: absolute;
-         bottom: 10px
+         top: 9px
          right: 10px;
          border-bottom: none;
          color: #000 !important;
@@ -56,7 +58,7 @@
          text-align: center;
    .error
       position: absolute
-      top: 0
+      bottom: 0
 
 @keyframes async-validating
    0%
