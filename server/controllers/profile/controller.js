@@ -100,8 +100,25 @@ const statistic = (req, res, next) => {
     .catch(e => next(e));
 };
 
+const deleteAccount = (req, res, next) => {
+  const {
+    user: {
+      id: userId,
+    },
+  } = req;
+
+  User.get(userId)
+    .then(user => {
+      console.log('test');
+
+      res.json(httpStatus[200]);
+    })
+    .catch(e => next(e));
+};
+
 module.exports = {
   getAllData,
   changePassword,
   statistic,
+  deleteAccount,
 };
