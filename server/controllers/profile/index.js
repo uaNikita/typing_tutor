@@ -11,4 +11,6 @@ router.post('/change-password', authenticate, controller.changePassword);
 
 router.post('/statistic', authenticate, controller.statistic);
 
+router.post('/delete', authenticate, controller.deleteAccount);
+
 module.exports = router;
