@@ -25,9 +25,7 @@ process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
 const config = require('config');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.get('database'), {
-  useMongoClient: true,
-});
+mongoose.connect(config.get('database'));
 mongoose.connection.on('error', () => {
   throw new Error(`unable to connect to database: ${config.db}`);
 });
