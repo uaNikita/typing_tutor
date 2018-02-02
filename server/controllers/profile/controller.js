@@ -3,7 +3,10 @@ const moment = require('moment');
 const httpStatus = require('http-status');
 
 const User = require('../../models/user');
+const Access = require('../../models/access');
+const Client = require('../../models/client');
 const Statistic = require('../../models/statistic');
+const Verification = require('../../models/verification');
 
 const getAllData = (req, res, next) => {
   const {
@@ -107,12 +110,44 @@ const deleteAccount = (req, res, next) => {
     },
   } = req;
 
-  User.get(userId)
-    .then(user => {
-      console.log('test');
+  Promise.all([
+    User.findById(userId),
+    Client.find({ user: userId }),
+    Statistic.findOne({ user: userId }),
+    Verification.find({ user: userId }),
+  ])
+    .then(([user, clients, statistic, verifications]) => {
+      const modelsForRemoval = [user];
 
-      res.json(httpStatus[200]);
+      if (statistic) {
+        modelsForRemoval.push(statistic);
+      }
+
+      if (verifications) {
+        verifications.forEach(verification =>
+          modelsForRemoval.push(verification));
+      }
+
+      if (clients) {
+        return Promise.all(clients.map(client => {
+          modelsForRemoval.push(client);
+
+          return Access
+            .find({ client }).exec()
+            .then(accesses => {
+              accesses.forEach(access =>
+                modelsForRemoval.push(access));
+            })
+        }))
+          .then(() => modelsForRemoval);
+      }
+
+      return modelsForRemoval
     })
+    .then(modelsForRemoval =>
+      Promise.all(modelsForRemoval.map(doc => doc.remove())))
+    .then(() =>
+      res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
