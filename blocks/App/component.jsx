@@ -8,6 +8,7 @@ import _ from 'lodash';
 import GlobalMessageTransitionGroup from 'Blocks/GlobalMessageTransitionGroup/container';
 import Modal from 'Blocks/Modal/component.jsx';
 import VerifyPage from 'Blocks/VerifyPage/container';
+import PrivateRoute from 'Blocks/PrivateRoute/container';
 import Home from 'Blocks/Home/container';
 import Header from 'Blocks/Header/component.jsx';
 import Modes from 'Blocks/Modes/component.jsx';
@@ -139,7 +140,7 @@ class App extends Component {
                       <Switch key="switch">
                         <Route key="modes" path="/modes" component={Modes} />
                         <Route key="settings" path="/settings" component={SettingsPages} />
-                        <Route key="profile" path="/profile" component={ProfilePages} />
+                        <PrivateRoute key="profile" path="/profile" component={ProfilePages} />
                       </Switch>,
                     ]} />
                 </Switch>

@@ -252,6 +252,7 @@ export const processAction = authActions => (dispatch, getState) => {
     delete state.fetch;
     delete state.form;
     delete state.sessionStatistic;
+    delete state.iaModal;
 
     window.localStorage.setItem('touchToType', JSON.stringify(state));
   }
