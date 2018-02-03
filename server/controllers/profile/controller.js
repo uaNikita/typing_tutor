@@ -108,46 +108,64 @@ const deleteAccount = (req, res, next) => {
     user: {
       id: userId,
     },
+    body: {
+      confirm_new_password,
+    },
   } = req;
 
-  Promise.all([
-    User.findById(userId),
-    Client.find({ user: userId }),
-    Statistic.findOne({ user: userId }),
-    Verification.find({ user: userId }),
-  ])
-    .then(([user, clients, statistic, verifications]) => {
-      const modelsForRemoval = [user];
+  User
+    .findById(userId).exec()
+    .then(user =>
+      user.validPassword(confirm_new_password)
+        .then(valid => {
+          if (valid) {
+            return Promise.all([
+              Client.find({ user: userId }),
+              Statistic.findOne({ user: userId }),
+              Verification.find({ user: userId }),
+            ]);
+          }
+          else {
+            throw new APIError({
+              errors: {
+                confirm_new_password: 'Incorrect password'
+              },
+              status: httpStatus.BAD_REQUEST
+            });
+          }
+        })
+        .then(([clients, statistic, verifications]) => {
+          const modelsForRemoval = [user];
 
-      if (statistic) {
-        modelsForRemoval.push(statistic);
-      }
+          if (statistic) {
+            modelsForRemoval.push(statistic);
+          }
 
-      if (verifications) {
-        verifications.forEach(verification =>
-          modelsForRemoval.push(verification));
-      }
+          if (verifications) {
+            verifications.forEach(verification =>
+              modelsForRemoval.push(verification));
+          }
 
-      if (clients) {
-        return Promise.all(clients.map(client => {
-          modelsForRemoval.push(client);
+          if (clients) {
+            return Promise.all(clients.map(client => {
+              modelsForRemoval.push(client);
 
-          return Access
-            .find({ client }).exec()
-            .then(accesses => {
-              accesses.forEach(access =>
-                modelsForRemoval.push(access));
-            })
-        }))
-          .then(() => modelsForRemoval);
-      }
+              return Access
+                .find({ client }).exec()
+                .then(accesses => {
+                  accesses.forEach(access =>
+                    modelsForRemoval.push(access));
+                })
+            }))
+              .then(() => modelsForRemoval);
+          }
 
-      return modelsForRemoval
-    })
-    .then(modelsForRemoval =>
-      Promise.all(modelsForRemoval.map(doc => doc.remove())))
-    .then(() =>
-      res.json(httpStatus[200]))
+          return modelsForRemoval
+        })
+        .then(modelsForRemoval =>
+          Promise.all(modelsForRemoval.map(doc => doc.remove())))
+        .then(() =>
+          res.json(httpStatus[200])))
     .catch(e => next(e));
 };
 

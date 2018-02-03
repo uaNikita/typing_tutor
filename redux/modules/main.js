@@ -71,6 +71,7 @@ const updateSessionStatisticPresses = (state, name, character) =>
   state.updateIn(['sessionStatistic', name], presses => {
     const index = presses.findIndex(c => c.get('character') === character);
 
+
     let newPresses;
 
     if (index === -1) {
@@ -119,11 +120,11 @@ export default (state = initialState, action = {}) => {
       return updateSessionStatisticPresses(state, 'typos', action.character);
 
     case ZEROING_STATISTIC:
-      return state.set('sessionStatistic', {
-        hits: Immutable.List([]),
-        typos: Immutable.List([]),
+      return state.set('sessionStatistic', Immutable.fromJS({
+        hits: [],
+        typos: [],
         start: undefined,
-      });
+      }));
 
     case SET_MODE:
       return state.set('mode', action.mode);
