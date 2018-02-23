@@ -18,6 +18,11 @@ import App from 'Blocks/App/container';
 
 import store from './store';
 
+// for IE9+
+if (!Element.prototype.matches) {
+  Element.prototype.matches = Element.prototype.msMatchesSelector;
+}
+
 hydrate(
   <Provider store={store}>
     <BrowserRouter>

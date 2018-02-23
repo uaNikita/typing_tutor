@@ -11,6 +11,31 @@ class Home extends Component {
     navOpen: false,
   };
 
+  componentDidMount() {
+    document.addEventListener('click', this.closeIfNeeded);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.closeIfNeeded);
+  }
+
+  closeIfNeeded = e => {
+    let el = e.target;
+
+    // traverse parents
+    while (el) {
+      if (el && el.matches(`.${styles.items}, .${styles.button}`)) {
+        break;
+      }
+
+      el = el.parentElement;
+    }
+
+    if (!el) {
+      this.setState({ navOpen: false });
+    }
+  };
+
   hanldeClickMenu = () => {
     this.setState({
       navOpen: !this.state.navOpen,
@@ -27,7 +52,7 @@ class Home extends Component {
     return (
       <header styleName="root">
         <div className="nav">
-          <button className={`${styles.button} fa fa-bars`} onClick={this.hanldeClickMenu} />
+          <button className="fa fa-bars" styleName="button" onClick={this.hanldeClickMenu} />
 
           {navOpen ? (
             <nav styleName="items">
