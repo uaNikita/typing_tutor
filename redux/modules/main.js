@@ -6,8 +6,16 @@ import keyboards from '../../constants/keyboards';
 
 import { fetchJSON, setAccessToken, setRefreshToken } from './fetch';
 import { setData as setUserData, addStatistic } from './user';
-import { setData as setTextData, typeTextMode } from './text-mode';
-import { typeLearningMode, updateLearningState } from './learning-mode';
+import {
+  setData as setTextData,
+  typeTextMode,
+  updateCharToType as updateCharToTypeText,
+} from './text-mode';
+import {
+  typeLearningMode,
+  updateLearningState,
+  updateCharToType as updateCharToTypeLearning,
+} from './learning-mode';
 
 import { getIdsFromCharacter } from '../../utils';
 
@@ -62,7 +70,7 @@ const initialState = Immutable.fromJS({
 
   lastNoModalLocation: undefined,
 
-  iaModal: false,
+  isModal: false,
 
   statistic: [],
 });
@@ -253,7 +261,8 @@ export const processAction = authActions => (dispatch, getState) => {
     delete state.fetch;
     delete state.form;
     delete state.sessionStatistic;
-    delete state.iaModal;
+    delete state.isModal;
+    delete state.main.idCharsToType;
 
     window.localStorage.setItem('touchToType', JSON.stringify(state));
   }
@@ -337,8 +346,19 @@ export const typeChar = char => (dispatch, getState) => {
   addStatisticWithTimeout(dispatch);
 };
 
-export const init = () => dispatch => {
+export const init = () => (dispatch, getState) => {
+  const state = getState();
+
   dispatch(updateLearningState());
+
+  switch (state.getIn(['main', 'mode'])) {
+    case 'text':
+      dispatch(updateCharToTypeText());
+      break;
+    case 'learning':
+      dispatch(updateCharToTypeLearning());
+      break;
+  }
 };
 
 export const setAllWithoutAuth = data => dispatch => {
