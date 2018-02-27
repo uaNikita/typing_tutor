@@ -369,13 +369,14 @@ export const setAllWithoutAuth = data => dispatch => {
   dispatch(init());
 };
 
-export const setAllWithAuth = ({ tokens: { refresh, access }, ...rest }) => dispatch => {
-  dispatch(setRefreshToken(refresh));
+export const setAllWithAuth = ({ tokens: { refresh, access }, ...rest }) =>
+  dispatch => {
+    dispatch(setRefreshToken(refresh));
 
-  dispatch(setAccessToken(access));
+    dispatch(setAccessToken(access));
 
-  dispatch(setAllWithoutAuth(rest));
-};
+    dispatch(setAllWithoutAuth(rest));
+  };
 
 export const requestAllWithoutAuth = () =>
   dispatch =>

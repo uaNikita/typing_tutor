@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 import defaults from 'Utils/defaults';
 import { setRefreshToken, setAccessToken } from 'ReduxUtils/modules/fetch';
-import { init, requestAllWithoutAuth, initAppStore } from 'ReduxUtils/modules/main';
+import { requestAllWithoutAuth } from 'ReduxUtils/modules/main';
 
 import App from 'Blocks/App/container';
 
@@ -22,7 +22,6 @@ export {
   defaults,
   setRefreshToken,
   setAccessToken,
-  init,
   requestAllWithoutAuth,
 };
 

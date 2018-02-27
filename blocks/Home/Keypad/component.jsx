@@ -1,6 +1,5 @@
 import React from 'react';
 import classNames from 'classnames';
-import _ from 'lodash';
 
 import Key from 'Blocks/Key/component.jsx';
 
@@ -13,25 +12,11 @@ const KeyPad = props => {
   } = props;
 
   const keysNode = keys.map(obj => {
-    const isPressed = pressedKeys.indexOf(obj.id) + 1;
-    const isWrong = pressedWrongKeys.indexOf(obj.id) + 1;
-    let needToType = false;
-
-    _.forEach(idCharsToType, value => {
-      let result = true;
-
-      if (obj.id === value) {
-        needToType = true;
-        result = false;
-      }
-
-      return result;
-    });
-
+    // todo: pressedWrongKeys and idCharsToType, different names but all vars have array with chars ids
     const className = classNames('keypad__key', {
-      keypad__pressed: isPressed,
-      keypad__wrong: isWrong,
-      'keypad__to-type': needToType,
+      keypad__pressed: pressedKeys.indexOf(obj.id) + 1,
+      keypad__wrong: pressedWrongKeys.indexOf(obj.id) + 1,
+      'keypad__to-type': idCharsToType.indexOf(obj.id) + 1,
     });
 
     let { finger } = obj;

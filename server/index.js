@@ -17,7 +17,6 @@ const {
   reducer,
   setRefreshToken,
   setAccessToken,
-  init,
   requestAllWithoutAuth
 } = require('../dist/compiledServer');
 
@@ -89,7 +88,7 @@ app.use((req, res) => {
   };
 
   const { tt_access, tt_refresh } = req.cookies;
-  
+
   if (tt_access) {
     dispatch(setAccessToken(tt_access));
 
@@ -102,13 +101,11 @@ app.use((req, res) => {
       .catch(() => {
         res.clearCookie('tt_refresh');
         res.clearCookie('tt_access');
-        
+
         sendRes();
       });
   }
   else {
-    dispatch(init());
-
     sendRes();
   }
 });

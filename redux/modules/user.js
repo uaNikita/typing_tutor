@@ -8,9 +8,9 @@ const SET_NAME = 'user/SET_NAME';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
 
 const initialState = Immutable.Map({
-  email: false,
+  email: undefined,
 
-  name: false,
+  name: undefined,
 
   statistic: [],
 });

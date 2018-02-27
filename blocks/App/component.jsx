@@ -27,7 +27,16 @@ class App extends Component {
   };
 
   componentDidMount() {
-    const { location, setLastNoModalLocation } = this.props;
+    const {
+      location,
+      setLastNoModalLocation,
+      email,
+      init,
+    } = this.props;
+
+    if (!email) {
+      init();
+    }
 
     setLastNoModalLocation(location);
   }
