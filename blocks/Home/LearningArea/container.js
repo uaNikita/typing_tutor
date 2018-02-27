@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { updateCharToType } from 'ReduxUtils/modules/learning-mode';
 
 import Textarea from './component.jsx';
 
@@ -11,7 +12,12 @@ const mapStateToProps = state => {
   };
 };
 
+const mapDispatchToProps = dispatch => ({
+  updateCharToType: (...args) => dispatch(updateCharToType(...args)),
+});
+
 export default connect(
   mapStateToProps,
+  mapDispatchToProps,
 )(Textarea);
 

@@ -9,12 +9,10 @@ import { setData as setUserData, addStatistic } from './user';
 import {
   setData as setTextData,
   typeTextMode,
-  updateCharToType as updateCharToTypeText,
 } from './text-mode';
 import {
   typeLearningMode,
   updateLearningState,
-  updateCharToType as updateCharToTypeLearning,
 } from './learning-mode';
 
 import { getIdsFromCharacter } from '../../utils';
@@ -314,7 +312,7 @@ export const processAddStatistic = () => (dispatch, getState) => {
   return dispatch(processAction(() => dispatch(fetchJSON('/profile/statistic', { body }))));
 };
 
-const addStatisticWithTimeout = _.throttle(
+export const addStatisticWithTimeout = _.throttle(
   dispatch => dispatch(processAddStatistic()),
   2000,
   { leading: false },
@@ -342,23 +340,10 @@ export const typeChar = char => (dispatch, getState) => {
       dispatch(typeLearningMode(char));
       break;
   }
-
-  addStatisticWithTimeout(dispatch);
 };
 
-export const init = () => (dispatch, getState) => {
-  const state = getState();
-
+export const init = () => dispatch => {
   dispatch(updateLearningState());
-
-  switch (state.getIn(['main', 'mode'])) {
-    case 'text':
-      dispatch(updateCharToTypeText());
-      break;
-    case 'learning':
-      dispatch(updateCharToTypeLearning());
-      break;
-  }
 };
 
 export const setAllWithoutAuth = data => dispatch => {

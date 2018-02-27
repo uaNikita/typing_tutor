@@ -6,6 +6,7 @@ import {
   pressWrongKeys,
   addHit,
   addTypo,
+  addStatisticWithTimeout,
 } from './main';
 import { getIdsFromCharacter, generateLesson, getFingersSet } from '../../utils';
 
@@ -226,11 +227,14 @@ export const updateCharToType = () => (dispatch, getState) => {
 
 export const typeLearningMode = char => (dispatch, getState) => {
   const state = getState();
+  const learningModeState = state.get('learningMode');
 
-  if (state.getIn(['learningMode', 'lessonRest'])) {
+  const charToType = learningModeState.get('lessonRest')[0];
+
+  if (charToType) {
     const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
-    if (state.getIn(['learningMode', 'lessonRest'])[0] === char) {
+    if (charToType === char) {
       dispatch(typeOnLesson());
 
       dispatch(addHit(char));
@@ -242,18 +246,20 @@ export const typeLearningMode = char => (dispatch, getState) => {
 
       dispatch(addTypo(char));
     }
+
+    addStatisticWithTimeout(dispatch);
   }
   // update fingers
-  else if (state.learningMode.mode === 'fingers') {
+  else if (learningModeState.get('mode') === 'fingers') {
     dispatch(updateFingersLesson());
 
-    dispatch(setCurrentLesson(getState().getIn(['learningMode', 'lessonFingers'])));
+    dispatch(setCurrentLesson(learningModeState.get('lessonFingers')));
   }
   // update free
   else {
     dispatch(updateFreeLesson());
 
-    dispatch(setCurrentLesson(getState().getIn(['learningMode', 'lessonFree'])));
+    dispatch(setCurrentLesson(learningModeState.get('lessonFree')));
   }
 };
 

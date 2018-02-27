@@ -9,6 +9,7 @@ import {
   pressWrongKeys,
   addHit,
   addTypo,
+  addStatisticWithTimeout,
 } from './main';
 
 const CLEAR_STATE = 'text-mode/CLEAR_STATE';
@@ -176,23 +177,29 @@ export const updateCharToType = () => (dispatch, getState) => {
 export const typeTextMode = char => (dispatch, getState) => {
   const state = getState();
   const textId = state.getIn(['textMode', 'selectedId']);
-  const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']), char);
+  const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
   const text = state
     .getIn(['textMode', 'entities'])
     .filter(obj => obj.get('id') === textId)
     .get(0);
 
-  if (text.get('last')[0] === char) {
-    dispatch(typeOnEntitie(textId));
+  const charToType = text.get('last')[0];
 
-    dispatch(addHit(char));
+  if (charToType) {
+    if (charToType === char) {
+      dispatch(typeOnEntitie(textId));
 
-    dispatch(updateCharToType());
-  }
-  else {
-    dispatch(pressWrongKeys(idsChar));
+      dispatch(addHit(char));
 
-    dispatch(addTypo(char));
+      dispatch(updateCharToType());
+    }
+    else {
+      dispatch(pressWrongKeys(idsChar));
+
+      dispatch(addTypo(char));
+    }
+
+    addStatisticWithTimeout(dispatch);
   }
 };

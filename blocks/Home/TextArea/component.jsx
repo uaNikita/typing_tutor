@@ -13,6 +13,9 @@ class TextArea extends Component {
   //   $content.perfectScrollbar();
   // }
 
+  componentDidMount = () =>
+    this.props.updateCharToType()
+
   render() {
     const { typed, nonTyped } = this.props;
 
