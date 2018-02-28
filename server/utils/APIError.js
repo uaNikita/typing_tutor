@@ -1,4 +1,4 @@
-let httpStatus = require('http-status');
+const httpStatus = require('http-status');
 
 /**
  * @extends Error
@@ -24,16 +24,19 @@ class APIError extends ExtendableError {
    * @param options - Error message, HTTP status code of error, errors description
    */
   constructor(options) {
+    const {
+      message,
+      errors,
+    } = options;
+
     let {
-            message,
-            status,
-            errors
-          } = options;
+      status,
+    } = options;
 
     if (!status) {
-      status = httpStatus.INTERNAL_SERVER_ERROR
+      status = httpStatus.INTERNAL_SERVER_ERROR;
     }
-    
+
     super(message, status, errors);
   }
 }

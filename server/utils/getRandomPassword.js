@@ -2,7 +2,7 @@ const chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890';
 const charsL = chars.length;
 
 const getRandomPassword = () => {
-  var pass = '';
+  let pass = '';
 
   for (let i = 0; i < 7; i += 1) {
     pass += chars.charAt(Math.floor(Math.random() * charsL));
@@ -23,8 +23,4 @@ const getValidRandomPassword = () => {
 };
 
 module.exports = getValidRandomPassword;
-
-
-
-
 

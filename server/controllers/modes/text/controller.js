@@ -1,12 +1,13 @@
 const _ = require('lodash');
-const moment = require('moment');
 const httpStatus = require('http-status');
 
 const User = require('../../../models/user');
 
 const add = (req, res, next) => {
   const {
-    user,
+    user: {
+      id: userId,
+    },
     body: {
       id,
       text,
@@ -14,7 +15,7 @@ const add = (req, res, next) => {
     },
   } = req;
 
-  User.get(user.id)
+  User.get(userId)
     .then(user => {
       const entity = {
         id,
@@ -22,7 +23,9 @@ const add = (req, res, next) => {
         last: text,
       };
 
-      const textMode = user.modes.text;
+      const userToSave = user;
+
+      const textMode = userToSave.modes.text;
 
       textMode.entities.push(entity);
 
@@ -30,45 +33,53 @@ const add = (req, res, next) => {
         textMode.selectedId = entity.id;
       }
 
-      return user.save().then(() => res.json(httpStatus[200]));
+      return userToSave.save().then(() => res.json(httpStatus[200]));
     })
     .catch(e => next(e));
 };
 
 const select = (req, res, next) => {
   const {
-    user,
+    user: {
+      id: userId,
+    },
     body: {
       id,
     },
   } = req;
 
-  User.get(user.id)
+  User.get(userId)
     .then(user => {
-      user.modes.text.selectedId = id;
+      const userToSave = user;
 
-      return user.save().then(() => res.json(httpStatus[200]));
+      userToSave.modes.text.selectedId = id;
+
+      return userToSave.save().then(() => res.json(httpStatus[200]));
     })
     .catch(e => next(e));
 };
 
 const refresh = (req, res, next) => {
   const {
-    user,
+    user: {
+      id: userId,
+    },
     body: {
       id,
     },
   } = req;
 
-  User.get(user.id)
+  User.get(userId)
     .then(user => {
-      const entity = _.find(user.modes.text.entities, { id });
+      const userToSave = user;
+
+      const entity = _.find(userToSave.modes.text.entities, { id });
 
       entity.last = entity.typed + entity.last;
 
       entity.typed = '';
 
-      return user.save().then(() => res.json(httpStatus[200]));
+      return userToSave.save().then(() => res.json(httpStatus[200]));
     })
     .catch(e => next(e));
 };

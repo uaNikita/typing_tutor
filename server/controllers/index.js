@@ -1,6 +1,4 @@
-let express = require('express');
-
-const authenticate = require('../utils/authenticate');
+const express = require('express');
 
 const router = express.Router();
 

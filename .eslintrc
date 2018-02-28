@@ -8,11 +8,33 @@
     "node": true
   },
   "rules": {
+    "linebreak-style": "off",
+    "function-paren-newline": [
+      "error",
+      "consistent"
+    ],
+    "brace-style": [
+      "error",
+      "stroustrup",
+      {
+        "allowSingleLine": true
+      }
+    ],
+    "object-curly-newline": "off",
     "no-useless-escape": "off",
     "default-case": "off",
     "arrow-parens": [
       "error",
       "as-needed"
+    ],
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allow": [
+          "_id",
+          "__v"
+        ]
+      }
     ],
     "import/extensions": "off",
     "max-len": "off",
@@ -31,20 +53,7 @@
         "components": []
       }
     ],
-    "jsx-a11y/click-events-have-key-events": "off",
-    "linebreak-style": "off",
-    "function-paren-newline": [
-      "error",
-      "consistent"
-    ],
-    "brace-style": [
-      "error",
-      "stroustrup",
-      {
-        "allowSingleLine": true
-      }
-    ],
-    "object-curly-newline": "off"
+    "jsx-a11y/click-events-have-key-events": "off"
   },
   "settings": {
     "import/resolver": {

@@ -1,13 +1,13 @@
-let mongoose = require('mongoose');
-let _ = require('lodash');
-let httpStatus = require('http-status');
-let APIError = require('./utils/APIError');
+const mongoose = require('mongoose');
+const _ = require('lodash');
+const httpStatus = require('http-status');
+const APIError = require('./utils/APIError');
 
 module.exports = app => {
   app.use((req, res, next) => {
     const apiError = new APIError({
       message: 'API not found',
-      status: httpStatus.NOT_FOUND
+      status: httpStatus.NOT_FOUND,
     });
 
     next(apiError);
@@ -23,7 +23,7 @@ module.exports = app => {
       const apiError = new APIError({
         message: 'validation error',
         status: httpStatus.BAD_REQUEST,
-        errors
+        errors,
       });
 
       next(apiError);
@@ -31,14 +31,14 @@ module.exports = app => {
     else {
       const apiError = new APIError({
         message: err.message,
-        status: err.status
+        status: err.status,
       });
 
       next(apiError);
     }
   });
 
-  app.use((err, req, res, next) => {
+  app.use((err, req, res) => {
     res.status(err.status).json(_.assign({ message: err.message }, err));
   });
 };

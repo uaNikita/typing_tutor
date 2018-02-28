@@ -1,17 +1,17 @@
-let passport = require('passport');
-let LocalStrategy = require('passport-local').Strategy;
-let User = require('./models/user');
-let httpStatus = require('http-status');
-let APIError = require('./utils/APIError');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const User = require('./models/user');
+const httpStatus = require('http-status');
+const APIError = require('./utils/APIError');
 
-module.exports = (app) => {
+module.exports = app => {
   app.use(passport.initialize());
 
   passport.serializeUser((user, done) => {
     done(null, user.id);
   });
 
-  passport.deserializeUser(function (id, done) {
+  passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => {
       done(err, user);
     });
@@ -32,22 +32,20 @@ module.exports = (app) => {
           else {
             done(new APIError({
               errors: {
-                password: 'Incorrect password'
+                password: 'Incorrect password',
               },
-              status: httpStatus.BAD_REQUEST
+              status: httpStatus.BAD_REQUEST,
             }));
           }
         });
-
       })
       .catch(() => {
         done(new APIError({
           errors: {
-            email: 'Incorrect email'
+            email: 'Incorrect email',
           },
-          status: httpStatus.BAD_REQUEST
+          status: httpStatus.BAD_REQUEST,
         }));
       });
-
   }));
 };

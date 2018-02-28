@@ -4,8 +4,8 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const favicon = require('serve-favicon');
 const mongoose = require('mongoose');
-const Helmet = require('react-helmet').Helmet;
-const renderToString = require('react-dom/server').renderToString;
+const { Helmet } = require('react-helmet');
+const { renderToString } = require('react-dom/server');
 
 require('isomorphic-fetch');
 
@@ -17,7 +17,7 @@ const {
   reducer,
   setRefreshToken,
   setAccessToken,
-  requestAllWithoutAuth
+  requestAllWithoutAuth,
 } = require('../dist/compiledServer');
 
 process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
@@ -87,13 +87,16 @@ app.use((req, res) => {
     }
   };
 
-  const { tt_access, tt_refresh } = req.cookies;
+  const {
+    tt_access: ttAccess,
+    tt_refresh: ttRefresh,
+  } = req.cookies;
 
-  if (tt_access) {
-    dispatch(setAccessToken(tt_access));
+  if (ttAccess) {
+    dispatch(setAccessToken(ttAccess));
 
-    if (tt_refresh) {
-      dispatch(setRefreshToken(tt_refresh));
+    if (ttRefresh) {
+      dispatch(setRefreshToken(ttRefresh));
     }
 
     dispatch(requestAllWithoutAuth())

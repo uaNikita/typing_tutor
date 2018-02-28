@@ -10,7 +10,7 @@ const {
   text: {
     selectedId,
     entities,
-  }
+  },
 } = defaults;
 
 
@@ -22,8 +22,8 @@ const UserSchema = new mongoose.Schema({
       required: true,
       match: [
         /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        '{PATH} is not a valid'
-      ]
+        '{PATH} is not a valid',
+      ],
     },
     password: {
       type: String,
@@ -49,16 +49,18 @@ const UserSchema = new mongoose.Schema({
       },
     },
     learning: {},
-  }
+  },
 });
 
 UserSchema.set('toObject', {
-  transform: function(doc, ret) {
-    delete ret._id;
-    delete ret.__v;
-    delete ret.profile.password;
-    delete ret.active;
-  }
+  transform(doc, ret) {
+    const retParam = ret;
+
+    delete retParam._id;
+    delete retParam.__v;
+    delete retParam.profile.password;
+    delete retParam.active;
+  },
 });
 
 /**
@@ -68,9 +70,11 @@ UserSchema.set('toObject', {
  * - virtuals
  */
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', next => {
   // only hash the password if it has been modified (or is new)
-  if (!this.isModified('profile.password')) return next();
+  if (!this.isModified('profile.password')) {
+    next();
+  }
 
   this.generateHash(this.profile.password)
     .then(hash => {
@@ -83,15 +87,13 @@ UserSchema.pre('save', function(next) {
 /**
  * Methods
  */
-UserSchema.methods.generateHash = password => {
-  return bcrypt.hash(password, config.get('saltRounds'));
-};
+UserSchema.methods.generateHash = password =>
+  bcrypt.hash(password, config.get('saltRounds'));
 
-UserSchema.methods.validPassword = function(candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.profile.password);
-};
+UserSchema.methods.validPassword = candidatePassword =>
+  bcrypt.compare(candidatePassword, this.profile.password);
 
-UserSchema.methods.getLearningMode = (candidatePassword, cb) => {};
+// UserSchema.methods.getLearningMode = (candidatePassword, cb) => {};
 
 /**
  * Statics
@@ -104,9 +106,9 @@ UserSchema.statics = {
         if (user) {
           throw new APIError({
             errors: {
-              email: 'Email is already taken'
+              email: 'Email is already taken',
             },
-            status: httpStatus.CONFLICT
+            status: httpStatus.CONFLICT,
           });
         }
       });
@@ -130,7 +132,7 @@ UserSchema.statics = {
   get(id) {
     return this.findById(id)
       .exec()
-      .then((user) => {
+      .then(user => {
         if (user) {
           return user;
         }
@@ -140,7 +142,7 @@ UserSchema.statics = {
           status: httpStatus.CONFLICT,
         });
       });
-  }
+  },
 };
 
 /**

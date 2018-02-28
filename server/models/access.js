@@ -28,7 +28,7 @@ AccessSchema.statics = {
 
   findByToken(token) {
     return this.findOne({ token })
-      .exec()
+      .exec();
   },
 };
 

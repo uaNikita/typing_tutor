@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const config = require('config');
@@ -16,9 +15,7 @@ const Access = require('../../models/access');
 
 const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: '1d' });
 
-const generateTokenWithId = clientId => {
-  return clientId.toString() + crypto.randomBytes(40).toString('hex');
-};
+const generateTokenWithId = clientId => clientId.toString() + crypto.randomBytes(40).toString('hex');
 
 const createClient = userId => {
   const client = new Client({
@@ -42,7 +39,6 @@ const createClient = userId => {
 const login = (req, res, next) =>
   User.get(req.user.get('id'))
     .then(user => {
-
       if (!user.get('active')) {
         throw new APIError({
           message: 'Your account is not active',
@@ -63,13 +59,20 @@ const login = (req, res, next) =>
     })
     .catch(e => next(e));
 
-const logout = (req, res, next) =>
-  Client.get(req.user.clientId)
+const logout = (req, res, next) => {
+  const {
+    user: {
+      clientId,
+    },
+  } = req;
+
+  Client.get(clientId)
     .then(client => client.remove().exec())
     .then(() => Access.findByClient(clientId))
     .then(access => access.remove().exec())
     .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
+};
 
 const register = (req, res, next) => {
   const { email } = req.body;
@@ -82,7 +85,7 @@ const register = (req, res, next) => {
         profile: {
           email,
           password,
-        }
+        },
       });
 
       const verification = new Verification({
@@ -92,15 +95,15 @@ const register = (req, res, next) => {
 
       verification.token = verification.get('id') + crypto.randomBytes(40).toString('hex');
 
-      return Promise.all([user.save(), verification.save()])
-        .then(([user, verification]) => {
+      return Promise.all([verification.save(), user.save()])
+        .then(([verif]) => {
           const mailOptions = {
             from: config.get('mail.from'),
             to: email,
             subject: 'Acoount registration',
             html: emailTemplates.registrationFn({
               origin: req.get('origin'),
-              token: verification.get('token'),
+              token: verif.get('token'),
               password,
             }),
           };
@@ -134,14 +137,14 @@ const verifyEmail = (req, res, next) => {
       verification.token = verification.get('id') + crypto.randomBytes(40).toString('hex');
 
       return verification.save()
-        .then(verification => {
+        .then(verif => {
           const mailOptions = {
             from: config.get('mail.from'),
             to: email,
             subject: 'Email verification',
             html: emailTemplates.verifyEmailFn({
               origin: req.get('origin'),
-              token: verification.get('token'),
+              token: verif.get('token'),
             }),
           };
 
@@ -165,26 +168,28 @@ const restoreAccess = (req, res, next) => {
 
   User.findByEmail(email)
     .then(user => {
+      const userToSave = user;
+
       const password = getRandomPassword();
 
-      user.profile.password = password;
+      userToSave.profile.password = password;
 
       const verification = new Verification({
-        user,
+        user: userToSave,
         type: 'email',
       });
 
       verification.token = verification.get('id') + crypto.randomBytes(40).toString('hex');
 
-      return Promise.all([user.save(), verification.save()])
-        .then(([user, verification]) => {
+      return Promise.all([verification.save(), user.save()])
+        .then(([verif]) => {
           const mailOptions = {
             from: config.get('mail.from'),
             to: email,
             subject: 'Restore access',
             html: emailTemplates.restoreAccessFn({
               origin: req.get('origin'),
-              token: verification.get('token'),
+              token: verif.get('token'),
               password,
             }),
           };
@@ -211,29 +216,33 @@ const getTokens = (req, res, next) => {
   Client
     .findByToken(token)
     .then(client => {
-      client.token = generateTokenWithId(client.get('id'));
+      const clientToSave = client;
 
-      return client.save()
-        .then(client => Access.findByClient(client.get('id')))
+      clientToSave.token = generateTokenWithId(clientToSave.get('id'));
+
+      return clientToSave.save()
+        .then(() => Access.findByClient(clientToSave.get('id')))
         .then(access => {
-          access.token = generateAccessToken({
-            id: client.get('user'),
-            clientId: client.get('id'),
+          const accessToSave = access;
+
+          accessToSave.token = generateAccessToken({
+            id: clientToSave.get('user'),
+            clientId: clientToSave.get('id'),
           });
 
-          return access;
+          return accessToSave;
         })
         .catch(() => new Access({
-          client: client.get('id'),
+          client: clientToSave.get('id'),
           token: generateAccessToken({
-            id: client.get('user'),
-            clientId: client.get('id'),
+            id: clientToSave.get('user'),
+            clientId: clientToSave.get('id'),
           }),
         }))
         .then(access => access.save())
         .then(access => {
           res.json({
-            refresh: client.get('token'),
+            refresh: clientToSave.get('token'),
             access: access.get('token'),
           });
         });
@@ -275,8 +284,8 @@ const verifyToken = (req, res, next) =>
       }
 
       return Promise.all([...createClient(user.get('id')), user.save(),
-          // verification.remove().exec()
-        ])
+        // verification.remove().exec()
+      ])
         .then(([client, access]) => {
           res.json({
             type,
@@ -289,10 +298,6 @@ const verifyToken = (req, res, next) =>
         });
     })
     .catch(e => next(e));
-
-
-
-
 
 
 module.exports = {

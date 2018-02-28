@@ -2,6 +2,7 @@ const _ = require('lodash');
 const moment = require('moment');
 const httpStatus = require('http-status');
 
+const APIError = require('../../utils/APIError');
 const User = require('../../models/user');
 const Access = require('../../models/access');
 const Client = require('../../models/client');
@@ -12,7 +13,7 @@ const getAllData = (req, res, next) => {
   const {
     user: {
       id: userId,
-    }
+    },
   } = req;
 
   Promise.all([User.get(userId), Statistic.findOne({ user: userId }).exec()])
@@ -34,28 +35,29 @@ const changePassword = (req, res, next) => {
       id: userId,
     },
     body: {
-      old_password,
-      new_password,
+      old_password: oldPassword,
+      new_password: newPassword,
     },
   } = req;
 
   User.get(userId)
     .then(user =>
-      user.validPassword(old_password)
+      user.validPassword(oldPassword)
         .then(valid => {
           if (valid) {
-            user.profile.password = new_password;
+            const userForSave = user;
 
-            return user.save().then(() => res.json(httpStatus[200]));
+            userForSave.profile.password = newPassword;
+
+            return userForSave.save().then(() => res.json(httpStatus[200]));
           }
-          else {
-            throw new APIError({
-              errors: {
-                old_password: 'Incorrect password'
-              },
-              status: httpStatus.BAD_REQUEST
-            });
-          }
+
+          throw new APIError({
+            errors: {
+              old_password: 'Incorrect password',
+            },
+            status: httpStatus.BAD_REQUEST,
+          });
         }))
     .catch(e => next(e));
 };
@@ -77,29 +79,29 @@ const statistic = (req, res, next) => {
       date: moment().startOf('day').toDate(),
     })
     .exec()
-    .then(statistic => {
-      if (statistic) {
+    .then(stats => {
+      if (stats) {
         const modePath = `${keyboard}.${mode}`;
 
-        if (!statistic.get(modePath)) {
-          statistic.set(modePath, [clientStatistic]);
+        if (!stats.get(modePath)) {
+          stats.set(modePath, [clientStatistic]);
         }
         else {
-          statistic.set(`${modePath}.${sessionId}`, clientStatistic);
+          stats.set(`${modePath}.${sessionId}`, clientStatistic);
         }
 
-        return statistic.save().then(() => res.json(httpStatus[200]));
+        return stats.save().then(() => res.json(httpStatus[200]));
       }
-      else {
-        const newStatistic = {
-          user: user.id,
-        };
 
-        _.set(newStatistic, `${keyboard}.${mode}`, [clientStatistic]);
+      const newStatistic = {
+        user: user.id,
+      };
 
-        new Statistic(newStatistic, { strict: false }).save().then(() => res.json(httpStatus[200]));
-      }
+      _.set(newStatistic, `${keyboard}.${mode}`, [clientStatistic]);
+
+      return new Statistic(newStatistic, { strict: false }).save();
     })
+    .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
@@ -109,14 +111,14 @@ const deleteAccount = (req, res, next) => {
       id: userId,
     },
     body: {
-      confirm_new_password,
+      confirm_new_password: confirmNewPassword,
     },
   } = req;
 
   User
     .findById(userId).exec()
     .then(user =>
-      user.validPassword(confirm_new_password)
+      user.validPassword(confirmNewPassword)
         .then(valid => {
           if (valid) {
             return Promise.all([
@@ -125,20 +127,19 @@ const deleteAccount = (req, res, next) => {
               Verification.find({ user: userId }),
             ]);
           }
-          else {
-            throw new APIError({
-              errors: {
-                confirm_new_password: 'Incorrect password'
-              },
-              status: httpStatus.BAD_REQUEST
-            });
-          }
+
+          throw new APIError({
+            errors: {
+              confirm_new_password: 'Incorrect password',
+            },
+            status: httpStatus.BAD_REQUEST,
+          });
         })
-        .then(([clients, statistic, verifications]) => {
+        .then(([clients, stats, verifications]) => {
           const modelsForRemoval = [user];
 
-          if (statistic) {
-            modelsForRemoval.push(statistic);
+          if (stats) {
+            modelsForRemoval.push(stats);
           }
 
           if (verifications) {
@@ -155,12 +156,12 @@ const deleteAccount = (req, res, next) => {
                 .then(accesses => {
                   accesses.forEach(access =>
                     modelsForRemoval.push(access));
-                })
+                });
             }))
               .then(() => modelsForRemoval);
           }
 
-          return modelsForRemoval
+          return modelsForRemoval;
         })
         .then(modelsForRemoval =>
           Promise.all(modelsForRemoval.map(doc => doc.remove())))

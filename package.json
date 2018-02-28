@@ -7,7 +7,8 @@
     "start": "cross-env NODE_ENV=development nodemon server/index.js",
     "start-prod": "node NODE_ENV=production server/index.js",
     "build": "cross-env WEBPACK_ENV=production webpack --progress",
-    "dev": "cross-env WEBPACK_ENV=development webpack --progress --watch"
+    "dev": "cross-env WEBPACK_ENV=development webpack --progress --watch",
+    "server-eslint": "eslint server"
   },
   "keywords": [],
   "author": "Nikita Zhukov",
