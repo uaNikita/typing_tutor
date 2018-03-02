@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 
 import { getIdsFromCharacter } from 'Utils';
 import defaults from 'Utils/defaults';
-import { fetchJSON } from './fetch';
+import { fetchJSON } from '../fetch';
 import {
   processAction,
   setIdsCharToType,
@@ -10,15 +10,15 @@ import {
   addHit,
   addTypo,
   addStatisticWithTimeout,
-} from './main';
+} from '../main';
 
-const CLEAR_STATE = 'text-mode/CLEAR_STATE';
-const SET_DATA = 'text-mode/SET_DATA';
-const SELECT_TEXT = 'text-mode/SELECT_TEXT';
-const SELECT_LAST_TEXT = 'text-mode/SELECT_LAST_TEXT';
-const REFRESH_TEXT = 'text-mode/REFRESH_TEXT';
-const ADD_TEXT = 'text-mode/ADD_TEXT';
-const TYPE_ON_ENTITIE = 'text-mode/TYPE_ON_ENTITIE';
+const CLEAR_STATE = 'text/CLEAR_STATE';
+const SET_DATA = 'text/SET_DATA';
+const SELECT_TEXT = 'text/SELECT_TEXT';
+const SELECT_LAST_TEXT = 'text/SELECT_LAST_TEXT';
+const REFRESH_TEXT = 'text/REFRESH_TEXT';
+const ADD_TEXT = 'text/ADD_TEXT';
+const TYPE_ON_ENTITIE = 'text/TYPE_ON_ENTITIE';
 
 const {
   text: {

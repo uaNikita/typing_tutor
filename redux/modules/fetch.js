@@ -2,8 +2,8 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import Cookie from 'js-cookie';
 
-import { clearState as clearLearningState } from './learning-mode';
-import { clearState as clearTextState } from './text-mode';
+import { clearState as clearLearningState } from './modes/learning';
+import { clearState as clearTextState } from './modes/text';
 import { clearState as clearUserState } from './user';
 import { clearState as clearMainState } from './main';
 

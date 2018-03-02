@@ -8,12 +8,11 @@ let initialState = window.PRELOADED_STATE;
 
 delete window.PRELOADED_STATE;
 
-if (!initialState.user.email) {
-  const touchToTypeStorage = window.localStorage.getItem('touchToType');
+// merge localStorage to state if needed
+const touchToTypeStorage = window.localStorage.getItem('touchToType');
 
-  if (touchToTypeStorage) {
-    initialState = _.merge(initialState, JSON.parse(touchToTypeStorage));
-  }
+if (touchToTypeStorage) {
+  initialState = _.merge(initialState, JSON.parse(touchToTypeStorage));
 }
 
 initialState = Immutable.fromJS(initialState);

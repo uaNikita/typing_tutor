@@ -4,7 +4,7 @@ import {
   setMode as setLearningMode,
   updateCurrentLessonFromCurrentMode,
   updateCharToType,
-} from 'ReduxUtils/modules/learning-mode';
+} from 'ReduxUtils/modules/modes/learning';
 import LearningMode from './component.jsx';
 
 const mapStateToProps = state => {

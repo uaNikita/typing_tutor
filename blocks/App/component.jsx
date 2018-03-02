@@ -23,6 +23,7 @@ const modalsRoutes = [
 
 class App extends Component {
   state = {
+    isClient: false,
     isModal: this.props.isModal,
   };
 
@@ -39,6 +40,10 @@ class App extends Component {
     }
 
     setLastNoModalLocation(location);
+
+    this.setState({
+      isClient: true,
+    });
   }
 
   componentWillReceiveProps(nextProps) {

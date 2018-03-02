@@ -5,7 +5,7 @@ import {
   updateFingersLesson,
   updateCurrentLessonFromCurrentMode,
   updateCharToType,
-} from 'ReduxUtils/modules/learning-mode';
+} from 'ReduxUtils/modules/modes/learning';
 
 import { getFingersSet } from 'Utils';
 

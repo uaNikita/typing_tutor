@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { processAddText } from 'ReduxUtils/modules/text-mode';
+import { processAddText } from 'ReduxUtils/modules/modes/text';
 import Component from './component.jsx';
 
 const mapDispatchToProps = dispatch => ({

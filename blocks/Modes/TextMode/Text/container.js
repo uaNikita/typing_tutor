@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { processSelectText, processRefreshText } from 'ReduxUtils/modules/text-mode';
+import { processSelectText, processRefreshText } from 'ReduxUtils/modules/modes/text';
 import Text from './component.jsx';
 
 const mapStateToProps = (state, ownProps) => {

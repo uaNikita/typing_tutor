@@ -7,7 +7,7 @@ import {
   updateFreeLesson,
   updateCurrentLessonFromCurrentMode,
   updateCharToType,
-} from 'ReduxUtils/modules/learning-mode';
+} from 'ReduxUtils/modules/modes/learning';
 
 import LearningFree from './component.jsx';
 

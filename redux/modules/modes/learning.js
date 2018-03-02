@@ -1,31 +1,32 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
+import { getIdsFromCharacter, generateLesson, getFingersSet } from 'Utils';
+
 import {
   setIdsCharToType,
   pressWrongKeys,
   addHit,
   addTypo,
   addStatisticWithTimeout,
-} from './main';
-import { getIdsFromCharacter, generateLesson, getFingersSet } from '../../utils';
+} from '../main';
 
-const CLEAR_STATE = 'learning-mode/CLEAR_STATE';
-const TYPE_ON_LESSON = 'learning-mode/TYPE_ON_LESSON';
+const CLEAR_STATE = 'learning/CLEAR_STATE';
+const TYPE_ON_LESSON = 'learning/TYPE_ON_LESSON';
 
-const SET_LEARNING_MODE = 'learning-mode/SET_LEARNING_MODE';
-const SET_CURRENT_LESSON = 'learning-mode/SET_CURRENT_LESSON';
-const REFRESH_CURRENT_LESSON = 'learning-mode/REFRESH_CURRENT_LESSON';
+const SET_LEARNING_MODE = 'learning/SET_LEARNING_MODE';
+const SET_CURRENT_LESSON = 'learning/SET_CURRENT_LESSON';
+const REFRESH_CURRENT_LESSON = 'learning/REFRESH_CURRENT_LESSON';
 
-const SET_LESSON_FINGERS = 'learning-mode/SET_LESSON_FINGERS';
-const SET_SET_SIZE_FINGERS = 'learning-mode/SET_SET_SIZE_FINGERS';
-const SET_MAX_LETTERS_IN_WORD_FINGERS = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FINGERS';
+const SET_LESSON_FINGERS = 'learning/SET_LESSON_FINGERS';
+const SET_SET_SIZE_FINGERS = 'learning/SET_SET_SIZE_FINGERS';
+const SET_MAX_LETTERS_IN_WORD_FINGERS = 'learning/SET_MAX_LETTERS_IN_WORD_FINGERS';
 
-const SET_LESSON_FREE = 'learning-mode/SET_LESSON_FREE';
-const SET_LETTERS_FREE = 'learning-mode/SET_LETTERS_FREE';
-const SET_MAX_LETTERS_IN_WORD_FREE = 'learning-mode/SET_MAX_LETTERS_IN_WORD_FREE';
-const ADD_LETTER_TO_FREE_LETTERS = 'learning-mode/ADD_LETTER_TO_FREE_LETTERS';
-const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning-mode/REMOVE_LETTER_FROM_FREE_LETTERS';
+const SET_LESSON_FREE = 'learning/SET_LESSON_FREE';
+const SET_LETTERS_FREE = 'learning/SET_LETTERS_FREE';
+const SET_MAX_LETTERS_IN_WORD_FREE = 'learning/SET_MAX_LETTERS_IN_WORD_FREE';
+const ADD_LETTER_TO_FREE_LETTERS = 'learning/ADD_LETTER_TO_FREE_LETTERS';
+const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning/REMOVE_LETTER_FROM_FREE_LETTERS';
 
 const SET_STATISTIC = 'text-mode/SET_STATISTIC';
 
@@ -249,17 +250,21 @@ export const typeLearningMode = char => (dispatch, getState) => {
 
     addStatisticWithTimeout(dispatch);
   }
-  // update fingers
-  else if (learningModeState.get('mode') === 'fingers') {
-    dispatch(updateFingersLesson());
-
-    dispatch(setCurrentLesson(learningModeState.get('lessonFingers')));
-  }
-  // update free
   else {
-    dispatch(updateFreeLesson());
+    // update fingers
+    if (learningModeState.get('mode') === 'fingers') {
+      dispatch(updateFingersLesson());
 
-    dispatch(setCurrentLesson(learningModeState.get('lessonFree')));
+      dispatch(setCurrentLesson(learningModeState.get('lessonFingers')));
+    }
+    // update free
+    else {
+      dispatch(updateFreeLesson());
+
+      dispatch(setCurrentLesson(learningModeState.get('lessonFree')));
+    }
+
+    dispatch(updateCharToType());
   }
 };
 

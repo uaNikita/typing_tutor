@@ -4,8 +4,8 @@ import { setKeyboard } from 'ReduxUtils/modules/main';
 import {
   updateLearningState,
   updateCharToType as updateCharToTypeFromLearningMode,
-} from 'ReduxUtils/modules/learning-mode';
-import { updateCharToType as updateCharToTypeFromTextMode } from 'ReduxUtils/modules/text-mode';
+} from 'ReduxUtils/modules/modes/learning';
+import { updateCharToType as updateCharToTypeFromTextMode } from 'ReduxUtils/modules/modes/text';
 import Keyboard from './component.jsx';
 
 const mapStateToProps = state => {

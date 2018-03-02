@@ -9,11 +9,11 @@ import { setData as setUserData, addStatistic } from './user';
 import {
   setData as setTextData,
   typeTextMode,
-} from './text-mode';
+} from './modes/text';
 import {
   typeLearningMode,
   updateLearningState,
-} from './learning-mode';
+} from './modes/learning';
 
 import { getIdsFromCharacter } from '../../utils';
 
