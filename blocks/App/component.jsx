@@ -23,17 +23,19 @@ const modalsRoutes = [
 
 class App extends Component {
   state = {
-    isClient: false,
     isModal: this.props.isModal,
   };
 
   componentDidMount() {
     const {
-      location,
-      setLastNoModalLocation,
-      email,
-      init,
-    } = this.props;
+      props: {
+        setMainState,
+        location,
+        setLastNoModalLocation,
+        email,
+        init,
+      },
+    } = this;
 
     if (!email) {
       init();
@@ -41,9 +43,14 @@ class App extends Component {
 
     setLastNoModalLocation(location);
 
-    this.setState({
-      isClient: true,
-    });
+    // update state from localStorage if needed
+    let touchToTypeStorage = window.localStorage.getItem('touchToType');
+
+    if (touchToTypeStorage) {
+      touchToTypeStorage = JSON.parse(touchToTypeStorage);
+
+      setMainState(touchToTypeStorage.main);
+    }
   }
 
   componentWillReceiveProps(nextProps) {

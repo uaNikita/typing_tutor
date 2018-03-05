@@ -17,6 +17,7 @@ import {
 
 import { getIdsFromCharacter } from '../../utils';
 
+const SET_STATE = 'main/SET_STATE';
 const CLEAR_STATE = 'main/CLEAR_STATE';
 const PRESS_KEYS = 'main/PRESS_KEYS';
 const UNPRESS_KEYS = 'main/UNPRESS_KEYS';
@@ -77,7 +78,6 @@ const updateSessionStatisticPresses = (state, name, character) =>
   state.updateIn(['sessionStatistic', name], presses => {
     const index = presses.findIndex(c => c.get('character') === character);
 
-
     let newPresses;
 
     if (index === -1) {
@@ -95,6 +95,9 @@ const updateSessionStatisticPresses = (state, name, character) =>
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
+    case SET_STATE:
+      return state.merge(action.state);
+
     case CLEAR_STATE:
       return state.merge(initialState);
 
@@ -160,6 +163,10 @@ export default (state = initialState, action = {}) => {
       return state;
   }
 };
+
+export const setState = () => ({
+  type: SET_STATE,
+});
 
 export const clearState = () => ({
   type: CLEAR_STATE,
@@ -294,23 +301,33 @@ export const startNewSession = () => (dispatch, getState) => {
   dispatch(setSessionId(index));
 };
 
-export const processAddStatistic = () => (dispatch, getState) => {
-  const stateMain = getState().get('main');
+export const processSetMode = mode =>
+  dispatch => {
+    dispatch(setMode(mode));
 
-  const body = {
-    keyboard: stateMain.get('keyboard'),
-    mode: stateMain.get('mode'),
-    sessionId: stateMain.get('sessionId'),
-    statistic: {
-      ...stateMain.get('sessionStatistic').toJS(),
-      end: Date.now(),
-    },
+    return dispatch(processAction(() =>
+      dispatch(fetchJSON('/profile/mode', { mode }))));
   };
 
-  dispatch(addStatistic(body));
+export const processAddStatistic = () =>
+  (dispatch, getState) => {
+    const stateMain = getState().get('main');
 
-  return dispatch(processAction(() => dispatch(fetchJSON('/profile/statistic', { body }))));
-};
+    const body = {
+      keyboard: stateMain.get('keyboard'),
+      mode: stateMain.get('mode'),
+      sessionId: stateMain.get('sessionId'),
+      statistic: {
+        ...stateMain.get('sessionStatistic').toJS(),
+        end: Date.now(),
+      },
+    };
+
+    dispatch(addStatistic(body));
+
+    return dispatch(processAction(() =>
+      dispatch(fetchJSON('/profile/statistic', { body }))));
+  };
 
 export const addStatisticWithTimeout = _.throttle(
   dispatch => dispatch(processAddStatistic()),

@@ -1,6 +1,11 @@
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { setLastNoModalLocation, setIsModal, init } from 'ReduxUtils/modules/main';
+import {
+  setState as setMainState,
+  setLastNoModalLocation,
+  setIsModal,
+  init,
+} from 'ReduxUtils/modules/main';
 import Component from './component.jsx';
 
 const mapStateToProps = state => ({
@@ -10,6 +15,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
+  setMainState: (...args) => dispatch(setMainState(...args)),
   init: () => dispatch(init()),
   setLastNoModalLocation: location => dispatch(setLastNoModalLocation(location)),
   setIsModal: modal => dispatch(setIsModal(modal)),
