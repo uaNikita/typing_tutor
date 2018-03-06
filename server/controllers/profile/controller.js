@@ -170,9 +170,31 @@ const deleteAccount = (req, res, next) => {
     .catch(e => next(e));
 };
 
+const setMode = (req, res, next) => {
+  const {
+    user: {
+      id: userId,
+    },
+    body: {
+      mode,
+    },
+  } = req;
+
+  console.log('mode', mode);
+
+  User.get(userId)
+    .then(user => {
+      user.set('currentMode', mode);
+
+      res.json(httpStatus[200]);
+    })
+    .catch(e => next(e));
+};
+
 module.exports = {
   getAllData,
   changePassword,
   statistic,
   deleteAccount,
+  setMode,
 };

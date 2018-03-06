@@ -2,6 +2,7 @@ import Immutable from 'immutable';
 import moment from 'moment';
 import _ from 'lodash';
 
+import { getIdsFromCharacter, ls } from 'Utils';
 import keyboards from '../../constants/keyboards';
 
 import { fetchJSON, setAccessToken, setRefreshToken } from './fetch';
@@ -14,8 +15,6 @@ import {
   typeLearningMode,
   updateLearningState,
 } from './modes/learning';
-
-import { getIdsFromCharacter } from '../../utils';
 
 const SET_STATE = 'main/SET_STATE';
 const CLEAR_STATE = 'main/CLEAR_STATE';
@@ -252,28 +251,21 @@ export const setIsModal = modal => ({
   modal,
 });
 
-export const processAction = authActions => (dispatch, getState) => {
-  let actions;
+export const processAction = (saveToClient, saveToServer) =>
+  (dispatch, getState) => {
+    let actions;
 
-  if (getState().getIn(['user', 'email'])) {
-    actions = authActions();
-  }
-  else {
-    actions = Promise.resolve();
+    if (getState().getIn(['user', 'email'])) {
+      actions = saveToServer();
+    }
+    else {
+      saveToClient();
 
-    const state = getState().toJS();
+      actions = Promise.resolve();
+    }
 
-    delete state.fetch;
-    delete state.form;
-    delete state.sessionStatistic;
-    delete state.isModal;
-    delete state.main.idCharsToType;
-
-    window.localStorage.setItem('touchToType', JSON.stringify(state));
-  }
-
-  return actions;
-};
+    return actions;
+  };
 
 export const setSessionId = id => ({
   type: SET_SESSION_ID,
@@ -305,8 +297,10 @@ export const processSetMode = mode =>
   dispatch => {
     dispatch(setMode(mode));
 
-    return dispatch(processAction(() =>
-      dispatch(fetchJSON('/profile/mode', { mode }))));
+    return dispatch(processAction(
+      () => ls.set('mode', mode),
+      () => dispatch(fetchJSON('/profile/mode', { mode })),
+    ));
   };
 
 export const processAddStatistic = () =>
@@ -325,8 +319,10 @@ export const processAddStatistic = () =>
 
     dispatch(addStatistic(body));
 
-    return dispatch(processAction(() =>
-      dispatch(fetchJSON('/profile/statistic', { body }))));
+    return dispatch(processAction(
+      () => ls.set('statistic', getState().getIn(['main', 'statistic'])),
+      () => dispatch(fetchJSON('/profile/statistic', { body })),
+    ));
   };
 
 export const addStatisticWithTimeout = _.throttle(

@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 
-import { getIdsFromCharacter } from 'Utils';
+import { getIdsFromCharacter, ls } from 'Utils';
 import defaults from 'Utils/defaults';
 import { fetchJSON } from '../fetch';
 import {
@@ -124,41 +124,53 @@ export const typeOnEntitie = id => ({
   id,
 });
 
-export const processAddText = data => (dispatch, getState) => {
-  const { text, select } = data;
+export const processAddText = data =>
+  (dispatch, getState) => {
+    const { text, select } = data;
 
-  dispatch(addText(text));
+    dispatch(addText(text));
 
-  const id = getState().getIn(['textMode', 'entities']).last().get('id');
+    const id = getState().getIn(['textMode', 'entities']).last().get('id');
 
-  if (select) {
-    dispatch(selectText(id));
-  }
+    if (select) {
+      dispatch(selectText(id));
+    }
 
-  const body = {
-    id,
-    text,
-    select,
+    const body = {
+      id,
+      text,
+      select,
+    };
+
+    return dispatch(processAction(
+      () => ls.set('modes.text', getState()),
+      () => dispatch(fetchJSON('/text/add', { body })),
+    ));
   };
 
-  return dispatch(processAction(() => dispatch(fetchJSON('/text/add', { body }))));
-};
+export const processSelectText = id =>
+  (dispatch, getState) => {
+    dispatch(selectText(parseInt(id, 10)));
 
-export const processSelectText = id => dispatch => {
-  dispatch(selectText(parseInt(id, 10)));
+    const body = { id };
 
-  const body = { id };
+    return dispatch(processAction(
+      () => ls.set('modes.text', getState()),
+      () => dispatch(fetchJSON('/text/select', { body })),
+    ));
+  };
 
-  return dispatch(processAction(() => dispatch(fetchJSON('/text/select', { body }))));
-};
+export const processRefreshText = id =>
+  (dispatch, getState) => {
+    dispatch(refreshText(id));
 
-export const processRefreshText = id => dispatch => {
-  dispatch(refreshText(id));
+    const body = { id };
 
-  const body = { id };
-
-  return dispatch(processAction(() => dispatch(fetchJSON('/text/refresh', { body }))));
-};
+    return dispatch(processAction(
+      () => ls.set('modes.text', getState()),
+      () => dispatch(fetchJSON('/text/refresh', { body })),
+    ));
+  };
 
 export const updateCharToType = () => (dispatch, getState) => {
   const state = getState();

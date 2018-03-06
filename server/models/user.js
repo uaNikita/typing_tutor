@@ -13,7 +13,6 @@ const {
   },
 } = defaults;
 
-
 const UserSchema = new mongoose.Schema({
   profile: {
     name: String,
@@ -36,6 +35,10 @@ const UserSchema = new mongoose.Schema({
   active: {
     type: Boolean,
     default: false,
+  },
+  currentMode: {
+    type: String,
+    default: 'learning',
   },
   modes: {
     text: {

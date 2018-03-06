@@ -5,6 +5,8 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
 import _ from 'lodash';
 
+import ls from 'Utils/ls';
+
 import GlobalMessageTransitionGroup from 'Blocks/GlobalMessageTransitionGroup/container';
 import Modal from 'Blocks/Modal/component.jsx';
 import VerifyPage from 'Blocks/VerifyPage/container';
@@ -44,12 +46,12 @@ class App extends Component {
     setLastNoModalLocation(location);
 
     // update state from localStorage if needed
-    let touchToTypeStorage = window.localStorage.getItem('touchToType');
+    let touchToType = ls.get('touchToType');
 
-    if (touchToTypeStorage) {
-      touchToTypeStorage = JSON.parse(touchToTypeStorage);
+    if (touchToType) {
+      touchToType = JSON.parse(touchToType);
 
-      setMainState(touchToTypeStorage.main);
+      setMainState(touchToType.main);
     }
   }
 
