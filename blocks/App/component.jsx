@@ -31,7 +31,9 @@ class App extends Component {
   componentDidMount() {
     const {
       props: {
-        setMainState,
+        setMode,
+        setStatistic,
+        setTextState,
         location,
         setLastNoModalLocation,
         email,
@@ -46,12 +48,20 @@ class App extends Component {
     setLastNoModalLocation(location);
 
     // update state from localStorage if needed
-    let touchToType = ls.get('touchToType');
+    const touchToType = ls.get('touchToType');
 
     if (touchToType) {
-      touchToType = JSON.parse(touchToType);
+      const {
+        mode,
+        statistic,
+        text,
+      } = JSON.parse(touchToType);
 
-      setMainState(touchToType.main);
+      setMode(mode);
+
+      setStatistic(statistic);
+
+      setTextState(text);
     }
   }
 

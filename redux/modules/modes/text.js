@@ -13,7 +13,7 @@ import {
 } from '../main';
 
 const CLEAR_STATE = 'text/CLEAR_STATE';
-const SET_DATA = 'text/SET_DATA';
+const SET_STATE = 'text/SET_STATE';
 const SELECT_TEXT = 'text/SELECT_TEXT';
 const SELECT_LAST_TEXT = 'text/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text/REFRESH_TEXT';
@@ -37,11 +37,11 @@ const initialState = Immutable.fromJS({
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
-    case CLEAR_STATE:
-      return state.merge(initialState);
+    case SET_STATE:
+      return state.set(action.data);
 
-    case SET_DATA:
-      return state.merge(action.data);
+    case CLEAR_STATE:
+      return state.set(initialState);
 
     case ADD_TEXT:
       return state.update('entities', ents => ents.push(Immutable.Map({
@@ -95,8 +95,8 @@ export const clearState = () => ({
   type: CLEAR_STATE,
 });
 
-export const setData = data => ({
-  type: SET_DATA,
+export const setState = data => ({
+  type: SET_STATE,
   data,
 });
 

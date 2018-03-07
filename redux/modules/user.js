@@ -5,6 +5,7 @@ const CLEAR_STATE = 'user/CLEAR_STATE';
 const SET_DATA = 'user/SET_DATA';
 const SET_EMAIL = 'user/SET_EMAIL';
 const SET_NAME = 'user/SET_NAME';
+const SET_STATISTIC = 'user/SET_STATISTIC';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
 
 const initialState = Immutable.Map({
@@ -28,6 +29,9 @@ export default (state = initialState, action = {}) => {
 
     case SET_NAME:
       return state.set('name', action.name);
+
+    case SET_STATISTIC:
+      return state.set('statistic', action.statistic);
 
     case ADD_STATISTIC:
       return state.update('statistic', dates => {
@@ -78,6 +82,11 @@ export const setEmail = email => ({
 export const setName = name => ({
   type: SET_NAME,
   name,
+});
+
+export const setStatistic = statistic => ({
+  type: ADD_STATISTIC,
+  statistic,
 });
 
 export const addStatistic = obj => ({
