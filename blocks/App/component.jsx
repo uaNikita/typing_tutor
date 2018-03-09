@@ -50,12 +50,12 @@ class App extends Component {
     // update state from localStorage if needed
     const touchToType = ls.get('touchToType');
 
-    if (touchToType) {
+    if (!_.isEmpty(touchToType)) {
       const {
         mode,
         statistic,
         text,
-      } = JSON.parse(touchToType);
+      } = touchToType;
 
       setMode(mode);
 

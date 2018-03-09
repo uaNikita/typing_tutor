@@ -2,7 +2,8 @@ import Immutable from 'immutable';
 import moment from 'moment';
 import _ from 'lodash';
 
-import { getIdsFromCharacter, ls } from 'Utils';
+import { getIdsFromCharacter } from 'Utils';
+import ls from 'Utils/ls';
 import keyboards from '../../constants/keyboards';
 
 import { fetchJSON, setAccessToken, setRefreshToken } from './fetch';

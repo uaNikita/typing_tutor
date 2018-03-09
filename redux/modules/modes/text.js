@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 
-import { getIdsFromCharacter, ls } from 'Utils';
+import { getIdsFromCharacter } from 'Utils';
+import ls from 'Utils/ls';
 import defaults from 'Utils/defaults';
 import { fetchJSON } from '../fetch';
 import {
