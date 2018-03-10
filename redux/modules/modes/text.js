@@ -21,28 +21,15 @@ const REFRESH_TEXT = 'text/REFRESH_TEXT';
 const ADD_TEXT = 'text/ADD_TEXT';
 const TYPE_ON_ENTITIE = 'text/TYPE_ON_ENTITIE';
 
-const {
-  text: {
-    selectedId,
-    entities,
-  },
-} = defaults;
-
-const initialState = Immutable.fromJS({
-  selectedId,
-
-  entities,
-
-  sessionId: undefined,
-});
+const initialState = Immutable.fromJS(defaults.text);
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_STATE:
-      return state.set(action.data);
+      return state.merge(action.data);
 
     case CLEAR_STATE:
-      return state.set(initialState);
+      return state.merge(initialState);
 
     case ADD_TEXT:
       return state.update('entities', ents => ents.push(Immutable.Map({
@@ -131,7 +118,9 @@ export const processAddText = data =>
 
     dispatch(addText(text));
 
-    const id = getState().getIn(['textMode', 'entities']).last().get('id');
+    const textModeState = getState().get('textMode');
+
+    const id = textModeState.get('entities').last().get('id');
 
     if (select) {
       dispatch(selectText(id));
@@ -144,19 +133,21 @@ export const processAddText = data =>
     };
 
     return dispatch(processAction(
-      () => ls.set('modes.text', getState()),
+      () => ls.set('modes.text', textModeState.toJS()),
       () => dispatch(fetchJSON('/text/add', { body })),
     ));
   };
 
 export const processSelectText = id =>
-  (dispatch, getState) => {
-    dispatch(selectText(parseInt(id, 10)));
+  dispatch => {
+    const selectedId = parseInt(id, 10);
+
+    dispatch(selectText(selectedId));
 
     const body = { id };
 
     return dispatch(processAction(
-      () => ls.set('modes.text', getState()),
+      () => ls.set('modes.text.selectedId', selectedId),
       () => dispatch(fetchJSON('/text/select', { body })),
     ));
   };
@@ -168,7 +159,7 @@ export const processRefreshText = id =>
     const body = { id };
 
     return dispatch(processAction(
-      () => ls.set('modes.text', getState()),
+      () => ls.set('modes.text.entities', getState().getIn(['textMode', 'entities']).toJS()),
       () => dispatch(fetchJSON('/text/refresh', { body })),
     ));
   };

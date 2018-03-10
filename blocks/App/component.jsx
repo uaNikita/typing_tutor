@@ -54,14 +54,22 @@ class App extends Component {
       const {
         mode,
         statistic,
-        text,
+        modes: {
+          text,
+        },
       } = touchToType;
 
-      setMode(mode);
+      if (mode) {
+        setMode(mode);
+      }
 
-      setStatistic(statistic);
+      if (statistic) {
+        setStatistic(statistic);
+      }
 
-      setTextState(text);
+      if (text) {
+        setTextState(text);
+      }
     }
   }
 

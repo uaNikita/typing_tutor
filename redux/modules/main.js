@@ -71,6 +71,8 @@ const initialState = Immutable.fromJS({
 
   isModal: false,
 
+  sessionId: undefined,
+
   statistic: [],
 });
 
