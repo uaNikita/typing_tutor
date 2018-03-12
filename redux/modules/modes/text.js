@@ -195,8 +195,6 @@ export const typeTextMode = char => (dispatch, getState) => {
       dispatch(typeOnEntitie(textId));
 
       dispatch(addHit(char));
-
-      dispatch(updateCharToType());
     }
     else {
       dispatch(pressWrongKeys(idsChar));

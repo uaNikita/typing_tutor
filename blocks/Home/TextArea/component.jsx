@@ -4,19 +4,45 @@ import PerfectScrollbar from 'perfect-scrollbar';
 import styles from './textarea.module.styl';
 
 class TextArea extends Component {
-  componentDidMount = () => this.init();
+  componentDidMount = () => {
+    this.content.addEventListener('keydown', this.keyDownHandler);
 
-  componentDidUpdate = () => this.init();
+    this.ps = new PerfectScrollbar(this.content);
 
-  init = () => {
+    this.update();
+  };
+
+  componentDidUpdate = () =>
+    this.update();
+
+  componentWillUnmount() {
+    this.content.removeEventListener('keydown', this.keyDownHandler);
+
+    this.ps.destroy();
+
+    // to make sure garbages are collected
+    this.ps = null;
+  }
+
+  update = () => {
     this.props.updateCharToType();
 
     const value = this.cursor.offsetTop - this.content.offsetTop - 80;
 
     this.content.scrollTop = value;
-
-    (() => new PerfectScrollbar(this.content))();
   }
+
+
+  keyDownHandler = e => {
+    if (e.which === 32) {
+      e.preventDefault();
+
+      this.setStartTypingTime();
+
+      this.props.typeChar(String.fromCharCode(e.which));
+    }
+  };
+
 
   render() {
     const { typed, nonTyped } = this.props;
