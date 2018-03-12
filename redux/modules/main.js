@@ -14,7 +14,7 @@ import {
 } from './modes/text';
 import {
   typeLearningMode,
-  updateLearningState,
+  initLessons,
 } from './modes/learning';
 
 const SET_STATE = 'main/SET_STATE';
@@ -359,7 +359,7 @@ export const typeChar = char => (dispatch, getState) => {
 };
 
 export const init = () => dispatch => {
-  dispatch(updateLearningState());
+  dispatch(initLessons());
 };
 
 export const setAllWithoutAuth = data => dispatch => {

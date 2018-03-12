@@ -268,7 +268,7 @@ export const typeLearningMode = char => (dispatch, getState) => {
   }
 };
 
-export const updateLearningState = () => (dispatch, getState) => {
+export const initLessons = () => (dispatch, getState) => {
   const state = getState();
 
   const defaultKeys = _.filter(state.getIn(['main', 'keys']).toJS(), {
@@ -289,16 +289,17 @@ export const updateLearningState = () => (dispatch, getState) => {
 
   const letters = defaultKeys.map(obj => obj.key);
 
-  let lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFingers']), letters);
+  // fingers mode
+  const lessonFingers = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFingers']), letters);
 
-  dispatch(setLessonFingers(lesson));
+  dispatch(setLessonFingers(lessonFingers));
 
-  dispatch(setCurrentLesson(lesson));
+  dispatch(setCurrentLesson(lessonFingers));
 
   dispatch(setLettersFree(letters));
 
   // different lesson for free mode
-  lesson = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFree']), letters);
+  const lessonFree = generateLesson(state.getIn(['learningMode', 'maxLettersInWordFree']), letters);
 
-  dispatch(setLessonFree(lesson));
+  dispatch(setLessonFree(lessonFree));
 };

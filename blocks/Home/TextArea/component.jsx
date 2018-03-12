@@ -1,20 +1,22 @@
 import React, { Component } from 'react';
+import PerfectScrollbar from 'perfect-scrollbar';
 
 import styles from './textarea.module.styl';
 
 class TextArea extends Component {
-  // componentDidMount() {
-  //   const $content = $(this.content);
-  //
-  //   const cursorOffsetTop = $(this.cursor).offset().top;
-  //
-  //   $content.scrollTop(cursorOffsetTop - $content.offset().top - 80);
-  //
-  //   $content.perfectScrollbar();
-  // }
+  componentDidMount = () => this.init();
 
-  componentDidMount = () =>
-    this.props.updateCharToType()
+  componentDidUpdate = () => this.init();
+
+  init = () => {
+    this.props.updateCharToType();
+
+    const value = this.cursor.offsetTop - this.content.offsetTop - 80;
+
+    this.content.scrollTop = value;
+
+    (() => new PerfectScrollbar(this.content))();
+  }
 
   render() {
     const { typed, nonTyped } = this.props;

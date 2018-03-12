@@ -41,10 +41,6 @@ class App extends Component {
       },
     } = this;
 
-    if (!email) {
-      init();
-    }
-
     setLastNoModalLocation(location);
 
     // update state from localStorage if needed
@@ -70,6 +66,10 @@ class App extends Component {
       if (text) {
         setTextState(text);
       }
+    }
+
+    if (!email) {
+      init();
     }
   }
 

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { setKeyboard } from 'ReduxUtils/modules/main';
 import {
-  updateLearningState,
+  initLessons,
   updateCharToType as updateCharToTypeFromLearningMode,
 } from 'ReduxUtils/modules/modes/learning';
 import { updateCharToType as updateCharToTypeFromTextMode } from 'ReduxUtils/modules/modes/text';
@@ -31,7 +31,7 @@ const mergeProps = (stateProps, dispatchProps) => {
 
       switch (mode) {
         case 'learning':
-          dispatch(updateLearningState());
+          dispatch(initLessons());
 
           dispatch(updateCharToTypeFromLearningMode());
 
