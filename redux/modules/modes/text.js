@@ -19,7 +19,7 @@ const SELECT_TEXT = 'text/SELECT_TEXT';
 const SELECT_LAST_TEXT = 'text/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text/REFRESH_TEXT';
 const ADD_TEXT = 'text/ADD_TEXT';
-const TYPE_ON_ENTITIE = 'text/TYPE_ON_ENTITIE';
+const TYPE_ENTITIE = 'text/TYPE_ENTITIE';
 
 const initialState = Immutable.fromJS(defaults.text);
 
@@ -58,7 +58,7 @@ export default (state = initialState, action = {}) => {
         return t;
       }));
 
-    case TYPE_ON_ENTITIE:
+    case TYPE_ENTITIE:
       return state.update('entities', ents => ents.map(text => {
         let t = text;
 
@@ -107,8 +107,8 @@ export const refreshText = id => ({
   id,
 });
 
-export const typeOnEntitie = id => ({
-  type: TYPE_ON_ENTITIE,
+export const typeEntitie = id => ({
+  type: TYPE_ENTITIE,
   id,
 });
 
@@ -178,6 +178,23 @@ export const updateCharToType = () => (dispatch, getState) => {
   dispatch(setIdsCharToType(idsChar));
 };
 
+export const processTypeEntitiy = id =>
+  (dispatch, getState) => {
+    const textModeState = getState().get('textMode');
+
+    dispatch(typeEntitie(id));
+
+    const body = {
+      id,
+      typed: getState().getState().get('typed').length,
+    };
+
+    return dispatch(processAction(
+      () => ls.set('modes.text', textModeState.toJS()),
+      () => dispatch(fetchJSON('/text/type', { body })),
+    ));
+  };
+
 export const typeTextMode = char => (dispatch, getState) => {
   const state = getState();
   const textId = state.getIn(['textMode', 'selectedId']);
@@ -192,7 +209,7 @@ export const typeTextMode = char => (dispatch, getState) => {
 
   if (charToType) {
     if (charToType === char) {
-      dispatch(typeOnEntitie(textId));
+      dispatch(processTypeEntitiy(textId));
 
       dispatch(addHit(char));
     }

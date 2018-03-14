@@ -8,5 +8,6 @@ const router = express.Router();
 router.post('/add', authenticate, controller.add);
 router.post('/select', authenticate, controller.select);
 router.post('/refresh', authenticate, controller.refresh);
+router.post('/type', authenticate, controller.type);
 
 module.exports = router;

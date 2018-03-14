@@ -84,8 +84,36 @@ const refresh = (req, res, next) => {
     .catch(e => next(e));
 };
 
+const type = (req, res, next) => {
+  const {
+    user: {
+      id: userId,
+    },
+    body: {
+      id,
+      typed,
+    },
+  } = req;
+
+  User.get(userId)
+    .then(user => {
+      const userToSave = user;
+
+      const entity = _.find(userToSave.modes.text.entities, { id });
+
+      const text = entity.typed + entity.last;
+
+      entity.typed = text.slice(0, typed);
+      entity.last = text.slice(typed);
+
+      return userToSave.save().then(() => res.json(httpStatus[200]));
+    })
+    .catch(e => next(e));
+};
+
 module.exports = {
   add,
   select,
   refresh,
+  type,
 };
