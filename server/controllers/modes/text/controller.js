@@ -107,6 +107,19 @@ const type = (req, res, next) => {
       entity.last = text.slice(typed);
 
       return userToSave.save().then(() => res.json(httpStatus[200]));
+
+      // try
+      // const entityIndex = _.find(user.modes.text.entities, { id });
+      //
+      // const entityPath = `modes.text.entities.${entityIndex}`;
+      //
+      // const text = user.get(`${entityPath}.typed`) + user.get(`${entityPath}.last`);
+      //
+      // user.set(`${entityPath}.typed`, text.slice(0, typed));
+      //
+      // user.set(`${entityPath}.last`, text.slice(typed));
+      //
+      // return user.save().then(() => res.json(httpStatus[200]));
     })
     .catch(e => next(e));
 };

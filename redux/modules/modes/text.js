@@ -1,4 +1,5 @@
 import Immutable from 'immutable';
+import _ from 'lodash';
 
 import { getIdsFromCharacter } from 'Utils';
 import ls from 'Utils/ls';
@@ -178,6 +179,12 @@ export const updateCharToType = () => (dispatch, getState) => {
   dispatch(setIdsCharToType(idsChar));
 };
 
+export const TypeEntitiySaveToServer = _.throttle(
+  (dispatch, ...rest) => dispatch(fetchJSON('/text/type', ...rest)),
+  2000,
+  { leading: false },
+);
+
 export const processTypeEntitiy = id =>
   (dispatch, getState) => {
     const textModeState = getState().get('textMode');
@@ -191,7 +198,7 @@ export const processTypeEntitiy = id =>
 
     return dispatch(processAction(
       () => ls.set('modes.text', textModeState.toJS()),
-      () => dispatch(fetchJSON('/text/type', { body })),
+      () => TypeEntitiySaveToServer(dispatch, { body }),
     ));
   };
 
