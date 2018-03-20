@@ -179,7 +179,7 @@ export const updateCharToType = () => (dispatch, getState) => {
   dispatch(setIdsCharToType(idsChar));
 };
 
-export const TypeEntitiySaveToServer = _.throttle(
+export const typeEntitiySaveToServer = _.throttle(
   (dispatch, ...rest) => dispatch(fetchJSON('/text/type', ...rest)),
   2000,
   { leading: false },
@@ -198,7 +198,7 @@ export const processTypeEntitiy = id =>
 
     return dispatch(processAction(
       () => ls.set('modes.text', textModeState.toJS()),
-      () => TypeEntitiySaveToServer(dispatch, { body }),
+      () => typeEntitiySaveToServer(dispatch, { body }),
     ));
   };
 

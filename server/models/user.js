@@ -73,7 +73,7 @@ UserSchema.set('toObject', {
  * - virtuals
  */
 
-UserSchema.pre('save', next => {
+UserSchema.pre('save', function(next) {
   // only hash the password if it has been modified (or is new)
   if (!this.isModified('profile.password')) {
     next();

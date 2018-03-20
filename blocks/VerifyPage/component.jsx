@@ -51,29 +51,33 @@ class VerifyPage extends Component {
 
     let text;
 
-    switch (verified) {
-      case 'email':
-        text = 'your email was succesfully verified';
-        break;
-      case 'password-reset':
-        text = 'you can use your new password from now';
-        break;
-    }
+    let content = <Loader key="loader" size="60" />;
 
-    const redirect = ([
-      <p key="text" styleName="text">
-        Thank you,
-        <br />
-        {text}
-      </p>,
-      <Link key="link" className="buttom" to="/">Continue</Link>,
-    ]);
+    if (verified) {
+      switch (verified) {
+        case 'email':
+          text = 'your email was succesfully verified';
+          break;
+        case 'password-reset':
+          text = 'you can use your new password from now';
+          break;
+      }
+
+      content = ([
+        <p key="text" styleName="text">
+          Thank you,
+          <br />
+          {text}
+        </p>,
+        <Link key="link" className="buttom" to="/">Continue</Link>,
+      ]);
+    }
 
     return (
       <div styleName="root">
         <Link key="home-link" to="/" styleName="home-link">TouchToType</Link>
 
-        {verified ? redirect : <Loader key="loader" size="60" />}
+        {content}
       </div>
     );
   }

@@ -9,7 +9,7 @@ import keyboards from '../../constants/keyboards';
 import { fetchJSON, setAccessToken, setRefreshToken } from './fetch';
 import { setData as setUserData, addStatistic } from './user';
 import {
-  setData as setTextData,
+  setState as setTextState,
   typeTextMode,
 } from './modes/text';
 import {
@@ -365,7 +365,7 @@ export const init = () => dispatch => {
 export const setAllWithoutAuth = data => dispatch => {
   dispatch(setUserData(data.profile));
 
-  dispatch(setTextData(data.modes.text));
+  dispatch(setTextState(data.modes.text));
 
   dispatch(init());
 };
