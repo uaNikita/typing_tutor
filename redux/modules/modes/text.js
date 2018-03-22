@@ -191,9 +191,13 @@ export const processTypeEntitiy = id =>
 
     dispatch(typeEntitie(id));
 
+    const text = textModeState.get('entities')
+      .filter(obj => obj.get('id') === id)
+      .get(0);
+
     const body = {
       id,
-      typed: getState().getState().get('typed').length,
+      typed: text.get('typed').length,
     };
 
     return dispatch(processAction(

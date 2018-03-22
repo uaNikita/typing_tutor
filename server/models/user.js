@@ -93,8 +93,9 @@ UserSchema.pre('save', function(next) {
 UserSchema.methods.generateHash = password =>
   bcrypt.hash(password, config.get('saltRounds'));
 
-UserSchema.methods.validPassword = candidatePassword =>
-  bcrypt.compare(candidatePassword, this.profile.password);
+UserSchema.methods.validPassword = function (candidatePassword) {
+  return bcrypt.compare(candidatePassword, this.profile.password);
+};
 
 // UserSchema.methods.getLearningMode = (candidatePassword, cb) => {};
 

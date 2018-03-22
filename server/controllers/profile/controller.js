@@ -16,12 +16,12 @@ const getAllData = (req, res, next) => {
     },
   } = req;
 
-  Promise.all([User.get(userId), Statistic.findOne({ user: userId }).exec()])
+  Promise.all([User.findById(userId).exec(), Statistic.find({ user: userId }).exec()])
     .then(([user, statistic]) => {
       const data = user.toObject();
 
       if (statistic) {
-        data.profile.statistic = statistic.toObject();
+        data.profile.statistic = statistic;
       }
 
       res.json(data);
@@ -179,8 +179,6 @@ const setMode = (req, res, next) => {
       mode,
     },
   } = req;
-
-  console.log('mode', mode);
 
   User.get(userId)
     .then(user => {

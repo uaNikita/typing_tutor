@@ -36,7 +36,7 @@ const createClient = userId => {
   return [client.save(), access.save()];
 };
 
-const login = (req, res, next) =>
+const login = (req, res, next) => {
   User.get(req.user.get('id'))
     .then(user => {
       if (!user.get('active')) {
@@ -58,7 +58,7 @@ const login = (req, res, next) =>
         });
     })
     .catch(e => next(e));
-
+}
 const logout = (req, res, next) => {
   const {
     user: {
