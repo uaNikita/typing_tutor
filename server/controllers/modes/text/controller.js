@@ -97,30 +97,23 @@ const type = (req, res, next) => {
 
   User.get(userId)
     .then(user => {
-      const userToSave = user;
+      const entityIndex = _.findIndex(user.modes.text.entities, { id });
 
-      const entity = _.find(userToSave.modes.text.entities, { id });
+      const entityPath = `modes.text.entities.${entityIndex}`;
+
+      const entity = user.get(entityPath);
 
       const text = entity.typed + entity.last;
 
-      entity.typed = text.slice(0, typed);
-      entity.last = text.slice(typed);
+      const slicePoint = typed + 1;
 
-      return userToSave.save().then(() => res.json(httpStatus[200]));
+      user.set(`${entityPath}.typed`, text.slice(0, slicePoint));
 
-      // try
-      // const entityIndex = _.find(user.modes.text.entities, { id });
-      //
-      // const entityPath = `modes.text.entities.${entityIndex}`;
-      //
-      // const text = user.get(`${entityPath}.typed`) + user.get(`${entityPath}.last`);
-      //
-      // user.set(`${entityPath}.typed`, text.slice(0, typed));
-      //
-      // user.set(`${entityPath}.last`, text.slice(typed));
-      //
-      // return user.save().then(() => res.json(httpStatus[200]));
+      user.set(`${entityPath}.last`, text.slice(slicePoint));
+
+      return user.save();
     })
+    .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 

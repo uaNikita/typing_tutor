@@ -90,7 +90,7 @@ const statistic = (req, res, next) => {
           stats.set(`${modePath}.${sessionId}`, clientStatistic);
         }
 
-        return stats.save().then(() => res.json(httpStatus[200]));
+        return stats.save();
       }
 
       const newStatistic = {

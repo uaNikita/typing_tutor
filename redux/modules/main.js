@@ -358,17 +358,19 @@ export const typeChar = char => (dispatch, getState) => {
   }
 };
 
-export const init = () => dispatch => {
-  dispatch(initLessons());
-};
+export const init = () =>
+  dispatch => {
+    dispatch(initLessons());
+  };
 
-export const setAllWithoutAuth = data => dispatch => {
-  dispatch(setUserData(data.profile));
+export const setAllWithoutAuth = data =>
+  dispatch => {
+    dispatch(setUserData(data.profile));
 
-  dispatch(setTextState(data.modes.text));
+    dispatch(setTextState(data.modes.text));
 
-  dispatch(init());
-};
+    dispatch(init());
+  };
 
 export const setAllWithAuth = ({ tokens: { refresh, access }, ...rest }) =>
   dispatch => {

@@ -46,33 +46,33 @@ class App extends Component {
     // update state from localStorage if needed
     const touchToType = ls.get('touchToType');
 
-    if (!_.isEmpty(touchToType)) {
-      const {
-        mode,
-        statistic,
-        modes,
-      } = touchToType;
-
-      if (mode) {
-        setMode(mode);
-      }
-
-      if (statistic) {
-        setStatistic(statistic);
-      }
-
-      if (modes) {
+    if (!email) {
+      if (!_.isEmpty(touchToType)) {
         const {
-          text,
-        } = modes;
+          mode,
+          statistic,
+          modes,
+        } = touchToType;
 
-        if (text) {
-          setTextState(text);
+        if (mode) {
+          setMode(mode);
+        }
+
+        if (statistic) {
+          setStatistic(statistic);
+        }
+
+        if (modes) {
+          const {
+            text,
+          } = modes;
+
+          if (text) {
+            setTextState(text);
+          }
         }
       }
-    }
 
-    if (!email) {
       init();
     }
   }
