@@ -68,19 +68,22 @@ const refresh = (req, res, next) => {
       id,
     },
   } = req;
-
+  
   User.get(userId)
     .then(user => {
-      const userToSave = user;
+      const entityIndex = _.findIndex(user.modes.text.entities, { id });
 
-      const entity = _.find(userToSave.modes.text.entities, { id });
+      const entityPath = `modes.text.entities.${entityIndex}`;
 
-      entity.last = entity.typed + entity.last;
+      const entity = user.get(entityPath);
 
-      entity.typed = '';
+      user.set(`${entityPath}.last`, entity.typed + entity.last);
 
-      return userToSave.save().then(() => res.json(httpStatus[200]));
+      user.set(`${entityPath}.typed`, '');
+
+      return user.save();
     })
+    .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
