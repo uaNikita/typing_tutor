@@ -50,12 +50,11 @@ const select = (req, res, next) => {
 
   User.get(userId)
     .then(user => {
-      const userToSave = user;
+      user.set('modes.text.entities.selectedId', id);
 
-      userToSave.modes.text.selectedId = id;
-
-      return userToSave.save().then(() => res.json(httpStatus[200]));
+      return user.save();
     })
+    .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
@@ -68,7 +67,7 @@ const refresh = (req, res, next) => {
       id,
     },
   } = req;
-  
+
   User.get(userId)
     .then(user => {
       const entityIndex = _.findIndex(user.modes.text.entities, { id });

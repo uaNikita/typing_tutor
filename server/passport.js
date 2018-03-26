@@ -25,28 +25,30 @@ module.exports = app => {
     User.findOne({ 'profile.email': email })
       .exec()
       .then(user => {
-        user.validPassword(password)
-          .then(valid => {
-            if (valid) {
-              done(null, user);
-            }
-            else {
-              done(new APIError({
-                errors: {
-                  password: 'Incorrect password',
-                },
-                status: httpStatus.BAD_REQUEST,
-              }));
-            }
-          });
-      })
-      .catch(() => {
-        done(new APIError({
-          errors: {
-            email: 'Incorrect email',
-          },
-          status: httpStatus.BAD_REQUEST,
-        }));
+        if (user) {
+          user.validPassword(password)
+            .then(valid => {
+              if (valid) {
+                done(null, user);
+              }
+              else {
+                done(new APIError({
+                  errors: {
+                    password: 'Incorrect password',
+                  },
+                  status: httpStatus.BAD_REQUEST,
+                }));
+              }
+            });
+        }
+        else {
+          done(new APIError({
+            errors: {
+              email: 'Incorrect email',
+            },
+            status: httpStatus.BAD_REQUEST,
+          }));
+        }
       });
   }));
 };

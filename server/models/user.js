@@ -73,7 +73,7 @@ UserSchema.set('toObject', {
  * - virtuals
  */
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function save(next) {
   // only hash the password if it has been modified (or is new)
   if (!this.isModified('profile.password')) {
     next();
@@ -93,7 +93,7 @@ UserSchema.pre('save', function(next) {
 UserSchema.methods.generateHash = password =>
   bcrypt.hash(password, config.get('saltRounds'));
 
-UserSchema.methods.validPassword = function (candidatePassword) {
+UserSchema.methods.validPassword = function validPassword(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.profile.password);
 };
 

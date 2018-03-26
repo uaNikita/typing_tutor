@@ -14,31 +14,35 @@ module.exports = app => {
   });
 
   app.use((err, req, res, next) => {
+    let error;
+
     if (err instanceof APIError) {
-      next(err);
+      error = err;
     }
     else if (err instanceof mongoose.Error.ValidationError) {
       const errors = _.mapValues(err.errors, o => o.message);
 
-      const apiError = new APIError({
+      error = new APIError({
         message: 'validation error',
         status: httpStatus.BAD_REQUEST,
         errors,
       });
-
-      next(apiError);
     }
     else {
-      const apiError = new APIError({
+      error = new APIError({
         message: err.message,
         status: err.status,
       });
-
-      next(apiError);
     }
-  });
 
-  app.use((err, req, res) => {
-    res.status(err.status).json(_.assign({ message: err.message }, err));
+    if (error) {
+      res
+        .status(error.status)
+        .json(_.assign({ message: error.message }, error));
+    }
+    else {
+      // for eslint only
+      next();
+    }
   });
 };

@@ -58,7 +58,8 @@ const login = (req, res, next) => {
         });
     })
     .catch(e => next(e));
-}
+};
+
 const logout = (req, res, next) => {
   const {
     user: {
