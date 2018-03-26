@@ -1,10 +1,17 @@
 import Immutable from 'immutable';
 import moment from 'moment';
+import _ from 'lodash';
+
+import ls from 'Utils/ls';
+
+import { processAction } from './main';
+import { fetchJSON } from './fetch';
 
 const CLEAR_STATE = 'user/CLEAR_STATE';
 const SET_DATA = 'user/SET_DATA';
 const SET_EMAIL = 'user/SET_EMAIL';
 const SET_NAME = 'user/SET_NAME';
+const SET_MODE = 'user/SET_MODE';
 const SET_STATISTIC = 'user/SET_STATISTIC';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
 
@@ -14,6 +21,9 @@ const initialState = Immutable.fromJS({
   name: undefined,
 
   statistic: [],
+
+  // text, learning
+  mode: 'text',
 });
 
 export default (state = initialState, action = {}) => {
@@ -29,6 +39,9 @@ export default (state = initialState, action = {}) => {
 
     case SET_NAME:
       return state.set('name', action.name);
+
+    case SET_MODE:
+      return state.set('mode', action.mode);
 
     case SET_STATISTIC:
       return state.set('statistic', Immutable.fromJS(action.statistic));
@@ -84,6 +97,11 @@ export const setName = name => ({
   name,
 });
 
+export const setMode = mode => ({
+  type: SET_MODE,
+  mode,
+});
+
 export const setStatistic = statistic => ({
   type: ADD_STATISTIC,
   statistic,
@@ -94,3 +112,40 @@ export const addStatistic = obj => ({
   ...obj,
 });
 
+export const processSetMode = mode =>
+  dispatch => {
+    dispatch(setMode(mode));
+
+    return dispatch(processAction(
+      () => ls.set('mode', mode),
+      () => dispatch(fetchJSON('/profile/mode', { mode })),
+    ));
+  };
+
+export const processAddStatistic = () =>
+  (dispatch, getState) => {
+    const stateMain = getState().get('main');
+
+    const body = {
+      keyboard: stateMain.get('keyboard'),
+      mode: stateMain.get('mode'),
+      sessionId: stateMain.get('sessionId'),
+      statistic: {
+        ...stateMain.get('sessionStatistic').toJS(),
+        end: Date.now(),
+      },
+    };
+
+    dispatch(addStatistic(body));
+
+    return dispatch(processAction(
+      () => ls.set('statistic', getState().getIn(['main', 'statistic'])),
+      () => dispatch(fetchJSON('/profile/statistic', { body })),
+    ));
+  };
+
+export const addStatisticWithTimeout = _.throttle(
+  dispatch => dispatch(processAddStatistic()),
+  2000,
+  { leading: false },
+);

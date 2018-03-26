@@ -14,20 +14,18 @@ const {
 } = defaults;
 
 const UserSchema = new mongoose.Schema({
-  profile: {
-    name: String,
-    email: {
-      type: String,
-      required: true,
-      match: [
-        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-        '{PATH} is not a valid',
-      ],
-    },
-    password: {
-      type: String,
-      required: true,
-    },
+  name: String,
+  email: {
+    type: String,
+    required: true,
+    match: [
+      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      '{PATH} is not a valid',
+    ],
+  },
+  password: {
+    type: String,
+    required: true,
   },
   newPassword: {
     type: String,
@@ -61,7 +59,7 @@ UserSchema.set('toObject', {
 
     delete retParam._id;
     delete retParam.__v;
-    delete retParam.profile.password;
+    delete retParam.password;
     delete retParam.active;
   },
 });
@@ -79,9 +77,9 @@ UserSchema.pre('save', function save(next) {
     next();
   }
 
-  this.generateHash(this.profile.password)
+  this.generateHash(this.password)
     .then(hash => {
-      this.profile.password = hash;
+      this.password = hash;
       next();
     })
     .catch(err => next(err));
@@ -94,7 +92,7 @@ UserSchema.methods.generateHash = password =>
   bcrypt.hash(password, config.get('saltRounds'));
 
 UserSchema.methods.validPassword = function validPassword(candidatePassword) {
-  return bcrypt.compare(candidatePassword, this.profile.password);
+  return bcrypt.compare(candidatePassword, this.password);
 };
 
 // UserSchema.methods.getLearningMode = (candidatePassword, cb) => {};

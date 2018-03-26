@@ -21,7 +21,7 @@ const getAllData = (req, res, next) => {
       const data = user.toObject();
 
       if (statistic) {
-        data.profile.statistic = statistic;
+        data.statistic = statistic;
       }
 
       res.json(data);
@@ -47,7 +47,7 @@ const changePassword = (req, res, next) => {
           if (valid) {
             const userForSave = user;
 
-            userForSave.profile.password = newPassword;
+            userForSave.password = newPassword;
 
             return userForSave.save().then(() => res.json(httpStatus[200]));
           }

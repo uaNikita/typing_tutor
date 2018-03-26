@@ -8,8 +8,11 @@ import {
   pressWrongKeys,
   addHit,
   addTypo,
-  addStatisticWithTimeout,
 } from '../main';
+
+import {
+  addStatisticWithTimeout,
+} from '../user';
 
 const CLEAR_STATE = 'learning/CLEAR_STATE';
 const TYPE_ON_LESSON = 'learning/TYPE_ON_LESSON';

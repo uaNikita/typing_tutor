@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { processSetMode } from 'ReduxUtils/modules/main';
+import { processSetMode } from 'ReduxUtils/modules/user';
 
 import Component from './component.jsx';
 

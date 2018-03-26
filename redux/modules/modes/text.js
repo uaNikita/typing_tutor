@@ -11,8 +11,11 @@ import {
   pressWrongKeys,
   addHit,
   addTypo,
-  addStatisticWithTimeout,
 } from '../main';
+
+import {
+  addStatisticWithTimeout,
+} from '../user';
 
 const CLEAR_STATE = 'text/CLEAR_STATE';
 const SET_STATE = 'text/SET_STATE';

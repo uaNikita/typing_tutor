@@ -3,11 +3,10 @@ import moment from 'moment';
 import _ from 'lodash';
 
 import { getIdsFromCharacter } from 'Utils';
-import ls from 'Utils/ls';
 import keyboards from '../../constants/keyboards';
 
 import { fetchJSON, setAccessToken, setRefreshToken } from './fetch';
-import { setData as setUserData, addStatistic } from './user';
+import { setData as setUserData } from './user';
 import {
   setState as setTextState,
   typeTextMode,
@@ -22,7 +21,6 @@ const CLEAR_STATE = 'main/CLEAR_STATE';
 const PRESS_KEYS = 'main/PRESS_KEYS';
 const UNPRESS_KEYS = 'main/UNPRESS_KEYS';
 const ZEROING_STATISTIC = 'main/ZEROING_STATISTIC';
-const SET_MODE = 'main/SET_MODE';
 const ACTION_METRONOME = 'main/ACTION_METRONOME';
 const SET_KEYBOARD = 'main/SET_KEYBOARD';
 const PRESS_WRONG_KEYS = 'main/PRESS_WRONG_KEYS';
@@ -72,8 +70,6 @@ const initialState = Immutable.fromJS({
   isModal: false,
 
   sessionId: undefined,
-
-  statistic: [],
 });
 
 const updateSessionStatisticPresses = (state, name, character) =>
@@ -137,9 +133,6 @@ export default (state = initialState, action = {}) => {
         start: undefined,
       }));
 
-    case SET_MODE:
-      return state.set('mode', action.mode);
-
     case ACTION_METRONOME:
       return state.set('metronomeStatus', 0);
 
@@ -177,11 +170,6 @@ export const clearState = () => ({
 export const setData = data => ({
   type: SET_DATA,
   data,
-});
-
-export const setMode = mode => ({
-  type: SET_MODE,
-  mode,
 });
 
 export const pressKeys = ids => ({
@@ -295,44 +283,6 @@ export const startNewSession = () => (dispatch, getState) => {
 
   dispatch(setSessionId(index));
 };
-
-export const processSetMode = mode =>
-  dispatch => {
-    dispatch(setMode(mode));
-
-    return dispatch(processAction(
-      () => ls.set('mode', mode),
-      () => dispatch(fetchJSON('/profile/mode', { mode })),
-    ));
-  };
-
-export const processAddStatistic = () =>
-  (dispatch, getState) => {
-    const stateMain = getState().get('main');
-
-    const body = {
-      keyboard: stateMain.get('keyboard'),
-      mode: stateMain.get('mode'),
-      sessionId: stateMain.get('sessionId'),
-      statistic: {
-        ...stateMain.get('sessionStatistic').toJS(),
-        end: Date.now(),
-      },
-    };
-
-    dispatch(addStatistic(body));
-
-    return dispatch(processAction(
-      () => ls.set('statistic', getState().getIn(['main', 'statistic'])),
-      () => dispatch(fetchJSON('/profile/statistic', { body })),
-    ));
-  };
-
-export const addStatisticWithTimeout = _.throttle(
-  dispatch => dispatch(processAddStatistic()),
-  2000,
-  { leading: false },
-);
 
 export const typeChar = char => (dispatch, getState) => {
   const state = getState();

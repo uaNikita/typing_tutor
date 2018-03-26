@@ -169,11 +169,7 @@ const restoreAccess = (req, res, next) => {
 
   User.findByEmail(email)
     .then(user => {
-      const userToSave = user;
-
-      const password = getRandomPassword();
-
-      userToSave.profile.password = password;
+      user.set('password', getRandomPassword());
 
       const verification = new Verification({
         user: userToSave,
