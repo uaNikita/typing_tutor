@@ -83,10 +83,8 @@ const register = (req, res, next) => {
       const password = getRandomPassword();
 
       const user = new User({
-        profile: {
-          email,
-          password,
-        },
+        email,
+        password,
       });
 
       const verification = new Verification({
@@ -283,7 +281,7 @@ const verifyToken = (req, res, next) =>
       return Promise.all([...createClient(user.get('id')), user.save(),
         // verification.remove().exec()
       ])
-        .then(([client, access]) => {
+        .then(([client, access]) =>
           res.json({
             type,
             tokens: {
@@ -291,8 +289,7 @@ const verifyToken = (req, res, next) =>
               access: access.get('token'),
             },
             ...user.toObject(),
-          });
-        });
+          }));
     })
     .catch(e => next(e));
 

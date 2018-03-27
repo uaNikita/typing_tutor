@@ -6,7 +6,7 @@ import { getIdsFromCharacter } from 'Utils';
 import keyboards from '../../constants/keyboards';
 
 import { fetchJSON, setAccessToken, setRefreshToken } from './fetch';
-import { setData as setUserData } from './user';
+import { setState as setUserState } from './user';
 import {
   setState as setTextState,
   typeTextMode,
@@ -30,7 +30,6 @@ const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_HIT = 'main/ADD_HIT';
 const ADD_TYPO = 'main/ADD_TYPO';
 const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
-const SET_DATA = 'main/SET_DATA';
 const SET_LAST_NO_MODAL_LOCATION = 'main/SET_LAST_NO_MODAL_LOCATION';
 const SET_IS_MODAL = 'main/SET_IS_MODAL';
 const SET_SESSION_ID = 'main/SET_SESSION_ID';
@@ -99,9 +98,6 @@ export default (state = initialState, action = {}) => {
     case CLEAR_STATE:
       return state.merge(initialState);
 
-    case SET_DATA:
-      return state.merge(action.data);
-
     case PRESS_KEYS:
       return state.update('pressedKeys', keys => keys.union(action.ids));
 
@@ -165,11 +161,6 @@ export const setState = () => ({
 
 export const clearState = () => ({
   type: CLEAR_STATE,
-});
-
-export const setData = data => ({
-  type: SET_DATA,
-  data,
 });
 
 export const pressKeys = ids => ({
@@ -265,11 +256,11 @@ export const setSessionId = id => ({
 
 export const startNewSession = () => (dispatch, getState) => {
   const now = moment().startOf('day').toDate();
-  const stateMain = getState().get('main');
-  const keyboard = stateMain.get('keyboard');
-  const mode = stateMain.get('mode');
+  const keyboard = getState().getIn(['main', 'keyboard']);
+  const stateUser = getState().get('user');
+  const mode = stateUser.get('mode');
 
-  const date = stateMain
+  const date = stateUser
     .get('statistic')
     .find(obj => obj.get('date') === now);
 
@@ -315,9 +306,12 @@ export const init = () =>
 
 export const setAllWithoutAuth = data =>
   dispatch => {
-    dispatch(setUserData(data.profile));
-
     dispatch(setTextState(data.modes.text));
+
+    const userData = data;
+    delete userData.modes;
+
+    dispatch(setUserState(userData));
 
     dispatch(init());
   };

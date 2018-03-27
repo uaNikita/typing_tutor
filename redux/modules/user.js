@@ -8,7 +8,7 @@ import { processAction } from './main';
 import { fetchJSON } from './fetch';
 
 const CLEAR_STATE = 'user/CLEAR_STATE';
-const SET_DATA = 'user/SET_DATA';
+const SET_STATE = 'user/SET_STATE';
 const SET_EMAIL = 'user/SET_EMAIL';
 const SET_NAME = 'user/SET_NAME';
 const SET_MODE = 'user/SET_MODE';
@@ -31,7 +31,7 @@ export default (state = initialState, action = {}) => {
     case CLEAR_STATE:
       return state.merge(initialState);
 
-    case SET_DATA:
+    case SET_STATE:
       return state.merge(action.data);
 
     case SET_EMAIL:
@@ -82,8 +82,8 @@ export const clearState = () => ({
   type: CLEAR_STATE,
 });
 
-export const setData = data => ({
-  type: SET_DATA,
+export const setState = data => ({
+  type: SET_STATE,
   data,
 });
 

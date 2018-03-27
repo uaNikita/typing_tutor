@@ -34,7 +34,8 @@ const UserSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-  currentMode: {
+  // current mode
+  mode: {
     type: String,
     default: 'learning',
   },

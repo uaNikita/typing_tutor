@@ -17,8 +17,8 @@ import {
   addStatisticWithTimeout,
 } from '../user';
 
-const CLEAR_STATE = 'text/CLEAR_STATE';
 const SET_STATE = 'text/SET_STATE';
+const CLEAR_STATE = 'text/CLEAR_STATE';
 const SELECT_TEXT = 'text/SELECT_TEXT';
 const SELECT_LAST_TEXT = 'text/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text/REFRESH_TEXT';

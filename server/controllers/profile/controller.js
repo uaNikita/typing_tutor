@@ -182,7 +182,7 @@ const setMode = (req, res, next) => {
 
   User.get(userId)
     .then(user => {
-      user.set('currentMode', mode);
+      user.set('mode', mode);
 
       res.json(httpStatus[200]);
     })
