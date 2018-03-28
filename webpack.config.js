@@ -7,8 +7,6 @@ var autoprefixer = require('autoprefixer');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var CopyWebpackPlugin = require('copy-webpack-plugin');
 
-var isProduction = process.env.WEBPACK_ENV === 'production' ? true : false;
-
 const commonConfig = {
   resolve: {
     alias: {
@@ -198,22 +196,6 @@ let serverConfig = {
     ]
   }
 };
-
-if (isProduction) {
-  const productionPlugins = [
-    new webpack.DefinePlugin({
-      'process.env.NODE_ENV': JSON.stringify('production'),
-    }),
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        warnings: false
-      }
-    })
-  ];
-
-  clientConfig.plugins = clientConfig.plugins.concat(productionPlugins);
-  serverConfig.plugins = serverConfig.plugins.concat(productionPlugins);
-}
 
 module.exports = [
   _.merge({}, commonConfig, clientConfig),

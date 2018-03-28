@@ -5,7 +5,7 @@ import { processSetMode } from 'ReduxUtils/modules/user';
 import Component from './component.jsx';
 
 const mapStateToProps = state => ({
-  mode: state.getIn(['main', 'mode']),
+  mode: state.getIn(['user', 'mode']),
 });
 
 const mapDispatchToProps = dispatch => ({

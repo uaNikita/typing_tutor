@@ -55,10 +55,11 @@ export const setAccessToken = token => {
   };
 };
 
-export const setData = ({ refresh, access }) => dispatch => {
-  dispatch(setRefreshToken(refresh));
-  dispatch(setAccessToken(access));
-};
+export const setTokens = ({ refresh, access }) =>
+  dispatch => {
+    dispatch(setRefreshToken(refresh));
+    dispatch(setAccessToken(access));
+  };
 
 const parseResponse = response => {
   const contentType = response.headers.get('content-type');

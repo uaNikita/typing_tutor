@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { getIdsFromCharacter } from 'Utils';
 import keyboards from '../../constants/keyboards';
 
-import { fetchJSON, setAccessToken, setRefreshToken } from './fetch';
+import { fetchJSON, setTokens } from './fetch';
 import { setState as setUserState } from './user';
 import {
   setState as setTextState,
@@ -289,7 +289,7 @@ export const typeChar = char => (dispatch, getState) => {
     dispatch(unPressWrongKeys(idsChar));
   }, 100);
 
-  switch (state.getIn(['main', 'mode'])) {
+  switch (state.getIn(['user', 'mode'])) {
     case 'text':
       dispatch(typeTextMode(char));
       break;
@@ -316,11 +316,9 @@ export const setAllWithoutAuth = data =>
     dispatch(init());
   };
 
-export const setAllWithAuth = ({ tokens: { refresh, access }, ...rest }) =>
+export const setAllWithAuth = ({ tokens, ...rest }) =>
   dispatch => {
-    dispatch(setRefreshToken(refresh));
-
-    dispatch(setAccessToken(access));
+    dispatch(setTokens(tokens));
 
     dispatch(setAllWithoutAuth(rest));
   };

@@ -13,7 +13,7 @@ const mapStateToProps = state => {
   return {
     lesson: stateLearningMode.get('lessonRest'),
     learningMode: stateLearningMode.get('mode'),
-    mode: state.getIn(['main', 'mode']),
+    mode: state.getIn(['user', 'mode']),
   };
 };
 

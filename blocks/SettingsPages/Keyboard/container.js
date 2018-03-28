@@ -12,7 +12,7 @@ const mapStateToProps = state => {
   const stateMain = state.get('main');
 
   return {
-    mode: stateMain.get('mode'),
+    mode: state.getIn(['user', 'mode']),
     keys: stateMain.get('keys').toJS(),
     name: stateMain.get('keyboard'),
   };
