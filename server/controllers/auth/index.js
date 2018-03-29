@@ -8,7 +8,7 @@ const authenticate = require('../../utils/authenticate');
 
 router.post('/check-email', controller.checkEmail);
 
-router.post('/signup', controller.register);
+router.post('/signup', controller.signUp);
 
 router.post('/verify-email', controller.verifyEmail);
 

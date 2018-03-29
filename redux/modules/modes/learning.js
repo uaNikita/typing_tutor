@@ -229,13 +229,13 @@ export const updateCharToType = () => (dispatch, getState) => {
   dispatch(setIdsCharToType(idsChar));
 };
 
-export const typeLearningMode = char => (dispatch, getState) => {
-  const state = getState();
-  const learningModeState = state.get('learningMode');
+export const typeLearningMode = char =>
+  (dispatch, getState) => {
+    const state = getState();
+    const learningModeState = state.get('learningMode');
 
-  const charToType = learningModeState.get('lessonRest')[0];
+    const charToType = learningModeState.get('lessonRest')[0];
 
-  if (charToType) {
     const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
     if (charToType === char) {
@@ -252,24 +252,24 @@ export const typeLearningMode = char => (dispatch, getState) => {
     }
 
     addStatisticWithTimeout(dispatch);
-  }
-  else {
-    // update fingers
-    if (learningModeState.get('mode') === 'fingers') {
-      dispatch(updateFingersLesson());
 
-      dispatch(setCurrentLesson(learningModeState.get('lessonFingers')));
+    if (!getState().getIn(['learningMode', 'lessonRest'])) {
+      // update fingers
+      if (learningModeState.get('mode') === 'fingers') {
+        dispatch(updateFingersLesson());
+
+        dispatch(setCurrentLesson(learningModeState.get('lessonFingers')));
+      }
+      // update free
+      else {
+        dispatch(updateFreeLesson());
+
+        dispatch(setCurrentLesson(learningModeState.get('lessonFree')));
+      }
+
+      dispatch(updateCharToType());
     }
-    // update free
-    else {
-      dispatch(updateFreeLesson());
-
-      dispatch(setCurrentLesson(learningModeState.get('lessonFree')));
-    }
-
-    dispatch(updateCharToType());
-  }
-};
+  };
 
 export const initLessons = () => (dispatch, getState) => {
   const state = getState();

@@ -4,7 +4,6 @@ import {
   typeChar,
   setStartTypingTime,
   zeroingStatic,
-  setGlobalMessage,
   startNewSession,
 } from 'ReduxUtils/modules/main';
 import Component from './component.jsx';

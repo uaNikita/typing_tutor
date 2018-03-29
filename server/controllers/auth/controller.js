@@ -75,7 +75,7 @@ const logout = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const register = (req, res, next) => {
+const signUp = (req, res, next) => {
   const { email } = req.body;
 
   User.isNotExist(email)
@@ -126,38 +126,46 @@ const register = (req, res, next) => {
 const verifyEmail = (req, res, next) => {
   const { email } = req.body;
 
-  User.findByEmail(email)
+  User.findOne({ 'email': email }).exec()
     .then(user => {
-      const verification = new Verification({
-        user: user.get('id'),
-        type: 'email',
-      });
-
-      verification.token = verification.get('id') + crypto.randomBytes(40).toString('hex');
-
-      return verification.save()
-        .then(verif => {
-          const mailOptions = {
-            from: config.get('mail.from'),
-            to: email,
-            subject: 'Email verification',
-            html: emailTemplates.verifyEmailFn({
-              origin: req.get('origin'),
-              token: verif.get('token'),
-            }),
-          };
-
-          transporter.sendMail(mailOptions, error => {
-            if (error) {
-              throw new APIError({
-                message: 'We can not verify your email now. Please try again later.',
-                status: httpStatus.SERVICE_UNAVAILABLE,
-              });
-            }
-
-            res.json(httpStatus[200]);
-          });
+      if (user) {
+        const verification = new Verification({
+          user: user,
+          type: 'email',
         });
+
+        verification.set('token', verification.get('id') + crypto.randomBytes(40).toString('hex'));
+
+        return verification.save()
+          .then(verif => {
+            const mailOptions = {
+              from: config.get('mail.from'),
+              to: email,
+              subject: 'Email verification',
+              html: emailTemplates.verifyEmailFn({
+                origin: req.get('origin'),
+                token: verif.get('token'),
+              }),
+            };
+
+            transporter.sendMail(mailOptions, error => {
+              if (error) {
+                throw new APIError({
+                  message: 'We can not verify your email now. Please try again later.',
+                  status: httpStatus.SERVICE_UNAVAILABLE,
+                });
+              }
+
+              res.json(httpStatus[200]);
+            });
+          });
+      }
+      else {
+        throw new APIError({
+          message: httpStatus['404'],
+          status: httpStatus.NOT_FOUND,
+        });
+      }
     })
     .catch(e => next(e));
 };
@@ -165,43 +173,50 @@ const verifyEmail = (req, res, next) => {
 const restoreAccess = (req, res, next) => {
   const { email } = req.body;
 
-  User.findByEmail(email)
+  User.findOne({ 'email': email }).exec()
     .then(user => {
-      user.set('password', getRandomPassword());
+      if (user) {
+        user.set('password', getRandomPassword());
 
-      const verification = new Verification({
-        user: userToSave,
-        type: 'email',
-      });
-
-      verification.token = verification.get('id') + crypto.randomBytes(40).toString('hex');
-
-      return Promise.all([verification.save(), user.save()])
-        .then(([verif]) => {
-          const mailOptions = {
-            from: config.get('mail.from'),
-            to: email,
-            subject: 'Restore access',
-            html: emailTemplates.restoreAccessFn({
-              origin: req.get('origin'),
-              token: verif.get('token'),
-              password,
-            }),
-          };
-
-          transporter.sendMail(mailOptions, error => {
-            if (error) {
-              throw new APIError({
-                message: 'We can not verify your email now. Please try again later.',
-                status: httpStatus.SERVICE_UNAVAILABLE,
-              });
-            }
-
-            res.json(httpStatus[200]);
-          });
+        const verification = new Verification({
+          user: user,
+          type: 'email',
         });
-    })
 
+        verification.set('token', verification.get('id') + crypto.randomBytes(40).toString('hex'));
+
+        return Promise.all([verification.save(), user.save()])
+          .then(([verif]) => {
+            const mailOptions = {
+              from: config.get('mail.from'),
+              to: email,
+              subject: 'Restore access',
+              html: emailTemplates.restoreAccessFn({
+                origin: req.get('origin'),
+                token: verif.get('token'),
+                password,
+              }),
+            };
+
+            transporter.sendMail(mailOptions, error => {
+              if (error) {
+                throw new APIError({
+                  message: 'We can not verify your email now. Please try again later.',
+                  status: httpStatus.SERVICE_UNAVAILABLE,
+                });
+              }
+
+              res.json(httpStatus[200]);
+            });
+          });
+      }
+      else {
+        throw new APIError({
+          message: httpStatus['404'],
+          status: httpStatus.NOT_FOUND,
+        });
+      }
+    })
     .catch(e => next(e));
 };
 
@@ -246,8 +261,10 @@ const getTokens = (req, res, next) => {
 };
 
 const checkEmail = (req, res, next) =>
-  User.findOne({ 'profile.email': req.body.email })
+  User.findOne({ 'email': req.body.email })
     .then(user => {
+      console.log('user', user);
+
       if (user) {
         res.json(httpStatus[200]);
       }
@@ -279,8 +296,8 @@ const verifyToken = (req, res, next) =>
       }
 
       return Promise.all([...createClient(user.get('id')), user.save(),
-        // verification.remove().exec()
-      ])
+          // verification.remove().exec()
+        ])
         .then(([client, access]) =>
           res.json({
             type,
@@ -295,7 +312,7 @@ const verifyToken = (req, res, next) =>
 
 
 module.exports = {
-  register,
+  signUp,
   verifyEmail,
   restoreAccess,
   login,

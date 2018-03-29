@@ -117,21 +117,6 @@ UserSchema.statics = {
       });
   },
 
-  findByEmail(email) {
-    return this.findOne({ 'profile.email': email })
-      .exec()
-      .then(user => {
-        if (user) {
-          return user;
-        }
-
-        throw new APIError({
-          message: httpStatus['404'],
-          status: httpStatus.NOT_FOUND,
-        });
-      });
-  },
-
   get(id) {
     return this.findById(id)
       .exec()
