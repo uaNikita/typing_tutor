@@ -49,9 +49,9 @@ class VerifyPage extends Component {
       },
     } = this;
 
-    let text;
-
     let content = <Loader key="loader" size="60" />;
+
+    let text;
 
     if (verified) {
       switch (verified) {

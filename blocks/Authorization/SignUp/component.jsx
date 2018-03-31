@@ -23,11 +23,16 @@ class SignUp extends Component {
 
   render() {
     const {
-      handleSubmit,
-      submitting,
-      invalid,
-      isModal,
-    } = this.props;
+      props: {
+        handleSubmit,
+        submitting,
+        invalid,
+        isModal,
+      },
+      state: {
+        submitted,
+      }
+    } = this;
 
     const state = { modal: false };
 
@@ -35,35 +40,30 @@ class SignUp extends Component {
       state.modal = true;
     }
 
-    let content = (
-      <form className="auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
-        <Field
-          className="auth__row"
-          name="email"
-          component={RenderField}
-          type="email"
-          label="Email"
-        />
-
-        <Button type="submit" disabled={invalid} isLoader={submitting}>Sign up</Button>
-
-        <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/sign-in', state }}>Log in now</Link></p>
-      </form>
-    );
-
-    if (this.state.submitted) {
-      content = (
-        <p>
-          You’ve got mail, <br />
-          Please click the link in the email we just sent you so we can verify your account.
-        </p>
-      );
-    }
-
     return (
       <div className="auth">
         <h3 className="auth__title">Registration</h3>
-        {content}
+
+        {submitted ? (
+          <p>
+            You’ve got mail, <br />
+            Please click the link in the email we just sent you so we can verify your account.
+          </p>
+        ) : (
+          <form className="auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
+            <Field
+              className="auth__row"
+              name="email"
+              component={RenderField}
+              type="email"
+              label="Email"
+            />
+
+            <Button type="submit" disabled={invalid} isLoader={submitting}>Sign up</Button>
+
+            <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/sign-in', state }}>Log in now</Link></p>
+          </form>
+        )}
       </div>
     );
   }

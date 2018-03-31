@@ -7,10 +7,21 @@ import RenderField from 'Blocks/RenderField/component.jsx';
 import Button from 'Blocks/Button/component.jsx';
 
 class RestoreAccess extends Component {
+  state = {
+    submitted: false,
+  };
+
   handleSubmit = values =>
     this.props.fetchJSON('/auth/restore-access', {
       body: values.toJS(),
-    });
+    })
+      .then(res => {
+        if (res === 'OK') {
+          this.setState({
+            submitted: true,
+          });
+        }
+      });
 
   render() {
     const {
@@ -20,6 +31,9 @@ class RestoreAccess extends Component {
         invalid,
         isModal,
       },
+      state: {
+        submitted,
+      }
     } = this;
 
     const state = { modal: false };
@@ -32,20 +46,26 @@ class RestoreAccess extends Component {
       <form className="auth auth__form auth__form_password-reset" onSubmit={handleSubmit(this.handleSubmit)}>
         <h3 className="auth__title">Password reset</h3>
 
-        <Field
-          name="email"
-          component={RenderField}
-          type="email"
-          label="Email"
-        />
+        {submitted ? (
+          <p>
+            You’ve got mail, <br />
+            Please check ou your email with new password.
+          </p>
+        ) : [
+          <Field
+            key="email"
+            name="email"
+            component={RenderField}
+            type="email"
+            label="Email"
+          />,
 
-        <div className="auth__button-wrap">
-          <Button type="submit" disabled={invalid} isLoader={submitting}>Restore access</Button>
-        </div>
+          <Button key="submit" type="submit" disabled={invalid} isLoader={submitting}>Restore access</Button>,
 
-        <p className="auth__hint">
-          <Link className="auth__link2" to={{ pathname: '/sign-in', state }}>Log in now</Link>
-        </p>
+          <p key="log-in" className="auth__hint">
+            <Link className="auth__link2" to={{ pathname: '/sign-in', state }}>Log in now</Link>
+          </p>
+        ]}
       </form>
     );
   }

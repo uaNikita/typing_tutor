@@ -4,23 +4,25 @@ const path = require('path');
 
 const exp = {};
 
-fs.readFile(path.resolve(__dirname, '../email-templates/registration.html'), 'utf8', (err, data) => {
+const getPathToTmpl = name => path.join(__dirname, '../email-templates', `${name}.html`);
+
+fs.readFile(getPathToTmpl('registration'), 'utf8', (err, data) => {
   if (err) throw err;
 
-  exp.registrationFn = _.template(data);
+  exp.registration = _.template(data);
 });
 
-fs.readFile(path.resolve(__dirname, '../email-templates/restore-access.html'), 'utf8', (err, data) => {
+fs.readFile(getPathToTmpl('restore-access'), 'utf8', (err, data) => {
   if (err) throw err;
 
-  exp.restoreAccessFn = _.template(data);
+  exp.restoreAccess = _.template(data);
 });
 
 
-fs.readFile(path.resolve(__dirname, '../email-templates/verify-email.html'), 'utf8', (err, data) => {
+fs.readFile(getPathToTmpl('verify-email'), 'utf8', (err, data) => {
   if (err) throw err;
 
-  exp.verifyEmailFn = _.template(data);
+  exp.verifyEmail = _.template(data);
 });
 
 module.exports = exp;

@@ -1,11 +1,12 @@
 'use strict';
 
-var path = require('path');
-var _ = require('lodash');
-var webpack = require('webpack');
-var autoprefixer = require('autoprefixer');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
+const _ = require('lodash');
+const webpack = require('webpack');
+const autoprefixer = require('autoprefixer');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const commonConfig = {
   resolve: {
@@ -52,11 +53,24 @@ let clientConfig = {
       from: path.resolve(__dirname, 'static/favicon.png'),
       to: path.resolve(__dirname, 'dist/favicon.png')
     }]),
-    new ExtractTextPlugin('[name].css'),
+    new MiniCssExtractPlugin(),
     new webpack.DefinePlugin({
       BROWSER: true,
     }),
   ],
+
+  optimization: {
+    splitChunks: {
+      cacheGroups: {
+        styles: {
+          name: 'main',
+          test: /\.css$/,
+          chunks: 'all',
+          enforce: true
+        }
+      }
+    }
+  },
 
   // Options affecting the normal modules
   module: {
@@ -75,40 +89,39 @@ let clientConfig = {
       },
       {
         test: /^((?!module).)+styl/,
-        loader: ExtractTextPlugin.extract({
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                url: true,
-                import: true
-              }
-            },
-            ...restCssLoders
-          ]
-        })
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              url: true,
+              import: true
+            }
+          },
+          ...restCssLoders
+        ]
       },
       {
         test: /module\.styl$/,
-        use: ExtractTextPlugin.extract({
-          use: [
-            {
-              loader: 'css-loader',
-              options: {
-                modules: true,
-                importLoaders: 1,
-                localIdentName: '[name]__[local]___[hash:base64:5]'
-              }
-            },
-            ...restCssLoders
-          ]
-        })
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: 'css-loader',
+            options: {
+              modules: true,
+              importLoaders: 1,
+              localIdentName: '[name]__[local]___[hash:base64:5]'
+            }
+          },
+          ...restCssLoders
+        ],
       },
       {
         test: /\.css$/,
-        loader: ExtractTextPlugin.extract({
-          use: 'css-loader'
-        })
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+        ],
       },
       {
         test: /\.(woff|woff2|ttf|eot)$/,

@@ -100,7 +100,7 @@ const signUp = (req, res, next) => {
             from: config.get('mail.from'),
             to: email,
             subject: 'Acoount registration',
-            html: emailTemplates.registrationFn({
+            html: emailTemplates.registration({
               origin: req.get('origin'),
               token: verif.get('token'),
               password,
@@ -142,7 +142,7 @@ const verifyEmail = (req, res, next) => {
               from: config.get('mail.from'),
               to: email,
               subject: 'Email verification',
-              html: emailTemplates.verifyEmailFn({
+              html: emailTemplates.verifyEmail({
                 origin: req.get('origin'),
                 token: verif.get('token'),
               }),
@@ -176,11 +176,13 @@ const restoreAccess = (req, res, next) => {
   User.findOne({ 'email': email }).exec()
     .then(user => {
       if (user) {
-        user.set('password', getRandomPassword());
+        const password = getRandomPassword();
+
+        user.set('newPassword', password);
 
         const verification = new Verification({
           user: user,
-          type: 'email',
+          type: 'password',
         });
 
         verification.set('token', verification.get('id') + crypto.randomBytes(40).toString('hex'));
@@ -191,7 +193,7 @@ const restoreAccess = (req, res, next) => {
               from: config.get('mail.from'),
               to: email,
               subject: 'Restore access',
-              html: emailTemplates.restoreAccessFn({
+              html: emailTemplates.restoreAccess({
                 origin: req.get('origin'),
                 token: verif.get('token'),
                 password,
@@ -263,14 +265,13 @@ const getTokens = (req, res, next) => {
 const checkEmail = (req, res, next) =>
   User.findOne({ 'email': req.body.email })
     .then(user => {
-      console.log('user', user);
+      let code = 404;
 
       if (user) {
-        res.json(httpStatus[200]);
+        code = 200;
       }
-      else {
-        res.json(httpStatus[404]);
-      }
+
+      res.json(httpStatus[code]);
     })
     .catch(e => next(e));
 
@@ -287,17 +288,24 @@ const verifyToken = (req, res, next) =>
 
       switch (type) {
         case 'email':
-          user.active = true;
+          user.set('active', true);
           break;
         case 'password':
-          user.password = user.newPassword;
-          user.newPassword = undefined;
+
+          console.log(user.get('newPassword'));
+
+
+          user.set('password', user.get('newPassword'));
+          user.set('newPassword', undefined);
+
+          console.log(user.get('newPassword'));
+
           break;
       }
 
       return Promise.all([...createClient(user.get('id')), user.save(),
-          // verification.remove().exec()
-        ])
+        // verification.remove().exec()
+      ])
         .then(([client, access]) =>
           res.json({
             type,
@@ -309,7 +317,6 @@ const verifyToken = (req, res, next) =>
           }));
     })
     .catch(e => next(e));
-
 
 module.exports = {
   signUp,

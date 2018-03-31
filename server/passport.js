@@ -22,7 +22,7 @@ module.exports = app => {
     passwordField: 'password',
     session: false,
   }, (email, password, done) => {
-    User.findOne({ 'profile.email': email })
+    User.findOne({ 'email': email })
       .exec()
       .then(user => {
         if (user) {
