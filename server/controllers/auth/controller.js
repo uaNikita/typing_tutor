@@ -285,22 +285,15 @@ const verifyToken = (req, res, next) =>
     .then(verification => {
       const type = verification.get('type');
       const user = verification.get('user');
-
+      
       switch (type) {
         case 'email':
           user.set('active', true);
           break;
         case 'password':
-
-          console.log(user.get('newPassword'));
-
-
           user.set('password', user.get('newPassword'));
           user.set('newPassword', undefined);
-
-          console.log(user.get('newPassword'));
-
-          break;
+        break;
       }
 
       return Promise.all([...createClient(user.get('id')), user.save(),
