@@ -96,7 +96,15 @@ export default (state = initialState, action = {}) => {
       return state.merge(action.state);
 
     case CLEAR_STATE:
-      return state.merge(initialState);
+      return state.mergeWith((prev, next, key) => {
+        let prop = next;
+
+        if (!next && ['lastNoModalLocation', 'isModal'].includes(key)) {
+          prop = prev;
+        }
+
+        return prop;
+      }, initialState);
 
     case PRESS_KEYS:
       return state.update('pressedKeys', keys => keys.union(action.ids));
