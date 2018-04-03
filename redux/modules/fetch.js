@@ -71,18 +71,6 @@ const parseResponse = response => {
   return response.text();
 };
 
-const parseResponseAndHandleError = response => {
-  const res = parseResponse(response);
-
-  if (response.ok) {
-    return res;
-  }
-
-  return res.then(resError => {
-    throw resError;
-  });
-};
-
 const requestJSON =
   (url, params, withoutAuthorization) =>
     (dispatch, getState) => {
@@ -109,7 +97,7 @@ const requestJSON =
       }
 
       return fetch(newUrl, newParams)
-        .then(parseResponseAndHandleError);
+        .then(parseResponse);
     };
 
 export const fetchJSON =
