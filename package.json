@@ -9,7 +9,7 @@
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
     "server-eslint": "eslint server",
-    "heroku-postbuild": "webpack --mode production"
+    "heroku-postbuild": "yarn --production=false && yarn run build"
   },
   "keywords": [
     "touch",
