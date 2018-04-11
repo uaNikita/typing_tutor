@@ -1,19 +1,26 @@
 {
   "name": "touch-to-type",
   "version": "1.0.0",
-  "description": "SPA Typing tutor. Client.",
+  "description": "Typing tutor",
   "main": "",
   "scripts": {
     "start": "nodemon server/index.js",
     "start-prod": "node server/index.js",
     "build": "webpack --mode production",
     "dev": "webpack --mode development --watch",
-    "server-eslint": "eslint server"
+    "server-eslint": "eslint server",
+    "heroku-postbuild": "webpack --mode production"
   },
-  "keywords": [],
+  "keywords": [
+    "touch",
+    "type"
+  ],
   "author": "Nikita Zhukov",
   "license": "ISC",
   "private": true,
+  "engines": {
+    "node": "9.11.1"
+  },
   "devDependencies": {
     "autoprefixer": "^8.0.0",
     "babel-core": "^6.26.0",
