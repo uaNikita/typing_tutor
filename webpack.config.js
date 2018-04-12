@@ -4,7 +4,7 @@ const path = require('path');
 const _ = require('lodash');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const commonConfig = {
@@ -30,9 +30,9 @@ const restCssLoders = [
     loader: 'postcss-loader',
     options: {
       plugins: [
-        autoprefixer()
+        autoprefixer(),
       ]
-    }
+    },
   },
   'stylus-loader'
 ];

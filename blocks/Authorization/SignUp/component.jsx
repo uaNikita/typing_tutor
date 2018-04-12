@@ -31,7 +31,7 @@ class SignUp extends Component {
       },
       state: {
         submitted,
-      }
+      },
     } = this;
 
     const state = { modal: false };

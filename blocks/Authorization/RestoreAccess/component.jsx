@@ -33,7 +33,7 @@ class RestoreAccess extends Component {
       },
       state: {
         submitted,
-      }
+      },
     } = this;
 
     const state = { modal: false };
@@ -64,7 +64,7 @@ class RestoreAccess extends Component {
 
           <p key="log-in" className="auth__hint">
             <Link className="auth__link2" to={{ pathname: '/sign-in', state }}>Log in now</Link>
-          </p>
+          </p>,
         ]}
       </form>
     );

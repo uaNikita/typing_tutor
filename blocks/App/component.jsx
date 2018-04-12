@@ -155,7 +155,7 @@ class App extends Component {
         </CSSTransition>
       );
     }
-    
+
     return [
       <Helmet key="helmet">
         <meta charSet="utf-8" />
