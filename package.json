@@ -9,7 +9,7 @@
     "build": "webpack --mode=production",
     "dev": "webpack --mode=development",
     "server-eslint": "eslint server",
-    "heroku-postbuild": "yarn --production=false && yarn run build"
+    "heroku-postbuild": "npm run build"
   },
   "keywords": [
     "touch",
@@ -19,7 +19,6 @@
   "license": "ISC",
   "private": true,
   "engines": {
-    "yarn": "1.5.1",
     "node": "9.11.1"
   },
   "devDependencies": {
