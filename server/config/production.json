@@ -1,4 +1,0 @@
-{
-  "database": "mongodb://localhost:27017/ttt",
-  "secretKey": "touch_me_and_then_just_push_me"
-}

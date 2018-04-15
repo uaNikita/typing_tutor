@@ -48,10 +48,15 @@ let clientConfig = {
   },
 
   plugins: [
-    new CopyWebpackPlugin([{
-      from: path.resolve(__dirname, 'static/favicon.png'),
-      to: path.resolve(__dirname, 'dist/favicon.png')
-    }]),
+    new CopyWebpackPlugin([
+      {
+        from: path.resolve(__dirname, 'static/favicon.png'),
+        to: path.resolve(__dirname, 'dist/favicon.png')
+      }, {
+        from: path.resolve(__dirname, 'static/robots.txt'),
+        to: path.resolve(__dirname, 'dist/robots.txt')
+      }
+    ]),
     new MiniCssExtractPlugin(),
     new webpack.DefinePlugin({
       BROWSER: true,

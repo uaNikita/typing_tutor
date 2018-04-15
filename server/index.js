@@ -24,9 +24,28 @@ process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
 const config = require('config');
 
 mongoose.Promise = global.Promise;
-mongoose.connect(config.get('database'));
+
+const mongoURI = (() => {
+  const {
+    username,
+    password,
+    host,
+    port,
+    name,
+  } = config.get('database');
+
+  let credentials = '';
+
+  if (username && password) {
+    credentials = `${encodeURIComponent(username)}:${encodeURIComponent(password)}@`;
+  }
+
+  return `mongodb://${credentials}${host}:${port}/${name}`;
+})();
+
+mongoose.connect(mongoURI);
 mongoose.connection.on('error', () => {
-  throw new Error(`unable to connect to database: ${config.db}`);
+  throw new Error(`unable to connect to database: ${mongoURI}`);
 });
 
 const app = express();
