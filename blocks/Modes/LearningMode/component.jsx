@@ -1,5 +1,5 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Switch, Route, Redirect, NavLink } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
 import LearningView from 'Blocks/LearningView/component.jsx';
@@ -20,25 +20,13 @@ const menuLinks = [
   },
 ];
 
-const LearningMode = props => {
+const Block = props => {
   const {
     lesson,
-    learningMode,
     match: {
       url,
     },
   } = props;
-
-  let Mode;
-
-  switch (learningMode) {
-    case 'fingers':
-      Mode = LearningFingers;
-      break;
-    case 'free':
-      Mode = LearningFree;
-      break;
-  }
 
   const links = menuLinks.map(({ url: linkUrl, text }) => (
     <NavLink
@@ -51,7 +39,7 @@ const LearningMode = props => {
   ));
 
   return (
-    <div>
+    <Fragment>
       <ModeButton to="learning" />
 
       <LearningView lesson={lesson} />
@@ -63,11 +51,16 @@ const LearningMode = props => {
         </div>
 
         <div styleName="content">
-          <Mode />
+          <Switch>
+            <Redirect exact from={url} to={`${url}/fingers`} />
+            <Route path={`${url}/fingers`} component={LearningFingers} />
+            <Route path={`${url}/free`} component={LearningFree} />
+            <Redirect to="/404" />
+          </Switch>
         </div>
       </div>
-    </div>
+    </Fragment>
   );
 };
 
-export default CSSModules(LearningMode, styles);
+export default CSSModules(Block, styles);

@@ -1,12 +1,16 @@
 import React from 'react';
-import { Route } from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
 import LearningMode from './LearningMode/container';
 import TextMode from './TextMode/component.jsx';
 
-const Modes = ({ match: { url } }) => ([
-  <Route key="learning" path={`${url}/learning`} component={LearningMode} />,
-  <Route key="text" path={`${url}/text`} component={TextMode} />,
-]);
+const Modes = ({ match: { url } }) => (
+  <Switch>
+    <Redirect exact from={url} to={`${url}/learning`} />
+    <Route path={`${url}/learning`} component={LearningMode} />
+    <Route path={`${url}/text`} component={TextMode} />
+    <Redirect to="/404" />
+  </Switch>
+);
 
 export default Modes;

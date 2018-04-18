@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { withRouter, Switch, Route } from 'react-router-dom';
+import React, { Component, Fragment } from 'react';
+import { withRouter, Switch, Route, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
@@ -17,6 +17,7 @@ import Modes from 'Blocks/Modes/component.jsx';
 import ProfilePages from 'Blocks/ProfilePages/component.jsx';
 import SettingsPages from 'Blocks/SettingsPages/component.jsx';
 import Footer from 'Blocks/Footer/component.jsx';
+import NotFound from 'Blocks/NotFound/component.jsx';
 import authorizationRoutes from 'Blocks/Authorization/routes';
 
 const modalsRoutes = [
@@ -175,19 +176,23 @@ class App extends Component {
             path="/"
             render={() => (
               <div className="layout__content">
-                <Switch key="switch" location={isModal ? lastNoModalLocation : location}>
+                <Switch location={isModal ? lastNoModalLocation : location}>
                   {modalsRoutes.map(({ path, component }) => <Route key={path} path={path} component={component} />)}
                   <Route exact path="/" component={Home} />
                   <Route
                     path="/"
-                    render={() => [
-                      <Header key="header" />,
-                      <Switch key="switch">
-                        <Route key="modes" path="/modes" component={Modes} />
-                        <Route key="settings" path="/settings" component={SettingsPages} />
-                        <PrivateRoute key="profile" path="/profile" component={ProfilePages} />
-                      </Switch>,
-                    ]} />
+                    render={() => (
+                      <Fragment>
+                        <Header />
+                        <Switch>
+                          <Route path="/404" component={NotFound} />
+                          <Route path="/modes" component={Modes} />
+                          <Route path="/settings" component={SettingsPages} />
+                          <PrivateRoute key="profile" path="/profile" component={ProfilePages} />
+                          <Redirect to="/404" />
+                        </Switch>
+                      </Fragment>
+                    )} />
                 </Switch>
 
                 <Footer />
