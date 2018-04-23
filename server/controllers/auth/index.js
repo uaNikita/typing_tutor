@@ -4,7 +4,6 @@ const passport = require('passport');
 const controller = require('./controller');
 
 const router = express.Router();
-const authenticate = require('../../utils/authenticate');
 
 router.post('/check-email', controller.checkEmail);
 
@@ -18,8 +17,8 @@ router.post('/verify-token', controller.verifyToken);
 
 router.post('/login', passport.authenticate('local'), controller.login);
 
-router.get('/logout', authenticate, controller.logout);
+router.get('/logout', passport.authenticate('jwt', { session: false }), controller.logout);
 
-router.post('/tokens', authenticate, controller.getTokens);
+router.post('/tokens', passport.authenticate('jwt', { session: false }), controller.getTokens);
 
 module.exports = router;

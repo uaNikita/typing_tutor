@@ -37,27 +37,27 @@ const createClient = userId => {
 };
 
 const login = (req, res, next) => {
-  User.get(req.user.get('id'))
-    .then(user => {
-      if (!user.get('active')) {
-        throw new APIError({
-          message: 'Your account is not active',
-          status: httpStatus.FORBIDDEN,
-        });
-      }
+  const {
+    user,
+  } = req;
 
-      return Promise.all([...createClient(user.get('id'))])
-        .then(([client, access]) => {
-          res.json({
-            tokens: {
-              refresh: client.get('token'),
-              access: access.get('token'),
-            },
-            ...user.toObject(),
-          });
-        });
-    })
-    .catch(e => next(e));
+  if (!user.get('active')) {
+    throw new APIError({
+      message: 'Your account is not active',
+      status: httpStatus.FORBIDDEN,
+    });
+  }
+
+  return Promise.all([...createClient(user.get('id'))])
+    .then(([client, access]) => {
+      res.json({
+        tokens: {
+          refresh: client.get('token'),
+          access: access.get('token'),
+        },
+        ...user.toObject(),
+      });
+    });
 };
 
 const logout = (req, res, next) => {
@@ -285,7 +285,7 @@ const verifyToken = (req, res, next) =>
     .then(verification => {
       const type = verification.get('type');
       const user = verification.get('user');
-      
+
       switch (type) {
         case 'email':
           user.set('active', true);
@@ -293,7 +293,7 @@ const verifyToken = (req, res, next) =>
         case 'password':
           user.set('password', user.get('newPassword'));
           user.set('newPassword', undefined);
-        break;
+          break;
       }
 
       return Promise.all([...createClient(user.get('id')), user.save(),

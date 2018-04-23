@@ -5,9 +5,7 @@ const User = require('../../../models/user');
 
 const add = (req, res, next) => {
   const {
-    user: {
-      id: userId,
-    },
+    user,
     body: {
       id,
       text,
@@ -15,106 +13,89 @@ const add = (req, res, next) => {
     },
   } = req;
 
-  User.get(userId)
-    .then(user => {
-      const entity = {
-        id,
-        typed: '',
-        last: text,
-      };
+  const entity = {
+    id,
+    typed: '',
+    last: text,
+  };
 
-      const userToSave = user;
+  const userToSave = user;
 
-      const textMode = userToSave.modes.text;
+  const textMode = userToSave.modes.text;
 
-      textMode.entities.push(entity);
+  textMode.entities.push(entity);
 
-      if (select) {
-        textMode.selectedId = entity.id;
-      }
+  if (select) {
+    textMode.selectedId = entity.id;
+  }
 
-      return userToSave.save().then(() => res.json(httpStatus[200]));
-    })
+  userToSave.save()
+    .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
 const select = (req, res, next) => {
   const {
-    user: {
-      id: userId,
-    },
+    user,
     body: {
       id,
     },
   } = req;
 
-  User.get(userId)
-    .then(user => {
-      user.set('modes.text.entities.selectedId', id);
+  user.set('modes.text.entities.selectedId', id);
 
-      return user.save();
-    })
+  user.save()
     .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
 const refresh = (req, res, next) => {
   const {
-    user: {
-      id: userId,
-    },
+    user,
     body: {
       id,
     },
   } = req;
 
-  User.get(userId)
-    .then(user => {
-      const entityIndex = _.findIndex(user.modes.text.entities, { id });
+  const entityIndex = _.findIndex(user.modes.text.entities, { id });
 
-      const entityPath = `modes.text.entities.${entityIndex}`;
+  const entityPath = `modes.text.entities.${entityIndex}`;
 
-      const entity = user.get(entityPath);
+  const entity = user.get(entityPath);
 
-      user.set(`${entityPath}.last`, entity.typed + entity.last);
+  user.set(`${entityPath}.last`, entity.typed + entity.last);
 
-      user.set(`${entityPath}.typed`, '');
+  user.set(`${entityPath}.typed`, '');
 
-      return user.save();
-    })
+  user.save()
     .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
 const type = (req, res, next) => {
   const {
-    user: {
-      id: userId,
-    },
+    user,
     body: {
       id,
       typed,
     },
   } = req;
 
-  User.get(userId)
-    .then(user => {
-      const entityIndex = _.findIndex(user.modes.text.entities, { id });
+  const entityIndex = _.findIndex(user.modes.text.entities, { id });
 
-      const entityPath = `modes.text.entities.${entityIndex}`;
+  const entityPath = `modes.text.entities.${entityIndex}`;
 
-      const entity = user.get(entityPath);
+  const entity = user.get(entityPath);
 
-      const text = entity.typed + entity.last;
+  const text = entity.typed + entity.last;
 
-      const slicePoint = typed + 1;
+  const slicePoint = typed + 1;
 
-      user.set(`${entityPath}.typed`, text.slice(0, slicePoint));
+  user.set(`${entityPath}.typed`, text.slice(0, slicePoint));
 
-      user.set(`${entityPath}.last`, text.slice(slicePoint));
+  user.set(`${entityPath}.last`, text.slice(slicePoint));
 
-      return user.save();
-    })
+  user.save()
     .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };

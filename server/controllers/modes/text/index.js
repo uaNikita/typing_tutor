@@ -1,13 +1,12 @@
 const express = require('express');
 
-const authenticate = require('../../../utils/authenticate');
 const controller = require('./controller');
 
 const router = express.Router();
 
-router.post('/add', authenticate, controller.add);
-router.post('/select', authenticate, controller.select);
-router.post('/refresh', authenticate, controller.refresh);
-router.post('/type', authenticate, controller.type);
+router.post('/add', controller.add);
+router.post('/select', controller.select);
+router.post('/refresh', controller.refresh);
+router.post('/type', controller.type);
 
 module.exports = router;

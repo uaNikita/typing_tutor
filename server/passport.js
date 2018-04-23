@@ -1,7 +1,10 @@
 const passport = require('passport');
-const LocalStrategy = require('passport-local').Strategy;
-const User = require('./models/user');
+const { Strategy: LocalStrategy } = require('passport-local');
+const { Strategy: JWTStrategy, ExtractJwt } = require('passport-jwt');
+const config = require('config');
 const httpStatus = require('http-status');
+
+const User = require('./models/user');
 const APIError = require('./utils/APIError');
 
 module.exports = app => {
@@ -51,4 +54,28 @@ module.exports = app => {
         }
       });
   }));
+
+  passport.use(new JWTStrategy({
+      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
+      secretOrKey: config.get('secretKey')
+    },
+    (payload, cb) => {
+      User.get(payload.id)
+        .then(user => {
+          if (user) {
+            cb(null, user);
+          }
+          else {
+            cb(new APIError({
+              errors: {
+                password: 'Incorrect password',
+              },
+              status: httpStatus.BAD_REQUEST,
+            }));
+          }
+        })
+        .catch(e => cb(e));
+    }
+  ));
+
 };

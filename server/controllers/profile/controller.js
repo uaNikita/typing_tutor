@@ -11,13 +11,11 @@ const Verification = require('../../models/verification');
 
 const getAllData = (req, res, next) => {
   const {
-    user: {
-      id: userId,
-    },
+    user,
   } = req;
 
-  Promise.all([User.findById(userId).exec(), Statistic.find({ user: userId }).exec()])
-    .then(([user, statistic]) => {
+  Statistic.find({ user }).exec()
+    .then(statistic => {
       const data = user.toObject();
 
       if (statistic) {
@@ -31,34 +29,31 @@ const getAllData = (req, res, next) => {
 
 const changePassword = (req, res, next) => {
   const {
-    user: {
-      id: userId,
-    },
+    user,
     body: {
       old_password: oldPassword,
       new_password: newPassword,
     },
   } = req;
 
-  User.get(userId)
-    .then(user =>
-      user.validPassword(oldPassword)
-        .then(valid => {
-          if (valid) {
-            const userForSave = user;
+  user.validPassword(oldPassword)
+    .then(valid => {
+      if (valid) {
+        const userForSave = user;
 
-            userForSave.password = newPassword;
+        userForSave.password = newPassword;
 
-            return userForSave.save().then(() => res.json(httpStatus[200]));
-          }
+        return userForSave.save();
+      }
 
-          throw new APIError({
-            errors: {
-              old_password: 'Incorrect password',
-            },
-            status: httpStatus.BAD_REQUEST,
-          });
-        }))
+      throw new APIError({
+        errors: {
+          old_password: 'Incorrect password',
+        },
+        status: httpStatus.BAD_REQUEST,
+      });
+    })
+    .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
@@ -72,6 +67,8 @@ const statistic = (req, res, next) => {
       statistic: clientStatistic,
     },
   } = req;
+
+  // todo: add filter for moment
 
   Statistic
     .findOne({
@@ -107,85 +104,77 @@ const statistic = (req, res, next) => {
 
 const deleteAccount = (req, res, next) => {
   const {
-    user: {
-      id: userId,
-    },
+    user,
     body: {
       confirm_new_password: confirmNewPassword,
     },
   } = req;
 
-  User
-    .findById(userId).exec()
-    .then(user =>
-      user.validPassword(confirmNewPassword)
-        .then(valid => {
-          if (valid) {
-            return Promise.all([
-              Client.find({ user: userId }),
-              Statistic.findOne({ user: userId }),
-              Verification.find({ user: userId }),
-            ]);
-          }
 
-          throw new APIError({
-            errors: {
-              confirm_new_password: 'Incorrect password',
-            },
-            status: httpStatus.BAD_REQUEST,
-          });
-        })
-        .then(([clients, stats, verifications]) => {
-          const modelsForRemoval = [user];
+  user.validPassword(confirmNewPassword)
+    .then(valid => {
+      if (valid) {
+        return Promise.all([
+          Client.find({ user: userId }),
+          Statistic.findOne({ user: userId }),
+          Verification.find({ user: userId }),
+        ]);
+      }
 
-          if (stats) {
-            modelsForRemoval.push(stats);
-          }
+      throw new APIError({
+        errors: {
+          confirm_new_password: 'Incorrect password',
+        },
+        status: httpStatus.BAD_REQUEST,
+      });
+    })
+    .then(([clients, stats, verifications]) => {
+      const modelsForRemoval = [user];
 
-          if (verifications) {
-            verifications.forEach(verification =>
-              modelsForRemoval.push(verification));
-          }
+      if (stats) {
+        modelsForRemoval.push(stats);
+      }
 
-          if (clients) {
-            return Promise.all(clients.map(client => {
-              modelsForRemoval.push(client);
+      if (verifications) {
+        verifications.forEach(verification =>
+          modelsForRemoval.push(verification));
+      }
 
-              return Access
-                .find({ client }).exec()
-                .then(accesses => {
-                  accesses.forEach(access =>
-                    modelsForRemoval.push(access));
-                });
-            }))
-              .then(() => modelsForRemoval);
-          }
+      if (clients) {
+        return Promise.all(clients.map(client => {
+          modelsForRemoval.push(client);
 
-          return modelsForRemoval;
-        })
-        .then(modelsForRemoval =>
-          Promise.all(modelsForRemoval.map(doc => doc.remove())))
-        .then(() =>
-          res.json(httpStatus[200])))
+          return Access
+            .find({ client }).exec()
+            .then(accesses => {
+              accesses.forEach(access =>
+                modelsForRemoval.push(access));
+            });
+        }))
+          .then(() => modelsForRemoval);
+      }
+
+      return modelsForRemoval;
+    })
+    .then(modelsForRemoval =>
+      Promise.all(modelsForRemoval.map(doc => doc.remove())))
+    .then(() =>
+      res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
 const setMode = (req, res, next) => {
   const {
-    user: {
-      id: userId,
-    },
+    user,
     body: {
       mode,
     },
   } = req;
 
-  User.get(userId)
-    .then(user => {
-      user.set('mode', mode);
+  user.set('mode', mode);
 
-      res.json(httpStatus[200]);
-    })
+  user.save()
+    .then(user => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 
