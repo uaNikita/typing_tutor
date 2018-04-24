@@ -25,7 +25,7 @@ module.exports = app => {
     passwordField: 'password',
     session: false,
   }, (email, password, done) => {
-    User.findOne({ 'email': email })
+    User.findOne({ email })
       .exec()
       .then(user => {
         if (user) {
@@ -56,26 +56,23 @@ module.exports = app => {
   }));
 
   passport.use(new JWTStrategy({
-      jwtFromRequest: ExtractJWT.fromAuthHeaderAsBearerToken(),
-      secretOrKey: config.get('secretKey')
-    },
-    (payload, cb) => {
-      User.get(payload.id)
-        .then(user => {
-          if (user) {
-            cb(null, user);
-          }
-          else {
-            cb(new APIError({
-              errors: {
-                password: 'Incorrect password',
-              },
-              status: httpStatus.BAD_REQUEST,
-            }));
-          }
-        })
-        .catch(e => cb(e));
-    }
-  ));
-
+    jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+    secretOrKey: config.get('secretKey'),
+  }, (payload, cb) => {
+    User.findById(payload.id)
+      .exec()
+      .then(user => {
+        if (user) {
+          cb(null, user);
+        }
+        else {
+          cb(new APIError({
+            errors: {
+              password: 'Incorrect password',
+            },
+            status: httpStatus.BAD_REQUEST,
+          }));
+        }
+      });
+  }));
 };

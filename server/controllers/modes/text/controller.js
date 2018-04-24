@@ -1,8 +1,6 @@
 const _ = require('lodash');
 const httpStatus = require('http-status');
 
-const User = require('../../../models/user');
-
 const add = (req, res, next) => {
   const {
     user,
@@ -19,17 +17,17 @@ const add = (req, res, next) => {
     last: text,
   };
 
-  const userToSave = user;
+  const pathToTextMode = 'modes.text';
 
-  const textMode = userToSave.modes.text;
+  const indexToSet = user.get(`${pathToTextMode}.entities`).length;
 
-  textMode.entities.push(entity);
+  user.set(`${pathToTextMode}.entities.${indexToSet}`, entity);
 
   if (select) {
-    textMode.selectedId = entity.id;
+    user.set(`${pathToTextMode}.selectedId`, entity.id);
   }
 
-  userToSave.save()
+  user.save()
     .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };

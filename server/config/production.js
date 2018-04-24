@@ -5,8 +5,8 @@ module.exports = {
     host: env.dbhost,
     port: env.dbport,
     username: env.dbuser,
-    password:  env.dbpassword
+    password: env.dbpassword,
   },
   secretKey: env.secretkey,
-  port: env.PORT
+  port: env.PORT,
 };

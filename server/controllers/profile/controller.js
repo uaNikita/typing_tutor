@@ -3,8 +3,6 @@ const moment = require('moment');
 const httpStatus = require('http-status');
 
 const APIError = require('../../utils/APIError');
-const User = require('../../models/user');
-const Access = require('../../models/access');
 const Client = require('../../models/client');
 const Statistic = require('../../models/statistic');
 const Verification = require('../../models/verification');
@@ -39,11 +37,9 @@ const changePassword = (req, res, next) => {
   user.validPassword(oldPassword)
     .then(valid => {
       if (valid) {
-        const userForSave = user;
+        user.set('password', newPassword);
 
-        userForSave.password = newPassword;
-
-        return userForSave.save();
+        return user.save();
       }
 
       throw new APIError({
@@ -68,11 +64,9 @@ const statistic = (req, res, next) => {
     },
   } = req;
 
-  // todo: add filter for moment
-
   Statistic
     .findOne({
-      user: user.id,
+      user,
       date: moment().startOf('day').toDate(),
     })
     .exec()
@@ -110,10 +104,11 @@ const deleteAccount = (req, res, next) => {
     },
   } = req;
 
-
   user.validPassword(confirmNewPassword)
     .then(valid => {
       if (valid) {
+        const userId = user.get('id');
+
         return Promise.all([
           Client.find({ user: userId }),
           Statistic.findOne({ user: userId }),
@@ -141,23 +136,12 @@ const deleteAccount = (req, res, next) => {
       }
 
       if (clients) {
-        return Promise.all(clients.map(client => {
-          modelsForRemoval.push(client);
-
-          return Access
-            .find({ client }).exec()
-            .then(accesses => {
-              accesses.forEach(access =>
-                modelsForRemoval.push(access));
-            });
-        }))
-          .then(() => modelsForRemoval);
+        clients.map(client =>
+          modelsForRemoval.push(client));
       }
 
-      return modelsForRemoval;
+      return Promise.all(modelsForRemoval.map(doc => doc.remove()));
     })
-    .then(modelsForRemoval =>
-      Promise.all(modelsForRemoval.map(doc => doc.remove())))
     .then(() =>
       res.json(httpStatus[200]))
     .catch(e => next(e));
@@ -174,7 +158,7 @@ const setMode = (req, res, next) => {
   user.set('mode', mode);
 
   user.save()
-    .then(user => res.json(httpStatus[200]))
+    .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 

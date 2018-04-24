@@ -11,7 +11,6 @@ const APIError = require('../../utils/APIError');
 const User = require('../../models/user');
 const Verification = require('../../models/verification');
 const Client = require('../../models/client');
-const Access = require('../../models/access');
 
 const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: '1d' });
 
@@ -22,21 +21,12 @@ const createClient = userId => {
     user: userId,
   });
 
-  client.token = generateTokenWithId(client.get('id'));
+  client.set('token', generateTokenWithId(client.get('id')));
 
-  const access = new Access({
-    client: client.get('id'),
-  });
-
-  access.token = generateAccessToken({
-    id: userId,
-    clientId: client.get('id'),
-  });
-
-  return [client.save(), access.save()];
+  return client.save();
 };
 
-const login = (req, res, next) => {
+const login = (req, res) => {
   const {
     user,
   } = req;
@@ -48,12 +38,15 @@ const login = (req, res, next) => {
     });
   }
 
-  return Promise.all([...createClient(user.get('id'))])
-    .then(([client, access]) => {
+  return createClient(user.get('id'))
+    .then(client => {
       res.json({
         tokens: {
           refresh: client.get('token'),
-          access: access.get('token'),
+          access: generateAccessToken({
+            id: user.get('id'),
+            clientId: client.get('id'),
+          }),
         },
         ...user.toObject(),
       });
@@ -69,8 +62,6 @@ const logout = (req, res, next) => {
 
   Client.get(clientId)
     .then(client => client.remove().exec())
-    .then(() => Access.findByClient(clientId))
-    .then(access => access.remove().exec())
     .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
@@ -126,11 +117,11 @@ const signUp = (req, res, next) => {
 const verifyEmail = (req, res, next) => {
   const { email } = req.body;
 
-  User.findOne({ 'email': email }).exec()
+  User.findOne({ email }).exec()
     .then(user => {
       if (user) {
         const verification = new Verification({
-          user: user,
+          user,
           type: 'email',
         });
 
@@ -160,12 +151,11 @@ const verifyEmail = (req, res, next) => {
             });
           });
       }
-      else {
-        throw new APIError({
-          message: httpStatus['404'],
-          status: httpStatus.NOT_FOUND,
-        });
-      }
+
+      throw new APIError({
+        message: httpStatus['404'],
+        status: httpStatus.NOT_FOUND,
+      });
     })
     .catch(e => next(e));
 };
@@ -173,7 +163,7 @@ const verifyEmail = (req, res, next) => {
 const restoreAccess = (req, res, next) => {
   const { email } = req.body;
 
-  User.findOne({ 'email': email }).exec()
+  User.findOne({ email }).exec()
     .then(user => {
       if (user) {
         const password = getRandomPassword();
@@ -181,7 +171,7 @@ const restoreAccess = (req, res, next) => {
         user.set('newPassword', password);
 
         const verification = new Verification({
-          user: user,
+          user,
           type: 'password',
         });
 
@@ -212,12 +202,11 @@ const restoreAccess = (req, res, next) => {
             });
           });
       }
-      else {
-        throw new APIError({
-          message: httpStatus['404'],
-          status: httpStatus.NOT_FOUND,
-        });
-      }
+
+      throw new APIError({
+        message: httpStatus['404'],
+        status: httpStatus.NOT_FOUND,
+      });
     })
     .catch(e => next(e));
 };
@@ -225,45 +214,34 @@ const restoreAccess = (req, res, next) => {
 const getTokens = (req, res, next) => {
   const token = req.get('Authorization').replace('Bearer ', '');
 
-  Client
-    .findByToken(token)
+  Client.findOne({ token })
+    .exec()
     .then(client => {
-      const clientToSave = client;
+      if (client) {
+        client.set('token', generateTokenWithId(client.get('id')));
 
-      clientToSave.token = generateTokenWithId(clientToSave.get('id'));
+        return client.save()
+          .then(() =>
+            res.json({
+              refresh: client.get('token'),
+              access: generateAccessToken({
+                id: client.get('user'),
+                clientId: client.get('id'),
+              }),
+            }));
+      }
 
-      return clientToSave.save()
-        .then(() => Access.findByClient(clientToSave.get('id')))
-        .then(access => {
-          const accessToSave = access;
-
-          accessToSave.token = generateAccessToken({
-            id: clientToSave.get('user'),
-            clientId: clientToSave.get('id'),
-          });
-
-          return accessToSave;
-        })
-        .catch(() => new Access({
-          client: clientToSave.get('id'),
-          token: generateAccessToken({
-            id: clientToSave.get('user'),
-            clientId: clientToSave.get('id'),
-          }),
-        }))
-        .then(access => access.save())
-        .then(access => {
-          res.json({
-            refresh: clientToSave.get('token'),
-            access: access.get('token'),
-          });
-        });
+      throw new APIError({
+        message: httpStatus['401'],
+        status: httpStatus.UNAUTHORIZED,
+      });
     })
+
     .catch(e => next(e));
 };
 
 const checkEmail = (req, res, next) =>
-  User.findOne({ 'email': req.body.email })
+  User.findOne({ email: req.body.email })
     .then(user => {
       let code = 404;
 
@@ -296,18 +274,20 @@ const verifyToken = (req, res, next) =>
           break;
       }
 
-      return Promise.all([...createClient(user.get('id')), user.save(),
+      return Promise.all([createClient(user.get('id')), user.save(),
         // verification.remove().exec()
-      ])
-        .then(([client, access]) =>
-          res.json({
-            type,
-            tokens: {
-              refresh: client.get('token'),
-              access: access.get('token'),
-            },
-            ...user.toObject(),
-          }));
+      ]).then(([client]) =>
+        res.json({
+          type,
+          tokens: {
+            refresh: client.get('token'),
+            access: generateAccessToken({
+              id: user.get('id'),
+              clientId: client.get('id'),
+            }),
+          },
+          ...user.toObject(),
+        }));
     })
     .catch(e => next(e));
 
