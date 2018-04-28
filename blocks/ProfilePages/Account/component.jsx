@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import ChangePassword from './ChangePassword/container';
 import DeleteAccount from './DeleteAccount/component.jsx';
 
-const Account = () => ([
-  <ChangePassword key="change-password" />,
-  <DeleteAccount key="delete-account" />,
-]);
+const Account = () => (
+  <Fragment>
+    <ChangePassword />
+    <DeleteAccount />
+  </Fragment>
+);
 
 export default Account;

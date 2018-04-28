@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Switch, Redirect, Route, NavLink } from 'react-router-dom';
 
 import Account from './Account/component.jsx';
@@ -30,6 +30,7 @@ const SettingsPages = ({ match: { url } }) => {
         <Switch>
           <Redirect exact from={url} to={`${url}/account`} />
           <Route path={`${url}/account`} component={Account} />
+          <Redirect to="/404" />
         </Switch>
       </div>
     </div>

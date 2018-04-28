@@ -188,7 +188,7 @@ class App extends Component {
                           <Route path="/404" component={NotFound} />
                           <Route path="/modes" component={Modes} />
                           <Route path="/settings" component={SettingsPages} />
-                          <PrivateRoute key="profile" path="/profile" component={ProfilePages} />
+                          <PrivateRoute path="/profile" component={ProfilePages} />
                           <Redirect to="/404" />
                         </Switch>
                       </Fragment>
