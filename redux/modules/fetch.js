@@ -105,10 +105,8 @@ export const fetchJSON =
     (dispatch, getState) =>
       dispatch(requestJSON(...args))
         .catch(error => {
-          let promise;
-
           if (error.status === 401) {
-            promise = dispatch(requestJSON('/auth/tokens', {
+            return dispatch(requestJSON('/auth/tokens', {
               headers: {
                 Authorization: `Bearer ${getState().getIn(['fetch', 'refreshToken'])}`,
               },
@@ -121,11 +119,8 @@ export const fetchJSON =
               })
               .catch(() => dispatch(clearState()));
           }
-          else {
-            promise = Promise.reject(error);
-          }
 
-          return promise;
+          throw error;
         });
 
 export const logOut = () => dispatch => {

@@ -12,7 +12,7 @@ const getAllData = (req, res, next) => {
     user,
   } = req;
 
-  Statistic.find({ user }).exec()
+  Statistic.find({ user: user.get('id') }).exec()
     .then(statistic => {
       const data = user.toObject();
 
