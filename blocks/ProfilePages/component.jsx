@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Switch, Redirect, Route, NavLink } from 'react-router-dom';
 
 import Account from './Account/component.jsx';

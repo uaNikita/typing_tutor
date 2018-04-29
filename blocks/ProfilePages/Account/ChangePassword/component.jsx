@@ -15,14 +15,25 @@ class ChangePassword extends Component {
   };
 
   handleSubmit = values => {
+    const {
+      props: {
+        fetchJSON,
+        setGlobalMessage,
+      },
+    } = this;
+
     const body = values.toJS();
 
     delete body.confirm_new_password;
 
-    this.props.fetchJSON('/profile/change-password', { body })
-      .then(() => this.setState({
-        submitted: true,
-      }))
+    return fetchJSON('/profile/change-password', { body })
+      .then(() => {
+        setGlobalMessage('asdfas test');
+
+        this.setState({
+          submitted: true,
+        });
+      })
       .catch(data => {
         if (data.errors) {
           throw new SubmissionError(data.errors);

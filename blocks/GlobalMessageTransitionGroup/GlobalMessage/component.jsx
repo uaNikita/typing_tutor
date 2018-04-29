@@ -4,27 +4,27 @@ import classNames from 'classnames';
 
 import styles from './global-message.module.styl';
 
-let closeTimeout;
-
-
 class GlobalMessage extends Component {
   state = {
     entered: false,
   };
 
   componentDidMount() {
-    setTimeout(() => {
-      this.setState({
-        entered: true,
-      });
-    }, 200);
+    const {
+      setState,
+      props: {
+        close,
+      },
+    } = this;
 
-    clearTimeout(closeTimeout);
+    setTimeout(() => setState({ entered: true }), 200);
 
-    closeTimeout = setTimeout(() => {
-      this.props.close();
-    }, 5300);
+    clearTimeout(this.closeTimeout);
+
+    this.closeTimeout = setTimeout(close, 5300);
   }
+
+  closeTimeout = undefined;
 
   render() {
     const {

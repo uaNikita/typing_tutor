@@ -3,6 +3,9 @@ import { hydrate } from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
+import 'babel-polyfill';
+import 'isomorphic-fetch';
+
 import 'font-awesome/css/font-awesome.css';
 import 'nouislider/distribute/nouislider.css';
 
@@ -10,9 +13,6 @@ import 'nouislider/distribute/nouislider.css';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 
 import 'Static/stylus/main.styl';
-
-import 'babel-polyfill';
-import 'isomorphic-fetch';
 
 import App from 'Blocks/App/container';
 
