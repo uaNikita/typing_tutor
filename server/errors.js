@@ -36,6 +36,8 @@ module.exports = app => {
     }
 
     if (error) {
+      console.log('error', error);
+
       res
         .status(error.status)
         .json(_.assign({ message: error.message }, error));

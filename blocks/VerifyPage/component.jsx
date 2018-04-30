@@ -31,14 +31,17 @@ class VerifyPage extends Component {
           token,
         },
       })
-        .then(data => {
+        .then(({ data }) => {
+          console.log(data);
+
           setAllWithAuth(data);
+
+
 
           this.setState({
             verified: data.type,
           });
-        })
-        .catch(() => {});
+        });
     }
   }
 

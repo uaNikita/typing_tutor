@@ -5,7 +5,7 @@ import Cookie from 'js-cookie';
 import { clearState as clearLearningState } from './modes/learning';
 import { clearState as clearTextState } from './modes/text';
 import { clearState as clearUserState } from './user';
-import { clearState as clearMainState } from './main';
+import { clearState as clearMainState, setGlobalMessage } from './main';
 
 const CLEAR_STATE = 'tokens/CLEAR_STATE';
 const SET_REFRESH_TOKEN = 'fetch/SET_REFRESH_TOKEN';
@@ -61,16 +61,6 @@ export const setTokens = ({ refresh, access }) =>
     dispatch(setAccessToken(access));
   };
 
-const parseResponse = response => {
-  const contentType = response.headers.get('content-type');
-
-  if (contentType && contentType.indexOf('application/json') !== -1) {
-    return response.json();
-  }
-
-  return response.text();
-};
-
 const requestJSON =
   (url, params, withoutAuthorization) =>
     (dispatch, getState) => {
@@ -90,37 +80,63 @@ const requestJSON =
         newParams.body = JSON.stringify(newParams.body);
       }
 
-      let newUrl = url;
+      let reformedUrl = url;
 
       if (!BROWSER) {
-        newUrl = `http://localhost:5550${newUrl}`;
+        reformedUrl = `http://localhost:5550${reformedUrl}`;
       }
 
-      return fetch(newUrl, newParams)
-        .then(parseResponse);
+      return fetch(reformedUrl, newParams)
+        .then(response => {
+          const contentType = response.headers.get('content-type');
+
+          if (contentType && contentType.indexOf('application/json') !== -1) {
+            return response.json()
+              .then(data => ({
+                data,
+                ok: response.ok,
+                status: response.status,
+              }))
+          }
+
+          return response;
+        })
+        .catch(error => {
+          dispatch(setGlobalMessage('Oops... something went wrong'));
+
+          throw error;
+        });
     };
 
 export const fetchJSON =
   (...args) =>
     (dispatch, getState) =>
       dispatch(requestJSON(...args))
-        .catch(error => {
-          if (error.status === 401) {
+        .then(response => {
+          if (response.status === 401) {
             return dispatch(requestJSON('/auth/tokens', {
               headers: {
                 Authorization: `Bearer ${getState().getIn(['fetch', 'refreshToken'])}`,
               },
             }))
-              .then(({ refresh, access }) => {
-                dispatch(setRefreshToken(refresh));
-                dispatch(setAccessToken(access));
+              .then(response => {
+                if (response.ok) {
+                  dispatch(setRefreshToken(response.refresh));
+                  dispatch(setAccessToken(response.access));
 
-                return dispatch(fetchJSON(...args));
-              })
-              .catch(() => dispatch(clearState()));
+                  return dispatch(fetchJSON(...args));
+                }
+                else {
+                  if (response.status === 401) {
+                    dispatch(setGlobalMessage('You are not authorized for this request'));
+                  }
+
+                  dispatch(clearState());
+                }
+              });
           }
 
-          throw error;
+          return response;
         });
 
 export const logOut = () => dispatch => {

@@ -10,10 +10,6 @@ import { validatePassword } from 'Utils/validation';
 import styles from './change-password.module.styl';
 
 class ChangePassword extends Component {
-  state = {
-    submitted: false,
-  };
-
   handleSubmit = values => {
     const {
       props: {
@@ -27,19 +23,27 @@ class ChangePassword extends Component {
     delete body.confirm_new_password;
 
     return fetchJSON('/profile/change-password', { body })
-      .then(() => {
-        setGlobalMessage('asdfas test');
+      .then(res => {
+        console.dir(res);
+        console.dir(res.ok);
+        console.dir(res.status);
 
-        this.setState({
-          submitted: true,
-        });
-      })
-      .catch(data => {
-        if (data.errors) {
-          throw new SubmissionError(data.errors);
+        if (res.errors) {
+          throw new SubmissionError(res.errors);
         }
+
+        setGlobalMessage('Password was changed');
       });
   };
+
+  send = () => {
+    this.props.fetchJSON('/profile/change-password', { body })
+      .then(res => {
+        console.dir(res);
+        console.dir(res.ok);
+        console.dir(res.status);
+      });
+  }
 
   render() {
     const {
@@ -48,14 +52,13 @@ class ChangePassword extends Component {
         submitting,
         invalid,
       },
-      state: {
-        submitted,
-      },
     } = this;
 
     return (
       <form styleName="root" onSubmit={handleSubmit(this.handleSubmit)}>
         <h3 styleName="title">Change password</h3>
+
+        <button onClick={this.send}>Send</button>
 
         <Field name="old_password" component={RenderField} type="password" label="Old password" />
         <Field name="new_password" component={RenderField} type="password" label="New password" />
@@ -68,8 +71,6 @@ class ChangePassword extends Component {
           isLoader={submitting}>
           Update password
         </Button>
-
-        {submitted ? 1 : ''}
       </form>
     );
   }
