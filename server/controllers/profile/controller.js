@@ -36,13 +36,14 @@ const changePassword = (req, res, next) => {
 
   user.validPassword(oldPassword)
     .then(valid => {
-      // if (valid) {
-      //   user.set('password', newPassword);
-      //
-      //   return user.save();
-      // }
+      if (valid) {
+        user.set('password', newPassword);
+
+        return user.save();
+      }
 
       throw new APIError({
+        message: 'test',
         errors: {
           old_password: 'Incorrect password',
         },

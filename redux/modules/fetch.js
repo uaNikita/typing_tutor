@@ -96,7 +96,7 @@ const requestJSON =
                 data,
                 ok: response.ok,
                 status: response.status,
-              }))
+              }));
           }
 
           return response;
@@ -119,20 +119,27 @@ export const fetchJSON =
                 Authorization: `Bearer ${getState().getIn(['fetch', 'refreshToken'])}`,
               },
             }))
-              .then(response => {
-                if (response.ok) {
-                  dispatch(setRefreshToken(response.refresh));
-                  dispatch(setAccessToken(response.access));
+              .then(refreshTokenResponse => {
+                const {
+                  status,
+                  ok,
+                  data,
+                } = refreshTokenResponse;
+
+                if (ok) {
+                  dispatch(setRefreshToken(data.refresh));
+                  dispatch(setAccessToken(data.access));
 
                   return dispatch(fetchJSON(...args));
                 }
-                else {
-                  if (response.status === 401) {
-                    dispatch(setGlobalMessage('You are not authorized for this request'));
-                  }
 
-                  dispatch(clearState());
+                if (status === 401) {
+                  dispatch(setGlobalMessage('You are not authorized for this request'));
                 }
+
+                dispatch(clearState());
+
+                throw new Error('Unauthorized');
               });
           }
 

@@ -36,11 +36,20 @@ module.exports = app => {
     }
 
     if (error) {
-      console.log('error', error);
+      const {
+        message,
+        errors,
+        name,
+        status,
+      } = error;
 
       res
-        .status(error.status)
-        .json(_.assign({ message: error.message }, error));
+        .status(status)
+        .json(_.assign({},
+          message && { message },
+          errors && { errors },
+          name && { name },
+        ));
     }
     else {
       // for eslint only

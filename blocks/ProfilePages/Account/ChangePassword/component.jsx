@@ -10,6 +10,9 @@ import { validatePassword } from 'Utils/validation';
 import styles from './change-password.module.styl';
 
 class ChangePassword extends Component {
+  componentDidMount = () => {
+    this.props.setGlobalMessage('Password was changed');
+  };
   handleSubmit = values => {
     const {
       props: {
@@ -24,26 +27,14 @@ class ChangePassword extends Component {
 
     return fetchJSON('/profile/change-password', { body })
       .then(res => {
-        console.dir(res);
-        console.dir(res.ok);
-        console.dir(res.status);
-
-        if (res.errors) {
+        if (res.ok) {
+          setGlobalMessage('Password was changed');
+        }
+        else if (res.errors) {
           throw new SubmissionError(res.errors);
         }
-
-        setGlobalMessage('Password was changed');
       });
   };
-
-  send = () => {
-    this.props.fetchJSON('/profile/change-password', { body })
-      .then(res => {
-        console.dir(res);
-        console.dir(res.ok);
-        console.dir(res.status);
-      });
-  }
 
   render() {
     const {
@@ -57,8 +48,6 @@ class ChangePassword extends Component {
     return (
       <form styleName="root" onSubmit={handleSubmit(this.handleSubmit)}>
         <h3 styleName="title">Change password</h3>
-
-        <button onClick={this.send}>Send</button>
 
         <Field name="old_password" component={RenderField} type="password" label="Old password" />
         <Field name="new_password" component={RenderField} type="password" label="New password" />

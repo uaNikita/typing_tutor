@@ -30,25 +30,27 @@ class SignIn extends Component {
     return fetchJSON('/auth/login', {
       body: values.toJS(),
     })
-      .then(data => {
-        setAllWithAuth(data);
+      .then(res => {
+        if (res.ok) {
+          setAllWithAuth(res.data);
 
-        if (isModal) {
-          replace(lastNoModalLocation.pathname);
+          if (isModal) {
+            replace(lastNoModalLocation.pathname);
+          }
+          else {
+            replace('/');
+          }
         }
         else {
-          replace('/');
-        }
-      })
-      .catch(data => {
-        if (data.status === 403) {
-          this.setState({
-            accountIsNotActive: true,
-          });
-        }
+          if (res.status === 403) {
+            this.setState({
+              accountIsNotActive: true,
+            });
+          }
 
-        if (data.errors) {
-          throw new SubmissionError(data.errors);
+          if (res.data.errors) {
+            throw new SubmissionError(res.data.errors);
+          }
         }
       });
   };

@@ -243,13 +243,14 @@ const getTokens = (req, res, next) => {
 const checkEmail = (req, res, next) =>
   User.findOne({ email: req.body.email })
     .then(user => {
-      let code = 404;
-
       if (user) {
-        code = 200;
+        res.json(httpStatus[200]);
       }
-
-      res.json(httpStatus[code]);
+      else {
+        throw new APIError({
+          status: httpStatus.NOT_FOUND,
+        });
+      }
     })
     .catch(e => next(e));
 

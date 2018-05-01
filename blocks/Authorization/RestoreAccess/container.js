@@ -15,7 +15,7 @@ const mapDispatchToProps = dispatch => ({
     },
   }))
     .then(res => {
-      if (res === 'Not Found') {
+      if (res.status === 404) {
         const error = {
           email: validateEmail.nonExistError,
         };

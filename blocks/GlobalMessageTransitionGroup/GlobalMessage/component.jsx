@@ -11,13 +11,12 @@ class GlobalMessage extends Component {
 
   componentDidMount() {
     const {
-      setState,
       props: {
         close,
       },
     } = this;
 
-    setTimeout(() => setState({ entered: true }), 200);
+    setTimeout(() => this.setState({ entered: true }), 200);
 
     clearTimeout(this.closeTimeout);
 

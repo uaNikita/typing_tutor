@@ -16,7 +16,7 @@ class RestoreAccess extends Component {
       body: values.toJS(),
     })
       .then(res => {
-        if (res === 'OK') {
+        if (res.ok) {
           this.setState({
             submitted: true,
           });

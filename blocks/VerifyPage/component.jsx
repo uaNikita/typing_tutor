@@ -31,16 +31,14 @@ class VerifyPage extends Component {
           token,
         },
       })
-        .then(({ data }) => {
-          console.log(data);
+        .then(res => {
+          if (res.ok) {
+            setAllWithAuth(res.data);
 
-          setAllWithAuth(data);
-
-
-
-          this.setState({
-            verified: data.type,
-          });
+            this.setState({
+              verified: res.data.type,
+            });
+          }
         });
     }
   }
