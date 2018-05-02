@@ -11,15 +11,18 @@ class SignUp extends Component {
     submitted: false,
   };
 
-  handleSubmit = values => this.props.fetchJSON('/auth/signup', { body: values.toJS() }, true)
-    .then(() => this.setState({
-      submitted: true,
-    }))
-    .catch(data => {
-      if (data.errors) {
-        throw new SubmissionError(data.errors);
-      }
-    });
+  handleSubmit = values =>
+    this.props.fetchJSON('/auth/signup', { body: values.toJS() }, true)
+      .then(res => {
+        if (res.ok) {
+          this.setState({
+            submitted: true,
+          });
+        }
+        else if (res.data.errors) {
+          throw new SubmissionError(res.data.errors);
+        }
+      });
 
   render() {
     const {

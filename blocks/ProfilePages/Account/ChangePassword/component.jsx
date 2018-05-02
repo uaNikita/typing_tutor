@@ -30,8 +30,8 @@ class ChangePassword extends Component {
         if (res.ok) {
           setGlobalMessage('Password was changed');
         }
-        else if (res.errors) {
-          throw new SubmissionError(res.errors);
+        else if (res.data.errors) {
+          throw new SubmissionError(res.data.errors);
         }
       });
   };

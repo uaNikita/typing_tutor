@@ -39,7 +39,6 @@ module.exports = app => {
       const {
         message,
         errors,
-        name,
         status,
       } = error;
 
@@ -48,7 +47,6 @@ module.exports = app => {
         .json(_.assign({},
           message && { message },
           errors && { errors },
-          name && { name },
         ));
     }
     else {

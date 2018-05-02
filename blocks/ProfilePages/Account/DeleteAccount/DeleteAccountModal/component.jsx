@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
+import { Field, reduxForm } from 'redux-form/immutable';
 import CSSModules from 'react-css-modules';
 
 import RenderField from 'Blocks/RenderField/component.jsx';
@@ -11,12 +11,7 @@ import styles from './delete-account.module.styl';
 
 class DeleteAccountModal extends Component {
   handleSubmit = () => {
-    this.props.fetchJSON('/profile/delete')
-      .catch(data => {
-        if (data.errors) {
-          throw new SubmissionError(data.errors);
-        }
-      });
+    this.props.fetchJSON('/profile/delete');
   };
 
   render() {

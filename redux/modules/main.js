@@ -334,5 +334,9 @@ export const setAllWithAuth = ({ tokens, ...rest }) =>
 export const requestAllWithoutAuth = () =>
   dispatch =>
     dispatch(fetchJSON('/profile'))
-      .then(({ data }) => dispatch(setAllWithoutAuth(data)));
+      .then(res => {
+        if (res.ok) {
+          dispatch(setAllWithoutAuth(res.data));
+        }
+      });
 
