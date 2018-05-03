@@ -1,15 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 
 import './field.styl';
-
 
 class RenderField extends Component {
   state = {
     showPassword: false,
   };
 
-  passwordHandleClick = () => {
+  passwordHandleClick = e => {
+    e.preventDefault();
+
     this.setState({
       showPassword: !this.state.showPassword,
     });
@@ -73,10 +74,12 @@ class RenderField extends Component {
         eyeClassName += '-slash';
       }
 
-      control = [
-        <input key="input" {...controlProps} />,
-        <button key="eye" className={eyeClassName} onClick={this.passwordHandleClick} />,
-      ];
+      control = (
+        <Fragment>
+          <input {...controlProps} />
+          <button className={eyeClassName} onClick={this.passwordHandleClick} />
+        </Fragment>
+      );
     }
     else if (type === 'textarea') {
       control = <textarea {...controlProps} />;

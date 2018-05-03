@@ -124,11 +124,17 @@ const deleteAccount = (req, res, next) => {
         status: httpStatus.BAD_REQUEST,
       });
     })
-    .then(([clients, stats, verifications]) => {
+    .then(([clients, statistics, verifications]) => {
       const modelsForRemoval = [user];
 
-      if (stats) {
-        modelsForRemoval.push(stats);
+      if (clients) {
+        clients.map(client =>
+          modelsForRemoval.push(client));
+      }
+
+      if (statistics) {
+        statistics.map(statistic =>
+          modelsForRemoval.push(statistic));
       }
 
       if (verifications) {
@@ -136,15 +142,9 @@ const deleteAccount = (req, res, next) => {
           modelsForRemoval.push(verification));
       }
 
-      if (clients) {
-        clients.map(client =>
-          modelsForRemoval.push(client));
-      }
-
       return Promise.all(modelsForRemoval.map(doc => doc.remove()));
     })
-    .then(() =>
-      res.json(httpStatus[200]))
+    .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
 };
 

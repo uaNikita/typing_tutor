@@ -9,15 +9,13 @@ import { validatePassword } from 'Utils/validation';
 
 import styles from './change-password.module.styl';
 
-class ChangePassword extends Component {
-  componentDidMount = () => {
-    this.props.setGlobalMessage('Password was changed');
-  };
+class Block extends Component {
   handleSubmit = values => {
     const {
       props: {
         fetchJSON,
         setGlobalMessage,
+        reset,
       },
     } = this;
 
@@ -29,6 +27,11 @@ class ChangePassword extends Component {
       .then(res => {
         if (res.ok) {
           setGlobalMessage('Password was changed');
+
+          reset();
+
+          // remove focus from fields
+          window.focus();
         }
         else if (res.data.errors) {
           throw new SubmissionError(res.data.errors);
@@ -49,9 +52,23 @@ class ChangePassword extends Component {
       <form styleName="root" onSubmit={handleSubmit(this.handleSubmit)}>
         <h3 styleName="title">Change password</h3>
 
-        <Field name="old_password" component={RenderField} type="password" label="Old password" />
-        <Field name="new_password" component={RenderField} type="password" label="New password" />
-        <Field name="confirm_new_password" component={RenderField} type="password" label="Confirm new password" />
+        <Field
+          name="old_password"
+          component={RenderField}
+          type="password"
+          label="Old password" />
+
+        <Field
+          name="new_password"
+          component={RenderField}
+          type="password"
+          label="New password" />
+
+        <Field
+          name="confirm_new_password"
+          component={RenderField}
+          type="password"
+          label="Confirm new password" />
 
         <Button
           styleName="button"
@@ -86,4 +103,4 @@ const validate = values => {
 export default reduxForm({
   form: 'change-password',
   validate,
-})(CSSModules(ChangePassword, styles));
+})(CSSModules(Block, styles));

@@ -157,52 +157,54 @@ class App extends Component {
       );
     }
 
-    return [
-      <Helmet key="helmet">
-        <meta charSet="utf-8" />
-        <title>Typing tutor</title>
-        <meta name="viewport" content="width=device-width,initial-scale=1" />
-        <link rel="stylesheet" type="text/css" href="/main.css" />
-        <script type="text/javascript" defer src="/main.js" />
-      </Helmet>,
+    return (
+      <Fragment>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>Typing tutor</title>
+          <meta name="viewport" content="width=device-width,initial-scale=1" />
+          <link rel="stylesheet" type="text/css" href="/main.css" />
+          <script type="text/javascript" defer src="/main.js" />
+        </Helmet>
 
-      <div key="layout" className={layoutClass}>
-        <GlobalMessageTransitionGroup />
+        <div className={layoutClass}>
+          <GlobalMessageTransitionGroup />
 
-        <Switch key="content">
-          <Route path="/verify" component={VerifyPage} />
+          <Switch key="content">
+            <Route path="/verify" component={VerifyPage} />
 
-          <Route
-            path="/"
-            render={() => (
-              <div className="layout__content">
-                <Switch location={isModal ? lastNoModalLocation : location}>
-                  {modalsRoutes.map(({ path, component }) => <Route key={path} path={path} component={component} />)}
-                  <Route exact path="/" component={Home} />
-                  <Route
-                    path="/"
-                    render={() => (
-                      <Fragment>
-                        <Header />
-                        <Switch>
-                          <Route path="/404" component={NotFound} />
-                          <Route path="/modes" component={Modes} />
-                          <Route path="/settings" component={SettingsPages} />
-                          <PrivateRoute path="/profile" component={ProfilePages} />
-                          <Redirect to="/404" />
-                        </Switch>
-                      </Fragment>
-                    )} />
-                </Switch>
+            <Route
+              path="/"
+              render={() => (
+                <div className="layout__content">
+                  <Switch location={isModal ? lastNoModalLocation : location}>
+                    {modalsRoutes.map(({ path, component }) => <Route key={path} path={path} component={component} />)}
+                    <Route exact path="/" component={Home} />
+                    <Route
+                      path="/"
+                      render={() => (
+                        <Fragment>
+                          <Header />
+                          <Switch>
+                            <Route path="/404" component={NotFound} />
+                            <Route path="/modes" component={Modes} />
+                            <Route path="/settings" component={SettingsPages} />
+                            <PrivateRoute path="/profile" component={ProfilePages} />
+                            <Redirect to="/404" />
+                          </Switch>
+                        </Fragment>
+                      )} />
+                  </Switch>
 
-                <Footer />
-              </div>
-            )} />
-        </Switch>
+                  <Footer />
+                </div>
+              )} />
+          </Switch>
 
-        <TransitionGroup>{modal}</TransitionGroup>
-      </div>,
-    ];
+          <TransitionGroup>{modal}</TransitionGroup>
+        </div>
+      </Fragment>
+    );
   }
 }
 
