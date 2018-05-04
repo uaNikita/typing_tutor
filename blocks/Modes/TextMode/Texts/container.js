@@ -3,9 +3,10 @@ import Texts from './component.jsx';
 
 const mapStateToProps = state => ({
   texts: state.getIn(['textMode', 'entities']).toJS().map(obj => ({
-    textId: obj.id,
-    text: obj.typed + obj.last,
+    id: obj.id,
+    content: obj.typed + obj.last,
   })),
+  selectedId: state.getIn(['textMode', 'selectedId']),
 });
 
 export default connect(

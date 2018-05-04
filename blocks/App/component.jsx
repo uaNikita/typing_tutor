@@ -186,7 +186,7 @@ class App extends Component {
                         <Fragment>
                           <Header />
                           <Switch>
-                            <Route path="/404" component={NotFound} />
+                            <Route exact path="/404" component={NotFound} />
                             <Route path="/modes" component={Modes} />
                             <Route path="/settings" component={SettingsPages} />
                             <PrivateRoute path="/profile" component={ProfilePages} />

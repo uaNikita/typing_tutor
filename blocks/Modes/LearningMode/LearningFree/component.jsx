@@ -75,7 +75,7 @@ class LearningFree extends Component {
       keyProps.className = className;
 
       return (
-        <KeyItem keyObj={obj} keyProps={keyProps} />
+        <KeyItem key={obj.id} keyObj={obj} keyProps={keyProps} />
       );
     });
 

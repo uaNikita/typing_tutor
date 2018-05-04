@@ -63,7 +63,7 @@ app.use('/', require('./controllers'));
 
 app.use((req, res) => {
   const context = {};
-  
+
   // todo: find solution to this
   if (req.url.indexOf('validateNextState.js.map') + 1) {
     res.end();

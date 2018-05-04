@@ -96,7 +96,7 @@ export default (state = initialState, action = {}) => {
       return state.set('lessonFree', action.lesson);
 
     case SET_LETTERS_FREE:
-      return state.set('lettersFree', action.letters);
+      return state.set('lettersFree', Immutable.Set(action.letters));
 
     case ADD_LETTER_TO_FREE_LETTERS:
       return state.update('lettersFree', letters => letters.add(action.letter));

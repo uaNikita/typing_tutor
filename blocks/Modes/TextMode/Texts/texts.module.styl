@@ -4,25 +4,30 @@
    align-items: center;
    margin-bottom: 30px;
 .text
-   max-height: 45px;
    display: block
    position: relative
    margin: 10px 0;
+   padding: 10px;
    border-bottom: none
-   overflow: hidden
    font-size: 12px;
    line-height: 15px;
    color: #000
-   &:after
-      width: 100px;
-      height: 15px;
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      background: linear-gradient(to right, transparent 0%, #fff 70%);
-      content: '';
    &:hover
       background-color: #fafafa
       color: #000
-      &:after
+      p:after
          background: linear-gradient(to right, transparent 0%, #fafafa 70%)
+   &_selected
+      border 1px solid #e7e7e7 !important
+   p
+      max-height: 45px;
+      overflow: hidden
+      position: relative
+      &:after
+         width: 100px;
+         height: 15px;
+         position: absolute;
+         bottom: 0;
+         right: 0;
+         background: linear-gradient(to right, transparent 0%, #fff 70%);
+         content: '';

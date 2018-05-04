@@ -1,13 +1,16 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import CSSModules from 'react-css-modules';
+import classNames from 'classnames';
 
 import ModeButton from '../../ModeButton/container';
 
 import styles from './texts.module.styl';
 
-const Texts = props => {
+const Block = props => {
   const {
     texts,
+    selectedId,
     match: {
       url,
     },
@@ -22,12 +25,20 @@ const Texts = props => {
     addTextLink = <p>Your can have maximum 10 texts</p>;
   }
 
-  const textEls = texts.map(({ textId, title, text }) => (
-    <Link key={textId} to={`${url}/${textId}`} title={title} className={styles.text}>{text}</Link>
-  ));
+  const textEls = texts.map(({ id, content }) => {
+    const className = classNames('text', {
+      text_selected: id === selectedId,
+    });
+
+    return (
+      <Link key={id} to={`${url}/${id}`} styleName={className}>
+        <p>{content}</p>
+      </Link>
+    );
+  });
 
   return [
-    <div key="actions" className={styles.actions}>
+    <div key="actions" styleName="actions">
       <ModeButton to="text" />
 
       {addTextLink}
@@ -37,4 +48,6 @@ const Texts = props => {
   ];
 };
 
-export default Texts;
+export default CSSModules(Block, styles, {
+  allowMultiple: true,
+});
