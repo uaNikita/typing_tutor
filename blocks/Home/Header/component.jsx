@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
+import classNames from 'classnames';
 
 import Menu from 'Blocks/Menu/container';
 import AuthInfo from 'Blocks/AuthInfo/container';
@@ -51,14 +52,12 @@ class Home extends Component {
 
     return (
       <header styleName="root">
-        <div className="nav">
+        <div styleName={classNames('menu', { menu_expanded: navOpen })}>
           <button className="fa fa-bars" styleName="button" onClick={this.hanldeClickMenu} />
 
-          {navOpen ? (
-            <nav styleName="items">
-              <Menu className={styles.item} />
-            </nav>
-          ) : null}
+          <nav styleName="nav">
+            <Menu className={styles.item} />
+          </nav>
         </div>
 
         <div styleName="actions">
@@ -71,4 +70,6 @@ class Home extends Component {
   }
 }
 
-export default CSSModules(Home, styles);
+export default CSSModules(Home, styles, {
+  allowMultiple: true,
+});
