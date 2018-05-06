@@ -4,8 +4,12 @@ import CSSModules from 'react-css-modules';
 
 import styles from './logo.module.styl';
 
-const Block = () => (
-  <Link to="/" styleName="logo">TouchToType</Link>
+const Block = ({ location: { pathname } }) => (
+  pathname === '/' ? (
+    <span styleName="logo">TouchToType</span>
+  ) : (
+    <Link to="/" styleName="logo">TouchToType</Link>
+  )
 );
 
 export default withRouter(CSSModules(Block, styles));

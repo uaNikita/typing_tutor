@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import URLSearchParams from 'url-search-params';
 
-import Loader from '../Loader/component.jsx';
+import Logo from 'Blocks/Logo/component.jsx';
+import Loader from 'Blocks/Loader/component.jsx';
 
 import styles from './verify-page.module.styl';
 
@@ -64,19 +65,21 @@ class VerifyPage extends Component {
           break;
       }
 
-      content = ([
-        <p key="text" styleName="text">
-          Thank you,
-          <br />
-          {text}
-        </p>,
-        <Link key="link" className="buttom" to="/">Continue</Link>,
-      ]);
+      content = (
+        <Fragment>
+          <p key="text" styleName="text">
+            Thank you,
+            <br />
+            {text}
+          </p>
+          <Link key="link" className="buttom" to="/">Continue</Link>
+        </Fragment>
+      );
     }
 
     return (
       <div styleName="root">
-        <Link to="/" styleName="home-link">TouchToType</Link>
+        <Logo />
 
         {content}
       </div>
