@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
+import CSSModules from 'react-css-modules';
 import noUiSlider from 'nouislider';
 import { debounce } from 'lodash';
 import classNames from 'classnames';
 
-class Metronome extends Component {
+import styles from './metronome.module.styl';
+
+class Block extends Component {
   constructor(props) {
     super(props);
 
@@ -80,26 +83,28 @@ class Metronome extends Component {
   }
 
   render() {
-    let btnClass = 'metronome__btn fa';
+    const {
+      state: {
+        status,
+      },
+    } = this;
 
-    if (this.state.status) {
-      btnClass = classNames(btnClass, 'fa-pause');
-    }
-    else {
-      btnClass = classNames(btnClass, 'fa-play');
-    }
+    const btnClass = classNames('fa', status ? 'fa-pause' : 'fa-play');
 
     return (
-      <div className="metronome">
-        <button className={btnClass} onClick={this.onClickHandler} />
+      <div styleName="metronome">
+        <button styleName="metronome__btn" className={btnClass} onClick={this.onClickHandler} />
 
-        <div className="metronome__range-wrap">
-          <h5 className="metronome__title">Volume</h5>
-          <div className="metronome__range" ref={c => { this.metronomeRange = c; }} />
+        <div styleName="metronome__range-wrap">
+          <h5 styleName="metronome__title">Volume</h5>
+          <div ref={c => { this.metronomeRange = c; }} />
         </div>
       </div>
     );
   }
 }
 
-export default Metronome;
+export default CSSModules(Block, styles, {
+  allowMultiple: true,
+});
+

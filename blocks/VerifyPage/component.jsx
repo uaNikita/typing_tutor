@@ -76,7 +76,7 @@ class VerifyPage extends Component {
 
     return (
       <div styleName="root">
-        <Link key="home-link" to="/" styleName="home-link">TouchToType</Link>
+        <Link to="/" styleName="home-link">TouchToType</Link>
 
         {content}
       </div>

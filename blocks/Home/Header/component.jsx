@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
+import Logo from 'Blocks/Logo/component.jsx';
 import Menu from 'Blocks/Menu/container';
 import AuthInfo from 'Blocks/AuthInfo/container';
 import Metronome from '../Metronome/container';
@@ -52,16 +53,18 @@ class Home extends Component {
 
     return (
       <header styleName="root">
-        <div styleName={classNames('menu', { menu_expanded: navOpen })}>
-          <button className="fa fa-bars" styleName="button" onClick={this.hanldeClickMenu} />
-
-          <nav styleName="nav">
-            <Menu className={styles.item} />
-          </nav>
-        </div>
+        <Logo />
 
         <div styleName="actions">
           <Metronome />
+
+          <div styleName={classNames('menu', { menu_expanded: navOpen })}>
+            <button className="fa fa-bars" styleName="button" onClick={this.hanldeClickMenu} />
+
+            <nav styleName="nav">
+              <Menu className={styles.item} />
+            </nav>
+          </div>
 
           <AuthInfo />
         </div>
