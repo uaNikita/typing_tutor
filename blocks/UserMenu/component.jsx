@@ -17,7 +17,7 @@ const personal = [
   },
 ];
 
-class AuthInfo extends Component {
+class Block extends Component {
   state = {
     openedMenu: false,
   };
@@ -69,7 +69,7 @@ class AuthInfo extends Component {
     let content = (
       <Fragment>
         <Link key="log-in" to={{ pathname: '/sign-in', state: { modal: true } }}>Log In</Link>
-        {' '}or{' '}
+        &nbsp;or&nbsp;
         <Link key="sign-up" to={{ pathname: '/sign-up', state: { modal: true } }}>Sign Up</Link>
       </Fragment>
     );
@@ -89,20 +89,11 @@ class AuthInfo extends Component {
         } = link;
 
         const re = new RegExp(`^${pathname}`);
-        let item;
 
-        if (re.test(locationPathname)) {
-          item = <span key={pathname}>{text}</span>;
-        }
-        else {
-          item = (
-            <span key={pathname}>
-              <Link to={{ pathname, state }}>{text}</Link>
-            </span>
-          );
-        }
-
-        return item;
+        return re.test(locationPathname) ?
+          <span key={pathname} styleName="item">{text}</span>
+          :
+          <Link key={pathname} styleName="item" to={{ pathname, state }}>{text}</Link>;
       });
 
       content = (
@@ -111,15 +102,15 @@ class AuthInfo extends Component {
             <span styleName="avatar" onClick={this.triggerMenu}>{nickname[0]}</span>
           </button>
 
-          <div styleName="nav">{links}</div>
+          <nav styleName="nav">{links}</nav>
         </div>
       );
     }
 
-    return <div styleName="auth-info">{content}</div>;
+    return content;
   }
 }
 
-export default withRouter(CSSModules(AuthInfo, styles, {
+export default withRouter(CSSModules(Block, styles, {
   allowMultiple: true,
 }));

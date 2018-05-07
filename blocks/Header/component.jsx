@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
 import Menu from 'Blocks/Menu.jsx';
-import AuthInfo from 'Blocks/AuthInfo/container';
+import UserMenu from 'Blocks/UserMenu/container';
 
 import styles from './header.module.styl';
 
@@ -14,7 +14,7 @@ const Header = () => (
     <div styleName="items">
       <Menu className={styles.item} activeClassName={styles.item_selected} />
 
-      <AuthInfo />
+      <UserMenu />
     </div>
   </nav>
 );

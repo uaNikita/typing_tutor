@@ -4,7 +4,7 @@ import classNames from 'classnames';
 
 import Logo from 'Blocks/Logo/component.jsx';
 import Menu from 'Blocks/Menu.jsx';
-import AuthInfo from 'Blocks/AuthInfo/container';
+import UserMenu from 'Blocks/UserMenu/container';
 import Metronome from '../Metronome/container';
 import styles from './home-header.module.styl';
 
@@ -67,7 +67,7 @@ class Home extends Component {
             </nav>
           </div>
 
-          <AuthInfo />
+          <UserMenu />
         </div>
       </header>
     );
