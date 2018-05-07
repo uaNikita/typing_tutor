@@ -1,21 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import classNames from 'classnames';
+import { personal } from 'Utils/menu';
+
 import CSSModules from 'react-css-modules';
 
 import styles from './user-menu.module.styl';
-
-const personal = [
-  {
-    pathname: '/profile',
-    text: 'My profile',
-  },
-  {
-    pathname: '/sign-out',
-    state: { modal: true },
-    text: 'Sign out',
-  },
-];
 
 class Block extends Component {
   state = {
