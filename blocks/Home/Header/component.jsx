@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
 import Logo from 'Blocks/Logo/component.jsx';
-import Menu from 'Blocks/Menu/container';
+import Menu from 'Blocks/Menu.jsx';
 import AuthInfo from 'Blocks/AuthInfo/container';
 import Metronome from '../Metronome/container';
 import styles from './home-header.module.styl';
@@ -26,7 +26,7 @@ class Home extends Component {
 
     // traverse parents
     while (el) {
-      if (el && el.matches(`.${styles.items}, .${styles.button}`)) {
+      if (el && el.matches(`.${styles.menu}`)) {
         break;
       }
 
@@ -38,11 +38,8 @@ class Home extends Component {
     }
   };
 
-  hanldeClickMenu = () => {
-    this.setState({
-      navOpen: !this.state.navOpen,
-    });
-  };
+  hanldeClickMenu = () =>
+    this.setState({ navOpen: !this.state.navOpen });
 
   render() {
     const {
@@ -51,6 +48,10 @@ class Home extends Component {
       },
     } = this;
 
+    const menuStyleName = classNames('menu', {
+      menu_expanded: navOpen,
+    });
+
     return (
       <header styleName="root">
         <Logo />
@@ -58,7 +59,7 @@ class Home extends Component {
         <div styleName="actions">
           <Metronome />
 
-          <div styleName={classNames('menu', { menu_expanded: navOpen })}>
+          <div styleName={menuStyleName}>
             <button className="fa fa-bars" styleName="button" onClick={this.hanldeClickMenu} />
 
             <nav styleName="nav">

@@ -1,10 +1,20 @@
+.menu
+   position: relative
+   &_expanded
+      .button
+         background-color: #f7a700;
+         color: #fff;
+      .nav
+         display: block
 .auth-info
-   margin-left: 10px
    font-size: 16px
+.button
+   width: 60px
+   height: 60px
 .avatar
    width: 32px
    height: @width
-   display: block
+   display inline-block
    border-radius: 50%
    background-color: #ddd
    font-size: 18px
@@ -12,3 +22,12 @@
    text-transform: uppercase
    text-align: center
    color: #fff
+.nav
+   display: none;
+   position: absolute;
+   top 60px
+   right: 0
+   margin-left: -20px;
+   padding: 20px 25px;
+   background-image: linear-gradient(to bottom, #f7a700 0%, #ffe100 100%);
+   z-index 1
