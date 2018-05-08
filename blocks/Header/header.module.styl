@@ -1,4 +1,4 @@
-.nav
+.root
    height 60px
    margin-bottom: 50px;
    display: flex
@@ -9,23 +9,26 @@
    border-bottom: none;
    font-size: 36px;
    text-decoration: none;
-.items
+.actions
    display: flex
    align-items center
-   :global .menu__modes
-      margin-right: 10px
-      padding-right: 10px;
-      border-right: 1px solid #000;
-      &-title
-         margin-right: 5px
-         font-size: 16px;
+.items
+   margin-right: 10px
+   font-size: 16px
 .item
-   margin-right: 2px;
+   margin-right: 5px;
    margin-left: @margin-right;
-   padding: 4px 6px
    font-size: 16px;
    &_selected
+      padding: 4px 6px
       background-color: #1c88d4;
       border-radius: 3px;
       text-decoration: none
       color: #fff;
+.modes-title
+   margin-right: 5px;
+.separator
+   width: 1px;
+   margin-right: 10px;
+   margin-left: 10px;
+   background-color: #000;

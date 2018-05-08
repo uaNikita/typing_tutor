@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { personal } from 'Utils/menu';
@@ -45,9 +45,7 @@ class Block extends Component {
   render() {
     const {
       props: {
-        location: {
-          pathname: locationPathname,
-        },
+        location,
         email,
         name,
       },
@@ -57,11 +55,11 @@ class Block extends Component {
     } = this;
 
     let content = (
-      <Fragment>
-        <Link key="log-in" to={{ pathname: '/sign-in', state: { modal: true } }}>Log In</Link>
+      <div styleName="unauthorized">
+        <Link to={{ pathname: '/sign-in', state: { modal: true } }}>Log In</Link>
         &nbsp;or&nbsp;
-        <Link key="sign-up" to={{ pathname: '/sign-up', state: { modal: true } }}>Sign Up</Link>
-      </Fragment>
+        <Link to={{ pathname: '/sign-up', state: { modal: true } }}>Sign Up</Link>
+      </div>
     );
 
     if (email) {
@@ -80,7 +78,7 @@ class Block extends Component {
 
         const re = new RegExp(`^${pathname}`);
 
-        return re.test(locationPathname) ?
+        return re.test(location.pathname) ?
           <span key={pathname} styleName="item">{text}</span>
           :
           <Link key={pathname} styleName="item" to={{ pathname, state }}>{text}</Link>;

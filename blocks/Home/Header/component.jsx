@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
+import { modes, other } from 'Utils/menu';
+
 import Logo from 'Blocks/Logo/component.jsx';
-import Menu from 'Blocks/Menu.jsx';
 import UserMenu from 'Blocks/UserMenu/container';
 import Metronome from '../Metronome/container';
+
 import styles from './home-header.module.styl';
 
-class Home extends Component {
+class Block extends Component {
   state = {
     navOpen: false,
   };
@@ -43,6 +46,9 @@ class Home extends Component {
 
   render() {
     const {
+      props: {
+        location,
+      },
       state: {
         navOpen,
       },
@@ -50,6 +56,47 @@ class Home extends Component {
 
     const menuStyleName = classNames('menu', {
       menu_expanded: navOpen,
+    });
+
+    const modesLinks = modes.map(link => {
+      const {
+        pathname,
+        state,
+        text,
+      } = link;
+
+      const re = new RegExp(`^${pathname}`);
+
+      const itemProps = {
+        key: pathname,
+        styleName: 'item item_modes',
+      };
+
+      return re.test(location.pathname) ?
+        <span {...itemProps}>{text}</span>
+        :
+        <Link {...itemProps} to={{ pathname, state }}>{text}</Link>;
+    });
+
+    const otherLinks = other.map(link => {
+      const {
+        pathname,
+        state,
+        text,
+      } = link;
+
+      const re = new RegExp(`^${pathname}`);
+
+      const itemProps = {
+        key: pathname,
+        styleName: 'item',
+      };
+
+
+      return re.test(location.pathname) ?
+        <span {...itemProps}>{text}</span>
+        :
+        <Link {...itemProps} to={{ pathname, state }}>{text}</Link>;
     });
 
     return (
@@ -63,7 +110,9 @@ class Home extends Component {
             <button className="fa fa-bars" styleName="button" onClick={this.hanldeClickMenu} />
 
             <nav styleName="nav">
-              <Menu className={styles.item} />
+              <h4 styleName="modes-title">Modes</h4>
+              {modesLinks}
+              {otherLinks}
             </nav>
           </div>
 
@@ -74,6 +123,6 @@ class Home extends Component {
   }
 }
 
-export default CSSModules(Home, styles, {
+export default withRouter(CSSModules(Block, styles, {
   allowMultiple: true,
-});
+}));

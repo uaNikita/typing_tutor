@@ -1,22 +1,55 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { Component } from 'react';
+import { withRouter, Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import Menu from 'Blocks/Menu.jsx';
+import { modes, other } from 'Utils/menu';
+
 import UserMenu from 'Blocks/UserMenu/container';
 
 import styles from './header.module.styl';
 
-const Header = () => (
-  <nav styleName="nav">
-    <Link styleName="home" className="fa fa-keyboard-o" to="/" />
+class Header extends Component {
+  generateLinks = data => {
+    const {
+      props: {
+        location,
+      },
+    } = this;
 
-    <div styleName="items">
-      <Menu className={styles.item} activeClassName={styles.item_selected} />
+    return data.map(link => {
+      const {
+        pathname,
+        state,
+        text,
+      } = link;
 
-      <UserMenu />
-    </div>
-  </nav>
-);
+      const re = new RegExp(`^${pathname}`);
 
-export default CSSModules(Header, styles);
+      return re.test(location.pathname) ?
+        <span key={pathname} styleName="item item_selected">{text}</span>
+        :
+        <Link key={pathname} styleName="item" to={{ pathname, state }}>{text}</Link>;
+    });
+  }
+
+  render() {
+    return (
+      <div styleName="root">
+        <Link styleName="home" className="fa fa-keyboard-o" to="/" />
+
+        <div styleName="actions">
+          <nav styleName="items">
+            <span styleName="modes-title">Modes:</span>
+            {this.generateLinks(modes)} | {this.generateLinks(other)}
+          </nav>
+
+          <UserMenu />
+        </div>
+      </div>
+    );
+  }
+}
+
+export default withRouter(CSSModules(Header, styles, {
+  allowMultiple: true,
+}));
