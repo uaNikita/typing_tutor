@@ -1,6 +1,6 @@
-import english from './keyboards/english';
-import russian from './keyboards/russian';
-import russianTypewriter from './keyboards/russian_typewriter';
+import english from './english';
+import russian from './russian';
+import russianTypewriter from './russian_typewriter';
 
 export default [
   {

@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import { getIdsFromCharacter } from 'Utils';
 import ls from 'Utils/ls';
-import defaults from 'Utils/defaults';
+import defaults from 'Constants/defaultState';
 import { fetchJSON } from '../fetch';
 import {
   processAction,

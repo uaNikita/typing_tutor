@@ -39,6 +39,10 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: 'learning',
   },
+  keyboard: {
+    type: String,
+    default: 'english',
+  },
   modes: {
     text: {
       selectedId: {
@@ -50,7 +54,12 @@ const UserSchema = new mongoose.Schema({
         default: entities,
       },
     },
-    learning: {},
+    learning: {
+      mode: {
+        type: String,
+        default: 'fingers',
+      }
+    },
   },
 });
 

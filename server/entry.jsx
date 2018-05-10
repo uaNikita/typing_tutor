@@ -2,7 +2,7 @@ import React from 'react';
 import reducer from 'ReduxUtils/reducer';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
-import defaults from 'Utils/defaults';
+import defaults from 'Constants/defaultState';
 import { setRefreshToken, setAccessToken } from 'ReduxUtils/modules/fetch';
 import { requestAllWithoutAuth } from 'ReduxUtils/modules/main';
 

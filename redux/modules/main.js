@@ -3,7 +3,7 @@ import moment from 'moment';
 import _ from 'lodash';
 
 import { getIdsFromCharacter } from 'Utils';
-import keyboards from '../../constants/keyboards';
+import keyboards from 'Constants/keyboards/index';
 
 import { fetchJSON, setTokens } from './fetch';
 import { setState as setUserState } from './user';

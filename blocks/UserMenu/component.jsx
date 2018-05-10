@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import classNames from 'classnames';
-import { personal } from 'Utils/menu';
+import { personal } from 'Constants/navigation';
 
 import CSSModules from 'react-css-modules';
 

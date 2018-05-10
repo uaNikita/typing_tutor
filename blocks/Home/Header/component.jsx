@@ -3,7 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
-import { modes, other } from 'Utils/menu';
+import { modes, other } from 'Constants/navigation';
 
 import Logo from 'Blocks/Logo/component.jsx';
 import UserMenu from 'Blocks/UserMenu/container';

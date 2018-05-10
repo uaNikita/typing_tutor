@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import { modes, other } from 'Utils/menu';
+import { modes, other } from 'Constants/navigation';
 
 import UserMenu from 'Blocks/UserMenu/container';
 

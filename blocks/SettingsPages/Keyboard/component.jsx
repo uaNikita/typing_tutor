@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import keyboards from 'Constants/keyboards';
+import keyboards from 'Constants/keyboards/index';
 
 import { Field, reduxForm } from 'redux-form/immutable';
 import RenderField from 'Blocks/RenderField/component.jsx';
