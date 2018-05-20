@@ -3,7 +3,7 @@ import { Switch, Route, Redirect, NavLink } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
 import LearningView from 'Blocks/LearningView/component.jsx';
-import ModeButton from '../ModeButton/container';
+import GeneralModeButton from '../GeneralModeButton/container';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
 
@@ -40,17 +40,19 @@ const Block = props => {
 
   return (
     <Fragment>
-      <ModeButton to="learning" />
-
-      <LearningView lesson={lesson} />
+      <GeneralModeButton toMode="learning" />
 
       <div styleName="modes">
         <div styleName="menu">
-          <h4 styleName="title">Keys set</h4>
+          <h4 styleName="title">Sets</h4>
           {links}
         </div>
 
         <div styleName="content">
+          <h4 styleName="title">Example</h4>
+          <LearningView styleName="view" lesson={lesson} />
+
+          <h4 styleName="title">Settings</h4>
           <Switch>
             <Redirect exact from={url} to={`${url}/fingers`} />
             <Route path={`${url}/fingers`} component={LearningFingers} />

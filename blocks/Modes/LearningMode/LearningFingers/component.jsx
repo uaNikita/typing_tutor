@@ -1,14 +1,16 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { concat, clone } from 'lodash';
 import noUiSlider from 'nouislider';
 import classNames from 'classnames';
+
 import Key from 'Blocks/Key/component.jsx';
+import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFingers extends Component {
   componentDidMount() {
     const self = this;
 
-    const { fingersSet, setSizeFingers, maxLettersInWord } = this.props;
+    const { fingersSet, sizeFingers, maxLettersInWord } = this.props;
 
     const noUiValueMaxLettersInWord = document.createElement('span');
     noUiValueMaxLettersInWord.className = 'noUi-value';
@@ -42,7 +44,7 @@ class LearningFingers extends Component {
     noUiValueFingersSet.className = 'noUi-value';
 
     noUiSlider.create(this.fingersRange, {
-      start: [setSizeFingers],
+      start: [sizeFingers],
       step: 1,
       connect: 'lower',
       range: {
@@ -51,7 +53,7 @@ class LearningFingers extends Component {
       },
     });
 
-    noUiValueFingersSet.innerHTML = setSizeFingers;
+    noUiValueFingersSet.innerHTML = sizeFingers;
 
     this.fingersRange
       .querySelector('.noUi-handle')
@@ -60,18 +62,18 @@ class LearningFingers extends Component {
     this.fingersRange.noUiSlider.on('slide', (values, handle) => {
       const val = parseInt(values[handle], 10);
 
-      self.props.setFingersSetSize(val);
+      self.props.setSizeFingers(val);
 
       noUiValueFingersSet.innerHTML = val;
     });
   }
 
   render() {
-    const { keys, fingersSet, setSizeFingers } = this.props;
+    const { keys, fingersSet, sizeFingers } = this.props;
 
     let selectedLetters = clone(fingersSet);
 
-    selectedLetters.splice(setSizeFingers);
+    selectedLetters.splice(sizeFingers);
 
     selectedLetters = concat(...selectedLetters);
 
@@ -111,31 +113,35 @@ class LearningFingers extends Component {
     });
 
 
-    return [
-      <div key="length" className="settings-learning__item">
-        <label htmlFor="" className="settings-learning__label">
-          Max word length:
-        </label>
-        <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-          <div
-            className="settings-learning__range settings-learning__max-word-length"
-            ref={c => { this.maxLettersInWordRange = c; }} />
-        </div>
-      </div>,
+    return (
+      <Fragment>
+        <LearningModeButton toMode="fingers" />
 
-      <div key="fingers" className="settings-learning__item">
-        <label htmlFor="" className="settings-learning__label">
-          Extend fingers set:
-        </label>
-        <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-          <div className="settings-learning__range" ref={c => { this.fingersRange = c; }} />
+        <div className="settings-learning__item">
+          <label htmlFor="" className="settings-learning__label">
+            Max word length:
+          </label>
+          <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+            <div
+              className="settings-learning__range settings-learning__max-word-length"
+              ref={c => { this.maxLettersInWordRange = c; }} />
+          </div>
         </div>
-      </div>,
 
-      <div key="keyboard" className="keyboard">
-        {keyNodes}
-      </div>,
-    ];
+        <div className="settings-learning__item">
+          <label htmlFor="" className="settings-learning__label">
+            Extend fingers set:
+          </label>
+          <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+            <div className="settings-learning__range" ref={c => { this.fingersRange = c; }} />
+          </div>
+        </div>
+
+        <div className="keyboard">
+          {keyNodes}
+        </div>
+      </Fragment>
+    );
   }
 }
 

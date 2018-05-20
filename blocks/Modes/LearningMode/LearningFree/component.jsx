@@ -1,7 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import noUiSlider from 'nouislider';
 import KeyItem from './KeyItem.jsx';
+
+import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFree extends Component {
   componentDidMount() {
@@ -80,7 +82,8 @@ class LearningFree extends Component {
     });
 
     return (
-      <div>
+      <Fragment>
+        <LearningModeButton toMode="free" />
 
         <div className="settings-learning__item">
           <label htmlFor="" className="settings-learning__label">
@@ -98,7 +101,7 @@ class LearningFree extends Component {
           {keyNodes}
         </div>
 
-      </div>
+      </Fragment>
     );
   }
 }

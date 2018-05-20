@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
-import ModeButton from '../../ModeButton/container';
+import GeneralModeButton from '../../GeneralModeButton/container';
 
 import styles from './texts.module.styl';
 
@@ -39,7 +39,7 @@ const Block = props => {
 
   return [
     <div key="actions" styleName="actions">
-      <ModeButton to="text" />
+      <GeneralModeButton toMode="text" />
 
       {addTextLink}
     </div>,

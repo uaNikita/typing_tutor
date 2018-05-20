@@ -18,7 +18,12 @@ class Learningarea extends Component {
   });
 
   render() {
-    const { lesson } = this.props;
+    const {
+      props: {
+        className,
+        lesson,
+      },
+    } = this;
 
     let content;
 
@@ -39,7 +44,7 @@ class Learningarea extends Component {
       ];
     }
 
-    return <div styleName="learningarea">{content}</div>;
+    return <div className={className} styleName="learningarea">{content}</div>;
   }
 }
 

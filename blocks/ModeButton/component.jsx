@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ModeButton = ({ to, setMode, mode }) => {
+const Component = ({ to, setMode, mode }) => {
   let button = {
     props: {
       onClick: () => setMode(to),
@@ -20,5 +20,5 @@ const ModeButton = ({ to, setMode, mode }) => {
   return <button className="button" {...button.props}>{button.text}</button>;
 };
 
-export default ModeButton;
+export default Component;
 

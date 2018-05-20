@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import {
-  setSetSizeFingers,
+  setSizeFingers,
   setMaxLettersInWordFingers,
   updateFingersLesson,
   updateCurrentLessonFromCurrentMode,
@@ -17,7 +17,7 @@ const mapStateToProps = state => {
   const stateLearningMode = state.get('learningMode');
 
   return {
-    setSizeFingers: stateLearningMode.get('setSizeFingers'),
+    sizeFingers: stateLearningMode.get('setSizeFingers'),
     maxLettersInWord: stateLearningMode.get('maxLettersInWordFingers'),
     fingersSet: getFingersSet(keys),
     keys,
@@ -25,8 +25,8 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setFingersSetSize: size => {
-    dispatch(setSetSizeFingers(size));
+  setSizeFingers: size => {
+    dispatch(setSizeFingers(size));
 
     dispatch(updateFingersLesson());
 
