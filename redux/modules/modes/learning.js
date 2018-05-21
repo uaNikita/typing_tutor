@@ -3,20 +3,19 @@ import _ from 'lodash';
 
 import { getIdsFromCharacter, generateLesson, getFingersSet } from 'Utils';
 
+import ls from 'Utils/ls';
+
+import { fetchJSON } from 'ReduxUtils/modules/fetch';
+
 import {
   setIdsCharToType,
   pressWrongKeys,
   addHit,
   addTypo,
+  processAction,
 } from '../main';
 
-import {
-  addStatisticWithTimeout,
-} from '../user';
-import { addStatistic } from 'ReduxUtils/modules/user';
-import { processAction } from 'ReduxUtils/modules/main';
-import { fetchJSON } from 'ReduxUtils/modules/fetch';
-import ls from 'Utils/ls';
+import { addStatisticWithTimeout } from '../user';
 
 const CLEAR_STATE = 'learning/CLEAR_STATE';
 const TYPE_ON_LESSON = 'learning/TYPE_ON_LESSON';
@@ -178,6 +177,20 @@ export const typeOnLesson = () => ({
   type: TYPE_ON_LESSON,
 });
 
+export const processSetMaxLettersInWordFingers = length =>
+  dispatch => {
+    dispatch(setMaxLettersInWordFingers(length));
+
+    return dispatch(processAction(
+      () => ls.set('modes.learning.maxLettersInWordFingers', length),
+      () => dispatch(fetchJSON('/learning/fingers', {
+        body: {
+          maxLettersInWordFingers: length,
+        },
+      })),
+    ));
+  };
+
 export const processSetSizeFingers = size =>
   dispatch => {
     dispatch(setSizeFingers(size));
@@ -187,6 +200,49 @@ export const processSetSizeFingers = size =>
       () => dispatch(fetchJSON('/learning/fingers', { body: size })),
     ));
   };
+
+export const processSetMaxLettersInWordFree = letter =>
+  dispatch => {
+    dispatch(setMaxLettersInWordFree(letter));
+
+    return dispatch(processAction(
+      () => ls.set('modes.learning.maxLettersInWordFree', 'length'),
+      () => dispatch(fetchJSON('/learning/free', {
+        body: {
+          maxLettersInWordFree: 'length',
+        },
+      })),
+    ));
+  };
+
+export const processAddLetterToFreeLetters = letter =>
+  dispatch => {
+    dispatch(addLetterToFreeLetters(letter));
+
+    return dispatch(processAction(
+      () => ls.set('modes.learning.lettersFree', 'letter'),
+      () => dispatch(fetchJSON('/learning/free', {
+        body: {
+          maxLettersInWordFree: 'letter',
+        },
+      })),
+    ));
+  };
+
+export const processRemoveLetterToFreeLetters = letter =>
+  dispatch => {
+    dispatch(removeLetterFromFreeLetters(letter));
+
+    return dispatch(processAction(
+      () => ls.set('modes.learning.lettersFree', 'letter'),
+      () => dispatch(fetchJSON('/learning/free', {
+        body: {
+          maxLettersInWordFree: 'letter',
+        },
+      })),
+    ));
+  };
+
 
 export const updateCurrentLessonFromCurrentMode = () => (dispatch, getState) => {
   const learningState = getState().get('learningMode');
@@ -227,7 +283,7 @@ export const updateFreeLesson = () => (dispatch, getState) => {
 
   const lesson = generateLesson(
     learningState.get('maxLettersInWordFree'),
-    learningState.get('lettersFree')
+    learningState.get('lettersFree'),
   );
 
   dispatch(setLessonFree(lesson));
@@ -241,7 +297,7 @@ export const updateCharToType = () => (dispatch, getState) => {
   if (state.getIn(['learningMode', 'lessonRest'])) {
     idsChar = getIdsFromCharacter(
       state.getIn(['main', 'keys']).toJS(),
-      state.getIn(['learningMode', 'lessonRest'])[0]
+      state.getIn(['learningMode', 'lessonRest'])[0],
     );
   }
 
@@ -309,7 +365,7 @@ export const initLessons = () =>
       .value()
       .length;
 
-    dispatch(processSetSizeFingers(size));
+    dispatch(setSizeFingers(size));
 
     const letters = defaultKeys.map(obj => obj.key);
 

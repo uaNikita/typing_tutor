@@ -49,7 +49,7 @@ class LearningFree extends Component {
         lesson,
         addLetter,
         removeLetter,
-      }
+      },
     } = this;
 
     const keyNodes = keys.map(obj => {
@@ -79,11 +79,13 @@ class LearningFree extends Component {
       keyProps.className = className;
 
       return (
-        <Key key={obj.id}
+        <Key
+          key={obj.id}
           type={obj.type}
           char={obj.key}
           shiftChar={obj.shiftKey}
-          {...keyProps} />
+          {...keyProps}
+        />
       );
     });
 

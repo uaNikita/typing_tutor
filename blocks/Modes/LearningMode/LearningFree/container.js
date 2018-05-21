@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 
 import {
-  addLetterToFreeLetters,
-  removeLetterFromFreeLetters,
-  setMaxLettersInWordFree,
+  processAddLetterToFreeLetters,
+  processRemoveLetterToFreeLetters,
+  processSetMaxLettersInWordFree,
   updateFreeLesson,
   updateCurrentLessonFromCurrentMode,
   updateCharToType,
@@ -24,7 +24,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   addLetter: letter => {
-    dispatch(addLetterToFreeLetters(letter));
+    dispatch(processAddLetterToFreeLetters(letter));
 
     dispatch(updateFreeLesson());
 
@@ -33,7 +33,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateCharToType());
   },
   removeLetter: letter => {
-    dispatch(removeLetterFromFreeLetters(letter));
+    dispatch(processRemoveLetterToFreeLetters(letter));
 
     dispatch(updateFreeLesson());
 
@@ -42,7 +42,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(updateCharToType());
   },
   setMaxLettersInWord: length => {
-    dispatch(setMaxLettersInWordFree(length));
+    dispatch(processSetMaxLettersInWordFree(length));
 
     dispatch(updateFreeLesson());
 

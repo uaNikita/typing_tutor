@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import {
-  setSizeFingers,
-  setMaxLettersInWordFingers,
+  processSetSizeFingers,
+  processSetMaxLettersInWordFingers,
   updateFingersLesson,
   updateCurrentLessonFromCurrentMode,
   updateCharToType,
@@ -26,7 +26,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   setSizeFingers: size => {
-    dispatch(setSizeFingers(size));
+    dispatch(processSetSizeFingers(size));
 
     dispatch(updateFingersLesson());
 
@@ -35,7 +35,7 @@ const mapDispatchToProps = dispatch => ({
     // dispatch(updateCharToType());
   },
   setMaxLettersInWord: length => {
-    dispatch(setMaxLettersInWordFingers(length));
+    dispatch(processSetMaxLettersInWordFingers(length));
 
     dispatch(updateFingersLesson());
 
