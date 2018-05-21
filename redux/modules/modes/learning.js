@@ -37,7 +37,7 @@ const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning/REMOVE_LETTER_FROM_FREE_LETTER
 
 const SET_STATISTIC = 'text-mode/SET_STATISTIC';
 
-const initialState = Immutable.Map({
+const initialState = Immutable.fromJS({
   // fingers, free,
   mode: 'fingers',
 
@@ -253,11 +253,11 @@ export const typeLearningMode = char =>
     const state = getState();
     const learningModeState = state.get('learningMode');
 
-    const charToType = learningModeState.get('lessonRest')[0];
+    const lessonRest = learningModeState.get('lessonRest');
 
     const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
-    if (charToType === char) {
+    if (lessonRest[0] === char) {
       dispatch(typeOnLesson());
 
       dispatch(addHit(char));
@@ -272,18 +272,19 @@ export const typeLearningMode = char =>
 
     addStatisticWithTimeout(dispatch);
 
-    if (!getState().getIn(['learningMode', 'lessonRest'])) {
-      // update fingers
-      if (learningModeState.get('mode') === 'fingers') {
-        dispatch(updateFingersLesson());
+    if (!lessonRest) {
+      switch (learningModeState.get('mode')) {
+        case 'fingers':
+          dispatch(updateFingersLesson());
 
-        dispatch(setCurrentLesson(learningModeState.get('lessonFingers')));
-      }
-      // update free
-      else {
-        dispatch(updateFreeLesson());
+          dispatch(setCurrentLesson(learningModeState.get('lessonFingers')));
+          break;
+        case 'free':
+          dispatch(updateFreeLesson());
 
-        dispatch(setCurrentLesson(learningModeState.get('lessonFree')));
+          dispatch(setCurrentLesson(learningModeState.get('lessonFree')));
+
+          break;
       }
 
       dispatch(updateCharToType());

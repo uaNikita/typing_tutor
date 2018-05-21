@@ -29,10 +29,10 @@ class Keyboard extends Component {
       return (
         <Key
           key={obj.id}
-          keyProps={keyProps}
           type={obj.type}
           char={obj.key}
           shiftChar={obj.shiftKey}
+          {... keyProps}
         />
       );
     });

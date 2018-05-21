@@ -1,6 +1,7 @@
 import React from 'react';
+import classNames from 'classnames';
 
-const ModeButton = ({ toMode, setMode, currentMode }) => {
+const ModeButton = ({ className, toMode, setMode, currentMode }) => {
   let button = {
     props: {
       onClick: () => setMode(toMode),
@@ -17,9 +18,7 @@ const ModeButton = ({ toMode, setMode, currentMode }) => {
     };
   }
 
-  console.log(toMode, currentMode);
-  
-  return <button className="button" {...button.props}>{button.text}</button>;
+  return <button className={classNames('button', className)} {...button.props}>{button.text}</button>;
 };
 
 export default ModeButton;

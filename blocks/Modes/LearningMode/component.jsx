@@ -7,6 +7,7 @@ import GeneralModeButton from '../GeneralModeButton/container';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
 
+import './settings-learning.styl';
 import styles from './learning-mode.module.styl';
 
 const menuLinks = [

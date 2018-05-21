@@ -2,11 +2,11 @@ import React from 'react';
 
 const Key = props => {
   const {
-    keyProps,
     type,
     char,
     shiftChar,
     classNameShift,
+    ...rest
   } = props;
 
   if (type === 'number' || type === 'non-alphanumeric') {
@@ -17,7 +17,7 @@ const Key = props => {
     }
 
     return (
-      <span {...keyProps}>
+      <span {...rest}>
         <span className={className}>{shiftChar}</span>
         {char}
       </span>
@@ -25,14 +25,14 @@ const Key = props => {
   }
   else if (type === 'letter') {
     return (
-      <span {...keyProps}>
+      <span {...rest}>
         {char.toUpperCase()}
       </span>
     );
   }
 
   return (
-    <span {...keyProps}>
+    <span {...rest}>
       {char}
     </span>
   );

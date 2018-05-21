@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 import noUiSlider from 'nouislider';
-import KeyItem from './KeyItem.jsx';
 
+import LearningView from 'Blocks/LearningView/component.jsx';
+import Key from 'Blocks/Key/component.jsx';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFree extends Component {
@@ -40,34 +41,35 @@ class LearningFree extends Component {
     });
   }
 
-  onClickNonSelectedKey(key) {
-    this.props.addLetter(key);
-  }
-
-  onClickSelectedKey(key) {
-    this.props.removeLetter(key);
-  }
-
   render() {
-    const { keys, letters } = this.props;
+    const {
+      props: {
+        keys,
+        letters,
+        lesson,
+        addLetter,
+        removeLetter,
+      }
+    } = this;
 
     const keyNodes = keys.map(obj => {
       let className = 'keyboard__key';
 
       const keyProps = {
         'data-key': obj.id,
+        'data-finger': obj.finger === 'index' ? `${obj.hand}-${obj.finger}` : obj.finger,
       };
 
       if (obj.type === 'letter') {
         if (letters.indexOf(obj.key) + 1) {
           if (letters.length > 1) {
-            keyProps.onClick = this.onClickSelectedKey;
+            keyProps.onClick = () => removeLetter(obj.key);
           }
 
           className = classNames(className, 'keyboard__key_selected');
         }
         else {
-          keyProps.onClick = this.onClickNonSelectedKey;
+          keyProps.onClick = () => addLetter(obj.key);
         }
       }
       else {
@@ -77,12 +79,21 @@ class LearningFree extends Component {
       keyProps.className = className;
 
       return (
-        <KeyItem key={obj.id} keyObj={obj} keyProps={keyProps} />
+        <Key key={obj.id}
+          type={obj.type}
+          char={obj.key}
+          shiftChar={obj.shiftKey}
+          {...keyProps} />
       );
     });
 
     return (
       <Fragment>
+        <h4 className="settings-learning__title">Example</h4>
+        <LearningView className="settings-learning__view" lesson={lesson} />
+
+        <h4 className="settings-learning__title">Settings</h4>
+
         <LearningModeButton toMode="free" />
 
         <div className="settings-learning__item">

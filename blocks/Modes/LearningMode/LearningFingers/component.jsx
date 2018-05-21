@@ -104,10 +104,10 @@ class LearningFingers extends Component {
       return (
         <Key
           key={obj.id}
-          keyProps={keyProps}
           type={obj.type}
           char={obj.key}
           shiftChar={obj.shiftKey}
+          {...keyProps}
         />
       );
     });
@@ -140,6 +140,7 @@ class LearningFingers extends Component {
         <div className="keyboard">
           {keyNodes}
         </div>
+
       </Fragment>
     );
   }

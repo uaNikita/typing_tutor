@@ -34,11 +34,11 @@ const KeyPad = props => {
     return (
       <Key
         key={obj.id}
-        keyProps={keyProps}
         type={obj.type}
         char={obj.key}
         shiftChar={obj.shiftKey}
         classNameShift="keypad__shift"
+        {... keyProps}
       />
     );
   });
