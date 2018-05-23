@@ -7,8 +7,8 @@ const mapStateToProps = state => {
   const stateLearningMode = state.get('learningMode');
 
   return {
-    lessonTyped: stateLearningMode.get('lessonTyped'),
-    lessonRest: stateLearningMode.get('lessonRest'),
+    lessonTyped: stateLearningMode.getIn(['lesson', 'typed']),
+    lessonRest: stateLearningMode.getIn(['lesson', 'rest']),
   };
 };
 

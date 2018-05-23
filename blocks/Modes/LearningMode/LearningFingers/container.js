@@ -1,10 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  processSetFingersOptions,
-  refreshFingersLesson,
-  updateCurrentLessonFromCurrentMode,
-  updateCharToType,
-} from 'ReduxUtils/modules/modes/learning';
+import { processSetFingersOptions, generateFingersLesson } from 'ReduxUtils/modules/modes/learning';
 
 import { getFingersSet } from 'Utils';
 
@@ -24,28 +19,15 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  setSizeFingers: size => {
+  setSizeFingers: size =>
     dispatch(processSetFingersOptions({
       setSize: size,
-    }));
-
-    dispatch(refreshFingersLesson());
-
-    dispatch(updateCurrentLessonFromCurrentMode());
-
-    // dispatch(updateCharToType());
-  },
-  setMaxLettersInWord: length => {
+    })),
+  setMaxLettersInWord: length =>
     dispatch(processSetFingersOptions({
       maxLettersInWord: length,
-    }));
-
-    dispatch(refreshFingersLesson());
-
-    dispatch(updateCurrentLessonFromCurrentMode());
-
-    dispatch(updateCharToType());
-  },
+    })),
+  generateFingersLesson: (...args) => generateFingersLesson(...args),
 });
 
 export default connect(

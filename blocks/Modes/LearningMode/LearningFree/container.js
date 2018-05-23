@@ -3,10 +3,8 @@ import { connect } from 'react-redux';
 import {
   processAddLetterToFreeLetters,
   processRemoveLetterToFreeLetters,
-  processSetMaxLettersInWordFree,
-  refreshFreeLesson,
-  updateCurrentLessonFromCurrentMode,
-  updateCharToType,
+  processSetFreeOptions,
+  generateFreeLesson,
 } from 'ReduxUtils/modules/modes/learning';
 
 import LearningFree from './component.jsx';
@@ -17,39 +15,18 @@ const mapStateToProps = state => {
   return {
     maxLettersInWord: stateLearningMode.get('maxLettersInWordFree'),
     keys: state.getIn(['main', 'keys']).toJS(),
-    letters: stateLearningMode.get('lettersFree').toJS(),
-    lesson: stateLearningMode.get('lessonFree'),
+    letters: stateLearningMode.getIn(['free', 'letters']).toJS(),
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  addLetter: letter => {
-    dispatch(processAddLetterToFreeLetters(letter));
-
-    dispatch(refreshFreeLesson());
-
-    dispatch(updateCurrentLessonFromCurrentMode());
-
-    dispatch(updateCharToType());
-  },
-  removeLetter: letter => {
-    dispatch(processRemoveLetterToFreeLetters(letter));
-
-    dispatch(refreshFreeLesson());
-
-    dispatch(updateCurrentLessonFromCurrentMode());
-
-    dispatch(updateCharToType());
-  },
-  setMaxLettersInWord: length => {
-    dispatch(processSetMaxLettersInWordFree(length));
-
-    dispatch(refreshFreeLesson());
-
-    dispatch(updateCurrentLessonFromCurrentMode());
-
-    dispatch(updateCharToType());
-  },
+  addLetter: (...args) => dispatch(processAddLetterToFreeLetters(...args)),
+  removeLetter: (...args) => dispatch(processRemoveLetterToFreeLetters(...args)),
+  setMaxLettersInWord: length =>
+    dispatch(processSetFreeOptions({
+      maxLettersInWord: length,
+    })),
+  generateFreeLesson: (...args) => generateFreeLesson(...args),
 });
 
 export default connect(

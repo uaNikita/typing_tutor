@@ -7,10 +7,18 @@ import Key from 'Blocks/Key/component.jsx';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFree extends Component {
-  componentDidMount() {
-    const self = this;
+  state = {
+    lesson: this.props.generateFreeLesson(),
+  }
 
-    const { maxLettersInWord } = this.props;
+  componentDidMount() {
+    const {
+      props: {
+        maxLettersInWord,
+        setMaxLettersInWord,
+        generateFreeLesson,
+      },
+    } = this;
 
     const noUiValueMaxLettersInWord = document.createElement('span');
     noUiValueMaxLettersInWord.className = 'noUi-value';
@@ -35,7 +43,11 @@ class LearningFree extends Component {
     this.maxLettersInWordRange.noUiSlider.on('slide', (values, handle) => {
       const val = parseInt(values[handle], 10);
 
-      self.props.setMaxLettersInWord(val);
+      setMaxLettersInWord(val);
+
+      this.setState({
+        lesson: generateFreeLesson(),
+      });
 
       noUiValueMaxLettersInWord.innerHTML = val;
     });
@@ -46,9 +58,11 @@ class LearningFree extends Component {
       props: {
         keys,
         letters,
-        lesson,
         addLetter,
         removeLetter,
+      },
+      state: {
+        lesson,
       },
     } = this;
 
