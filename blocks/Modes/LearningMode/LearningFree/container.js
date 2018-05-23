@@ -4,7 +4,7 @@ import {
   processAddLetterToFreeLetters,
   processRemoveLetterToFreeLetters,
   processSetMaxLettersInWordFree,
-  updateFreeLesson,
+  refreshFreeLesson,
   updateCurrentLessonFromCurrentMode,
   updateCharToType,
 } from 'ReduxUtils/modules/modes/learning';
@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => ({
   addLetter: letter => {
     dispatch(processAddLetterToFreeLetters(letter));
 
-    dispatch(updateFreeLesson());
+    dispatch(refreshFreeLesson());
 
     dispatch(updateCurrentLessonFromCurrentMode());
 
@@ -35,7 +35,7 @@ const mapDispatchToProps = dispatch => ({
   removeLetter: letter => {
     dispatch(processRemoveLetterToFreeLetters(letter));
 
-    dispatch(updateFreeLesson());
+    dispatch(refreshFreeLesson());
 
     dispatch(updateCurrentLessonFromCurrentMode());
 
@@ -44,7 +44,7 @@ const mapDispatchToProps = dispatch => ({
   setMaxLettersInWord: length => {
     dispatch(processSetMaxLettersInWordFree(length));
 
-    dispatch(updateFreeLesson());
+    dispatch(refreshFreeLesson());
 
     dispatch(updateCurrentLessonFromCurrentMode());
 

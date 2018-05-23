@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import {
-  processSetSizeFingers,
-  processSetMaxLettersInWordFingers,
-  updateFingersLesson,
+  processSetFingersOptions,
+  refreshFingersLesson,
   updateCurrentLessonFromCurrentMode,
   updateCharToType,
 } from 'ReduxUtils/modules/modes/learning';
@@ -14,11 +13,11 @@ import LearningFingers from './component.jsx';
 const mapStateToProps = state => {
   const keys = state.getIn(['main', 'keys']).toJS();
 
-  const stateLearningMode = state.get('learningMode');
+  const stateFingers = state.getIn('learningMode', 'fingers');
 
   return {
-    sizeFingers: stateLearningMode.get('setSizeFingers'),
-    maxLettersInWord: stateLearningMode.get('maxLettersInWordFingers'),
+    sizeFingers: stateFingers.get('setSize'),
+    maxLettersInWord: stateFingers.get('maxLettersInWord'),
     fingersSet: getFingersSet(keys),
     keys,
   };
@@ -26,18 +25,22 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => ({
   setSizeFingers: size => {
-    dispatch(processSetSizeFingers(size));
+    dispatch(processSetFingersOptions({
+      setSize: size,
+    }));
 
-    dispatch(updateFingersLesson());
+    dispatch(refreshFingersLesson());
 
     dispatch(updateCurrentLessonFromCurrentMode());
 
     // dispatch(updateCharToType());
   },
   setMaxLettersInWord: length => {
-    dispatch(processSetMaxLettersInWordFingers(length));
+    dispatch(processSetFingersOptions({
+      maxLettersInWord: length,
+    }));
 
-    dispatch(updateFingersLesson());
+    dispatch(refreshFingersLesson());
 
     dispatch(updateCurrentLessonFromCurrentMode());
 
