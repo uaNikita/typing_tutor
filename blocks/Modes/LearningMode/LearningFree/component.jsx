@@ -7,8 +7,34 @@ import Key from 'Blocks/Key/component.jsx';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFree extends Component {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const changedOptions = [];
+
+    if (prevState.maxLettersInWord !== nextProps.maxLettersInWord) {
+      changedOptions.push('maxLettersInWord');
+    }
+
+    if (prevState.letters !== nextProps.letters) {
+      changedOptions.push('letters');
+    }
+
+    let state = null;
+
+    if (changedOptions.length) {
+      state = {};
+
+      changedOptions.forEach(option => {
+        state[option] = nextProps[option];
+      });
+
+      state.lesson = nextProps.generateFreeLesson();
+    }
+
+    return state;
+  }
+
   state = {
-    lesson: this.props.generateFreeLesson(),
+    lesson: undefined,
   }
 
   componentDidMount() {

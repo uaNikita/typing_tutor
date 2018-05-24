@@ -14,8 +14,8 @@ const mapStateToProps = state => {
 
   return {
     maxLettersInWord: stateLearningMode.getIn(['free', 'maxLettersInWord']),
-    keys: state.getIn(['main', 'keys']).toJS(),
     letters: stateLearningMode.getIn(['free', 'letters']).toJS(),
+    keys: state.getIn(['main', 'keys']).toJS(),
   };
 };
 

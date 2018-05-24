@@ -1,4 +1,4 @@
-import { forEach, filter, random, times } from 'lodash';
+import _ from 'lodash';
 
 export function getIdsFromCharacter(keys, сharacter) {
   const charsToType = [];
@@ -26,7 +26,7 @@ export function getIdsFromCharacter(keys, сharacter) {
 export function sliceChar(chars, idChars) {
   let newChars = chars.slice();
 
-  forEach(idChars, id => {
+  _.forEach(idChars, id => {
     const index = newChars.indexOf(id);
 
     if (index + 1) {
@@ -46,29 +46,32 @@ export const generateLesson = (() => {
 
   return (maxLettersInWord, letters) => {
     let lesson = '';
-    let wordLength;
 
-    const addLetter = () => {
-      lesson += letters[random(0, letters.length - 1)];
-    };
+    if (maxLettersInWord && !_.isEmpty(letters)) {
+      let wordLength;
 
-    while (lesson.length <= maxChars) {
-      wordLength = random(minWordLength, maxLettersInWord);
+      const addLetter = () => {
+        lesson += letters[_.random(0, letters.length - 1)];
+      };
 
-      if (lesson.length + wordLength > maxChars) {
-        wordLength = maxChars - lesson.length;
+      while (lesson.length <= maxChars) {
+        wordLength = _.random(minWordLength, maxLettersInWord);
 
-        if (wordLength < 3) {
-          break;
+        if (lesson.length + wordLength > maxChars) {
+          wordLength = maxChars - lesson.length;
+
+          if (wordLength < 3) {
+            break;
+          }
         }
+
+        _.times(wordLength, addLetter);
+
+        lesson += ' ';
       }
 
-      times(wordLength, addLetter);
-
-      lesson += ' ';
+      lesson = lesson.slice(0, -1);
     }
-
-    lesson = lesson.slice(0, -1);
 
     return lesson;
   };
@@ -84,7 +87,7 @@ export function getFingersSet(keys) {
   rows.forEach(row => {
     fingers.forEach(finger => {
       hands.forEach(hand => {
-        const keysArr = filter(keys, {
+        const keysArr = _.filter(keys, {
           row,
           finger,
           hand,
