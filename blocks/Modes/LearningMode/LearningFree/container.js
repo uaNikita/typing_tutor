@@ -13,7 +13,7 @@ const mapStateToProps = state => {
   const stateLearningMode = state.get('learningMode');
 
   return {
-    maxLettersInWord: stateLearningMode.get('maxLettersInWordFree'),
+    maxLettersInWord: stateLearningMode.getIn(['free', 'maxLettersInWord']),
     keys: state.getIn(['main', 'keys']).toJS(),
     letters: stateLearningMode.getIn(['free', 'letters']).toJS(),
   };
@@ -26,7 +26,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(processSetFreeOptions({
       maxLettersInWord: length,
     })),
-  generateFreeLesson: (...args) => generateFreeLesson(...args),
+  generateFreeLesson: (...args) => dispatch(generateFreeLesson(...args)),
 });
 
 export default connect(

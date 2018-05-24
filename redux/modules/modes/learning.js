@@ -25,10 +25,8 @@ const SET_CURRENT_LESSON = 'learning/SET_CURRENT_LESSON';
 const REFRESH_CURRENT_LESSON = 'learning/REFRESH_CURRENT_LESSON';
 
 const SET_FINGERS_OPTIONS = 'learning/SET_FINGERS_OPTIONS';
+const SET_FREE_OPTIONS = 'learning/SET_FREE_OPTIONS';
 
-const SET_FREE_OPTIONS = 'learning/SET_FINGERS_OPTIONS';
-
-const SET_LETTERS_FREE = 'learning/SET_LETTERS_FREE';
 const ADD_LETTER_TO_FREE_LETTERS = 'learning/ADD_LETTER_TO_FREE_LETTERS';
 const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning/REMOVE_LETTER_FROM_FREE_LETTERS';
 
@@ -45,7 +43,7 @@ const initialState = Immutable.fromJS({
 
   fingers: {
     maxLettersInWord: 5,
-    setSize: 0,
+    setSize: 5,
   },
 
   free: {
@@ -84,10 +82,17 @@ export default (state = initialState, action = {}) => {
       return state.update('fingers', fingers => fingers.merge(action.options));
 
     case SET_FREE_OPTIONS:
-      return state.update('free', free => free.merge(action.options));
+      return state.update('free', free => {
+        const {
+          options,
+        } = action;
 
-    case SET_LETTERS_FREE:
-      return state.setIn(['free', 'letters'], Immutable.Set(action.letters));
+        if (options.letters) {
+          options.letters = Immutable.Set(options.letters);
+        }
+
+        return free.merge(options);
+      });
 
     case ADD_LETTER_TO_FREE_LETTERS:
       return state.updateIn(['free', 'letters'], letters => letters.add(action.letter));
@@ -126,15 +131,11 @@ export const setFingersOptions = length => ({
   length,
 });
 
-export const setFreeOptions = length => ({
+export const setFreeOptions = options => ({
   type: SET_FREE_OPTIONS,
-  length,
+  options,
 });
 
-export const setLettersFree = letters => ({
-  type: SET_LETTERS_FREE,
-  letters,
-});
 
 export const addLetterToFreeLetters = letter => ({
   type: ADD_LETTER_TO_FREE_LETTERS,
@@ -239,8 +240,8 @@ export const generateFreeLesson = () => (dispatch, getState) => {
   const learningState = getState().get('learningMode');
 
   return generateLesson(
-    learningState.get('maxLettersInWordFree'),
-    learningState.getIn(['free', 'letters']),
+    learningState.getIn(['free', 'maxLettersInWord']),
+    learningState.getIn(['free', 'letters']).toJS(),
   );
 };
 
@@ -323,10 +324,9 @@ export const initLessons = () =>
 
     const letters = defaultKeys.map(obj => obj.key);
 
-    // default mode
-    const lessonFingers = generateLesson(state.getIn(['learningMode', 'fingers', 'maxLettersInWord']), letters);
+    dispatch(setCurrentLesson(
+      generateLesson(state.getIn(['learningMode', 'fingers', 'maxLettersInWord']), letters),
+    ));
 
-    dispatch(setCurrentLesson(lessonFingers));
-
-    dispatch(setLettersFree(letters));
+    dispatch(setFreeOptions({ letters }));
   };

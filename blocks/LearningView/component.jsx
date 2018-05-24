@@ -4,7 +4,7 @@ import CSSModules from 'react-css-modules';
 
 import styles from './learning-view.module.styl';
 
-class Learningarea extends Component {
+class Block extends Component {
   getCharsMarkup = string => string.split('').map((char, i) => {
     let c = char;
 
@@ -48,4 +48,4 @@ class Learningarea extends Component {
   }
 }
 
-export default CSSModules(Learningarea, styles);
+export default CSSModules(Block, styles);

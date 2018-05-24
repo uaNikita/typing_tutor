@@ -2,7 +2,6 @@ import React, { Fragment } from 'react';
 import { Switch, Route, Redirect, NavLink } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import LearningView from 'Blocks/LearningView/component.jsx';
 import GeneralModeButton from '../GeneralModeButton/container';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
@@ -23,7 +22,6 @@ const menuLinks = [
 
 const Block = props => {
   const {
-    lesson,
     match: {
       url,
     },
@@ -50,10 +48,6 @@ const Block = props => {
         </div>
 
         <div styleName="content">
-          <h4 styleName="title">Example</h4>
-          <LearningView styleName="view" lesson={lesson} />
-
-          <h4 styleName="title">Settings</h4>
           <Switch>
             <Redirect exact from={url} to={`${url}/fingers`} />
             <Route path={`${url}/fingers`} component={LearningFingers} />

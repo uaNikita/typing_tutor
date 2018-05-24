@@ -8,7 +8,7 @@ import LearningFingers from './component.jsx';
 const mapStateToProps = state => {
   const keys = state.getIn(['main', 'keys']).toJS();
 
-  const stateFingers = state.getIn('learningMode', 'fingers');
+  const stateFingers = state.getIn(['learningMode', 'fingers']);
 
   return {
     sizeFingers: stateFingers.get('setSize'),
@@ -27,7 +27,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(processSetFingersOptions({
       maxLettersInWord: length,
     })),
-  generateFingersLesson: (...args) => generateFingersLesson(...args),
+  generateFingersLesson: (...args) => dispatch(generateFingersLesson(...args)),
 });
 
 export default connect(

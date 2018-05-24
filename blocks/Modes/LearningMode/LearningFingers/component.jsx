@@ -9,7 +9,7 @@ import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFingers extends Component {
   state = {
-    lesson: this.props.generateFreeLesson(),
+    lesson: this.props.generateFingersLesson(),
   }
 
   componentDidMount() {
@@ -20,7 +20,7 @@ class LearningFingers extends Component {
         maxLettersInWord,
         setSizeFingers,
         setMaxLettersInWord,
-        generateFreeLesson,
+        generateFingersLesson,
       },
     } = this;
 
@@ -50,7 +50,7 @@ class LearningFingers extends Component {
       setMaxLettersInWord(val);
 
       this.setState({
-        lesson: generateFreeLesson(),
+        lesson: generateFingersLesson(),
       });
 
       noUiValueMaxLettersInWord.innerHTML = val;
@@ -81,7 +81,7 @@ class LearningFingers extends Component {
       setSizeFingers(val);
 
       this.setState({
-        lesson: generateFreeLesson(),
+        lesson: generateFingersLesson(),
       });
 
       noUiValueFingersSet.innerHTML = val;
@@ -140,7 +140,6 @@ class LearningFingers extends Component {
         />
       );
     });
-
 
     return (
       <Fragment>
