@@ -4,13 +4,13 @@ import LearningView from 'Blocks/LearningView/component.jsx';
 
 class LearningArea extends Component {
   componentDidMount = () =>
-    this.props.updateCharToType()
+    this.props.refreshInitialData()
 
   render() {
     const {
       props: {
-        lessonTyped: typed,
-        lessonRest: rest,
+        typed,
+        rest,
       },
     } = this;
 

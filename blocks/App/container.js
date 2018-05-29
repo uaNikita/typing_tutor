@@ -4,9 +4,8 @@ import {
   setLastNoModalLocation,
   setIsModal,
   init,
-  setMode,
 } from 'ReduxUtils/modules/main';
-import { setStatistic } from 'ReduxUtils/modules/user';
+import { setStatistic, setMode } from 'ReduxUtils/modules/user';
 import { setState as setTextState } from 'ReduxUtils/modules/modes/text';
 import Component from './component.jsx';
 

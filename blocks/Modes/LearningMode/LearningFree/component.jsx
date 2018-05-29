@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
+import _ from 'lodash';
 import noUiSlider from 'nouislider';
 
 import LearningView from 'Blocks/LearningView/component.jsx';
@@ -14,7 +15,7 @@ class LearningFree extends Component {
       changedOptions.push('maxLettersInWord');
     }
 
-    if (prevState.letters !== nextProps.letters) {
+    if (!_.isEqual(prevState.letters, nextProps.letters)) {
       changedOptions.push('letters');
     }
 

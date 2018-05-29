@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { updateCharToType } from 'ReduxUtils/modules/modes/learning';
+import { refreshCurrentLesson, updateCharToType } from 'ReduxUtils/modules/modes/learning';
 
 import Textarea from './component.jsx';
 
@@ -7,13 +7,16 @@ const mapStateToProps = state => {
   const stateLesson = state.getIn(['learningMode', 'lesson']);
 
   return {
-    lessonTyped: stateLesson.getIn(['lesson', 'typed']),
-    lessonRest: stateLesson.getIn(['lesson', 'rest']),
+    typed: stateLesson.get('typed'),
+    rest: stateLesson.get('rest'),
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  updateCharToType: (...args) => dispatch(updateCharToType(...args)),
+  refreshInitialData: () => {
+    dispatch(refreshCurrentLesson());
+    dispatch(updateCharToType());
+  },
 });
 
 export default connect(

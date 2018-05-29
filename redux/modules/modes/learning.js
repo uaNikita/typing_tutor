@@ -22,7 +22,6 @@ const TYPE_ON_LESSON = 'learning/TYPE_ON_LESSON';
 
 const SET_LEARNING_MODE = 'learning/SET_LEARNING_MODE';
 const SET_CURRENT_LESSON = 'learning/SET_CURRENT_LESSON';
-const REFRESH_CURRENT_LESSON = 'learning/REFRESH_CURRENT_LESSON';
 
 const SET_FINGERS_OPTIONS = 'learning/SET_FINGERS_OPTIONS';
 const SET_FREE_OPTIONS = 'learning/SET_FREE_OPTIONS';
@@ -57,26 +56,25 @@ export default (state = initialState, action = {}) => {
     case CLEAR_STATE:
       return state.merge(initialState);
 
-    case REFRESH_CURRENT_LESSON:
-      return state.update('lesson', ({ typed, rest }) => ({
-        typed: '',
-        rest: typed + rest,
-      }));
-
     case TYPE_ON_LESSON:
-      return state.update('lesson', ({ typed, rest }) => ({
-        typed: typed + rest[0],
-        rest: rest.substring(1),
-      }));
+      return state.update('lesson', lesson => {
+        const typed = lesson.get('typed');
+        const rest = lesson.get('rest');
+
+        return lesson.merge({
+          typed: typed + rest[0],
+          rest: rest.substring(1),
+        });
+      });
 
     case SET_LEARNING_MODE:
       return state.set('mode', action.mode);
 
     case SET_CURRENT_LESSON:
-      return state.set('lesson', {
+      return state.set('lesson', Immutable.Map({
         typed: '',
         rest: action.lesson,
-      });
+      }));
 
     case SET_FINGERS_OPTIONS:
       return state.update('fingers', fingers => fingers.merge(action.options));
@@ -120,10 +118,6 @@ export const setMode = mode => ({
 export const setCurrentLesson = lesson => ({
   type: SET_CURRENT_LESSON,
   lesson,
-});
-
-export const refreshCurrentLesson = () => ({
-  type: REFRESH_CURRENT_LESSON,
 });
 
 export const setFingersOptions = length => ({
@@ -203,25 +197,6 @@ export const processRemoveLetterToFreeLetters = letter =>
     ));
   };
 
-
-export const updateCurrentLessonFromCurrentMode = () => (dispatch, getState) => {
-  const learningState = getState().get('learningMode');
-
-  let lesson;
-
-  switch (learningState.get('mode')) {
-    case 'fingers':
-      lesson = learningState.getIn(['fingers', 'lesson']);
-      break;
-
-    case 'free':
-      lesson = learningState.get('lessonFree');
-      break;
-  }
-
-  dispatch(setCurrentLesson(lesson));
-};
-
 export const generateFingersLesson = () => (dispatch, getState) => {
   const state = getState();
 
@@ -243,6 +218,24 @@ export const generateFreeLesson = () => (dispatch, getState) => {
     learningState.getIn(['free', 'maxLettersInWord']),
     learningState.getIn(['free', 'letters']).toJS(),
   );
+};
+
+export const refreshCurrentLesson = () => (dispatch, getState) => {
+  const learningState = getState().get('learningMode');
+
+  let lesson = '';
+
+  switch (learningState.get('mode')) {
+    case 'fingers':
+      lesson = dispatch(generateFingersLesson());
+      break;
+
+    case 'free':
+      lesson = dispatch(generateFreeLesson());
+      break;
+  }
+
+  dispatch(setCurrentLesson(lesson));
 };
 
 export const updateCharToType = () => (dispatch, getState) => {
@@ -287,14 +280,7 @@ export const typeLearningMode = char =>
     addStatisticWithTimeout(dispatch);
 
     if (!lessonRest) {
-      switch (learningModeState.get('mode')) {
-        case 'fingers':
-          dispatch(setCurrentLesson(generateFingersLesson()));
-          break;
-        case 'free':
-          dispatch(setCurrentLesson(generateFreeLesson()));
-          break;
-      }
+      dispatch(refreshCurrentLesson());
 
       dispatch(updateCharToType());
     }
