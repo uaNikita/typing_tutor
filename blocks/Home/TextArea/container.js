@@ -4,10 +4,10 @@ import { updateCharToType } from 'ReduxUtils/modules/modes/text';
 import Component from './component.jsx';
 
 const mapStateToProps = state => {
-  const stateTextMode = state.get('textMode');
+  const stateText = state.get('text');
 
-  const text = stateTextMode.get('entities')
-    .filter(obj => obj.get('id') === stateTextMode.get('selectedId'))
+  const text = stateText.get('entities')
+    .filter(obj => obj.get('id') === stateText.get('selectedId'))
     .get(0);
 
   return {

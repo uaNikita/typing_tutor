@@ -154,7 +154,6 @@ class LearningFree extends Component {
         <div className="keyboard">
           {keyNodes}
         </div>
-
       </Fragment>
     );
   }

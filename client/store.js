@@ -10,7 +10,7 @@ delete window.PRELOADED_STATE;
 
 initialState = Immutable.fromJS(initialState);
 
-const setsPath = [['main', 'pressedKeys'], ['main', 'pressedWrongKeys'], ['learningMode', 'lettersFree']];
+const setsPath = [['main', 'pressedKeys'], ['main', 'pressedWrongKeys'], ['learning', 'free', 'letters']];
 
 initialState = setsPath.reduce((state, path) => state.setIn(path, Immutable.Set(state.getIn(path))), initialState);
 

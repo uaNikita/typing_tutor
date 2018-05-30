@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import Component from './component.jsx';
 
 const mapStateToProps = state => ({
-  lesson: state.getIn(['learningMode', 'lesson', 'rest']),
+  lesson: state.getIn(['learning', 'lesson', 'rest']),
   mode: state.getIn(['user', 'mode']),
 });
 

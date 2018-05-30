@@ -5,9 +5,9 @@ import Text from './component.jsx';
 const mapStateToProps = (state, ownProps) => {
   const id = parseInt(ownProps.match.params.textId, 10);
 
-  const stateTextMode = state.get('textMode');
+  const stateText = state.get('text');
 
-  const text = stateTextMode.get('entities')
+  const text = stateText.get('entities')
     .filter(obj => obj.get('id') === id)
     .get(0);
 
@@ -15,7 +15,7 @@ const mapStateToProps = (state, ownProps) => {
     id,
     typed: text.get('typed'),
     last: text.get('last'),
-    selectedId: stateTextMode.get('selectedId'),
+    selectedId: stateText.get('selectedId'),
   };
 };
 

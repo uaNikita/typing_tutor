@@ -10,11 +10,11 @@ import {
 import LearningFree from './component.jsx';
 
 const mapStateToProps = state => {
-  const stateLearningMode = state.get('learningMode');
+  const stateLearning = state.get('learning');
 
   return {
-    maxLettersInWord: stateLearningMode.getIn(['free', 'maxLettersInWord']),
-    letters: stateLearningMode.getIn(['free', 'letters']).toJS(),
+    maxLettersInWord: stateLearning.getIn(['free', 'maxLettersInWord']),
+    letters: stateLearning.getIn(['free', 'letters']).toJS(),
     keys: state.getIn(['main', 'keys']).toJS(),
   };
 };

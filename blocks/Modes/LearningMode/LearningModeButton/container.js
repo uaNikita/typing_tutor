@@ -5,7 +5,7 @@ import { setMode } from 'ReduxUtils/modules/modes/learning';
 import Component from './component.jsx';
 
 const mapStateToProps = state => ({
-  currentMode: state.getIn(['learningMode', 'mode']),
+  currentMode: state.getIn(['learning', 'mode']),
 });
 
 const mapDispatchToProps = dispatch => ({

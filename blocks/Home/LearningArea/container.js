@@ -4,7 +4,7 @@ import { refreshCurrentLesson, updateCharToType } from 'ReduxUtils/modules/modes
 import Textarea from './component.jsx';
 
 const mapStateToProps = state => {
-  const stateLesson = state.getIn(['learningMode', 'lesson']);
+  const stateLesson = state.getIn(['learning', 'lesson']);
 
   return {
     typed: stateLesson.get('typed'),

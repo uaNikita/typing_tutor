@@ -2,11 +2,11 @@ import { connect } from 'react-redux';
 import Texts from './component.jsx';
 
 const mapStateToProps = state => ({
-  texts: state.getIn(['textMode', 'entities']).toJS().map(obj => ({
+  texts: state.getIn(['text', 'entities']).toJS().map(obj => ({
     id: obj.id,
     content: obj.typed + obj.last,
   })),
-  selectedId: state.getIn(['textMode', 'selectedId']),
+  selectedId: state.getIn(['text', 'selectedId']),
 });
 
 export default connect(

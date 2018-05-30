@@ -25,7 +25,7 @@ const REFRESH_TEXT = 'text/REFRESH_TEXT';
 const ADD_TEXT = 'text/ADD_TEXT';
 const TYPE_ENTITIE = 'text/TYPE_ENTITIE';
 
-const initialState = Immutable.fromJS(defaults.text);
+const initialState = Immutable.fromJS(defaults.modes.text);
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
@@ -122,9 +122,9 @@ export const processAddText = data =>
 
     dispatch(addText(text));
 
-    const textModeState = getState().get('textMode');
+    const textState = getState().get('text');
 
-    const id = textModeState.get('entities').last().get('id');
+    const id = textState.get('entities').last().get('id');
 
     if (select) {
       dispatch(selectText(id));
@@ -137,7 +137,7 @@ export const processAddText = data =>
     };
 
     return dispatch(processAction(
-      () => ls.set('modes.text', textModeState.toJS()),
+      () => ls.set('modes.text', textState.toJS()),
       () => dispatch(fetchJSON('/text/add', { body })),
     ));
   };
@@ -163,15 +163,15 @@ export const processRefreshText = id =>
     const body = { id };
 
     return dispatch(processAction(
-      () => ls.set('modes.text.entities', getState().getIn(['textMode', 'entities']).toJS()),
+      () => ls.set('modes.text.entities', getState().getIn(['text', 'entities']).toJS()),
       () => dispatch(fetchJSON('/text/refresh', { body })),
     ));
   };
 
 export const updateCharToType = () => (dispatch, getState) => {
   const state = getState();
-  const textId = state.getIn(['textMode', 'selectedId']);
-  const text = state.getIn(['textMode', 'entities']).filter(obj => obj.get('id') === textId).get(0);
+  const textId = state.getIn(['text', 'selectedId']);
+  const text = state.getIn(['text', 'entities']).filter(obj => obj.get('id') === textId).get(0);
 
   let idsChar = '';
 
@@ -190,11 +190,11 @@ export const typeEntitiySaveToServer = _.throttle(
 
 export const processTypeEntitiy = id =>
   (dispatch, getState) => {
-    const textModeState = getState().get('textMode');
+    const textState = getState().get('text');
 
     dispatch(typeEntitie(id));
 
-    const text = textModeState.get('entities')
+    const text = textState.get('entities')
       .filter(obj => obj.get('id') === id)
       .get(0);
 
@@ -204,18 +204,18 @@ export const processTypeEntitiy = id =>
     };
 
     return dispatch(processAction(
-      () => ls.set('modes.text', textModeState.toJS()),
+      () => ls.set('modes.text', textState.toJS()),
       () => typeEntitiySaveToServer(dispatch, { body }),
     ));
   };
 
 export const typeTextMode = char => (dispatch, getState) => {
   const state = getState();
-  const textId = state.getIn(['textMode', 'selectedId']);
+  const textId = state.getIn(['text', 'selectedId']);
   const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
   const text = state
-    .getIn(['textMode', 'entities'])
+    .getIn(['text', 'entities'])
     .filter(obj => obj.get('id') === textId)
     .get(0);
 
