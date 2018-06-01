@@ -31,7 +31,7 @@ const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning/REMOVE_LETTER_FROM_FREE_LETTER
 
 const SET_STATISTIC = 'text-mode/SET_STATISTIC';
 
-const initialState = Immutable.fromJS(defaults.modes.learning);
+const initialState = Immutable.fromJS(defaults.learning);
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
@@ -132,7 +132,7 @@ export const processSetFingersOptions = options =>
     dispatch(setFingersOptions(options));
 
     return dispatch(processAction(
-      () => ls.set('modes.learning.fingers', getState().getIn(['learning', 'fingers']).toJS()),
+      () => ls.set('learning.fingers', getState().getIn(['learning', 'fingers']).toJS()),
       () => dispatch(fetchJSON('/learning/fingers', {
         body: options,
       })),
@@ -144,7 +144,7 @@ export const processSetFreeOptions = options =>
     dispatch(setFreeOptions(options));
 
     return dispatch(processAction(
-      () => ls.set('modes.learning.free', getState().getIn(['learning', 'free']).toJS()),
+      () => ls.set('learning.free', getState().getIn(['learning', 'free']).toJS()),
       () => dispatch(fetchJSON('/learning/free', {
         body: options,
       })),
@@ -156,7 +156,7 @@ export const processAddLetterToFreeLetters = letter =>
     dispatch(addLetterToFreeLetters(letter));
 
     return dispatch(processAction(
-      () => ls.set('modes.learning.free.letters', 'letter'),
+      () => ls.set('learning.free.letters', 'letter'),
       () => dispatch(fetchJSON('/learning/free', {
         body: {
           maxLettersInWordFree: 'letter',
@@ -170,7 +170,7 @@ export const processRemoveLetterToFreeLetters = letter =>
     dispatch(removeLetterFromFreeLetters(letter));
 
     return dispatch(processAction(
-      () => ls.set('modes.learning.free.letters', 'letter'),
+      () => ls.set('learning.free.letters', 'letter'),
       () => dispatch(fetchJSON('/learning/free', {
         body: {
           maxLettersInWordFree: 'letter',

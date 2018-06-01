@@ -7,11 +7,9 @@ const APIError = require('../utils/APIError');
 const { defaults } = require('../../dist/compiledServer');
 
 const {
-  modes: {
-    text: {
-      selectedId,
-      entities,
-    },
+  text: {
+    selectedId,
+    entities,
   },
 } = defaults;
 

@@ -25,7 +25,7 @@ const REFRESH_TEXT = 'text/REFRESH_TEXT';
 const ADD_TEXT = 'text/ADD_TEXT';
 const TYPE_ENTITIE = 'text/TYPE_ENTITIE';
 
-const initialState = Immutable.fromJS(defaults.modes.text);
+const initialState = Immutable.fromJS(defaults.text);
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
