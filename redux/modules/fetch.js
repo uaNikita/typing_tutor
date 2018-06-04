@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
-import Cookie from 'js-cookie';
+import Cookies from 'js-cookie';
 
 import { clearState as clearLearningState } from './modes/learning';
 import { clearState as clearTextState } from './modes/text';
@@ -38,7 +38,7 @@ export const clearState = () => ({
 });
 
 export const setRefreshToken = token => {
-  Cookie.set('tt_refresh', token);
+  Cookies.set('tt_refresh', token);
 
   return {
     type: SET_REFRESH_TOKEN,
@@ -47,7 +47,7 @@ export const setRefreshToken = token => {
 };
 
 export const setAccessToken = token => {
-  Cookie.set('tt_access', token);
+  Cookies.set('tt_access', token);
 
   return {
     type: SET_ACCESS_TOKEN,
@@ -147,8 +147,8 @@ export const fetchJSON =
         });
 
 export const logOut = () => dispatch => {
-  Cookie.remove('tt_refresh');
-  Cookie.remove('tt_access');
+  Cookies.remove('tt_refresh');
+  Cookies.remove('tt_access');
 
   dispatch(clearState());
   dispatch(clearLearningState());

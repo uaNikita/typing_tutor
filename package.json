@@ -66,6 +66,7 @@
     "js-cookie": "^2.2.0",
     "jsonwebtoken": "^8.2.1",
     "lodash": "^4.17.10",
+    "lz-string": "^1.4.4",
     "moment": "^2.22.0",
     "mongodb": "^3.0.6",
     "mongoose": "^5.0.16",
