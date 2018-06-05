@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import moment from 'moment';
 import _ from 'lodash';
 
-import ls from 'Utils/ls';
+import temp from 'Utils/temp';
 
 import { processAction } from './main';
 import { fetchJSON } from './fetch';
@@ -117,7 +117,7 @@ export const processSetMode = mode =>
     dispatch(setMode(mode));
 
     return dispatch(processAction(
-      () => ls.set('mode', mode),
+      () => temp.path('mode', mode),
       () => dispatch(fetchJSON('/profile/mode', { mode })),
     ));
   };
@@ -139,7 +139,7 @@ export const processAddStatistic = () =>
     dispatch(addStatistic(body));
 
     return dispatch(processAction(
-      () => ls.set('statistic', getState().getIn(['main', 'statistic'])),
+      () => temp.path('statistic', getState().getIn(['main', 'statistic'])),
       () => dispatch(fetchJSON('/profile/statistic', { body })),
     ));
   };

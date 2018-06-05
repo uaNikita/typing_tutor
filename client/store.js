@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import ls from 'Utils/ls';
+import temp from 'Utils/temp';
 import reducer from 'ReduxUtils/reducer';
 
 // get state from server
@@ -12,7 +12,7 @@ let initialState = window.PRELOADED_STATE;
 delete window.PRELOADED_STATE;
 
 // get state from localStorage
-const localState = ls.get();
+const localState = temp.get();
 
 if (!_.isEmpty(localState)) {
   initialState = _.merge(initialState, localState);

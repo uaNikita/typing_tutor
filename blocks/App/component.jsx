@@ -5,8 +5,6 @@ import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import classNames from 'classnames';
 import _ from 'lodash';
 
-import ls from 'Utils/ls';
-
 import GlobalMessageTransitionGroup from 'Blocks/GlobalMessageTransitionGroup/container';
 import Modal from 'Blocks/Modal/component.jsx';
 import VerifyPage from 'Blocks/VerifyPage/container';
@@ -32,50 +30,15 @@ class App extends Component {
   componentDidMount() {
     const {
       props: {
-        setMode,
-        setStatistic,
-        setTextState,
         location,
         setLastNoModalLocation,
-        email,
         init,
       },
     } = this;
 
     setLastNoModalLocation(location);
 
-    // update state from localStorage if needed
-    const touchToType = ls.get('touchToType');
-
-    if (!email) {
-      if (!_.isEmpty(touchToType)) {
-        const {
-          mode,
-          statistic,
-          modes,
-        } = touchToType;
-
-        if (mode) {
-          setMode(mode);
-        }
-
-        if (statistic) {
-          setStatistic(statistic);
-        }
-
-        if (modes) {
-          const {
-            text,
-          } = modes;
-
-          if (text) {
-            setTextState(text);
-          }
-        }
-      }
-
-      init();
-    }
+    init();
   }
 
   componentWillReceiveProps(nextProps) {

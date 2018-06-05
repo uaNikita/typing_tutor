@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 
 import { getIdsFromCharacter, generateLesson, getFingersSet } from 'Utils';
-import ls from 'Utils/ls';
+import temp from 'Utils/temp';
 import defaults from 'Constants/defaultState';
 
 import { fetchJSON } from 'ReduxUtils/modules/fetch';
@@ -132,7 +132,7 @@ export const processSetFingersOptions = options =>
     dispatch(setFingersOptions(options));
 
     return dispatch(processAction(
-      () => ls.set('learning.fingers', getState().getIn(['learning', 'fingers']).toJS()),
+      () => temp.path('learning.fingers', getState().getIn(['learning', 'fingers']).toJS()),
       () => dispatch(fetchJSON('/learning/fingers', {
         body: options,
       })),
@@ -144,7 +144,7 @@ export const processSetFreeOptions = options =>
     dispatch(setFreeOptions(options));
 
     return dispatch(processAction(
-      () => ls.set('learning.free', getState().getIn(['learning', 'free']).toJS()),
+      () => temp.path('learning.free', getState().getIn(['learning', 'free']).toJS()),
       () => dispatch(fetchJSON('/learning/free', {
         body: options,
       })),
@@ -156,7 +156,7 @@ export const processAddLetterToFreeLetters = letter =>
     dispatch(addLetterToFreeLetters(letter));
 
     return dispatch(processAction(
-      () => ls.set('learning.free.letters', 'letter'),
+      () => temp.path('learning.free.letters', 'letter'),
       () => dispatch(fetchJSON('/learning/free', {
         body: {
           maxLettersInWordFree: 'letter',
@@ -170,7 +170,7 @@ export const processRemoveLetterToFreeLetters = letter =>
     dispatch(removeLetterFromFreeLetters(letter));
 
     return dispatch(processAction(
-      () => ls.set('learning.free.letters', 'letter'),
+      () => temp.path('learning.free.letters', 'letter'),
       () => dispatch(fetchJSON('/learning/free', {
         body: {
           maxLettersInWordFree: 'letter',

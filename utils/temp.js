@@ -12,9 +12,7 @@ const get = () => {
   let obj = Cookies.get(cookieName);
 
   if (obj) {
-    obj = decodeURIComponent(obj);
-
-    obj = LZString.decompress(obj);
+    obj = LZString.decompressFromEncodedURIComponent(obj);
 
     obj = JSON.parse(obj);
   }
@@ -25,28 +23,25 @@ const get = () => {
   return obj;
 };
 
+const set = obj => {
+  let cookie = JSON.stringify(obj);
 
-const set = c => {
-  let cookie = JSON.stringify(c);
-
-  cookie = LZString.compress(cookie);
-
-  cookie = encodeURIComponent(cookie);
+  cookie = LZString.compressToEncodedURIComponent(cookie);
 
   Cookies.set(cookieName, cookie);
 };
 
 
 const path = (pathToProp, val) => {
-  const cookie = _.set(get(), pathToProp, val);
+  const obj = _.set(get(), pathToProp, val);
 
-  set(cookieName, cookie);
+  set(obj);
 };
 
-const assign = obj => {
-  const cookie = _.merge(get(), obj);
+const assign = objToExtend => {
+  const obj = _.merge(get(), objToExtend);
 
-  set(cookieName, cookie);
+  set(obj);
 };
 
 const clear = () => Cookies.remove(cookieName);
