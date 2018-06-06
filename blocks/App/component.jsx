@@ -32,13 +32,10 @@ class App extends Component {
       props: {
         location,
         setLastNoModalLocation,
-        init,
       },
     } = this;
 
     setLastNoModalLocation(location);
-
-    init();
   }
 
   componentWillReceiveProps(nextProps) {

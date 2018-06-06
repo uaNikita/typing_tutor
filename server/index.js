@@ -19,6 +19,7 @@ const {
   reducer,
   setRefreshToken,
   setAccessToken,
+  init,
   requestAllWithoutAuth,
 } = require('../dist/compiledServer');
 
@@ -63,15 +64,14 @@ require('./passport')(app);
 
 app.use('/', require('./controllers'));
 
-app.use((req, res) => {
-  const context = {};
-
+app.use(async (req, res) => {
   const {
     tt_access: accessCookie,
     tt_refresh: refreshCookie,
     tt_temp: tempCookie,
   } = req.cookies;
 
+  // read info from tt_temp cookie and add it to store
   let tempState = {};
 
   if (tempCookie) {
@@ -80,27 +80,45 @@ app.use((req, res) => {
     tempState = JSON.parse(tempState);
   }
 
-  console.log('tempState', tempState);
-  
   tempState = Immutable.fromJS(tempState);
 
+  // create store
   const store = createStore(reducer, tempState, applyMiddleware(thunk));
 
   const { dispatch } = store;
 
-  const sendRes = () => {
-    const html = renderToString(compiledApp(req.url, context, store));
+  // get all info for authorized users
+  if (accessCookie) {
+    dispatch(setAccessToken(accessCookie));
+    dispatch(setRefreshToken(refreshCookie));
 
-    if (context.url) {
-      res.status(301).set('Location', context.url);
+    await dispatch(requestAllWithoutAuth())
+      .then(({ ok }) => {
+        if (!ok) {
+          res.clearCookie('tt_refresh');
+          res.clearCookie('tt_access');
+        }
+      })
+      .catch(() => {});
+  }
 
-      res.end();
-    }
-    else {
-      const { title, meta, link, script } = Helmet.renderStatic();
+  // initialize some parts of store, for example learning lessons
+  dispatch(init());
 
-      res.send(
-        `<!doctype html>
+  const context = {};
+
+  const html = renderToString(compiledApp(req.url, context, store));
+
+  if (context.url) {
+    res.status(301).set('Location', context.url);
+
+    res.end();
+  }
+  else {
+    const { title, meta, link, script } = Helmet.renderStatic();
+
+    res.send(
+      `<!doctype html>
            <html>
              ${title.toString()}
              ${meta.toString()}
@@ -113,28 +131,7 @@ app.use((req, res) => {
              ${script.toString()}
              <div id='root'>${html}</div>
           </html>`
-      );
-    }
-  };
-
-  if (accessCookie) {
-    dispatch(setAccessToken(accessCookie));
-
-    if (refreshCookie) {
-      dispatch(setRefreshToken(refreshCookie));
-    }
-
-    dispatch(requestAllWithoutAuth())
-      .then(() => sendRes())
-      .catch(() => {
-        res.clearCookie('tt_refresh');
-        res.clearCookie('tt_access');
-
-        sendRes();
-      });
-  }
-  else {
-    sendRes();
+    );
   }
 });
 

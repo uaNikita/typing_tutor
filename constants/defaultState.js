@@ -29,11 +29,13 @@ export default {
     fingers: {
       maxLettersInWord: 5,
       setSize: 5,
+      example: '',
     },
 
     free: {
       maxLettersInWord: 5,
       letters: Immutable.Set([]),
+      example: '',
     },
   },
 };
