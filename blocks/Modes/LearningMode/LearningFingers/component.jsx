@@ -8,19 +8,43 @@ import LearningView from 'Blocks/LearningView/component.jsx';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFingers extends Component {
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const changedOptions = [];
+
+    if (prevState.maxLettersInWord !== nextProps.maxLettersInWord) {
+      changedOptions.push('maxLettersInWord');
+    }
+
+    if (prevState.setSize !== nextProps.setSize) {
+      changedOptions.push('setSize');
+    }
+
+    let state = null;
+
+    if (changedOptions.length) {
+      state = {};
+
+      changedOptions.forEach(option => {
+        state[option] = nextProps[option];
+      });
+
+      state.lesson = nextProps.generateFingersLesson();
+    }
+
+    return state;
+  }
+
   state = {
-    lesson: this.props.generateFingersLesson(),
+    lesson: '',
   }
 
   componentDidMount() {
     const {
       props: {
         fingersSet,
-        sizeFingers,
+        setSize,
         maxLettersInWord,
-        setSizeFingers,
-        setMaxLettersInWord,
-        generateFingersLesson,
+        setOptions,
       },
     } = this;
 
@@ -47,10 +71,8 @@ class LearningFingers extends Component {
     this.maxLettersInWordRange.noUiSlider.on('slide', (values, handle) => {
       const val = parseInt(values[handle], 10);
 
-      setMaxLettersInWord(val);
-
-      this.setState({
-        lesson: generateFingersLesson(),
+      setOptions({
+        maxLettersInWord: val,
       });
 
       noUiValueMaxLettersInWord.innerHTML = val;
@@ -60,7 +82,7 @@ class LearningFingers extends Component {
     noUiValueFingersSet.className = 'noUi-value';
 
     noUiSlider.create(this.fingersRange, {
-      start: [sizeFingers],
+      start: [setSize],
       step: 1,
       connect: 'lower',
       range: {
@@ -69,7 +91,7 @@ class LearningFingers extends Component {
       },
     });
 
-    noUiValueFingersSet.innerHTML = sizeFingers;
+    noUiValueFingersSet.innerHTML = setSize;
 
     this.fingersRange
       .querySelector('.noUi-handle')
@@ -78,10 +100,8 @@ class LearningFingers extends Component {
     this.fingersRange.noUiSlider.on('slide', (values, handle) => {
       const val = parseInt(values[handle], 10);
 
-      setSizeFingers(val);
-
-      this.setState({
-        lesson: generateFingersLesson(),
+      setOptions({
+        setSize: val,
       });
 
       noUiValueFingersSet.innerHTML = val;
@@ -93,7 +113,7 @@ class LearningFingers extends Component {
       props: {
         keys,
         fingersSet,
-        sizeFingers,
+        setSize,
       },
       state: {
         lesson,
@@ -102,7 +122,7 @@ class LearningFingers extends Component {
 
     let selectedLetters = clone(fingersSet);
 
-    selectedLetters.splice(sizeFingers);
+    selectedLetters.splice(setSize);
 
     selectedLetters = concat(...selectedLetters);
 

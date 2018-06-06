@@ -102,9 +102,9 @@ export const setCurrentLesson = lesson => ({
   lesson,
 });
 
-export const setFingersOptions = length => ({
+export const setFingersOptions = options => ({
   type: SET_FINGERS_OPTIONS,
-  length,
+  options,
 });
 
 export const setFreeOptions = options => ({

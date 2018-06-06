@@ -72,13 +72,6 @@ app.use((req, res) => {
     tt_temp: tempCookie,
   } = req.cookies;
 
-  // todo: find solution to this
-  if (req.url.indexOf('validateNextState.js.map') + 1) {
-    res.end();
-
-    return;
-  }
-
   let tempState = {};
 
   if (tempCookie) {
@@ -87,6 +80,8 @@ app.use((req, res) => {
     tempState = JSON.parse(tempState);
   }
 
+  console.log('tempState', tempState);
+  
   tempState = Immutable.fromJS(tempState);
 
   const store = createStore(reducer, tempState, applyMiddleware(thunk));

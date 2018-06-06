@@ -11,22 +11,15 @@ const mapStateToProps = state => {
   const stateFingers = state.getIn(['learning', 'fingers']);
 
   return {
-    sizeFingers: stateFingers.get('setSize'),
     maxLettersInWord: stateFingers.get('maxLettersInWord'),
+    setSize: stateFingers.get('setSize'),
     fingersSet: getFingersSet(keys),
     keys,
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  setSizeFingers: size =>
-    dispatch(processSetFingersOptions({
-      setSize: size,
-    })),
-  setMaxLettersInWord: length =>
-    dispatch(processSetFingersOptions({
-      maxLettersInWord: length,
-    })),
+  setOptions: (...args) => dispatch(processSetFingersOptions(...args)),
   generateFingersLesson: (...args) => dispatch(generateFingersLesson(...args)),
 });
 
