@@ -117,7 +117,7 @@ export const processSetMode = mode =>
     dispatch(setMode(mode));
 
     return dispatch(processAction(
-      () => temp.path('mode', mode),
+      () => temp.path('user.mode', mode),
       () => dispatch(fetchJSON('/profile/mode', { mode })),
     ));
   };
@@ -139,7 +139,7 @@ export const processAddStatistic = () =>
     dispatch(addStatistic(body));
 
     return dispatch(processAction(
-      () => temp.path('statistic', getState().getIn(['main', 'statistic'])),
+      () => temp.path('user.statistic', getState().getIn(['main', 'statistic'])),
       () => dispatch(fetchJSON('/profile/statistic', { body })),
     ));
   };
