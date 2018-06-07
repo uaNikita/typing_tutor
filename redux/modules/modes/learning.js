@@ -24,8 +24,9 @@ const SET_LEARNING_MODE = 'learning/SET_LEARNING_MODE';
 const SET_CURRENT_LESSON = 'learning/SET_CURRENT_LESSON';
 
 const SET_FINGERS_OPTIONS = 'learning/SET_FINGERS_OPTIONS';
-const SET_FREE_OPTIONS = 'learning/SET_FREE_OPTIONS';
+const SET_FINGERS_EXAMPLE = 'learning/SET_FINGERS_EXAMPLE';
 
+const SET_FREE_OPTIONS = 'learning/SET_FREE_OPTIONS';
 const ADD_LETTER_TO_FREE_LETTERS = 'learning/ADD_LETTER_TO_FREE_LETTERS';
 const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning/REMOVE_LETTER_FROM_FREE_LETTERS';
 
@@ -107,11 +108,15 @@ export const setFingersOptions = options => ({
   options,
 });
 
+export const setFingersExample = example => ({
+  type: SET_FINGERS_EXAMPLE,
+  example,
+});
+
 export const setFreeOptions = options => ({
   type: SET_FREE_OPTIONS,
   options,
 });
-
 
 export const addLetterToFreeLetters = letter => ({
   type: ADD_LETTER_TO_FREE_LETTERS,
@@ -127,9 +132,25 @@ export const typeOnLesson = () => ({
   type: TYPE_ON_LESSON,
 });
 
+export const generateFingersLesson = () => (dispatch, getState) => {
+  const state = getState();
+
+  const keys = state.getIn(['main', 'keys']).toJS();
+
+  let fingersSet = getFingersSet(keys);
+
+  fingersSet.splice(state.getIn(['learning', 'fingers', 'setSize']));
+
+  fingersSet = _.concat.apply(null, fingersSet);
+
+  return generateLesson(state.getIn(['learning', 'fingers', 'maxLettersInWord']), fingersSet);
+};
+
 export const processSetFingersOptions = options =>
   (dispatch, getState) => {
     dispatch(setFingersOptions(options));
+
+    dispatch(generateFingersLesson(options));
 
     return dispatch(processAction(
       () => temp.path('learning.fingers', getState().getIn(['learning', 'fingers']).toJS()),
@@ -138,6 +159,15 @@ export const processSetFingersOptions = options =>
       })),
     ));
   };
+
+export const generateFreeLesson = () => (dispatch, getState) => {
+  const learningState = getState().get('learning');
+
+  return generateLesson(
+    learningState.getIn(['free', 'maxLettersInWord']),
+    learningState.getIn(['free', 'letters']).toJS(),
+  );
+};
 
 export const processSetFreeOptions = options =>
   (dispatch, getState) => {
@@ -178,29 +208,6 @@ export const processRemoveLetterToFreeLetters = letter =>
       })),
     ));
   };
-
-export const generateFingersLesson = () => (dispatch, getState) => {
-  const state = getState();
-
-  const keys = state.getIn(['main', 'keys']).toJS();
-
-  let fingersSet = getFingersSet(keys);
-
-  fingersSet.splice(state.getIn(['learning', 'fingers', 'setSize']));
-
-  fingersSet = _.concat.apply(null, fingersSet);
-
-  return generateLesson(state.getIn(['learning', 'fingers', 'maxLettersInWord']), fingersSet);
-};
-
-export const generateFreeLesson = () => (dispatch, getState) => {
-  const learningState = getState().get('learning');
-
-  return generateLesson(
-    learningState.getIn(['free', 'maxLettersInWord']),
-    learningState.getIn(['free', 'letters']).toJS(),
-  );
-};
 
 export const refreshCurrentLesson = () => (dispatch, getState) => {
   const learningState = getState().get('learning');
@@ -289,6 +296,10 @@ export const initLessons = () =>
     dispatch(setFingersOptions({
       setSize: size,
     }));
+
+    const fingersExample = dispatch(generateFingersLesson())
+
+    dispatch(setFingersExample(fingersExample));
 
     const letters = defaultKeys.map(obj => obj.key);
 
