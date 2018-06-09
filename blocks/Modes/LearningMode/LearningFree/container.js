@@ -1,32 +1,21 @@
 import { connect } from 'react-redux';
 
-import {
-  processAddLetterToFreeLetters,
-  processRemoveLetterToFreeLetters,
-  processSetFreeOptions,
-  generateFreeLesson,
-} from 'ReduxUtils/modules/modes/learning';
+import { updateFreeOptionsAndExample } from 'ReduxUtils/modules/modes/learning';
 
 import LearningFree from './component.jsx';
 
 const mapStateToProps = state => {
-  const stateLearning = state.get('learning');
+  const stateFree = state.getIn(['learning', 'free']);
 
   return {
-    maxLettersInWord: stateLearning.getIn(['free', 'maxLettersInWord']),
-    letters: stateLearning.getIn(['free', 'letters']).toJS(),
+    example: stateFree.getIn('example'),
+    options: stateFree.getIn('options').toJS(),
     keys: state.getIn(['main', 'keys']).toJS(),
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  addLetter: (...args) => dispatch(processAddLetterToFreeLetters(...args)),
-  removeLetter: (...args) => dispatch(processRemoveLetterToFreeLetters(...args)),
-  setMaxLettersInWord: length =>
-    dispatch(processSetFreeOptions({
-      maxLettersInWord: length,
-    })),
-  generateFreeLesson: (...args) => dispatch(generateFreeLesson(...args)),
+  updateOptions: (...args) => dispatch(updateFreeOptionsAndExample(...args)),
 });
 
 export default connect(

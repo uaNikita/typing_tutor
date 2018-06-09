@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
-import _ from 'lodash';
 import noUiSlider from 'nouislider';
 
 import LearningView from 'Blocks/LearningView/component.jsx';
@@ -8,42 +7,13 @@ import Key from 'Blocks/Key/component.jsx';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFree extends Component {
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const changedOptions = [];
-
-    if (prevState.maxLettersInWord !== nextProps.maxLettersInWord) {
-      changedOptions.push('maxLettersInWord');
-    }
-
-    if (!_.isEqual(prevState.letters, nextProps.letters)) {
-      changedOptions.push('letters');
-    }
-
-    let state = null;
-
-    if (changedOptions.length) {
-      state = {};
-
-      changedOptions.forEach(option => {
-        state[option] = nextProps[option];
-      });
-
-      state.lesson = nextProps.generateFreeLesson();
-    }
-
-    return state;
-  }
-
-  state = {
-    lesson: undefined,
-  }
-
   componentDidMount() {
     const {
       props: {
-        maxLettersInWord,
-        setMaxLettersInWord,
-        generateFreeLesson,
+        options: {
+          maxLettersInWord,
+        },
+        updateOptions,
       },
     } = this;
 
@@ -70,10 +40,8 @@ class LearningFree extends Component {
     this.maxLettersInWordRange.noUiSlider.on('slide', (values, handle) => {
       const val = parseInt(values[handle], 10);
 
-      setMaxLettersInWord(val);
-
-      this.setState({
-        lesson: generateFreeLesson(),
+      updateOptions({
+        maxLettersInWord: val,
       });
 
       noUiValueMaxLettersInWord.innerHTML = val;
@@ -83,13 +51,12 @@ class LearningFree extends Component {
   render() {
     const {
       props: {
+        options: {
+          letters,
+        },
         keys,
-        letters,
-        addLetter,
-        removeLetter,
-      },
-      state: {
-        lesson,
+        updateOptions,
+        example,
       },
     } = this;
 
@@ -104,13 +71,17 @@ class LearningFree extends Component {
       if (obj.type === 'letter') {
         if (letters.indexOf(obj.key) + 1) {
           if (letters.length > 1) {
-            keyProps.onClick = () => removeLetter(obj.key);
+            keyProps.onClick = () => updateOptions({
+              letters: ['remove', obj.key],
+            });
           }
 
           className = classNames(className, 'keyboard__key_selected');
         }
         else {
-          keyProps.onClick = () => addLetter(obj.key);
+          keyProps.onClick = () => updateOptions({
+            letters: ['add', obj.key],
+          });
         }
       }
       else {
@@ -133,7 +104,7 @@ class LearningFree extends Component {
     return (
       <Fragment>
         <h4 className="settings-learning__title">Example</h4>
-        <LearningView className="settings-learning__view" lesson={lesson} />
+        <LearningView className="settings-learning__view" lesson={example} />
 
         <h4 className="settings-learning__title">Settings</h4>
 

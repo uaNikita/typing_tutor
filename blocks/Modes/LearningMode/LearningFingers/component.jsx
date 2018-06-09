@@ -8,43 +8,15 @@ import LearningView from 'Blocks/LearningView/component.jsx';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFingers extends Component {
-  static getDerivedStateFromProps(nextProps, prevState) {
-    const changedOptions = [];
-
-    if (prevState.maxLettersInWord !== nextProps.maxLettersInWord) {
-      changedOptions.push('maxLettersInWord');
-    }
-
-    if (prevState.setSize !== nextProps.setSize) {
-      changedOptions.push('setSize');
-    }
-
-    let state = null;
-
-    if (changedOptions.length) {
-      state = {};
-
-      changedOptions.forEach(option => {
-        state[option] = nextProps[option];
-      });
-
-      state.lesson = nextProps.generateFingersLesson();
-    }
-
-    return state;
-  }
-
-  state = {
-    lesson: '',
-  }
-
   componentDidMount() {
     const {
       props: {
+        options: {
+          setSize,
+          maxLettersInWord,
+        },
         fingersSet,
-        setSize,
-        maxLettersInWord,
-        setOptions,
+        updateOptions,
       },
     } = this;
 
@@ -71,7 +43,7 @@ class LearningFingers extends Component {
     this.maxLettersInWordRange.noUiSlider.on('slide', (values, handle) => {
       const val = parseInt(values[handle], 10);
 
-      setOptions({
+      updateOptions({
         maxLettersInWord: val,
       });
 
@@ -100,7 +72,7 @@ class LearningFingers extends Component {
     this.fingersRange.noUiSlider.on('slide', (values, handle) => {
       const val = parseInt(values[handle], 10);
 
-      setOptions({
+      updateOptions({
         setSize: val,
       });
 
@@ -111,12 +83,12 @@ class LearningFingers extends Component {
   render() {
     const {
       props: {
+        options: {
+          setSize,
+        },
         keys,
         fingersSet,
-        setSize,
-      },
-      state: {
-        lesson,
+        example,
       },
     } = this;
 
@@ -164,7 +136,7 @@ class LearningFingers extends Component {
     return (
       <Fragment>
         <h4 className="settings-learning__title">Example</h4>
-        <LearningView className="settings-learning__view" lesson={lesson} />
+        <LearningView className="settings-learning__view" lesson={example} />
 
         <h4 className="settings-learning__title">Settings</h4>
 

@@ -23,12 +23,11 @@ const TYPE_ON_LESSON = 'learning/TYPE_ON_LESSON';
 const SET_LEARNING_MODE = 'learning/SET_LEARNING_MODE';
 const SET_CURRENT_LESSON = 'learning/SET_CURRENT_LESSON';
 
-const SET_FINGERS_OPTIONS = 'learning/SET_FINGERS_OPTIONS';
+const UPDATE_FINGERS_OPTIONS = 'learning/UPDATE_FINGERS_OPTIONS';
 const SET_FINGERS_EXAMPLE = 'learning/SET_FINGERS_EXAMPLE';
 
-const SET_FREE_OPTIONS = 'learning/SET_FREE_OPTIONS';
-const ADD_LETTER_TO_FREE_LETTERS = 'learning/ADD_LETTER_TO_FREE_LETTERS';
-const REMOVE_LETTER_FROM_FREE_LETTERS = 'learning/REMOVE_LETTER_FROM_FREE_LETTERS';
+const UPDATE_FREE_OPTIONS = 'learning/UPDATE_FREE_OPTIONS';
+const SET_FREE_EXAMPLE = 'learning/SET_FREE_EXAMPLE';
 
 const SET_STATISTIC = 'text-mode/SET_STATISTIC';
 
@@ -59,27 +58,25 @@ export default (state = initialState, action = {}) => {
         rest: action.lesson,
       }));
 
-    case SET_FINGERS_OPTIONS:
-      return state.update('fingers', fingers => fingers.merge(action.options));
+    case UPDATE_FINGERS_OPTIONS:
+      return state.updateIn(['fingers', 'options'], fingers => fingers.merge(action.options));
 
-    case SET_FREE_OPTIONS:
-      return state.update('free', free => {
-        const {
-          options,
-        } = action;
+    case SET_FINGERS_EXAMPLE:
+      return state.setIn(['free', 'example'], action.example);
+
+    case UPDATE_FREE_OPTIONS:
+      return state.updateIn(['free', 'options'], opts => {
+        const { options } = action;
 
         if (options.letters) {
-          options.letters = Immutable.Set(options.letters);
+          const [type, letter] = options.letters;
+
+          // type can be add, delete, set
+          options.letters = opts[type](letter);
         }
 
-        return free.merge(options);
+        return opts.merge(options);
       });
-
-    case ADD_LETTER_TO_FREE_LETTERS:
-      return state.updateIn(['free', 'letters'], letters => letters.add(action.letter));
-
-    case REMOVE_LETTER_FROM_FREE_LETTERS:
-      return state.updateIn(['free', 'letters'], letters => letters.delete(action.letter));
 
     case SET_STATISTIC:
       return state.set('selectedId', state.get('entities').last().get('id'));
@@ -103,8 +100,8 @@ export const setCurrentLesson = lesson => ({
   lesson,
 });
 
-export const setFingersOptions = options => ({
-  type: SET_FINGERS_OPTIONS,
+export const updateFingersOptions = options => ({
+  type: UPDATE_FINGERS_OPTIONS,
   options,
 });
 
@@ -113,100 +110,88 @@ export const setFingersExample = example => ({
   example,
 });
 
-export const setFreeOptions = options => ({
-  type: SET_FREE_OPTIONS,
+export const updateFreeOptions = options => ({
+  type: UPDATE_FREE_OPTIONS,
   options,
 });
 
-export const addLetterToFreeLetters = letter => ({
-  type: ADD_LETTER_TO_FREE_LETTERS,
-  letter,
-});
-
-export const removeLetterFromFreeLetters = letter => ({
-  type: REMOVE_LETTER_FROM_FREE_LETTERS,
-  letter,
+export const setFreeExample = example => ({
+  type: SET_FREE_EXAMPLE,
+  example,
 });
 
 export const typeOnLesson = () => ({
   type: TYPE_ON_LESSON,
 });
 
-export const generateFingersLesson = () => (dispatch, getState) => {
-  const state = getState();
-
-  const keys = state.getIn(['main', 'keys']).toJS();
-
-  let fingersSet = getFingersSet(keys);
-
-  fingersSet.splice(state.getIn(['learning', 'fingers', 'setSize']));
-
-  fingersSet = _.concat.apply(null, fingersSet);
-
-  return generateLesson(state.getIn(['learning', 'fingers', 'maxLettersInWord']), fingersSet);
-};
-
-export const processSetFingersOptions = options =>
+export const processUpdateFingersOptions = options =>
   (dispatch, getState) => {
-    dispatch(setFingersOptions(options));
-
-    dispatch(generateFingersLesson(options));
+    dispatch(updateFingersOptions(options));
 
     return dispatch(processAction(
-      () => temp.path('learning.fingers', getState().getIn(['learning', 'fingers']).toJS()),
+      () => temp.path('learning.fingers.options', getState().getIn(['learning', 'fingers', 'options']).toJS()),
       () => dispatch(fetchJSON('/learning/fingers', {
         body: options,
       })),
     ));
   };
 
-export const generateFreeLesson = () => (dispatch, getState) => {
-  const learningState = getState().get('learning');
-
-  return generateLesson(
-    learningState.getIn(['free', 'maxLettersInWord']),
-    learningState.getIn(['free', 'letters']).toJS(),
-  );
-};
-
-export const processSetFreeOptions = options =>
+export const generateFingersLesson = () =>
   (dispatch, getState) => {
-    dispatch(setFreeOptions(options));
+    const state = getState();
+
+    const keys = state.getIn(['main', 'keys']).toJS();
+
+    let fingersSet = getFingersSet(keys);
+
+    fingersSet.splice(state.getIn(['learning', 'fingers', 'options', 'setSize']));
+
+    fingersSet = _.concat.apply(null, fingersSet);
+
+    return generateLesson(state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']), fingersSet);
+  };
+
+export const updateFingersOptionsAndExample = options =>
+  dispatch => {
+    dispatch(processUpdateFingersOptions(options));
+
+    const example = dispatch(generateFingersLesson());
+
+    dispatch(setFingersExample(example));
+  };
+
+export const processUpdateFreeOptions = options =>
+  (dispatch, getState) => {
+    dispatch(updateFreeOptions(options));
 
     return dispatch(processAction(
-      () => temp.path('learning.free', getState().getIn(['learning', 'free']).toJS()),
+      () => temp.path(
+        'learning.free.options',
+        getState().getIn(['learning', 'free', 'options']).toJS(),
+      ),
       () => dispatch(fetchJSON('/learning/free', {
         body: options,
       })),
     ));
   };
 
-export const processAddLetterToFreeLetters = letter =>
-  dispatch => {
-    dispatch(addLetterToFreeLetters(letter));
+export const generateFreeLesson = () =>
+  (dispatch, getState) => {
+    const learningState = getState().getIn(['learning', 'free', 'options']);
 
-    return dispatch(processAction(
-      () => temp.path('learning.free.letters', 'letter'),
-      () => dispatch(fetchJSON('/learning/free', {
-        body: {
-          maxLettersInWordFree: 'letter',
-        },
-      })),
-    ));
+    return generateLesson(
+      learningState.get('maxLettersInWord'),
+      learningState.get('letters').toJS(),
+    );
   };
 
-export const processRemoveLetterToFreeLetters = letter =>
+export const updateFreeOptionsAndExample = options =>
   dispatch => {
-    dispatch(removeLetterFromFreeLetters(letter));
+    dispatch(processUpdateFreeOptions(options));
 
-    return dispatch(processAction(
-      () => temp.path('learning.free.letters', 'letter'),
-      () => dispatch(fetchJSON('/learning/free', {
-        body: {
-          maxLettersInWordFree: 'letter',
-        },
-      })),
-    ));
+    const example = dispatch(generateFreeLesson());
+
+    dispatch(setFreeExample(example));
   };
 
 export const refreshCurrentLesson = () => (dispatch, getState) => {
@@ -293,19 +278,19 @@ export const initLessons = () =>
       .value()
       .length;
 
-    dispatch(setFingersOptions({
+    dispatch(updateFingersOptions({
       setSize: size,
     }));
 
-    const fingersExample = dispatch(generateFingersLesson())
+    const fingersExample = dispatch(generateFingersLesson());
 
     dispatch(setFingersExample(fingersExample));
 
     const letters = defaultKeys.map(obj => obj.key);
 
     dispatch(setCurrentLesson(
-      generateLesson(state.getIn(['learning', 'fingers', 'maxLettersInWord']), letters),
+      generateLesson(state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']), letters),
     ));
 
-    dispatch(setFreeOptions({ letters }));
+    dispatch(updateFreeOptions({ letters }));
   };
