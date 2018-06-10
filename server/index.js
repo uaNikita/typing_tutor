@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -21,6 +22,7 @@ const {
   setAccessToken,
   init,
   requestAllWithoutAuth,
+  defaults,
 } = require('../dist/compiledServer');
 
 process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
@@ -80,6 +82,8 @@ app.use(async (req, res) => {
     tempState = JSON.parse(tempState);
   }
 
+  tempState = _.merge({}, defaults, tempState);
+
   tempState = Immutable.fromJS(tempState);
 
   // create store
@@ -115,7 +119,12 @@ app.use(async (req, res) => {
     res.end();
   }
   else {
-    const { title, meta, link, script } = Helmet.renderStatic();
+    const {
+      title,
+      meta,
+      link,
+      script,
+    } = Helmet.renderStatic();
 
     res.send(
       `<!doctype html>

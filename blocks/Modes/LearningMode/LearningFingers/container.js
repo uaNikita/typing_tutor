@@ -12,7 +12,7 @@ const mapStateToProps = state => {
 
   return {
     example: stateFingers.get('example'),
-    options: stateFingers.getIn('options').toJS(),
+    options: stateFingers.get('options').toJS(),
     fingersSet: getFingersSet(keys),
     keys,
   };

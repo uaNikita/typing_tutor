@@ -8,9 +8,8 @@ import 'isomorphic-fetch';
 
 import 'font-awesome/css/font-awesome.css';
 import 'nouislider/distribute/nouislider.css';
-
-// initialize perfect-scrollbar for $ in all project;
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
+import 'rc-slider/assets/index.css';
 
 import 'Static/stylus/main.styl';
 

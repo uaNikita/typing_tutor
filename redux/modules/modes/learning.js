@@ -29,7 +29,7 @@ const SET_FINGERS_EXAMPLE = 'learning/SET_FINGERS_EXAMPLE';
 const UPDATE_FREE_OPTIONS = 'learning/UPDATE_FREE_OPTIONS';
 const SET_FREE_EXAMPLE = 'learning/SET_FREE_EXAMPLE';
 
-const SET_STATISTIC = 'text-mode/SET_STATISTIC';
+const SET_STATISTIC = 'learning/SET_STATISTIC';
 
 const initialState = Immutable.fromJS(defaults.learning);
 
@@ -59,10 +59,10 @@ export default (state = initialState, action = {}) => {
       }));
 
     case UPDATE_FINGERS_OPTIONS:
-      return state.updateIn(['fingers', 'options'], fingers => fingers.merge(action.options));
+      return state.updateIn(['fingers', 'options'], opts => opts.merge(action.options));
 
     case SET_FINGERS_EXAMPLE:
-      return state.setIn(['free', 'example'], action.example);
+      return state.setIn(['fingers', 'example'], action.example);
 
     case UPDATE_FREE_OPTIONS:
       return state.updateIn(['free', 'options'], opts => {
@@ -129,7 +129,10 @@ export const processUpdateFingersOptions = options =>
     dispatch(updateFingersOptions(options));
 
     return dispatch(processAction(
-      () => temp.path('learning.fingers.options', getState().getIn(['learning', 'fingers', 'options']).toJS()),
+      () => temp.path(
+        'learning.fingers.options',
+        getState().getIn(['learning', 'fingers', 'options']).toJS(),
+      ),
       () => dispatch(fetchJSON('/learning/fingers', {
         body: options,
       })),
@@ -148,7 +151,10 @@ export const generateFingersLesson = () =>
 
     fingersSet = _.concat.apply(null, fingersSet);
 
-    return generateLesson(state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']), fingersSet);
+    return generateLesson(
+      state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']),
+      fingersSet,
+    );
   };
 
 export const updateFingersOptionsAndExample = options =>
@@ -269,28 +275,39 @@ export const initLessons = () =>
       type: 'letter',
     });
 
-    const size = _(defaultKeys)
-      .map(o => ({
-        finger: o.finger,
-        hand: o.hand,
-      }))
-      .uniqWith(_.isEqual)
-      .value()
-      .length;
+    if (!state.getIn(['learning', 'fingers', 'options', 'setSize'])) {
+      const size = _(defaultKeys)
+        .map(o => ({
+          finger: o.finger,
+          hand: o.hand,
+        }))
+        .uniqWith(_.isEqual)
+        .value()
+        .length;
 
-    dispatch(updateFingersOptions({
-      setSize: size,
-    }));
+      dispatch(updateFingersOptions({
+        setSize: size,
+      }));
+    }
 
-    const fingersExample = dispatch(generateFingersLesson());
+    if (!state.getIn(['learning', 'fingers', 'example'])) {
+      const fingersExample = dispatch(generateFingersLesson());
 
-    dispatch(setFingersExample(fingersExample));
+      dispatch(setFingersExample(fingersExample));
+    }
 
     const letters = defaultKeys.map(obj => obj.key);
 
-    dispatch(setCurrentLesson(
-      generateLesson(state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']), letters),
-    ));
+    const lesson = generateLesson(
+      state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']),
+      letters,
+    );
 
-    dispatch(updateFreeOptions({ letters }));
+    dispatch(setCurrentLesson(lesson));
+
+    if (!state.getIn(['learning', 'free', 'options', 'letters']).size) {
+      dispatch(updateFreeOptions({
+        letters: ['set', letters],
+      }));
+    }
   };

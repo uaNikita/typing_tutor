@@ -1,84 +1,60 @@
 import React, { Component, Fragment } from 'react';
-import { concat, clone } from 'lodash';
-import noUiSlider from 'nouislider';
+import _ from 'lodash';
 import classNames from 'classnames';
+import Slider from 'rc-slider';
 
 import Key from 'Blocks/Key/component.jsx';
 import LearningView from 'Blocks/LearningView/component.jsx';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFingers extends Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+
+    const {
+      options: {
+        maxLettersInWord,
+      },
+    } = props;
+
+    const maxLettersInWordMin = 1;
+    const maxLettersInWordMax = 10;
+
+    this.maxLettersInWordSliderProps = {
+      min: maxLettersInWordMin,
+      max: maxLettersInWordMax,
+      marks: this.getMarks(maxLettersInWordMin, maxLettersInWordMax),
+      step: null,
+      defaultValue: maxLettersInWord,
+      onChange: this.handleChangeMaxLettersInWord,
+    };
+  }
+
+  getMarks = (min, max) =>
+    _(_.range(min, max + 1))
+      .map(i => [i, i])
+      .fromPairs()
+      .value();
+
+  handleChangeMaxLettersInWord = maxLettersInWord => {
     const {
       props: {
-        options: {
-          setSize,
-          maxLettersInWord,
-        },
-        fingersSet,
         updateOptions,
       },
     } = this;
 
-    const noUiValueMaxLettersInWord = document.createElement('span');
-    noUiValueMaxLettersInWord.className = 'noUi-value';
+    updateOptions({ maxLettersInWord });
+  };
 
-    // max word length range
-    noUiSlider.create(this.maxLettersInWordRange, {
-      start: [maxLettersInWord],
-      step: 1,
-      connect: 'lower',
-      range: {
-        min: 3,
-        max: 10,
+  handleChangeSetSize = setSize => {
+    const {
+      props: {
+        updateOptions,
       },
-    });
+    } = this;
 
-    noUiValueMaxLettersInWord.innerHTML = maxLettersInWord;
-
-    this.maxLettersInWordRange
-      .querySelector('.noUi-handle')
-      .appendChild(noUiValueMaxLettersInWord);
-
-    this.maxLettersInWordRange.noUiSlider.on('slide', (values, handle) => {
-      const val = parseInt(values[handle], 10);
-
-      updateOptions({
-        maxLettersInWord: val,
-      });
-
-      noUiValueMaxLettersInWord.innerHTML = val;
-    });
-
-    const noUiValueFingersSet = document.createElement('span');
-    noUiValueFingersSet.className = 'noUi-value';
-
-    noUiSlider.create(this.fingersRange, {
-      start: [setSize],
-      step: 1,
-      connect: 'lower',
-      range: {
-        min: 1,
-        max: fingersSet.length,
-      },
-    });
-
-    noUiValueFingersSet.innerHTML = setSize;
-
-    this.fingersRange
-      .querySelector('.noUi-handle')
-      .appendChild(noUiValueFingersSet);
-
-    this.fingersRange.noUiSlider.on('slide', (values, handle) => {
-      const val = parseInt(values[handle], 10);
-
-      updateOptions({
-        setSize: val,
-      });
-
-      noUiValueFingersSet.innerHTML = val;
-    });
-  }
+    updateOptions({ setSize });
+  };
 
   render() {
     const {
@@ -90,13 +66,14 @@ class LearningFingers extends Component {
         fingersSet,
         example,
       },
+      maxLettersInWordSliderProps,
     } = this;
 
-    let selectedLetters = clone(fingersSet);
+    let selectedLetters = _.clone(fingersSet);
 
     selectedLetters.splice(setSize);
 
-    selectedLetters = concat(...selectedLetters);
+    selectedLetters = _.concat(...selectedLetters);
 
     const keyNodes = keys.map(obj => {
       let className = 'keyboard__key';
@@ -133,6 +110,18 @@ class LearningFingers extends Component {
       );
     });
 
+    const setSizeMin = 1;
+    const setSizeMax = fingersSet.length;
+
+    const setSizeSliderProps = {
+      min: setSizeMin,
+      max: setSizeMax,
+      marks: this.getMarks(setSizeMin, setSizeMax),
+      step: null,
+      defaultValue: setSize,
+      onChange: this.handleChangeSetSize,
+    };
+
     return (
       <Fragment>
         <h4 className="settings-learning__title">Example</h4>
@@ -146,10 +135,9 @@ class LearningFingers extends Component {
           <label htmlFor="" className="settings-learning__label">
             Max word length:
           </label>
+
           <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-            <div
-              className="settings-learning__range settings-learning__max-word-length"
-              ref={c => { this.maxLettersInWordRange = c; }} />
+            <Slider {...maxLettersInWordSliderProps} />
           </div>
         </div>
 
@@ -158,14 +146,13 @@ class LearningFingers extends Component {
             Extend fingers set:
           </label>
           <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-            <div className="settings-learning__range" ref={c => { this.fingersRange = c; }} />
+            <Slider {...setSizeSliderProps} />
           </div>
         </div>
 
         <div className="keyboard">
           {keyNodes}
         </div>
-
       </Fragment>
     );
   }
