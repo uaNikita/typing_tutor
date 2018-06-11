@@ -8,8 +8,8 @@ const mapStateToProps = state => {
   const stateFree = state.getIn(['learning', 'free']);
 
   return {
-    example: stateFree.getIn('example'),
-    options: stateFree.getIn('options').toJS(),
+    example: stateFree.get('example'),
+    options: stateFree.get('options').toJS(),
     keys: state.getIn(['main', 'keys']).toJS(),
   };
 };

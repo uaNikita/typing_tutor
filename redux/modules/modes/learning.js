@@ -68,11 +68,15 @@ export default (state = initialState, action = {}) => {
       return state.updateIn(['free', 'options'], opts => {
         const { options } = action;
 
+        // type can be add, delete, set
         if (options.letters) {
-          const [type, letter] = options.letters;
+          const [type, value] = options.letters;
 
-          // type can be add, delete, set
-          options.letters = opts[type](letter);
+          const letters = opts.get('letters');
+
+          options.letters = type === 'set' ?
+            Immutable.Set(value) :
+            letters[type](value);
         }
 
         return opts.merge(options);

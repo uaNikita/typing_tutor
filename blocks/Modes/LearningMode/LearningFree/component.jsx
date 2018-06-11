@@ -1,52 +1,50 @@
 import React, { Component, Fragment } from 'react';
+import _ from 'lodash';
 import classNames from 'classnames';
-import noUiSlider from 'nouislider';
+import Slider from 'rc-slider';
 
 import LearningView from 'Blocks/LearningView/component.jsx';
 import Key from 'Blocks/Key/component.jsx';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFree extends Component {
-  componentDidMount() {
+  constructor(props) {
+    super(props);
+
+    const {
+      options: {
+        maxLettersInWord,
+      },
+    } = props;
+
+    const maxLettersInWordMin = 1;
+    const maxLettersInWordMax = 10;
+
+    this.maxLettersInWordSliderProps = {
+      min: maxLettersInWordMin,
+      max: maxLettersInWordMax,
+      marks: this.getMarks(maxLettersInWordMin, maxLettersInWordMax),
+      step: null,
+      defaultValue: maxLettersInWord,
+      onChange: this.handleChangeMaxLettersInWord,
+    };
+  }
+
+  getMarks = (min, max) =>
+    _(_.range(min, max + 1))
+      .map(i => [i, i])
+      .fromPairs()
+      .value();
+
+  handleChangeMaxLettersInWord = maxLettersInWord => {
     const {
       props: {
-        options: {
-          maxLettersInWord,
-        },
         updateOptions,
       },
     } = this;
 
-    const noUiValueMaxLettersInWord = document.createElement('span');
-    noUiValueMaxLettersInWord.className = 'noUi-value';
-
-    // max word length range
-    noUiSlider.create(this.maxLettersInWordRange, {
-      start: [maxLettersInWord],
-      step: 1,
-      connect: 'lower',
-      range: {
-        min: 3,
-        max: 10,
-      },
-    });
-
-    noUiValueMaxLettersInWord.innerHTML = maxLettersInWord;
-
-    this.maxLettersInWordRange
-      .querySelector('.noUi-handle')
-      .appendChild(noUiValueMaxLettersInWord);
-
-    this.maxLettersInWordRange.noUiSlider.on('slide', (values, handle) => {
-      const val = parseInt(values[handle], 10);
-
-      updateOptions({
-        maxLettersInWord: val,
-      });
-
-      noUiValueMaxLettersInWord.innerHTML = val;
-    });
-  }
+    updateOptions({ maxLettersInWord });
+  };
 
   render() {
     const {
@@ -58,6 +56,7 @@ class LearningFree extends Component {
         updateOptions,
         example,
       },
+      maxLettersInWordSliderProps,
     } = this;
 
     const keyNodes = keys.map(obj => {
@@ -115,10 +114,7 @@ class LearningFree extends Component {
             Max word length:
           </label>
           <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
-            <div
-              className="settings-learning__range settings-learning__max-word-length"
-              ref={c => { this.maxLettersInWordRange = c; }}
-            />
+            <Slider {...maxLettersInWordSliderProps} />
           </div>
         </div>
 
