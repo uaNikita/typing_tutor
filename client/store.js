@@ -2,6 +2,7 @@ import { createStore, applyMiddleware } from 'redux';
 import thunk from 'redux-thunk';
 import Immutable from 'immutable';
 
+import convert from 'Utils/listToSetsConverter';
 import reducer from 'ReduxUtils/reducer';
 
 // get state from server
@@ -11,9 +12,6 @@ delete window.PRELOADED_STATE;
 
 initialState = Immutable.fromJS(initialState);
 
-// transform some array to Set
-const setsPath = [['main', 'pressedKeys'], ['main', 'pressedWrongKeys'], ['learning', 'free', 'letters']];
-
-initialState = setsPath.reduce((state, path) => state.setIn(path, Immutable.Set(state.getIn(path))), initialState);
+initialState = convert(initialState);
 
 export default createStore(reducer, initialState, applyMiddleware(thunk));

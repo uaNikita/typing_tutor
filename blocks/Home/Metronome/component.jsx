@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
-import noUiSlider from 'nouislider';
-import { debounce } from 'lodash';
+// import noUiSlider from 'nouislider';
+// import { debounce } from 'lodash';
 import classNames from 'classnames';
 
 import styles from './metronome.module.styl';
@@ -18,21 +18,21 @@ class Block extends Component {
   }
 
   componentDidMount() {
-    const { interval, actionMetronome } = this.props;
+    // const { interval, actionMetronome } = this.props;
 
-    noUiSlider.create(this.metronomeRange, {
-      start: interval,
-      range: {
-        min: 200,
-        max: 2000,
-      },
-    });
-
-    this.metronomeRange.noUiSlider.on('update', debounce((values, handle) => {
-      const val = parseInt(values[handle], 10);
-
-      actionMetronome('interval', val);
-    }, 100));
+    // noUiSlider.create(this.metronomeRange, {
+    //   start: interval,
+    //   range: {
+    //     min: 200,
+    //     max: 2000,
+    //   },
+    // });
+    //
+    // this.metronomeRange.noUiSlider.on('update', debounce((values, handle) => {
+    //   const val = parseInt(values[handle], 10);
+    //
+    //   actionMetronome('interval', val);
+    // }, 100));
   }
 
   componentDidUpdate() {

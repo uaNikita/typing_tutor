@@ -7,7 +7,6 @@ import 'babel-polyfill';
 import 'isomorphic-fetch';
 
 import 'font-awesome/css/font-awesome.css';
-import 'nouislider/distribute/nouislider.css';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import 'rc-slider/assets/index.css';
 
