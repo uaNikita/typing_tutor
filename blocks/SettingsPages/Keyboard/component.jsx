@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import keyboards from 'Constants/keyboards/index';
 
 import { Field, reduxForm } from 'redux-form/immutable';
@@ -32,25 +32,28 @@ class Keyboard extends Component {
           type={obj.type}
           char={obj.key}
           shiftChar={obj.shiftKey}
-          {... keyProps}
+          {...keyProps}
         />
       );
     });
 
-    return [
-      <Field
-        key="field"
-        className={styles.field}
-        onChange={this.handleOnChange}
-        name="email"
-        component={RenderField}
-        type="select"
-        label="Layout">
-        {keyboards.map(({ name: kbName }) => <option key={kbName} value={kbName}>{kbName}</option>)}
-      </Field>,
+    return (
+      <Fragment>
+        <Field
+          className={styles.field}
+          onChange={this.handleOnChange}
+          name="email"
+          component={RenderField}
+          type="select"
+          label="Layout">
+          {keyboards.map(({ name: kbName }) => <option key={kbName} value={kbName}>{kbName}</option>)}
+        </Field>
 
-      <div key="keyboard" className="keyboard">{keyNodes}</div>,
-    ];
+        <Field name="email" component={RenderField} type="email" label="Email" />
+
+        <div className="keyboard">{keyNodes}</div>
+      </Fragment>
+    );
   }
 }
 

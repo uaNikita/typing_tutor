@@ -17,7 +17,7 @@ class LearningFingers extends Component {
       },
     } = props;
 
-    const maxLettersInWordMin = 1;
+    const maxLettersInWordMin = 3;
     const maxLettersInWordMax = 10;
 
     this.maxLettersInWordSliderProps = {

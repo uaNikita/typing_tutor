@@ -5,11 +5,14 @@ import { personal } from 'Constants/navigation';
 
 import CSSModules from 'react-css-modules';
 
+import SignIn from './SignIn/container';
+
 import styles from './user-menu.module.styl';
 
 class Block extends Component {
   state = {
-    openedMenu: false,
+    signInOpened: false,
+    userMenuOpened: false,
   };
 
   componentDidMount() {
@@ -33,14 +36,33 @@ class Block extends Component {
     }
 
     if (!el) {
-      this.setState({ openedMenu: false });
+      this.setState({ userMenuOpened: false });
     }
   };
 
-  triggerMenu = () =>
+  handleSignIn = () => {
+    const {
+      state: {
+        signInOpened,
+      },
+    } = this;
+
     this.setState({
-      openedMenu: !this.state.openedMenu,
+      signInOpened: !signInOpened,
     });
+  }
+
+  handleUserMenu = () => {
+    const {
+      state: {
+        userMenuOpened,
+      },
+    } = this;
+
+    this.setState({
+      userMenuOpened: !userMenuOpened,
+    });
+  }
 
   render() {
     const {
@@ -50,15 +72,15 @@ class Block extends Component {
         name,
       },
       state: {
-        openedMenu,
+        userMenuOpened,
+        signInOpened,
       },
     } = this;
 
     let content = (
       <div styleName="unauthorized">
-        <Link to={{ pathname: '/sign-in', state: { modal: true } }}>Log In</Link>
-        &nbsp;or&nbsp;
-        <Link to={{ pathname: '/sign-up', state: { modal: true } }}>Sign Up</Link>
+        <button className="fa fa-user-circle-o" styleName="button" onClick={this.handleSignIn} />
+        {signInOpened && <SignIn />}
       </div>
     );
 
@@ -66,7 +88,7 @@ class Block extends Component {
       const nickname = name || email;
 
       const styleName = classNames('menu', {
-        menu_expanded: openedMenu,
+        menu_expanded: userMenuOpened,
       });
 
       const links = personal.map(link => {
@@ -87,7 +109,7 @@ class Block extends Component {
       content = (
         <div styleName={styleName}>
           <button styleName="button">
-            <span styleName="avatar" onClick={this.triggerMenu}>{nickname[0]}</span>
+            <span styleName="avatar" onClick={this.handleUserMenu}>{nickname[0]}</span>
           </button>
 
           <nav styleName="nav">{links}</nav>
@@ -99,6 +121,8 @@ class Block extends Component {
   }
 }
 
-export default withRouter(CSSModules(Block, styles, {
-  allowMultiple: true,
-}));
+export default withRouter(
+  CSSModules(Block, styles, {
+    allowMultiple: true,
+  }),
+);
