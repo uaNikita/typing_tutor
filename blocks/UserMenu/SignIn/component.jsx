@@ -1,146 +1,70 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import CSSModules from 'react-css-modules';
 
-import { validateEmail, validatePassword } from 'Utils/validation';
-
-import RenderField from 'Blocks/RenderField/component.jsx';
-import Button from 'Blocks/Button/component.jsx';
+import SignIn from 'Blocks/Authorization/SignIn/container';
 
 import styles from './sign-in.module.styl';
 
-
 class Block extends Component {
   state = {
-    accountIsNotActive: false,
-    submittedVerifyLink: false,
+    menuOpened: false,
   };
 
-  handleSubmit = values => {
+  componentDidMount() {
+    document.addEventListener('click', this.closeIfNeeded);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.closeIfNeeded);
+  }
+
+  closeIfNeeded = e => {
+    let el = e.target;
+
+    // traverse parents
+    while (el) {
+      if (el && el.matches(`.${styles.root}`)) {
+        break;
+      }
+
+      el = el.parentElement;
+    }
+
+    if (!el) {
+      this.setState({ menuOpened: false });
+    }
+  };
+
+  hanldeClickMenu = () => {
     const {
-      props: {
-        history: {
-          replace,
-        },
-        setAllWithAuth,
-        fetchJSON,
-        isModal,
-        lastNoModalLocation,
+      state: {
+        menuOpened,
       },
     } = this;
 
-    this.email = values.get('email');
-
-    return fetchJSON('/auth/login', {
-      body: values.toJS(),
-    })
-      .then(res => {
-        if (res.ok) {
-          setAllWithAuth(res.data);
-
-          if (isModal) {
-            replace(lastNoModalLocation.pathname);
-          }
-          else {
-            replace('/');
-          }
-        }
-        else {
-          if (res.status === 403) {
-            this.setState({
-              accountIsNotActive: true,
-            });
-          }
-
-          if (res.data.errors) {
-            throw new SubmissionError(res.data.errors);
-          }
-        }
-      });
-  };
-
-  handleSendVerifyLink = () => {
-    const {
-      props: {
-        fetchJSON,
-      },
-    } = this;
-
-    fetchJSON('/auth/verify-email', {
-      body: {
-        email: this.email,
-      },
-    })
-      .then(() => this.setState({
-        submittedVerifyLink: true,
-      }));
-  };
+    this.setState({
+      menuOpened: !menuOpened,
+    });
+  }
 
   render() {
     const {
-      handleSubmit,
-      submitting,
-      invalid,
-    } = this.props;
-
-    let content = (
-      <form className="auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
-        <Field name="email" component={RenderField} type="email" label="Email" />
-
-        <Field name="password" component={RenderField} type="password" label="Password" />
-
-        <p className="auth__fp-wrap">
-          <Link
-            to="/restore-access"
-            className="auth__fp">
-            Restore access?
-          </Link>
-        </p>
-
-        <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
-
-        <p className="auth__hint">
-          Not yet registered? <Link to="/sign-up" className="auth__link1">Registration</Link>
-        </p>
-      </form>
-    );
-
-    if (this.state.submittedVerifyLink) {
-      content = (
-        <p>
-          You’ve got mail, <br />
-          Please click the link in the email we just sent you so we can verify your account.
-        </p>
-      );
-    }
-    else if (this.state.accountIsNotActive) {
-      content = [
-        <p key="email-not-verified">
-          Your account email is not verified, <br />
-          Please click the link bellow and we will send you a link to verify email.
-        </p>,
-        <button key="verify-link" className="button" onClick={this.handleSendVerifyLink}>Send verify link</button>,
-      ];
-    }
+      state: {
+        menuOpened,
+      },
+    } = this;
 
     return (
-      <div className="auth" styleName="root">
-        <h3 className="auth__title">Log In</h3>
-
-        {content}
+      <div className="drop-down" styleName="root">
+        <button
+          className="fa fa-user-circle-o drop-down__button"
+          styleName="button"
+          onClick={this.hanldeClickMenu} />
+        {menuOpened && <SignIn className="drop-down__dd" styleName="drop-down" />}
       </div>
     );
   }
 }
 
-const validate = values => ({
-  ...validateEmail('email', values.get('email')),
-  ...validatePassword('password', values.get('password')),
-});
 
-export default reduxForm({
-  form: 'sign-in',
-  validate,
-  asyncBlurFields: ['email'],
-})(CSSModules(Block, styles));
+export default CSSModules(Block, styles);

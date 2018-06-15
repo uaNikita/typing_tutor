@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
-import classNames from 'classnames';
 
 import { modes, other } from 'Constants/navigation';
 
@@ -41,8 +40,17 @@ class Block extends Component {
     }
   };
 
-  hanldeClickMenu = () =>
-    this.setState({ navOpen: !this.state.navOpen });
+  hanldeClickMenu = () => {
+    const {
+      state: {
+        navOpen,
+      },
+    } = this;
+
+    this.setState({
+      navOpen: !navOpen,
+    });
+  }
 
   render() {
     const {
@@ -53,10 +61,6 @@ class Block extends Component {
         navOpen,
       },
     } = this;
-
-    const menuStyleName = classNames('menu', {
-      menu_expanded: navOpen,
-    });
 
     const modesLinks = modes.map(link => {
       const {
@@ -92,10 +96,8 @@ class Block extends Component {
         styleName: 'item',
       };
 
-
       return re.test(location.pathname) ?
-        <span {...itemProps}>{text}</span>
-        :
+        <span {...itemProps}>{text}</span> :
         <Link {...itemProps} to={{ pathname, state }}>{text}</Link>;
     });
 
@@ -106,14 +108,16 @@ class Block extends Component {
         <div styleName="actions">
           <Metronome />
 
-          <div styleName={menuStyleName}>
-            <button className="fa fa-bars" styleName="button" onClick={this.hanldeClickMenu} />
+          <div className="drop-down" styleName="menu">
+            <button className="fa fa-bars drop-down__button" styleName="button" onClick={this.hanldeClickMenu} />
 
-            <nav styleName="nav">
-              <h4 styleName="modes-title">Modes</h4>
-              {modesLinks}
-              {otherLinks}
-            </nav>
+            {navOpen && (
+              <nav className="drop-down__dd">
+                <h4 styleName="modes-title">Modes</h4>
+                {modesLinks}
+                {otherLinks}
+              </nav>
+            )}
           </div>
 
           <UserMenu />

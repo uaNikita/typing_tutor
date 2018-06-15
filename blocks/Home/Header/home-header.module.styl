@@ -5,42 +5,25 @@
    justify-content: space-between;
    align-items: center;
    z-index: 2;
+
 .actions
    display: flex
    align-items: center;
-.button
-   width: 60px;
-   height: 60px;
-   font-size: 36px
-   position: relative;
-   z-index: 2;
+
 .menu
-   position: relative;
-   &_expanded
-      .nav
-         display: flex
-.nav
-   display: none;
-   position: absolute;
-   top 60px
-   right: 0
-   flex-direction column
-   align-items flex-start
-   margin-left: -20px;
-   padding: 20px 25px;
-   background-color: #fff;
-   box-shadow: 0 0 10px #1c88d4db;
-   z-index 1
+   margin-right: 5px
+   
+.button
+   font-size: 36px
+
 .item
-   display: block;
    margin-top: 5px
    margin-bottom: 5px
    white-space nowrap
-   a&
-      border-bottom-color: #fff;
-      &:hover
-         border-bottom-color: #ff5665;
    &_modes
       margin-left: 10px
+   &:last-child
+      margin-bottom: 0
+
 .modes-title
    margin-bottom: -5px

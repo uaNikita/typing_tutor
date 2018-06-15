@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
+import classNames from 'classnames';
 
 import { validateEmail, validatePassword } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component.jsx';
@@ -74,17 +75,17 @@ class SignIn extends Component {
 
   render() {
     const {
-      handleSubmit,
-      submitting,
-      invalid,
-      isModal,
-    } = this.props;
-
-    const state = { modal: false };
-
-    if (isModal) {
-      state.modal = true;
-    }
+      props: {
+        handleSubmit,
+        submitting,
+        invalid,
+        className,
+      },
+      state: {
+        submittedVerifyLink,
+        accountIsNotActive,
+      },
+    } = this;
 
     let content = (
       <form className="auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
@@ -94,7 +95,7 @@ class SignIn extends Component {
 
         <p className="auth__fp-wrap">
           <Link
-            to={{ pathname: '/restore-access', state }}
+            to="/restore-access"
             className="auth__fp">
             Restore access?
           </Link>
@@ -103,12 +104,12 @@ class SignIn extends Component {
         <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
 
         <p className="auth__hint">
-          Not yet registered? <Link to={{ pathname: '/sign-up', state }} className="auth__link1">Registration</Link>
+          Not yet registered? <Link to="/sign-up" className="auth__link1">Registration</Link>
         </p>
       </form>
     );
 
-    if (this.state.submittedVerifyLink) {
+    if (submittedVerifyLink) {
       content = (
         <p>
           You’ve got mail, <br />
@@ -116,7 +117,7 @@ class SignIn extends Component {
         </p>
       );
     }
-    else if (this.state.accountIsNotActive) {
+    else if (accountIsNotActive) {
       content = [
         <p key="email-not-verified">
           Your account email is not verified, <br />
@@ -127,7 +128,7 @@ class SignIn extends Component {
     }
 
     return (
-      <div className="auth">
+      <div className={classNames(className, 'auth')}>
         <h3 className="auth__title">Log In</h3>
 
         {content}

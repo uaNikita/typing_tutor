@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
-import classNames from 'classnames';
 import { personal } from 'Constants/navigation';
 
 import CSSModules from 'react-css-modules';
@@ -11,7 +10,6 @@ import styles from './user-menu.module.styl';
 
 class Block extends Component {
   state = {
-    signInOpened: false,
     userMenuOpened: false,
   };
 
@@ -36,21 +34,11 @@ class Block extends Component {
     }
 
     if (!el) {
-      this.setState({ userMenuOpened: false });
+      this.setState({
+        userMenuOpened: false,
+      });
     }
   };
-
-  handleSignIn = () => {
-    const {
-      state: {
-        signInOpened,
-      },
-    } = this;
-
-    this.setState({
-      signInOpened: !signInOpened,
-    });
-  }
 
   handleUserMenu = () => {
     const {
@@ -73,23 +61,13 @@ class Block extends Component {
       },
       state: {
         userMenuOpened,
-        signInOpened,
       },
     } = this;
 
-    let content = (
-      <div styleName="unauthorized">
-        <button className="fa fa-user-circle-o" styleName="button" onClick={this.handleSignIn} />
-        {signInOpened && <SignIn />}
-      </div>
-    );
+    let content = <SignIn />;
 
     if (email) {
       const nickname = name || email;
-
-      const styleName = classNames('menu', {
-        menu_expanded: userMenuOpened,
-      });
 
       const links = personal.map(link => {
         const {
@@ -101,18 +79,17 @@ class Block extends Component {
         const re = new RegExp(`^${pathname}`);
 
         return re.test(location.pathname) ?
-          <span key={pathname} styleName="item">{text}</span>
-          :
+          <span key={pathname} styleName="item">{text}</span> :
           <Link key={pathname} styleName="item" to={{ pathname, state }}>{text}</Link>;
       });
 
       content = (
-        <div styleName={styleName}>
+        <div styleName="menu">
           <button styleName="button">
             <span styleName="avatar" onClick={this.handleUserMenu}>{nickname[0]}</span>
           </button>
 
-          <nav styleName="nav">{links}</nav>
+          {userMenuOpened && <nav styleName="nav">{links}</nav>}
         </div>
       );
     }
