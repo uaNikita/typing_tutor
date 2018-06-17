@@ -29,18 +29,11 @@ class RestoreAccess extends Component {
         handleSubmit,
         submitting,
         invalid,
-        isModal,
       },
       state: {
         submitted,
       },
     } = this;
-
-    const state = { modal: false };
-
-    if (isModal) {
-      state.modal = true;
-    }
 
     return (
       <form className="auth auth__form auth__form_password-reset" onSubmit={handleSubmit(this.handleSubmit)}>
@@ -63,7 +56,7 @@ class RestoreAccess extends Component {
           <Button key="submit" type="submit" disabled={invalid} isLoader={submitting}>Restore access</Button>,
 
           <p key="log-in" className="auth__hint">
-            <Link className="auth__link2" to={{ pathname: '/sign-in', state }}>Log in now</Link>
+            <Link className="auth__link2" to="/authorization/sign-in">Log in now</Link>
           </p>,
         ]}
       </form>

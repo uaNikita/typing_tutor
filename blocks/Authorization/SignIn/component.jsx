@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter, Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import classNames from 'classnames';
 
@@ -21,8 +21,6 @@ class SignIn extends Component {
         },
         setAllWithAuth,
         fetchJSON,
-        isModal,
-        lastNoModalLocation,
       },
     } = this;
 
@@ -35,12 +33,7 @@ class SignIn extends Component {
         if (res.ok) {
           setAllWithAuth(res.data);
 
-          if (isModal) {
-            replace(lastNoModalLocation.pathname);
-          }
-          else {
-            replace('/');
-          }
+          replace('/');
         }
         else {
           if (res.status === 403) {
@@ -142,8 +135,8 @@ const validate = values => ({
   ...validatePassword('password', values.get('password')),
 });
 
-export default reduxForm({
+export default withRouter(reduxForm({
   form: 'sign-in',
   validate,
   asyncBlurFields: ['email'],
-})(SignIn);
+})(SignIn));

@@ -22,8 +22,7 @@ export const personal = [
     text: 'My profile',
   },
   {
-    pathname: '/sign-out',
-    state: { modal: true },
+    pathname: '/authorization/sign-out',
     text: 'Sign out',
   },
 ];

@@ -30,18 +30,11 @@ class SignUp extends Component {
         handleSubmit,
         submitting,
         invalid,
-        isModal,
       },
       state: {
         submitted,
       },
     } = this;
-
-    const state = { modal: false };
-
-    if (isModal) {
-      state.modal = true;
-    }
 
     return (
       <div className="auth">

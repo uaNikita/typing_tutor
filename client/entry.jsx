@@ -12,7 +12,7 @@ import 'rc-slider/assets/index.css';
 
 import 'Static/stylus/main.styl';
 
-import App from 'Blocks/App/container';
+import App from 'Blocks/App.jsx';
 
 import store from './store';
 

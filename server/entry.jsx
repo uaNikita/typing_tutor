@@ -6,7 +6,7 @@ import defaults from 'Constants/defaultState';
 import { setRefreshToken, setAccessToken } from 'ReduxUtils/modules/fetch';
 import { init, requestAllWithoutAuth } from 'ReduxUtils/modules/main';
 
-import App from 'Blocks/App/container';
+import App from 'Blocks/App.jsx';
 
 const app = (url, context, store) => (
   <Provider store={store}>

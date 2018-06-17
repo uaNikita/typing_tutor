@@ -3,10 +3,6 @@ import { fetchJSON } from 'ReduxUtils/modules/fetch';
 import { validateEmail } from 'Utils/validation';
 import Component from './component.jsx';
 
-const mapStateToProps = state => ({
-  isModal: state.getIn(['main', 'isModal']),
-});
-
 const mapDispatchToProps = dispatch => ({
   fetchJSON: (...args) => dispatch(fetchJSON(...args)),
   asyncValidate: values => dispatch(fetchJSON('/auth/check-email', {
@@ -26,6 +22,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(Component);

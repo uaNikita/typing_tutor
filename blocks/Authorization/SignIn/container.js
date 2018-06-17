@@ -4,11 +4,6 @@ import { setAllWithAuth } from 'ReduxUtils/modules/main';
 import { validateEmail } from 'Utils/validation';
 import Component from './component.jsx';
 
-const mapStateToProps = state => ({
-  lastNoModalLocation: state.getIn(['main', 'lastNoModalLocation']),
-  isModal: state.getIn(['main', 'isModal']),
-});
-
 const mapDispatchToProps = dispatch => ({
   fetchJSON: (...args) => dispatch(fetchJSON(...args)),
   setAllWithAuth: (...args) => dispatch(setAllWithAuth(...args)),
@@ -29,6 +24,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(Component);

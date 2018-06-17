@@ -19,16 +19,18 @@ class Header extends Component {
     return data.map(link => {
       const {
         pathname,
-        state,
         text,
       } = link;
 
       const re = new RegExp(`^${pathname}`);
 
-      return re.test(location.pathname) ?
+      return re.test(location.pathname) ? (
         <span key={pathname} styleName="item item_selected">{text}</span>
-        :
-        <Link key={pathname} styleName="item" to={{ pathname, state }}>{text}</Link>;
+      ) : (
+        <span styleName="item" key={pathname}>
+          <Link to={pathname}>{text}</Link>
+        </span>
+      );
     });
   }
 
