@@ -25,6 +25,7 @@ class RenderField extends Component {
         className,
         children,
         meta: {
+          submitFailed,
           asyncValidating,
           touched,
           error,
@@ -37,7 +38,15 @@ class RenderField extends Component {
       },
     } = this;
 
-    const showError = touched && !active && error;
+    let showError;
+    let showHint;
+
+    if (submitFailed) {
+      showError = true;
+    }
+    else if (error && input.value && touched) {
+      showHint = true;
+    }
 
     const fieldClass = classNames(
       classNames('field', className),
@@ -85,10 +94,19 @@ class RenderField extends Component {
       control = <textarea {...controlProps} />;
     }
 
+    let errorText = null;
+
+    if (showHint) {
+      errorText = <p className="field__error">{error}</p>;
+    }
+    else if (showError) {
+      errorText = <p className="field__error error">{error}</p>;
+    }
+
     return (
       <div className={fieldClass}>
         {control}
-        {showError && <p className="error">{error}</p>}
+        {errorText}
       </div>
     );
   }
