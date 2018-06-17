@@ -95,7 +95,7 @@ class SignIn extends Component {
 
         <p className="auth__fp-wrap">
           <Link
-            to="/restore-access"
+            to="/authorization/restore-access"
             className="auth__fp">
             Restore access?
           </Link>
@@ -104,7 +104,7 @@ class SignIn extends Component {
         <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
 
         <p className="auth__hint">
-          Not yet registered? <Link to="/sign-up" className="auth__link1">Registration</Link>
+          Not yet registered? <Link to="/authorization/sign-up" className="auth__link1">Registration</Link>
         </p>
       </form>
     );

@@ -30,8 +30,6 @@ const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_HIT = 'main/ADD_HIT';
 const ADD_TYPO = 'main/ADD_TYPO';
 const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
-const SET_LAST_NO_MODAL_LOCATION = 'main/SET_LAST_NO_MODAL_LOCATION';
-const SET_IS_MODAL = 'main/SET_IS_MODAL';
 const SET_SESSION_ID = 'main/SET_SESSION_ID';
 
 const initialState = Immutable.fromJS({
@@ -149,12 +147,6 @@ export default (state = initialState, action = {}) => {
     case SET_GLOBAL_MESSAGE:
       return state.set('globalMessage', action.message);
 
-    case SET_LAST_NO_MODAL_LOCATION:
-      return state.set('lastNoModalLocation', action.location);
-
-    case SET_IS_MODAL:
-      return state.set('isModal', action.modal);
-
     case SET_SESSION_ID:
       return state.set('sessionId', action.id);
 
@@ -229,16 +221,6 @@ export const zeroingStatic = () => ({
 export const setGlobalMessage = message => ({
   type: SET_GLOBAL_MESSAGE,
   message,
-});
-
-export const setLastNoModalLocation = location => ({
-  type: SET_LAST_NO_MODAL_LOCATION,
-  location,
-});
-
-export const setIsModal = modal => ({
-  type: SET_IS_MODAL,
-  modal,
 });
 
 export const processAction = (saveToClient, saveToServer) =>

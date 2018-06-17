@@ -64,8 +64,8 @@ class SignUp extends Component {
 
             <Button type="submit" disabled={invalid} isLoader={submitting}>Sign up</Button>
 
-            <p className="auth__hint">Already registered? <Link className="auth__link1" to={{ pathname: '/sign-in', state }}>Log in now</Link>
-              <Link className="auth__link1" to={{ pathname: '/sign-up', state: { modal: true } }}>Log in now</Link>
+            <p className="auth__hint">
+              Already registered? <Link className="auth__link1" to="/authorization/sign-in">Log in now</Link>
             </p>
           </form>
         )}

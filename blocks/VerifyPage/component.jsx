@@ -66,23 +66,24 @@ class VerifyPage extends Component {
       }
 
       content = (
-        <Fragment>
-          <p key="text" styleName="text">
-            Thank you,
-            <br />
-            {text}
-          </p>
+        <p key="text" styleName="text">
+          Thank you,
+          <br />
+          {text}.
+          <br />
           <Link key="link" className="buttom" to="/">Continue</Link>
-        </Fragment>
+        </p>
       );
     }
 
     return (
-      <div styleName="root">
-        <Logo />
+      <Fragment>
+        <div styleName="header">
+          <Logo />
+        </div>
 
         {content}
-      </div>
+      </Fragment>
     );
   }
 }

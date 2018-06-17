@@ -20,7 +20,7 @@ class AddText extends Component {
     const body = values.toJS();
 
     return processAddText(body)
-      .then(() => push('/modes/text'));
+      .then(() => push('/mode/text'));
   };
 
   render() {

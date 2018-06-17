@@ -1,10 +1,10 @@
 export const modes = [
   {
-    pathname: '/modes/learning',
+    pathname: '/mode/learning',
     text: 'learning',
   },
   {
-    pathname: '/modes/text',
+    pathname: '/mode/text',
     text: 'text',
   },
 ];
