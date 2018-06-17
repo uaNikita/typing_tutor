@@ -17,6 +17,10 @@ import SettingsPages from 'Blocks/SettingsPages/component.jsx';
 import Footer from 'Blocks/Footer/component.jsx';
 import NotFound from 'Blocks/NotFound/component.jsx';
 import authorizationRoutes from 'Blocks/Authorization/routes';
+import SignIn from 'Blocks/Authorization/SignIn/container';
+import SignUp from 'Blocks/Authorization/SignUp/container';
+import RestoreAccess from 'Blocks/Authorization/RestoreAccess/container';
+import SignOut from 'Blocks/Authorization/SignOut/container';
 
 const modalsRoutes = [
   ...authorizationRoutes,
@@ -131,15 +135,19 @@ class App extends Component {
         <div className={layoutClass}>
           <GlobalMessageTransitionGroup />
 
-          <Switch key="content">
+          <Switch>
             <Route path="/verify" component={VerifyPage} />
 
             <Route
               path="/"
               render={() => (
                 <div className="layout__content">
-                  <Switch location={isModal ? lastNoModalLocation : location}>
-                    {modalsRoutes.map(({ path, component }) => <Route key={path} path={path} component={component} />)}
+                  <Switch>
+                    <Route path="/sign-in" component={SignIn} />
+                    <Route path="/sign-up" component={SignUp} />
+                    <Route path="/restore-access" component={RestoreAccess} />
+                    <Route path="/sign-out" component={SignOut} />
+
                     <Route exact path="/" component={Home} />
                     <Route
                       path="/"
@@ -161,8 +169,6 @@ class App extends Component {
                 </div>
               )} />
           </Switch>
-
-          <TransitionGroup>{modal}</TransitionGroup>
         </div>
       </Fragment>
     );
