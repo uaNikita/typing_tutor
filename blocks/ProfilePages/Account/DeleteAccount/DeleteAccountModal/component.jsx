@@ -11,7 +11,13 @@ import styles from './delete-account.module.styl';
 
 class DeleteAccountModal extends Component {
   handleSubmit = () => {
-    this.props.fetchJSON('/profile/delete');
+    const {
+      props: {
+        fetchJSON,
+      },
+    } = this;
+
+    return fetchJSON('/profile/delete');
   };
 
   render() {

@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-import ModalSimple from 'Blocks/ModalSimple.jsx';
+import Modal from 'Blocks/Modal/component.jsx';
 import DeleteAccountModal from './DeleteAccountModal/container';
 
 import styles from './delete-account.module.styl';
@@ -11,9 +12,15 @@ class DeleteAccount extends Component {
     modal: false,
   };
 
-  handleClickButton = () => this.setState({ modal: true });
+  handleClickButton = () =>
+    this.setState({
+      modal: true,
+    });
 
-  handlerCloseModal = () => this.setState({ modal: false });
+  handlerCloseModal = () =>
+    this.setState({
+      modal: false,
+    });
 
   render() {
     const {
@@ -28,9 +35,19 @@ class DeleteAccount extends Component {
 
         <button className="button" styleName="button" onClick={this.handleClickButton}>Delete account</button>
 
-        <ModalSimple active={modal} onClose={this.handlerCloseModal}>
-          <DeleteAccountModal />
-        </ModalSimple>
+        <TransitionGroup component={null}>
+          {modal && (
+            <CSSTransition
+              classNames="modal"
+              timeout={250}
+              mountOnEnter
+              unmountOnExit>
+              <Modal onClose={this.handlerCloseModal}>
+                <DeleteAccountModal />
+              </Modal>
+            </CSSTransition>
+          )}
+        </TransitionGroup>
       </div>
     );
   }

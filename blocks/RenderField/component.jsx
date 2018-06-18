@@ -97,10 +97,10 @@ class RenderField extends Component {
     let errorText = null;
 
     if (showHint) {
-      errorText = <p className="field__error">{error}</p>;
+      errorText = <p className="field__hint">{error}</p>;
     }
     else if (showError) {
-      errorText = <p className="field__error error">{error}</p>;
+      errorText = <p className="field__hint">{error}</p>;
     }
 
     return (
