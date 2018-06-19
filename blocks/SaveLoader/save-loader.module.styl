@@ -1,0 +1,26 @@
+.loader
+   width: 15px;
+   height: 15px;
+   position: absolute;
+   top: 50%
+   right: 10px
+   margin-top: -14px;
+   box-sizing border-box
+   border-radius: 50%;
+   border: 2px solid transparent;
+   border-top-color: #000;
+   border-bottom-color: @border-top-color;
+   background-color: rgba(255,255,255,0.85);
+   box-shadow: 0 0 6px 4px #fff;
+   content ''
+   animation: async-validating 1s infinite linear
+   
+.check-mark
+   color: green;
+
+@keyframes async-validating
+   0%
+      transform: rotate(0deg);
+   100%
+      transform: rotate(360deg);
+
