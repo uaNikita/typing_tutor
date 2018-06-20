@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
 
 import Keypad from './Keypad/container';
@@ -51,19 +51,21 @@ class Home extends Component {
 
     switch (mode) {
       case 'text':
-        area = <TextArea key="textarea" />;
+        area = <TextArea />;
         break;
       case 'learning':
-        area = <LearningArea key="learningarea" />;
+        area = <LearningArea />;
         break;
     }
 
-    return [
-      <Header key="header" />,
-      <Statistic key="statistic" />,
-      area,
-      <Keypad key="keypad" />,
-    ];
+    return (
+      <Fragment>
+        <Header />
+        <Statistic />
+        {area}
+        <Keypad />
+      </Fragment>
+    );
   }
 }
 

@@ -4,17 +4,25 @@ import CSSModules from 'react-css-modules';
 
 import styles from './save-loader.module.styl';
 
-const Block = () => (
+const Block = ({ show }) => (
   <TransitionGroup component={null}>
-    {modal && (
+    {show && (
       <CSSTransition
-        classNames="modal"
-        timeout={250}
+        classNames={{
+          enter: styles['root-enter'],
+          enterActive: styles['root-enter-active'],
+          exit: styles['root-exit'],
+          exitActive: styles['root-exit-active'],
+        }}
+        timeout={{
+          enter: 300,
+          exit: 1300,
+        }}
         mountOnEnter
         unmountOnExit>
-        <span className="root">
+        <span styleName="root">
           <span styleName="loader" />
-          <span styleName="check-mark" />
+          <span className="fa fa-check" styleName="check-mark" />
         </span>
       </CSSTransition>
     )}

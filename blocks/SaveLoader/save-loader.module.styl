@@ -1,26 +1,62 @@
+.root
+   width: 15px;
+   height: 15px;
+   position: relative
+   display: block
+   &-enter
+      .loader
+         opacity: 0;
+      &-active
+         .loader
+            opacity: 1;
+   &-exit
+      .check-mark
+         display: flex
+      &-active
+         .loader
+            opacity: 0;
+
+body
+   transition opacity 1s linear
+   
 .loader
    width: 15px;
    height: 15px;
-   position: absolute;
-   top: 50%
-   right: 10px
-   margin-top: -14px;
+   position: absolute
    box-sizing border-box
-   border-radius: 50%;
-   border: 2px solid transparent;
-   border-top-color: #000;
-   border-bottom-color: @border-top-color;
-   background-color: rgba(255,255,255,0.85);
+   border-radius: 50%
+   border: 2px solid transparent
+   border-top-color: #000
+   border-bottom-color: @border-top-color
+   background-color: rgba(255, 255, 255, 0.85);
    box-shadow: 0 0 6px 4px #fff;
    content ''
-   animation: async-validating 1s infinite linear
-   
-.check-mark
-   color: green;
+   transition opacity .3s linear
+   animation: loader 1s infinite linear
 
-@keyframes async-validating
+.check-mark
+   width: 15px;
+   height: 15px;
+   display: none
+   opacity: 0;
+   justify-content center
+   align-items center
+   position: absolute;
+   color: #008000;
+   animation: check-mark 1s linear .3s
+   
+@keyframes loader
    0%
       transform: rotate(0deg);
    100%
       transform: rotate(360deg);
 
+@keyframes check-mark
+   0%
+      opacity: 0;
+   30%
+      opacity: 1;
+   70%
+      opacity: 1;
+   100%
+      opacity: 0;
