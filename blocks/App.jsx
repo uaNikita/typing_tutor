@@ -8,8 +8,8 @@ import PrivateRoute from 'Blocks/PrivateRoute/container';
 import Home from 'Blocks/Home/container';
 import Header from 'Blocks/Header/component.jsx';
 import Modes from 'Blocks/Modes/component.jsx';
-import ProfilePages from 'Blocks/ProfilePages/component.jsx';
 import SettingsPages from 'Blocks/SettingsPages/component.jsx';
+import OptionsPages from 'Blocks/OptionsPages/component.jsx';
 import Footer from 'Blocks/Footer/component.jsx';
 import NotFound from 'Blocks/NotFound/component.jsx';
 import Authorization from 'Blocks/Authorization/component.jsx';
@@ -41,8 +41,8 @@ const App = () => (
               <Switch>
                 <Route exact path="/404" component={NotFound} />
                 <Route path="/mode" component={Modes} />
-                <Route path="/settings" component={SettingsPages} />
-                <PrivateRoute path="/profile" component={ProfilePages} />
+                <Route path="/options" component={OptionsPages} />
+                <PrivateRoute path="/settings" component={SettingsPages} />
                 <Redirect to="/404" />
               </Switch>
             </Fragment>

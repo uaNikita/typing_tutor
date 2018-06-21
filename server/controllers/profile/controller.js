@@ -25,6 +25,26 @@ const getAllData = (req, res, next) => {
     .catch(e => next(e));
 };
 
+
+const setSettings = (req, res, next) => {
+  const {
+    user,
+    body: {
+      settings,
+    },
+  } = req;
+
+  console.log(settings);
+  
+  _.each(settings, (value, key) => {
+    user.set(key, value);
+  });
+
+  user.save()
+    .then(() => res.json(httpStatus[200]))
+    .catch(e => next(e));
+};
+
 const changePassword = (req, res, next) => {
   const {
     user,
@@ -165,6 +185,7 @@ const setMode = (req, res, next) => {
 
 module.exports = {
   getAllData,
+  setSettings,
   changePassword,
   statistic,
   deleteAccount,

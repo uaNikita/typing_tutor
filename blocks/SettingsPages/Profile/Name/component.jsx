@@ -15,6 +15,8 @@ class Block extends Component {
       },
     } = this;
 
+   console.log('handleSubmit');
+
     const body = values.toJS();
 
     delete body.confirm_new_password;

@@ -1,25 +1,32 @@
 import React from 'react';
-import { Switch, Redirect, Route, NavLink } from 'react-router-dom';
+import { Switch, Redirect, Route, Link } from 'react-router-dom';
 
-import Keyboard from './Keyboard/container';
+import Profile from './Profile/component.jsx';
+import Account from './Account/component.jsx';
 
 const menuLinks = [
   {
-    url: '/keyboard',
-    text: 'Keyboard layout',
+    pathname: '/profile',
+    text: 'Profile',
+  },
+  {
+    pathname: '/account',
+    text: 'Account',
   },
 ];
 
-const SettingsPages = ({ match: { url } }) => {
-  const links = menuLinks.map(({ url: linkUrl, text }) => (
-    <NavLink
-      key={linkUrl}
-      className="submenu-link"
-      activeClassName="submenu-link_selected"
-      to={url + linkUrl}>
-      {text}
-    </NavLink>
-  ));
+const Block = ({ location, match: { url } }) => {
+  const links = menuLinks.map(({ pathname, text }) => {
+    const re = new RegExp(`^${url}${pathname}$`);
+
+    const linkProps = {
+      key: pathname,
+    };
+
+    return re.test(location.pathname) ?
+      <span {...linkProps} className="submenu-link submenu-link_selected">{text}</span> :
+      <Link {...linkProps} className="submenu-link" to={`${url}${pathname}`}>{text}</Link>;
+  });
 
   return (
     <div className="sub-layout">
@@ -28,12 +35,14 @@ const SettingsPages = ({ match: { url } }) => {
       </nav>
       <div className="sub-layout__content">
         <Switch>
-          <Redirect exact from={url} to={`${url}/keyboard`} />
-          <Route path={`${url}/keyboard`} component={Keyboard} />
+          <Redirect exact from={url} to={`${url}/profile`} />
+          <Route path={`${url}/profile`} component={Profile} />
+          <Route path={`${url}/account`} component={Account} />
+          <Redirect to="/404" />
         </Switch>
       </div>
     </div>
   );
 };
 
-export default SettingsPages;
+export default Block;

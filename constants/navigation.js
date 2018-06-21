@@ -11,15 +11,15 @@ export const modes = [
 
 export const other = [
   {
-    pathname: '/settings',
-    text: 'Settings',
+    pathname: '/options',
+    text: 'Options',
   },
 ];
 
 export const personal = [
   {
-    pathname: '/profile',
-    text: 'My profile',
+    pathname: '/settings',
+    text: 'Settings',
   },
   {
     pathname: '/authorization/sign-out',

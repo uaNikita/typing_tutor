@@ -7,6 +7,7 @@ const authenticate = passport.authenticate('jwt', { session: false });
 
 router.post('/', authenticate, controller.getAllData);
 router.post('/mode', authenticate, controller.setMode);
+router.post('/settings', authenticate, controller.setSettings);
 router.post('/change-password', authenticate, controller.changePassword);
 router.post('/statistic', authenticate, controller.statistic);
 router.post('/delete', authenticate, controller.deleteAccount);

@@ -23,6 +23,7 @@ const UserSchema = new mongoose.Schema({
       '{PATH} is not a valid',
     ],
   },
+  bio: String,
   password: {
     type: String,
     required: true,
