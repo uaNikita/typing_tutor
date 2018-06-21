@@ -1,4 +1,7 @@
+import { compose } from 'redux';
 import { connect } from 'react-redux';
+import { withRouter } from 'react-router-dom';
+
 import Component from './component.jsx';
 
 const mapStateToProps = state => {
@@ -10,6 +13,7 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(
-  mapStateToProps,
+export default compose(
+  withRouter,
+  connect(mapStateToProps),
 )(Component);

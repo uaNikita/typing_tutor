@@ -1,29 +1,32 @@
 import React from 'react';
-import { Switch, Redirect, Route, NavLink } from 'react-router-dom';
+import { Switch, Redirect, Route, Link } from 'react-router-dom';
 
+import Profile from './Profile/component.jsx';
 import Account from './Account/component.jsx';
 
 const menuLinks = [
   {
-    url: '/profile',
-    text: 'Account',
+    pathname: '',
+    text: 'Profile',
   },
   {
-    url: '/account',
+    pathname: '/account',
     text: 'Account',
   },
 ];
 
-const Block = ({ match: { url } }) => {
-  const links = menuLinks.map(({ url: linkUrl, text }) => (
-    <NavLink
-      key={linkUrl}
-      className="submenu-link"
-      activeClassName="submenu-link_selected"
-      to={url + linkUrl}>
-      {text}
-    </NavLink>
-  ));
+const Block = ({ location, match: { url } }) => {
+  const links = menuLinks.map(({ pathname, text }) => {
+    const re = new RegExp(`^${url}${pathname}$`);
+
+    const linkProps = {
+      key: pathname,
+    };
+
+    return re.test(location.pathname) ?
+      <span {...linkProps} className="submenu-link submenu-link_selected">{text}</span> :
+      <Link {...linkProps} className="submenu-link" to={`${url}${pathname}`}>{text}</Link>;
+  });
 
   return (
     <div className="sub-layout">
@@ -32,7 +35,7 @@ const Block = ({ match: { url } }) => {
       </nav>
       <div className="sub-layout__content">
         <Switch>
-          <Redirect exact from={url} to={`${url}/account`} />
+          <Route exact path={url} component={Profile} />
           <Route path={`${url}/account`} component={Account} />
           <Redirect to="/404" />
         </Switch>

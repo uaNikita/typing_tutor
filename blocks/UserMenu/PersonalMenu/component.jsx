@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { personal } from 'Constants/navigation';
 
 import CSSModules from 'react-css-modules';
@@ -64,12 +64,7 @@ class Block extends Component {
 
     const nickname = name || email;
 
-    const links = personal.map(link => {
-      const {
-        pathname,
-        text,
-      } = link;
-
+    const links = personal.map(({ pathname, text }) => {
       const re = new RegExp(`^${pathname}`);
 
       const linkProps = {
@@ -94,4 +89,4 @@ class Block extends Component {
   }
 }
 
-export default withRouter(CSSModules(Block, styles));
+export default CSSModules(Block, styles);
