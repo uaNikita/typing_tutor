@@ -5,12 +5,16 @@ import Account from './Account/component.jsx';
 
 const menuLinks = [
   {
+    url: '/profile',
+    text: 'Account',
+  },
+  {
     url: '/account',
     text: 'Account',
   },
 ];
 
-const SettingsPages = ({ match: { url } }) => {
+const Block = ({ match: { url } }) => {
   const links = menuLinks.map(({ url: linkUrl, text }) => (
     <NavLink
       key={linkUrl}
@@ -37,4 +41,4 @@ const SettingsPages = ({ match: { url } }) => {
   );
 };
 
-export default SettingsPages;
+export default Block;

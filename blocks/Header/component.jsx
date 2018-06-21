@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { withRouter, Link } from 'react-router-dom';
+import { withRouter, Link, Route } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
 import { modes, other } from 'Constants/navigation';
@@ -8,7 +8,7 @@ import UserMenu from 'Blocks/UserMenu/container';
 
 import styles from './header.module.styl';
 
-class Header extends Component {
+class Block extends Component {
   generateLinks = data => {
     const {
       props: {
@@ -45,13 +45,13 @@ class Header extends Component {
             {this.generateLinks(modes)} | {this.generateLinks(other)}
           </nav>
 
-          <UserMenu />
+          <Route path="/" component={UserMenu} />
         </div>
       </div>
     );
   }
 }
 
-export default withRouter(CSSModules(Header, styles, {
+export default withRouter(CSSModules(Block, styles, {
   allowMultiple: true,
 }));

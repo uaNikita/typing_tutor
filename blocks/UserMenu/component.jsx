@@ -1,24 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 
 import SignIn from './SignIn/container';
 import PersonalMenu from './PersonalMenu/container';
 
-class Block extends Component {
-  render() {
-    const {
-      props: {
-        email,
-      },
-    } = this;
-
-    let content = <SignIn />;
-
-    if (email) {
-      content = <PersonalMenu />;
-    }
-
-    return content;
-  }
-}
+const Block = ({ email }) => (
+  email ? <PersonalMenu /> : <SignIn />
+);
 
 export default Block;

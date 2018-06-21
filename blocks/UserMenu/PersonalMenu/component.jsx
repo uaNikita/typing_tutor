@@ -67,15 +67,19 @@ class Block extends Component {
     const links = personal.map(link => {
       const {
         pathname,
-        state,
         text,
       } = link;
 
       const re = new RegExp(`^${pathname}`);
 
+      const linkProps = {
+        key: pathname,
+        styleName: 'item',
+      };
+
       return re.test(location.pathname) ?
-        <span key={pathname} styleName="item">{text}</span> :
-        <Link key={pathname} styleName="item" to={{ pathname, state }}>{text}</Link>;
+        <span {...linkProps}>{text}</span> :
+        <Link {...linkProps} to={pathname}>{text}</Link>;
     });
 
     return (
