@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 
-import { setKeyboard } from 'ReduxUtils/modules/main';
+import { setKeyboard } from 'ReduxUtils/reducers/main';
 import {
   initLessons,
   updateCharToType as updateCharToTypeFromLearningMode,
-} from 'ReduxUtils/modules/modes/learning';
-import { updateCharToType as updateCharToTypeFromTextMode } from 'ReduxUtils/modules/modes/text';
+} from 'ReduxUtils/reducers/modes/learning';
+import { updateCharToType as updateCharToTypeFromTextMode } from 'ReduxUtils/reducers/modes/text';
 import Keyboard from './component.jsx';
 
 const mapStateToProps = state => {

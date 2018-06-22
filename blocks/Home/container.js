@@ -5,7 +5,7 @@ import {
   setStartTypingTime,
   zeroingStatic,
   startNewSession,
-} from 'ReduxUtils/modules/main';
+} from 'ReduxUtils/reducers/main';
 import Component from './component.jsx';
 
 const mapStateToProps = state => {

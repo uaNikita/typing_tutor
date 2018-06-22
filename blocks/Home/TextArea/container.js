@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { updateCharToType } from 'ReduxUtils/modules/modes/text';
+import { updateCharToType } from 'ReduxUtils/reducers/modes/text';
 
 import Component from './component.jsx';
 

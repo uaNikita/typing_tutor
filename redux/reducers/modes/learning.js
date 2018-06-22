@@ -5,7 +5,7 @@ import { getIdsFromCharacter, generateLesson, getFingersSet } from 'Utils';
 import temp from 'Utils/temp';
 import defaults from 'Constants/defaultState';
 
-import { fetchJSON } from 'ReduxUtils/modules/fetch';
+import { fetchJSON } from '../fetch';
 
 import {
   setIdsCharToType,

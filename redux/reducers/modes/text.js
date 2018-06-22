@@ -137,7 +137,7 @@ export const processAddText = data =>
     };
 
     return dispatch(processAction(
-      () => temp.path('modes.text', textState.toJS()),
+      () => temp.path('text', textState.toJS()),
       () => dispatch(fetchJSON('/text/add', { body })),
     ));
   };
@@ -151,7 +151,7 @@ export const processSelectText = id =>
     const body = { id };
 
     return dispatch(processAction(
-      () => temp.path('modes.text.selectedId', selectedId),
+      () => temp.path('text.selectedId', selectedId),
       () => dispatch(fetchJSON('/text/select', { body })),
     ));
   };
@@ -163,7 +163,7 @@ export const processRefreshText = id =>
     const body = { id };
 
     return dispatch(processAction(
-      () => temp.path('modes.text.entities', getState().getIn(['text', 'entities']).toJS()),
+      () => temp.path('text.entities', getState().getIn(['text', 'entities']).toJS()),
       () => dispatch(fetchJSON('/text/refresh', { body })),
     ));
   };
@@ -204,7 +204,7 @@ export const processTypeEntitiy = id =>
     };
 
     return dispatch(processAction(
-      () => temp.path('modes.text', textState.toJS()),
+      () => temp.path('text', textState.toJS()),
       () => typeEntitiySaveToServer(dispatch, { body }),
     ));
   };

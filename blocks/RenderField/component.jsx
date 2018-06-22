@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 
+import SaveLoader from './SaveLoader/component.jsx';
+
 import './field.styl';
 
 class RenderField extends Component {
@@ -19,12 +21,14 @@ class RenderField extends Component {
   render() {
     const {
       props: {
+        loader,
         input,
         label,
         type,
         className,
         children,
         meta: {
+          submitting,
           submitFailed,
           asyncValidating,
           touched,
@@ -106,6 +110,7 @@ class RenderField extends Component {
     return (
       <div className={fieldClass}>
         {control}
+        {loader && <SaveLoader show={submitting} />}
         {errorText}
       </div>
     );

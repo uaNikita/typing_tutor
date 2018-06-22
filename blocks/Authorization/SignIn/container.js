@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { fetchJSON } from 'ReduxUtils/modules/fetch';
-import { setAllWithAuth } from 'ReduxUtils/modules/main';
+import { fetchJSON } from 'ReduxUtils/reducers/fetch';
+import { setAllWithAuth } from 'ReduxUtils/reducers/main';
 import { validateEmail } from 'Utils/validation';
 import Component from './component.jsx';
 

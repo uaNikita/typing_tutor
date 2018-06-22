@@ -9,7 +9,6 @@ import { fetchJSON } from './fetch';
 
 const CLEAR_STATE = 'user/CLEAR_STATE';
 const SET_STATE = 'user/SET_STATE';
-const SET_SETTINGS = 'user/SET_SETTINGS';
 const SET_STATISTIC = 'user/SET_STATISTIC';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
 
@@ -76,11 +75,6 @@ export const setState = data => ({
   data,
 });
 
-export const setSettings = settings => ({
-  type: SET_SETTINGS,
-  settings,
-});
-
 export const setStatistic = statistic => ({
   type: ADD_STATISTIC,
   statistic,
@@ -91,13 +85,22 @@ export const addStatistic = obj => ({
   ...obj,
 });
 
-export const processSetMode = mode =>
+export const processSetSettings = settings =>
   dispatch => {
-    dispatch(setMode(mode));
+    dispatch(setState(settings));
 
     return dispatch(processAction(
-      () => temp.path('user.mode', mode),
-      () => dispatch(fetchJSON('/profile/mode', { mode })),
+      () => temp.assign({
+        user: {
+          ...settings,
+        },
+      }),
+      () => dispatch(fetchJSON('/user', {
+        method: 'PATCH',
+        body: {
+          ...settings,
+        },
+      })),
     ));
   };
 
@@ -119,7 +122,7 @@ export const processAddStatistic = () =>
 
     return dispatch(processAction(
       () => temp.path('user.statistic', getState().getIn(['main', 'statistic'])),
-      () => dispatch(fetchJSON('/profile/statistic', { body })),
+      () => dispatch(fetchJSON('/user/statistic', { body })),
     ));
   };
 

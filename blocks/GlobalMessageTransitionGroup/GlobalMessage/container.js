@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { setGlobalMessage } from 'ReduxUtils/modules/main';
+import { setGlobalMessage } from 'ReduxUtils/reducers/main';
 import Component from './component.jsx';
 
 const mapStateToProps = state => ({

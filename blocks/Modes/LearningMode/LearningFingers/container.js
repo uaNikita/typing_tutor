@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { updateFingersOptionsAndExample } from 'ReduxUtils/modules/modes/learning';
+import { updateFingersOptionsAndExample } from 'ReduxUtils/reducers/modes/learning';
 
 import { getFingersSet } from 'Utils';
 

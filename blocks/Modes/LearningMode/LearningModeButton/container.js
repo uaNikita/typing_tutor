@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { setMode } from 'ReduxUtils/modules/modes/learning';
+import { setMode } from 'ReduxUtils/reducers/modes/learning';
 
 import Component from './component.jsx';
 

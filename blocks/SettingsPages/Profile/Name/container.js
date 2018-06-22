@@ -1,15 +1,19 @@
 import { connect } from 'react-redux';
 
-import { fetchJSON } from 'ReduxUtils/modules/fetch';
-import { setGlobalMessage } from 'ReduxUtils/modules/main';
+import { processSetSettings } from 'ReduxUtils/reducers/user';
 import Component from './component.jsx';
 
+const mapStateToProps = state => ({
+  initialValues: {
+    name: state.getIn(['user', 'name']),
+  },
+});
+
 const mapDispatchToProps = dispatch => ({
-  fetchJSON: (...args) => dispatch(fetchJSON(...args)),
-  setGlobalMessage: (...args) => dispatch(setGlobalMessage(...args)),
+  setSettings: (...args) => dispatch(processSetSettings(...args)),
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(Component);

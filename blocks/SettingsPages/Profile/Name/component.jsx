@@ -9,27 +9,16 @@ class Block extends Component {
   handleSubmit = values => {
     const {
       props: {
-        fetchJSON,
-        setGlobalMessage,
-        reset,
+        setSettings,
       },
     } = this;
 
-   console.log('handleSubmit');
+    const settings = values.toJS();
 
-    const body = values.toJS();
-
-    delete body.confirm_new_password;
-
-    return fetchJSON('/profile/change-password', { body })
+    return setSettings(settings)
       .then(res => {
         if (res.ok) {
-          setGlobalMessage('Password was changed');
-
-          reset();
-
-          // remove focus from fields
-          window.focus();
+          // console.log('res.ok');
         }
         else if (res.data.errors) {
           throw new SubmissionError(res.data.errors);
@@ -52,19 +41,16 @@ class Block extends Component {
           name="name"
           component={RenderField}
           type="text"
-          label="Name" />
+          label="Name"
+          loader />
       </form>
     );
   }
 }
 
-const validate = values => {
-  const e = {
-    ...validateField('name', values.get('name')),
-  }
-  console.log('e', e);
-  return e;
-}
+const validate = values => ({
+  ...validateField('name', values.get('name')),
+});
 
 export default reduxForm({
   form: 'name',

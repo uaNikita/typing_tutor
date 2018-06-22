@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { refreshCurrentLesson, updateCharToType } from 'ReduxUtils/modules/modes/learning';
+import { refreshCurrentLesson, updateCharToType } from 'ReduxUtils/reducers/modes/learning';
 
 import Textarea from './component.jsx';
 

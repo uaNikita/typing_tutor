@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 
-import { fetchJSON } from 'ReduxUtils/modules/fetch';
-import { setGlobalMessage } from 'ReduxUtils/modules/main';
+import { fetchJSON } from 'ReduxUtils/reducers/fetch';
+import { setGlobalMessage } from 'ReduxUtils/reducers/main';
 import Component from './component.jsx';
 
 const mapDispatchToProps = dispatch => ({

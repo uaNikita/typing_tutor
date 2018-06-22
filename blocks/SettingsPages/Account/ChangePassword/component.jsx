@@ -23,7 +23,7 @@ class Block extends Component {
 
     delete body.confirm_new_password;
 
-    return fetchJSON('/profile/change-password', { body })
+    return fetchJSON('/user/change-password', { body })
       .then(res => {
         if (res.ok) {
           setGlobalMessage('Password was changed');

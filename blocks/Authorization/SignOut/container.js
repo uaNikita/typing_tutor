@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { logOut } from 'ReduxUtils/modules/fetch';
+import { logOut } from 'ReduxUtils/reducers/fetch';
 import Component from './component.jsx';
 
 const mapDispatchToProps = dispatch => ({

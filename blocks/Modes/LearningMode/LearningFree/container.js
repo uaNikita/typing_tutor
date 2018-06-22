@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { updateFreeOptionsAndExample } from 'ReduxUtils/modules/modes/learning';
+import { updateFreeOptionsAndExample } from 'ReduxUtils/reducers/modes/learning';
 
 import LearningFree from './component.jsx';
 

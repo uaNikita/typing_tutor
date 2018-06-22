@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { setAllWithAuth } from 'ReduxUtils/modules/main';
-import { fetchJSON } from 'ReduxUtils/modules/fetch';
+import { setAllWithAuth } from 'ReduxUtils/reducers/main';
+import { fetchJSON } from 'ReduxUtils/reducers/fetch';
 import Component from './component.jsx';
 
 const mapDispatchToProps = dispatch => ({

@@ -17,7 +17,7 @@ class DeleteAccountModal extends Component {
       },
     } = this;
 
-    return fetchJSON('/profile/delete');
+    return fetchJSON('/user/delete');
   };
 
   render() {
