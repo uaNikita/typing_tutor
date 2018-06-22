@@ -33,8 +33,6 @@ const setSettings = (req, res, next) => {
       settings,
     },
   } = req;
-
-  console.log(settings);
   
   _.each(settings, (value, key) => {
     user.set(key, value);
@@ -168,24 +166,8 @@ const deleteAccount = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const setMode = (req, res, next) => {
-  const {
-    user,
-    body: {
-      mode,
-    },
-  } = req;
-
-  user.set('mode', mode);
-
-  user.save()
-    .then(() => res.json(httpStatus[200]))
-    .catch(e => next(e));
-};
-
 module.exports = {
   getAllData,
-  setSettings,
   changePassword,
   statistic,
   deleteAccount,

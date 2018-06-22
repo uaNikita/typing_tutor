@@ -9,9 +9,7 @@ import { fetchJSON } from './fetch';
 
 const CLEAR_STATE = 'user/CLEAR_STATE';
 const SET_STATE = 'user/SET_STATE';
-const SET_EMAIL = 'user/SET_EMAIL';
-const SET_NAME = 'user/SET_NAME';
-const SET_MODE = 'user/SET_MODE';
+const SET_SETTINGS = 'user/SET_SETTINGS';
 const SET_STATISTIC = 'user/SET_STATISTIC';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
 
@@ -33,15 +31,6 @@ export default (state = initialState, action = {}) => {
 
     case SET_STATE:
       return state.merge(action.data);
-
-    case SET_EMAIL:
-      return state.set('email', action.email);
-
-    case SET_NAME:
-      return state.set('name', action.name);
-
-    case SET_MODE:
-      return state.set('mode', action.mode);
 
     case SET_STATISTIC:
       return state.set('statistic', Immutable.fromJS(action.statistic));
@@ -87,19 +76,9 @@ export const setState = data => ({
   data,
 });
 
-export const setEmail = email => ({
-  type: SET_EMAIL,
-  email,
-});
-
-export const setName = name => ({
-  type: SET_NAME,
-  name,
-});
-
-export const setMode = mode => ({
-  type: SET_MODE,
-  mode,
+export const setSettings = settings => ({
+  type: SET_SETTINGS,
+  settings,
 });
 
 export const setStatistic = statistic => ({
