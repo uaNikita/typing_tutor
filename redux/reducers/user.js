@@ -85,7 +85,7 @@ export const addStatistic = obj => ({
   ...obj,
 });
 
-export const processSetSettings = settings =>
+export const processSetSettings = settings => (
   dispatch => {
     dispatch(setState(settings));
 
@@ -102,9 +102,10 @@ export const processSetSettings = settings =>
         },
       })),
     ));
-  };
+  }
+);
 
-export const processAddStatistic = () =>
+export const processAddStatistic = () => (
   (dispatch, getState) => {
     const stateMain = getState().get('main');
 
@@ -124,7 +125,8 @@ export const processAddStatistic = () =>
       () => temp.path('user.statistic', getState().getIn(['main', 'statistic'])),
       () => dispatch(fetchJSON('/user/statistic', { body })),
     ));
-  };
+  }
+);
 
 export const addStatisticWithTimeout = _.throttle(
   dispatch => dispatch(processAddStatistic()),

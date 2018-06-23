@@ -13,12 +13,15 @@ const Button = ({
   ...rest
 }) => (
   <button
+    type="button"
     className={classNames('button', className)}
     styleName={classNames('button', {
       button_loader: isLoader,
     })}
     {...rest}>
-    <span styleName="content">{children}</span>
+    <span styleName="content">
+      {children}
+    </span>
     <Loader styleName="loader" size={20} />
   </button>
 );

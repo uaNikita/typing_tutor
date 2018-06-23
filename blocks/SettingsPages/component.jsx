@@ -23,9 +23,17 @@ const Block = ({ location, match: { url } }) => {
       key: pathname,
     };
 
-    return re.test(location.pathname) ?
-      <span {...linkProps} className="submenu-link submenu-link_selected">{text}</span> :
-      <Link {...linkProps} className="submenu-link" to={`${url}${pathname}`}>{text}</Link>;
+    return re.test(location.pathname)
+      ? (
+        <span {...linkProps} className="submenu-link submenu-link_selected">
+          {text}
+        </span>
+      )
+      : (
+        <Link {...linkProps} className="submenu-link" to={`${url}${pathname}`}>
+          {text}
+        </Link>
+      );
   });
 
   return (

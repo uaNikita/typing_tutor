@@ -5,6 +5,8 @@ import classNames from 'classnames';
 import styles from './global-message.module.styl';
 
 class GlobalMessage extends Component {
+  closeTimeout = undefined;
+
   state = {
     entered: false,
   };
@@ -23,8 +25,6 @@ class GlobalMessage extends Component {
     this.closeTimeout = setTimeout(close, 5300);
   }
 
-  closeTimeout = undefined;
-
   render() {
     const {
       props: {
@@ -41,7 +41,7 @@ class GlobalMessage extends Component {
         <div styleName={classNames('content', { entered })}>
           <i styleName="icon" className="fa fa-bullhorn" />
           {message}
-          <button onClick={close} className="fa fa-times" styleName="close" />
+          <button type="button" onClick={close} className="fa fa-times" styleName="close" />
         </div>
         <div styleName={classNames('progress', { entered })} />
       </div>

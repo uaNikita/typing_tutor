@@ -8,9 +8,13 @@ const Footer = () => (
   <footer styleName="footer">
     © 2016 Touch to type
     <br />
-    <a href="mailto:info@touchtotype.com">info@touchtotype.com</a>
+    <a href="mailto:info@touchtotype.com">
+info@touchtotype.com
+    </a>
     <br />
-    <Link to="/help">Help</Link>
+    <Link to="/help">
+Help
+    </Link>
   </footer>
 );
 

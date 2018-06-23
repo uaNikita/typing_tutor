@@ -69,7 +69,7 @@ const initialState = Immutable.fromJS({
   sessionId: undefined,
 });
 
-const updateSessionStatisticPresses = (state, name, character) =>
+const updateSessionStatisticPresses = (state, name, character) => (
   state.updateIn(['sessionStatistic', name], presses => {
     const index = presses.findIndex(c => c.get('character') === character);
 
@@ -86,7 +86,8 @@ const updateSessionStatisticPresses = (state, name, character) =>
     }
 
     return newPresses;
-  });
+  })
+);
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
@@ -223,7 +224,7 @@ export const setGlobalMessage = message => ({
   message,
 });
 
-export const processAction = (saveToClient, saveToServer) =>
+export const processAction = (saveToClient, saveToServer) => (
   (dispatch, getState) => {
     let actions;
 
@@ -237,7 +238,8 @@ export const processAction = (saveToClient, saveToServer) =>
     }
 
     return actions;
-  };
+  }
+);
 
 export const setSessionId = id => ({
   type: SET_SESSION_ID,
@@ -289,12 +291,13 @@ export const typeChar = char => (dispatch, getState) => {
   }
 };
 
-export const init = () =>
+export const init = () => (
   dispatch => {
     dispatch(initLessons());
-  };
+  }
+);
 
-export const setAllWithoutAuth = data =>
+export const setAllWithoutAuth = data => (
   dispatch => {
     dispatch(setTextState(data.modes.text));
 
@@ -304,21 +307,24 @@ export const setAllWithoutAuth = data =>
     dispatch(setUserState(userData));
 
     dispatch(init());
-  };
+  }
+);
 
-export const setAllWithAuth = ({ tokens, ...rest }) =>
+export const setAllWithAuth = ({ tokens, ...rest }) => (
   dispatch => {
     dispatch(setTokens(tokens));
 
     dispatch(setAllWithoutAuth(rest));
-  };
+  }
+);
 
-export const requestAllWithoutAuth = () =>
-  dispatch =>
+export const requestAllWithoutAuth = () => (
+  dispatch => (
     dispatch(fetchJSON('/user'))
       .then(res => {
         if (res.ok) {
           dispatch(setAllWithoutAuth(res.data));
         }
-      });
-
+      })
+  )
+);

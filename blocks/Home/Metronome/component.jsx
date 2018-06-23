@@ -36,7 +36,13 @@ class Block extends Component {
   }
 
   componentDidUpdate() {
-    if (this.state.status) {
+    const {
+      state: {
+        status,
+      },
+    } = this;
+
+    if (status) {
       this.playWithInterval();
     }
     else {
@@ -45,9 +51,9 @@ class Block extends Component {
   }
 
   onClickHandler = () => {
-    this.setState({
-      status: !this.state.status,
-    });
+    this.setState(prevState => ({
+      status: !prevState.status,
+    }));
   };
 
   playFromBegin() {
@@ -93,10 +99,12 @@ class Block extends Component {
 
     return (
       <div styleName="metronome">
-        <button styleName="metronome__btn" className={btnClass} onClick={this.onClickHandler} />
+        <button type="button" styleName="metronome__btn" className={btnClass} onClick={this.onClickHandler} />
 
         <div styleName="metronome__range-wrap">
-          <h5 styleName="metronome__title">Volume</h5>
+          <h5 styleName="metronome__title">
+            Volume
+          </h5>
           <div ref={c => { this.metronomeRange = c; }} />
         </div>
       </div>
@@ -107,4 +115,3 @@ class Block extends Component {
 export default CSSModules(Block, styles, {
   allowMultiple: true,
 });
-

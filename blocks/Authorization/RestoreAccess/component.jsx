@@ -11,8 +11,14 @@ class RestoreAccess extends Component {
     submitted: false,
   };
 
-  handleSubmit = values =>
-    this.props.fetchJSON('/auth/restore-access', {
+  handleSubmit = values => {
+    const {
+      props: {
+        fetchJSON,
+      },
+    } = this;
+
+    fetchJSON('/auth/restore-access', {
       body: values.toJS(),
     })
       .then(res => {
@@ -22,6 +28,7 @@ class RestoreAccess extends Component {
           });
         }
       });
+  };
 
   render() {
     const {
@@ -37,11 +44,15 @@ class RestoreAccess extends Component {
 
     return (
       <form className="auth auth__form auth__form_password-reset" onSubmit={handleSubmit(this.handleSubmit)}>
-        <h3 className="auth__title">Password reset</h3>
+        <h3 className="auth__title">
+          Password reset
+        </h3>
 
         {submitted ? (
           <p>
-            You’ve got mail, <br />
+            You’ve got mail,
+            {' '}
+            <br />
             Please check ou your email with new password.
           </p>
         ) : [
@@ -53,10 +64,14 @@ class RestoreAccess extends Component {
             label="Email"
           />,
 
-          <Button key="submit" type="submit" disabled={invalid} isLoader={submitting}>Restore access</Button>,
+          <Button key="submit" type="submit" disabled={invalid} isLoader={submitting}>
+            Restore access
+          </Button>,
 
           <p key="log-in" className="auth__hint">
-            <Link className="auth__link2" to="/authorization/sign-in">Log in now</Link>
+            <Link className="auth__link2" to="/authorization/sign-in">
+              Log in now
+            </Link>
           </p>,
         ]}
       </form>

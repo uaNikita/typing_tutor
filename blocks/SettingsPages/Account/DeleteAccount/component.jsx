@@ -12,15 +12,17 @@ class DeleteAccount extends Component {
     modal: false,
   };
 
-  handleClickButton = () =>
+  handleClickButton = () => (
     this.setState({
       modal: true,
-    });
+    })
+  );
 
-  handlerCloseModal = () =>
+  handlerCloseModal = () => (
     this.setState({
       modal: false,
-    });
+    })
+  );
 
   render() {
     const {
@@ -31,9 +33,17 @@ class DeleteAccount extends Component {
 
     return (
       <div>
-        <h3 styleName="title">Delete Account</h3>
+        <h3 styleName="title">
+          Delete Account
+        </h3>
 
-        <button className="button" styleName="button" onClick={this.handleClickButton}>Delete account</button>
+        <button
+          type="button"
+          className="button"
+          styleName="button"
+          onClick={this.handleClickButton}>
+          Delete account
+        </button>
 
         <TransitionGroup component={null}>
           {modal && (

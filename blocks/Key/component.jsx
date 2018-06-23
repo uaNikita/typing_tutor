@@ -18,12 +18,14 @@ const Key = props => {
 
     return (
       <span {...rest}>
-        <span className={className}>{shiftChar}</span>
+        <span className={className}>
+          {shiftChar}
+        </span>
         {char}
       </span>
     );
   }
-  else if (type === 'letter') {
+  if (type === 'letter') {
     return (
       <span {...rest}>
         {char.toUpperCase()}

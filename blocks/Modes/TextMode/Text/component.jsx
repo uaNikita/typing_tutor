@@ -16,7 +16,13 @@ const Text = props => {
   let refresh;
 
   if (typed) {
-    refresh = <button onClick={() => refreshText(id)} className={classNames('fa fa-refresh', styles.reload)} />;
+    refresh = (
+      <button
+        type="button"
+        onClick={() => refreshText(id)}
+        className={classNames('fa fa-refresh', styles.reload)}
+      />
+    );
   }
 
   let button = {
@@ -37,11 +43,15 @@ const Text = props => {
 
   return [
     <div key="actions" className={styles.actions}>
-      <button className="button" {...button.props}>{button.text}</button>
+      <button type="button" className="button" {...button.props}>
+        {button.text}
+      </button>
 
       {refresh}
     </div>,
-    <span key="typed" className={styles.typed}>{typed}</span>,
+    <span key="typed" className={styles.typed}>
+      {typed}
+    </span>,
     last,
   ];
 };

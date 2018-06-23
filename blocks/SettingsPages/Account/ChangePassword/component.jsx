@@ -50,7 +50,9 @@ class Block extends Component {
 
     return (
       <form styleName="root" onSubmit={handleSubmit(this.handleSubmit)}>
-        <h3 styleName="title">Change password</h3>
+        <h3 styleName="title">
+          Change password
+        </h3>
 
         <Field
           name="old_password"

@@ -21,7 +21,9 @@ const Statistic = ({ hits, errors, startTypingTime }) => {
 
       <p>
         <i className="fa fa-tachometer" styleName="speed" />
-        {speed} зн/мин
+        {speed}
+        {' '}
+зн/мин
       </p>
 
       <p>

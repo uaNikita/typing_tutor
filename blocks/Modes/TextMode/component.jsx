@@ -13,4 +13,3 @@ const TextMode = ({ match: { url } }) => (
 );
 
 export default TextMode;
-

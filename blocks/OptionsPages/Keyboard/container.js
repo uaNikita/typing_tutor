@@ -51,4 +51,3 @@ export default connect(
   null,
   mergeProps,
 )(Keyboard);
-

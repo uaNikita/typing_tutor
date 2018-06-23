@@ -25,10 +25,14 @@ class Block extends Component {
       const re = new RegExp(`^${pathname}`);
 
       return re.test(location.pathname) ? (
-        <span key={pathname} styleName="item item_selected">{text}</span>
+        <span key={pathname} styleName="item item_selected">
+          {text}
+        </span>
       ) : (
         <span styleName="item" key={pathname}>
-          <Link to={pathname}>{text}</Link>
+          <Link to={pathname}>
+            {text}
+          </Link>
         </span>
       );
     });
@@ -41,8 +45,13 @@ class Block extends Component {
 
         <div styleName="actions">
           <nav styleName="items">
-            <span styleName="modes-title">Modes:</span>
-            {this.generateLinks(modes)} | {this.generateLinks(other)}
+            <span styleName="modes-title">
+Modes:
+            </span>
+            {this.generateLinks(modes)}
+            {' '}
+|
+            {this.generateLinks(other)}
           </nav>
 
           <Route path="/" component={UserMenu} />

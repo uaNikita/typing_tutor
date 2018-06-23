@@ -13,9 +13,9 @@ class RenderField extends Component {
   passwordHandleClick = e => {
     e.preventDefault();
 
-    this.setState({
-      showPassword: !this.state.showPassword,
-    });
+    this.setState(prevState => ({
+      showPassword: !prevState.showPassword,
+    }));
   };
 
   render() {
@@ -90,7 +90,7 @@ class RenderField extends Component {
       control = (
         <Fragment>
           <input {...controlProps} />
-          <button className={eyeClassName} onClick={this.passwordHandleClick} />
+          <button type="button" className={eyeClassName} onClick={this.passwordHandleClick} />
         </Fragment>
       );
     }
@@ -101,10 +101,18 @@ class RenderField extends Component {
     let errorText = null;
 
     if (showHint) {
-      errorText = <p className="field__hint">{error}</p>;
+      errorText = (
+        <p className="field__hint">
+          {error}
+        </p>
+      );
     }
     else if (showError) {
-      errorText = <p className="field__hint">{error}</p>;
+      errorText = (
+        <p className="field__hint">
+          {error}
+        </p>
+      );
     }
 
     return (

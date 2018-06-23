@@ -19,10 +19,18 @@ const Block = props => {
   let addTextLink;
 
   if (texts.length < 10) {
-    addTextLink = <Link to={`${url}/add-text`}>Add new text</Link>;
+    addTextLink = (
+      <Link to={`${url}/add-text`}>
+Add new text
+      </Link>
+    );
   }
   else {
-    addTextLink = <p>Your can have maximum 10 texts</p>;
+    addTextLink = (
+      <p>
+Your can have maximum 10 texts
+      </p>
+    );
   }
 
   const textEls = texts.map(({ id, content }) => {
@@ -32,7 +40,9 @@ const Block = props => {
 
     return (
       <Link key={id} to={`${url}/${id}`} styleName={className}>
-        <p>{content}</p>
+        <p>
+          {content}
+        </p>
       </Link>
     );
   });

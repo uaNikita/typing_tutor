@@ -43,7 +43,9 @@ const Block = props => {
 
       <div styleName="modes">
         <div styleName="menu">
-          <h4 styleName="title">Sets</h4>
+          <h4 styleName="title">
+Sets
+          </h4>
           {links}
         </div>
 

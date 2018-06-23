@@ -55,96 +55,98 @@ export const setAccessToken = token => {
   };
 };
 
-export const setTokens = ({ refresh, access }) =>
+export const setTokens = ({ refresh, access }) => (
   dispatch => {
     dispatch(setRefreshToken(refresh));
     dispatch(setAccessToken(access));
-  };
+  }
+);
 
-const requestJSON =
-  (url, params, withoutAuthorization) =>
-    (dispatch, getState) => {
-      const newParams = _.merge({
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${getState().getIn(['fetch', 'accessToken'])}`,
-        },
-      }, params);
+const requestJSON = (url, params, withoutAuthorization) => (
+  (dispatch, getState) => {
+    const newParams = _.merge({
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${getState().getIn(['fetch', 'accessToken'])}`,
+      },
+    }, params);
 
-      if (withoutAuthorization) {
-        delete newParams.headers.Authorization;
-      }
+    if (withoutAuthorization) {
+      delete newParams.headers.Authorization;
+    }
 
-      if (typeof newParams.body === 'object') {
-        newParams.body = JSON.stringify(newParams.body);
-      }
+    if (typeof newParams.body === 'object') {
+      newParams.body = JSON.stringify(newParams.body);
+    }
 
-      let reformedUrl = url;
+    let reformedUrl = url;
 
-      if (!BROWSER) {
-        reformedUrl = `http://localhost:5550${reformedUrl}`;
-      }
+    if (!BROWSER) {
+      reformedUrl = `http://localhost:5550${reformedUrl}`;
+    }
 
-      return fetch(reformedUrl, newParams)
-        .then(response => {
-          const contentType = response.headers.get('content-type');
+    return fetch(reformedUrl, newParams)
+      .then(response => {
+        const contentType = response.headers.get('content-type');
 
-          if (contentType && contentType.indexOf('application/json') !== -1) {
-            return response.json()
-              .then(data => ({
+        if (contentType && contentType.indexOf('application/json') !== -1) {
+          return response.json()
+            .then(data => ({
+              data,
+              ok: response.ok,
+              status: response.status,
+            }));
+        }
+
+        return response;
+      })
+      .catch(error => {
+        dispatch(setGlobalMessage('Oops... something went wrong'));
+
+        throw error;
+      });
+  }
+);
+
+export const fetchJSON = (...args) => (
+  (dispatch, getState) => (
+    dispatch(requestJSON(...args))
+      .then(response => {
+        if (response.status === 401) {
+          return dispatch(requestJSON('/auth/tokens', {
+            headers: {
+              Authorization: `Bearer ${getState().getIn(['fetch', 'refreshToken'])}`,
+            },
+          }))
+            .then(refreshTokenResponse => {
+              const {
+                status,
+                ok,
                 data,
-                ok: response.ok,
-                status: response.status,
-              }));
-          }
+              } = refreshTokenResponse;
 
-          return response;
-        })
-        .catch(error => {
-          dispatch(setGlobalMessage('Oops... something went wrong'));
+              if (ok) {
+                dispatch(setRefreshToken(data.refresh));
+                dispatch(setAccessToken(data.access));
 
-          throw error;
-        });
-    };
+                return dispatch(fetchJSON(...args));
+              }
 
-export const fetchJSON =
-  (...args) =>
-    (dispatch, getState) =>
-      dispatch(requestJSON(...args))
-        .then(response => {
-          if (response.status === 401) {
-            return dispatch(requestJSON('/auth/tokens', {
-              headers: {
-                Authorization: `Bearer ${getState().getIn(['fetch', 'refreshToken'])}`,
-              },
-            }))
-              .then(refreshTokenResponse => {
-                const {
-                  status,
-                  ok,
-                  data,
-                } = refreshTokenResponse;
+              if (status === 401) {
+                dispatch(setGlobalMessage('You are not authorized for this request'));
+              }
 
-                if (ok) {
-                  dispatch(setRefreshToken(data.refresh));
-                  dispatch(setAccessToken(data.access));
+              dispatch(clearState());
 
-                  return dispatch(fetchJSON(...args));
-                }
+              throw new Error('Unauthorized');
+            });
+        }
 
-                if (status === 401) {
-                  dispatch(setGlobalMessage('You are not authorized for this request'));
-                }
-
-                dispatch(clearState());
-
-                throw new Error('Unauthorized');
-              });
-          }
-
-          return response;
-        });
+        return response;
+      })
+  )
+);
 
 export const logOut = () => dispatch => {
   Cookies.remove('tt_refresh');

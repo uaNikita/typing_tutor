@@ -43,7 +43,9 @@ class AddText extends Component {
         />
 
         <div styleName="actions">
-          <Button type="submit" className="button" disabled={invalid} isLoader={submitting}>Add text</Button>
+          <Button type="submit" className="button" disabled={invalid} isLoader={submitting}>
+Add text
+          </Button>
 
           <label styleName="select">
             <Field
@@ -68,4 +70,3 @@ export default reduxForm({
   form: 'add-text',
   validate,
 })(CSSModules(AddText, styles, { allowMultiple: true }));
-

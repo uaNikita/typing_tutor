@@ -48,7 +48,7 @@ class Block extends Component {
     this.setState({
       menuOpened: !menuOpened,
     });
-  }
+  };
 
   render() {
     const {
@@ -72,18 +72,32 @@ class Block extends Component {
         styleName: 'item',
       };
 
-      return re.test(location.pathname) ?
-        <span {...linkProps}>{text}</span> :
-        <Link {...linkProps} to={pathname}>{text}</Link>;
+      return re.test(location.pathname)
+        ? (
+          <span {...linkProps}>
+            {text}
+          </span>
+        )
+        : (
+          <Link {...linkProps} to={pathname}>
+            {text}
+          </Link>
+        );
     });
 
     return (
       <div className="drop-down" styleName="menu">
-        <button className="drop-down__button" styleName="button">
-          <span styleName="avatar" onClick={this.handleUserMenu}>{nickname[0]}</span>
+        <button type="button" className="drop-down__button" styleName="button">
+          <span styleName="avatar" onClick={this.handleUserMenu}>
+            {nickname[0]}
+          </span>
         </button>
 
-        {menuOpened && <nav className="drop-down__dd">{links}</nav>}
+        {menuOpened && (
+          <nav className="drop-down__dd">
+            {links}
+          </nav>
+        )}
       </div>
     );
   }

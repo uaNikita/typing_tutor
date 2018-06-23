@@ -9,35 +9,67 @@ import Header from './Header/component.jsx';
 
 class Home extends Component {
   componentDidMount() {
-    this.props.startNewSession();
+    const {
+      props: {
+        startNewSession,
+      },
+    } = this;
+
+    startNewSession();
 
     document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandler);
   }
 
   componentWillUnmount() {
+    const {
+      props: {
+        zeroingStatic,
+      },
+    } = this;
+
     document.removeEventListener('keydown', this.keyDownHandler);
     document.removeEventListener('keypress', this.keyPressHandler);
 
-    this.props.zeroingStatic();
+    zeroingStatic();
   }
 
-  setStartTypingTime = _.once(() => this.props.setStartTypingTime(Date.now()));
+  setStartTypingTime = (() => {
+    const {
+      props: {
+        setStartTypingTime,
+      },
+    } = this;
+
+    return _.once(() => setStartTypingTime(Date.now()));
+  })();
 
   keyDownHandler = e => {
+    const {
+      props: {
+        typeChar,
+      },
+    } = this;
+
     if (e.which === 32) {
       e.preventDefault();
 
       this.setStartTypingTime();
 
-      this.props.typeChar(String.fromCharCode(e.which));
+      typeChar(String.fromCharCode(e.which));
     }
   };
 
   keyPressHandler = e => {
+    const {
+      props: {
+        typeChar,
+      },
+    } = this;
+
     this.setStartTypingTime();
 
-    this.props.typeChar(String.fromCharCode(e.which));
+    typeChar(String.fromCharCode(e.which));
   };
 
   render() {

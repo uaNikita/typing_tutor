@@ -11,7 +11,11 @@ class Block extends Component {
     if (char === ' ') {
       const key = char + i;
 
-      c = <span key={key} styleName="space">␣</span>;
+      c = (
+        <span key={key} styleName="space">
+␣
+        </span>
+      );
     }
 
     return c;
@@ -34,7 +38,11 @@ class Block extends Component {
       let typed = null;
 
       if (lesson.typed.length) {
-        typed = <span key="typed" styleName="typed">{this.getCharsMarkup(lesson.typed)}</span>;
+        typed = (
+          <span key="typed" styleName="typed">
+            {this.getCharsMarkup(lesson.typed)}
+          </span>
+        );
       }
 
       content = [
@@ -44,7 +52,11 @@ class Block extends Component {
       ];
     }
 
-    return <div className={className} styleName="learningarea">{content}</div>;
+    return (
+      <div className={className} styleName="learningarea">
+        {content}
+      </div>
+    );
   }
 }
 

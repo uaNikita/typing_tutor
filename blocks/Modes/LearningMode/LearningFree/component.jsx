@@ -30,11 +30,10 @@ class LearningFree extends Component {
     };
   }
 
-  getMarks = (min, max) =>
-    _(_.range(min, max + 1))
-      .map(i => [i, i])
-      .fromPairs()
-      .value();
+  getMarks = (min, max) => _(_.range(min, max + 1))
+    .map(i => [i, i])
+    .fromPairs()
+    .value();
 
   handleChangeMaxLettersInWord = maxLettersInWord => {
     const {
@@ -102,10 +101,14 @@ class LearningFree extends Component {
 
     return (
       <Fragment>
-        <h4 className="settings-learning__title">Example</h4>
+        <h4 className="settings-learning__title">
+Example
+        </h4>
         <LearningView className="settings-learning__view" lesson={example} />
 
-        <h4 className="settings-learning__title">Settings</h4>
+        <h4 className="settings-learning__title">
+Settings
+        </h4>
 
         <LearningModeButton toMode="free" />
 

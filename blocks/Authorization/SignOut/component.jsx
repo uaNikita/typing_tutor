@@ -2,13 +2,26 @@ import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 
 class SignOut extends Component {
-  componentDidMount = () => this.props.logOut();
+  componentDidMount = () => {
+    const {
+      props: {
+        logOut,
+      },
+    } = this;
+
+    logOut();
+  };
 
   render() {
     return (
       <div className="auth">
-        <p> SignOut</p>
-        <Link to="/">Continue</Link>
+        <p>
+          {' '}
+          SignOut
+        </p>
+        <Link to="/">
+          Continue
+        </Link>
       </div>
     );
   }

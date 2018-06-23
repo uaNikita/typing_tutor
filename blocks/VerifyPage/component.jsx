@@ -69,9 +69,12 @@ class VerifyPage extends Component {
         <p key="text" styleName="text">
           Thank you,
           <br />
-          {text}.
+          {text}
+          .
           <br />
-          <Link key="link" className="buttom" to="/">Continue</Link>
+          <Link key="link" className="buttom" to="/">
+            Continue
+          </Link>
         </p>
       );
     }

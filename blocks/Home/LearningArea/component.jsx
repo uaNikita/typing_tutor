@@ -3,8 +3,15 @@ import React, { Component } from 'react';
 import LearningView from 'Blocks/LearningView/component.jsx';
 
 class LearningArea extends Component {
-  componentDidMount = () =>
-    this.props.refreshInitialData()
+  componentDidMount = () => {
+    const {
+      props: {
+        refreshInitialData,
+      },
+    } = this;
+
+    refreshInitialData();
+  };
 
   render() {
     const {

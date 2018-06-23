@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import classNames from 'classnames';
@@ -94,10 +94,16 @@ class SignIn extends Component {
           </Link>
         </p>
 
-        <Button type="submit" disabled={invalid} isLoader={submitting}>Log In</Button>
+        <Button type="submit" disabled={invalid} isLoader={submitting}>
+          Log In
+        </Button>
 
         <p className="auth__hint">
-          Not yet registered? <Link to="/authorization/sign-up" className="auth__link1">Registration</Link>
+          Not yet registered?
+          {' '}
+          <Link to="/authorization/sign-up" className="auth__link1">
+            Registration
+          </Link>
         </p>
       </form>
     );
@@ -105,24 +111,34 @@ class SignIn extends Component {
     if (submittedVerifyLink) {
       content = (
         <p>
-          You’ve got mail, <br />
+          You’ve got mail,
+          {' '}
+          <br />
           Please click the link in the email we just sent you so we can verify your account.
         </p>
       );
     }
     else if (accountIsNotActive) {
-      content = [
-        <p key="email-not-verified">
-          Your account email is not verified, <br />
-          Please click the link bellow and we will send you a link to verify email.
-        </p>,
-        <button key="verify-link" className="button" onClick={this.handleSendVerifyLink}>Send verify link</button>,
-      ];
+      content = (
+        <Fragment>
+          <p>
+            Your account email is not verified,
+            {' '}
+            <br />
+            Please click the link bellow and we will send you a link to verify email.
+          </p>
+          <button type="button" className="button" onClick={this.handleSendVerifyLink}>
+            Send verify link
+          </button>
+        </Fragment>
+      );
     }
 
     return (
       <div className={classNames(className, 'auth')}>
-        <h3 className="auth__title">Log In</h3>
+        <h3 className="auth__title">
+          Log In
+        </h3>
 
         {content}
       </div>

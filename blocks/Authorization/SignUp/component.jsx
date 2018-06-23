@@ -11,8 +11,14 @@ class SignUp extends Component {
     submitted: false,
   };
 
-  handleSubmit = values =>
-    this.props.fetchJSON('/auth/signup', { body: values.toJS() }, true)
+  handleSubmit = values => {
+    const {
+      props: {
+        fetchJSON,
+      },
+    } = this;
+
+    fetchJSON('/auth/signup', { body: values.toJS() }, true)
       .then(res => {
         if (res.ok) {
           this.setState({
@@ -23,6 +29,7 @@ class SignUp extends Component {
           throw new SubmissionError(res.data.errors);
         }
       });
+  };
 
   render() {
     const {
@@ -38,11 +45,15 @@ class SignUp extends Component {
 
     return (
       <div className="auth">
-        <h3 className="auth__title">Registration</h3>
+        <h3 className="auth__title">
+          Registration
+        </h3>
 
         {submitted ? (
           <p>
-            You’ve got mail, <br />
+            You’ve got mail,
+            {' '}
+            <br />
             Please click the link in the email we just sent you so we can verify your account.
           </p>
         ) : (
@@ -55,10 +66,16 @@ class SignUp extends Component {
               label="Email"
             />
 
-            <Button type="submit" disabled={invalid} isLoader={submitting}>Sign up</Button>
+            <Button type="submit" disabled={invalid} isLoader={submitting}>
+              Sign up
+            </Button>
 
             <p className="auth__hint">
-              Already registered? <Link className="auth__link1" to="/authorization/sign-in">Log in now</Link>
+              Already registered?
+              {' '}
+              <Link className="auth__link1" to="/authorization/sign-in">
+                Log in now
+              </Link>
             </p>
           </form>
         )}

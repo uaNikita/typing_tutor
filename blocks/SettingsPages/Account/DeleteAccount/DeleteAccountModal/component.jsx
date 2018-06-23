@@ -34,7 +34,11 @@ class DeleteAccountModal extends Component {
         Are you sure you want to do this?
         <br />
 
-        To verify, type <span styleName="delete-text">delete my account</span> below:
+        To verify, type
+        <span styleName="delete-text">
+          delete my account
+        </span>
+        below:
         <Field name="delete_my_account" component={RenderField} type="text" />
 
         <div styleName="confirm">
@@ -42,7 +46,9 @@ class DeleteAccountModal extends Component {
           <Field name="confirm_new_password" component={RenderField} type="password" label="Confirm your password" />
         </div>
 
-        <Button type="submit" disabled={invalid} isLoader={submitting}>Delete my account</Button>
+        <Button type="submit" disabled={invalid} isLoader={submitting}>
+          Delete my account
+        </Button>
       </form>
     );
   }

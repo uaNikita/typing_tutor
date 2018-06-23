@@ -74,9 +74,9 @@ export default (state = initialState, action = {}) => {
 
           const letters = opts.get('letters');
 
-          options.letters = type === 'set' ?
-            Immutable.Set(value) :
-            letters[type](value);
+          options.letters = type === 'set'
+            ? Immutable.Set(value)
+            : letters[type](value);
         }
 
         return opts.merge(options);
@@ -128,7 +128,7 @@ export const typeOnLesson = () => ({
   type: TYPE_ON_LESSON,
 });
 
-export const processUpdateFingersOptions = options =>
+export const processUpdateFingersOptions = options => (
   (dispatch, getState) => {
     dispatch(updateFingersOptions(options));
 
@@ -141,9 +141,10 @@ export const processUpdateFingersOptions = options =>
         body: options,
       })),
     ));
-  };
+  }
+);
 
-export const generateFingersLesson = () =>
+export const generateFingersLesson = () => (
   (dispatch, getState) => {
     const state = getState();
 
@@ -159,18 +160,20 @@ export const generateFingersLesson = () =>
       state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']),
       fingersSet,
     );
-  };
+  }
+);
 
-export const updateFingersOptionsAndExample = options =>
+export const updateFingersOptionsAndExample = options => (
   dispatch => {
     dispatch(processUpdateFingersOptions(options));
 
     const example = dispatch(generateFingersLesson());
 
     dispatch(setFingersExample(example));
-  };
+  }
+);
 
-export const processUpdateFreeOptions = options =>
+export const processUpdateFreeOptions = options => (
   (dispatch, getState) => {
     dispatch(updateFreeOptions(options));
 
@@ -183,9 +186,10 @@ export const processUpdateFreeOptions = options =>
         body: options,
       })),
     ));
-  };
+  }
+);
 
-export const generateFreeLesson = () =>
+export const generateFreeLesson = () => (
   (dispatch, getState) => {
     const learningState = getState().getIn(['learning', 'free', 'options']);
 
@@ -193,16 +197,18 @@ export const generateFreeLesson = () =>
       learningState.get('maxLettersInWord'),
       learningState.get('letters').toJS(),
     );
-  };
+  }
+);
 
-export const updateFreeOptionsAndExample = options =>
+export const updateFreeOptionsAndExample = options => (
   dispatch => {
     dispatch(processUpdateFreeOptions(options));
 
     const example = dispatch(generateFreeLesson());
 
     dispatch(setFreeExample(example));
-  };
+  }
+);
 
 export const refreshCurrentLesson = () => (dispatch, getState) => {
   const learningState = getState().get('learning');
@@ -239,7 +245,7 @@ export const updateCharToType = () => (dispatch, getState) => {
   dispatch(setIdsCharToType(idsChar));
 };
 
-export const typeLearningMode = char =>
+export const typeLearningMode = char => (
   (dispatch, getState) => {
     const state = getState();
     const learningState = state.get('learning');
@@ -268,9 +274,10 @@ export const typeLearningMode = char =>
 
       dispatch(updateCharToType());
     }
-  };
+  }
+);
 
-export const initLessons = () =>
+export const initLessons = () => (
   (dispatch, getState) => {
     const state = getState();
 
@@ -314,4 +321,5 @@ export const initLessons = () =>
         letters: ['set', letters],
       }));
     }
-  };
+  }
+);

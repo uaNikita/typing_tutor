@@ -50,7 +50,7 @@ class Block extends Component {
     this.setState({
       navOpen: !navOpen,
     });
-  }
+  };
 
   render() {
     const {
@@ -76,10 +76,17 @@ class Block extends Component {
         styleName: 'item item_modes',
       };
 
-      return re.test(location.pathname) ?
-        <span {...itemProps}>{text}</span>
-        :
-        <Link {...itemProps} to={{ pathname, state }}>{text}</Link>;
+      return re.test(location.pathname)
+        ? (
+          <span {...itemProps}>
+            {text}
+          </span>
+        )
+        : (
+          <Link {...itemProps} to={{ pathname, state }}>
+            {text}
+          </Link>
+        );
     });
 
     const otherLinks = other.map(link => {
@@ -96,9 +103,17 @@ class Block extends Component {
         styleName: 'item',
       };
 
-      return re.test(location.pathname) ?
-        <span {...itemProps}>{text}</span> :
-        <Link {...itemProps} to={{ pathname, state }}>{text}</Link>;
+      return re.test(location.pathname)
+        ? (
+          <span {...itemProps}>
+            {text}
+          </span>
+        )
+        : (
+          <Link {...itemProps} to={{ pathname, state }}>
+            {text}
+          </Link>
+        );
     });
 
     return (
@@ -109,11 +124,17 @@ class Block extends Component {
           <Metronome />
 
           <div className="drop-down" styleName="menu">
-            <button className="fa fa-bars drop-down__button" styleName="button" onClick={this.hanldeClickMenu} />
+            <button
+              type="button"
+              className="fa fa-bars drop-down__button"
+              styleName="button"
+              onClick={this.hanldeClickMenu} />
 
             {navOpen && (
               <nav className="drop-down__dd">
-                <h4 styleName="modes-title">Modes</h4>
+                <h4 styleName="modes-title">
+                  Modes
+                </h4>
                 {modesLinks}
                 {otherLinks}
               </nav>

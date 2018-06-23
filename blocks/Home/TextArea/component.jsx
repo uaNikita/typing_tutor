@@ -12,8 +12,7 @@ class TextArea extends Component {
     this.update();
   };
 
-  componentDidUpdate = () =>
-    this.update();
+  componentDidUpdate = () => this.update();
 
   componentWillUnmount() {
     this.content.removeEventListener('keydown', this.keyDownHandler);
@@ -25,21 +24,33 @@ class TextArea extends Component {
   }
 
   update = () => {
-    this.props.updateCharToType();
+    const {
+      props: {
+        updateCharToType,
+      },
+    } = this;
+
+    updateCharToType();
 
     const value = this.cursor.offsetTop - this.content.offsetTop - 80;
 
     this.content.scrollTop = value;
-  }
+  };
 
 
   keyDownHandler = e => {
+    const {
+      props: {
+        typeChar,
+      },
+    } = this;
+
     if (e.which === 32) {
       e.preventDefault();
 
       this.setStartTypingTime();
 
-      this.props.typeChar(String.fromCharCode(e.which));
+      typeChar(String.fromCharCode(e.which));
     }
   };
 
@@ -50,7 +61,9 @@ class TextArea extends Component {
     return (
       <div key="textarea" className={styles.textarea}>
         <div className={styles.content} ref={el => { this.content = el; }}>
-          <span className={styles.typed}>{typed}</span>
+          <span className={styles.typed}>
+            {typed}
+          </span>
           <span className="cursor" ref={el => { this.cursor = el; }} />
           {nonTyped}
         </div>

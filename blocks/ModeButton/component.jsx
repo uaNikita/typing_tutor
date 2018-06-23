@@ -17,8 +17,11 @@ const Component = ({ to, setMode, mode }) => {
     };
   }
 
-  return <button className="button" {...button.props}>{button.text}</button>;
+  return (
+    <button type="button" className="button" {...button.props}>
+      {button.text}
+    </button>
+  );
 };
 
 export default Component;
-

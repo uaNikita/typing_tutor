@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { processSetMode } from 'ReduxUtils/reducers/user';
+import { processSetSettings } from 'ReduxUtils/reducers/user';
 
 import Component from './component.jsx';
 
@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setMode: (...args) => dispatch(processSetMode(...args)),
+  setMode: mode => dispatch(processSetSettings({ mode })),
 });
 
 export default connect(

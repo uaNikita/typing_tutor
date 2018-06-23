@@ -6,9 +6,13 @@ import styles from './logo.module.styl';
 
 const Block = ({ location: { pathname } }) => (
   pathname === '/' ? (
-    <span styleName="logo">TouchToType</span>
+    <span styleName="logo">
+TouchToType
+    </span>
   ) : (
-    <Link to="/" styleName="logo">TouchToType</Link>
+    <Link to="/" styleName="logo">
+TouchToType
+    </Link>
   )
 );
 

@@ -10,8 +10,14 @@ import styles from './keyboard.module.styl';
 
 class Keyboard extends Component {
   handleOnChange = e => {
-    this.props.setKeyboard(e.target.value);
-  }
+    const {
+      props: {
+        setKeyboard,
+      },
+    } = this;
+
+    setKeyboard(e.target.value);
+  };
 
   render() {
     const {
@@ -46,12 +52,18 @@ class Keyboard extends Component {
           component={RenderField}
           type="select"
           label="Layout">
-          {keyboards.map(({ name: kbName }) => <option key={kbName} value={kbName}>{kbName}</option>)}
+          {keyboards.map(({ name: kbName }) => (
+            <option key={kbName} value={kbName}>
+              {kbName}
+            </option>
+          ))}
         </Field>
 
         <Field name="email" component={RenderField} type="email" label="Email" />
 
-        <div className="keyboard">{keyNodes}</div>
+        <div className="keyboard">
+          {keyNodes}
+        </div>
       </Fragment>
     );
   }
@@ -60,4 +72,3 @@ class Keyboard extends Component {
 export default reduxForm({
   form: 'keyboard-layout',
 })(Keyboard);
-

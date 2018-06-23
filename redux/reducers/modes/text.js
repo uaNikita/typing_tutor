@@ -116,7 +116,7 @@ export const typeEntitie = id => ({
   id,
 });
 
-export const processAddText = data =>
+export const processAddText = data => (
   (dispatch, getState) => {
     const { text, select } = data;
 
@@ -140,9 +140,10 @@ export const processAddText = data =>
       () => temp.path('text', textState.toJS()),
       () => dispatch(fetchJSON('/text/add', { body })),
     ));
-  };
+  }
+);
 
-export const processSelectText = id =>
+export const processSelectText = id => (
   dispatch => {
     const selectedId = parseInt(id, 10);
 
@@ -154,9 +155,10 @@ export const processSelectText = id =>
       () => temp.path('text.selectedId', selectedId),
       () => dispatch(fetchJSON('/text/select', { body })),
     ));
-  };
+  }
+);
 
-export const processRefreshText = id =>
+export const processRefreshText = id => (
   (dispatch, getState) => {
     dispatch(refreshText(id));
 
@@ -166,7 +168,8 @@ export const processRefreshText = id =>
       () => temp.path('text.entities', getState().getIn(['text', 'entities']).toJS()),
       () => dispatch(fetchJSON('/text/refresh', { body })),
     ));
-  };
+  }
+);
 
 export const updateCharToType = () => (dispatch, getState) => {
   const state = getState();
@@ -188,7 +191,7 @@ export const typeEntitiySaveToServer = _.throttle(
   { leading: false },
 );
 
-export const processTypeEntitiy = id =>
+export const processTypeEntitiy = id => (
   (dispatch, getState) => {
     const textState = getState().get('text');
 
@@ -207,7 +210,8 @@ export const processTypeEntitiy = id =>
       () => temp.path('text', textState.toJS()),
       () => typeEntitiySaveToServer(dispatch, { body }),
     ));
-  };
+  }
+);
 
 export const typeTextMode = char => (dispatch, getState) => {
   const state = getState();

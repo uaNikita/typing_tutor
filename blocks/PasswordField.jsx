@@ -1,11 +1,7 @@
 import RenderField from 'Blocks/RenderField/component.jsx';
 
-const PasswordField = props => {
-
-  return (
-    <PasswordField {...props} />
-  );
-};
+const PasswordField = props => (
+  <PasswordField {...props} />
+);
 
 export default PasswordField;
-

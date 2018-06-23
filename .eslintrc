@@ -37,6 +37,7 @@
       }
     ],
     "import/extensions": "off",
+    "import/no-cycle": "off",
     "max-len": "off",
     "react/prop-types": "off",
     "react/jsx-closing-bracket-location": "off",

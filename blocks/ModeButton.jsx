@@ -18,8 +18,11 @@ const ModeButton = ({ className, toMode, setMode, currentMode }) => {
     };
   }
 
-  return <button className={classNames('button', className)} {...button.props}>{button.text}</button>;
+  return (
+    <button type="button" className={classNames('button', className)} {...button.props}>
+      {button.text}
+    </button>
+  );
 };
 
 export default ModeButton;
-
