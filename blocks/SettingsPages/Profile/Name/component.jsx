@@ -44,7 +44,8 @@ class Block extends Component {
           component={RenderField}
           type="text"
           label="Name"
-          loader />
+          loader
+        />
       </form>
     );
   }

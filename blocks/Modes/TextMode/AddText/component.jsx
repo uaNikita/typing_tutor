@@ -47,8 +47,9 @@ class AddText extends Component {
 Add text
           </Button>
 
-          <label styleName="select">
+          <label styleName="select" htmlFor="select">
             <Field
+              id="select"
               styleName="select-input"
               name="select"
               component="input"

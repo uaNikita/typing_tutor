@@ -41,7 +41,8 @@ class DeleteAccount extends Component {
           type="button"
           className="button"
           styleName="button"
-          onClick={this.handleClickButton}>
+          onClick={this.handleClickButton}
+        >
           Delete account
         </button>
 
@@ -51,7 +52,8 @@ class DeleteAccount extends Component {
               classNames="modal"
               timeout={250}
               mountOnEnter
-              unmountOnExit>
+              unmountOnExit
+            >
               <Modal onClose={this.handlerCloseModal}>
                 <DeleteAccountModal />
               </Modal>

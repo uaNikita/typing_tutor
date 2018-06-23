@@ -51,7 +51,8 @@ class Keyboard extends Component {
           name="email"
           component={RenderField}
           type="select"
-          label="Layout">
+          label="Layout"
+        >
           {keyboards.map(({ name: kbName }) => (
             <option key={kbName} value={kbName}>
               {kbName}

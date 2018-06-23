@@ -135,9 +135,9 @@ Settings
         <LearningModeButton toMode="fingers" />
 
         <div className="settings-learning__item">
-          <label htmlFor="" className="settings-learning__label">
+          <p className="settings-learning__label">
             Max word length:
-          </label>
+          </p>
 
           <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
             <Slider {...maxLettersInWordSliderProps} />
@@ -145,9 +145,9 @@ Settings
         </div>
 
         <div className="settings-learning__item">
-          <label htmlFor="" className="settings-learning__label">
+          <p className="settings-learning__label">
             Extend fingers set:
-          </label>
+          </p>
           <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
             <Slider {...setSizeSliderProps} />
           </div>

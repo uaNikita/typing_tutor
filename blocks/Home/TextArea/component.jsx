@@ -4,10 +4,17 @@ import PerfectScrollbar from 'perfect-scrollbar';
 import styles from './textarea.module.styl';
 
 class TextArea extends Component {
-  componentDidMount = () => {
-    this.content.addEventListener('keydown', this.keyDownHandler);
+  constructor(props) {
+    super(props);
 
-    this.ps = new PerfectScrollbar(this.content);
+    this.cursor = React.createRef();
+    this.content = React.createRef();
+  }
+
+  componentDidMount = () => {
+    this.content.current.addEventListener('keydown', this.keyDownHandler);
+
+    this.ps = new PerfectScrollbar(this.content.current);
 
     this.update();
   };
@@ -15,7 +22,7 @@ class TextArea extends Component {
   componentDidUpdate = () => this.update();
 
   componentWillUnmount() {
-    this.content.removeEventListener('keydown', this.keyDownHandler);
+    this.content.current.removeEventListener('keydown', this.keyDownHandler);
 
     this.ps.destroy();
 
@@ -32,9 +39,9 @@ class TextArea extends Component {
 
     updateCharToType();
 
-    const value = this.cursor.offsetTop - this.content.offsetTop - 80;
+    const value = this.cursor.current.offsetTop - this.content.current.offsetTop - 80;
 
-    this.content.scrollTop = value;
+    this.content.current.scrollTop = value;
   };
 
 
@@ -60,11 +67,11 @@ class TextArea extends Component {
 
     return (
       <div key="textarea" className={styles.textarea}>
-        <div className={styles.content} ref={el => { this.content = el; }}>
+        <div className={styles.content} ref={this.content}>
           <span className={styles.typed}>
             {typed}
           </span>
-          <span className="cursor" ref={el => { this.cursor = el; }} />
+          <span className="cursor" ref={this.cursor} />
           {nonTyped}
         </div>
       </div>

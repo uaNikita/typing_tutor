@@ -58,25 +58,29 @@ class Block extends Component {
           name="old_password"
           component={RenderField}
           type="password"
-          label="Old password" />
+          label="Old password"
+        />
 
         <Field
           name="new_password"
           component={RenderField}
           type="password"
-          label="New password" />
+          label="New password"
+        />
 
         <Field
           name="confirm_new_password"
           component={RenderField}
           type="password"
-          label="Confirm new password" />
+          label="Confirm new password"
+        />
 
         <Button
           styleName="button"
           type="submit"
           disabled={invalid}
-          isLoader={submitting}>
+          isLoader={submitting}
+        >
           Update password
         </Button>
       </form>

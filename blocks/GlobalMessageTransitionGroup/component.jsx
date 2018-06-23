@@ -19,7 +19,8 @@ const GlobalMessageTransitionGroup = ({ message }) => (
           timeout={{
             enter: 500,
             exit: 300,
-          }}>
+          }}
+        >
           <GlobalMessage />
         </CSSTransition>
       )

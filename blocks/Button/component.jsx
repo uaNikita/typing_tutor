@@ -18,7 +18,8 @@ const Button = ({
     styleName={classNames('button', {
       button_loader: isLoader,
     })}
-    {...rest}>
+    {...rest}
+  >
     <span styleName="content">
       {children}
     </span>

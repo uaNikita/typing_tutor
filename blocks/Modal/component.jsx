@@ -4,7 +4,12 @@ import { withRouter } from 'react-router-dom';
 
 import './modal.styl';
 
-const Modal = ({ children, nonCloseable, onClose, className }) => {
+const Modal = ({
+  children,
+  nonCloseable,
+  onClose,
+  className,
+}) => {
   const props = {};
   let closeButton = null;
 

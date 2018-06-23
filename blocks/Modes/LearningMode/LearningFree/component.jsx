@@ -102,20 +102,20 @@ class LearningFree extends Component {
     return (
       <Fragment>
         <h4 className="settings-learning__title">
-Example
+          Example
         </h4>
         <LearningView className="settings-learning__view" lesson={example} />
 
         <h4 className="settings-learning__title">
-Settings
+          Settings
         </h4>
 
         <LearningModeButton toMode="free" />
 
         <div className="settings-learning__item">
-          <label htmlFor="" className="settings-learning__label">
+          <p className="settings-learning__label">
             Max word length:
-          </label>
+          </p>
           <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
             <Slider {...maxLettersInWordSliderProps} />
           </div>

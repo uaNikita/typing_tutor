@@ -1,5 +1,10 @@
 import React, { Fragment } from 'react';
-import { withRouter, Switch, Route, Redirect } from 'react-router-dom';
+import {
+  withRouter,
+  Switch,
+  Route,
+  Redirect,
+} from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import GlobalMessageTransitionGroup from 'Blocks/GlobalMessageTransitionGroup/container';
@@ -19,7 +24,7 @@ const App = () => (
     <Helmet>
       <meta charSet="utf-8" />
       <title>
-Typing tutor
+        Typing tutor
       </title>
       <meta name="viewport" content="width=device-width,initial-scale=1" />
       <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet" />
@@ -43,12 +48,13 @@ Typing tutor
               <Switch>
                 <Route exact path="/404" component={NotFound} />
                 <Route path="/mode" component={Modes} />
-                <Route path="/options" component={OptionsPages} />
-                <PrivateRoute path="/settings" component={SettingsPages} />
+                <Route path="/options" component={SettingsPages} />
+                <PrivateRoute path="/settings" component={OptionsPages} />
                 <Redirect to="/404" />
               </Switch>
             </Fragment>
-          )} />
+          )}
+        />
       </Switch>
 
       <Footer />

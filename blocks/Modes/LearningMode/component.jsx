@@ -1,5 +1,10 @@
 import React, { Fragment } from 'react';
-import { Switch, Route, Redirect, NavLink } from 'react-router-dom';
+import {
+  Switch,
+  Route,
+  Redirect,
+  NavLink,
+} from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
 import GeneralModeButton from '../GeneralModeButton/container';
@@ -32,7 +37,8 @@ const Block = props => {
       key={linkUrl}
       className="submenu-link"
       activeClassName="submenu-link_selected"
-      to={url + linkUrl}>
+      to={url + linkUrl}
+    >
       {text}
     </NavLink>
   ));
@@ -44,7 +50,7 @@ const Block = props => {
       <div styleName="modes">
         <div styleName="menu">
           <h4 styleName="title">
-Sets
+            Sets
           </h4>
           {links}
         </div>

@@ -1,5 +1,10 @@
 import React from 'react';
-import { Switch, Redirect, Route, NavLink } from 'react-router-dom';
+import {
+  Switch,
+  Redirect,
+  Route,
+  NavLink,
+} from 'react-router-dom';
 
 import Keyboard from './Keyboard/container';
 
@@ -16,7 +21,8 @@ const Block = ({ match: { url } }) => {
       key={linkUrl}
       className="submenu-link"
       activeClassName="submenu-link_selected"
-      to={url + linkUrl}>
+      to={url + linkUrl}
+    >
       {text}
     </NavLink>
   ));

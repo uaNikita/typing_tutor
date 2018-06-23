@@ -1,7 +1,12 @@
 import React from 'react';
 import classNames from 'classnames';
 
-const ModeButton = ({ className, toMode, setMode, currentMode }) => {
+const ModeButton = ({
+  className,
+  toMode,
+  setMode,
+  currentMode,
+}) => {
   let button = {
     props: {
       onClick: () => setMode(toMode),

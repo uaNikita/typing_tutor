@@ -128,7 +128,8 @@ class Block extends Component {
               type="button"
               className="fa fa-bars drop-down__button"
               styleName="button"
-              onClick={this.hanldeClickMenu} />
+              onClick={this.hanldeClickMenu}
+            />
 
             {navOpen && (
               <nav className="drop-down__dd">

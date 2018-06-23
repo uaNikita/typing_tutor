@@ -10,12 +10,14 @@ class Block extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      status: 0,
-    };
+    this.metronomeRange = React.createRef();
 
     // this.audio = new Audio('media/metronome2.mp3');
   }
+
+  state = {
+    status: 0,
+  };
 
   componentDidMount() {
     // const { interval, actionMetronome } = this.props;
@@ -105,7 +107,7 @@ class Block extends Component {
           <h5 styleName="metronome__title">
             Volume
           </h5>
-          <div ref={c => { this.metronomeRange = c; }} />
+          <div ref={this.metronomeRange} />
         </div>
       </div>
     );

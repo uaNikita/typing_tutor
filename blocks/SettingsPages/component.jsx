@@ -1,5 +1,10 @@
 import React from 'react';
-import { Switch, Redirect, Route, Link } from 'react-router-dom';
+import {
+  Switch,
+  Redirect,
+  Route,
+  Link,
+} from 'react-router-dom';
 
 import Profile from './Profile/component.jsx';
 import Account from './Account/component.jsx';

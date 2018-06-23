@@ -89,7 +89,8 @@ class SignIn extends Component {
         <p className="auth__fp-wrap">
           <Link
             to="/authorization/restore-access"
-            className="auth__fp">
+            className="auth__fp"
+          >
             Restore access?
           </Link>
         </p>

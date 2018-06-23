@@ -19,7 +19,8 @@ const Block = ({ show }) => (
           exit: 1300,
         }}
         mountOnEnter
-        unmountOnExit>
+        unmountOnExit
+      >
         <span styleName="root">
           <span styleName="loader" />
           <span className="fa fa-check" styleName="check-mark" />

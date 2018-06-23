@@ -87,8 +87,13 @@ class Block extends Component {
 
     return (
       <div className="drop-down" styleName="menu">
-        <button type="button" className="drop-down__button" styleName="button">
-          <span styleName="avatar" onClick={this.handleUserMenu}>
+        <button
+          type="button"
+          className="drop-down__button"
+          styleName="button"
+          onClick={this.handleUserMenu}
+        >
+          <span styleName="avatar">
             {nickname[0]}
           </span>
         </button>

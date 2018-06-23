@@ -9,19 +9,10 @@
   },
   "rules": {
     "linebreak-style": "off",
-    "function-paren-newline": [
-      "error",
-      "consistent"
-    ],
     "brace-style": [
       "error",
-      "stroustrup",
-      {
-        "allowSingleLine": true
-      }
+      "stroustrup"
     ],
-    "object-curly-newline": "off",
-    "no-useless-escape": "off",
     "default-case": "off",
     "arrow-parens": [
       "error",
@@ -38,23 +29,7 @@
     ],
     "import/extensions": "off",
     "import/no-cycle": "off",
-    "max-len": "off",
-    "react/prop-types": "off",
-    "react/jsx-closing-bracket-location": "off",
-    "react/jsx-boolean-value": "off",
-    "react/no-unescaped-entities": "off",
-    "react/no-danger": "off",
-    "jsx-a11y/href-no-hash": "off",
-    "jsx-a11y/label-has-for": "off",
-    "jsx-a11y/anchor-has-content": "off",
-    "jsx-a11y/no-static-element-interactions": "off",
-    "jsx-a11y/anchor-is-valid": [
-      "error",
-      {
-        "components": []
-      }
-    ],
-    "jsx-a11y/click-events-have-key-events": "off"
+    "react/prop-types": "off"
   },
   "settings": {
     "import/resolver": {
