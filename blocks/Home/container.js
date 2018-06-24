@@ -6,9 +6,9 @@ import {
   zeroingStatic,
   startNewSession,
 } from 'ReduxUtils/reducers/main';
-import Component from './component.jsx';
+import Component from './component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const uaerState = state.get('user');
 
   return {

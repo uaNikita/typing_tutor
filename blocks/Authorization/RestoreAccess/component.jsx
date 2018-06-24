@@ -3,15 +3,15 @@ import { Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form/immutable';
 
 import { validateEmail } from 'Utils/validation';
-import RenderField from 'Blocks/RenderField/component.jsx';
-import Button from 'Blocks/Button/component.jsx';
+import RenderField from 'Blocks/RenderField/component';
+import Button from 'Blocks/Button/component';
 
 class RestoreAccess extends Component {
   state = {
     submitted: false,
   };
 
-  handleSubmit = values => {
+  handleSubmit = (values) => {
     const {
       props: {
         fetchJSON,
@@ -21,7 +21,7 @@ class RestoreAccess extends Component {
     fetchJSON('/auth/restore-access', {
       body: values.toJS(),
     })
-      .then(res => {
+      .then((res) => {
         if (res.ok) {
           this.setState({
             submitted: true,

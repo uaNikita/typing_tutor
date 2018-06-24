@@ -39,7 +39,7 @@ export default (state = initialState, action = {}) => {
       return state.merge(initialState);
 
     case TYPE_ON_LESSON:
-      return state.update('lesson', lesson => {
+      return state.update('lesson', (lesson) => {
         const typed = lesson.get('typed');
         const rest = lesson.get('rest');
 
@@ -65,7 +65,7 @@ export default (state = initialState, action = {}) => {
       return state.setIn(['fingers', 'example'], action.example);
 
     case UPDATE_FREE_OPTIONS:
-      return state.updateIn(['free', 'options'], opts => {
+      return state.updateIn(['free', 'options'], (opts) => {
         const { options } = action;
 
         // type can be add, delete, set
@@ -164,7 +164,7 @@ export const generateFingersLesson = () => (
 );
 
 export const updateFingersOptionsAndExample = options => (
-  dispatch => {
+  (dispatch) => {
     dispatch(processUpdateFingersOptions(options));
 
     const example = dispatch(generateFingersLesson());
@@ -201,7 +201,7 @@ export const generateFreeLesson = () => (
 );
 
 export const updateFreeOptionsAndExample = options => (
-  dispatch => {
+  (dispatch) => {
     dispatch(processUpdateFreeOptions(options));
 
     const example = dispatch(generateFreeLesson());
@@ -223,6 +223,8 @@ export const refreshCurrentLesson = () => (dispatch, getState) => {
     case 'free':
       lesson = dispatch(generateFreeLesson());
       break;
+
+    default:
   }
 
   dispatch(setCurrentLesson(lesson));

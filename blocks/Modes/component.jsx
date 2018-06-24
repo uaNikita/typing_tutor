@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 
 import LearningMode from './LearningMode/container';
-import TextMode from './TextMode/component.jsx';
+import TextMode from './TextMode/component';
 
 const Modes = ({ match: { url } }) => (
   <Switch>

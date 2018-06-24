@@ -9,14 +9,14 @@ import UserMenu from 'Blocks/UserMenu/container';
 import styles from './header.module.styl';
 
 class Block extends Component {
-  generateLinks = data => {
+  generateLinks = (data) => {
     const {
       props: {
         location,
       },
     } = this;
 
-    return data.map(link => {
+    return data.map((link) => {
       const {
         pathname,
         text,

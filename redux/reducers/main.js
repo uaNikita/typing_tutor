@@ -70,7 +70,7 @@ const initialState = Immutable.fromJS({
 });
 
 const updateSessionStatisticPresses = (state, name, character) => (
-  state.updateIn(['sessionStatistic', name], presses => {
+  state.updateIn(['sessionStatistic', name], (presses) => {
     const index = presses.findIndex(c => c.get('character') === character);
 
     let newPresses;
@@ -285,20 +285,23 @@ export const typeChar = char => (dispatch, getState) => {
     case 'text':
       dispatch(typeTextMode(char));
       break;
+
     case 'learning':
       dispatch(typeLearningMode(char));
       break;
+
+    default:
   }
 };
 
 export const init = () => (
-  dispatch => {
+  (dispatch) => {
     dispatch(initLessons());
   }
 );
 
 export const setAllWithoutAuth = data => (
-  dispatch => {
+  (dispatch) => {
     dispatch(setTextState(data.modes.text));
 
     const userData = data;
@@ -311,7 +314,7 @@ export const setAllWithoutAuth = data => (
 );
 
 export const setAllWithAuth = ({ tokens, ...rest }) => (
-  dispatch => {
+  (dispatch) => {
     dispatch(setTokens(tokens));
 
     dispatch(setAllWithoutAuth(rest));
@@ -321,7 +324,7 @@ export const setAllWithAuth = ({ tokens, ...rest }) => (
 export const requestAllWithoutAuth = () => (
   dispatch => (
     dispatch(fetchJSON('/user'))
-      .then(res => {
+      .then((res) => {
         if (res.ok) {
           dispatch(setAllWithoutAuth(res.data));
         }

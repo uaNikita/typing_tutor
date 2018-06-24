@@ -16,7 +16,7 @@ const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expi
 
 const generateTokenWithId = clientId => clientId.toString() + crypto.randomBytes(40).toString('hex');
 
-const createClient = userId => {
+const createClient = (userId) => {
   const client = new Client({
     user: userId,
   });
@@ -39,7 +39,7 @@ const login = (req, res) => {
   }
 
   return createClient(user.get('id'))
-    .then(client => {
+    .then((client) => {
       res.json({
         tokens: {
           refresh: client.get('token'),
@@ -98,7 +98,7 @@ const signUp = (req, res, next) => {
             }),
           };
 
-          transporter.sendMail(mailOptions, error => {
+          transporter.sendMail(mailOptions, (error) => {
             if (error) {
               throw new APIError({
                 message: 'We can not verify your email now. Please try again later.',
@@ -118,7 +118,7 @@ const verifyEmail = (req, res, next) => {
   const { email } = req.body;
 
   User.findOne({ email }).exec()
-    .then(user => {
+    .then((user) => {
       if (user) {
         const verification = new Verification({
           user,
@@ -128,7 +128,7 @@ const verifyEmail = (req, res, next) => {
         verification.set('token', verification.get('id') + crypto.randomBytes(40).toString('hex'));
 
         return verification.save()
-          .then(verif => {
+          .then((verif) => {
             const mailOptions = {
               from: config.get('mail.from'),
               to: email,
@@ -139,7 +139,7 @@ const verifyEmail = (req, res, next) => {
               }),
             };
 
-            transporter.sendMail(mailOptions, error => {
+            transporter.sendMail(mailOptions, (error) => {
               if (error) {
                 throw new APIError({
                   message: 'We can not verify your email now. Please try again later.',
@@ -164,7 +164,7 @@ const restoreAccess = (req, res, next) => {
   const { email } = req.body;
 
   User.findOne({ email }).exec()
-    .then(user => {
+    .then((user) => {
       if (user) {
         const password = getRandomPassword();
 
@@ -190,7 +190,7 @@ const restoreAccess = (req, res, next) => {
               }),
             };
 
-            transporter.sendMail(mailOptions, error => {
+            transporter.sendMail(mailOptions, (error) => {
               if (error) {
                 throw new APIError({
                   message: 'We can not verify your email now. Please try again later.',
@@ -216,19 +216,18 @@ const getTokens = (req, res, next) => {
 
   Client.findOne({ token })
     .exec()
-    .then(client => {
+    .then((client) => {
       if (client) {
         client.set('token', generateTokenWithId(client.get('id')));
 
         return client.save()
-          .then(() =>
-            res.json({
-              refresh: client.get('token'),
-              access: generateAccessToken({
-                id: client.get('user'),
-                clientId: client.get('id'),
-              }),
-            }));
+          .then(() => res.json({
+            refresh: client.get('token'),
+            access: generateAccessToken({
+              id: client.get('user'),
+              clientId: client.get('id'),
+            }),
+          }));
       }
 
       throw new APIError({
@@ -240,57 +239,56 @@ const getTokens = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const checkEmail = (req, res, next) =>
-  User.findOne({ email: req.body.email })
-    .then(user => {
-      if (user) {
-        res.json(httpStatus[200]);
-      }
-      else {
-        throw new APIError({
-          status: httpStatus.NOT_FOUND,
-        });
-      }
-    })
-    .catch(e => next(e));
+const checkEmail = (req, res, next) => User.findOne({ email: req.body.email })
+  .then((user) => {
+    if (user) {
+      res.json(httpStatus[200]);
+    }
+    else {
+      throw new APIError({
+        status: httpStatus.NOT_FOUND,
+      });
+    }
+  })
+  .catch(e => next(e));
 
-const getUserData = (req, res, next) =>
-  User.get(req.user.id)
-    .then(user => res.json(user.toObject()))
-    .catch(e => next(e));
+const getUserData = (req, res, next) => User.get(req.user.id)
+  .then(user => res.json(user.toObject()))
+  .catch(e => next(e));
 
-const verifyToken = (req, res, next) =>
-  Verification.findByToken(req.body.token)
-    .then(verification => {
-      const type = verification.get('type');
-      const user = verification.get('user');
+const verifyToken = (req, res, next) => Verification.findByToken(req.body.token)
+  .then((verification) => {
+    const type = verification.get('type');
+    const user = verification.get('user');
 
-      switch (type) {
-        case 'email':
-          user.set('active', true);
-          break;
-        case 'password':
-          user.set('password', user.get('newPassword'));
-          user.set('newPassword', undefined);
-          break;
-      }
+    switch (type) {
+      case 'email':
+        user.set('active', true);
+        break;
 
-      return Promise.all([createClient(user.get('id')), user.save(),
-        // verification.remove().exec()
-      ]).then(([client]) =>
-        res.json({
-          type,
-          tokens: {
-            refresh: client.get('token'),
-            access: generateAccessToken({
-              id: user.get('id'),
-              clientId: client.get('id'),
-            }),
-          },
-          ...user.toObject(),
-        }));
-    })
-    .catch(e => next(e));
+      case 'password':
+        user.set('password', user.get('newPassword'));
+        user.set('newPassword', undefined);
+        break;
+
+      default:
+    }
+
+    return Promise.all([createClient(user.get('id')), user.save(),
+      // verification.remove().exec()
+    ]).then(([client]) => res.json({
+      type,
+      tokens: {
+        refresh: client.get('token'),
+        access: generateAccessToken({
+          id: user.get('id'),
+          clientId: client.get('id'),
+        }),
+      },
+      ...user.toObject(),
+    }));
+  })
+  .catch(e => next(e));
 
 module.exports = {
   signUp,

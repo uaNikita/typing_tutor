@@ -2,7 +2,7 @@ import React from 'react';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
-import Loader from '../Loader/component.jsx';
+import Loader from '../Loader/component';
 
 import styles from './button.module.styl';
 

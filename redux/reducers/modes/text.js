@@ -49,7 +49,7 @@ export default (state = initialState, action = {}) => {
       return state.set('selectedId', state.get('entities').last().get('id'));
 
     case REFRESH_TEXT:
-      return state.update('entities', ents => ents.map(text => {
+      return state.update('entities', ents => ents.map((text) => {
         let t = text;
 
         if (text.get('id') === action.id) {
@@ -63,7 +63,7 @@ export default (state = initialState, action = {}) => {
       }));
 
     case TYPE_ENTITIE:
-      return state.update('entities', ents => ents.map(text => {
+      return state.update('entities', ents => ents.map((text) => {
         let t = text;
 
         if (text.get('id') === action.id) {
@@ -144,7 +144,7 @@ export const processAddText = data => (
 );
 
 export const processSelectText = id => (
-  dispatch => {
+  (dispatch) => {
     const selectedId = parseInt(id, 10);
 
     dispatch(selectText(selectedId));

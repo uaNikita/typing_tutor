@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const httpStatus = require('http-status');
 
 const mode = (req, res, next) => {

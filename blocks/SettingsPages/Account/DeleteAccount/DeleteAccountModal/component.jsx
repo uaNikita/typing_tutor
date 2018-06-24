@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 import CSSModules from 'react-css-modules';
 
-import RenderField from 'Blocks/RenderField/component.jsx';
-import Button from 'Blocks/Button/component.jsx';
+import RenderField from 'Blocks/RenderField/component';
+import Button from 'Blocks/Button/component';
 
 import { validateField, validatePassword } from 'Utils/validation';
 
@@ -55,7 +55,7 @@ class DeleteAccountModal extends Component {
 }
 
 
-const validate = values => {
+const validate = (values) => {
   const deleteMyAccountValue = values.get('delete_my_account');
 
   const errors = {

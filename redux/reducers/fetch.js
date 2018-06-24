@@ -37,7 +37,7 @@ export const clearState = () => ({
   type: CLEAR_STATE,
 });
 
-export const setRefreshToken = token => {
+export const setRefreshToken = (token) => {
   Cookies.set('tt_refresh', token);
 
   return {
@@ -46,7 +46,7 @@ export const setRefreshToken = token => {
   };
 };
 
-export const setAccessToken = token => {
+export const setAccessToken = (token) => {
   Cookies.set('tt_access', token);
 
   return {
@@ -56,7 +56,7 @@ export const setAccessToken = token => {
 };
 
 export const setTokens = ({ refresh, access }) => (
-  dispatch => {
+  (dispatch) => {
     dispatch(setRefreshToken(refresh));
     dispatch(setAccessToken(access));
   }
@@ -87,7 +87,7 @@ const requestJSON = (url, params, withoutAuthorization) => (
     }
 
     return fetch(reformedUrl, newParams)
-      .then(response => {
+      .then((response) => {
         const contentType = response.headers.get('content-type');
 
         if (contentType && contentType.indexOf('application/json') !== -1) {
@@ -101,7 +101,7 @@ const requestJSON = (url, params, withoutAuthorization) => (
 
         return response;
       })
-      .catch(error => {
+      .catch((error) => {
         dispatch(setGlobalMessage('Oops... something went wrong'));
 
         throw error;
@@ -112,14 +112,14 @@ const requestJSON = (url, params, withoutAuthorization) => (
 export const fetchJSON = (...args) => (
   (dispatch, getState) => (
     dispatch(requestJSON(...args))
-      .then(response => {
+      .then((response) => {
         if (response.status === 401) {
           return dispatch(requestJSON('/auth/tokens', {
             headers: {
               Authorization: `Bearer ${getState().getIn(['fetch', 'refreshToken'])}`,
             },
           }))
-            .then(refreshTokenResponse => {
+            .then((refreshTokenResponse) => {
               const {
                 status,
                 ok,
@@ -148,7 +148,7 @@ export const fetchJSON = (...args) => (
   )
 );
 
-export const logOut = () => dispatch => {
+export const logOut = () => (dispatch) => {
   Cookies.remove('tt_refresh');
   Cookies.remove('tt_access');
 

@@ -3,9 +3,9 @@ import { updateFingersOptionsAndExample } from 'ReduxUtils/reducers/modes/learni
 
 import { getFingersSet } from 'Utils';
 
-import LearningFingers from './component.jsx';
+import LearningFingers from './component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const keys = state.getIn(['main', 'keys']).toJS();
 
   const stateFingers = state.getIn(['learning', 'fingers']);

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import Component from './component.jsx';
+import Component from './component';
 
 const mapStateToProps = state => ({
   message: state.getIn(['main', 'globalMessage']),

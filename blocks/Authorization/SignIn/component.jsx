@@ -4,8 +4,8 @@ import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import classNames from 'classnames';
 
 import { validateEmail, validatePassword } from 'Utils/validation';
-import RenderField from 'Blocks/RenderField/component.jsx';
-import Button from 'Blocks/Button/component.jsx';
+import RenderField from 'Blocks/RenderField/component';
+import Button from 'Blocks/Button/component';
 
 class SignIn extends Component {
   state = {
@@ -13,7 +13,7 @@ class SignIn extends Component {
     submittedVerifyLink: false,
   };
 
-  handleSubmit = values => {
+  handleSubmit = (values) => {
     const {
       props: {
         history: {
@@ -29,7 +29,7 @@ class SignIn extends Component {
     return fetchJSON('/auth/login', {
       body: values.toJS(),
     })
-      .then(res => {
+      .then((res) => {
         if (res.ok) {
           setAllWithAuth(res.data);
 

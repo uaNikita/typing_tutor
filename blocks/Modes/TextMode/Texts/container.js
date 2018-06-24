@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import Texts from './component.jsx';
+import Texts from './component';
 
 const mapStateToProps = state => ({
   texts: state.getIn(['text', 'entities']).toJS().map(obj => ({

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { processSelectText, processRefreshText } from 'ReduxUtils/reducers/modes/text';
-import Text from './component.jsx';
+import Text from './component';
 
 const mapStateToProps = (state, ownProps) => {
   const id = parseInt(ownProps.match.params.textId, 10);

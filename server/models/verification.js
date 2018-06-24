@@ -26,7 +26,7 @@ VerificationSchema.statics = {
     return this.findOne({ token })
       .populate('user')
       .exec()
-      .then(verification => {
+      .then((verification) => {
         if (verification) {
           return verification;
         }

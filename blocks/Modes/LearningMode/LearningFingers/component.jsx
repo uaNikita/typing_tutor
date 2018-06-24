@@ -3,8 +3,8 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import Slider from 'rc-slider';
 
-import Key from 'Blocks/Key/component.jsx';
-import LearningView from 'Blocks/LearningView/component.jsx';
+import Key from 'Blocks/Key/component';
+import LearningView from 'Blocks/LearningView/component';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFingers extends Component {
@@ -35,7 +35,7 @@ class LearningFingers extends Component {
     .fromPairs()
     .value();
 
-  handleChangeMaxLettersInWord = maxLettersInWord => {
+  handleChangeMaxLettersInWord = (maxLettersInWord) => {
     const {
       props: {
         updateOptions,
@@ -45,7 +45,7 @@ class LearningFingers extends Component {
     updateOptions({ maxLettersInWord });
   };
 
-  handleChangeSetSize = setSize => {
+  handleChangeSetSize = (setSize) => {
     const {
       props: {
         updateOptions,
@@ -74,7 +74,7 @@ class LearningFingers extends Component {
 
     selectedLetters = _.concat(...selectedLetters);
 
-    const keyNodes = keys.map(obj => {
+    const keyNodes = keys.map((obj) => {
       let className = 'keyboard__key';
 
       if (obj.type === 'letter') {

@@ -11,6 +11,7 @@ const nodeExternals = require('webpack-node-externals');
 const getConfig = (() => {
   const commonConfig = {
     resolve: {
+      extensions: ['.js', '.json', '.jsx'],
       alias: {
         ReduxUtils: path.resolve(__dirname, 'redux/'),
         Blocks: path.resolve(__dirname, 'blocks/'),

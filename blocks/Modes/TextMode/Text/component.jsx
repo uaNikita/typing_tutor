@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import styles from './text.module.styl';
 
-const Text = props => {
+const Text = (props) => {
   const {
     id,
     typed,

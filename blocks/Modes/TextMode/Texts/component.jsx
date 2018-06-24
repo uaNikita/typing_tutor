@@ -7,7 +7,7 @@ import GeneralModeButton from '../../GeneralModeButton/container';
 
 import styles from './texts.module.styl';
 
-const Block = props => {
+const Block = (props) => {
   const {
     texts,
     selectedId,

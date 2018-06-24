@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 
-import Modal from 'Blocks/Modal/component.jsx';
+import Modal from 'Blocks/Modal/component';
 import DeleteAccountModal from './DeleteAccountModal/container';
 
 import styles from './delete-account.module.styl';

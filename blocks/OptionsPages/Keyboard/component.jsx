@@ -2,14 +2,14 @@ import React, { Component, Fragment } from 'react';
 import keyboards from 'Constants/keyboards/index';
 
 import { Field, reduxForm } from 'redux-form/immutable';
-import RenderField from 'Blocks/RenderField/component.jsx';
+import RenderField from 'Blocks/RenderField/component';
 
-import Key from 'Blocks/Key/component.jsx';
+import Key from 'Blocks/Key/component';
 
 import styles from './keyboard.module.styl';
 
 class Keyboard extends Component {
-  handleOnChange = e => {
+  handleOnChange = (e) => {
     const {
       props: {
         setKeyboard,
@@ -26,7 +26,7 @@ class Keyboard extends Component {
       },
     } = this;
 
-    const keyNodes = keys.map(obj => {
+    const keyNodes = keys.map((obj) => {
       const keyProps = {
         className: 'keyboard__key',
         'data-key': obj.id,

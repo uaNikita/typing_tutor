@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 
 import { actionMetronome } from 'ReduxUtils/reducers/main';
-import Component from './component.jsx';
+import Component from './component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const stateMain = state.get('main');
 
   return {

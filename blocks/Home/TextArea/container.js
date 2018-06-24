@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { updateCharToType } from 'ReduxUtils/reducers/modes/text';
 
-import Component from './component.jsx';
+import Component from './component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const stateText = state.get('text');
 
   const text = stateText.get('entities')

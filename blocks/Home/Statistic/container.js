@@ -1,9 +1,9 @@
 import _ from 'lodash';
 import { connect } from 'react-redux';
 
-import Component from './component.jsx';
+import Component from './component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const sessionStatistic = state.getIn(['main', 'sessionStatistic']).toJS();
 
   return {

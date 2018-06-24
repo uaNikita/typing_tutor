@@ -19,7 +19,7 @@ class Block extends Component {
     document.removeEventListener('click', this.closeIfNeeded);
   }
 
-  closeIfNeeded = e => {
+  closeIfNeeded = (e) => {
     let el = e.target;
 
     // traverse parents

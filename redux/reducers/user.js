@@ -35,7 +35,7 @@ export default (state = initialState, action = {}) => {
       return state.set('statistic', Immutable.fromJS(action.statistic));
 
     case ADD_STATISTIC:
-      return state.update('statistic', dates => {
+      return state.update('statistic', (dates) => {
         const thisDay = moment().startOf('day').toDate();
 
         let newDates = dates;
@@ -50,7 +50,7 @@ export default (state = initialState, action = {}) => {
           dateIndex = newDates.count() - 1;
         }
 
-        return newDates.updateIn([dateIndex, action.keyboard, action.mode], mode => {
+        return newDates.updateIn([dateIndex, action.keyboard, action.mode], (mode) => {
           let newMode = mode;
 
           if (!newMode) {
@@ -86,7 +86,7 @@ export const addStatistic = obj => ({
 });
 
 export const processSetSettings = settings => (
-  dispatch => {
+  (dispatch) => {
     dispatch(setState(settings));
 
     return dispatch(processAction(

@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 import CSSModules from 'react-css-modules';
 
-import RenderField from 'Blocks/RenderField/component.jsx';
-import Button from 'Blocks/Button/component.jsx';
+import RenderField from 'Blocks/RenderField/component';
+import Button from 'Blocks/Button/component';
 import { validateField } from 'Utils/validation';
 
 import styles from './add-text.module.styl';
 
 class AddText extends Component {
-  textFormHandleSubmit = values => {
+  textFormHandleSubmit = (values) => {
     const {
       processAddText,
       history: {

@@ -1,9 +1,9 @@
 import React from 'react';
 import classNames from 'classnames';
 
-import Key from 'Blocks/Key/component.jsx';
+import Key from 'Blocks/Key/component';
 
-const KeyPad = props => {
+const KeyPad = (props) => {
   const {
     keys,
     pressedKeys,
@@ -11,7 +11,7 @@ const KeyPad = props => {
     idCharsToType,
   } = props;
 
-  const keysNode = keys.map(obj => {
+  const keysNode = keys.map((obj) => {
     // todo: pressedWrongKeys and idCharsToType,
     // different names but all vars have array with chars ids
     const className = classNames('keypad__key', {

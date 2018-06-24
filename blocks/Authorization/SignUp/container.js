@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { fetchJSON } from 'ReduxUtils/reducers/fetch';
 import { validateEmail } from 'Utils/validation';
-import Component from './component.jsx';
+import Component from './component';
 
 const mapDispatchToProps = dispatch => ({
   fetchJSON: (...args) => dispatch(fetchJSON(...args)),
@@ -10,7 +10,7 @@ const mapDispatchToProps = dispatch => ({
       email: values.get('email'),
     },
   }))
-    .then(res => {
+    .then((res) => {
       if (res === 'OK') {
         const error = {
           email: validateEmail.existError,

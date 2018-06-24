@@ -4,7 +4,7 @@ import CSSModules from 'react-css-modules';
 
 import { modes, other } from 'Constants/navigation';
 
-import Logo from 'Blocks/Logo/component.jsx';
+import Logo from 'Blocks/Logo/component';
 import UserMenu from 'Blocks/UserMenu/container';
 import Metronome from '../Metronome/container';
 
@@ -23,7 +23,7 @@ class Block extends Component {
     document.removeEventListener('click', this.closeIfNeeded);
   }
 
-  closeIfNeeded = e => {
+  closeIfNeeded = (e) => {
     let el = e.target;
 
     // traverse parents
@@ -62,7 +62,7 @@ class Block extends Component {
       },
     } = this;
 
-    const modesLinks = modes.map(link => {
+    const modesLinks = modes.map((link) => {
       const {
         pathname,
         state,
@@ -89,7 +89,7 @@ class Block extends Component {
         );
     });
 
-    const otherLinks = other.map(link => {
+    const otherLinks = other.map((link) => {
       const {
         pathname,
         state,

@@ -6,9 +6,9 @@ import {
   updateCharToType as updateCharToTypeFromLearningMode,
 } from 'ReduxUtils/reducers/modes/learning';
 import { updateCharToType as updateCharToTypeFromTextMode } from 'ReduxUtils/reducers/modes/text';
-import Keyboard from './component.jsx';
+import Keyboard from './component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const stateMain = state.get('main');
 
   return {
@@ -26,7 +26,7 @@ const mergeProps = (stateProps, dispatchProps) => {
   return {
     keys,
     name,
-    setKeyboard: boardName => {
+    setKeyboard: (boardName) => {
       dispatch(setKeyboard(boardName));
 
       switch (mode) {
@@ -40,6 +40,8 @@ const mergeProps = (stateProps, dispatchProps) => {
           dispatch(updateCharToTypeFromTextMode());
 
           break;
+
+        default:
       }
     },
   };

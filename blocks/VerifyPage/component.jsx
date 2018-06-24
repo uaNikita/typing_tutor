@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import URLSearchParams from 'url-search-params';
 
-import Logo from 'Blocks/Logo/component.jsx';
-import Loader from 'Blocks/Loader/component.jsx';
+import Logo from 'Blocks/Logo/component';
+import Loader from 'Blocks/Loader/component';
 
 import styles from './verify-page.module.styl';
 
@@ -32,7 +32,7 @@ class VerifyPage extends Component {
           token,
         },
       })
-        .then(res => {
+        .then((res) => {
           if (res.ok) {
             setAllWithAuth(res.data);
 
@@ -60,9 +60,12 @@ class VerifyPage extends Component {
         case 'email':
           text = 'your email was succesfully verified';
           break;
+
         case 'password-reset':
           text = 'you can use your new password from now';
           break;
+
+        default:
       }
 
       content = (

@@ -3,7 +3,7 @@ const _ = require('lodash');
 const httpStatus = require('http-status');
 const APIError = require('./utils/APIError');
 
-module.exports = app => {
+module.exports = (app) => {
   app.use((req, res, next) => {
     const apiError = new APIError({
       message: 'API not found',
@@ -46,8 +46,7 @@ module.exports = app => {
         .status(status)
         .json(_.assign({},
           message && { message },
-          errors && { errors },
-        ));
+          errors && { errors }));
     }
     else {
       // for eslint only

@@ -2,15 +2,15 @@ import React, { Component } from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import CSSModules from 'react-css-modules';
 
-import Button from 'Blocks/Button/component.jsx';
-import RenderField from 'Blocks/RenderField/component.jsx';
+import Button from 'Blocks/Button/component';
+import RenderField from 'Blocks/RenderField/component';
 
 import { validatePassword } from 'Utils/validation';
 
 import styles from './change-password.module.styl';
 
 class Block extends Component {
-  handleSubmit = values => {
+  handleSubmit = (values) => {
     const {
       props: {
         fetchJSON,
@@ -24,7 +24,7 @@ class Block extends Component {
     delete body.confirm_new_password;
 
     return fetchJSON('/user/change-password', { body })
-      .then(res => {
+      .then((res) => {
         if (res.ok) {
           setGlobalMessage('Password was changed');
 
@@ -88,7 +88,7 @@ class Block extends Component {
   }
 }
 
-const validate = values => {
+const validate = (values) => {
   const errors = {};
 
   const newPassword = values.get('new_password');

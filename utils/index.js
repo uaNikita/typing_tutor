@@ -3,7 +3,7 @@ import _ from 'lodash';
 export function getIdsFromCharacter(keys, сharacter) {
   const charsToType = [];
 
-  keys.forEach(obj => {
+  keys.forEach((obj) => {
     // check if it upper case letter
     if (obj.shiftKey === сharacter) {
       charsToType.push(obj.id);
@@ -26,7 +26,7 @@ export function getIdsFromCharacter(keys, сharacter) {
 export function sliceChar(chars, idChars) {
   let newChars = chars.slice();
 
-  _.forEach(idChars, id => {
+  _.forEach(idChars, (id) => {
     const index = newChars.indexOf(id);
 
     if (index + 1) {
@@ -84,9 +84,9 @@ export function getFingersSet(keys) {
 
   const lettersSet = [];
 
-  rows.forEach(row => {
-    fingers.forEach(finger => {
-      hands.forEach(hand => {
+  rows.forEach((row) => {
+    fingers.forEach((finger) => {
+      hands.forEach((hand) => {
         const keysArr = _.filter(keys, {
           row,
           finger,

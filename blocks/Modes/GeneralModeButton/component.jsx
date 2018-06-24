@@ -1,6 +1,6 @@
 import React from 'react';
 
-import ModeButton from 'Blocks/ModeButton.jsx';
+import ModeButton from 'Blocks/ModeButton';
 
 const Component = props => <ModeButton {...props} />;
 

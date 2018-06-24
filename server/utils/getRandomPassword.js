@@ -23,4 +23,3 @@ const getValidRandomPassword = () => {
 };
 
 module.exports = getValidRandomPassword;
-

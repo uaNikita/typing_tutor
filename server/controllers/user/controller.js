@@ -13,7 +13,7 @@ const getAllData = (req, res, next) => {
   } = req;
 
   Statistic.find({ user: user.get('id') }).exec()
-    .then(statistic => {
+    .then((statistic) => {
       const data = user.toObject();
 
       if (statistic) {
@@ -35,7 +35,7 @@ const changePassword = (req, res, next) => {
   } = req;
 
   user.validPassword(oldPassword)
-    .then(valid => {
+    .then((valid) => {
       if (valid) {
         user.set('password', newPassword);
 
@@ -71,7 +71,7 @@ const statistic = (req, res, next) => {
       date: moment().startOf('day').toDate(),
     })
     .exec()
-    .then(stats => {
+    .then((stats) => {
       if (stats) {
         const modePath = `${keyboard}.${mode}`;
 
@@ -106,7 +106,7 @@ const deleteAccount = (req, res, next) => {
   } = req;
 
   user.validPassword(confirmNewPassword)
-    .then(valid => {
+    .then((valid) => {
       if (valid) {
         const userId = user.get('id');
 
@@ -128,18 +128,15 @@ const deleteAccount = (req, res, next) => {
       const modelsForRemoval = [user];
 
       if (clients) {
-        clients.map(client =>
-          modelsForRemoval.push(client));
+        clients.map(client => modelsForRemoval.push(client));
       }
 
       if (statistics) {
-        statistics.map(statistic =>
-          modelsForRemoval.push(statistic));
+        statistics.map(stc => modelsForRemoval.push(stc));
       }
 
       if (verifications) {
-        verifications.forEach(verification =>
-          modelsForRemoval.push(verification));
+        verifications.forEach(verification => modelsForRemoval.push(verification));
       }
 
       return Promise.all(modelsForRemoval.map(doc => doc.remove()));
@@ -153,8 +150,6 @@ const setSettings = (req, res, next) => {
     user,
     body,
   } = req;
-
-  console.log('body', body);
 
   _.each(body, (value, key) => {
     user.set(key, value);

@@ -2,9 +2,9 @@ import { connect } from 'react-redux';
 
 import { updateFreeOptionsAndExample } from 'ReduxUtils/reducers/modes/learning';
 
-import LearningFree from './component.jsx';
+import LearningFree from './component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const stateFree = state.getIn(['learning', 'free']);
 
   return {

@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import { refreshCurrentLesson, updateCharToType } from 'ReduxUtils/reducers/modes/learning';
 
-import Textarea from './component.jsx';
+import Textarea from './component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const stateLesson = state.getIn(['learning', 'lesson']);
 
   return {

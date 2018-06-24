@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 
-import LearningView from 'Blocks/LearningView/component.jsx';
+import LearningView from 'Blocks/LearningView/component';
 
 class LearningArea extends Component {
   componentDidMount = () => {

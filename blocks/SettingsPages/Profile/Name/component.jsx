@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 
-import RenderField from 'Blocks/RenderField/component.jsx';
+import RenderField from 'Blocks/RenderField/component';
 
 import { validateField } from 'Utils/validation';
 
 class Block extends Component {
-  handleSubmit = values => {
+  handleSubmit = (values) => {
     const {
       props: {
         setSettings,
@@ -16,7 +16,7 @@ class Block extends Component {
     const settings = values.toJS();
 
     return setSettings(settings)
-      .then(res => {
+      .then((res) => {
         if (res.ok) {
           // console.log('res.ok');
         }

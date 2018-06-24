@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import Logo from 'Blocks/Logo/component.jsx';
+import Logo from 'Blocks/Logo/component';
 import SignOut from './SignOut/container';
 import RestoreAccess from './RestoreAccess/container';
 import SignIn from './SignIn/container';

@@ -11,13 +11,13 @@ import GlobalMessageTransitionGroup from 'Blocks/GlobalMessageTransitionGroup/co
 import VerifyPage from 'Blocks/VerifyPage/container';
 import PrivateRoute from 'Blocks/PrivateRoute/container';
 import Home from 'Blocks/Home/container';
-import Header from 'Blocks/Header/component.jsx';
-import Modes from 'Blocks/Modes/component.jsx';
-import SettingsPages from 'Blocks/SettingsPages/component.jsx';
-import OptionsPages from 'Blocks/OptionsPages/component.jsx';
-import Footer from 'Blocks/Footer/component.jsx';
-import NotFound from 'Blocks/NotFound/component.jsx';
-import Authorization from 'Blocks/Authorization/component.jsx';
+import Header from 'Blocks/Header/component';
+import Modes from 'Blocks/Modes/component';
+import SettingsPages from 'Blocks/SettingsPages/component';
+import OptionsPages from 'Blocks/OptionsPages/component';
+import Footer from 'Blocks/Footer/component';
+import NotFound from 'Blocks/NotFound/component';
+import Authorization from 'Blocks/Authorization/component';
 
 const App = () => (
   <Fragment>

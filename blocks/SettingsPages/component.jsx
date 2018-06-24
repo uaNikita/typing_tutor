@@ -6,8 +6,8 @@ import {
   Link,
 } from 'react-router-dom';
 
-import Profile from './Profile/component.jsx';
-import Account from './Account/component.jsx';
+import Profile from './Profile/component';
+import Account from './Account/component';
 
 const menuLinks = [
   {

@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { setMode } from 'ReduxUtils/reducers/modes/learning';
 
-import Component from './component.jsx';
+import Component from './component';
 
 const mapStateToProps = state => ({
   currentMode: state.getIn(['learning', 'mode']),

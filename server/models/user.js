@@ -19,7 +19,7 @@ const UserSchema = new mongoose.Schema({
     type: String,
     required: true,
     match: [
-      /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      /^(([^<>()\\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
       '{PATH} is not a valid',
     ],
   },
@@ -59,7 +59,7 @@ const UserSchema = new mongoose.Schema({
       mode: {
         type: String,
         default: 'fingers',
-      }
+      },
     },
   },
 });
@@ -86,7 +86,7 @@ UserSchema.pre('save', function save(next) {
   // only hash the password if it has been modified (or is new)
   if (this.isModified('password')) {
     this.generateHash(this.password)
-      .then(hash => {
+      .then((hash) => {
         this.password = hash;
         next();
       })
@@ -100,8 +100,7 @@ UserSchema.pre('save', function save(next) {
 /**
  * Methods
  */
-UserSchema.methods.generateHash = password =>
-  bcrypt.hash(password, config.get('saltRounds'));
+UserSchema.methods.generateHash = password => bcrypt.hash(password, config.get('saltRounds'));
 
 UserSchema.methods.validPassword = function validPassword(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
@@ -116,7 +115,7 @@ UserSchema.statics = {
   isNotExist(email) {
     return this.findOne({ profile: { email } })
       .exec()
-      .then(user => {
+      .then((user) => {
         if (user) {
           throw new APIError({
             errors: {
@@ -131,7 +130,7 @@ UserSchema.statics = {
   get(id) {
     return this.findById(id)
       .exec()
-      .then(user => {
+      .then((user) => {
         if (user) {
           return user;
         }

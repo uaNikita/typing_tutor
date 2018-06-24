@@ -1,8 +1,8 @@
 import { connect } from 'react-redux';
 
-import KeyPad from './component.jsx';
+import KeyPad from './component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const stateMain = state.get('main');
 
   return {

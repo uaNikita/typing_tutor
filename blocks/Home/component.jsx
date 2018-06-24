@@ -5,7 +5,7 @@ import Keypad from './Keypad/container';
 import LearningArea from './LearningArea/container';
 import TextArea from './TextArea/container';
 import Statistic from './Statistic/container';
-import Header from './Header/component.jsx';
+import Header from './Header/component';
 
 class Home extends Component {
   componentDidMount() {
@@ -44,7 +44,7 @@ class Home extends Component {
     return _.once(() => setStartTypingTime(Date.now()));
   })();
 
-  keyDownHandler = e => {
+  keyDownHandler = (e) => {
     const {
       props: {
         typeChar,
@@ -60,7 +60,7 @@ class Home extends Component {
     }
   };
 
-  keyPressHandler = e => {
+  keyPressHandler = (e) => {
     const {
       props: {
         typeChar,
@@ -85,9 +85,12 @@ class Home extends Component {
       case 'text':
         area = <TextArea />;
         break;
+
       case 'learning':
         area = <LearningArea />;
         break;
+
+      default:
     }
 
     return (

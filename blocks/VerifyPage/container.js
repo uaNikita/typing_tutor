@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { setAllWithAuth } from 'ReduxUtils/reducers/main';
 import { fetchJSON } from 'ReduxUtils/reducers/fetch';
-import Component from './component.jsx';
+import Component from './component';
 
 const mapDispatchToProps = dispatch => ({
   setAllWithAuth: (...args) => dispatch(setAllWithAuth(...args)),

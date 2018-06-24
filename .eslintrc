@@ -8,15 +8,9 @@
     "node": true
   },
   "rules": {
-    "linebreak-style": "off",
     "brace-style": [
       "error",
       "stroustrup"
-    ],
-    "default-case": "off",
-    "arrow-parens": [
-      "error",
-      "as-needed"
     ],
     "no-underscore-dangle": [
       "error",
@@ -27,7 +21,6 @@
         ]
       }
     ],
-    "import/extensions": "off",
     "import/no-cycle": "off",
     "react/prop-types": "off"
   },

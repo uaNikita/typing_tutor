@@ -2,9 +2,9 @@ import { compose } from 'redux';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
-import Component from './component.jsx';
+import Component from './component';
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   const userState = state.get('user');
 
   return {

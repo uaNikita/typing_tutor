@@ -45,7 +45,7 @@ class TextArea extends Component {
   };
 
 
-  keyDownHandler = e => {
+  keyDownHandler = (e) => {
     const {
       props: {
         typeChar,

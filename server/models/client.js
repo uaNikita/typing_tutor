@@ -32,7 +32,7 @@ ClientSchema.statics = {
   findByToken(token) {
     return this.findOne({ token })
       .exec()
-      .then(client => {
+      .then((client) => {
         if (client) {
           return client;
         }

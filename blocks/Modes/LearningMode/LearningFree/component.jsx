@@ -3,8 +3,8 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import Slider from 'rc-slider';
 
-import LearningView from 'Blocks/LearningView/component.jsx';
-import Key from 'Blocks/Key/component.jsx';
+import LearningView from 'Blocks/LearningView/component';
+import Key from 'Blocks/Key/component';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFree extends Component {
@@ -35,7 +35,7 @@ class LearningFree extends Component {
     .fromPairs()
     .value();
 
-  handleChangeMaxLettersInWord = maxLettersInWord => {
+  handleChangeMaxLettersInWord = (maxLettersInWord) => {
     const {
       props: {
         updateOptions,
@@ -58,7 +58,7 @@ class LearningFree extends Component {
       maxLettersInWordSliderProps,
     } = this;
 
-    const keyNodes = keys.map(obj => {
+    const keyNodes = keys.map((obj) => {
       let className = 'keyboard__key';
 
       const keyProps = {

@@ -15,6 +15,9 @@ require('isomorphic-fetch');
 const { createStore, applyMiddleware } = require('redux');
 const thunk = require('redux-thunk').default;
 
+process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
+const config = require('config');
+
 const {
   app: compiledApp,
   reducer,
@@ -25,8 +28,6 @@ const {
   defaults,
 } = require('../dist/compiledServer');
 
-process.env.NODE_CONFIG_DIR = path.join(__dirname, 'config');
-const config = require('config');
 
 mongoose.Promise = global.Promise;
 
@@ -113,8 +114,10 @@ app.use(async (req, res) => {
 
   const html = renderToString(compiledApp(req.url, context, store));
 
-  if (context.url) {
-    res.status(301).set('Location', context.url);
+  const { url } = context;
+
+  if (url) {
+    res.status(301).set('Location', url);
 
     res.end();
   }
@@ -139,7 +142,7 @@ app.use(async (req, res) => {
              </script>
              ${script.toString()}
              <div id='root'>${html}</div>
-          </html>`
+          </html>`,
     );
   }
 });

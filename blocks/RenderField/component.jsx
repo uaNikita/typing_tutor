@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import classNames from 'classnames';
 
-import SaveLoader from './SaveLoader/component.jsx';
+import SaveLoader from './SaveLoader/component';
 
 import './field.styl';
 
@@ -10,7 +10,7 @@ class RenderField extends Component {
     showPassword: false,
   };
 
-  passwordHandleClick = e => {
+  passwordHandleClick = (e) => {
     e.preventDefault();
 
     this.setState(prevState => ({

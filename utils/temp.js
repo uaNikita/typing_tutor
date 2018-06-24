@@ -23,7 +23,7 @@ const get = () => {
   return obj;
 };
 
-const set = obj => {
+const set = (obj) => {
   let cookie = JSON.stringify(obj);
 
   cookie = LZString.compressToEncodedURIComponent(cookie);
@@ -38,7 +38,7 @@ const path = (pathToProp, val) => {
   set(obj);
 };
 
-const assign = objToExtend => {
+const assign = (objToExtend) => {
   const obj = _.merge(get(), objToExtend);
 
   set(obj);
