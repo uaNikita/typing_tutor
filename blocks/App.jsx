@@ -48,8 +48,8 @@ const App = () => (
               <Switch>
                 <Route exact path="/404" component={NotFound} />
                 <Route path="/mode" component={Modes} />
-                <Route path="/options" component={SettingsPages} />
-                <PrivateRoute path="/settings" component={OptionsPages} />
+                <Route path="/options" component={OptionsPages} />
+                <PrivateRoute path="/settings" component={SettingsPages} />
                 <Redirect to="/404" />
               </Switch>
             </Fragment>

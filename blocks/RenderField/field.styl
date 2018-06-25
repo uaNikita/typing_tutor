@@ -1,4 +1,6 @@
 .field
+   display: flex
+   align-items flex-start
    position: relative
    margin-top: 2px
    margin-bottom: 2px
@@ -41,15 +43,19 @@
          animation: async-validating 1s infinite linear
    &__
       &text, &select
-         width:100%;
-         height: 38px;
-         padding: 0 12px;
+         width: 300px;
+         height: 2.5em
+         padding: 0 0.75em;
          border-radius: 4px;
          border: 1px solid #ddd;
          background: #fff;
          outline none
-         font 16px / 20px 'Open Sans', sans-serif;
+         font inherit;
          transition border-color .15s linear
+      &select
+         height: 2.5em;
+      &label
+         margin: 0.6em 1.2em 0 0;
       &eye
          width: 20px;
          height: @width;

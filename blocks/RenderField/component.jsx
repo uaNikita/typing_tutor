@@ -65,15 +65,16 @@ class RenderField extends Component {
     const controlProps = {
       ...input,
       className: 'field__text',
-      placeholder: label,
       type,
+      id: `field-${input.name}`,
     };
+
 
     let control = <input {...controlProps} />;
 
     if (type === 'select') {
       control = (
-        <select name="industry" className="field__select" {...input}>
+        <select name="industry" className="field__select" {...input} id={controlProps.id}>
           {children}
         </select>
       );
@@ -89,7 +90,7 @@ class RenderField extends Component {
 
       control = (
         <Fragment>
-          <input {...controlProps} />
+          {control}
           <button type="button" className={eyeClassName} onClick={this.passwordHandleClick} />
         </Fragment>
       );
@@ -117,7 +118,11 @@ class RenderField extends Component {
 
     return (
       <div className={fieldClass}>
-        {control}
+        {/* eslint-disable-next-line jsx-a11y/label-has-for */}
+        <label className="field__label" htmlFor={controlProps.id}>
+          {label}
+          {control}
+        </label>
         {loader && <SaveLoader show={submitting} />}
         {errorText}
       </div>

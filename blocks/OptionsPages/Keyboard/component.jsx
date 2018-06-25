@@ -60,8 +60,6 @@ class Keyboard extends Component {
           ))}
         </Field>
 
-        <Field name="email" component={RenderField} type="email" label="Email" />
-
         <div className="keyboard">
           {keyNodes}
         </div>

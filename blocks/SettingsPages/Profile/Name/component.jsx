@@ -35,10 +35,6 @@ class Block extends Component {
 
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
-        <h3>
-          Name
-        </h3>
-
         <Field
           name="name"
           component={RenderField}
