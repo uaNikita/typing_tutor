@@ -2,46 +2,45 @@
    display: flex
    align-items flex-start
    position: relative
-   margin-top: 2px
-   margin-bottom: 2px
    padding-bottom:13px;
-   color #bdbdbd;
    &[disabled]
       background-color: #f4f4f4;
    &::placeholder
       font-style: italic
-   &_
-      &active
-         color #333;
-         .field__
-            &text, &select
-               border-color: #333;
-      &valid
-         .field__
-            &text, &select
-               border-color: #33C3F0;
-      &error
-         color red;
-         .field__
-            &text, &select
-               border-color: red;
-      &async-validating:after
-         width: 15px;
-         height: 15px;
-         position: absolute;
-         top: 50%
-         right: 10px
-         margin-top: -14px;
-         box-sizing border-box
-         border-radius: 50%;
-         border: 2px solid transparent;
-         border-top-color: #000;
-         border-bottom-color: @border-top-color;
-         background-color: rgba(255,255,255,0.85);
-         box-shadow: 0 0 6px 4px #fff;
-         content ''
-         animation: async-validating 1s infinite linear
    &__
+      &control
+         color #bdbdbd;
+         &_
+            &active
+               color #333;
+               .field__
+                  &text, &select
+                     border-color: #333;
+            &valid
+               .field__
+                  &text, &select
+                     border-color: #33C3F0;
+            &error
+               color red;
+               .field__
+                  &text, &select
+                     border-color: red;
+            &async-validating:after
+               width: 15px;
+               height: 15px;
+               position: absolute;
+               top: 50%
+               right: 10px
+               margin-top: -14px;
+               box-sizing border-box
+               border-radius: 50%;
+               border: 2px solid transparent;
+               border-top-color: #000;
+               border-bottom-color: @border-top-color;
+               background-color: rgba(255,255,255,0.85);
+               box-shadow: 0 0 6px 4px #fff;
+               content ''
+               animation: async-validating 1s infinite linear
       &text, &select
          width: 300px;
          height: 2.5em

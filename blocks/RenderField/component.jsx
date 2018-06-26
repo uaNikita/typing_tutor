@@ -53,12 +53,12 @@ class RenderField extends Component {
     }
 
     const fieldClass = classNames(
-      classNames('field', className),
+      'field__control',
       {
-        field_active: active,
-        field_error: showError,
-        field_valid: touched && !active && valid,
-        'field_async-validating': asyncValidating,
+        field__control_active: active,
+        field__control_error: showError,
+        field__control_valid: touched && !active && valid,
+        'field__control_async-validating': asyncValidating,
       },
     );
 
@@ -117,15 +117,16 @@ class RenderField extends Component {
     }
 
     return (
-      <div className={fieldClass}>
-        {/* eslint-disable-next-line jsx-a11y/label-has-for */}
-        <label className="field__label" htmlFor={controlProps.id}>
+      <label className={classNames('field', className)} htmlFor={controlProps.id}>
+        <span className="field__label">
           {label}
+        </span>
+        <div className={fieldClass}>
           {control}
-        </label>
-        {loader && <SaveLoader show={submitting} />}
-        {errorText}
-      </div>
+          {loader && <SaveLoader show={submitting} />}
+          {errorText}
+        </div>
+      </label>
     );
   }
 }
