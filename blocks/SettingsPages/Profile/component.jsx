@@ -1,11 +1,16 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import CSSModules from 'react-css-modules';
 
 import Name from './Name/container';
+import Bio from './Bio/container';
+
+import styles from './profile.module.styl';
 
 const Block = () => (
-  <Fragment>
+  <div styleName="profile">
     <Name />
-  </Fragment>
+    <Bio />
+  </div>
 );
 
-export default Block;
+export default CSSModules(Block, styles);

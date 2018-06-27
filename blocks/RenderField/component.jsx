@@ -96,6 +96,8 @@ class RenderField extends Component {
       );
     }
     else if (type === 'textarea') {
+      controlProps.className = 'field__textarea';
+
       control = <textarea {...controlProps} />;
     }
 

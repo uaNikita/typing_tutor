@@ -33,9 +33,10 @@ class Block extends Component {
     return (
       <form onSubmit={handleSubmit(this.handleSubmit)}>
         <Field
-          name="name"
+          name="bio"
           component={RenderField}
-          label="Name"
+          type="textarea"
+          label="Bio"
           loader
         />
       </form>

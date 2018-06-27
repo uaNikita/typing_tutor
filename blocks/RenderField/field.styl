@@ -9,6 +9,7 @@
       font-style: italic
    &__
       &control
+         position: relative
          color #bdbdbd;
          &_
             &active
@@ -41,7 +42,7 @@
                box-shadow: 0 0 6px 4px #fff;
                content ''
                animation: async-validating 1s infinite linear
-      &text, &select
+      &text, &select, &textarea
          width: 300px;
          height: 2.5em
          padding: 0 0.75em;
@@ -51,6 +52,9 @@
          outline none
          font inherit;
          transition border-color .15s linear
+      &textarea
+         padding-top: 0.6em;
+         padding-bottom: @padding-bottom;
       &select
          height: 2.5em;
       &label

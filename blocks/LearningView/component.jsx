@@ -13,7 +13,7 @@ class Block extends Component {
 
       c = (
         <span key={key} styleName="space">
-␣
+          ␣
         </span>
       );
     }

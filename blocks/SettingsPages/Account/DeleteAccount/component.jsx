@@ -40,7 +40,6 @@ class DeleteAccount extends Component {
         <button
           type="button"
           className="button"
-          styleName="button"
           onClick={this.handleClickButton}
         >
           Delete account
