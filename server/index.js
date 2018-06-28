@@ -102,6 +102,7 @@ app.use(async (req, res) => {
         if (!ok) {
           res.clearCookie('tt_refresh');
           res.clearCookie('tt_access');
+          res.clearCookie('tt_temp');
         }
       })
       .catch(() => {});

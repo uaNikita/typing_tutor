@@ -328,6 +328,8 @@ export const requestAllWithoutAuth = () => (
         if (res.ok) {
           dispatch(setAllWithoutAuth(res.data));
         }
+
+        return res;
       })
   )
 );

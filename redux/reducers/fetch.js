@@ -62,6 +62,19 @@ export const setTokens = ({ refresh, access }) => (
   }
 );
 
+
+export const logOut = () => (dispatch) => {
+  Cookies.remove('tt_refresh');
+  Cookies.remove('tt_access');
+  Cookies.remove('tt_temp');
+
+  dispatch(clearState());
+  dispatch(clearLearningState());
+  dispatch(clearTextState());
+  dispatch(clearUserState());
+  dispatch(clearMainState());
+};
+
 const requestJSON = (url, params, withoutAuthorization) => (
   (dispatch, getState) => {
     const newParams = _.merge({
@@ -137,9 +150,9 @@ export const fetchJSON = (...args) => (
                 dispatch(setGlobalMessage('You are not authorized for this request'));
               }
 
-              dispatch(clearState());
+              dispatch(logOut());
 
-              throw new Error('Unauthorized');
+              return refreshTokenResponse;
             });
         }
 
@@ -147,14 +160,3 @@ export const fetchJSON = (...args) => (
       })
   )
 );
-
-export const logOut = () => (dispatch) => {
-  Cookies.remove('tt_refresh');
-  Cookies.remove('tt_access');
-
-  dispatch(clearState());
-  dispatch(clearLearningState());
-  dispatch(clearTextState());
-  dispatch(clearUserState());
-  dispatch(clearMainState());
-};
