@@ -172,7 +172,7 @@ const restoreAccess = (req, res, next) => {
 
         const verification = new Verification({
           user,
-          type: 'password',
+          type: 'password-reset',
         });
 
         verification.set('token', verification.get('id') + crypto.randomBytes(40).toString('hex'));
@@ -252,43 +252,45 @@ const checkEmail = (req, res, next) => User.findOne({ email: req.body.email })
   })
   .catch(e => next(e));
 
-const getUserData = (req, res, next) => User.get(req.user.id)
-  .then(user => res.json(user.toObject()))
-  .catch(e => next(e));
+const getUserData = (req, res, next) =>
+  User.get(req.user.id)
+    .then(user => res.json(user.toObject()))
+    .catch(e => next(e));
 
-const verifyToken = (req, res, next) => Verification.findByToken(req.body.token)
-  .then((verification) => {
-    const type = verification.get('type');
-    const user = verification.get('user');
+const verifyToken = (req, res, next) =>
+  Verification.findByToken(req.body.token)
+    .then((verification) => {
+      const type = verification.get('type');
+      const user = verification.get('user');
 
-    switch (type) {
-      case 'email':
-        user.set('active', true);
-        break;
+      switch (type) {
+        case 'email':
+          user.set('active', true);
+          break;
 
-      case 'password':
-        user.set('password', user.get('newPassword'));
-        user.set('newPassword', undefined);
-        break;
+        case 'password-reset':
+          user.set('password', user.get('newPassword'));
+          user.set('newPassword', undefined);
+          break;
 
-      default:
-    }
+        default:
+      }
 
-    return Promise.all([createClient(user.get('id')), user.save(),
-      // verification.remove().exec()
-    ]).then(([client]) => res.json({
-      type,
-      tokens: {
-        refresh: client.get('token'),
-        access: generateAccessToken({
-          id: user.get('id'),
-          clientId: client.get('id'),
-        }),
-      },
-      ...user.toObject(),
-    }));
-  })
-  .catch(e => next(e));
+      return Promise.all([createClient(user.get('id')), user.save(),
+        // verification.remove().exec()
+      ]).then(([client]) => res.json({
+        type,
+        tokens: {
+          refresh: client.get('token'),
+          access: generateAccessToken({
+            id: user.get('id'),
+            clientId: client.get('id'),
+          }),
+        },
+        ...user.toObject(),
+      }));
+    })
+    .catch(e => next(e));
 
 module.exports = {
   signUp,

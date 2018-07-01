@@ -51,7 +51,6 @@ class RestoreAccess extends Component {
         {submitted ? (
           <p>
             You’ve got mail,
-            {' '}
             <br />
             Please check ou your email with new password.
           </p>

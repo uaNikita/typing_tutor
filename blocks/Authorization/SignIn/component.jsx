@@ -1,13 +1,17 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
+import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
 import { validateEmail, validatePassword } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component';
 import Button from 'Blocks/Button/component';
 
-class SignIn extends Component {
+import styles from './sign-in.module.styl';
+
+
+class Block extends Component {
   state = {
     accountIsNotActive: false,
     submittedVerifyLink: false,
@@ -113,7 +117,6 @@ class SignIn extends Component {
       content = (
         <p>
           You’ve got mail,
-          {' '}
           <br />
           Please click the link in the email we just sent you so we can verify your account.
         </p>
@@ -124,7 +127,6 @@ class SignIn extends Component {
         <Fragment>
           <p>
             Your account email is not verified,
-            {' '}
             <br />
             Please click the link bellow and we will send you a link to verify email.
           </p>
@@ -136,7 +138,7 @@ class SignIn extends Component {
     }
 
     return (
-      <div className={classNames(className, 'auth')}>
+      <div className={classNames(className, 'auth')} styleName="root">
         <h3 className="auth__title">
           Log In
         </h3>
@@ -152,8 +154,10 @@ const validate = values => ({
   ...validatePassword('password', values.get('password')),
 });
 
-export default withRouter(reduxForm({
-  form: 'sign-in',
-  validate,
-  asyncBlurFields: ['email'],
-})(SignIn));
+export default withRouter(
+  reduxForm({
+    form: 'sign-in',
+    validate,
+    asyncBlurFields: ['email'],
+  })(CSSModules(Block, styles)),
+);

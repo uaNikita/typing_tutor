@@ -17,6 +17,8 @@ const initialState = Immutable.fromJS({
 
   name: undefined,
 
+  bio: undefined,
+
   statistic: [],
 
   // text, learning
