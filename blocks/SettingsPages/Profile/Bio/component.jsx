@@ -34,6 +34,7 @@ class Block extends Component {
       <form onSubmit={handleSubmit(this.handleSubmit)}>
         <Field
           name="bio"
+          onBlur={handleSubmit(this.handleSubmit)}
           component={RenderField}
           type="textarea"
           label="Bio"
@@ -49,6 +50,6 @@ const validate = values => ({
 });
 
 export default reduxForm({
-  form: 'name',
+  form: 'bio',
   validate,
 })(Block);

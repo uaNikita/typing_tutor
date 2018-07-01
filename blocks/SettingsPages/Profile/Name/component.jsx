@@ -34,6 +34,7 @@ class Block extends Component {
       <form onSubmit={handleSubmit(this.handleSubmit)}>
         <Field
           name="name"
+          onBlur={handleSubmit(this.handleSubmit)}
           component={RenderField}
           label="Name"
           loader

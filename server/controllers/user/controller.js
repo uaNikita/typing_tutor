@@ -91,7 +91,9 @@ const statistic = (req, res, next) => {
 
       _.set(newStatistic, `${keyboard}.${mode}`, [clientStatistic]);
 
-      return new Statistic(newStatistic, { strict: false }).save();
+      return new Statistic(newStatistic, {
+        strict: false,
+      }).save();
     })
     .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
