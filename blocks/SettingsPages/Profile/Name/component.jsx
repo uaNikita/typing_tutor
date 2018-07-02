@@ -4,23 +4,33 @@ import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import RenderField from 'Blocks/RenderField/component';
 
 import { validateField } from 'Utils/validation';
+import _ from "lodash";
 
 class Block extends Component {
   handleSubmit = (values) => {
     const {
       props: {
         setSettings,
+        initialValues,
       },
     } = this;
 
     const settings = values.toJS();
 
-    return setSettings(settings)
-      .then((res) => {
-        if (res.data && res.data.errors) {
-          throw new SubmissionError(res.data.errors);
-        }
-      });
+    settings.name = _.trim(settings.name);
+
+    let result = false;
+
+    if (initialValues.get('name') !== settings.name) {
+      result = setSettings(settings)
+        .then((res) => {
+          if (res.data && res.data.errors) {
+            throw new SubmissionError(res.data.errors);
+          }
+        });
+    }
+
+    return result;
   };
 
   render() {

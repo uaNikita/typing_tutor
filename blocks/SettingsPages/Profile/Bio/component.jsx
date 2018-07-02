@@ -56,7 +56,7 @@ class Block extends Component {
 }
 
 const validate = values => ({
-  ...validateField('name', values.get('name')),
+  ...validateField('bio', values.get('bio')),
 });
 
 export default reduxForm({
