@@ -17,7 +17,7 @@ export default (options) => {
   } = options;
 
   class Block extends Component {
-    handleSubmit = (values) => {
+    submit = (values) => {
       const {
         props: {
           setSettings,
@@ -48,18 +48,25 @@ export default (options) => {
         props: {
           handleSubmit,
         },
+        submit,
       } = this;
 
+      const fieldProps = {
+        name: key,
+        onBlur: handleSubmit(submit),
+        component: RenderField,
+        loader: true,
+      };
+
+      fieldProps.label = label || _.upperFirst(key);
+
+      if (type) {
+        fieldProps.type = type;
+      }
+
       return (
-        <form onSubmit={handleSubmit(this.handleSubmit)}>
-          <Field
-            name={key}
-            onBlur={handleSubmit(this.handleSubmit)}
-            component={RenderField}
-            type={type}
-            label={label}
-            loader
-          />
+        <form onSubmit={handleSubmit(submit)}>
+          <Field {...fieldProps} />
         </form>
       );
     }
@@ -83,7 +90,7 @@ export default (options) => {
     setSettings: (...args) => dispatch(processSetSettings(...args)),
   });
 
-  const Test = connect(
+  const ConnectedBlock = connect(
     mapStateToProps,
     mapDispatchToProps,
   )(reduxForm({
@@ -91,5 +98,5 @@ export default (options) => {
     validate,
   })(Block));
 
-  return <Test />;
+  return <ConnectedBlock />;
 };
