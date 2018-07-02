@@ -21,10 +21,7 @@ const Block = ({ show }) => (
         mountOnEnter
         unmountOnExit
       >
-        <span styleName="root">
-          <span styleName="loader" />
-          <span className="fa fa-check" styleName="check-mark" />
-        </span>
+        <span className="field__control_async" styleName="root" />
       </CSSTransition>
     )}
   </TransitionGroup>

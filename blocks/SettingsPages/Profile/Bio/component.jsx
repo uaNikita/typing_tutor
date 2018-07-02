@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
+import _ from 'lodash';
 
 import RenderField from 'Blocks/RenderField/component';
 
@@ -10,17 +11,26 @@ class Block extends Component {
     const {
       props: {
         setSettings,
+        initialValues,
       },
     } = this;
 
     const settings = values.toJS();
 
-    return setSettings(settings)
-      .then((res) => {
-        if (res.data && res.data.errors) {
-          throw new SubmissionError(res.data.errors);
-        }
-      });
+    settings.bio = _.trim(settings.bio);
+
+    let result = false;
+
+    if (initialValues.get('bio') !== settings.bio) {
+      result = setSettings(settings)
+        .then((res) => {
+          if (res.data && res.data.errors) {
+            throw new SubmissionError(res.data.errors);
+          }
+        });
+    }
+
+    return result;
   };
 
   render() {

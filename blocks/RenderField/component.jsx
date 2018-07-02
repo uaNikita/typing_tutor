@@ -58,7 +58,7 @@ class RenderField extends Component {
         field__control_active: active,
         field__control_error: showError,
         field__control_valid: touched && !active && valid,
-        'field__control_async-validating': asyncValidating,
+        field__control_async: asyncValidating,
       },
     );
 
