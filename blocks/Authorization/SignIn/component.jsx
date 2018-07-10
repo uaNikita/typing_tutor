@@ -1,15 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
-import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
 import { validateEmail, validatePassword } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component';
 import Button from 'Blocks/Button/component';
-
-import styles from './sign-in.module.styl';
-
 
 class Block extends Component {
   state = {
@@ -138,7 +134,7 @@ class Block extends Component {
     }
 
     return (
-      <div className={classNames(className, 'auth')} styleName="root">
+      <div className={classNames(className, 'auth')}>
         <h3 className="auth__title">
           Log In
         </h3>
@@ -159,5 +155,5 @@ export default withRouter(
     form: 'sign-in',
     validate,
     asyncBlurFields: ['email'],
-  })(CSSModules(Block, styles)),
+  })(Block),
 );

@@ -1,47 +1,54 @@
 .auth
-   width:600px;
+   width: 600px;
    display: flex;
    flex-direction: column;
    align-items: center;
    margin: 0 auto;
    padding-top: 50px
    text-align: center;
+   
    &__
-      &form
-         &_password-reset
-            margin-top: 40px;
-            .auth__hint
-               margin-top: 50px
-            .button
-               margin-top: 0 !important
       &title
          font-size: 28px;
          margin-bottom: 30px
+      
       &row
          margin-bottom: 15px
+      
       &label
          display: block
          margin-bottom: 2px
+      
       &fp-wrap
-         margin: -10px 0 10px
+         margin: -15px 0 15px 93px
          font-size: 11px
          text-align: left
+      
       &fp
          border-bottom: 1px dotted rgba(171, 171, 171, .3);
          text-decoration: none
          color: #ababab;
+      
       &cp
          display: block
          margin: -10px 0 10px
          font-size: 11px
          text-align: left
          color: #ababab;
+      
       &cp-control
          margin-right: 5px
+      
       &hint
          margin-top: 30px;
          color: #706e70;
+   
    .menu__item
       margin: 0 5px;
+   
    .button
       margin-top: 10px;
+   
+   .field__label
+      width: 75px
+      text-align: left

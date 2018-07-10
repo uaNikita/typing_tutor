@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form/immutable';
 
@@ -18,7 +18,7 @@ class RestoreAccess extends Component {
       },
     } = this;
 
-    fetchJSON('/auth/restore-access', {
+    return fetchJSON('/auth/restore-access', {
       body: values.toJS(),
     })
       .then((res) => {
@@ -43,36 +43,40 @@ class RestoreAccess extends Component {
     } = this;
 
     return (
-      <form className="auth auth__form auth__form_password-reset" onSubmit={handleSubmit(this.handleSubmit)}>
+      <form className="auth auth__form" onSubmit={handleSubmit(this.handleSubmit)}>
         <h3 className="auth__title">
           Password reset
         </h3>
 
-        {submitted ? (
-          <p>
-            You’ve got mail,
-            <br />
-            Please check ou your email with new password.
-          </p>
-        ) : [
-          <Field
-            key="email"
-            name="email"
-            component={RenderField}
-            type="email"
-            label="Email"
-          />,
+        {submitted
+          ? (
+            <p>
+              You’ve got mail,
+              <br />
+              Please check ou your email with new password.
+            </p>
+          )
+          : (
+            <Fragment>
+              <Field
+                className="auth__row"
+                name="email"
+                component={RenderField}
+                type="email"
+                label="Email"
+              />
 
-          <Button key="submit" type="submit" disabled={invalid} isLoader={submitting}>
-            Restore access
-          </Button>,
+              <Button type="submit" disabled={invalid} isLoader={submitting}>
+                Restore access
+              </Button>
 
-          <p key="log-in" className="auth__hint">
-            <Link className="auth__link2" to="/authorization/sign-in">
-              Log in now
-            </Link>
-          </p>,
-        ]}
+              <p className="auth__hint">
+                <Link className="auth__link2" to="/authorization/sign-in">
+                  Log in now
+                </Link>
+              </p>
+            </Fragment>
+          )}
       </form>
     );
   }
