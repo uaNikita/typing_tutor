@@ -5,15 +5,19 @@ import createAsyncField from './createAsyncField';
 
 import styles from './profile.module.styl';
 
+const fields = [
+  {
+    key: 'name',
+  },
+  {
+    key: 'bio',
+    type: 'textarea',
+  },
+];
+
 const Block = () => (
   <div styleName="profile">
-    {createAsyncField({
-      key: 'name',
-    })}
-    {createAsyncField({
-      key: 'bio',
-      type: 'textarea',
-    })}
+    {fields.map(o => createAsyncField(o))}
   </div>
 );
 

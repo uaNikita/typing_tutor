@@ -67,7 +67,7 @@ const statistic = (req, res, next) => {
 
   Statistic
     .findOne({
-      user,
+      user: user.get('id'),
       date: moment().startOf('day').toDate(),
     })
     .exec()

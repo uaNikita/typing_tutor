@@ -78,13 +78,8 @@ export const setState = data => ({
 });
 
 export const setStatistic = statistic => ({
-  type: ADD_STATISTIC,
+  type: SET_STATISTIC,
   statistic,
-});
-
-export const addStatistic = obj => ({
-  type: ADD_STATISTIC,
-  ...obj,
 });
 
 export const processSetSettings = settings => (
@@ -106,6 +101,11 @@ export const processSetSettings = settings => (
     ));
   }
 );
+
+export const addStatistic = obj => ({
+  type: ADD_STATISTIC,
+  ...obj,
+});
 
 export const processAddStatistic = () => (
   (dispatch, getState) => {

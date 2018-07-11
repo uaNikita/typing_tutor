@@ -6,7 +6,7 @@ const controller = require('./controller');
 const router = express.Router();
 const authenticate = passport.authenticate('jwt', { session: false });
 
-router.post('/', authenticate, controller.getAllData);
+router.get('/', authenticate, controller.getAllData);
 router.patch('/', authenticate, controller.setSettings);
 router.post('/change-password', authenticate, controller.changePassword);
 router.post('/statistic', authenticate, controller.statistic);
