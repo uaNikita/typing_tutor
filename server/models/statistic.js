@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const moment = require('moment');
 
 const StatisticSchema = new mongoose.Schema({
   user: {
@@ -7,9 +6,20 @@ const StatisticSchema = new mongoose.Schema({
     ref: 'User',
     required: true,
   },
-  date: {
+  start: {
     type: Date,
-    default: () => moment().startOf('day').toDate(),
+    required: true,
+  },
+  end: {
+    type: Date,
+    required: true,
+  },
+  keyboard: {
+    type: String,
+    required: true,
+  },
+  mode: {
+    type: String,
     required: true,
   },
 }, {

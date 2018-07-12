@@ -27,8 +27,7 @@ const PRESS_WRONG_KEYS = 'main/PRESS_WRONG_KEYS';
 const UNPRESS_WRONG_KEYS = 'main/UNPRESS_WRONG_KEYS';
 const SET_START_TYPING_TIME = 'main/SET_START_TYPING_TIME';
 const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
-const ADD_HIT = 'main/ADD_HIT';
-const ADD_TYPO = 'main/ADD_TYPO';
+const ADD_TOUCH = 'main/ADD_TOUCH';
 const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
 const SET_SESSION_ID = 'main/SET_SESSION_ID';
 
@@ -69,26 +68,6 @@ const initialState = Immutable.fromJS({
   sessionId: undefined,
 });
 
-const updateSessionStatisticPresses = (state, name, character) => (
-  state.updateIn(['sessionStatistic', name], (presses) => {
-    const index = presses.findIndex(c => c.get('character') === character);
-
-    let newPresses;
-
-    if (index === -1) {
-      newPresses = presses.push(Immutable.Map({
-        character,
-        presses: 1,
-      }));
-    }
-    else {
-      newPresses = presses.updateIn([index, 'presses'], p => p + 1);
-    }
-
-    return newPresses;
-  })
-);
-
 export default (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_STATE:
@@ -118,16 +97,29 @@ export default (state = initialState, action = {}) => {
       return state.update('pressedWrongKeys', keys => keys.subtract(action.ids));
 
     case SET_START_TYPING_TIME:
-      return state.set(['sessionStatistic', 'start'], action.time);
+      return state.setIn(['sessionStatistic', 'start'], action.time);
 
     case SET_IDS_CHAR_TO_TYPE:
       return state.set('idCharsToType', action.id);
 
-    case ADD_HIT:
-      return updateSessionStatisticPresses(state, 'hits', action.character);
+    case ADD_TOUCH:
+      return state.updateIn(['sessionStatistic', `${action.touchType}s`], (presses) => {
+        const index = presses.findIndex(c => c.get('character') === action.character);
 
-    case ADD_TYPO:
-      return updateSessionStatisticPresses(state, 'typos', action.character);
+        let newPresses;
+
+        if (index === -1) {
+          newPresses = presses.push(Immutable.Map({
+            character: action.character,
+            presses: 1,
+          }));
+        }
+        else {
+          newPresses = presses.updateIn([index, 'presses'], p => p + 1);
+        }
+
+        return newPresses;
+      });
 
     case ZEROING_STATISTIC:
       return state.set('sessionStatistic', Immutable.fromJS({
@@ -205,13 +197,9 @@ export const setIdsCharToType = id => ({
   id,
 });
 
-export const addHit = character => ({
-  type: ADD_HIT,
-  character,
-});
-
-export const addTypo = character => ({
-  type: ADD_TYPO,
+export const addTouch = (touchType, character) => ({
+  type: ADD_TOUCH,
+  touchType,
   character,
 });
 

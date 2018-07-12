@@ -114,11 +114,8 @@ export const processAddStatistic = () => (
     const body = {
       keyboard: stateMain.get('keyboard'),
       mode: stateMain.get('mode'),
-      sessionId: stateMain.get('sessionId'),
-      statistic: {
-        ...stateMain.get('sessionStatistic').toJS(),
-        end: Date.now(),
-      },
+      end: Date.now(),
+      ...stateMain.get('sessionStatistic').toJS(),
     };
 
     dispatch(addStatistic(body));

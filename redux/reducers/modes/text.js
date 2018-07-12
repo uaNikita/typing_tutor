@@ -9,8 +9,7 @@ import {
   processAction,
   setIdsCharToType,
   pressWrongKeys,
-  addHit,
-  addTypo,
+  addTouch,
 } from '../main';
 
 import {
@@ -229,12 +228,12 @@ export const typeTextMode = char => (dispatch, getState) => {
     if (charToType === char) {
       dispatch(processTypeEntitiy(textId));
 
-      dispatch(addHit(char));
+      dispatch(addTouch('hit', char));
     }
     else {
       dispatch(pressWrongKeys(idsChar));
 
-      dispatch(addTypo(char));
+      dispatch(addTouch('typo', char));
     }
 
     addStatisticWithTimeout(dispatch);

@@ -10,8 +10,7 @@ import { fetchJSON } from '../fetch';
 import {
   setIdsCharToType,
   pressWrongKeys,
-  addHit,
-  addTypo,
+  addTouch,
   processAction,
 } from '../main';
 
@@ -259,14 +258,14 @@ export const typeLearningMode = char => (
     if (lessonRest[0] === char) {
       dispatch(typeOnLesson());
 
-      dispatch(addHit(char));
+      dispatch(addTouch('hit', char));
 
       dispatch(updateCharToType());
     }
     else {
       dispatch(pressWrongKeys(idsChar));
 
-      dispatch(addTypo(char));
+      dispatch(addTouch('typo', char));
     }
 
     addStatisticWithTimeout(dispatch);

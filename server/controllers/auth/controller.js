@@ -252,12 +252,13 @@ const checkEmail = (req, res, next) => User.findOne({ email: req.body.email })
   })
   .catch(e => next(e));
 
-const getUserData = (req, res, next) =>
+const getUserData = (req, res, next) => (
   User.get(req.user.id)
     .then(user => res.json(user.toObject()))
-    .catch(e => next(e));
+    .catch(e => next(e))
+);
 
-const verifyToken = (req, res, next) =>
+const verifyToken = (req, res, next) => (
   Verification.findByToken(req.body.token)
     .then((verification) => {
       const type = verification.get('type');
@@ -290,7 +291,8 @@ const verifyToken = (req, res, next) =>
         ...user.toObject(),
       }));
     })
-    .catch(e => next(e));
+    .catch(e => next(e))
+);
 
 module.exports = {
   signUp,

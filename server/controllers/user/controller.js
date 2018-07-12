@@ -1,5 +1,4 @@
 const _ = require('lodash');
-const moment = require('moment');
 const httpStatus = require('http-status');
 
 const APIError = require('../../utils/APIError');
@@ -57,43 +56,31 @@ const changePassword = (req, res, next) => {
 const statistic = (req, res, next) => {
   const {
     user,
-    body: {
-      keyboard,
-      mode,
-      sessionId,
-      statistic: clientStatistic,
-    },
+    body,
   } = req;
 
   Statistic
     .findOne({
       user: user.get('id'),
-      date: moment().startOf('day').toDate(),
+      start: body.start,
     })
     .exec()
     .then((stats) => {
       if (stats) {
-        const modePath = `${keyboard}.${mode}`;
-
-        if (!stats.get(modePath)) {
-          stats.set(modePath, [clientStatistic]);
-        }
-        else {
-          stats.set(`${modePath}.${sessionId}`, clientStatistic);
-        }
+        stats.set({
+          ...body,
+        });
 
         return stats.save();
       }
 
-      const newStatistic = {
-        user: user.id,
-      };
-
-      _.set(newStatistic, `${keyboard}.${mode}`, [clientStatistic]);
-
-      return new Statistic(newStatistic, {
-        strict: false,
-      }).save();
+      return new Statistic(
+        {
+          user: user.get('id'),
+          ...body,
+        },
+        { strict: false },
+      ).save();
     })
     .then(() => res.json(httpStatus[200]))
     .catch(e => next(e));
