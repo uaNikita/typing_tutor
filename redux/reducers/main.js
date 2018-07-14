@@ -29,7 +29,6 @@ const SET_START_TYPING_TIME = 'main/SET_START_TYPING_TIME';
 const SET_IDS_CHAR_TO_TYPE = 'main/SET_IDS_CHAR_TO_TYPE';
 const ADD_TOUCH = 'main/ADD_TOUCH';
 const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
-const SET_SESSION_ID = 'main/SET_SESSION_ID';
 
 const initialState = Immutable.fromJS({
   keyboard: 'english',
@@ -64,8 +63,6 @@ const initialState = Immutable.fromJS({
   lastNoModalLocation: undefined,
 
   isModal: false,
-
-  sessionId: undefined,
 });
 
 export default (state = initialState, action = {}) => {
@@ -139,9 +136,6 @@ export default (state = initialState, action = {}) => {
 
     case SET_GLOBAL_MESSAGE:
       return state.set('globalMessage', action.message);
-
-    case SET_SESSION_ID:
-      return state.set('sessionId', action.id);
 
     default:
       return state;
@@ -228,32 +222,6 @@ export const processAction = (saveToClient, saveToServer) => (
     return actions;
   }
 );
-
-export const setSessionId = id => ({
-  type: SET_SESSION_ID,
-  id,
-});
-
-export const startNewSession = () => (dispatch, getState) => {
-  const now = moment().startOf('day').toDate();
-  const keyboard = getState().getIn(['main', 'keyboard']);
-  const stateUser = getState().get('user');
-  const mode = stateUser.get('mode');
-
-  const date = stateUser
-    .get('statistic')
-    .find(obj => obj.get('date') === now);
-
-  let statistic;
-
-  if (date) {
-    statistic = date.getIn([keyboard, mode]);
-  }
-
-  const index = statistic ? statistic.get('data').count() : 0;
-
-  dispatch(setSessionId(index));
-};
 
 export const typeChar = char => (dispatch, getState) => {
   const state = getState();

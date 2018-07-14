@@ -9,14 +9,6 @@ import Header from './Header/component';
 
 class Home extends Component {
   componentDidMount() {
-    const {
-      props: {
-        startNewSession,
-      },
-    } = this;
-
-    startNewSession();
-
     document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandler);
   }

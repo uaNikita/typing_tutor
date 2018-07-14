@@ -4,7 +4,6 @@ import {
   typeChar,
   setStartTypingTime,
   zeroingStatic,
-  startNewSession,
 } from 'ReduxUtils/reducers/main';
 import Component from './component';
 
@@ -21,7 +20,6 @@ const mapDispatchToProps = dispatch => ({
   typeChar: (...args) => dispatch(typeChar(...args)),
   setStartTypingTime: (...args) => dispatch(setStartTypingTime(...args)),
   zeroingStatic: (...args) => dispatch(zeroingStatic(...args)),
-  startNewSession: (...args) => dispatch(startNewSession(...args)),
 });
 
 export default connect(

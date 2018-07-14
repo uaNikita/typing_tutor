@@ -37,31 +37,7 @@ export default (state = initialState, action = {}) => {
       return state.set('statistic', Immutable.fromJS(action.statistic));
 
     case ADD_STATISTIC:
-      return state.update('statistic', (dates) => {
-        const thisDay = moment().startOf('day').toDate();
-
-        let newDates = dates;
-
-        let dateIndex = newDates.findIndex(date => date.get('date') === thisDay);
-
-        if (dateIndex === -1) {
-          newDates = dates.push(Immutable.fromJS({
-            date: thisDay,
-          }));
-
-          dateIndex = newDates.count() - 1;
-        }
-
-        return newDates.updateIn([dateIndex, action.keyboard, action.mode], (mode) => {
-          let newMode = mode;
-
-          if (!newMode) {
-            newMode = Immutable.List([]);
-          }
-
-          newMode.set(action.sessionId, Immutable.Map(action.statistic));
-        });
-      });
+      return state.mergeIn('statistic', action.statistic);
 
     default:
       return state;
