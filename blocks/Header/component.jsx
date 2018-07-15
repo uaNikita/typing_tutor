@@ -36,7 +36,7 @@ class Block extends Component {
         </span>
       );
     });
-  }
+  };
 
   render() {
     return (
@@ -46,11 +46,11 @@ class Block extends Component {
         <div styleName="actions">
           <nav styleName="items">
             <span styleName="modes-title">
-Modes:
+              Modes:
             </span>
             {this.generateLinks(modes)}
             {' '}
-|
+            |
             {this.generateLinks(other)}
           </nav>
 

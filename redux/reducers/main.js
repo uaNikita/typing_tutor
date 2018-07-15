@@ -1,5 +1,4 @@
 import Immutable from 'immutable';
-import moment from 'moment';
 import _ from 'lodash';
 
 import { getIdsFromCharacter } from 'Utils';

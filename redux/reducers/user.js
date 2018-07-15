@@ -1,5 +1,4 @@
 import Immutable from 'immutable';
-import moment from 'moment';
 import _ from 'lodash';
 
 import temp from 'Utils/temp';
@@ -9,7 +8,6 @@ import { fetchJSON } from './fetch';
 
 const CLEAR_STATE = 'user/CLEAR_STATE';
 const SET_STATE = 'user/SET_STATE';
-const SET_STATISTIC = 'user/SET_STATISTIC';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
 
 const initialState = Immutable.fromJS({
@@ -33,9 +31,6 @@ export default (state = initialState, action = {}) => {
     case SET_STATE:
       return state.merge(action.data);
 
-    case SET_STATISTIC:
-      return state.set('statistic', Immutable.fromJS(action.statistic));
-
     case ADD_STATISTIC:
       return state.mergeIn('statistic', action.statistic);
 
@@ -51,11 +46,6 @@ export const clearState = () => ({
 export const setState = data => ({
   type: SET_STATE,
   data,
-});
-
-export const setStatistic = statistic => ({
-  type: SET_STATISTIC,
-  statistic,
 });
 
 export const processSetSettings = settings => (

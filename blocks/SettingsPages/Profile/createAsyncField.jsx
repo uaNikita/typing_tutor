@@ -98,5 +98,5 @@ export default (options) => {
     validate,
   })(Block));
 
-  return <ConnectedBlock />;
+  return <ConnectedBlock key={key} />;
 };

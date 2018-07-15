@@ -142,7 +142,7 @@ app.use(async (req, res) => {
                window.PRELOADED_STATE = ${JSON.stringify(store.getState()).replace(/</g, '\\u003c')}
              </script>
              ${script.toString()}
-             <div id='root'>${html}</div>
+             <div id="root" class="layout">${html}</div>
           </html>`,
     );
   }

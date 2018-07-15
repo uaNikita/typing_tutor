@@ -39,11 +39,13 @@ class TextArea extends Component {
 
     updateCharToType();
 
-    const value = this.cursor.current.offsetTop - this.content.current.offsetTop - 80;
+    const cursor = this.cursor.current;
+    const content = this.content.current;
 
-    this.content.current.scrollTop = value;
+    const value = cursor.offsetTop - content.offsetTop - 80;
+
+    content.scrollTop = value;
   };
-
 
   keyDownHandler = (e) => {
     const {

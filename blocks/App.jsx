@@ -18,6 +18,7 @@ import OptionsPages from 'Blocks/OptionsPages/component';
 import Footer from 'Blocks/Footer/component';
 import NotFound from 'Blocks/NotFound/component';
 import Authorization from 'Blocks/Authorization/component';
+import Breadcrumbs from 'Blocks/Breadcrumbs/component';
 
 const App = () => (
   <Fragment>
@@ -32,33 +33,32 @@ const App = () => (
       <script type="text/javascript" defer src="/main.js" />
     </Helmet>
 
-    <div className="layout">
-      <GlobalMessageTransitionGroup />
+    <GlobalMessageTransitionGroup />
 
-      <Switch>
-        <Route exact path="/" component={Home} />
-        <Route path="/verify" component={VerifyPage} />
-        <Route path="/authorization" component={Authorization} />
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route path="/verify" component={VerifyPage} />
+      <Route path="/authorization" component={Authorization} />
 
-        <Route
-          path="/"
-          render={() => (
-            <Fragment>
-              <Header />
-              <Switch>
-                <Route exact path="/404" component={NotFound} />
-                <Route path="/mode" component={Modes} />
-                <Route path="/options" component={OptionsPages} />
-                <PrivateRoute path="/settings" component={SettingsPages} />
-                <Redirect to="/404" />
-              </Switch>
-            </Fragment>
-          )}
-        />
-      </Switch>
+      <Route
+        path="/"
+        render={() => (
+          <Fragment>
+            <Header />
+            <Route component={Breadcrumbs} />
+            <Switch>
+              <Route exact path="/404" component={NotFound} />
+              <Route path="/mode" component={Modes} />
+              <Route path="/options" component={OptionsPages} />
+              <PrivateRoute path="/settings" component={SettingsPages} />
+              <Redirect to="/404" />
+            </Switch>
+          </Fragment>
+        )}
+      />
+    </Switch>
 
-      <Footer />
-    </div>
+    <Footer />
   </Fragment>
 );
 
