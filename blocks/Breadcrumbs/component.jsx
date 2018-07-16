@@ -1,59 +1,72 @@
-import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
 import _ from 'lodash';
 
 const routes = {
   '/': 'Home',
-  '/settings': 'Settings',
-  '/settings/a': 'A',
-  '/settings/a/b': 'B',
 };
 
-const getPaths = (pathname) => {
-  const paths = [];
-
-  if (pathname === '/') return paths;
-
-  pathname.split('/').reduce((prev, curr) => {
-    const currPath = `${prev}/${curr}`;
-
-    paths.push(currPath);
-
-    return currPath;
-  });
-
-  return paths;
-};
-
-const BreadcrumbsItem = ({ ...rest, match }) => {
+const Breadcrumbs = (props) => {
   const {
-    isExact,
-    url,
-  } = match;
+    location: {
+      pathname,
+    },
+    start,
+  } = props;
 
-  console.log('match', match);
+  let list = null;
 
-  let breadcrumbText = routes[url];
+  if (pathname !== '/') {
+    list = [];
 
-  if (!breadcrumbText) {
-    breadcrumbText = _.last(url.split('/'));
+    pathname.split('/').reduce((prev, curr) => {
+      const path = `${prev}/${curr}`;
+
+      let text = routes[path];
+
+      if (!text) {
+        text = _.capitalize(_.lowerCase(curr));
+      }
+
+      list.push({
+        path,
+        text,
+        name: curr,
+      });
+
+      return path;
+    });
+
+    if (start) {
+      list = _.dropWhile(list, ({ name }) => name !== start);
+    }
+
+    if (list.length === 1) {
+      list = null;
+    }
+    else {
+      const lastIndex = list.length - 1;
+
+      list = list.map(({ path, text }, i) => (
+        lastIndex === i
+          ? (
+            <span key={path}>
+              {text}
+            </span>
+          )
+          : (
+            <Fragment key={path}>
+              <Link to={path}>
+                {text}
+              </Link>
+              {' > '}
+            </Fragment>
+          )
+      ));
+    }
   }
 
-  return (
-    isExact
-      ? <span active>{breadcrumbText}</span>
-      : (
-        <Link to={url}>{breadcrumbText}</Link>
-      )
-  );
-
-  return null;
-};
-
-const Breadcrumbs = ({ ...rest, location: { pathname } }) => {
-  const paths = getPaths(pathname);
-
-  return paths.map(path => <Route key={path} path={path} component={BreadcrumbsItem} />);
+  return list;
 };
 
 export default Breadcrumbs;

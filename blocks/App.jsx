@@ -18,7 +18,6 @@ import OptionsPages from 'Blocks/OptionsPages/component';
 import Footer from 'Blocks/Footer/component';
 import NotFound from 'Blocks/NotFound/component';
 import Authorization from 'Blocks/Authorization/component';
-import Breadcrumbs from 'Blocks/Breadcrumbs/component';
 
 const App = () => (
   <Fragment>
@@ -45,7 +44,6 @@ const App = () => (
         render={() => (
           <Fragment>
             <Header />
-            <Route component={Breadcrumbs} />
             <Switch>
               <Route exact path="/404" component={NotFound} />
               <Route path="/mode" component={Modes} />
