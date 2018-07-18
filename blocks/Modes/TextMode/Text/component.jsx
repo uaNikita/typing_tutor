@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import classNames from 'classnames';
 
 import styles from './text.module.styl';
@@ -41,19 +41,21 @@ const Text = (props) => {
     };
   }
 
-  return [
-    <div key="actions" className={styles.actions}>
-      <button type="button" className="button" {...button.props}>
-        {button.text}
-      </button>
+  return (
+    <Fragment>
+      <div className={styles.actions}>
+        <button type="button" className="button" {...button.props}>
+          {button.text}
+        </button>
 
-      {refresh}
-    </div>,
-    <span key="typed" className={styles.typed}>
-      {typed}
-    </span>,
-    last,
-  ];
+        {refresh}
+      </div>
+      <span className={styles.typed}>
+        {typed}
+      </span>
+      {last}
+    </Fragment>
+  );
 };
 
 export default Text;

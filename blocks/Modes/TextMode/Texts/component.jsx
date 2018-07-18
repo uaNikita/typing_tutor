@@ -20,15 +20,15 @@ const Block = (props) => {
 
   if (texts.length < 10) {
     addTextLink = (
-      <Link to={`${url}/add-text`}>
-Add new text
+      <Link to={`${url}/add`}>
+        Add new text
       </Link>
     );
   }
   else {
     addTextLink = (
       <p>
-Your can have maximum 10 texts
+        Your can have maximum 10 texts
       </p>
     );
   }

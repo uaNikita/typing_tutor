@@ -8,8 +8,8 @@ import { validateField } from 'Utils/validation';
 
 import styles from './add-text.module.styl';
 
-class AddText extends Component {
-  textFormHandleSubmit = (values) => {
+class Block extends Component {
+  handleSubmit = (values) => {
     const {
       processAddText,
       history: {
@@ -33,7 +33,7 @@ class AddText extends Component {
     } = this;
 
     return (
-      <form onSubmit={handleSubmit(this.textFormHandleSubmit)}>
+      <form onSubmit={handleSubmit(this.handleSubmit)}>
         <Field
           name="text"
           type="textarea"
@@ -44,7 +44,7 @@ class AddText extends Component {
 
         <div styleName="actions">
           <Button type="submit" className="button" disabled={invalid} isLoader={submitting}>
-Add text
+            Add text
           </Button>
 
           <label styleName="select" htmlFor="select">
@@ -68,6 +68,6 @@ const validate = values => ({
 });
 
 export default reduxForm({
-  form: 'add-text',
+  form: 'edit-text',
   validate,
-})(CSSModules(AddText, styles, { allowMultiple: true }));
+})(CSSModules(Block, styles, { allowMultiple: true }));
