@@ -3,9 +3,8 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Breadcrumbs from 'Blocks/Breadcrumbs/component';
 import Texts from './Texts/container';
-import Text from './Text/container';
+import Text from './Text/component';
 import Add from './Add/container';
-import Edit from './Edit/container';
 
 const TextMode = ({ match: { url } }) => (
   <Fragment>
@@ -13,8 +12,7 @@ const TextMode = ({ match: { url } }) => (
     <Switch>
       <Route exact path={url} component={Texts} />
       <Route exact path={`${url}/add`} component={Add} />
-      <Route exact path={`${url}/edit`} component={Edit} />
-      <Route path={`${url}/:\\d+`} component={Text} />
+      <Route path={`${url}/:textId(\\d+)`} component={Text} />
       <Redirect to="/404" />
     </Switch>
   </Fragment>

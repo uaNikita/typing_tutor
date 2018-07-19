@@ -1,61 +1,15 @@
-import React, { Fragment } from 'react';
-import classNames from 'classnames';
+import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 
-import styles from './text.module.styl';
+import View from './View/container';
+import Edit from './Edit/container';
 
-const Text = (props) => {
-  const {
-    id,
-    typed,
-    last,
-    selectedId,
-    refreshText,
-    selectText,
-  } = props;
+const TextMode = ({ match: { url } }) => (
+  <Switch>
+    <Route exact path={url} component={View} />
+    <Route exact path={`${url}/edit`} component={Edit} />
+    <Redirect to="/404" />
+  </Switch>
+);
 
-  let refresh;
-
-  if (typed) {
-    refresh = (
-      <button
-        type="button"
-        onClick={() => refreshText(id)}
-        className={classNames('fa fa-refresh', styles.reload)}
-      />
-    );
-  }
-
-  let button = {
-    props: {
-      onClick: () => selectText(id),
-    },
-    text: 'Select',
-  };
-
-  if (id === selectedId) {
-    button = {
-      props: {
-        disabled: true,
-      },
-      text: 'Selected',
-    };
-  }
-
-  return (
-    <Fragment>
-      <div className={styles.actions}>
-        <button type="button" className="button" {...button.props}>
-          {button.text}
-        </button>
-
-        {refresh}
-      </div>
-      <span className={styles.typed}>
-        {typed}
-      </span>
-      {last}
-    </Fragment>
-  );
-};
-
-export default Text;
+export default TextMode;

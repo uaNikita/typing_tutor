@@ -1,12 +1,15 @@
 import React, { Fragment } from 'react';
+import CSSModules from 'react-css-modules';
 import { Link } from 'react-router-dom';
 import _ from 'lodash';
+
+import styles from './breadcrumbs.module.styl';
 
 const routes = {
   '/': 'Home',
 };
 
-const Breadcrumbs = (props) => {
+const Block = (props) => {
   const {
     location: {
       pathname,
@@ -63,10 +66,16 @@ const Breadcrumbs = (props) => {
             </Fragment>
           )
       ));
+
+      list = (
+        <nav styleName="root">
+          {list}
+        </nav>
+      );
     }
   }
 
   return list;
 };
 
-export default Breadcrumbs;
+export default CSSModules(Block, styles);
