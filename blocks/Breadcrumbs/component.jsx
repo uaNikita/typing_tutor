@@ -62,7 +62,7 @@ const Block = (props) => {
               <Link to={path}>
                 {text}
               </Link>
-              {' > '}
+              {' / '}
             </Fragment>
           )
       ));

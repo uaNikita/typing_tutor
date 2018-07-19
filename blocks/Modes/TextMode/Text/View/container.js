@@ -2,22 +2,9 @@ import { connect } from 'react-redux';
 import { processSelectText, processRefreshText } from 'ReduxUtils/reducers/modes/text';
 import Text from './component';
 
-const mapStateToProps = (state, ownProps) => {
-  const id = parseInt(ownProps.match.params.textId, 10);
-
-  const stateText = state.get('text');
-
-  const text = stateText.get('entities')
-    .filter(obj => obj.get('id') === id)
-    .get(0);
-
-  return {
-    id,
-    typed: text.get('typed'),
-    last: text.get('last'),
-    selectedId: stateText.get('selectedId'),
-  };
-};
+const mapStateToProps = state => ({
+  selectedId: state.getIn(['text', 'selectedId']),
+});
 
 const mapDispatchToProps = dispatch => ({
   selectText: (...args) => dispatch(processSelectText(...args)),

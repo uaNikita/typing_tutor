@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Breadcrumbs from 'Blocks/Breadcrumbs/component';
 import Texts from './Texts/container';
-import Text from './Text/component';
+import Text from './Text/container';
 import Add from './Add/container';
 
 const TextMode = ({ match: { url } }) => (
