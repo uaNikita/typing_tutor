@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 import CSSModules from 'react-css-modules';
 
@@ -6,7 +6,7 @@ import RenderField from 'Blocks/RenderField/component';
 import Button from 'Blocks/Button/component';
 import { validateField } from 'Utils/validation';
 
-import styles from './add-text.module.styl';
+import styles from './edit-text.module.styl';
 
 class Block extends Component {
   handleSubmit = (values) => {
@@ -29,6 +29,8 @@ class Block extends Component {
         handleSubmit,
         invalid,
         submitting,
+        id,
+        selectedId,
       },
     } = this;
 
@@ -44,19 +46,24 @@ class Block extends Component {
 
         <div styleName="actions">
           <Button type="submit" className="button" disabled={invalid} isLoader={submitting}>
-            Add text
+            Edit text
           </Button>
 
-          <label styleName="select" htmlFor="select">
-            <Field
-              id="select"
-              styleName="select-input"
-              name="select"
-              component="input"
-              type="checkbox"
-            />
-            and select
-          </label>
+          {id !== selectedId && (
+            <Fragment>
+              {/* eslint-disable-next-line jsx-a11y/label-has-for */}
+              <label styleName="select" htmlFor="select">
+                <Field
+                  id="select"
+                  styleName="select-input"
+                  name="select"
+                  component="input"
+                  type="checkbox"
+                />
+                and select
+              </label>
+            </Fragment>
+          )}
         </div>
       </form>
     );

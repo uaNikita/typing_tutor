@@ -9,11 +9,11 @@ const Footer = () => (
     © 2016 Touch to type
     <br />
     <a href="mailto:info@touchtotype.com">
-info@touchtotype.com
+      info@touchtotype.com
     </a>
     <br />
     <Link to="/help">
-Help
+      Help
     </Link>
   </footer>
 );

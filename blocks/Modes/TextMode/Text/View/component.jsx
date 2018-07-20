@@ -1,29 +1,20 @@
 import React, { Fragment } from 'react';
-import classNames from 'classnames';
+import { Link } from 'react-router-dom';
+import CSSModules from 'react-css-modules';
 
 import styles from './text-view.module.styl';
 
-const Text = (props) => {
+const Block = (props) => {
   const {
     id,
     typed,
     last,
     selectedId,
-    refreshText,
     selectText,
+    match: {
+      url,
+    },
   } = props;
-
-  let refresh;
-
-  if (typed) {
-    refresh = (
-      <button
-        type="button"
-        onClick={() => refreshText(id)}
-        className={classNames('fa fa-refresh', styles.reload)}
-      />
-    );
-  }
 
   let button = {
     props: {
@@ -43,14 +34,16 @@ const Text = (props) => {
 
   return (
     <Fragment>
-      <div className={styles.actions}>
+      <div styleName="actions">
         <button type="button" className="button" {...button.props}>
           {button.text}
         </button>
 
-        {refresh}
+        <Link to={`${url}/edit`} className="button">
+          Edit
+        </Link>
       </div>
-      <span className={styles.typed}>
+      <span>
         {typed}
       </span>
       {last}
@@ -58,4 +51,4 @@ const Text = (props) => {
   );
 };
 
-export default Text;
+export default CSSModules(Block, styles);

@@ -119,18 +119,21 @@ class RenderField extends Component {
     }
 
     return (
-      <label className={classNames('field', className)} htmlFor={controlProps.id}>
-        {label && (
-          <span className="field__label">
-            {label}
-          </span>
-        )}
-        <div className={fieldClass}>
-          {control}
-          {loader && <SaveLoader show={submitting} />}
-          {errorText}
-        </div>
-      </label>
+      <Fragment>
+        {/* eslint-disable-next-line jsx-a11y/label-has-for */}
+        <label className={classNames('field', className)} htmlFor={controlProps.id}>
+          {label && (
+            <span className="field__label">
+              {label}
+            </span>
+          )}
+          <div className={fieldClass}>
+            {control}
+            {loader && <SaveLoader show={submitting} />}
+            {errorText}
+          </div>
+        </label>
+      </Fragment>
     );
   }
 }

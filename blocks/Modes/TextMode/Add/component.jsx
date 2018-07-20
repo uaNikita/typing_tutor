@@ -52,6 +52,7 @@ class Block extends Component {
             Add text
           </Button>
 
+          {/* eslint-disable-next-line jsx-a11y/label-has-for */}
           <label styleName="select" htmlFor="select">
             <Field
               id="select"
