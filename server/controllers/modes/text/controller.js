@@ -32,12 +32,33 @@ const add = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const select = (req, res, next) => {
+const update = (req, res, next) => {
   const {
     user,
     body: {
-      id,
+      text,
+      select,
     },
+    params: {
+      id,
+    }
+  } = req;
+
+  console.log('id', id);
+
+  const entities = user.get('mode.text.entities');
+
+  user.save()
+    .then(() => res.json(httpStatus[200]))
+    .catch(e => next(e));
+};
+
+const select = (req, res, next) => {
+  const {
+    user,
+    params: {
+      id,
+    }
   } = req;
 
   user.set('modes.text.entities.selectedId', id);
@@ -100,6 +121,7 @@ const type = (req, res, next) => {
 
 module.exports = {
   add,
+  update,
   select,
   refresh,
   type,

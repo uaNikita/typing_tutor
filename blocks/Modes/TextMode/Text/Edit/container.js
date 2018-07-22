@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { processAddText } from 'ReduxUtils/reducers/modes/text';
+import { processUpdateText } from 'ReduxUtils/reducers/modes/text';
 import Component from './component';
 
 const mapStateToProps = (state, { last, typed }) => ({
@@ -11,7 +11,7 @@ const mapStateToProps = (state, { last, typed }) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  processAddText: (...args) => dispatch(processAddText(...args)),
+  updateText: (...args) => dispatch(processUpdateText(...args)),
 });
 
 export default connect(

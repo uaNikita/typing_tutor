@@ -22,6 +22,7 @@ const SELECT_TEXT = 'text/SELECT_TEXT';
 const SELECT_LAST_TEXT = 'text/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text/REFRESH_TEXT';
 const ADD_TEXT = 'text/ADD_TEXT';
+const UPDATE_TEXT = 'text/UPDATE_TEXT';
 const TYPE_ENTITIE = 'text/TYPE_ENTITIE';
 
 const initialState = Immutable.fromJS(defaults.text);
@@ -96,13 +97,15 @@ export const addText = text => ({
   text,
 });
 
+export const updateText = (id, text) => ({
+  type: UPDATE_TEXT,
+  id,
+  text,
+});
+
 export const selectText = id => ({
   type: SELECT_TEXT,
   id,
-});
-
-export const selectLastText = () => ({
-  type: SELECT_LAST_TEXT,
 });
 
 export const refreshText = id => ({
@@ -137,7 +140,27 @@ export const processAddText = data => (
 
     return dispatch(processAction(
       () => temp.path('text', textState.toJS()),
-      () => dispatch(fetchJSON('/text/add', { body })),
+      () => dispatch(fetchJSON('/text', { body })),
+    ));
+  }
+);
+
+export const processUpdateText = (id, data) => (
+  (dispatch, getState) => {
+    const { text, select } = data;
+
+    dispatch(updateText(id, text));
+
+    if (select) {
+      dispatch(selectText(id));
+    }
+
+    return dispatch(processAction(
+      () => temp.path('text', getState().get('text').toJS()),
+      () => dispatch(fetchJSON(`/text/${id}`, {
+        method: 'PATCH',
+        body: data,
+      })),
     ));
   }
 );

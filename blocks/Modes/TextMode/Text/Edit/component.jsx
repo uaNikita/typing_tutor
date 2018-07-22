@@ -11,15 +11,16 @@ import styles from './edit-text.module.styl';
 class Block extends Component {
   handleSubmit = (values) => {
     const {
-      processAddText,
-      history: {
-        push,
+      props: {
+        id,
+        updateText,
+        history: {
+          push,
+        },
       },
-    } = this.props;
+    } = this;
 
-    const body = values.toJS();
-
-    return processAddText(body)
+    return updateText(id, values.toJS())
       .then(() => push('/mode/text'));
   };
 
