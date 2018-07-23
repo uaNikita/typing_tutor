@@ -42,6 +42,20 @@ export default (state = initialState, action = {}) => {
         last: action.text,
       })));
 
+    case UPDATE_TEXT:
+      return state.update('entities', ents => ents.map((text) => {
+        let t = text;
+
+        if (text.get('id') === action.id) {
+          t = text.merge({
+            typed: action.text,
+            last: '',
+          });
+        }
+
+        return t;
+      }));
+
     case SELECT_TEXT:
       return state.set('selectedId', action.id);
 

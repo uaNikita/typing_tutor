@@ -39,14 +39,21 @@ const update = (req, res, next) => {
       text,
       select,
     },
-    params: {
-      id,
-    }
+    params
   } = req;
 
-  console.log('id', id);
+  const id = parseInt(params.id, 10)
 
-  const entities = user.get('mode.text.entities');
+  const pathToEntites = 'modes.text.entities';
+
+  const index = user.get(pathToEntites).findIndex(item => item.id === id);
+
+  user.set(`${pathToEntites}.${index}.typed`, text);
+  user.set(`${pathToEntites}.${index}.last`, );
+
+  if (select) {
+    user.set('modes.text.entities.selectedId', id);
+  }
 
   user.save()
     .then(() => res.json(httpStatus[200]))
