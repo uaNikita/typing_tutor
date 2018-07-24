@@ -48,8 +48,8 @@ export default (state = initialState, action = {}) => {
 
         if (text.get('id') === action.id) {
           t = text.merge({
-            typed: action.text,
-            last: '',
+            typed: '',
+            last: action.text,
           });
         }
 
@@ -160,39 +160,35 @@ export const processAddText = data => (
 );
 
 export const processUpdateText = (id, data) => (
-  (dispatch, getState) => {
-    const { text, select } = data;
-
-    dispatch(updateText(id, text));
-
-    if (select) {
-      dispatch(selectText(id));
-    }
-
-    return dispatch(processAction(
+  (dispatch, getState) => (
+    dispatch(processAction(
       () => temp.path('text', getState().get('text').toJS()),
       () => dispatch(fetchJSON(`/text/${id}`, {
         method: 'PATCH',
         body: data,
       })),
-    ));
-  }
-);
+    ))
+      .then(() => {
+        const { text, select } = data;
+
+        dispatch(updateText(id, text));
+
+        if (select) {
+          dispatch(selectText(id));
+        }
+      })
+  ));
 
 export const processSelectText = id => (
   (dispatch) => {
     const selectedId = parseInt(id, 10);
 
-    dispatch(selectText(selectedId));
-
-    const body = { id };
-
     return dispatch(processAction(
       () => temp.path('text.selectedId', selectedId),
-      () => dispatch(fetchJSON('/text/select', { body })),
-    ));
-  }
-);
+      () => dispatch(fetchJSON(`/text/${id}/select`)),
+    ))
+      .then(() => dispatch(selectText(selectedId)));
+  });
 
 export const processRefreshText = id => (
   (dispatch, getState) => {
@@ -260,6 +256,13 @@ export const typeTextMode = char => (dispatch, getState) => {
     .get(0);
 
   const charToType = text.get('last')[0];
+
+
+  console.log(charToType, encodeURIComponent(charToType));
+  console.log(typeof charToType);
+  console.log(char, encodeURIComponent(char));
+  console.log(typeof char);
+  console.log(charToType === char);
 
   if (charToType) {
     if (charToType === char) {

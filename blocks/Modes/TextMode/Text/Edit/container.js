@@ -5,7 +5,7 @@ import Component from './component';
 
 const mapStateToProps = (state, { last, typed }) => ({
   initialValues: {
-    text: last + typed,
+    text: typed + last,
   },
   selectedId: state.getIn(['text', 'selectedId']),
 });

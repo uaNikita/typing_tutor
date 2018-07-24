@@ -12,7 +12,7 @@ const mapStateToProps = (state) => {
 
   return {
     typed: text.get('typed'),
-    nonTyped: text.get('last'),
+    last: text.get('last'),
   };
 };
 

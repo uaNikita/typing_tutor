@@ -65,7 +65,10 @@ class TextArea extends Component {
 
 
   render() {
-    const { typed, nonTyped } = this.props;
+    const { typed, last } = this.props;
+
+    console.log(typed, last);
+    console.log(last[0]);
 
     return (
       <div key="textarea" className={styles.textarea}>
@@ -74,7 +77,7 @@ class TextArea extends Component {
             {typed}
           </span>
           <span className="cursor" ref={this.cursor} />
-          {nonTyped}
+          {last}
         </div>
       </div>
     );

@@ -48,11 +48,11 @@ const update = (req, res, next) => {
 
   const index = user.get(pathToEntites).findIndex(item => item.id === id);
 
-  user.set(`${pathToEntites}.${index}.typed`, text);
-  user.set(`${pathToEntites}.${index}.last`, );
+  user.set(`${pathToEntites}.${index}.typed`, '');
+  user.set(`${pathToEntites}.${index}.last`, text);
 
   if (select) {
-    user.set('modes.text.entities.selectedId', id);
+    user.set(`${pathToEntites}.selectedId`, id);
   }
 
   user.save()
@@ -68,7 +68,9 @@ const select = (req, res, next) => {
     }
   } = req;
 
-  user.set('modes.text.entities.selectedId', id);
+  console.log('id', id);
+
+  user.set('modes.text.selectedId', parseInt(id, 10));
 
   user.save()
     .then(() => res.json(httpStatus[200]))

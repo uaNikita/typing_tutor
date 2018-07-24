@@ -207,18 +207,16 @@ export const setGlobalMessage = message => ({
 
 export const processAction = (saveToClient, saveToServer) => (
   (dispatch, getState) => {
-    let actions;
+    let promise = Promise.resolve();
 
     if (getState().getIn(['user', 'email'])) {
-      actions = saveToServer();
+      promise = saveToServer();
     }
     else {
       saveToClient();
-
-      actions = Promise.resolve();
     }
 
-    return actions;
+    return promise;
   }
 );
 
