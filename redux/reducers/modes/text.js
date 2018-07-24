@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import { getIdsFromCharacter } from 'Utils';
+import { getIdsFromCharacter, normalizeString } from 'Utils';
 import temp from 'Utils/temp';
 import defaults from 'Constants/defaultState';
 import { fetchJSON } from '../fetch';
@@ -159,25 +159,28 @@ export const processAddText = data => (
   }
 );
 
-export const processUpdateText = (id, data) => (
-  (dispatch, getState) => (
+export const processUpdateText = (id, { text, select }) => (
+  (dispatch, getState) => {
+    const normalizedText = normalizeString(text);
+
     dispatch(processAction(
       () => temp.path('text', getState().get('text').toJS()),
       () => dispatch(fetchJSON(`/text/${id}`, {
         method: 'PATCH',
-        body: data,
+        body: {
+          text: normalizedText,
+          select,
+        },
       })),
     ))
       .then(() => {
-        const { text, select } = data;
-
-        dispatch(updateText(id, text));
+        dispatch(updateText(id, normalizedText));
 
         if (select) {
           dispatch(selectText(id));
         }
-      })
-  ));
+      });
+  });
 
 export const processSelectText = id => (
   (dispatch) => {
@@ -256,13 +259,6 @@ export const typeTextMode = char => (dispatch, getState) => {
     .get(0);
 
   const charToType = text.get('last')[0];
-
-
-  console.log(charToType, encodeURIComponent(charToType));
-  console.log(typeof charToType);
-  console.log(char, encodeURIComponent(char));
-  console.log(typeof char);
-  console.log(charToType === char);
 
   if (charToType) {
     if (charToType === char) {

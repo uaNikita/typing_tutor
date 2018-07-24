@@ -103,3 +103,11 @@ export function getFingersSet(keys) {
 
   return lettersSet;
 }
+
+export const normalizeString = (string) => {
+  let result = encodeURIComponent(string);
+
+  result = result.replace(/%0D/g, '%0A');
+
+  return decodeURIComponent(result);
+};

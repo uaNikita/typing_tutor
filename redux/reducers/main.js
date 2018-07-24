@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import { getIdsFromCharacter } from 'Utils';
+import { getIdsFromCharacter, normalizeString } from 'Utils';
 import keyboards from 'Constants/keyboards/index';
 
 import { fetchJSON, setTokens } from './fetch';
@@ -223,7 +223,9 @@ export const processAction = (saveToClient, saveToServer) => (
 export const typeChar = char => (dispatch, getState) => {
   const state = getState();
 
-  const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
+  const normalizedChar = normalizeString(char);
+
+  const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), normalizedChar);
 
   dispatch(pressKeys(idsChar));
 
@@ -236,11 +238,11 @@ export const typeChar = char => (dispatch, getState) => {
 
   switch (state.getIn(['user', 'mode'])) {
     case 'text':
-      dispatch(typeTextMode(char));
+      dispatch(typeTextMode(normalizedChar));
       break;
 
     case 'learning':
-      dispatch(typeLearningMode(char));
+      dispatch(typeLearningMode(normalizedChar));
       break;
 
     default:

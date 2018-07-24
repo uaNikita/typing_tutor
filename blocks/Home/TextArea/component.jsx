@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
+import CSSModules from 'react-css-modules';
 import PerfectScrollbar from 'perfect-scrollbar';
 
 import styles from './textarea.module.styl';
 
-class TextArea extends Component {
+class Block extends Component {
   constructor(props) {
     super(props);
 
@@ -65,23 +66,25 @@ class TextArea extends Component {
 
 
   render() {
-    const { typed, last } = this.props;
-
-    console.log(typed, last);
-    console.log(last[0]);
+    const {
+      props: {
+        typed,
+        last,
+      },
+    } = this;
 
     return (
       <div key="textarea" className={styles.textarea}>
-        <div className={styles.content} ref={this.content}>
+        <pre className={styles.content} ref={this.content}>
           <span className={styles.typed}>
             {typed}
           </span>
           <span className="cursor" ref={this.cursor} />
           {last}
-        </div>
+        </pre>
       </div>
     );
   }
 }
 
-export default TextArea;
+export default CSSModules(Block, styles);
