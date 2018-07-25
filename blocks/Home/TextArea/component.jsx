@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import PerfectScrollbar from 'perfect-scrollbar';
 
+import Content from '../Content/container';
+
 import styles from './textarea.module.styl';
 
 class Block extends Component {
@@ -77,10 +79,10 @@ class Block extends Component {
       <div key="textarea" className={styles.textarea}>
         <pre className={styles.content} ref={this.content}>
           <span className={styles.typed}>
-            {typed}
+            <Content string={typed} />
           </span>
           <span className="cursor" ref={this.cursor} />
-          {last}
+          <Content string={last} />
         </pre>
       </div>
     );

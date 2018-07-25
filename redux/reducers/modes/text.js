@@ -163,7 +163,7 @@ export const processUpdateText = (id, { text, select }) => (
   (dispatch, getState) => {
     const normalizedText = normalizeString(text);
 
-    dispatch(processAction(
+    return dispatch(processAction(
       () => temp.path('text', getState().get('text').toJS()),
       () => dispatch(fetchJSON(`/text/${id}`, {
         method: 'PATCH',
