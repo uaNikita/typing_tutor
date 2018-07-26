@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import PerfectScrollbar from 'perfect-scrollbar';
 
@@ -37,17 +37,25 @@ class Block extends Component {
     const {
       props: {
         updateCharToType,
+        last,
       },
+      cursor: {
+        current: cursor,
+      },
+      content: {
+        current: content,
+      },
+      keyDownHandler,
     } = this;
 
     updateCharToType();
 
-    const cursor = this.cursor.current;
-    const content = this.content.current;
-
-    const value = cursor.offsetTop - content.offsetTop - 80;
-
-    content.scrollTop = value;
+    if (last) {
+      content.scrollTop = cursor.offsetTop - content.offsetTop - 80;
+    }
+    else {
+      content.removeEventListener('keydown', keyDownHandler);
+    }
   };
 
   keyDownHandler = (e) => {
@@ -66,7 +74,6 @@ class Block extends Component {
     }
   };
 
-
   render() {
     const {
       props: {
@@ -76,13 +83,19 @@ class Block extends Component {
     } = this;
 
     return (
-      <div key="textarea" className={styles.textarea}>
-        <pre className={styles.content} ref={this.content}>
-          <span className={styles.typed}>
-            <Content string={typed} />
-          </span>
-          <span className="cursor" ref={this.cursor} />
-          <Content string={last} />
+      <div key="textarea" styleName="textarea">
+        <pre styleName="content" ref={this.content}>
+          {typed && (
+            <span styleName="typed">
+              <Content string={typed} />
+            </span>
+          )}
+          {last && (
+            <Fragment>
+              <span className="cursor" ref={this.cursor} />
+              <Content string={last} />
+            </Fragment>
+          )}
         </pre>
       </div>
     );
