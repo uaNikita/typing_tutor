@@ -2,11 +2,12 @@ import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import PerfectScrollbar from 'perfect-scrollbar';
 
-import Content from '../Content/container';
+import ContentArea from '../ContentArea/container';
+import Content from '../Content/component';
 
 import styles from './textarea.module.styl';
 
-class Block extends Component {
+class Block extends ContentArea {
   constructor(props) {
     super(props);
 
@@ -15,7 +16,10 @@ class Block extends Component {
   }
 
   componentDidMount = () => {
-    this.content.current.addEventListener('keydown', this.keyDownHandler);
+    document.addEventListener('keydown', this.keyDownHandler);
+    document.addEventListener('keypress', this.keyPressHandler);
+
+    // this.content.current.addEventListener('keydown', this.keyDownHandler);
 
     this.ps = new PerfectScrollbar(this.content.current);
 
@@ -25,7 +29,18 @@ class Block extends Component {
   componentDidUpdate = () => this.update();
 
   componentWillUnmount() {
-    this.content.current.removeEventListener('keydown', this.keyDownHandler);
+    const {
+      props: {
+        zeroingStatic,
+      },
+    } = this;
+
+    document.removeEventListener('keydown', this.keyDownHandler);
+    document.removeEventListener('keypress', this.keyPressHandler);
+
+    zeroingStatic();
+
+    // this.content.current.removeEventListener('keydown', this.keyDownHandler);
 
     this.ps.destroy();
 
@@ -58,22 +73,6 @@ class Block extends Component {
     }
   };
 
-  keyDownHandler = (e) => {
-    const {
-      props: {
-        typeChar,
-      },
-    } = this;
-
-    if (e.which === 32) {
-      e.preventDefault();
-
-      this.setStartTypingTime();
-
-      typeChar(String.fromCharCode(e.which));
-    }
-  };
-
   render() {
     const {
       props: {
@@ -84,16 +83,17 @@ class Block extends Component {
 
     return (
       <div key="textarea" styleName="textarea">
+        <Red>test</Red>
         <pre styleName="content" ref={this.content}>
           {typed && (
             <span styleName="typed">
-              <Content string={typed} />
+              <Content>{typed}</Content>
             </span>
           )}
           {last && (
             <Fragment>
               <span className="cursor" ref={this.cursor} />
-              <Content string={last} />
+              <Content>{last}</Content>
             </Fragment>
           )}
         </pre>

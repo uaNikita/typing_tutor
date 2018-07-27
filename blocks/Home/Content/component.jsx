@@ -3,8 +3,8 @@ import CSSModules from 'react-css-modules';
 
 import styles from './content.module.styl';
 
-const Block = ({ string }) => {
-  let result = string;
+const Block = ({ children }) => {
+  let result = children;
 
   // if (true) {
   result = result
