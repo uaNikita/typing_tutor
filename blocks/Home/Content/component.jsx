@@ -6,7 +6,6 @@ import styles from './content.module.styl';
 const Block = ({ children }) => {
   let result = children;
 
-  // if (true) {
   result = result
     .split('')
     .map((char, i) => {
@@ -16,9 +15,14 @@ const Block = ({ children }) => {
         const key = i;
 
         c = (
-          <span key={key} styleName="space">
-            ␣
-          </span>
+          <Fragment key={key}>
+            <span styleName="space">
+              ␣
+            </span>
+            <span styleName="real-space">
+              {' '}
+            </span>
+          </Fragment>
         );
       }
       else if (encodeURIComponent(char) === '%0A') {
@@ -34,7 +38,6 @@ const Block = ({ children }) => {
 
       return c;
     });
-  // }
 
   return (
     <Fragment>

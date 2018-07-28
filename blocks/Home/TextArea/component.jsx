@@ -1,8 +1,8 @@
-import React, { Component, Fragment } from 'react';
+import React, { Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import PerfectScrollbar from 'perfect-scrollbar';
 
-import ContentArea from '../ContentArea/container';
+import ContentArea from '../ContentArea';
 import Content from '../Content/component';
 
 import styles from './textarea.module.styl';
@@ -83,17 +83,20 @@ class Block extends ContentArea {
 
     return (
       <div key="textarea" styleName="textarea">
-        <Red>test</Red>
         <pre styleName="content" ref={this.content}>
           {typed && (
             <span styleName="typed">
-              <Content>{typed}</Content>
+              <Content>
+                {typed}
+              </Content>
             </span>
           )}
           {last && (
             <Fragment>
               <span className="cursor" ref={this.cursor} />
-              <Content>{last}</Content>
+              <Content>
+                {last}
+              </Content>
             </Fragment>
           )}
         </pre>
