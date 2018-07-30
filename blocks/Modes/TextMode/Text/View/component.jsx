@@ -2,6 +2,8 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
+import TypedContent from 'Blocks/TypedContent/component';
+
 import styles from './text-view.module.styl';
 
 const Block = (props) => {
@@ -32,6 +34,8 @@ const Block = (props) => {
     };
   }
 
+  const text = typed + last;
+
   return (
     <Fragment>
       <div styleName="actions">
@@ -43,10 +47,12 @@ const Block = (props) => {
           Edit
         </Link>
       </div>
-      <span>
-        {typed}
-      </span>
-      {last}
+
+      <p>
+        <TypedContent>
+          {text}
+        </TypedContent>
+      </p>
     </Fragment>
   );
 };

@@ -83,7 +83,7 @@ class Block extends ContentArea {
 
     return (
       <div key="textarea" styleName="textarea">
-        <pre styleName="content" ref={this.content}>
+        <p styleName="content" ref={this.content}>
           {typed && (
             <span styleName="typed">
               <Content>
@@ -99,7 +99,7 @@ class Block extends ContentArea {
               </Content>
             </Fragment>
           )}
-        </pre>
+        </p>
       </div>
     );
   }

@@ -21,6 +21,8 @@ const initialState = Immutable.fromJS({
 
   // text, learning
   mode: 'text',
+
+  showHiddenChars: true,
 });
 
 export default (state = initialState, action = {}) => {

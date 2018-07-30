@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
+import TypedContent from 'Blocks/TypedContent/component';
 import GeneralModeButton from '../../GeneralModeButton/container';
 
 import styles from './texts.module.styl';
@@ -41,21 +42,25 @@ const Block = (props) => {
     return (
       <Link key={id} to={`${url}/${id}`} styleName={className}>
         <p>
-          {content}
+          <TypedContent>
+            {content}
+          </TypedContent>
         </p>
       </Link>
     );
   });
 
-  return [
-    <div key="actions" styleName="actions">
-      <GeneralModeButton toMode="text" />
+  return (
+    <Fragment>
+      <div styleName="actions">
+        <GeneralModeButton toMode="text" />
 
-      {addTextLink}
-    </div>,
+        {addTextLink}
+      </div>
 
-    textEls,
-  ];
+      {textEls}
+    </Fragment>
+  );
 };
 
 export default CSSModules(Block, styles, {
