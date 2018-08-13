@@ -4,7 +4,7 @@ import Keypad from './Keypad/container';
 import LearningArea from './LearningArea/container';
 import TextArea from './TextArea/container';
 import Statistic from './Statistic/container';
-import Header from './Header/component';
+import Header from './Header/container';
 
 const Block = ({ mode }) => {
   let area;

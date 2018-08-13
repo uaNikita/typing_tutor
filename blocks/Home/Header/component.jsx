@@ -52,10 +52,22 @@ class Block extends Component {
     });
   };
 
+  handleHiddenChars = () => {
+    const {
+      props: {
+        showHiddenChars,
+        setHiddenChars,
+      },
+    } = this;
+
+    setHiddenChars(!showHiddenChars);
+  }
+
   render() {
     const {
       props: {
         location,
+        showHiddenChars,
       },
       state: {
         navOpen,
@@ -121,6 +133,8 @@ class Block extends Component {
         <Logo />
 
         <div styleName="actions">
+          <button type="button" className={`fa fa-eye${showHiddenChars ? '-slash' : ''}`} onClick={this.handleHiddenChars} />
+
           <Metronome />
 
           <div className="drop-down" styleName="menu">

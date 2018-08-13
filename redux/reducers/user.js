@@ -9,6 +9,7 @@ import { fetchJSON } from './fetch';
 const CLEAR_STATE = 'user/CLEAR_STATE';
 const SET_STATE = 'user/SET_STATE';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
+const SET_HIDDEN_CHARS = 'user/SET_HIDDEN_CHARS';
 
 const initialState = Immutable.fromJS({
   email: undefined,
@@ -36,6 +37,9 @@ export default (state = initialState, action = {}) => {
     case ADD_STATISTIC:
       return state.mergeIn('statistic', action.statistic);
 
+    case SET_HIDDEN_CHARS:
+      return state.set('showHiddenChars', action.value);
+
     default:
       return state;
   }
@@ -48,6 +52,11 @@ export const clearState = () => ({
 export const setState = data => ({
   type: SET_STATE,
   data,
+});
+
+export const setHiddenChars = value => ({
+  type: SET_HIDDEN_CHARS,
+  value,
 });
 
 export const processSetSettings = settings => (
