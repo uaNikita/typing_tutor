@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { typeChar, setStartTypingTime, zeroingStatic } from 'ReduxUtils/reducers/main';
+import { setStartTypingTime, zeroingStatic } from 'ReduxUtils/reducers/main';
 import { updateCharToType } from 'ReduxUtils/reducers/modes/text';
 
 import Component from './component';
@@ -14,11 +14,11 @@ const mapStateToProps = (state) => {
   return {
     typed: text.get('typed'),
     last: text.get('last'),
+    showHiddenChars: state.getIn(['user', 'showHiddenChars']),
   };
 };
 
 const mapDispatchToProps = dispatch => ({
-  typeChar: (...args) => dispatch(typeChar(...args)),
   setStartTypingTime: (...args) => dispatch(setStartTypingTime(...args)),
   zeroingStatic: (...args) => dispatch(zeroingStatic(...args)),
   updateCharToType: (...args) => dispatch(updateCharToType(...args)),

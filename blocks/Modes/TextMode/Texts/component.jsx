@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
-import TypedContent from 'Blocks/TypedContent/component';
+import ContentToType from 'Blocks/ContentToType/component';
 import GeneralModeButton from '../../GeneralModeButton/container';
 
 import styles from './texts.module.styl';
@@ -42,9 +42,9 @@ const Block = (props) => {
     return (
       <Link key={id} to={`${url}/${id}`} styleName={className}>
         <p>
-          <TypedContent>
+          <ContentToType>
             {content}
-          </TypedContent>
+          </ContentToType>
         </p>
       </Link>
     );

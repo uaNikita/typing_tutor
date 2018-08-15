@@ -2,8 +2,8 @@ import React, { Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import PerfectScrollbar from 'perfect-scrollbar';
 
+import ContentToType from 'Blocks/ContentToType/component';
 import ContentArea from '../ContentArea';
-import Content from '../Content/component';
 
 import styles from './textarea.module.styl';
 
@@ -78,6 +78,7 @@ class Block extends ContentArea {
       props: {
         typed,
         last,
+        showHiddenChars,
       },
     } = this;
 
@@ -86,17 +87,17 @@ class Block extends ContentArea {
         <p styleName="content" ref={this.content}>
           {typed && (
             <span styleName="typed">
-              <Content>
+              <ContentToType hidden={showHiddenChars}>
                 {typed}
-              </Content>
+              </ContentToType>
             </span>
           )}
           {last && (
             <Fragment>
               <span className="cursor" ref={this.cursor} />
-              <Content>
+              <ContentToType hidden={showHiddenChars}>
                 {last}
-              </Content>
+              </ContentToType>
             </Fragment>
           )}
         </p>

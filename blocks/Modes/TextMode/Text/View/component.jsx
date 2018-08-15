@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import TypedContent from 'Blocks/TypedContent/component';
+import ContentToType from 'Blocks/ContentToType/component';
 
 import styles from './text-view.module.styl';
 
@@ -49,9 +49,9 @@ const Block = (props) => {
       </div>
 
       <p>
-        <TypedContent>
+        <ContentToType>
           {text}
-        </TypedContent>
+        </ContentToType>
       </p>
     </Fragment>
   );

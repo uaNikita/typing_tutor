@@ -12,21 +12,24 @@ const Block = ({ children, hidden }) => {
       .map((char, i) => {
         let c = char;
 
-        if (hidden && char === ' ') {
+        if (char === ' ') {
           const key = i;
 
-          c = (
-            <Fragment key={key}>
-              <span styleName="space">
-                ␣
-              </span>
-              <span styleName="real-space">
-                {' '}
-              </span>
-            </Fragment>
-          );
+          if (hidden) {
+            c = (
+              <Fragment key={key}>
+                <span styleName="middot">
+                  &middot;
+                </span>
+                <span styleName="separator" />
+              </Fragment>
+            );
+          }
+          else {
+            c = <span styleName="space" />;
+          }
         }
-        else if (encodeURIComponent(char) === '%0A') {
+        else if (hidden && encodeURIComponent(char) === '%0A') {
           const key = i;
 
           c = hidden
