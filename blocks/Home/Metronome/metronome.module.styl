@@ -1,15 +1,15 @@
 .metronome
    position: relative
-   &:hover .range-wrap
-      top: 10px;
 .btn
    font-size: 20px;
 .range-wrap
+   width: 56px;
    position: absolute;
-   top: -150px;
-   right: 100%;
+   top: 100%;
+   left: 50%;
    padding: 10px 10px 15px;
-   transition: top .15s;
+   transform: translateX(-50%);
+   transition: top ease-in-out .3s, opacity ease-in-out .3s;
 .title
    margin-bottom: 12px;
    font-size: 10px;
@@ -19,3 +19,13 @@
    margin: 0 auto;
    :global(.rc-slider-mark)
       display: none
+.enter
+   top: 80%;
+   opacity 0
+   &-active
+      top: 100%;
+      opacity 1
+.exit
+   &-active
+      top: 80%;
+      opacity 0

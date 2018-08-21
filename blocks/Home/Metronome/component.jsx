@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import { CSSTransition } from 'react-transition-group';
 import Slider from 'rc-slider';
-// import { debounce } from 'lodash';
+import _ from 'lodash';
 import classNames from 'classnames';
 
 import styles from './metronome.module.styl';
@@ -66,13 +66,23 @@ class Block extends Component {
     this.audio.pause();
   }
 
+  debouncedEnterHandler = _.debounce(() => {
+    if (this.isCursorAbove) {
+      this.setState({
+        isSettingOpen: true,
+      });
+    }
+  }, 500);
+
   onMouseEnterHandler = () => {
-    this.setState({
-      isSettingOpen: true,
-    });
+    this.isCursorAbove = true;
+
+    this.debouncedEnterHandler();
   }
 
   onMouseLeaveHandler = () => {
+    this.isCursorAbove = false;
+
     this.setState({
       isSettingOpen: false,
     });
@@ -89,36 +99,40 @@ class Block extends Component {
     const btnClass = classNames('drop-down__button fa', status ? 'fa-pause' : 'fa-play');
 
     return (
-      <div className="drop-down" styleName="metronome">
+      <div
+        className="drop-down"
+        styleName="metronome"
+        onMouseEnter={this.onMouseEnterHandler}
+        onMouseLeave={this.onMouseLeaveHandler}
+      >
         <button
           type="button"
           className={btnClass}
           styleName="btn"
           onClick={this.onClickHandler}
-          onMouseEnter={this.onMouseEnterHandler}
-          onMouseLeave={this.onMouseLeaveHandler}
         />
 
         <CSSTransition
           in={isSettingOpen}
-          timeout={3000}
+          timeout={300}
           classNames="message"
+          classNames={{
+            enter: styles['enter'],
+            enterActive: styles['enter-active'],
+            exit: styles['exit'],
+            exitActive: styles['exit-active'],
+          }}
           unmountOnExit
         >
-          {state => {
-            console.log('state', state);
+          <div className="drop-down__dd" styleName="range-wrap">
+            <h5 styleName="title">
+              Volume
+            </h5>
 
-            return <div>{state}</div>
-          }}
+            <Slider styleName="slider" vertical min={0} max={100} defaultValue={50} />
+          </div>
         </CSSTransition>
 
-        <div className="drop-down__dd" styleName="range-wrap">
-          <h5 styleName="title">
-            Volume
-          </h5>
-
-          <Slider styleName="slider" vertical min={0} max={100} defaultValue={50} />
-        </div>
       </div>
     );
   }
