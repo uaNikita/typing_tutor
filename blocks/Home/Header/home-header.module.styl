@@ -10,11 +10,33 @@
    display: flex
    align-items: center;
 
+.left
+   display: flex
+   align-items: center;
+
+.right
+   display: flex
+
+.navigation
+   display: flex
+   &:before
+      width: 1px;
+      top: 10px
+      bottom: @top;
+      position: absolute
+      background-color: #ccc;
+      content '';
+
 .menu
    margin-right: 5px
    
 .button
    font-size: 36px
+
+.eye
+   width 60px
+   height: @width;
+   font-size: 24px;
 
 .item
    margin-top: 5px
@@ -27,3 +49,5 @@
 
 .modes-title
    margin-bottom: -5px
+
+

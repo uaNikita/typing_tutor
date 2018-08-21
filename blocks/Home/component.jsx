@@ -3,7 +3,6 @@ import React, { Fragment } from 'react';
 import Keypad from './Keypad/container';
 import LearningArea from './LearningArea/container';
 import TextArea from './TextArea/container';
-import Statistic from './Statistic/container';
 import Header from './Header/container';
 
 const Block = ({ mode }) => {
@@ -24,7 +23,6 @@ const Block = ({ mode }) => {
   return (
     <Fragment>
       <Header />
-      <Statistic />
       {area}
       <Keypad />
     </Fragment>

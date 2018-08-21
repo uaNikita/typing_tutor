@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
-// import noUiSlider from 'nouislider';
+import Slider from 'rc-slider';
 // import { debounce } from 'lodash';
 import classNames from 'classnames';
 
 import styles from './metronome.module.styl';
 
+const marks = { 0: '', 1: '' };
+
 class Block extends Component {
   constructor(props) {
     super(props);
-
-    this.metronomeRange = React.createRef();
 
     // this.audio = new Audio('media/metronome2.mp3');
   }
@@ -18,24 +18,6 @@ class Block extends Component {
   state = {
     status: 0,
   };
-
-  componentDidMount() {
-    // const { interval, actionMetronome } = this.props;
-
-    // noUiSlider.create(this.metronomeRange, {
-    //   start: interval,
-    //   range: {
-    //     min: 200,
-    //     max: 2000,
-    //   },
-    // });
-    //
-    // this.metronomeRange.noUiSlider.on('update', debounce((values, handle) => {
-    //   const val = parseInt(values[handle], 10);
-    //
-    //   actionMetronome('interval', val);
-    // }, 100));
-  }
 
   componentDidUpdate() {
     const {
@@ -45,10 +27,10 @@ class Block extends Component {
     } = this;
 
     if (status) {
-      this.playWithInterval();
+      // this.playWithInterval();
     }
     else {
-      this.stopPlaying();
+      // this.stopPlaying();
     }
   }
 
@@ -97,17 +79,23 @@ class Block extends Component {
       },
     } = this;
 
-    const btnClass = classNames('fa', status ? 'fa-pause' : 'fa-play');
+    const btnClass = classNames('drop-down__button fa', status ? 'fa-pause' : 'fa-play');
 
     return (
-      <div styleName="metronome">
-        <button type="button" styleName="metronome__btn" className={btnClass} onClick={this.onClickHandler} />
+      <div className="drop-down" styleName="metronome">
+        <button
+          type="button"
+          className={btnClass}
+          styleName="btn"
+          onClick={this.onClickHandler}
+        />
 
-        <div styleName="metronome__range-wrap">
-          <h5 styleName="metronome__title">
+        <div className="drop-down__dd" styleName="range-wrap">
+          <h5 styleName="title">
             Volume
           </h5>
-          <div ref={this.metronomeRange} />
+
+          <Slider vertical min={-10} marks={marks} included={false} defaultValue={0} />
         </div>
       </div>
     );

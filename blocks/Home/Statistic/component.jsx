@@ -13,7 +13,7 @@ const Statistic = ({ hits, errors, startTypingTime }) => {
   }
 
   return (
-    <div key="typing-info" styleName="typing-info">
+    <div styleName="typing-info">
       <p>
         <i className="fa fa-file-text-o" styleName="hits" />
         {hits}
@@ -23,7 +23,7 @@ const Statistic = ({ hits, errors, startTypingTime }) => {
         <i className="fa fa-tachometer" styleName="speed" />
         {speed}
         {' '}
-зн/мин
+        зн/мин
       </p>
 
       <p>

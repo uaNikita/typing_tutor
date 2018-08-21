@@ -6,6 +6,7 @@ import { modes, other } from 'Constants/navigation';
 
 import Logo from 'Blocks/Logo/component';
 import UserMenu from 'Blocks/UserMenu/container';
+import Statistic from '../Statistic/container';
 import Metronome from '../Metronome/container';
 
 import styles from './home-header.module.styl';
@@ -61,7 +62,7 @@ class Block extends Component {
     } = this;
 
     setHiddenChars(!showHiddenChars);
-  }
+  };
 
   render() {
     const {
@@ -128,35 +129,52 @@ class Block extends Component {
         );
     });
 
+    let eyeClassName = 'fa fa-eye';
+
+    if (showHiddenChars) {
+      eyeClassName += '-slash';
+    }
+
     return (
       <header styleName="root">
-        <Logo />
+        <div styleName="left">
+          <Logo />
 
-        <div styleName="actions">
-          <button type="button" className={`fa fa-eye${showHiddenChars ? '-slash' : ''}`} onClick={this.handleHiddenChars} />
+          <Statistic />
+        </div>
+
+        <div styleName="right">
+          <button
+            type="button"
+            className={eyeClassName}
+            styleName="eye"
+            onClick={this.handleHiddenChars}
+          />
 
           <Metronome />
 
-          <div className="drop-down" styleName="menu">
-            <button
-              type="button"
-              className="fa fa-bars drop-down__button"
-              styleName="button"
-              onClick={this.hanldeClickMenu}
-            />
+          <div styleName="navigation">
+            <div className="drop-down" styleName="menu">
+              <button
+                type="button"
+                className="fa fa-bars drop-down__button"
+                styleName="button"
+                onClick={this.hanldeClickMenu}
+              />
 
-            {navOpen && (
-              <nav className="drop-down__dd">
-                <h4 styleName="modes-title">
-                  Modes
-                </h4>
-                {modesLinks}
-                {otherLinks}
-              </nav>
-            )}
+              {navOpen && (
+                <nav className="drop-down__dd">
+                  <h4 styleName="modes-title">
+                    Modes
+                  </h4>
+                  {modesLinks}
+                  {otherLinks}
+                </nav>
+              )}
+            </div>
+
+            <UserMenu />
           </div>
-
-          <UserMenu />
         </div>
       </header>
     );
