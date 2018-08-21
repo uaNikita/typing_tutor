@@ -1,22 +1,16 @@
 import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
+import { CSSTransition } from 'react-transition-group';
 import Slider from 'rc-slider';
 // import { debounce } from 'lodash';
 import classNames from 'classnames';
 
 import styles from './metronome.module.styl';
 
-const marks = { 0: '', 1: '' };
-
 class Block extends Component {
-  constructor(props) {
-    super(props);
-
-    // this.audio = new Audio('media/metronome2.mp3');
-  }
-
   state = {
     status: 0,
+    isSettingOpen: false,
   };
 
   componentDidUpdate() {
@@ -72,10 +66,23 @@ class Block extends Component {
     this.audio.pause();
   }
 
+  onMouseEnterHandler = () => {
+    this.setState({
+      isSettingOpen: true,
+    });
+  }
+
+  onMouseLeaveHandler = () => {
+    this.setState({
+      isSettingOpen: false,
+    });
+  }
+
   render() {
     const {
       state: {
         status,
+        isSettingOpen,
       },
     } = this;
 
@@ -88,14 +95,29 @@ class Block extends Component {
           className={btnClass}
           styleName="btn"
           onClick={this.onClickHandler}
+          onMouseEnter={this.onMouseEnterHandler}
+          onMouseLeave={this.onMouseLeaveHandler}
         />
+
+        <CSSTransition
+          in={isSettingOpen}
+          timeout={3000}
+          classNames="message"
+          unmountOnExit
+        >
+          {state => {
+            console.log('state', state);
+
+            return <div>{state}</div>
+          }}
+        </CSSTransition>
 
         <div className="drop-down__dd" styleName="range-wrap">
           <h5 styleName="title">
             Volume
           </h5>
 
-          <Slider vertical min={-10} marks={marks} included={false} defaultValue={0} />
+          <Slider styleName="slider" vertical min={0} max={100} defaultValue={50} />
         </div>
       </div>
     );
