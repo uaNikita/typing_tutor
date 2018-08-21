@@ -8,63 +8,9 @@ import classNames from 'classnames';
 import styles from './metronome.module.styl';
 
 class Block extends Component {
-  state = {
-    status: 0,
-    isSettingOpen: false,
+  componentDidMount = () => {
+    this.audio = new Audio('media/metronome.mp3');
   };
-
-  componentDidUpdate() {
-    const {
-      state: {
-        status,
-      },
-    } = this;
-
-    if (status) {
-      // this.playWithInterval();
-    }
-    else {
-      // this.stopPlaying();
-    }
-  }
-
-  onClickHandler = () => {
-    this.setState(prevState => ({
-      status: !prevState.status,
-    }));
-  };
-
-  playFromBegin() {
-    const { audio } = this;
-
-    audio.pause();
-
-    setTimeout(() => {
-      audio.currentTime = 0;
-      audio.play();
-    }, 100);
-  }
-
-  playWithInterval() {
-    const self = this;
-    const { interval } = this.props;
-
-    const loop = () => {
-      self.timeout = setTimeout(() => {
-        self.playFromBegin();
-
-        loop();
-      }, interval);
-    };
-
-    loop();
-  }
-
-  stopPlaying() {
-    clearTimeout(this.timeout);
-
-    this.audio.pause();
-  }
 
   debouncedEnterHandler = _.debounce(() => {
     if (this.isCursorAbove) {
@@ -74,11 +20,39 @@ class Block extends Component {
     }
   }, 500);
 
+  state = {
+    status: 0,
+    isSettingOpen: false,
+  };
+
+  componentDidUpdate = (prevProps, prevState) => {
+    const {
+      state: {
+        status,
+      },
+    } = this;
+
+    if (prevState.status !== status) {
+      if (status) {
+        this.playWithInterval();
+      }
+      else {
+        this.stopPlaying();
+      }
+    }
+  };
+
+  onClickHandler = () => {
+    this.setState(prevState => ({
+      status: !prevState.status,
+    }));
+  };
+
   onMouseEnterHandler = () => {
     this.isCursorAbove = true;
 
     this.debouncedEnterHandler();
-  }
+  };
 
   onMouseLeaveHandler = () => {
     this.isCursorAbove = false;
@@ -86,7 +60,36 @@ class Block extends Component {
     this.setState({
       isSettingOpen: false,
     });
-  }
+  };
+
+  playFromBegin = () => {
+    const { audio } = this;
+
+    audio.pause();
+
+    audio.currentTime = 0;
+    audio.play();
+  };
+
+  playWithInterval = () => {
+    const { interval } = this.props;
+
+    const loop = () => {
+      this.timeout = setTimeout(() => {
+        this.playFromBegin();
+
+        loop();
+      }, interval);
+    };
+
+    loop();
+  };
+
+  stopPlaying = () => {
+    clearTimeout(this.timeout);
+
+    this.audio.pause();
+  };
 
   render() {
     const {
@@ -115,11 +118,10 @@ class Block extends Component {
         <CSSTransition
           in={isSettingOpen}
           timeout={300}
-          classNames="message"
           classNames={{
-            enter: styles['enter'],
+            enter: styles.enter,
             enterActive: styles['enter-active'],
-            exit: styles['exit'],
+            exit: styles.exit,
             exitActive: styles['exit-active'],
           }}
           unmountOnExit

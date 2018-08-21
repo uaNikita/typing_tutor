@@ -55,9 +55,14 @@ const getConfig = (() => {
         {
           from: path.resolve(__dirname, 'static/favicon.png'),
           to: path.resolve(__dirname, 'dist/favicon.png')
-        }, {
+        },
+        {
           from: path.resolve(__dirname, 'static/robots.txt'),
           to: path.resolve(__dirname, 'dist/robots.txt')
+        },
+        {
+          from: path.resolve(__dirname, 'static/media'),
+          to: path.resolve(__dirname, 'dist/media')
         }
       ]),
       new MiniCssExtractPlugin(),
