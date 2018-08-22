@@ -8,10 +8,6 @@ import classNames from 'classnames';
 import styles from './metronome.module.styl';
 
 class Block extends Component {
-  componentDidMount = () => {
-    this.audio = new Audio('media/metronome.mp3');
-  };
-
   debouncedEnterHandler = _.debounce(() => {
     if (this.isCursorAbove) {
       this.setState({
@@ -23,6 +19,10 @@ class Block extends Component {
   state = {
     status: 0,
     isSettingOpen: false,
+  };
+
+  componentDidMount = () => {
+    this.audio = new Audio('media/metronome.mp3');
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -64,8 +64,6 @@ class Block extends Component {
 
   playFromBegin = () => {
     const { audio } = this;
-
-    audio.pause();
 
     audio.currentTime = 0;
     audio.play();
