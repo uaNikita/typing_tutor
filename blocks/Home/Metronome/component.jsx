@@ -22,7 +22,7 @@ class Block extends Component {
   };
 
   componentDidMount = () => {
-    this.audio = new Audio('media/metronome.mp3');
+    this.audio = new Audio('media/1.mp3');
   };
 
   componentDidUpdate = (prevProps, prevState) => {
@@ -30,14 +30,17 @@ class Block extends Component {
       state: {
         status,
       },
+      audio,
     } = this;
 
     if (prevState.status !== status) {
       if (status) {
-        this.playWithInterval();
+        this.loop();
       }
       else {
-        this.stopPlaying();
+        clearTimeout(this.timeout);
+
+        audio.pause();
       }
     }
   };
@@ -62,31 +65,18 @@ class Block extends Component {
     });
   };
 
-  playFromBegin = () => {
-    const { audio } = this;
+  loop = () => {
+    const {
+      props: {
+        interval,
+      },
+      audio,
+    } = this;
 
     audio.currentTime = 0;
     audio.play();
-  };
 
-  playWithInterval = () => {
-    const { interval } = this.props;
-
-    const loop = () => {
-      this.timeout = setTimeout(() => {
-        this.playFromBegin();
-
-        loop();
-      }, interval);
-    };
-
-    loop();
-  };
-
-  stopPlaying = () => {
-    clearTimeout(this.timeout);
-
-    this.audio.pause();
+    this.timeout = setTimeout(() => this.loop(), interval);
   };
 
   render() {
