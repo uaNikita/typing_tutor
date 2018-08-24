@@ -22,6 +22,10 @@ class Block extends Component {
   };
 
   componentDidMount = () => {
+    window.addEventListener('blur', this.windowBlurHandler);
+
+    window.addEventListener('focus', this.windowFocusHandler);
+
     this.audio = new Audio('media/1.mp3');
   };
 
@@ -30,17 +34,18 @@ class Block extends Component {
       state: {
         status,
       },
-      audio,
     } = this;
 
     if (prevState.status !== status) {
       if (status) {
-        this.loop();
+        this.play();
+
+        this.playing = true;
       }
       else {
-        clearTimeout(this.timeout);
+        this.stop();
 
-        audio.pause();
+        this.playing = false;
       }
     }
   };
@@ -65,10 +70,48 @@ class Block extends Component {
     });
   };
 
-  loop = () => {
+  onChangeHandler = (value) => {
     const {
       props: {
-        interval,
+        setMetronomeOptions,
+      },
+    } = this;
+
+    const interval = 2000 - value;
+
+    setMetronomeOptions({
+      interval,
+    });
+  };
+
+  stop = () => {
+    const {
+      audio,
+    } = this;
+
+    if (this.playing) {
+      clearTimeout(this.timeout);
+
+      audio.pause();
+    }
+  };
+
+  windowFocusHandler = () => {
+    if (this.playing) {
+      this.play();
+    }
+  };
+
+  windowBlurHandler = () => {
+    this.stop();
+  };
+
+  play = () => {
+    const {
+      props: {
+        metronome: {
+          interval,
+        },
       },
       audio,
     } = this;
@@ -76,11 +119,16 @@ class Block extends Component {
     audio.currentTime = 0;
     audio.play();
 
-    this.timeout = setTimeout(() => this.loop(), interval);
+    this.timeout = setTimeout(() => this.play(), interval);
   };
 
   render() {
     const {
+      props: {
+        metronome: {
+          interval,
+        },
+      },
       state: {
         status,
         isSettingOpen,
@@ -115,11 +163,14 @@ class Block extends Component {
           unmountOnExit
         >
           <div className="drop-down__dd" styleName="range-wrap">
-            <h5 styleName="title">
-              Volume
-            </h5>
-
-            <Slider styleName="slider" vertical min={0} max={100} defaultValue={50} />
+            <Slider
+              styleName="slider"
+              vertical
+              min={0}
+              max={1700}
+              defaultValue={2000 - interval}
+              onChange={this.onChangeHandler}
+            />
           </div>
         </CSSTransition>
 

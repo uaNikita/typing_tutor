@@ -1,21 +1,13 @@
 import { connect } from 'react-redux';
-
-import { actionMetronome } from 'ReduxUtils/reducers/main';
+import { setMetronomeOptions } from 'ReduxUtils/reducers/user';
 import Component from './component';
 
-const mapStateToProps = (state) => {
-  const stateMain = state.get('main');
-
-  return {
-    status: stateMain.get('metronomeStatus'),
-    interval: stateMain.get('metronomeInterval'),
-  };
-};
+const mapStateToProps = state => ({
+  metronome: state.getIn(['user', 'metronome']).toJS(),
+});
 
 const mapDispatchToProps = dispatch => ({
-  actionMetronome: (action, value) => {
-    dispatch(actionMetronome(action, value));
-  },
+  setMetronomeOptions: (...args) => dispatch(setMetronomeOptions(...args)),
 });
 
 export default connect(

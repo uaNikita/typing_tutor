@@ -20,7 +20,6 @@ const CLEAR_STATE = 'main/CLEAR_STATE';
 const PRESS_KEYS = 'main/PRESS_KEYS';
 const UNPRESS_KEYS = 'main/UNPRESS_KEYS';
 const ZEROING_STATISTIC = 'main/ZEROING_STATISTIC';
-const ACTION_METRONOME = 'main/ACTION_METRONOME';
 const SET_KEYBOARD = 'main/SET_KEYBOARD';
 const PRESS_WRONG_KEYS = 'main/PRESS_WRONG_KEYS';
 const UNPRESS_WRONG_KEYS = 'main/UNPRESS_WRONG_KEYS';
@@ -49,10 +48,6 @@ const initialState = Immutable.fromJS({
   typos: 0,
 
   idCharsToType: '',
-
-  metronomeStatus: 0,
-
-  metronomeInterval: 800,
 
   // text, learning
   mode: 'text',
@@ -124,9 +119,6 @@ export default (state = initialState, action = {}) => {
         start: undefined,
       }));
 
-    case ACTION_METRONOME:
-      return state.set('metronomeStatus', 0);
-
     case SET_KEYBOARD:
       return state.merge({
         keyboard: action.name,
@@ -172,12 +164,6 @@ export const unPressWrongKeys = ids => ({
 export const setStartTypingTime = time => ({
   type: SET_START_TYPING_TIME,
   time,
-});
-
-export const actionMetronome = (action, value) => ({
-  type: ACTION_METRONOME,
-  action,
-  value,
 });
 
 export const setKeyboard = name => ({

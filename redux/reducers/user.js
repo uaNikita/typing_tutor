@@ -10,6 +10,7 @@ const CLEAR_STATE = 'user/CLEAR_STATE';
 const SET_STATE = 'user/SET_STATE';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
 const SET_HIDDEN_CHARS = 'user/SET_HIDDEN_CHARS';
+const SET_METRONOME_OPTIONS = 'user/SET_METRONOME_OPTIONS';
 
 const initialState = Immutable.fromJS({
   email: undefined,
@@ -24,6 +25,11 @@ const initialState = Immutable.fromJS({
   mode: 'text',
 
   showHiddenChars: true,
+
+  metronome: {
+    on: false,
+    interval: 1200,
+  },
 });
 
 export default (state = initialState, action = {}) => {
@@ -39,6 +45,9 @@ export default (state = initialState, action = {}) => {
 
     case SET_HIDDEN_CHARS:
       return state.set('showHiddenChars', action.value);
+
+    case SET_METRONOME_OPTIONS:
+      return state.mergeIn(['metronome'], action.options);
 
     default:
       return state;
@@ -57,6 +66,11 @@ export const setState = data => ({
 export const setHiddenChars = value => ({
   type: SET_HIDDEN_CHARS,
   value,
+});
+
+export const setMetronomeOptions = options => ({
+  type: SET_METRONOME_OPTIONS,
+  options,
 });
 
 export const processSetSettings = settings => (
