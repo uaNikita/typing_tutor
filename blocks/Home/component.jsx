@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 
+import Header from 'Blocks/Header/component';
 import Keypad from './Keypad/container';
 import LearningArea from './LearningArea/container';
 import TextArea from './TextArea/container';
-import Header from './Header/container';
+import Actions from './Actions/container';
 
 const Block = ({ mode }) => {
   let area;
@@ -23,6 +24,7 @@ const Block = ({ mode }) => {
   return (
     <Fragment>
       <Header />
+      <Actions />
       {area}
       <Keypad />
     </Fragment>

@@ -1,7 +1,11 @@
 .metronome
    position: relative
+
 .btn
+   width: 50px
+   height: @width
    font-size: 20px;
+
 .range-wrap
    width: 56px;
    position: absolute;
@@ -10,17 +14,20 @@
    padding: 15px 10px;
    transform: translateX(-50%);
    transition: top ease-in-out .3s, opacity ease-in-out .3s;
+
 .slider
    height: 100px;
    margin: 0 auto;
    :global(.rc-slider-mark)
       display: none
+
 .enter
    top: 80%;
    opacity 0
    &-active
       top: 100%;
       opacity 1
+
 .exit
    &-active
       top: 80%;

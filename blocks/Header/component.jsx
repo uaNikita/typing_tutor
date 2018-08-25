@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 
 import { modes, other } from 'Constants/navigation';
 
+import Logo from 'Blocks/Logo/component';
 import UserMenu from 'Blocks/UserMenu/container';
 
 import styles from './header.module.styl';
@@ -39,9 +40,19 @@ class Block extends Component {
   };
 
   render() {
+    const {
+      props: {
+        location: {
+          pathname,
+        },
+      },
+    } = this;
+
     return (
       <div styleName="root">
-        <Link styleName="home" className="fa fa-keyboard-o" to="/" />
+        {pathname === '/'
+          ? <Logo />
+          : <Link styleName="home" className="fa fa-keyboard-o" to="/" />}
 
         <div styleName="actions">
           <nav styleName="items">
