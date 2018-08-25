@@ -14,7 +14,7 @@ const mapStateToProps = (state) => {
   return {
     typed: text.get('typed'),
     last: text.get('last'),
-    showHiddenChars: state.getIn(['user', 'showHiddenChars']),
+    hiddenChars: state.getIn(['user', 'hiddenChars']),
   };
 };
 

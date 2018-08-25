@@ -78,7 +78,7 @@ class Block extends ContentArea {
       props: {
         typed,
         last,
-        showHiddenChars,
+        hiddenChars,
       },
     } = this;
 
@@ -87,7 +87,7 @@ class Block extends ContentArea {
         <p styleName="content" ref={this.content}>
           {typed && (
             <span styleName="typed">
-              <ContentToType hidden={showHiddenChars}>
+              <ContentToType hidden={hiddenChars}>
                 {typed}
               </ContentToType>
             </span>
@@ -95,7 +95,7 @@ class Block extends ContentArea {
           {last && (
             <Fragment>
               <span className="cursor" ref={this.cursor} />
-              <ContentToType hidden={showHiddenChars}>
+              <ContentToType hidden={hiddenChars}>
                 {last}
               </ContentToType>
             </Fragment>

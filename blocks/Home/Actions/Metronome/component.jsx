@@ -17,7 +17,6 @@ class Block extends Component {
   }, 500);
 
   state = {
-    status: 0,
     isSettingOpen: false,
   };
 
@@ -26,34 +25,31 @@ class Block extends Component {
 
     window.addEventListener('focus', this.windowFocusHandler);
 
-    this.audio = new Audio('media/1.mp3');
-  };
-
-  componentDidUpdate = (prevProps, prevState) => {
-    const {
-      state: {
-        status,
-      },
-    } = this;
-
-    if (prevState.status !== status) {
-      if (status) {
-        this.play();
-
-        this.playing = true;
-      }
-      else {
-        this.stop();
-
-        this.playing = false;
-      }
-    }
+    this.audio = new Audio('media/metronome.mp3');
   };
 
   onClickHandler = () => {
-    this.setState(prevState => ({
-      status: !prevState.status,
-    }));
+    const {
+      props: {
+        metronome: {
+          on: onPrev,
+        },
+        setMetronomeOptions,
+      },
+    } = this;
+
+    const on = !onPrev;
+
+    if (on) {
+      this.play();
+    }
+    else {
+      this.stop();
+    }
+
+    setMetronomeOptions({
+      on,
+    });
   };
 
   onMouseEnterHandler = () => {
@@ -87,9 +83,15 @@ class Block extends Component {
   stop = () => {
     const {
       audio,
+      props: {
+        metronome: {
+          on,
+        },
+      },
     } = this;
 
-    if (this.playing) {
+
+    if (on) {
       clearTimeout(this.timeout);
 
       audio.pause();
@@ -97,7 +99,15 @@ class Block extends Component {
   };
 
   windowFocusHandler = () => {
-    if (this.playing) {
+    const {
+      props: {
+        metronome: {
+          on,
+        },
+      },
+    } = this;
+
+    if (on) {
       this.play();
     }
   };
@@ -127,15 +137,15 @@ class Block extends Component {
       props: {
         metronome: {
           interval,
+          on,
         },
       },
       state: {
-        status,
         isSettingOpen,
       },
     } = this;
 
-    const btnClass = classNames('drop-down__button fa', status ? 'fa-pause' : 'fa-play');
+    const btnClass = classNames('drop-down__button fa', on ? 'fa-pause' : 'fa-play');
 
     return (
       <div
@@ -149,6 +159,7 @@ class Block extends Component {
           className={btnClass}
           styleName="btn"
           onClick={this.onClickHandler}
+          title="Metronome"
         />
 
         <CSSTransition

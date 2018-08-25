@@ -24,7 +24,7 @@ const initialState = Immutable.fromJS({
   // text, learning
   mode: 'text',
 
-  showHiddenChars: true,
+  hiddenChars: true,
 
   metronome: {
     on: false,
@@ -44,7 +44,7 @@ export default (state = initialState, action = {}) => {
       return state.mergeIn('statistic', action.statistic);
 
     case SET_HIDDEN_CHARS:
-      return state.set('showHiddenChars', action.value);
+      return state.set('hiddenChars', action.value);
 
     case SET_METRONOME_OPTIONS:
       return state.mergeIn(['metronome'], action.options);

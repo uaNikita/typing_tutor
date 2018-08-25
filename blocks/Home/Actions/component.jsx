@@ -11,24 +11,24 @@ class Block extends Component {
   handleHiddenChars = () => {
     const {
       props: {
-        showHiddenChars,
+        hiddenChars,
         setHiddenChars,
       },
     } = this;
 
-    setHiddenChars(!showHiddenChars);
+    setHiddenChars(!hiddenChars);
   };
 
   render() {
     const {
       props: {
-        showHiddenChars,
+        hiddenChars,
       },
     } = this;
 
     let eyeClassName = 'fa fa-eye';
 
-    if (showHiddenChars) {
+    if (hiddenChars) {
       eyeClassName += '-slash';
     }
 
@@ -42,6 +42,7 @@ class Block extends Component {
             className={eyeClassName}
             styleName="eye"
             onClick={this.handleHiddenChars}
+            title="Hidden characters"
           />
 
           <Metronome />

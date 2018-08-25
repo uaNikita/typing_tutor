@@ -140,9 +140,7 @@ const setSettings = (req, res, next) => {
     body,
   } = req;
 
-  _.each(body, (value, key) => {
-    user.set(key, value);
-  });
+  user.set(body);
 
   user.save()
     .then(() => res.json(httpStatus[200]))

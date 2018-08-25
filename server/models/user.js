@@ -45,15 +45,25 @@ const UserSchema = new mongoose.Schema({
     type: String,
     default: 'english',
   },
+  metronome: {
+    on: {
+      type: Boolean,
+      default: defaults.user.metronome.on,
+    },
+    interval: {
+      type: Number,
+      default: defaults.user.metronome.interval,
+    }
+  },
   modes: {
     text: {
       selectedId: {
         type: Number,
-        default: selectedId,
+        default: defaults.text.selectedId,
       },
       entities: {
         type: Array,
-        default: entities,
+        default: defaults.text.entities,
       },
     },
     learning: {

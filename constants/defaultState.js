@@ -1,6 +1,14 @@
 import Immutable from 'immutable';
 
 export default {
+  user: {
+    hiddenChars: true,
+
+    metronome: {
+      on: false,
+      interval: 1200,
+    },
+  },
   text: {
     selectedId: 1,
 

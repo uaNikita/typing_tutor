@@ -3,7 +3,7 @@ import { setHiddenChars } from 'ReduxUtils/reducers/user';
 import Component from './component';
 
 const mapStateToProps = state => ({
-  showHiddenChars: state.getIn(['user', 'showHiddenChars']),
+  hiddenChars: state.getIn(['user', 'hiddenChars']),
 });
 
 const mapDispatchToProps = dispatch => ({
