@@ -21,7 +21,6 @@
         ]
       }
     ],
-    "import/no-cycle": "off",
     "react/prop-types": "off"
   },
   "settings": {

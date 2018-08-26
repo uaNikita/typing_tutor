@@ -10,7 +10,6 @@ const CLEAR_STATE = 'user/CLEAR_STATE';
 const SET_STATE = 'user/SET_STATE';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
 const SET_HIDDEN_CHARS = 'user/SET_HIDDEN_CHARS';
-const SET_METRONOME_OPTIONS = 'user/SET_METRONOME_OPTIONS';
 
 const initialState = Immutable.fromJS({
   email: undefined,
@@ -38,16 +37,13 @@ export default (state = initialState, action = {}) => {
       return state.merge(initialState);
 
     case SET_STATE:
-      return state.merge(action.data);
+      return state.mergeDeep(action.data);
 
     case ADD_STATISTIC:
       return state.mergeIn('statistic', action.statistic);
 
     case SET_HIDDEN_CHARS:
       return state.set('hiddenChars', action.value);
-
-    case SET_METRONOME_OPTIONS:
-      return state.mergeIn(['metronome'], action.options);
 
     default:
       return state;
@@ -68,30 +64,26 @@ export const setHiddenChars = value => ({
   value,
 });
 
-export const setMetronomeOptions = options => ({
-  type: SET_METRONOME_OPTIONS,
-  options,
-});
+export const processSetSettings = (() => {
+  const deferredFetch = _.throttle(
+    (dispatch, settings) => dispatch(fetchJSON('/user', {
+      method: 'PATCH',
+      body: settings,
+    })),
+    1000,
+  );
 
-export const processSetSettings = settings => (
-  (dispatch) => {
+  return settings => (dispatch) => {
     dispatch(setState(settings));
 
     return dispatch(processAction(
       () => temp.assign({
-        user: {
-          ...settings,
-        },
+        user: settings,
       }),
-      () => dispatch(fetchJSON('/user', {
-        method: 'PATCH',
-        body: {
-          ...settings,
-        },
-      })),
+      () => deferredFetch(dispatch, settings),
     ));
-  }
-);
+  };
+})();
 
 export const addStatistic = obj => ({
   type: ADD_STATISTIC,

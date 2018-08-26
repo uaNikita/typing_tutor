@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { setMetronomeOptions } from 'ReduxUtils/reducers/user';
+import { processSetSettings } from 'ReduxUtils/reducers/user';
 import Component from './component';
 
 const mapStateToProps = state => ({
@@ -7,7 +7,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setMetronomeOptions: (...args) => dispatch(setMetronomeOptions(...args)),
+  setMetronomeOptions: obj => dispatch(processSetSettings({ metronome: obj })),
 });
 
 export default connect(
