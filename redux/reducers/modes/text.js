@@ -13,8 +13,9 @@ import {
 } from '../main';
 
 import {
-  addStatisticWithTimeout,
+  dispatch,
 } from '../user';
+import { processAddStatistic } from 'ReduxUtils/reducers/user';
 
 const SET_STATE = 'text/SET_STATE';
 const CLEAR_STATE = 'text/CLEAR_STATE';
@@ -272,6 +273,6 @@ export const typeTextMode = char => (dispatch, getState) => {
       dispatch(addTouch('typo', char));
     }
 
-    addStatisticWithTimeout(dispatch);
+    dispatch(processAddStatistic());
   }
 };

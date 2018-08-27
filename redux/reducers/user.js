@@ -73,16 +73,17 @@ export const processSetSettings = (() => {
     1000,
   );
 
-  return settings => (dispatch) => {
-    dispatch(setState(settings));
+  return settings =>
+    (dispatch) => {
+      dispatch(setState(settings));
 
-    return dispatch(processAction(
-      () => temp.assign({
-        user: settings,
-      }),
-      () => deferredFetch(dispatch, settings),
-    ));
-  };
+      return dispatch(processAction(
+        () => temp.assign({
+          user: settings,
+        }),
+        () => deferredFetch(dispatch, settings),
+      ));
+    };
 })();
 
 export const addStatistic = obj => ({
@@ -90,28 +91,28 @@ export const addStatistic = obj => ({
   ...obj,
 });
 
-export const processAddStatistic = () => (
-  (dispatch, getState) => {
-    const stateMain = getState().get('main');
+export const processAddStatistic = (() => {
+  const deferredFetch = _.throttle(
+    (dispatch, body) => dispatch(fetchJSON('/user/statistic', { body })),
+    2000,
+  );
 
-    const body = {
-      keyboard: stateMain.get('keyboard'),
-      mode: stateMain.get('mode'),
-      end: Date.now(),
-      ...stateMain.get('sessionStatistic').toJS(),
+  return () =>
+    (dispatch, getState) => {
+      const stateMain = getState().get('main');
+
+      const body = {
+        keyboard: stateMain.get('keyboard'),
+        mode: stateMain.get('mode'),
+        end: Date.now(),
+        ...stateMain.get('sessionStatistic').toJS(),
+      };
+
+      dispatch(addStatistic(body));
+
+      return dispatch(processAction(
+        () => temp.path('user.statistic', getState().getIn(['main', 'statistic'])),
+        () => deferredFetch(dispatch, body),
+        ));
     };
-
-    dispatch(addStatistic(body));
-
-    return dispatch(processAction(
-      () => temp.path('user.statistic', getState().getIn(['main', 'statistic'])),
-      () => dispatch(fetchJSON('/user/statistic', { body })),
-    ));
-  }
-);
-
-export const addStatisticWithTimeout = _.throttle(
-  dispatch => dispatch(processAddStatistic()),
-  2000,
-  { leading: false },
-);
+})();

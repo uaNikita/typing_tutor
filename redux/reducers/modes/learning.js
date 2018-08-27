@@ -14,7 +14,7 @@ import {
   processAction,
 } from '../main';
 
-import { addStatisticWithTimeout } from '../user';
+import { processAddStatistic } from '../user';
 
 const CLEAR_STATE = 'learning/CLEAR_STATE';
 const TYPE_ON_LESSON = 'learning/TYPE_ON_LESSON';
@@ -268,7 +268,7 @@ export const typeLearningMode = char => (
       dispatch(addTouch('typo', char));
     }
 
-    addStatisticWithTimeout(dispatch);
+    dispatch(processAddStatistic());
 
     if (!lessonRest) {
       dispatch(refreshCurrentLesson());
