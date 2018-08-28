@@ -73,17 +73,16 @@ export const processSetSettings = (() => {
     1000,
   );
 
-  return settings =>
-    (dispatch) => {
-      dispatch(setState(settings));
+  return settings => (dispatch) => {
+    dispatch(setState(settings));
 
-      return dispatch(processAction(
-        () => temp.assign({
-          user: settings,
-        }),
-        () => deferredFetch(dispatch, settings),
-      ));
-    };
+    return dispatch(processAction(
+      () => temp.assign({
+        user: settings,
+      }),
+      () => deferredFetch(dispatch, settings),
+    ));
+  };
 })();
 
 export const addStatistic = obj => ({
@@ -97,22 +96,21 @@ export const processAddStatistic = (() => {
     2000,
   );
 
-  return () =>
-    (dispatch, getState) => {
-      const stateMain = getState().get('main');
+  return () => (dispatch, getState) => {
+    const stateMain = getState().get('main');
 
-      const body = {
-        keyboard: stateMain.get('keyboard'),
-        mode: stateMain.get('mode'),
-        end: Date.now(),
-        ...stateMain.get('sessionStatistic').toJS(),
-      };
-
-      dispatch(addStatistic(body));
-
-      return dispatch(processAction(
-        () => temp.path('user.statistic', getState().getIn(['main', 'statistic'])),
-        () => deferredFetch(dispatch, body),
-        ));
+    const body = {
+      keyboard: stateMain.get('keyboard'),
+      mode: stateMain.get('mode'),
+      end: Date.now(),
+      ...stateMain.get('sessionStatistic').toJS(),
     };
+
+    dispatch(addStatistic(body));
+
+    return dispatch(processAction(
+      () => temp.path('user.statistic', getState().getIn(['main', 'statistic'])),
+      () => deferredFetch(dispatch, body),
+    ));
+  };
 })();

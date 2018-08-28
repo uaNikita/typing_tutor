@@ -26,7 +26,7 @@ const Block = ({ children, hidden }) => {
             );
           }
           else {
-            c = <span styleName="space" />;
+            c = <span key={key} styleName="space" />;
           }
         }
         else if (hidden && encodeURIComponent(char) === '%0A') {
@@ -34,8 +34,8 @@ const Block = ({ children, hidden }) => {
 
           c = hidden
             ? (
-              <Fragment>
-                <span key={key} styleName="enter">
+              <Fragment key={key}>
+                <span styleName="enter">
                   ↵
                 </span>
                 <br />

@@ -12,10 +12,7 @@ import {
   addTouch,
 } from '../main';
 
-import {
-  dispatch,
-} from '../user';
-import { processAddStatistic } from 'ReduxUtils/reducers/user';
+import { processAddStatistic } from '../user';
 
 const SET_STATE = 'text/SET_STATE';
 const CLEAR_STATE = 'text/CLEAR_STATE';

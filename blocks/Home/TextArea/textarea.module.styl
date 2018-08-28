@@ -3,17 +3,17 @@
    position: relative;
    &:before, &:after
       width: 100%
-      height: 5px
+      height: 80px
       position: absolute
       left: 0
       content ''
       z-index: 1
    &:before
       top: 0
-      background-image: linear-gradient(to top, transparent, #fff);
+      background-image: linear-gradient(to top, transparent, rgba(255, 255, 255, 0.6) 30%,  #fff);
    &:after
       bottom: 0
-      background-image: linear-gradient(to bottom, transparent, #fff);
+      background-image: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.6) 30%, #fff);
 
 .content
    height: 100%
