@@ -35,9 +35,11 @@ class Block extends Component {
       },
     } = this;
 
-    this.setStartTypingTime();
+    if (e.which !== 32) {
+      this.setStartTypingTime();
 
-    typeChar(String.fromCharCode(e.which));
+      typeChar(String.fromCharCode(e.which));
+    }
   };
 }
 

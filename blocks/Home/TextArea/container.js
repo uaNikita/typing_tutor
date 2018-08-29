@@ -1,5 +1,9 @@
 import { connect } from 'react-redux';
-import { setStartTypingTime, zeroingStatic } from 'ReduxUtils/reducers/main';
+import {
+  setStartTypingTime,
+  zeroingStatic,
+  typeChar,
+} from 'ReduxUtils/reducers/main';
 import { updateCharToType } from 'ReduxUtils/reducers/modes/text';
 
 import Component from './component';
@@ -21,6 +25,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = dispatch => ({
   setStartTypingTime: (...args) => dispatch(setStartTypingTime(...args)),
   zeroingStatic: (...args) => dispatch(zeroingStatic(...args)),
+  typeChar: (...args) => dispatch(typeChar(...args)),
   updateCharToType: (...args) => dispatch(updateCharToType(...args)),
 });
 
