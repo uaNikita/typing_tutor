@@ -112,6 +112,40 @@ export default (state = initialState, action = {}) => {
         return newPresses;
       });
 
+    case ADD_TOUCH1:
+      return state.updateIn(['sessionStatistic', 'presses'], (presses) => {
+        const type = `${action.touchType}s`;
+        const index = presses.findIndex(c => c.get('character') === action.character);
+
+        let newPresses;
+
+        if (index === -1) {
+          const obj = {
+            character: action.character,
+          };
+
+          obj[type] = 1;
+
+          newPresses = presses.push(Immutable.Map(obj));
+        }
+        else {
+          newPresses = presses.updateIn([index], character => {
+            let updatedCharacter;
+
+            if (character.get(type)){
+              updatedCharacter = character.updateIn([type], i => i + 1);
+            }
+            else {
+              updatedCharacter = character.set(type, 1);
+            }
+
+            return updatedCharacter;
+          });
+        }
+
+        return newPresses;
+      });
+
     case ZEROING_STATISTIC:
       return state.set('sessionStatistic', Immutable.fromJS({
         hits: [],
