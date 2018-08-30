@@ -38,8 +38,7 @@ const initialState = Immutable.fromJS({
   pressedWrongKeys: Immutable.Set([]),
 
   sessionStatistic: {
-    hits: [],
-    typos: [],
+    presses: [],
     start: undefined,
   },
 
@@ -94,30 +93,11 @@ export default (state = initialState, action = {}) => {
       return state.set('idCharsToType', action.id);
 
     case ADD_TOUCH:
-      return state.updateIn(['sessionStatistic', `${action.touchType}s`], (presses) => {
-        const index = presses.findIndex(c => c.get('character') === action.character);
-
-        let newPresses;
-
-        if (index === -1) {
-          newPresses = presses.push(Immutable.Map({
-            character: action.character,
-            presses: 1,
-          }));
-        }
-        else {
-          newPresses = presses.updateIn([index, 'presses'], p => p + 1);
-        }
-
-        return newPresses;
-      });
-
-    case ADD_TOUCH1:
       return state.updateIn(['sessionStatistic', 'presses'], (presses) => {
         const type = `${action.touchType}s`;
         const index = presses.findIndex(c => c.get('character') === action.character);
 
-        let newPresses;
+        let updatedPresses;
 
         if (index === -1) {
           const obj = {
@@ -126,13 +106,13 @@ export default (state = initialState, action = {}) => {
 
           obj[type] = 1;
 
-          newPresses = presses.push(Immutable.Map(obj));
+          updatedPresses = presses.push(Immutable.Map(obj));
         }
         else {
-          newPresses = presses.updateIn([index], character => {
+          updatedPresses = presses.updateIn([index], (character) => {
             let updatedCharacter;
 
-            if (character.get(type)){
+            if (character.get(type)) {
               updatedCharacter = character.updateIn([type], i => i + 1);
             }
             else {
@@ -143,7 +123,7 @@ export default (state = initialState, action = {}) => {
           });
         }
 
-        return newPresses;
+        return updatedPresses;
       });
 
     case ZEROING_STATISTIC:
