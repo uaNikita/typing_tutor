@@ -22,6 +22,10 @@ export const personal = [
     text: 'Settings',
   },
   {
+    pathname: '/statistic',
+    text: 'Statistic',
+  },
+  {
     pathname: '/authorization/sign-out',
     text: 'Sign out',
   },

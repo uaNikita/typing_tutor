@@ -15,6 +15,7 @@ import Header from 'Blocks/Header/component';
 import Modes from 'Blocks/Modes/component';
 import SettingsPages from 'Blocks/SettingsPages/component';
 import OptionsPages from 'Blocks/OptionsPages/component';
+import StatisticPage from 'Blocks/StatisticPage/container';
 import Footer from 'Blocks/Footer/component';
 import NotFound from 'Blocks/NotFound/component';
 import Authorization from 'Blocks/Authorization/component';
@@ -49,6 +50,7 @@ const App = () => (
               <Route path="/mode" component={Modes} />
               <Route path="/options" component={OptionsPages} />
               <PrivateRoute path="/settings" component={SettingsPages} />
+              <PrivateRoute path="/statistic" component={StatisticPage} />
               <Redirect to="/404" />
             </Switch>
           </Fragment>

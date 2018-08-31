@@ -5,7 +5,7 @@ import CSSModules from 'react-css-modules';
 import { modes, other } from 'Constants/navigation';
 
 import Logo from 'Blocks/Logo/component';
-import UserMenu from 'Blocks/UserMenu/container';
+import UserMenu from './UserMenu/container';
 
 import styles from './header.module.styl';
 

@@ -124,12 +124,12 @@ class LearningFingers extends Component {
     return (
       <Fragment>
         <h4 className="settings-learning__title">
-Example
+          Example
         </h4>
         <LearningView className="settings-learning__view" lesson={example} />
 
         <h4 className="settings-learning__title">
-Settings
+          Settings
         </h4>
 
         <LearningModeButton toMode="fingers" />
