@@ -28,7 +28,6 @@ const {
   defaults,
 } = require('../dist/compiledServer');
 
-
 mongoose.Promise = global.Promise;
 
 const mongoURI = (() => {

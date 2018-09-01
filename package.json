@@ -55,6 +55,7 @@
     "babel-polyfill": "^6.26.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
+    "chartist": "^0.11.0",
     "classnames": "^2.2.5",
     "config": "^1.30.0",
     "cookie-parser": "^1.4.3",

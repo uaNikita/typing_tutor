@@ -9,6 +9,7 @@ import 'isomorphic-fetch';
 import 'font-awesome/css/font-awesome.css';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import 'rc-slider/assets/index.css';
+import 'chartist/dist/chartist.css';
 
 import 'Static/stylus/main.styl';
 
