@@ -14,26 +14,16 @@ class Block extends Component {
       this.chartEl.current,
       {
         labels: [
-          'First quarter of the year',
-          'Second quarter of the year',
-          'Third quarter of the year',
-          'Fourth quarter of the year'],
-        series: [
-          [60000, 40000, 80000, 70000],
-          [40000, 30000, 70000, 65000],
-          [8000, 3000, 10000, 6000],
+          'a',
+          'b',
+          'c',
+          'd'
         ],
-      },
-      {
-        seriesBarDistance: 10,
-        axisX: {
-          offset: 60,
-        },
-        axisY: {
-          offset: 80,
-          scaleMinSpace: 15,
-        },
-      },
+        series: [
+          [3, 4, 1, 6],
+          [2, 2, 3, 2],
+        ],
+      }
     );
   }
 
