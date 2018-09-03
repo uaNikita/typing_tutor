@@ -43,7 +43,7 @@ const getConfig = (() => {
   let clientConfig = {
     context: path.join(__dirname),
 
-    entry: path.join(__dirname, 'client', 'entry.jsx'),
+    entry: ['@babel/polyfill', path.join(__dirname, 'client', 'entry.jsx')],
 
     output: {
       path: path.join(__dirname, 'dist'),
@@ -224,7 +224,7 @@ const getConfig = (() => {
     const options = {
       watch: mode === 'production',
     };
-    
+
     return [
       _.merge({}, options, commonConfig, clientConfig),
       _.merge({}, options, commonConfig, serverConfig)

@@ -12,7 +12,7 @@ const User = require('../../models/user');
 const Verification = require('../../models/verification');
 const Client = require('../../models/client');
 
-const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: '1d' });
+const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: '15s' });
 
 const generateTokenWithId = clientId => clientId.toString() + crypto.randomBytes(40).toString('hex');
 

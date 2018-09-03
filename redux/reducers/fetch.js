@@ -139,6 +139,8 @@ export const fetchJSON = (...args) => (
                 data,
               } = refreshTokenResponse;
 
+              console.log('refreshTokenResponse', refreshTokenResponse);
+
               if (ok) {
                 dispatch(setRefreshToken(data.refresh));
                 dispatch(setAccessToken(data.access));

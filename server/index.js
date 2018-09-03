@@ -48,7 +48,12 @@ const mongoURI = (() => {
   return `mongodb://${credentials}${host}:${port}/${name}`;
 })();
 
-mongoose.connect(mongoURI, { useNewUrlParser: true });
+mongoose.connect(mongoURI, {
+  useNewUrlParser: true,
+});
+
+mongoose.set('useCreateIndex', true)
+
 mongoose.connection.on('error', () => {
   throw new Error(`unable to connect to database: ${mongoURI}`);
 });
