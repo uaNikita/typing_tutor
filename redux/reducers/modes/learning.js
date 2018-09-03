@@ -258,14 +258,14 @@ export const typeLearningMode = char => (
     if (lessonRest[0] === char) {
       dispatch(typeOnLesson());
 
-      dispatch(addTouch('hit', char));
+      dispatch(addTouch(true, char));
 
       dispatch(updateCharToType());
     }
     else {
       dispatch(pressWrongKeys(idsChar));
 
-      dispatch(addTouch('typo', char));
+      dispatch(addTouch(false, char));
     }
 
     dispatch(processAddStatistic());

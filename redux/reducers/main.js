@@ -94,7 +94,12 @@ export default (state = initialState, action = {}) => {
 
     case ADD_TOUCH:
       return state.updateIn(['sessionStatistic', 'presses'], (presses) => {
-        const type = `${action.touchType}s`;
+        let type = 'typos';
+
+        if (action.hit) {
+          type = 'hits';
+        }
+
         const index = presses.findIndex(c => c.get('character') === action.character);
 
         let updatedPresses;
@@ -190,9 +195,9 @@ export const setIdsCharToType = id => ({
   id,
 });
 
-export const addTouch = (touchType, character) => ({
+export const addTouch = (hit, character) => ({
   type: ADD_TOUCH,
-  touchType,
+  hit,
   character,
 });
 
@@ -261,6 +266,8 @@ export const setAllWithoutAuth = data => (
 
     const userData = data;
     delete userData.modes;
+
+    console.log('userData', userData);
 
     dispatch(setUserState(userData));
 

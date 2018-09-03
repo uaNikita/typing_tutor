@@ -262,12 +262,12 @@ export const typeTextMode = char => (dispatch, getState) => {
     if (charToType === char) {
       dispatch(processTypeEntitiy(textId));
 
-      dispatch(addTouch('hit', char));
+      dispatch(addTouch(true, char));
     }
     else {
       dispatch(pressWrongKeys(idsChar));
 
-      dispatch(addTouch('typo', char));
+      dispatch(addTouch(false, char));
     }
 
     dispatch(processAddStatistic());

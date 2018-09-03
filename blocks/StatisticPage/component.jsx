@@ -8,6 +8,14 @@ class Block extends Component {
   }
 
   componentDidMount() {
+    const {
+      props: {
+        statistic,
+      },
+    } = this;
+
+    console.log('statistic', statistic);
+
     const Chartist = require('chartist');
 
     this.a = new Chartist.Bar(
