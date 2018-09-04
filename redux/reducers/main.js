@@ -267,8 +267,6 @@ export const setAllWithoutAuth = data => (
     const userData = data;
     delete userData.modes;
 
-    console.log('userData', userData);
-
     dispatch(setUserState(userData));
 
     dispatch(init());

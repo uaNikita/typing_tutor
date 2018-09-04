@@ -14,4 +14,6 @@ module.exports = {
     refreshToken: '1/EDaY5h-2MjAMgN8n5wSIU5uQ0lduyzg2dexSfW3jV2s',
     from: 'Touch to type <touchtotype@gmail.com>',
   },
+  accessTokenLiveTime: '15m',
+  refreshTokenLiveTime: '30d',
 };

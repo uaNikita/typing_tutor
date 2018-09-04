@@ -128,8 +128,8 @@ export const fetchJSON = (...args) => (
       .then((response) => {
         if (response.status === 401) {
           return dispatch(requestJSON('/auth/tokens', {
-            headers: {
-              Authorization: `Bearer ${getState().getIn(['fetch', 'refreshToken'])}`,
+            body: {
+              token: getState().getIn(['fetch', 'refreshToken']),
             },
           }))
             .then((refreshTokenResponse) => {
@@ -138,8 +138,6 @@ export const fetchJSON = (...args) => (
                 ok,
                 data,
               } = refreshTokenResponse;
-
-              console.log('refreshTokenResponse', refreshTokenResponse);
 
               if (ok) {
                 dispatch(setRefreshToken(data.refresh));

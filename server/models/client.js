@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
+const config = require('config');
 const APIError = require('../utils/APIError');
 
 const ClientSchema = new mongoose.Schema({
@@ -15,7 +16,7 @@ const ClientSchema = new mongoose.Schema({
   createdAt: {
     type: Date,
     default: Date.now,
-    expires: '30d',
+    expires: config.get('refreshTokenLiveTime'),
     required: true,
   },
 });

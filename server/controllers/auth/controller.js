@@ -12,7 +12,7 @@ const User = require('../../models/user');
 const Verification = require('../../models/verification');
 const Client = require('../../models/client');
 
-const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: '15s' });
+const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: config.get('accessTokenLiveTime') });
 
 const generateTokenWithId = clientId => clientId.toString() + crypto.randomBytes(40).toString('hex');
 
@@ -212,11 +212,12 @@ const restoreAccess = (req, res, next) => {
 };
 
 const getTokens = (req, res, next) => {
-  const token = req.get('Authorization').replace('Bearer ', '');
+  const { token } = req.body;
 
   Client.findOne({ token })
     .exec()
     .then((client) => {
+      console.log('client', client);
       if (client) {
         client.set('token', generateTokenWithId(client.get('id')));
 

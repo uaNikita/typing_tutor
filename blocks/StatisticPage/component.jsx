@@ -14,8 +14,6 @@ class Block extends Component {
       },
     } = this;
 
-    console.log('statistic', statistic);
-
     const Chartist = require('chartist');
 
     this.a = new Chartist.Bar(

@@ -67,9 +67,7 @@ module.exports = (app) => {
         }
         else {
           cb(new APIError({
-            errors: {
-              password: 'Incorrect password',
-            },
+            message: 'Something went wrong',
             status: httpStatus.BAD_REQUEST,
           }));
         }
