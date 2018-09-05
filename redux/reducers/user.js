@@ -40,7 +40,22 @@ export default (state = initialState, action = {}) => {
       return state.mergeDeep(action.data);
 
     case ADD_STATISTIC:
-      return state.mergeIn('statistic', action.statistic);
+      return state.updateIn(['statistic'], (statistic) => {
+        const index = statistic.findIndex(c =>
+          c.get('start') === action.statistic.start
+        );
+
+        let updatedstatistic;
+
+        if (index === -1) {
+          updatedstatistic = statistic.push(Immutable.Map(action.statistic));
+        }
+        else {
+          updatedstatistic = statistic.set(index, action.statistic);
+        }
+
+        return updatedstatistic;
+      });
 
     case SET_HIDDEN_CHARS:
       return state.set('hiddenChars', action.value);
@@ -85,9 +100,9 @@ export const processSetSettings = (() => {
   };
 })();
 
-export const addStatistic = obj => ({
+export const addStatistic = statistic => ({
   type: ADD_STATISTIC,
-  ...obj,
+  statistic,
 });
 
 export const processAddStatistic = (() => {

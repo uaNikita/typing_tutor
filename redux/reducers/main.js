@@ -105,13 +105,10 @@ export default (state = initialState, action = {}) => {
         let updatedPresses;
 
         if (index === -1) {
-          const obj = {
+          updatedPresses = presses.push(Immutable.Map({
             character: action.character,
-          };
-
-          obj[type] = 1;
-
-          updatedPresses = presses.push(Immutable.Map(obj));
+            [type]: 1,
+          }));
         }
         else {
           updatedPresses = presses.updateIn([index], (character) => {
@@ -133,8 +130,7 @@ export default (state = initialState, action = {}) => {
 
     case ZEROING_STATISTIC:
       return state.set('sessionStatistic', Immutable.fromJS({
-        hits: [],
-        typos: [],
+        presses: [],
         start: undefined,
       }));
 

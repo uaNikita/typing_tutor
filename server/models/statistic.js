@@ -33,6 +33,9 @@ StatisticSchema.set('toObject', {
     delete retParam._id;
     delete retParam.__v;
     delete retParam.user;
+
+    retParam.start = retParam.start.getTime();
+    retParam.end = retParam.end.getTime();
   },
 });
 
