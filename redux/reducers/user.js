@@ -41,14 +41,12 @@ export default (state = initialState, action = {}) => {
 
     case ADD_STATISTIC:
       return state.updateIn(['statistic'], (statistic) => {
-        const index = statistic.findIndex(c =>
-          c.get('start') === action.statistic.start
-        );
+        const index = statistic.findIndex(c => c.get('start') === action.statistic.start);
 
         let updatedstatistic;
 
         if (index === -1) {
-          updatedstatistic = statistic.push(Immutable.Map(action.statistic));
+          updatedstatistic = statistic.push(action.statistic);
         }
         else {
           updatedstatistic = statistic.set(index, action.statistic);

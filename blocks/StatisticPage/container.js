@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import Component from './component';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   statistic: state.getIn(['user', 'statistic']).toJS(),
 });
 
