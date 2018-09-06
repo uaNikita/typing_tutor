@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 
@@ -17,6 +17,7 @@ class Block extends Component {
         statistic,
       },
     } = this;
+
 
     const labels = [];
     const series = [[], []];
@@ -54,12 +55,30 @@ class Block extends Component {
         labels,
         series,
       },
+      {
+        axisY: {
+          onlyInteger: true
+        },
+        axisX: {
+          showGrid: false,
+        },
+      },
     );
   }
 
   render() {
     return (
-      <div styleName="chart" ref={this.chartEl} />
+      <Fragment>
+        <div className="filters">
+          <select name="" id="">
+            <option value="1"></option>
+            <option value="2"></option>
+            <option value="3"></option>
+          </select>
+        </div>
+
+        <div styleName="chart" ref={this.chartEl} />
+      </Fragment>
     );
   }
 }
