@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 
 import { getIdsFromCharacter, generateLesson, getFingersSet } from 'Utils';
-import temp from 'Utils/temp';
+import tempCookie from 'Utils/tempCookie';
 import defaults from 'Constants/defaultState';
 
 import { fetchJSON } from '../fetch';
@@ -132,7 +132,7 @@ export const processUpdateFingersOptions = options => (
     dispatch(updateFingersOptions(options));
 
     return dispatch(processAction(
-      () => temp.path(
+      () => tempCookie.path(
         'learning.fingers.options',
         getState().getIn(['learning', 'fingers', 'options']).toJS(),
       ),
@@ -177,7 +177,7 @@ export const processUpdateFreeOptions = options => (
     dispatch(updateFreeOptions(options));
 
     return dispatch(processAction(
-      () => temp.path(
+      () => tempCookie.path(
         'learning.free.options',
         getState().getIn(['learning', 'free', 'options']).toJS(),
       ),

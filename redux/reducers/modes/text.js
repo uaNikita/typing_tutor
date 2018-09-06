@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 
 import { getIdsFromCharacter, normalizeString } from 'Utils';
-import temp from 'Utils/temp';
+import tempCookie from 'Utils/tempCookie';
 import defaults from 'Constants/defaultState';
 import { fetchJSON } from '../fetch';
 import {
@@ -151,7 +151,7 @@ export const processAddText = data => (
     };
 
     return dispatch(processAction(
-      () => temp.path('text', textState.toJS()),
+      () => tempCookie.path('text', textState.toJS()),
       () => dispatch(fetchJSON('/text', { body })),
     ));
   }
@@ -162,7 +162,7 @@ export const processUpdateText = (id, { text, select }) => (
     const normalizedText = normalizeString(text);
 
     return dispatch(processAction(
-      () => temp.path('text', getState().get('text').toJS()),
+      () => tempCookie.path('text', getState().get('text').toJS()),
       () => dispatch(fetchJSON(`/text/${id}`, {
         method: 'PATCH',
         body: {
@@ -185,7 +185,7 @@ export const processSelectText = id => (
     const selectedId = parseInt(id, 10);
 
     return dispatch(processAction(
-      () => temp.path('text.selectedId', selectedId),
+      () => tempCookie.path('text.selectedId', selectedId),
       () => dispatch(fetchJSON(`/text/${id}/select`)),
     ))
       .then(() => dispatch(selectText(selectedId)));
@@ -198,7 +198,7 @@ export const processRefreshText = id => (
     const body = { id };
 
     return dispatch(processAction(
-      () => temp.path('text.entities', getState().getIn(['text', 'entities']).toJS()),
+      () => tempCookie.path('text.entities', getState().getIn(['text', 'entities']).toJS()),
       () => dispatch(fetchJSON('/text/refresh', { body })),
     ));
   }
@@ -240,7 +240,7 @@ export const processTypeEntitiy = id => (
     };
 
     return dispatch(processAction(
-      () => temp.path('text', textState.toJS()),
+      () => tempCookie.path('text', textState.toJS()),
       () => typeEntitiySaveToServer(dispatch, { body }),
     ));
   }

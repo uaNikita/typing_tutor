@@ -1,7 +1,7 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import temp from 'Utils/temp';
+import tempCookie from 'Utils/tempCookie';
 
 import { processAction } from './main';
 import { fetchJSON } from './fetch';
@@ -45,11 +45,13 @@ export default (state = initialState, action = {}) => {
 
         let updatedstatistic;
 
+        const immutableStatistic = Immutable.fromJS(action.statistic);
+
         if (index === -1) {
-          updatedstatistic = statistic.push(action.statistic);
+          updatedstatistic = statistic.push(immutableStatistic);
         }
         else {
-          updatedstatistic = statistic.set(index, action.statistic);
+          updatedstatistic = statistic.set(index, immutableStatistic);
         }
 
         return updatedstatistic;
@@ -90,7 +92,7 @@ export const processSetSettings = (() => {
     dispatch(setState(settings));
 
     return dispatch(processAction(
-      () => temp.assign({
+      () => tempCookie.assign({
         user: settings,
       }),
       () => deferredFetch(dispatch, settings),
@@ -122,7 +124,7 @@ export const processAddStatistic = (() => {
     dispatch(addStatistic(body));
 
     return dispatch(processAction(
-      () => temp.path('user.statistic', getState().getIn(['main', 'statistic'])),
+      () => tempCookie.path('user.statistic', getState().getIn(['main', 'statistic'])),
       () => deferredFetch(dispatch, body),
     ));
   };

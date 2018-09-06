@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
+import CSSModules from 'react-css-modules';
 import _ from 'lodash';
+
+import styles from './statistic.module.styl';
 
 class Block extends Component {
   constructor(props) {
@@ -56,9 +59,11 @@ class Block extends Component {
 
   render() {
     return (
-      <div ref={this.chartEl} />
+      <div styleName="chart" ref={this.chartEl} />
     );
   }
 }
 
-export default Block;
+export default CSSModules(Block, styles, {
+  allowMultiple: true,
+});
