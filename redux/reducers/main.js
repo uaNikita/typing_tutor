@@ -52,10 +52,6 @@ const initialState = Immutable.fromJS({
   mode: 'text',
 
   globalMessage: false,
-
-  lastNoModalLocation: undefined,
-
-  isModal: false,
 });
 
 export default (state = initialState, action = {}) => {
@@ -64,15 +60,7 @@ export default (state = initialState, action = {}) => {
       return state.merge(action.state);
 
     case CLEAR_STATE:
-      return state.mergeWith((prev, next, key) => {
-        let prop = next;
-
-        if (!next && ['lastNoModalLocation', 'isModal'].includes(key)) {
-          prop = prev;
-        }
-
-        return prop;
-      }, initialState);
+      return state.merge(initialState);
 
     case PRESS_KEYS:
       return state.update('pressedKeys', keys => keys.union(action.ids));

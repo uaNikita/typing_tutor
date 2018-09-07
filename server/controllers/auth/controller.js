@@ -217,7 +217,6 @@ const getTokens = (req, res, next) => {
   Client.findOne({ token })
     .exec()
     .then((client) => {
-      console.log('client', client);
       if (client) {
         client.set('token', generateTokenWithId(client.get('id')));
 
@@ -240,18 +239,20 @@ const getTokens = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const checkEmail = (req, res, next) => User.findOne({ email: req.body.email })
-  .then((user) => {
-    if (user) {
-      res.json(httpStatus[200]);
-    }
-    else {
-      throw new APIError({
-        status: httpStatus.NOT_FOUND,
-      });
-    }
-  })
-  .catch(e => next(e));
+const checkEmail = (req, res, next) => (
+  User.findOne({ email: req.body.email })
+    .then((user) => {
+      if (user) {
+        res.json(httpStatus[200]);
+      }
+      else {
+        throw new APIError({
+          status: httpStatus.NOT_FOUND,
+        });
+      }
+    })
+    .catch(e => next(e))
+);
 
 const getUserData = (req, res, next) => (
   User.get(req.user.id)
@@ -278,19 +279,23 @@ const verifyToken = (req, res, next) => (
         default:
       }
 
-      return Promise.all([createClient(user.get('id')), user.save(),
-        // verification.remove().exec()
-      ]).then(([client]) => res.json({
-        type,
-        tokens: {
-          refresh: client.get('token'),
-          access: generateAccessToken({
-            id: user.get('id'),
-            clientId: client.get('id'),
-          }),
-        },
-        ...user.toObject(),
-      }));
+      return Promise
+        .all([
+          createClient(user.get('id')),
+          user.save(),
+          // verification.remove().exec(),
+        ])
+        .then(([client]) => res.json({
+          type,
+          tokens: {
+            refresh: client.get('token'),
+            access: generateAccessToken({
+              id: user.get('id'),
+              clientId: client.get('id'),
+            }),
+          },
+          ...user.toObject(),
+        }));
     })
     .catch(e => next(e))
 );

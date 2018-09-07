@@ -31,12 +31,18 @@ const initialState = Immutable.fromJS({
   },
 });
 
+console.log(1, initialState.mergeDeep({bio:6}).toJS());
+
 export default (state = initialState, action = {}) => {
   switch (action.type) {
     case CLEAR_STATE:
       return state.merge(initialState);
 
     case SET_STATE:
+      console.log('data', action.data);
+      console.log('state', state.toJS());
+      console.log('SET_STATE', state.mergeDeep(action.data).toJS());
+
       return state.mergeDeep(action.data);
 
     case ADD_STATISTIC:

@@ -68,8 +68,6 @@ const select = (req, res, next) => {
     }
   } = req;
 
-  console.log('id', id);
-
   user.set('modes.text.selectedId', parseInt(id, 10));
 
   user.save()

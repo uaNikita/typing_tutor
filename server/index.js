@@ -91,6 +91,8 @@ app.use(async (req, res) => {
 
   tempState = Immutable.fromJS(tempState);
 
+  console.log('tempState', tempState);
+
   // create store
   const store = createStore(reducer, tempState, applyMiddleware(thunk));
 

@@ -2,7 +2,11 @@ import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 
+import { Field, reduxForm } from 'redux-form/immutable';
+import RenderField from 'Blocks/RenderField/component';
+
 import styles from './statistic.module.styl';
+import keyboards from 'Constants/keyboards';
 
 class Block extends Component {
   constructor(props) {
@@ -18,7 +22,7 @@ class Block extends Component {
       },
     } = this;
 
-
+    console.log('statistic', statistic);
     const labels = [];
     const series = [[], []];
 
@@ -70,11 +74,19 @@ class Block extends Component {
     return (
       <Fragment>
         <div className="filters">
-          <select name="" id="">
-            <option value="1"></option>
-            <option value="2"></option>
-            <option value="3"></option>
-          </select>
+          <Field
+            onChange={this.handleOnChange}
+            name="email"
+            component={RenderField}
+            type="select"
+            label="Keyboard"
+          >
+            {keyboards.map(({ name: kbName }) => (
+              <option key={kbName} value={kbName}>
+                {kbName}
+              </option>
+            ))}
+          </Field>
         </div>
 
         <div styleName="chart" ref={this.chartEl} />
@@ -83,6 +95,8 @@ class Block extends Component {
   }
 }
 
-export default CSSModules(Block, styles, {
+export default reduxForm({
+  form: 'statistic',
+})(CSSModules(Block, styles, {
   allowMultiple: true,
-});
+}));
