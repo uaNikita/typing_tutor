@@ -2,6 +2,8 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import Cookies from 'js-cookie';
 
+import defaults from 'Constants/defaultState';
+
 import { clearState as clearLearningState } from './modes/learning';
 import { clearState as clearTextState } from './modes/text';
 import { clearState as clearUserState } from './user';
@@ -11,11 +13,7 @@ const CLEAR_STATE = 'tokens/CLEAR_STATE';
 const SET_REFRESH_TOKEN = 'fetch/SET_REFRESH_TOKEN';
 const SET_ACCESS_TOKEN = 'fetch/SET_ACCESS_TOKEN';
 
-const initialState = Immutable.Map({
-  refreshToken: false,
-
-  accessToken: false,
-});
+const initialState = Immutable.Map(defaults.fetch);
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {

@@ -6,13 +6,6 @@ const APIError = require('../utils/APIError');
 
 const { defaults } = require('../../dist/compiledServer');
 
-const {
-  text: {
-    selectedId,
-    entities,
-  },
-} = defaults;
-
 const UserSchema = new mongoose.Schema({
   name: String,
   email: {
@@ -53,7 +46,7 @@ const UserSchema = new mongoose.Schema({
     interval: {
       type: Number,
       default: defaults.user.metronome.interval,
-    }
+    },
   },
   modes: {
     text: {

@@ -39,10 +39,10 @@ const update = (req, res, next) => {
       text,
       select,
     },
-    params
+    params,
   } = req;
 
-  const id = parseInt(params.id, 10)
+  const id = parseInt(params.id, 10);
 
   const pathToEntites = 'modes.text.entities';
 
@@ -65,7 +65,7 @@ const select = (req, res, next) => {
     user,
     params: {
       id,
-    }
+    },
   } = req;
 
   user.set('modes.text.selectedId', parseInt(id, 10));

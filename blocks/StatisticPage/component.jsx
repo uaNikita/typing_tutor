@@ -1,12 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
-
 import { Field, reduxForm } from 'redux-form/immutable';
+
+import keyboards from 'Constants/keyboards';
+
 import RenderField from 'Blocks/RenderField/component';
 
 import styles from './statistic.module.styl';
-import keyboards from 'Constants/keyboards';
+
 
 class Block extends Component {
   constructor(props) {
@@ -22,7 +24,6 @@ class Block extends Component {
       },
     } = this;
 
-    console.log('statistic', statistic);
     const labels = [];
     const series = [[], []];
 
@@ -61,7 +62,7 @@ class Block extends Component {
       },
       {
         axisY: {
-          onlyInteger: true
+          onlyInteger: true,
         },
         axisX: {
           showGrid: false,

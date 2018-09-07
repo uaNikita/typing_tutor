@@ -52,7 +52,7 @@ mongoose.connect(mongoURI, {
   useNewUrlParser: true,
 });
 
-mongoose.set('useCreateIndex', true)
+mongoose.set('useCreateIndex', true);
 
 mongoose.connection.on('error', () => {
   throw new Error(`unable to connect to database: ${mongoURI}`);
@@ -90,8 +90,6 @@ app.use(async (req, res) => {
   tempState = _.merge({}, defaults, tempState);
 
   tempState = Immutable.fromJS(tempState);
-
-  console.log('tempState', tempState);
 
   // create store
   const store = createStore(reducer, tempState, applyMiddleware(thunk));

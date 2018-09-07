@@ -1,6 +1,7 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
+import defaults from 'Constants/defaultState';
 import tempCookie from 'Utils/tempCookie';
 
 import { processAction } from './main';
@@ -11,27 +12,7 @@ const SET_STATE = 'user/SET_STATE';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
 const SET_HIDDEN_CHARS = 'user/SET_HIDDEN_CHARS';
 
-const initialState = Immutable.fromJS({
-  email: undefined,
-
-  name: undefined,
-
-  bio: undefined,
-
-  statistic: [],
-
-  // text, learning
-  mode: 'text',
-
-  hiddenChars: true,
-
-  metronome: {
-    on: false,
-    interval: 1200,
-  },
-});
-
-console.log(1, initialState.mergeDeep({bio:6}).toJS());
+const initialState = Immutable.fromJS(defaults.user);
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
@@ -39,10 +20,6 @@ export default (state = initialState, action = {}) => {
       return state.merge(initialState);
 
     case SET_STATE:
-      console.log('data', action.data);
-      console.log('state', state.toJS());
-      console.log('SET_STATE', state.mergeDeep(action.data).toJS());
-
       return state.mergeDeep(action.data);
 
     case ADD_STATISTIC:

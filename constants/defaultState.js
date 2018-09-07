@@ -1,7 +1,23 @@
 import Immutable from 'immutable';
 
 export default {
+  fetch: {
+    refreshToken: false,
+
+    accessToken: false,
+  },
   user: {
+    email: undefined,
+
+    name: undefined,
+
+    bio: undefined,
+
+    statistic: [],
+
+    // text, learning
+    mode: 'text',
+
     hiddenChars: true,
 
     metronome: {
