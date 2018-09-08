@@ -67,10 +67,10 @@ export const logOut = () => (dispatch) => {
   Cookies.remove('tt_temp');
 
   dispatch(clearState());
+  dispatch(clearMainState());
+  dispatch(clearUserState());
   dispatch(clearLearningState());
   dispatch(clearTextState());
-  dispatch(clearUserState());
-  dispatch(clearMainState());
 };
 
 const requestJSON = (url, params, withoutAuthorization) => (

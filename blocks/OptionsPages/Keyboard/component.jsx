@@ -53,9 +53,9 @@ class Keyboard extends Component {
           type="select"
           label="Layout"
         >
-          {keyboards.map(({ name: kbName }) => (
-            <option key={kbName} value={kbName}>
-              {kbName}
+          {keyboards.map(({ name }) => (
+            <option key={name} value={name}>
+              {name}
             </option>
           ))}
         </Field>

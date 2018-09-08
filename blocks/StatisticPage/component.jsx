@@ -9,7 +9,6 @@ import RenderField from 'Blocks/RenderField/component';
 
 import styles from './statistic.module.styl';
 
-
 class Block extends Component {
   constructor(props) {
     super(props);
@@ -74,7 +73,7 @@ class Block extends Component {
   render() {
     return (
       <Fragment>
-        <div className="filters">
+        <div styleName="filters">
           <Field
             onChange={this.handleOnChange}
             name="email"
@@ -82,9 +81,9 @@ class Block extends Component {
             type="select"
             label="Keyboard"
           >
-            {keyboards.map(({ name: kbName }) => (
-              <option key={kbName} value={kbName}>
-                {kbName}
+            {keyboards.map(({ name }) => (
+              <option key={name} value={name}>
+                {name}
               </option>
             ))}
           </Field>
