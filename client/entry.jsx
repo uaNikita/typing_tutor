@@ -9,6 +9,7 @@ import 'font-awesome/css/font-awesome.css';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import 'rc-slider/assets/index.css';
 import 'chartist/dist/chartist.css';
+import 'react-day-picker/lib/style.css';
 
 import 'Static/stylus/main.styl';
 

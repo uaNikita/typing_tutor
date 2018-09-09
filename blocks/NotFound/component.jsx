@@ -19,6 +19,7 @@ const Block = () => (
       </p>
       <p>
         Go back to
+        {' '}
         <Link to="/">
           home
         </Link>

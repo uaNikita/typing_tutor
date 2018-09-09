@@ -2,8 +2,10 @@ import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 import { Field, reduxForm } from 'redux-form/immutable';
+import DayPickerInput from 'react-day-picker/DayPickerInput';
 
 import keyboards from 'Constants/keyboards';
+import modes from 'Constants/modes';
 
 import RenderField from 'Blocks/RenderField/component';
 
@@ -22,6 +24,8 @@ class Block extends Component {
         statistic,
       },
     } = this;
+
+    console.log('statistic', statistic);
 
     const labels = [];
     const series = [[], []];
@@ -70,13 +74,35 @@ class Block extends Component {
     );
   }
 
+  handleChangeMode = () => {
+    console.log('handleChangeMode');
+  };
+
+  handleChangeKeyboard = () => {
+    console.log('handleChangeKeyboard');
+  };
+
   render() {
     return (
       <Fragment>
         <div styleName="filters">
           <Field
-            onChange={this.handleOnChange}
-            name="email"
+            onChange={this.handleChangeMode}
+            name="mode"
+            component={RenderField}
+            type="select"
+            label="Mode"
+          >
+            {modes.map(name => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+          </Field>
+
+          <Field
+            onChange={this.handleChangeKeyboard}
+            name="keyboard"
             component={RenderField}
             type="select"
             label="Keyboard"
@@ -87,6 +113,8 @@ class Block extends Component {
               </option>
             ))}
           </Field>
+
+          <DayPickerInput />
         </div>
 
         <div styleName="chart" ref={this.chartEl} />
