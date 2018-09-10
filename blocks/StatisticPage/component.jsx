@@ -25,8 +25,6 @@ class Block extends Component {
       },
     } = this;
 
-    console.log('statistic', statistic);
-
     const labels = [];
     const series = [[], []];
 
@@ -74,12 +72,26 @@ class Block extends Component {
     );
   }
 
+  getData = () => {
+
+  }
+
   handleChangeMode = () => {
-    console.log('handleChangeMode');
+    this.getData();
   };
 
   handleChangeKeyboard = () => {
-    console.log('handleChangeKeyboard');
+    this.getData();
+  };
+
+  handleChangeFrom = (selectedDay, modifiers, dayPickerInput) => {
+    const {
+      props: {
+        change,
+      },
+    } = this;
+
+    change('from', dayPickerInput.state.value);
   };
 
   render() {
@@ -114,7 +126,17 @@ class Block extends Component {
             ))}
           </Field>
 
-          <DayPickerInput />
+          <DayPickerInput
+            component={props => (
+              <Field
+                {...props}
+                name="from"
+                component={RenderField}
+                label="From"
+              />
+            )}
+            onDayChange={this.handleChangeFrom}
+          />
         </div>
 
         <div styleName="chart" ref={this.chartEl} />
