@@ -73,19 +73,22 @@ export const logOut = () => (dispatch) => {
   dispatch(clearTextState());
 };
 
-const requestJSON = (url, params, withoutAuthorization) => (
+const requestJSON = (url, params, opts) => (
   (dispatch, getState) => {
+    const headers = {
+      'Content-Type': 'application/json',
+    };
+
+    const options = opts || {};
+
+    if (!options.withoutAuthorization) {
+      headers.Authorization = `Bearer ${getState().getIn(['fetch', 'accessToken'])}`;
+    }
+
     const newParams = _.merge({
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${getState().getIn(['fetch', 'accessToken'])}`,
-      },
+      headers,
     }, params);
-
-    if (withoutAuthorization) {
-      delete newParams.headers.Authorization;
-    }
 
     if (typeof newParams.body === 'object') {
       newParams.body = JSON.stringify(newParams.body);
@@ -140,6 +143,16 @@ export const fetchJSON = (...args) => (
               if (ok) {
                 dispatch(setRefreshToken(data.refresh));
                 dispatch(setAccessToken(data.access));
+
+                // check for responseFromServer in options argument
+                if (args[2]) {
+                  const { responseFromServer } = args[2];
+
+                  if (responseFromServer) {
+                    responseFromServer.cookie('tt_refresh', getState().getIn(['fetch', 'refreshToken']));
+                    responseFromServer.cookie('tt_access', getState().getIn(['fetch', 'accessToken']));
+                  }
+                }
 
                 return dispatch(fetchJSON(...args));
               }

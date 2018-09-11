@@ -18,7 +18,11 @@ class SignUp extends Component {
       },
     } = this;
 
-    return fetchJSON('/auth/signup', { body: values.toJS() }, true)
+    return fetchJSON(
+      '/auth/signup',
+      { body: values.toJS() },
+      { withoutAuthorization: true },
+    )
       .then((res) => {
         if (res.ok) {
           this.setState({

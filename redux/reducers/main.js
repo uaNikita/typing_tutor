@@ -265,15 +265,10 @@ export const setAllWithAuth = ({ tokens, ...rest }) => (
   }
 );
 
-export const requestAllWithoutAuth = resOnServer => (
-  (dispatch, getState) => (
-    dispatch(fetchJSON('/user', { method: 'GET' }))
+export const getAllUserData = options => (
+  dispatch => (
+    dispatch(fetchJSON('/user', { method: 'GET' }, options))
       .then((res) => {
-        if (resOnServer) {
-          resOnServer.cookie('tt_refresh', getState().getIn(['fetch', 'refreshToken']));
-          resOnServer.cookie('tt_access', getState().getIn(['fetch', 'accessToken']));
-        }
-
         if (res.ok) {
           dispatch(setAllWithoutAuth(res.data));
         }

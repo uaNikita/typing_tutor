@@ -24,7 +24,7 @@ const {
   setRefreshToken,
   setAccessToken,
   init,
-  requestAllWithoutAuth,
+  getAllUserData,
   defaults,
 } = require('../dist/compiledServer');
 
@@ -101,7 +101,9 @@ app.use(async (req, res) => {
     dispatch(setAccessToken(accessCookie));
     dispatch(setRefreshToken(refreshCookie));
 
-    await dispatch(requestAllWithoutAuth(res))
+    await dispatch(getAllUserData({
+      responseFromServer: res,
+    }))
       .then(({ ok }) => {
         if (!ok) {
           res.clearCookie('tt_refresh');
