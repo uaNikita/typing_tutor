@@ -101,7 +101,7 @@ app.use(async (req, res) => {
     dispatch(setAccessToken(accessCookie));
     dispatch(setRefreshToken(refreshCookie));
 
-    await dispatch(requestAllWithoutAuth())
+    await dispatch(requestAllWithoutAuth(res))
       .then(({ ok }) => {
         if (!ok) {
           res.clearCookie('tt_refresh');

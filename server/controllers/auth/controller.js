@@ -224,7 +224,7 @@ const getTokens = (req, res, next) => {
           .then(() => res.json({
             refresh: client.get('token'),
             access: generateAccessToken({
-              id: client.get('user'),
+              id: client.get('user').toString(),
               clientId: client.get('id'),
             }),
           }));
