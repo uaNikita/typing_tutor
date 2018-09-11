@@ -18,17 +18,70 @@ class Block extends Component {
     this.chartEl = React.createRef();
   }
 
+  state = {
+    mode: undefined,
+    keyboard: undefined,
+    from: undefined,
+    to: undefined,
+  }
+
   componentDidMount() {
+    // eslint-disable-next-line global-require
+    const Chartist = require('chartist');
+
+    this.chart = new Chartist.Bar(
+      this.chartEl.current,
+      this.getChartistData(),
+      {
+        axisY: {
+          onlyInteger: true,
+        },
+        axisX: {
+          showGrid: false,
+        },
+      },
+    );
+  }
+
+  componentDidUpdate() {
+    this.chart.update(this.getChartistData());
+  }
+
+  getChartistData = () => {
     const {
       props: {
         statistic,
       },
+      state,
     } = this;
 
     const labels = [];
     const series = [[], []];
 
     _(statistic)
+      .filter((s) => {
+        let mode = true;
+        if (state.mode) {
+          mode = s.mode === state.mode;
+        }
+
+        let keyboard = true;
+        if (state.keyboard) {
+          keyboard = s.keyboard === state.keyboard;
+        }
+
+        let from = true;
+        if (state.from) {
+          from = s.from > state.from;
+        }
+
+        let to = true;
+        if (state.to) {
+          to = s.to < state.to;
+        }
+
+        return mode && keyboard && from && to;
+      })
       .map('presses')
       .flatten()
       .each((c) => {
@@ -52,37 +105,15 @@ class Block extends Component {
         }
       });
 
-    // eslint-disable-next-line global-require
-    const Chartist = require('chartist');
-
-    this.a = new Chartist.Bar(
-      this.chartEl.current,
-      {
-        labels,
-        series,
-      },
-      {
-        axisY: {
-          onlyInteger: true,
-        },
-        axisX: {
-          showGrid: false,
-        },
-      },
-    );
+    return {
+      labels,
+      series,
+    };
   }
 
-  getData = () => {
+  handleChangeMode = (e, mode) => this.setState({ mode });
 
-  }
-
-  handleChangeMode = () => {
-    this.getData();
-  };
-
-  handleChangeKeyboard = () => {
-    this.getData();
-  };
+  handleChangeKeyboard = (e, keyboard) => this.setState({ keyboard });
 
   handleChangeFrom = (selectedDay, modifiers, dayPickerInput) => {
     const {
