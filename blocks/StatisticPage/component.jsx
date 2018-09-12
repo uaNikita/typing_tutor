@@ -111,9 +111,15 @@ class Block extends Component {
     };
   }
 
-  handleChangeMode = (e, mode) => this.setState({ mode });
+  getOptimizedValue = mode => mode || undefined;
 
-  handleChangeKeyboard = (e, keyboard) => this.setState({ keyboard });
+  handleChangeMode = (e, mode) => (
+    this.setState({ mode: this.getOptimizedValue(mode) })
+  );
+
+  handleChangeKeyboard = (e, keyboard) => (
+    this.setState({ mode: this.getOptimizedValue(keyboard) })
+  );
 
   handleChangeFrom = (selectedDay, modifiers, dayPickerInput) => {
     const {
@@ -126,6 +132,22 @@ class Block extends Component {
   };
 
   render() {
+    const modesOptions = modes.map(name => (
+      <option key={name} value={name}>
+        {name}
+      </option>
+    ));
+
+    modesOptions.unshift(<option key="all" value="">All</option>);
+
+    const keyboardsOptions = keyboards.map(({ name }) => (
+      <option key={name} value={name}>
+        {name}
+      </option>
+    ));
+
+    keyboardsOptions.unshift(<option key="all" value="">All</option>);
+
     return (
       <Fragment>
         <div styleName="filters">
@@ -136,11 +158,7 @@ class Block extends Component {
             type="select"
             label="Mode"
           >
-            {modes.map(name => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
+            {modesOptions}
           </Field>
 
           <Field
@@ -150,11 +168,7 @@ class Block extends Component {
             type="select"
             label="Keyboard"
           >
-            {keyboards.map(({ name }) => (
-              <option key={name} value={name}>
-                {name}
-              </option>
-            ))}
+            {keyboardsOptions}
           </Field>
 
           <DayPickerInput
