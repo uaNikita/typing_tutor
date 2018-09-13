@@ -8,6 +8,7 @@ import keyboards from 'Constants/keyboards';
 import modes from 'Constants/modes';
 
 import RenderField from 'Blocks/RenderField/component';
+import DayPickerField from './DayPickerField';
 
 import styles from './statistic.module.styl';
 
@@ -171,17 +172,13 @@ class Block extends Component {
             {keyboardsOptions}
           </Field>
 
-          <DayPickerInput
-            component={props => (
-              <Field
-                {...props}
-                name="from"
-                component={RenderField}
-                label="From"
-              />
-            )}
-            onDayChange={this.handleChangeFrom}
+          <DayPickerField
+            name="from1"
+            component={RenderField}
+            label="From"
           />
+
+          <DayPickerInput />
         </div>
 
         <div styleName="chart" ref={this.chartEl} />
