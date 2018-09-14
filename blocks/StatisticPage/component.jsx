@@ -8,7 +8,7 @@ import keyboards from 'Constants/keyboards';
 import modes from 'Constants/modes';
 
 import RenderField from 'Blocks/RenderField/component';
-import DayPickerField from './DayPickerField';
+import DayPickerField from './DayPickerField/component';
 
 import styles from './statistic.module.styl';
 
@@ -115,21 +115,29 @@ class Block extends Component {
   getOptimizedValue = mode => mode || undefined;
 
   handleChangeMode = (e, mode) => (
-    this.setState({ mode: this.getOptimizedValue(mode) })
+    this.setState({
+      mode: this.getOptimizedValue(mode),
+    })
   );
 
   handleChangeKeyboard = (e, keyboard) => (
-    this.setState({ mode: this.getOptimizedValue(keyboard) })
+    this.setState({
+      mode: this.getOptimizedValue(keyboard),
+    })
   );
 
-  handleChangeFrom = (selectedDay, modifiers, dayPickerInput) => {
+  handleChangeFrom = (day) => {
     const {
       props: {
         change,
       },
     } = this;
 
-    change('from', dayPickerInput.state.value);
+    this.setState({
+      from: this.getOptimizedValue(day),
+    });
+
+    change('from', day.formatted);
   };
 
   render() {
@@ -173,9 +181,10 @@ class Block extends Component {
           </Field>
 
           <DayPickerField
-            name="from1"
+            name="from"
             component={RenderField}
             label="From"
+            onChange={this.handleChangeFrom}
           />
 
           <DayPickerInput />
