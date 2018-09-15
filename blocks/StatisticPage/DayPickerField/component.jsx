@@ -18,22 +18,21 @@ class Block extends Component {
     })
   );
 
-  handleBlur = () => (
-    this.setState({
-      show: false,
-    })
-  );
-
   handleDayClick = (day) => {
     const {
       props: {
+        name,
+        change,
         onChange,
       },
     } = this;
 
-    onChange({
-      original: day,
-      formatted: format(day, 'DD/MM/YYYY'),
+    change(name, format(day, 'DD MMM YYYY'));
+
+    onChange(day);
+
+    this.setState({
+      show: false,
     });
   };
 
@@ -50,7 +49,6 @@ class Block extends Component {
         <Field
           {...props}
           onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
         />
 
         <CSSTransition

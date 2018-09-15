@@ -111,3 +111,18 @@ export const normalizeString = (string) => {
 
   return decodeURIComponent(result);
 };
+
+export const closestEl = (el, selector) => {
+  let closest = el;
+
+  // traverse parents
+  while (closest) {
+    if (closest && closest.matches(selector)) {
+      break;
+    }
+
+    closest = closest.parentElement;
+  }
+
+  return closest;
+};

@@ -2,7 +2,6 @@ import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 import { Field, reduxForm } from 'redux-form/immutable';
-import DayPickerInput from 'react-day-picker/DayPickerInput';
 
 import keyboards from 'Constants/keyboards';
 import modes from 'Constants/modes';
@@ -24,7 +23,7 @@ class Block extends Component {
     keyboard: undefined,
     from: undefined,
     to: undefined,
-  }
+  };
 
   componentDidMount() {
     // eslint-disable-next-line global-require
@@ -73,12 +72,12 @@ class Block extends Component {
 
         let from = true;
         if (state.from) {
-          from = s.from > state.from;
+          from = s.start > state.from.getTime();
         }
 
         let to = true;
         if (state.to) {
-          to = s.to < state.to;
+          to = s.start < state.to.getTime();
         }
 
         return mode && keyboard && from && to;
@@ -110,7 +109,7 @@ class Block extends Component {
       labels,
       series,
     };
-  }
+  };
 
   getOptimizedValue = mode => mode || undefined;
 
@@ -126,21 +125,25 @@ class Block extends Component {
     })
   );
 
-  handleChangeFrom = (day) => {
+  handleChangeFrom = day => (
+    this.setState({
+      from: this.getOptimizedValue(day),
+    })
+  );
+
+  handleChangeTo = day => (
+    this.setState({
+      from: this.getOptimizedValue(day),
+    })
+  );
+
+  render() {
     const {
       props: {
         change,
       },
     } = this;
 
-    this.setState({
-      from: this.getOptimizedValue(day),
-    });
-
-    change('from', day.formatted);
-  };
-
-  render() {
     const modesOptions = modes.map(name => (
       <option key={name} value={name}>
         {name}
@@ -184,10 +187,17 @@ class Block extends Component {
             name="from"
             component={RenderField}
             label="From"
+            change={change}
             onChange={this.handleChangeFrom}
           />
 
-          <DayPickerInput />
+          <DayPickerField
+            name="to"
+            component={RenderField}
+            label="To"
+            change={change}
+            onChange={this.handleChangeTo}
+          />
         </div>
 
         <div styleName="chart" ref={this.chartEl} />
