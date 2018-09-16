@@ -5,11 +5,35 @@ import { CSSTransition } from 'react-transition-group';
 import DayPicker from 'react-day-picker';
 import format from 'date-fns/format';
 
+import { closestEl } from 'Utils';
+
 import styles from './day-picker-field.module.styl';
 
 class Block extends Component {
   state = {
     show: false,
+  };
+
+  componentDidMount() {
+    document.addEventListener('click', this.closeIfNeeded);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener('click', this.closeIfNeeded);
+  }
+
+  closeIfNeeded = (e) => {
+    const {
+      props: {
+        name,
+      },
+    } = this;
+
+    if (!closestEl(e.target, `.daypicker_${name}`)) {
+      this.setState({
+        show: false,
+      });
+    }
   };
 
   handleFocus = () => (
@@ -45,7 +69,7 @@ class Block extends Component {
     } = this;
 
     return (
-      <div styleName="daypicker">
+      <div className={`daypicker_${props.name}`} styleName="daypicker">
         <Field
           {...props}
           onFocus={this.handleFocus}
@@ -53,7 +77,7 @@ class Block extends Component {
 
         <CSSTransition
           in={show}
-          timeout={300}
+          timeout={150}
           classNames={{
             enter: styles.enter,
             enterActive: styles['enter-active'],

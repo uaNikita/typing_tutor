@@ -6,10 +6,13 @@ import { Field, reduxForm } from 'redux-form/immutable';
 import keyboards from 'Constants/keyboards';
 import modes from 'Constants/modes';
 
+import { validateField } from 'Utils/validation';
+
 import RenderField from 'Blocks/RenderField/component';
 import DayPickerField from './DayPickerField/component';
 
 import styles from './statistic.module.styl';
+
 
 class Block extends Component {
   constructor(props) {
@@ -206,8 +209,15 @@ class Block extends Component {
   }
 }
 
+const validate = values => ({
+  ...validateDate('from', values.get('from')),
+  ...validateDate('to', values.get('to')),
+});
+
+
 export default reduxForm({
   form: 'statistic',
+  validate,
 })(CSSModules(Block, styles, {
   allowMultiple: true,
 }));

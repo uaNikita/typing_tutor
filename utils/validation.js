@@ -46,3 +46,20 @@ export const validatePassword = (name, val) => {
 
   return errors;
 };
+
+export const validateDate = (name, val) => {
+  const errors = {
+    ...validateField(name, val),
+  };
+
+  if (!errors[name]) {
+    if (val.length < 5) {
+      errors[name] = 'Must have 5 or more characters';
+    }
+    else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/.test(val)) {
+      errors[name] = 'Must contain one upper and lower letters, one number';
+    }
+  }
+
+  return errors;
+};
