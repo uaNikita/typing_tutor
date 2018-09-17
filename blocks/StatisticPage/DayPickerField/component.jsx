@@ -5,7 +5,7 @@ import { Field } from 'redux-form/immutable';
 import { CSSTransition } from 'react-transition-group';
 import DayPicker from 'react-day-picker';
 import format from 'date-fns/format';
-import parse from 'date-fns/parse'
+import parse from 'date-fns/parse';
 
 import { closestEl } from 'Utils';
 
@@ -56,7 +56,7 @@ class Block extends Component {
       },
     } = this;
 
-    change(name, format(day, 'YYYY-M-D'));
+    change(name, format(day, 'YYYY-MM-DD'));
 
     onChange(day);
 
@@ -84,7 +84,7 @@ class Block extends Component {
     this.setState({
       day: day,
     });
-  }
+  };
 
   render() {
     const {
@@ -100,23 +100,20 @@ class Block extends Component {
         <Field
           {...props}
           component={RenderField}
-          placeholder="YYYY-M-D"
+          placeholder="YYYY-MM-DD"
           onFocus={this.handleFocus}
           onChange={this.handleChange}
           normalize={value => {
-            const onlyNums = value.replace(/\D/g, '')
+            let formattedDate = value.replace(/\D/g, '');
 
-            if (onlyNums.length <= 4) {
-              return onlyNums
+            if (formattedDate.length > 4 && formattedDate.length <= 6) {
+              return `${formattedDate.slice(0, 4)}-${formattedDate.slice(4)}`;
+            }
+            else if (formattedDate.length > 6) {
+              formattedDate = `${formattedDate.slice(0, 4)}-${formattedDate.slice(4, 6)}-${formattedDate.slice(6, 8)}`;
             }
 
-            if (onlyNums.length <= 6) {
-              return `${onlyNums.slice(0, 4)}-${onlyNums.slice(4)}`
-            }
-
-            console.log('onlyNums', onlyNums);
-
-            return `${onlyNums.slice(0, 4)}-${onlyNums.slice(4, 6)}-${onlyNums.slice(6, 8)}`
+            return formattedDate;
           }}
         />
 
