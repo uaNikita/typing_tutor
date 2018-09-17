@@ -52,13 +52,10 @@ export const validateDate = (name, val) => {
     ...validateField(name, val),
   };
 
-  if (!errors[name]) {
-    if (val.length < 5) {
-      errors[name] = 'Must have 5 or more characters';
-    }
-    else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).{5,}$/.test(val)) {
-      errors[name] = 'Must contain one upper and lower letters, one number';
-    }
+  console.log('val', name, val);
+
+  if (!errors[name] && _.isNaN(val)) {
+    errors[name] = 'Must be in YYYY-M-D format, example 2018-05-15';
   }
 
   return errors;

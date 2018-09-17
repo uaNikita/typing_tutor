@@ -6,7 +6,7 @@ import { Field, reduxForm } from 'redux-form/immutable';
 import keyboards from 'Constants/keyboards';
 import modes from 'Constants/modes';
 
-import { validateField } from 'Utils/validation';
+import { validateDate } from 'Utils/validation';
 
 import RenderField from 'Blocks/RenderField/component';
 import DayPickerField from './DayPickerField/component';
@@ -74,12 +74,12 @@ class Block extends Component {
         }
 
         let from = true;
-        if (state.from) {
+        if (state.from && state.from.getTime) {
           from = s.start > state.from.getTime();
         }
 
         let to = true;
-        if (state.to) {
+        if (state.to && state.from.to) {
           to = s.start < state.to.getTime();
         }
 
@@ -188,7 +188,6 @@ class Block extends Component {
 
           <DayPickerField
             name="from"
-            component={RenderField}
             label="From"
             change={change}
             onChange={this.handleChangeFrom}
@@ -196,7 +195,6 @@ class Block extends Component {
 
           <DayPickerField
             name="to"
-            component={RenderField}
             label="To"
             change={change}
             onChange={this.handleChangeTo}

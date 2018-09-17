@@ -27,6 +27,7 @@ class RenderField extends Component {
         type,
         className,
         children,
+        placeholder,
         meta: {
           submitting,
           submitFailed,
@@ -67,6 +68,7 @@ class RenderField extends Component {
       className: 'field__text',
       type,
       id: `field-${input.name}`,
+      placeholder,
     };
 
 

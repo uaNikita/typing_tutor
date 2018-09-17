@@ -1,16 +1,21 @@
 import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
+import _ from 'lodash';
 import { Field } from 'redux-form/immutable';
 import { CSSTransition } from 'react-transition-group';
 import DayPicker from 'react-day-picker';
 import format from 'date-fns/format';
+import parse from 'date-fns/parse'
 
 import { closestEl } from 'Utils';
+
+import RenderField from 'Blocks/RenderField/component';
 
 import styles from './day-picker-field.module.styl';
 
 class Block extends Component {
   state = {
+    day: undefined,
     show: false,
   };
 
@@ -51,19 +56,41 @@ class Block extends Component {
       },
     } = this;
 
-    change(name, format(day, 'DD MMM YYYY'));
+    change(name, format(day, 'YYYY-M-D'));
 
     onChange(day);
 
     this.setState({
       show: false,
+      day,
     });
   };
+
+  handleChange = (e, value) => {
+    const {
+      props: {
+        name,
+        change,
+        onChange,
+      },
+    } = this;
+
+    const day = new Date(value);
+
+    // change(name, format(day, 'YYYY-M-D'));
+
+    onChange(day);
+
+    this.setState({
+      day: day,
+    });
+  }
 
   render() {
     const {
       props,
       state: {
+        day,
         show,
       },
     } = this;
@@ -72,7 +99,25 @@ class Block extends Component {
       <div className={`daypicker_${props.name}`} styleName="daypicker">
         <Field
           {...props}
+          component={RenderField}
+          placeholder="YYYY-M-D"
           onFocus={this.handleFocus}
+          onChange={this.handleChange}
+          normalize={value => {
+            const onlyNums = value.replace(/\D/g, '')
+
+            if (onlyNums.length <= 4) {
+              return onlyNums
+            }
+
+            if (onlyNums.length <= 6) {
+              return `${onlyNums.slice(0, 4)}-${onlyNums.slice(4)}`
+            }
+
+            console.log('onlyNums', onlyNums);
+
+            return `${onlyNums.slice(0, 4)}-${onlyNums.slice(4, 6)}-${onlyNums.slice(6, 8)}`
+          }}
         />
 
         <CSSTransition
@@ -89,6 +134,7 @@ class Block extends Component {
           <div styleName="overlay">
             <div className="DayPickerInput-Overlay">
               <DayPicker
+                selectedDays={day}
                 onDayClick={this.handleDayClick}
               />
             </div>
