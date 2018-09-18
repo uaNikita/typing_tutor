@@ -142,6 +142,7 @@ class Block extends Component {
 
   render() {
     const {
+      props,
       props: {
         change,
       },

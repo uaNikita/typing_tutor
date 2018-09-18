@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
-import _ from 'lodash';
 import { Field } from 'redux-form/immutable';
 import { CSSTransition } from 'react-transition-group';
 import DayPicker from 'react-day-picker';
 import format from 'date-fns/format';
-import parse from 'date-fns/parse';
+import startOfDay from 'date-fns/start_of_day';
 
 import { closestEl } from 'Utils';
 
@@ -47,7 +46,7 @@ class Block extends Component {
     })
   );
 
-  handleDayClick = (day) => {
+  handleDayClick = (selectedDay) => {
     const {
       props: {
         name,
@@ -55,6 +54,8 @@ class Block extends Component {
         onChange,
       },
     } = this;
+
+    const day = startOfDay(selectedDay);
 
     change(name, format(day, 'YYYY-MM-DD'));
 
@@ -69,21 +70,15 @@ class Block extends Component {
   handleChange = (e, value) => {
     const {
       props: {
-        name,
-        change,
         onChange,
       },
     } = this;
 
     const day = new Date(value);
 
-    // change(name, format(day, 'YYYY-M-D'));
-
     onChange(day);
 
-    this.setState({
-      day: day,
-    });
+    this.setState({ day });
   };
 
   render() {
@@ -103,11 +98,11 @@ class Block extends Component {
           placeholder="YYYY-MM-DD"
           onFocus={this.handleFocus}
           onChange={this.handleChange}
-          normalize={value => {
+          normalize={(value) => {
             let formattedDate = value.replace(/\D/g, '');
 
             if (formattedDate.length > 4 && formattedDate.length <= 6) {
-              return `${formattedDate.slice(0, 4)}-${formattedDate.slice(4)}`;
+              formattedDate = `${formattedDate.slice(0, 4)}-${formattedDate.slice(4)}`;
             }
             else if (formattedDate.length > 6) {
               formattedDate = `${formattedDate.slice(0, 4)}-${formattedDate.slice(4, 6)}-${formattedDate.slice(6, 8)}`;

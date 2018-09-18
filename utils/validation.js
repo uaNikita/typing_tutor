@@ -1,11 +1,10 @@
-export const requiredError = 'Please fill out this field';
-
+import _ from 'lodash';
 
 export const validateField = (name, val) => {
   const errors = {};
 
   if (!val) {
-    errors[name] = requiredError;
+    errors[name] = 'Please fill out this field';
   }
 
   return errors;
@@ -52,10 +51,12 @@ export const validateDate = (name, val) => {
     ...validateField(name, val),
   };
 
-  console.log('val', name, val);
+  if (!errors[name] ) {
+    const time = new Date(val).getTime();
 
-  if (!errors[name] && _.isNaN(val)) {
-    errors[name] = 'Must be in YYYY-M-D format, example 2018-05-15';
+    if ( _.isNaN(time)) {
+      errors[name] = 'Bad format, try YYYY-MM-DD, example: 2018-05-15';
+    }
   }
 
   return errors;
