@@ -51,10 +51,10 @@ export const validateDate = (name, val) => {
     ...validateField(name, val),
   };
 
-  if (!errors[name] ) {
+  if (!errors[name]) {
     const time = new Date(val).getTime();
 
-    if ( _.isNaN(time)) {
+    if (_.isNaN(time)) {
       errors[name] = 'Bad format, try YYYY-MM-DD, example: 2018-05-15';
     }
   }

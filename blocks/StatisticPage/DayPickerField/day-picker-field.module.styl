@@ -5,17 +5,24 @@
    position: relative;
    top: -13px;
    transition: opacity linear .15s, top linear .15s;
-   
+   &_input-error
+      top: 13px
 
 .enter
    top: 15px;
    opacity 0
+   &.overlay_input-error
+      top: 41px;
    &-active
-      top: 0;
+      top: -13px;
       opacity 1
+      &.overlay_input-error
+         top: 13px;
 
 .exit
    &-active
       top: 15px;
       opacity 0
+      &.overlay_input-error
+         top: 41px;
 

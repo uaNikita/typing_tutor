@@ -5,6 +5,7 @@ import { CSSTransition } from 'react-transition-group';
 import DayPicker from 'react-day-picker';
 import format from 'date-fns/format';
 import startOfDay from 'date-fns/start_of_day';
+import classNames from 'classnames';
 
 import { closestEl } from 'Utils';
 
@@ -16,6 +17,7 @@ class Block extends Component {
   state = {
     day: undefined,
     show: false,
+    error: false,
   };
 
   componentDidMount() {
@@ -81,14 +83,27 @@ class Block extends Component {
     this.setState({ day });
   };
 
+  handleUpdate = (input, meta) => {
+    const error = meta.submitFailed || (meta.error && input.value && meta.touched);
+
+    this.setState({
+      error,
+    });
+  }
+
   render() {
     const {
       props,
       state: {
         day,
         show,
+        error,
       },
     } = this;
+
+    const overlayStyleName = classNames('overlay', {
+      'overlay_input-error': error,
+    });
 
     return (
       <div className={`daypicker_${props.name}`} styleName="daypicker">
@@ -98,6 +113,7 @@ class Block extends Component {
           placeholder="YYYY-MM-DD"
           onFocus={this.handleFocus}
           onChange={this.handleChange}
+          onUpdate={this.handleUpdate}
           normalize={(value) => {
             let formattedDate = value.replace(/\D/g, '');
 
@@ -114,7 +130,7 @@ class Block extends Component {
 
         <CSSTransition
           in={show}
-          timeout={150}
+          timeout={10000}
           classNames={{
             enter: styles.enter,
             enterActive: styles['enter-active'],
@@ -123,7 +139,7 @@ class Block extends Component {
           }}
           unmountOnExit
         >
-          <div styleName="overlay">
+          <div styleName={overlayStyleName}>
             <div className="DayPickerInput-Overlay">
               <DayPicker
                 selectedDays={day}

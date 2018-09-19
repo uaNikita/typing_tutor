@@ -10,6 +10,20 @@ class RenderField extends Component {
     showPassword: false,
   };
 
+  componentDidUpdate() {
+    const {
+      props: {
+        input,
+        meta,
+        onUpdate,
+      },
+    } = this;
+
+    if (onUpdate) {
+      onUpdate(input, meta);
+    }
+  }
+
   passwordHandleClick = (e) => {
     e.preventDefault();
 
