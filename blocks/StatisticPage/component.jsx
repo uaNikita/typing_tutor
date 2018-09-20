@@ -18,7 +18,9 @@ class Block extends Component {
   constructor(props) {
     super(props);
 
-    this.chartEl = React.createRef();
+    this.chartCharactersEl = React.createRef();
+    this.chartHitsTyposEl = React.createRef();
+    this.chartSpeedEl = React.createRef();
   }
 
   state = {
@@ -29,12 +31,40 @@ class Block extends Component {
   };
 
   componentDidMount() {
+    const filteredStatistic = this.getFilteredStatistic();
+
     // eslint-disable-next-line global-require
     const Chartist = require('chartist');
 
-    this.chart = new Chartist.Bar(
-      this.chartEl.current,
-      this.getChartistData(),
+    this.chartCharacters = new Chartist.Bar(
+      this.chartCharactersEl.current,
+      this.getCharactersData(filteredStatistic),
+      {
+        axisY: {
+          onlyInteger: true,
+        },
+        axisX: {
+          showGrid: false,
+        },
+      },
+    );
+
+    this.chartHitsTypos = new Chartist.Bar(
+      this.chartHitsTyposEl.current,
+      this.getHitsTyposData(filteredStatistic),
+      {
+        axisY: {
+          onlyInteger: true,
+        },
+        axisX: {
+          showGrid: false,
+        },
+      },
+    );
+
+    this.chartSpeed = new Chartist.Bar(
+      this.chartSpeedEl.current,
+      this.getCharactersData(filteredStatistic),
       {
         axisY: {
           onlyInteger: true,
@@ -47,10 +77,19 @@ class Block extends Component {
   }
 
   componentDidUpdate() {
-    this.chart.update(this.getChartistData());
+    const filteredStatistic = this.getFilteredStatistic();
+
+    const chartCharactersData = this.getCharactersData(filteredStatistic);
+    this.chartCharacters.update(chartCharactersData);
+
+    const chartHitsTyposData = this.getHitsTyposData(filteredStatistic);
+    this.chartHitsTypos.update(chartHitsTyposData);
+
+    const chartSpeedData = this.getCharactersData(filteredStatistic);
+    this.chartSpeed.update(chartSpeedData);
   }
 
-  getChartistData = () => {
+  getFilteredStatistic = () => {
     const {
       props: {
         statistic,
@@ -58,10 +97,8 @@ class Block extends Component {
       state,
     } = this;
 
-    const labels = [];
-    const series = [[], []];
-
-    _(statistic)
+    // returns LodashWrapper
+    return _(statistic)
       .filter((s) => {
         let mode = true;
         if (state.mode) {
@@ -84,7 +121,14 @@ class Block extends Component {
         }
 
         return mode && keyboard && from && to;
-      })
+      });
+  }
+
+  getCharactersData = (statistic) => {
+    const labels = [];
+    const series = [[], []];
+
+    statistic
       .map('presses')
       .flatten()
       .each((c) => {
@@ -106,6 +150,40 @@ class Block extends Component {
           series[0][index] += hits;
           series[1][index] += typos;
         }
+      });
+
+    return {
+      labels,
+      series,
+    };
+  };
+
+  getHitsTyposData = (statistic) => {
+    const labels = [];
+    const series = [[], []];
+
+    statistic
+      .each((c) => {
+        console.log('c', c);
+
+        // const { character } = c;
+        // let { hits, typos } = c;
+        //
+        // hits = hits || 0;
+        // typos = typos || 0;
+        //
+        // const index = labels.indexOf(character);
+        //
+        // if (index === -1) {
+        //   labels.push(character);
+        //
+        //   series[0].push(hits);
+        //   series[1].push(typos);
+        // }
+        // else {
+        //   series[0][index] += hits;
+        //   series[1][index] += typos;
+        // }
       });
 
     return {
@@ -201,7 +279,14 @@ class Block extends Component {
           />
         </div>
 
-        <div styleName="chart" ref={this.chartEl} />
+        <h3 styleName="title">Hits and typos depend on characters</h3>
+        <div styleName="chart chart_characters" ref={this.chartCharactersEl} />
+
+        <h3 styleName="title">Hits and typos depend on sessions</h3>
+        <div styleName="chart chart_hits-typos" ref={this.chartHitsTyposEl} />
+
+        <h3 styleName="title">Speed depends on sessions</h3>
+        <div styleName="chart chart_speed" ref={this.chartSpeedEl} />
       </Fragment>
     );
   }

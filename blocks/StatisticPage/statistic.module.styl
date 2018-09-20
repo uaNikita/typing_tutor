@@ -13,5 +13,21 @@
    > :last-child
       margin-right: 0
 
+.title
+   margin-top: 80px
+   margin-bottom: 10px
+   font-size: 28px;
+   font-weight: normal
+   text-align: center;
+   
 .chart
    height: 500px;
+   &_
+      &characters, &hits-typos
+         :global(.ct-series-a .ct-bar)
+            stroke: #59922b;
+         :global(.ct-series-b .ct-bar)
+            stroke: #f05b4f;
+      &speed
+         :global(.ct-bar)
+            stroke: #0544d3;
