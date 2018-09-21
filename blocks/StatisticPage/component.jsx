@@ -164,26 +164,24 @@ class Block extends Component {
 
     statistic
       .each((c) => {
-        console.log('c', c);
+        const { character } = c;
+        let { hits, typos } = c;
 
-        // const { character } = c;
-        // let { hits, typos } = c;
-        //
-        // hits = hits || 0;
-        // typos = typos || 0;
-        //
-        // const index = labels.indexOf(character);
-        //
-        // if (index === -1) {
-        //   labels.push(character);
-        //
-        //   series[0].push(hits);
-        //   series[1].push(typos);
-        // }
-        // else {
-        //   series[0][index] += hits;
-        //   series[1][index] += typos;
-        // }
+        hits = hits || 0;
+        typos = typos || 0;
+
+        const index = labels.indexOf(character);
+
+        if (index === -1) {
+          labels.push(character);
+
+          series[0].push(hits);
+          series[1].push(typos);
+        }
+        else {
+          series[0][index] += hits;
+          series[1][index] += typos;
+        }
       });
 
     return {
