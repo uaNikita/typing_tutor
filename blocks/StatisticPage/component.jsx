@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 import { Field, reduxForm } from 'redux-form/immutable';
+import format from 'date-fns/format';
 
 import keyboards from 'Constants/keyboards';
 import modes from 'Constants/modes';
@@ -64,7 +65,7 @@ class Block extends Component {
 
     this.chartSpeed = new Chartist.Bar(
       this.chartSpeedEl.current,
-      this.getCharactersData(filteredStatistic),
+      this.getSpeedData(filteredStatistic),
       {
         axisY: {
           onlyInteger: true,
@@ -85,7 +86,7 @@ class Block extends Component {
     const chartHitsTyposData = this.getHitsTyposData(filteredStatistic);
     this.chartHitsTypos.update(chartHitsTyposData);
 
-    const chartSpeedData = this.getCharactersData(filteredStatistic);
+    const chartSpeedData = this.getSpeedData(filteredStatistic);
     this.chartSpeed.update(chartSpeedData);
   }
 
@@ -122,7 +123,7 @@ class Block extends Component {
 
         return mode && keyboard && from && to;
       });
-  }
+  };
 
   getCharactersData = (statistic) => {
     const labels = [];
@@ -163,31 +164,42 @@ class Block extends Component {
     const series = [[], []];
 
     statistic
-      .each((c) => {
-        const { character } = c;
-        let { hits, typos } = c;
+      .each(({ start, presses }, i) => {
+        labels.push(format(start, 'YYYY MMM DD, HH:mm'));
 
-        hits = hits || 0;
-        typos = typos || 0;
-
-        const index = labels.indexOf(character);
-
-        if (index === -1) {
-          labels.push(character);
-
-          series[0].push(hits);
-          series[1].push(typos);
-        }
-        else {
-          series[0][index] += hits;
-          series[1][index] += typos;
-        }
+        series[0][i] = _.sumBy(presses, 'hits');
+        series[1][i] = _.sumBy(presses, 'typos');
       });
 
     return {
       labels,
       series,
     };
+  };
+
+  getSpeedData = (statistic) => {
+    const labels = [];
+    const series = [[], []];
+
+    statistic
+      .each(({ start, end, presses }, i) => {
+        labels.push(format(start, 'YYYY MMM DD, HH:mm'));
+
+        const totalHits = _.sumBy(presses, 'hits');
+        const totalMinutes = (end - start) / (1000 * 60);
+
+        series[0][i] = totalHits / totalMinutes;
+      });
+
+    return {
+      labels,
+      series,
+    };
+  };
+
+  // todo: add getChartsData with one loop of statistic and add new chart about session time
+  getChartsData = () => {
+
   };
 
   getOptimizedValue = mode => mode || undefined;
