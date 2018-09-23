@@ -14,7 +14,6 @@ import DayPickerField from './DayPickerField/component';
 
 import styles from './statistic.module.styl';
 
-
 class Block extends Component {
   constructor(props) {
     super(props);
@@ -22,6 +21,7 @@ class Block extends Component {
     this.chartCharactersEl = React.createRef();
     this.chartHitsTyposEl = React.createRef();
     this.chartSpeedEl = React.createRef();
+    this.chartDurabilityEl = React.createRef();
   }
 
   state = {
@@ -32,62 +32,52 @@ class Block extends Component {
   };
 
   componentDidMount() {
-    const filteredStatistic = this.getFilteredStatistic();
+    const data = this.getChartsData();
 
     // eslint-disable-next-line global-require
     const Chartist = require('chartist');
 
+    const options = {
+      axisY: {
+        onlyInteger: true,
+      },
+      axisX: {
+        showGrid: false,
+      },
+    };
+
     this.chartCharacters = new Chartist.Bar(
       this.chartCharactersEl.current,
-      this.getCharactersData(filteredStatistic),
-      {
-        axisY: {
-          onlyInteger: true,
-        },
-        axisX: {
-          showGrid: false,
-        },
-      },
+      data.characters,
+      options,
     );
 
     this.chartHitsTypos = new Chartist.Bar(
       this.chartHitsTyposEl.current,
-      this.getHitsTyposData(filteredStatistic),
-      {
-        axisY: {
-          onlyInteger: true,
-        },
-        axisX: {
-          showGrid: false,
-        },
-      },
+      data.hitsTypos,
+      options,
     );
 
     this.chartSpeed = new Chartist.Bar(
       this.chartSpeedEl.current,
-      this.getSpeedData(filteredStatistic),
-      {
-        axisY: {
-          onlyInteger: true,
-        },
-        axisX: {
-          showGrid: false,
-        },
-      },
+      data.speed,
+      options,
+    );
+
+    this.chartDurability = new Chartist.Bar(
+      this.chartDurabilityEl.current,
+      data.durability,
+      options,
     );
   }
 
   componentDidUpdate() {
-    const filteredStatistic = this.getFilteredStatistic();
+    const data = this.getChartsData();
 
-    const chartCharactersData = this.getCharactersData(filteredStatistic);
-    this.chartCharacters.update(chartCharactersData);
-
-    const chartHitsTyposData = this.getHitsTyposData(filteredStatistic);
-    this.chartHitsTypos.update(chartHitsTyposData);
-
-    const chartSpeedData = this.getSpeedData(filteredStatistic);
-    this.chartSpeed.update(chartSpeedData);
+    this.chartCharacters.update(data.characters);
+    this.chartHitsTypos.update(data.hitsTypos);
+    this.chartSpeed.update(data.speed);
+    this.chartDurability.update(data.durability);
   }
 
   getFilteredStatistic = () => {
@@ -125,81 +115,73 @@ class Block extends Component {
       });
   };
 
-  getCharactersData = (statistic) => {
-    const labels = [];
-    const series = [[], []];
+  getChartsData = () => {
+    const statistic = this.getFilteredStatistic();
+
+    const data = {
+      characters: {
+        labels: [],
+        series: [[], []],
+      },
+      hitsTypos: {
+        labels: [],
+        series: [[], []],
+      },
+      speed: {
+        labels: [],
+        series: [[]],
+      },
+      durability: {
+        labels: [],
+        series: [[]],
+      },
+    };
 
     statistic
-      .map('presses')
+      .map(({ start, end, presses }) => {
+        const date = format(start, 'YYYY MMM DD, HH:mm');
+        const totalMinutes = (end - start) / (1000 * 60);
+        const totalHits = _.sumBy(presses, 'hits');
+
+        // hit and typos
+        data.hitsTypos.labels.push(date);
+        data.hitsTypos.series[0].push(_.sumBy(presses, 'hits'));
+        data.hitsTypos.series[1].push(_.sumBy(presses, 'typos'));
+
+        // speed
+        data.speed.labels.push(date);
+        data.speed.series[0].push(totalHits / totalMinutes);
+
+        // durability
+        data.durability.labels.push(date);
+        data.durability.series[0].push(totalMinutes);
+
+        return presses;
+      })
       .flatten()
       .each((c) => {
+        // characters
         const { character } = c;
         let { hits, typos } = c;
 
         hits = hits || 0;
         typos = typos || 0;
 
-        const index = labels.indexOf(character);
+        const index = data.characters.labels.indexOf(character);
 
         if (index === -1) {
-          labels.push(character);
+          data.characters.labels.push(character);
 
-          series[0].push(hits);
-          series[1].push(typos);
+          data.characters.series[0].push(hits);
+          data.characters.series[1].push(typos);
         }
         else {
-          series[0][index] += hits;
-          series[1][index] += typos;
+          data.characters.series[0][index] += hits;
+          data.characters.series[1][index] += typos;
         }
       });
 
-    return {
-      labels,
-      series,
-    };
-  };
-
-  getHitsTyposData = (statistic) => {
-    const labels = [];
-    const series = [[], []];
-
-    statistic
-      .each(({ start, presses }, i) => {
-        labels.push(format(start, 'YYYY MMM DD, HH:mm'));
-
-        series[0][i] = _.sumBy(presses, 'hits');
-        series[1][i] = _.sumBy(presses, 'typos');
-      });
-
-    return {
-      labels,
-      series,
-    };
-  };
-
-  getSpeedData = (statistic) => {
-    const labels = [];
-    const series = [[], []];
-
-    statistic
-      .each(({ start, end, presses }, i) => {
-        labels.push(format(start, 'YYYY MMM DD, HH:mm'));
-
-        const totalHits = _.sumBy(presses, 'hits');
-        const totalMinutes = (end - start) / (1000 * 60);
-
-        series[0][i] = totalHits / totalMinutes;
-      });
-
-    return {
-      labels,
-      series,
-    };
-  };
-
-  // todo: add getChartsData with one loop of statistic and add new chart about session time
-  getChartsData = () => {
-
+    return data;
   };
 
   getOptimizedValue = mode => mode || undefined;
@@ -297,6 +279,9 @@ class Block extends Component {
 
         <h3 styleName="title">Speed depends on sessions</h3>
         <div styleName="chart chart_speed" ref={this.chartSpeedEl} />
+
+        <h3 styleName="title">Durability of sessions</h3>
+        <div styleName="chart chart_durability" ref={this.chartDurabilityEl} />
       </Fragment>
     );
   }
