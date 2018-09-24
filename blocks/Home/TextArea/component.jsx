@@ -5,7 +5,7 @@ import PerfectScrollbar from 'perfect-scrollbar';
 import ContentToType from 'Blocks/ContentToType/component';
 import ContentArea from '../ContentArea';
 
-import styles from './textarea.module.styl';
+import styles from './text-area.module.styl';
 
 class Block extends ContentArea {
   constructor(props) {

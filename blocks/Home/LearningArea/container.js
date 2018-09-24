@@ -1,22 +1,27 @@
 import { connect } from 'react-redux';
-import { refreshCurrentLesson, updateCharToType } from 'ReduxUtils/reducers/modes/learning';
+import {
+  setStartTypingTime,
+  zeroingStatic,
+  typeChar,
+} from 'ReduxUtils/reducers/main';
+import {
+  refreshCurrentLesson,
+  updateCharToType,
+} from 'ReduxUtils/reducers/modes/learning';
 
 import Textarea from './component';
 
-const mapStateToProps = (state) => {
-  const stateLesson = state.getIn(['learning', 'lesson']);
-
-  return {
-    typed: stateLesson.get('typed'),
-    rest: stateLesson.get('rest'),
-  };
-};
+const mapStateToProps = state => ({
+  hiddenChars: state.getIn(['user', 'hiddenChars']),
+  lesson: state.getIn(['learning', 'lesson']).toJS(),
+});
 
 const mapDispatchToProps = dispatch => ({
-  refreshInitialData: () => {
-    dispatch(refreshCurrentLesson());
-    dispatch(updateCharToType());
-  },
+  setStartTypingTime: (...args) => dispatch(setStartTypingTime(...args)),
+  zeroingStatic: (...args) => dispatch(zeroingStatic(...args)),
+  typeChar: (...args) => dispatch(typeChar(...args)),
+  updateCharToType: (...args) => dispatch(updateCharToType(...args)),
+  refreshCurrentLesson: (...args) => dispatch(refreshCurrentLesson(...args)),
 });
 
 export default connect(

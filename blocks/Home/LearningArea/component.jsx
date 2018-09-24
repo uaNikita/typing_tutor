@@ -1,28 +1,85 @@
-import React, { Component } from 'react';
+import React from 'react';
+import CSSModules from 'react-css-modules';
 
-import LearningView from 'Blocks/LearningView/component';
+import ContentToType from 'Blocks/ContentToType/component';
+import ContentArea from '../ContentArea';
 
-class LearningArea extends Component {
+import styles from './learning-area.module.styl';
+
+class Block extends ContentArea {
   componentDidMount = () => {
     const {
       props: {
-        refreshInitialData,
+        refreshCurrentLesson,
+        updateCharToType,
+      },
+    } = this;
+    document.addEventListener('keydown', this.keyDownHandler);
+    document.addEventListener('keypress', this.keyPressHandler);
+
+    refreshCurrentLesson();
+    updateCharToType();
+  };
+
+  componentWillUnmount() {
+    const {
+      props: {
+        zeroingStatic,
       },
     } = this;
 
-    refreshInitialData();
-  };
+    document.removeEventListener('keydown', this.keyDownHandler);
+    document.removeEventListener('keypress', this.keyPressHandler);
+
+    zeroingStatic();
+  }
+
+  getCharsMarkup = string => string.split('').map((char, i) => {
+    let c = char;
+
+    if (char === ' ') {
+      const key = char + i;
+
+      c = (
+        <span key={key} styleName="space">
+          ␣
+        </span>
+      );
+    }
+
+    return c;
+  });
 
   render() {
     const {
       props: {
-        typed,
-        rest,
+        lesson,
+        hiddenChars,
       },
     } = this;
 
-    return <LearningView key="learningview" lesson={{ typed, rest }} />;
+    let typed = null;
+
+    if (lesson.typed.length) {
+      typed = (
+        <span styleName="typed">
+          <ContentToType hidden={hiddenChars}>
+            {lesson.typed}
+          </ContentToType>
+        </span>
+      );
+    }
+
+    return (
+      <div styleName="learningarea">
+        {typed}
+        <span styleName="cursor" />
+        <ContentToType hidden={hiddenChars}>
+          {lesson.rest}
+        </ContentToType>
+      </div>
+    );
   }
 }
 
-export default LearningArea;
+export default CSSModules(Block, styles);
