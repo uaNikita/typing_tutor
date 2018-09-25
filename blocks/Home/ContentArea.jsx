@@ -1,6 +1,8 @@
 import { Component } from 'react';
 import _ from 'lodash';
 
+import { closestEl } from 'Utils';
+
 class Block extends Component {
   setStartTypingTime = (() => {
     const {
@@ -19,6 +21,11 @@ class Block extends Component {
       },
     } = this;
 
+    // todo: find some way to improve speed of success typing
+    if (closestEl(e.target, '.drop-down')) {
+      return;
+    }
+
     if (e.which === 32) {
       e.preventDefault();
 
@@ -34,6 +41,10 @@ class Block extends Component {
         typeChar,
       },
     } = this;
+
+    if (closestEl(e.target, '.drop-down')) {
+      return;
+    }
 
     if (e.which !== 32) {
       this.setStartTypingTime();
