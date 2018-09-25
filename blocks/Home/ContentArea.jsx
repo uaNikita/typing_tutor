@@ -21,7 +21,6 @@ class Block extends Component {
       },
     } = this;
 
-    // todo: find some way to improve speed of success typing
     if (closestEl(e.target, '.drop-down')) {
       return;
     }

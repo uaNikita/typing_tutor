@@ -14,16 +14,16 @@ export const other = [
     pathname: '/options',
     text: 'Options',
   },
+  {
+    pathname: '/statistic',
+    text: 'Statistic',
+  },
 ];
 
 export const personal = [
   {
     pathname: '/settings',
     text: 'Settings',
-  },
-  {
-    pathname: '/statistic',
-    text: 'Statistic',
   },
   {
     pathname: '/authorization/sign-out',

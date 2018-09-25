@@ -49,8 +49,8 @@ const App = () => (
               <Route exact path="/404" component={NotFound} />
               <Route path="/mode" component={Modes} />
               <Route path="/options" component={OptionsPages} />
+              <Route path="/statistic" component={StatisticPage} />
               <PrivateRoute path="/settings" component={SettingsPages} />
-              <PrivateRoute path="/statistic" component={StatisticPage} />
               <Redirect to="/404" />
             </Switch>
           </Fragment>
