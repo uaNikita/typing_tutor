@@ -19,7 +19,8 @@ class Block extends Component {
         history: {
           replace,
         },
-        setAllWithAuth,
+        setTokens,
+        setAllWithoutAuth,
         fetchJSON,
       },
     } = this;
@@ -31,7 +32,14 @@ class Block extends Component {
     })
       .then((res) => {
         if (res.ok) {
-          setAllWithAuth(res.data);
+          const {
+            tokens,
+            ...rest
+          } = res.data;
+
+          setTokens(tokens);
+
+          setAllWithoutAuth(rest);
 
           replace('/');
         }

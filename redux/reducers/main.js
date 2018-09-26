@@ -4,7 +4,7 @@ import _ from 'lodash';
 import { getIdsFromCharacter, normalizeString } from 'Utils';
 import keyboards from 'Constants/keyboards/index';
 
-import { fetchJSON, setTokens } from './fetch';
+import { fetchJSON } from './fetch';
 import { setState as setUserState } from './user';
 import {
   setState as setTextState,
@@ -254,14 +254,6 @@ export const setAllWithoutAuth = data => (
     dispatch(setUserState(userData));
 
     dispatch(init());
-  }
-);
-
-export const setAllWithAuth = ({ tokens, ...rest }) => (
-  (dispatch) => {
-    dispatch(setTokens(tokens));
-
-    dispatch(setAllWithoutAuth(rest));
   }
 );
 
