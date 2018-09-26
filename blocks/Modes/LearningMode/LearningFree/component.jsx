@@ -3,7 +3,6 @@ import _ from 'lodash';
 import classNames from 'classnames';
 import Slider from 'rc-slider';
 
-import LearningView from 'Blocks/LearningView/component';
 import Key from 'Blocks/Key/component';
 import LearningModeButton from '../LearningModeButton/container';
 
@@ -101,22 +100,23 @@ class LearningFree extends Component {
 
     return (
       <Fragment>
-        <h4 className="settings-learning__title">
+        <h4 className="options-learning__title">
           Example
         </h4>
-        <LearningView className="settings-learning__view" lesson={example} />
 
-        <h4 className="settings-learning__title">
+        <p className="options-learning__view">{example}</p>
+
+        <h4 className="options-learning__title">
           Settings
         </h4>
 
         <LearningModeButton toMode="free" />
 
-        <div className="settings-learning__item">
-          <p className="settings-learning__label">
+        <div className="options-learning__item">
+          <p className="options-learning__label">
             Max word length:
           </p>
-          <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+          <div className="options-learning__item-ctrl options-learning__item-ctrl-range">
             <Slider {...maxLettersInWordSliderProps} />
           </div>
         </div>

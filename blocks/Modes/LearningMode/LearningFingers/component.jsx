@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import Slider from 'rc-slider';
 
 import Key from 'Blocks/Key/component';
-import LearningView from 'Blocks/LearningView/component';
 import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFingers extends Component {
@@ -12,6 +11,7 @@ class LearningFingers extends Component {
     super(props);
 
     const {
+      updateOptions,
       options: {
         maxLettersInWord,
       },
@@ -26,7 +26,7 @@ class LearningFingers extends Component {
       marks: this.getMarks(maxLettersInWordMin, maxLettersInWordMax),
       step: null,
       defaultValue: maxLettersInWord,
-      onChange: this.handleChangeMaxLettersInWord,
+      onChange: v => updateOptions({ maxLettersInWord: v }),
     };
   }
 
@@ -34,16 +34,6 @@ class LearningFingers extends Component {
     .map(i => [i, i])
     .fromPairs()
     .value();
-
-  handleChangeMaxLettersInWord = (maxLettersInWord) => {
-    const {
-      props: {
-        updateOptions,
-      },
-    } = this;
-
-    updateOptions({ maxLettersInWord });
-  };
 
   handleChangeSetSize = (setSize) => {
     const {
@@ -123,32 +113,33 @@ class LearningFingers extends Component {
 
     return (
       <Fragment>
-        <h4 className="settings-learning__title">
+        <h4 className="options-learning__title">
           Example
         </h4>
-        <LearningView className="settings-learning__view" lesson={example} />
 
-        <h4 className="settings-learning__title">
+        <p className="options-learning__view">{example}</p>
+
+        <h4 className="options-learning__title">
           Settings
         </h4>
 
         <LearningModeButton toMode="fingers" />
 
-        <div className="settings-learning__item">
-          <p className="settings-learning__label">
+        <div className="options-learning__item">
+          <p className="options-learning__label">
             Max word length:
           </p>
 
-          <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+          <div className="options-learning__item-ctrl options-learning__item-ctrl-range">
             <Slider {...maxLettersInWordSliderProps} />
           </div>
         </div>
 
-        <div className="settings-learning__item">
-          <p className="settings-learning__label">
+        <div className="options-learning__item">
+          <p className="options-learning__label">
             Extend fingers set:
           </p>
-          <div className="settings-learning__item-ctrl settings-learning__item-ctrl-range">
+          <div className="options-learning__item-ctrl options-learning__item-ctrl-range">
             <Slider {...setSizeSliderProps} />
           </div>
         </div>

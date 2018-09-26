@@ -81,6 +81,9 @@ export default (state = initialState, action = {}) => {
         return opts.merge(options);
       });
 
+    case SET_FREE_EXAMPLE:
+      return state.setIn(['free', 'example'], action.example);
+
     case SET_STATISTIC:
       return state.set('selectedId', state.get('entities').last().get('id'));
 
@@ -260,6 +263,11 @@ export const typeLearningMode = char => (
 
       dispatch(addTouch(true, char));
 
+      // if this is last character of line need to refresh it
+      if (lessonRest.length === 1) {
+        dispatch(refreshCurrentLesson());
+      }
+
       dispatch(updateCharToType());
     }
     else {
@@ -269,12 +277,6 @@ export const typeLearningMode = char => (
     }
 
     dispatch(processAddStatistic());
-
-    if (!lessonRest) {
-      dispatch(refreshCurrentLesson());
-
-      dispatch(updateCharToType());
-    }
   }
 );
 
