@@ -1,13 +1,14 @@
 import { connect } from 'react-redux';
 import { fetchJSON, setTokens } from 'ReduxUtils/reducers/fetch';
-import { setAllWithoutAuth } from 'ReduxUtils/reducers/main';
+import { init, setData } from 'ReduxUtils/reducers/main';
 import { validateEmail } from 'Utils/validation';
 import Component from './component';
 
 const mapDispatchToProps = dispatch => ({
   fetchJSON: (...args) => dispatch(fetchJSON(...args)),
   setTokens: (...args) => dispatch(setTokens(...args)),
-  setAllWithoutAuth: (...args) => dispatch(setAllWithoutAuth(...args)),
+  init: (...args) => dispatch(init(...args)),
+  setData: (...args) => dispatch(setData(...args)),
   asyncValidate: values => dispatch(fetchJSON('/auth/check-email', {
     body: {
       email: values.get('email'),

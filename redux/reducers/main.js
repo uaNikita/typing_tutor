@@ -244,7 +244,7 @@ export const init = () => (
   }
 );
 
-export const setAllWithoutAuth = data => (
+export const setData = data => (
   (dispatch) => {
     dispatch(setTextState(data.modes.text));
 
@@ -252,17 +252,18 @@ export const setAllWithoutAuth = data => (
     delete userData.modes;
 
     dispatch(setUserState(userData));
-
-    dispatch(init());
   }
 );
 
-export const getAllUserData = options => (
+// just for server
+export const getData = options => (
   dispatch => (
     dispatch(fetchJSON('/user', { method: 'GET' }, options))
       .then((res) => {
         if (res.ok) {
-          dispatch(setAllWithoutAuth(res.data));
+          dispatch(setData(res.data));
+
+          dispatch(init());
         }
 
         return res;

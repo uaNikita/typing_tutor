@@ -20,7 +20,8 @@ class Block extends Component {
           replace,
         },
         setTokens,
-        setAllWithoutAuth,
+        setData,
+        init,
         fetchJSON,
       },
     } = this;
@@ -39,7 +40,9 @@ class Block extends Component {
 
           setTokens(tokens);
 
-          setAllWithoutAuth(rest);
+          setData(rest);
+
+          init();
 
           replace('/');
         }

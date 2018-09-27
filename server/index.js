@@ -24,7 +24,7 @@ const {
   setRefreshToken,
   setAccessToken,
   init,
-  getAllUserData,
+  getData,
   defaults,
 } = require('../dist/compiledServer');
 
@@ -101,7 +101,7 @@ app.use(async (req, res) => {
     dispatch(setAccessToken(accessCookie));
     dispatch(setRefreshToken(refreshCookie));
 
-    await dispatch(getAllUserData({
+    await dispatch(getData({
       responseFromServer: res,
     }))
       .then(({ ok }) => {
