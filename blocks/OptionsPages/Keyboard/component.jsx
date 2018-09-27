@@ -1,14 +1,17 @@
 import React, { Component, Fragment } from 'react';
-import keyboards from 'Constants/keyboards/index';
+import CSSModules from 'react-css-modules';
+import _ from 'lodash';
 
 import { Field, reduxForm } from 'redux-form/immutable';
 import RenderField from 'Blocks/RenderField/component';
-
 import Key from 'Blocks/Key/component';
+
+import keyboards from 'Constants/keyboards/index';
 
 import styles from './keyboard.module.styl';
 
-class Keyboard extends Component {
+
+class Block extends Component {
   handleOnChange = (e) => {
     const {
       props: {
@@ -22,9 +25,11 @@ class Keyboard extends Component {
   render() {
     const {
       props: {
-        keys,
+        keyboard,
       },
     } = this;
+
+    const { keys } = _.find(keyboards, { name: keyboard });
 
     const keyNodes = keys.map((obj) => {
       const keyProps = {
@@ -46,7 +51,7 @@ class Keyboard extends Component {
     return (
       <Fragment>
         <Field
-          className={styles.field}
+          styleName="field"
           onChange={this.handleOnChange}
           name="email"
           component={RenderField}
@@ -70,4 +75,4 @@ class Keyboard extends Component {
 
 export default reduxForm({
   form: 'keyboard-layout',
-})(Keyboard);
+})(CSSModules(Block, styles));

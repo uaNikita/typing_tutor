@@ -36,7 +36,7 @@ const UserSchema = new mongoose.Schema({
   },
   keyboard: {
     type: String,
-    default: 'english',
+    default: defaults.keyboard,
   },
   metronome: {
     on: {

@@ -13,7 +13,7 @@ export default {
 
     bio: undefined,
 
-    statistic: [],
+    keyboard: 'english',
 
     // text, learning
     mode: 'text',
@@ -24,6 +24,8 @@ export default {
       on: false,
       interval: 1200,
     },
+
+    statistic: [],
   },
   text: {
     selectedId: 1,
