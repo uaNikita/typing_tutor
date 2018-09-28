@@ -1,5 +1,18 @@
 const httpStatus = require('http-status');
 
+const options = (req, res, next) => {
+  const {
+    user,
+    body,
+  } = req;
+
+  user.set('modes.learning', body);
+
+  user.save()
+    .then(() => res.json(httpStatus[200]))
+    .catch(e => next(e));
+};
+
 const mode = (req, res, next) => {
   const {
     user,
@@ -40,6 +53,7 @@ const free = (req, res, next) => {
 };
 
 module.exports = {
+  options,
   mode,
   fingers,
   free,

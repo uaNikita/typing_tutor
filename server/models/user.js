@@ -64,6 +64,26 @@ const UserSchema = new mongoose.Schema({
         type: String,
         default: 'fingers',
       },
+      fingers: {
+        maxLettersInWord: {
+          type: Number,
+          default: defaults.learning.fingers.options.maxLettersInWord,
+        },
+        setSize: {
+          type: Number,
+          default: defaults.learning.fingers.options.setSize,
+        },
+      },
+      free: {
+        maxLettersInWord: {
+          type: Number,
+          default: defaults.learning.free.options.maxLettersInWord,
+        },
+        letters: {
+          type: Array,
+          default: defaults.learning.free.options.letters,
+        },
+      }
     },
   },
 });

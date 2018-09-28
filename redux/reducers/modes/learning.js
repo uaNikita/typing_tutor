@@ -130,17 +130,27 @@ export const typeOnLesson = () => ({
   type: TYPE_ON_LESSON,
 });
 
-export const processUpdateFingersOptions = options => (
+export const processSetOptions = ({ mode, options }) => (
   (dispatch, getState) => {
-    dispatch(updateFingersOptions(options));
+    switch (mode) {
+      case 'fingers':
+        dispatch(updateFingersOptions(options));
+        break;
+      case 'free':
+        dispatch(updateFreeOptions(options));
+        break;
+      default:
+    }
 
     return dispatch(processAction(
       () => tempCookie.path(
-        'learning.fingers.options',
-        getState().getIn(['learning', 'fingers', 'options']).toJS(),
+        `learning.${mode}.options`,
+        getState().getIn(['learning', mode, 'options']).toJS(),
       ),
-      () => dispatch(fetchJSON('/learning/fingers', {
-        body: options,
+      () => dispatch(fetchJSON('/learning', {
+        body: {
+          [mode]: options,
+        },
       })),
     ));
   }
@@ -165,32 +175,6 @@ export const generateFingersLesson = () => (
   }
 );
 
-export const updateFingersOptionsAndExample = options => (
-  (dispatch) => {
-    dispatch(processUpdateFingersOptions(options));
-
-    const example = dispatch(generateFingersLesson());
-
-    dispatch(setFingersExample(example));
-  }
-);
-
-export const processUpdateFreeOptions = options => (
-  (dispatch, getState) => {
-    dispatch(updateFreeOptions(options));
-
-    return dispatch(processAction(
-      () => tempCookie.path(
-        'learning.free.options',
-        getState().getIn(['learning', 'free', 'options']).toJS(),
-      ),
-      () => dispatch(fetchJSON('/learning/free', {
-        body: options,
-      })),
-    ));
-  }
-);
-
 export const generateFreeLesson = () => (
   (dispatch, getState) => {
     const learningState = getState().getIn(['learning', 'free', 'options']);
@@ -199,16 +183,6 @@ export const generateFreeLesson = () => (
       learningState.get('maxLettersInWord'),
       learningState.get('letters').toJS(),
     );
-  }
-);
-
-export const updateFreeOptionsAndExample = options => (
-  (dispatch) => {
-    dispatch(processUpdateFreeOptions(options));
-
-    const example = dispatch(generateFreeLesson());
-
-    dispatch(setFreeExample(example));
   }
 );
 

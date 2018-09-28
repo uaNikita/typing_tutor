@@ -10,8 +10,6 @@ let initialState = window.PRELOADED_STATE;
 
 delete window.PRELOADED_STATE;
 
-initialState = Immutable.fromJS(initialState);
-
-initialState = convert(initialState);
+initialState = convert(Immutable.fromJS(initialState));
 
 export default createStore(reducer, initialState, applyMiddleware(thunk));

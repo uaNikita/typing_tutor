@@ -1,5 +1,3 @@
-import Immutable from 'immutable';
-
 export default {
   fetch: {
     refreshToken: false,
@@ -63,7 +61,7 @@ export default {
     free: {
       options: {
         maxLettersInWord: 5,
-        letters: Immutable.Set([]),
+        letters: [],
       },
       example: '',
     },

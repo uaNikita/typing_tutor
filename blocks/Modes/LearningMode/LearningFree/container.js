@@ -1,6 +1,9 @@
 import { connect } from 'react-redux';
-
-import { updateFreeOptionsAndExample } from 'ReduxUtils/reducers/modes/learning';
+import {
+  processSetOptions,
+  generateFreeLesson,
+  setFreeExample,
+} from 'ReduxUtils/reducers/modes/learning';
 
 import LearningFree from './component';
 
@@ -15,8 +18,18 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  updateOptions: (...args) => dispatch(updateFreeOptionsAndExample(...args)),
+  updateOptions: (options) => {
+    dispatch(processSetOptions({
+      mode: 'free',
+      options,
+    }));
+
+    const example = dispatch(generateFreeLesson());
+
+    dispatch(setFreeExample(example));
+  },
 });
+
 
 export default connect(
   mapStateToProps,
