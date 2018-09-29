@@ -7,8 +7,5 @@ const router = express.Router();
 const authenticate = passport.authenticate('jwt', { session: false });
 
 router.post('/', authenticate, controller.options);
-router.post('/mode', authenticate, controller.mode);
-router.post('/fingers', authenticate, controller.fingers);
-router.post('/free', authenticate, controller.free);
 
 module.exports = router;

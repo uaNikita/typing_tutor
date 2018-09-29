@@ -16,6 +16,7 @@ import {
 
 import { processAddStatistic } from '../user';
 
+const SET_STATE = 'learning/SET_STATE';
 const CLEAR_STATE = 'learning/CLEAR_STATE';
 const TYPE_ON_LESSON = 'learning/TYPE_ON_LESSON';
 
@@ -34,6 +35,9 @@ const initialState = Immutable.fromJS(defaults.learning);
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
+    case SET_STATE:
+      return state.merge(action.data);
+
     case CLEAR_STATE:
       return state.merge(initialState);
 
@@ -94,6 +98,11 @@ export default (state = initialState, action = {}) => {
 
 export const clearState = () => ({
   type: CLEAR_STATE,
+});
+
+export const setState = data => ({
+  type: SET_STATE,
+  data,
 });
 
 export const setMode = mode => ({

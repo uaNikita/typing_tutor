@@ -5,7 +5,7 @@ const Client = require('../../models/client');
 const Statistic = require('../../models/statistic');
 const Verification = require('../../models/verification');
 
-const getAllData = (req, res, next) => {
+const getData = (req, res, next) => {
   const {
     user,
   } = req;
@@ -17,7 +17,7 @@ const getAllData = (req, res, next) => {
       if (statistic) {
         data.statistic = statistic;
       }
-
+      
       res.json(data);
     })
     .catch(e => next(e));
@@ -147,7 +147,7 @@ const setSettings = (req, res, next) => {
 };
 
 module.exports = {
-  getAllData,
+  getData,
   changePassword,
   statistic,
   deleteAccount,
