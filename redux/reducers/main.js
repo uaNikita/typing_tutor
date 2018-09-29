@@ -11,6 +11,7 @@ import {
   typeTextMode,
 } from './modes/text';
 import {
+  setState as setLearningState,
   typeLearningMode,
   initLessons,
 } from './modes/learning';
@@ -247,6 +248,13 @@ export const init = () => (
 export const setData = data => (
   (dispatch) => {
     dispatch(setTextState(data.modes.text));
+
+    let { modes: { learning } } = data;
+
+    learning.fingers = { options: learning.fingers, };
+    learning.free = { options: learning.free, };
+
+    dispatch(setLearningState(learning));
 
     const userData = data;
     delete userData.modes;
