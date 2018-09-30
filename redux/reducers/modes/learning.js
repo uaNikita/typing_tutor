@@ -267,45 +267,12 @@ export const initLessons = () => (
   (dispatch, getState) => {
     const state = getState();
 
-    const defaultKeys = _.filter(state.getIn(['main', 'keys']).toJS(), {
-      row: 'middle',
-      type: 'letter',
-    });
-
-    if (!state.getIn(['learning', 'fingers', 'options', 'setSize'])) {
-      const size = _(defaultKeys)
-        .map(o => ({
-          finger: o.finger,
-          hand: o.hand,
-        }))
-        .uniqWith(_.isEqual)
-        .value()
-        .length;
-
-      dispatch(updateFingersOptions({
-        setSize: size,
-      }));
-    }
-
     if (!state.getIn(['learning', 'fingers', 'example'])) {
       const fingersExample = dispatch(generateFingersLesson());
 
       dispatch(setFingersExample(fingersExample));
-    }
 
-    const letters = defaultKeys.map(obj => obj.key);
-
-    const lesson = generateLesson(
-      state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']),
-      letters,
-    );
-
-    dispatch(setCurrentLesson(lesson));
-
-    if (!state.getIn(['learning', 'free', 'options', 'letters']).size) {
-      dispatch(updateFreeOptions({
-        letters: ['set', letters],
-      }));
+      dispatch(setCurrentLesson(lesson));
     }
   }
 );

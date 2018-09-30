@@ -1,3 +1,13 @@
+import _ from 'lodash';
+import keyboards from 'Constants/keyboards';
+
+const keyboard = 'english';
+const keys = _.find(keyboards, { name: keyboard }).keys
+const defaultKeys = _.filter(keys, {
+  row: 'middle',
+  type: 'letter',
+});
+
 export default {
   fetch: {
     refreshToken: false,
@@ -11,7 +21,7 @@ export default {
 
     bio: undefined,
 
-    keyboard: 'english',
+    keyboard,
 
     // text, learning
     mode: 'text',
@@ -53,7 +63,14 @@ export default {
     fingers: {
       options: {
         maxLettersInWord: 5,
-        setSize: 5,
+        setSize: _(defaultKeys)
+          .map(o => ({
+            finger: o.finger,
+            hand: o.hand,
+          }))
+          .uniqWith(_.isEqual)
+          .value()
+          .length,
       },
       example: '',
     },
@@ -61,7 +78,7 @@ export default {
     free: {
       options: {
         maxLettersInWord: 5,
-        letters: [],
+        letters: defaultKeys.map(obj => obj.key),
       },
       example: '',
     },
