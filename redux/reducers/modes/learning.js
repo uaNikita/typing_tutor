@@ -202,25 +202,29 @@ export const processSetOptionsAndUpdate = ({ mode, options }) => (
       options,
     }));
 
+    const fingersExample = dispatch(generateFingersLesson());
+    dispatch(setFingersExample(fingersExample));
+
+    const freeExample = dispatch(generateFreeLesson());
+    dispatch(setFreeExample(freeExample));
+
     const currentMode = getState().getIn(['learning', 'mode']);
 
-    let lesson = '';
-
-    switch (currentMode) {
-      case 'fingers':
-        lesson = dispatch(generateFingersLesson());
-        dispatch(setFingersExample(lesson));
-        break;
-
-      case 'free':
-        lesson = dispatch(generateFreeLesson());
-        dispatch(setFreeExample(lesson));
-        break;
-
-      default:
-    }
-
     if (mode === currentMode) {
+      let lesson = '';
+
+      switch (currentMode) {
+        case 'fingers':
+          lesson = fingersExample;
+          break;
+
+        case 'free':
+          lesson = freeExample;
+          break;
+
+        default:
+      }
+
       dispatch(setCurrentLesson(lesson));
     }
   });
@@ -292,8 +296,6 @@ export const typeLearningMode = char => (
 
 export const initLessons = () => (
   (dispatch, getState) => {
-    const state = getState();
-
     const fingersExample = dispatch(generateFingersLesson());
     dispatch(setFingersExample(fingersExample));
 
@@ -302,12 +304,12 @@ export const initLessons = () => (
 
     let lesson;
 
-    switch (state.getIn(['learning', 'mode'])) {
-      case 1:
+    switch (getState().getIn(['learning', 'mode'])) {
+      case 'fingers':
         lesson = fingersExample;
         break;
 
-      case 2:
+      case 'free':
         lesson = freeExample;
         break;
 
