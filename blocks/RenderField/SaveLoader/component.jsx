@@ -21,7 +21,7 @@ const Block = ({ show }) => (
         mountOnEnter
         unmountOnExit
       >
-        <span className="field__control_async" styleName="root" />
+        <span className="field__wrapper_async" styleName="root" />
       </CSSTransition>
     )}
   </TransitionGroup>

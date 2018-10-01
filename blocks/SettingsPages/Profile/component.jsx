@@ -7,11 +7,12 @@ import styles from './profile.module.styl';
 
 const fields = [
   {
-    key: 'name',
+    name: 'name',
   },
   {
-    key: 'bio',
+    name: 'bio',
     type: 'textarea',
+    className: styles.bio,
   },
 ];
 

@@ -8,24 +8,23 @@
    &::placeholder
       font-style: italic
    &__
-      &control
-         width: 300px;
+      &wrapper
          position: relative
          color #bdbdbd;
          &_
             &active
                color #333;
                .field__
-                  &text, &select
+                  &control
                      border-color: #333;
             &valid
                .field__
-                  &text, &select
+                  &control
                      border-color: #33C3F0;
             &error
                color red;
                .field__
-                  &text, &select
+                  &control
                      border-color: red;
             &async:after
                width: 16px;
@@ -43,7 +42,7 @@
                box-shadow: 0 0 6px 4px #fff;
                content ''
                animation: field-async 1s infinite linear
-      &text, &select, &textarea
+      &control
          width: 100%;
          height: 2.5em
          padding: 0 0.75em;
@@ -53,11 +52,13 @@
          outline none
          font inherit;
          transition border-color .15s linear
-      &textarea
-         padding-top: 0.6em;
-         padding-bottom: @padding-bottom;
-      &select
-         height: 2.5em;
+         &_textarea
+            height: 100%;
+            display: block
+            padding-top: 0.6em;
+            padding-bottom: @padding-bottom;
+         &_select
+            height: 2.5em;
       &label
          margin: 0.6em 18px 0 0;
       &eye

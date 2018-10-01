@@ -9,13 +9,7 @@ import RenderField from 'Blocks/RenderField/component';
 
 import { validateField } from 'Utils/validation';
 
-export default (options) => {
-  const {
-    key,
-    label,
-    type,
-  } = options;
-
+export default ({ name, ...rest }) => {
   class Block extends Component {
     submit = (values) => {
       const {
@@ -27,11 +21,11 @@ export default (options) => {
 
       const settings = values.toJS();
 
-      settings[key] = _.trim(settings[key]);
+      settings[name] = _.trim(settings[name]);
 
       let result = false;
 
-      if (initialValues.get(key) !== settings[key]) {
+      if (initialValues.get(name) !== settings[name]) {
         result = setSettings(settings)
           .then((res) => {
             if (res.data && res.data.errors) {
@@ -52,16 +46,15 @@ export default (options) => {
       } = this;
 
       const fieldProps = {
-        name: key,
+        name,
         onBlur: handleSubmit(submit),
         component: RenderField,
         loader: true,
+        ...rest,
       };
 
-      fieldProps.label = label || _.upperFirst(key);
-
-      if (type) {
-        fieldProps.type = type;
+      if (!fieldProps.label) {
+        fieldProps.label = _.upperFirst(name);
       }
 
       return (
@@ -73,7 +66,7 @@ export default (options) => {
   }
 
   const validate = values => ({
-    ...validateField(key, values.get(key)),
+    ...validateField(name, values.get(name)),
   });
 
   const mapStateToProps = (state) => {
@@ -81,7 +74,7 @@ export default (options) => {
       initialValues: {},
     };
 
-    result.initialValues[key] = state.getIn(['user', key]);
+    result.initialValues[name] = state.getIn(['user', name]);
 
     return result;
   };
@@ -94,9 +87,9 @@ export default (options) => {
     mapStateToProps,
     mapDispatchToProps,
   )(reduxForm({
-    form: `field-${key}`,
+    form: `field-${name}`,
     validate,
   })(Block));
 
-  return <ConnectedBlock key={key} />;
+  return <ConnectedBlock key={name} />;
 };

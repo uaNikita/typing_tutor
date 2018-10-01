@@ -68,54 +68,64 @@ class RenderField extends Component {
     }
 
     const fieldClass = classNames(
-      'field__control',
+      'field__wrapper',
       {
-        field__control_active: active,
-        field__control_error: showError,
-        field__control_valid: touched && !active && valid,
-        field__control_async: asyncValidating,
+        field__wrapper_active: active,
+        field__wrapper_error: showError,
+        field__wrapper_valid: touched && !active && valid,
+        field__wrapper_async: asyncValidating,
       },
     );
 
-    const controlProps = {
-      ...input,
-      className: 'field__text',
-      type,
-      id: `field-${input.name}`,
-      placeholder,
-    };
-
-
-    let control = <input {...controlProps} />;
+    const id = `field-${input.name}`;
+    let control;
 
     if (type === 'select') {
       control = (
-        <select name="industry" className="field__select" {...input} id={controlProps.id}>
+        <select name="industry" className="field__control field__control_select" {...input} id={id}>
           {children}
         </select>
       );
     }
-    else if (type === 'password') {
-      let eyeClassName = 'field__eye fa fa-eye';
+    else {
+      const controlProps = {
+        ...input,
+        className: 'field__control',
+        type,
+        id,
+        placeholder,
+      };
 
-      if (showPassword) {
-        controlProps.type = 'text';
+      if (type === 'textarea') {
+        controlProps.className = classNames(controlProps.className, 'field__control_textarea');
 
-        eyeClassName += '-slash';
+        control = <textarea {...controlProps} />;
       }
+      else {
+        controlProps.className = classNames(controlProps.className, 'field__control_input');
 
-      control = (
-        <Fragment>
-          {control}
-          <button type="button" className={eyeClassName} onClick={this.passwordHandleClick} />
-        </Fragment>
-      );
-    }
-    else if (type === 'textarea') {
-      controlProps.className = 'field__textarea';
+        if (type === 'password') {
+          let eyeClassName = 'field__eye fa fa-eye';
 
-      control = <textarea {...controlProps} />;
+          if (showPassword) {
+            controlProps.type = 'text';
+
+            eyeClassName += '-slash';
+          }
+
+          control = (
+            <Fragment>
+              {control}
+              <button type="button" className={eyeClassName} onClick={this.passwordHandleClick} />
+            </Fragment>
+          );
+        }
+        else {
+          control = <input {...controlProps} />;
+        }
+      }
     }
+
 
     let errorText = null;
 
@@ -137,7 +147,7 @@ class RenderField extends Component {
     return (
       <Fragment>
         {/* eslint-disable-next-line jsx-a11y/label-has-for */}
-        <label className={classNames('field', className)} htmlFor={controlProps.id}>
+        <label className={classNames('field', className)} htmlFor={id}>
           {label && (
             <span className="field__label">
               {label}
