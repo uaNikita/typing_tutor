@@ -2,7 +2,7 @@ import _ from 'lodash';
 import keyboards from 'Constants/keyboards';
 
 const keyboard = 'english';
-const keys = _.find(keyboards, { name: keyboard }).keys
+const { keys } = _.find(keyboards, { name: keyboard });
 const defaultKeys = _.filter(keys, {
   row: 'middle',
   type: 'letter',

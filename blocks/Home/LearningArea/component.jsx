@@ -10,14 +10,12 @@ class Block extends ContentArea {
   componentDidMount = () => {
     const {
       props: {
-        refreshCurrentLesson,
         updateCharToType,
       },
     } = this;
     document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandler);
 
-    refreshCurrentLesson();
     updateCharToType();
   };
 

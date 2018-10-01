@@ -1,17 +1,14 @@
 import { connect } from 'react-redux';
 import {
-  processSetOptions,
-  generateFingersLesson,
-  setFingersExample,
+  processSetOptionsAndUpdate,
 } from 'ReduxUtils/reducers/modes/learning';
 
 import { getFingersSet } from 'Utils';
 
-import LearningFingers from './component';
+import Component from './component';
 
 const mapStateToProps = (state) => {
   const keys = state.getIn(['main', 'keys']).toJS();
-
   const stateFingers = state.getIn(['learning', 'fingers']);
 
   return {
@@ -23,19 +20,13 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = dispatch => ({
-  updateOptions: (options) => {
-    dispatch(processSetOptions({
-      mode: 'fingers',
-      options,
-    }));
-
-    const example = dispatch(generateFingersLesson());
-
-    dispatch(setFingersExample(example));
-  },
+  updateOptions: options => dispatch(processSetOptionsAndUpdate({
+    mode: 'fingers',
+    options,
+  })),
 });
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(LearningFingers);
+)(Component);

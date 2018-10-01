@@ -5,7 +5,6 @@ import {
   typeChar,
 } from 'ReduxUtils/reducers/main';
 import {
-  refreshCurrentLesson,
   updateCharToType,
 } from 'ReduxUtils/reducers/modes/learning';
 
@@ -21,7 +20,6 @@ const mapDispatchToProps = dispatch => ({
   zeroingStatic: (...args) => dispatch(zeroingStatic(...args)),
   typeChar: (...args) => dispatch(typeChar(...args)),
   updateCharToType: (...args) => dispatch(updateCharToType(...args)),
-  refreshCurrentLesson: (...args) => dispatch(refreshCurrentLesson(...args)),
 });
 
 export default connect(

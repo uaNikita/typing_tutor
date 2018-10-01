@@ -165,7 +165,7 @@ export const processSetOptions = ({ mode, options }) => (
   }
 );
 
-export const generateFingersLesson = () => (
+const generateFingersLesson = () => (
   (dispatch, getState) => {
     const state = getState();
 
@@ -184,7 +184,7 @@ export const generateFingersLesson = () => (
   }
 );
 
-export const generateFreeLesson = () => (
+const generateFreeLesson = () => (
   (dispatch, getState) => {
     const learningState = getState().getIn(['learning', 'free', 'options']);
 
@@ -195,25 +195,36 @@ export const generateFreeLesson = () => (
   }
 );
 
-export const refreshCurrentLesson = () => (dispatch, getState) => {
-  const learningState = getState().get('learning');
+export const processSetOptionsAndUpdate = ({ mode, options }) => (
+  (dispatch, getState) => {
+    dispatch(processSetOptions({
+      mode,
+      options,
+    }));
 
-  let lesson = '';
+    const currentMode = getState().getIn(['learning', 'mode']);
 
-  switch (learningState.get('mode')) {
-    case 'fingers':
-      lesson = dispatch(generateFingersLesson());
-      break;
+    let lesson = '';
 
-    case 'free':
-      lesson = dispatch(generateFreeLesson());
-      break;
+    switch (currentMode) {
+      case 'fingers':
+        lesson = dispatch(generateFingersLesson());
+        dispatch(setFingersExample(lesson));
+        break;
 
-    default:
-  }
+      case 'free':
+        lesson = dispatch(generateFreeLesson());
+        dispatch(setFreeExample(lesson));
+        break;
 
-  dispatch(setCurrentLesson(lesson));
-};
+      default:
+    }
+
+    if (mode === currentMode) {
+      dispatch(setCurrentLesson(lesson));
+    }
+  });
+
 
 export const updateCharToType = () => (dispatch, getState) => {
   const state = getState();
@@ -248,7 +259,23 @@ export const typeLearningMode = char => (
 
       // if this is last character of line need to refresh it
       if (lessonRest.length === 1) {
-        dispatch(refreshCurrentLesson());
+        let lesson = '';
+
+        switch (learningState.get('mode')) {
+          case 'fingers':
+            lesson = dispatch(generateFingersLesson());
+            dispatch(setFingersExample(lesson));
+            break;
+
+          case 'free':
+            lesson = dispatch(generateFreeLesson());
+            dispatch(setFreeExample(lesson));
+            break;
+
+          default:
+        }
+
+        dispatch(setCurrentLesson(lesson));
       }
 
       dispatch(updateCharToType());
@@ -267,12 +294,26 @@ export const initLessons = () => (
   (dispatch, getState) => {
     const state = getState();
 
-    if (!state.getIn(['learning', 'fingers', 'example'])) {
-      const fingersExample = dispatch(generateFingersLesson());
+    const fingersExample = dispatch(generateFingersLesson());
+    dispatch(setFingersExample(fingersExample));
 
-      dispatch(setFingersExample(fingersExample));
+    const freeExample = dispatch(generateFreeLesson());
+    dispatch(setFreeExample(freeExample));
 
-      dispatch(setCurrentLesson(lesson));
+    let lesson;
+
+    switch (state.getIn(['learning', 'mode'])) {
+      case 1:
+        lesson = fingersExample;
+        break;
+
+      case 2:
+        lesson = freeExample;
+        break;
+
+      default:
     }
+
+    dispatch(setCurrentLesson(lesson));
   }
 );

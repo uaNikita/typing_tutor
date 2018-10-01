@@ -249,10 +249,10 @@ export const setData = data => (
   (dispatch) => {
     dispatch(setTextState(data.modes.text));
 
-    let { modes: { learning } } = data;
+    const { modes: { learning } } = data;
 
-    learning.fingers = { options: learning.fingers, };
-    learning.free = { options: learning.free, };
+    learning.fingers = { options: learning.fingers };
+    learning.free = { options: learning.free };
 
     dispatch(setLearningState(learning));
 
@@ -270,8 +270,6 @@ export const getData = options => (
       .then((res) => {
         if (res.ok) {
           dispatch(setData(res.data));
-
-          dispatch(init());
         }
 
         return res;
