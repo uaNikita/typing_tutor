@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { Field, reduxForm } from 'redux-form/immutable';
+import { withRouter } from 'react-router-dom';
+import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import CSSModules from 'react-css-modules';
 
 import RenderField from 'Blocks/RenderField/component';
@@ -10,14 +11,35 @@ import { validateField, validatePassword } from 'Utils/validation';
 import styles from './delete-account.module.styl';
 
 class DeleteAccountModal extends Component {
-  handleSubmit = () => {
+  handleSubmit = (values) => {
     const {
       props: {
+        history: {
+          push,
+        },
+        logOut,
         fetchJSON,
+        setGlobalMessage,
       },
     } = this;
 
-    return fetchJSON('/user/delete');
+    const body = values.toJS();
+
+    delete body.deleteMyAccount;
+
+    return fetchJSON('/user/delete', { body })
+      .then((res) => {
+        if (res.ok) {
+          logOut();
+
+          push('/');
+
+          setGlobalMessage('Accound was deleted');
+        }
+        else if (res.data.errors) {
+          throw new SubmissionError(res.data.errors);
+        }
+      });
   };
 
   render() {
@@ -30,21 +52,22 @@ class DeleteAccountModal extends Component {
     } = this;
 
     return (
-      <form onSubmit={handleSubmit(this.handleSubmit)}>
-        Are you sure you want to do this?
-        <br />
+      <form styleName="root" onSubmit={handleSubmit(this.handleSubmit)}>
+        <p styleName="title">Are you sure you want to do this?</p>
 
-        To verify, type
-        <span styleName="delete-text">
-          delete my account
-        </span>
-        below:
-        <Field name="delete_my_account" component={RenderField} type="text" />
+        <Field
+          name="deleteMyAccount"
+          component={RenderField}
+          type="text"
+          label={'To verify, type "delete my account"'}
+        />
 
-        <div styleName="confirm">
-          Confirm your password:
-          <Field name="confirm_new_password" component={RenderField} type="password" label="Confirm your password" />
-        </div>
+        <Field
+          name="confirmNewPassword"
+          component={RenderField}
+          type="password"
+          label="Confirm your password"
+        />
 
         <Button type="submit" disabled={invalid} isLoader={submitting}>
           Delete my account
@@ -56,23 +79,23 @@ class DeleteAccountModal extends Component {
 
 
 const validate = (values) => {
-  const deleteMyAccountValue = values.get('delete_my_account');
+  const deleteMyAccountValue = values.get('deleteMyAccount');
 
   const errors = {
-    ...validateField('delete_my_account', deleteMyAccountValue),
+    ...validateField('deleteMyAccount', deleteMyAccountValue),
   };
 
-  if (!errors.delete_my_account && deleteMyAccountValue !== 'delete my account') {
-    errors.delete_my_account = 'Message is wrong';
+  if (!errors.deleteMyAccount && deleteMyAccountValue !== 'delete my account') {
+    errors.deleteMyAccount = 'Message is wrong';
   }
 
   return {
     ...errors,
-    ...validatePassword('confirm_new_password', values.get('confirm_new_password')),
+    ...validatePassword('confirmNewPassword', values.get('confirmNewPassword')),
   };
 };
 
 export default reduxForm({
   form: 'delete-account',
   validate,
-})(CSSModules(DeleteAccountModal, styles));
+})(withRouter(CSSModules(DeleteAccountModal, styles)));

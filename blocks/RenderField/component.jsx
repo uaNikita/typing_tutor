@@ -103,6 +103,7 @@ class RenderField extends Component {
       }
       else {
         controlProps.className = classNames(controlProps.className, 'field__control_input');
+        control = <input {...controlProps} />;
 
         if (type === 'password') {
           let eyeClassName = 'field__eye fa fa-eye';
@@ -119,9 +120,6 @@ class RenderField extends Component {
               <button type="button" className={eyeClassName} onClick={this.passwordHandleClick} />
             </Fragment>
           );
-        }
-        else {
-          control = <input {...controlProps} />;
         }
       }
     }

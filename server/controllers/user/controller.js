@@ -17,7 +17,7 @@ const getData = (req, res, next) => {
       if (statistic) {
         data.statistic = statistic;
       }
-      
+
       res.json(data);
     })
     .catch(e => next(e));
@@ -89,7 +89,7 @@ const deleteAccount = (req, res, next) => {
   const {
     user,
     body: {
-      confirm_new_password: confirmNewPassword,
+      confirmNewPassword,
     },
   } = req;
 
@@ -100,14 +100,14 @@ const deleteAccount = (req, res, next) => {
 
         return Promise.all([
           Client.find({ user: userId }),
-          Statistic.findOne({ user: userId }),
+          Statistic.find({ user: userId }),
           Verification.find({ user: userId }),
         ]);
       }
 
       throw new APIError({
         errors: {
-          confirm_new_password: 'Incorrect password',
+          confirmNewPassword: 'Incorrect password',
         },
         status: httpStatus.BAD_REQUEST,
       });

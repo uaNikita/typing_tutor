@@ -21,7 +21,7 @@ class Block extends Component {
 
     const body = values.toJS();
 
-    delete body.confirm_new_password;
+    delete body.confirmNewPassword;
 
     return fetchJSON('/user/change-password', { body })
       .then((res) => {
@@ -69,7 +69,7 @@ class Block extends Component {
         />
 
         <Field
-          name="confirm_new_password"
+          name="confirmNewPassword"
           component={RenderField}
           type="password"
           label="Confirm new password"
@@ -92,17 +92,17 @@ const validate = (values) => {
   const errors = {};
 
   const newPassword = values.get('new_password');
-  const confirmNewPassword = values.get('confirm_new_password');
+  const confirmNewPassword = values.get('confirmNewPassword');
 
   if (newPassword !== confirmNewPassword) {
-    errors.confirm_new_password = 'Password does not match';
+    errors.confirmNewPassword = 'Password does not match';
   }
 
   return {
     ...errors,
     ...validatePassword('old_password', values.get('old_password')),
     ...validatePassword('new_password', values.get('new_password')),
-    ...validatePassword('confirm_new_password', values.get('confirm_new_password')),
+    ...validatePassword('confirmNewPassword', values.get('confirmNewPassword')),
   };
 };
 
