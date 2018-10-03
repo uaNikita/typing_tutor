@@ -33,9 +33,12 @@
                margin-bottom: 15px
          &-content
             flex: 0 0 700px;
-      &keyboard
+      &keyboard-free
          .keyboard__key:not(.keyboard__key_disabled)
-            cursor: pointer
+            cursor: pointer;
+         &_last
+            .keyboard__key_selected
+               cursor: default !important;
    .learningarea
       margin-bottom: 20px
 

@@ -79,20 +79,23 @@ app.use(async (req, res) => {
   } = req.cookies;
 
   // read info from tt_temp cookie and add it to store
-  let tempState = {};
+  let stateFromCookie = {};
 
   if (tempCookie) {
-    tempState = LZString.decompressFromEncodedURIComponent(tempCookie);
+    stateFromCookie = LZString.decompressFromEncodedURIComponent(tempCookie);
 
-    tempState = JSON.parse(tempState);
+    stateFromCookie = JSON.parse(stateFromCookie);
   }
 
-  tempState = _.merge({}, defaults, tempState);
-
-  tempState = Immutable.fromJS(tempState);
+  // if value is array then replace array with new
+  const mergedState =_.mergeWith({}, defaults, stateFromCookie, (objValue, srcValue) => {
+    if (_.isArray(objValue)) {
+      return srcValue;
+    }
+  });
 
   // create store
-  const store = createStore(reducer, tempState, applyMiddleware(thunk));
+  const store = createStore(reducer, Immutable.fromJS(mergedState), applyMiddleware(thunk));
 
   const { dispatch } = store;
 

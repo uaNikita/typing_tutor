@@ -139,8 +139,17 @@ export const typeOnLesson = () => ({
   type: TYPE_ON_LESSON,
 });
 
-export const processSetOptions = ({ mode, options }) => (
-  (dispatch, getState) => {
+export const processSetOptions = (() => {
+  const deferredFetch = _.throttle(
+    (dispatch, mode, options) => dispatch(fetchJSON('/learning', {
+      body: {
+        [mode]: options,
+      },
+    })),
+    1000,
+  );
+
+  return ({ mode, options }) => (dispatch, getState) => {
     switch (mode) {
       case 'fingers':
         dispatch(updateFingersOptions(options));
@@ -156,14 +165,10 @@ export const processSetOptions = ({ mode, options }) => (
         `learning.${mode}.options`,
         getState().getIn(['learning', mode, 'options']).toJS(),
       ),
-      () => dispatch(fetchJSON('/learning', {
-        body: {
-          [mode]: options,
-        },
-      })),
+      () => deferredFetch(dispatch, mode, options),
     ));
-  }
-);
+  };
+})();
 
 const generateFingersLesson = () => (
   (dispatch, getState) => {

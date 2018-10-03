@@ -44,6 +44,18 @@ class LearningFree extends Component {
     updateOptions({ maxLettersInWord });
   };
 
+  updateKey = (action, key) => {
+    const {
+      props: {
+        updateOptions,
+      },
+    } = this;
+
+    updateOptions({
+      letters: [action, key],
+    });
+  }
+
   render() {
     const {
       props: {
@@ -51,7 +63,6 @@ class LearningFree extends Component {
           letters,
         },
         keys,
-        updateOptions,
         example,
       },
       maxLettersInWordSliderProps,
@@ -68,17 +79,13 @@ class LearningFree extends Component {
       if (obj.type === 'letter') {
         if (letters.indexOf(obj.key) + 1) {
           if (letters.length > 1) {
-            keyProps.onClick = () => updateOptions({
-              letters: ['remove', obj.key],
-            });
+            keyProps.onClick = this.updateKey.bind(this, 'remove', obj.key);
           }
 
           className = classNames(className, 'keyboard__key_selected');
         }
         else {
-          keyProps.onClick = () => updateOptions({
-            letters: ['add', obj.key],
-          });
+          keyProps.onClick = this.updateKey.bind(this, 'add', obj.key);
         }
       }
       else {
@@ -96,6 +103,10 @@ class LearningFree extends Component {
           {...keyProps}
         />
       );
+    });
+
+    const keyboardClassName = classNames('keyboard', 'options-learning__keyboard-free', {
+      'options-learning__keyboard-free_last': letters.length === 1,
     });
 
     return (
@@ -121,7 +132,7 @@ class LearningFree extends Component {
           </div>
         </div>
 
-        <div className="keyboard">
+        <div className={keyboardClassName}>
           {keyNodes}
         </div>
       </Fragment>
