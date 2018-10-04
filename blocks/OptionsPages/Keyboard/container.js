@@ -1,6 +1,8 @@
 import { connect } from 'react-redux';
 
 import { setState } from 'ReduxUtils/reducers/user';
+import { initLessons } from 'ReduxUtils/reducers/modes/learning';
+
 import Keyboard from './component';
 
 const mapStateToProps = state => ({
@@ -8,7 +10,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setKeyboard: keyboard => dispatch(setState({ keyboard })),
+  setKeyboard: (keyboard) => {
+    dispatch(setState({ keyboard }));
+    dispatch(initLessons());
+  },
 });
 
 export default connect(
