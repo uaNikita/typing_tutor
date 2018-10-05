@@ -21,7 +21,7 @@ const CLEAR_STATE = 'main/CLEAR_STATE';
 const PRESS_KEYS = 'main/PRESS_KEYS';
 const UNPRESS_KEYS = 'main/UNPRESS_KEYS';
 const ZEROING_STATISTIC = 'main/ZEROING_STATISTIC';
-const SET_KEYBOARD = 'main/SET_KEYBOARD';
+const SET_KEYS = 'main/SET_KEYS';
 const PRESS_WRONG_KEYS = 'main/PRESS_WRONG_KEYS';
 const UNPRESS_WRONG_KEYS = 'main/UNPRESS_WRONG_KEYS';
 const SET_START_TYPING_TIME = 'main/SET_START_TYPING_TIME';
@@ -49,9 +49,6 @@ const initialState = Immutable.fromJS({
 
   idCharsToType: '',
 
-  // text, learning
-  mode: 'text',
-
   globalMessage: false,
 });
 
@@ -62,6 +59,9 @@ export default (state = initialState, action = {}) => {
 
     case CLEAR_STATE:
       return state.merge(initialState);
+
+    case SET_KEYS:
+      return state.set('keys', action.keys);
 
     case PRESS_KEYS:
       return state.update('pressedKeys', keys => keys.union(action.ids));
@@ -123,12 +123,6 @@ export default (state = initialState, action = {}) => {
         start: undefined,
       }));
 
-    case SET_KEYBOARD:
-      return state.merge({
-        keyboard: action.name,
-        keys: Immutable.List(_.find(keyboards, { name: action.name }).keys),
-      });
-
     case SET_GLOBAL_MESSAGE:
       return state.set('globalMessage', action.message);
 
@@ -143,6 +137,11 @@ export const setState = () => ({
 
 export const clearState = () => ({
   type: CLEAR_STATE,
+});
+
+export const setKeys = keys => ({
+  type: SET_KEYS,
+  keys,
 });
 
 export const pressKeys = ids => ({
@@ -170,11 +169,6 @@ export const setStartTypingTime = time => ({
   time,
 });
 
-export const setKeyboard = name => ({
-  type: SET_KEYBOARD,
-  name,
-});
-
 export const setIdsCharToType = id => ({
   type: SET_IDS_CHAR_TO_TYPE,
   id,
@@ -195,6 +189,15 @@ export const setGlobalMessage = message => ({
   message,
 });
 
+export const getKeysFromKeyboard = () => (
+  (dispatch, getState) => {
+    const name = getState().getIn(['user', 'keyboard']);
+    const keys = Immutable.List(_.find(keyboards, { name }).keys);
+
+    dispatch(setKeys(keys));
+  }
+);
+
 export const processAction = (saveToClient, saveToServer) => (
   (dispatch, getState) => {
     let promise = Promise.resolve();
@@ -210,34 +213,36 @@ export const processAction = (saveToClient, saveToServer) => (
   }
 );
 
-export const typeChar = char => (dispatch, getState) => {
-  const state = getState();
+export const typeChar = char => (
+  (dispatch, getState) => {
+    const state = getState();
 
-  const normalizedChar = normalizeString(char);
+    const normalizedChar = normalizeString(char);
 
-  const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), normalizedChar);
+    const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), normalizedChar);
 
-  dispatch(pressKeys(idsChar));
+    dispatch(pressKeys(idsChar));
 
-  // unpress keys
-  setTimeout(() => {
-    dispatch(unPressKeys(idsChar));
+    // unpress keys
+    setTimeout(() => {
+      dispatch(unPressKeys(idsChar));
 
-    dispatch(unPressWrongKeys(idsChar));
-  }, 100);
+      dispatch(unPressWrongKeys(idsChar));
+    }, 100);
 
-  switch (state.getIn(['user', 'mode'])) {
-    case 'text':
-      dispatch(typeTextMode(normalizedChar));
-      break;
+    switch (state.getIn(['user', 'mode'])) {
+      case 'text':
+        dispatch(typeTextMode(normalizedChar));
+        break;
 
-    case 'learning':
-      dispatch(typeLearningMode(normalizedChar));
-      break;
+      case 'learning':
+        dispatch(typeLearningMode(normalizedChar));
+        break;
 
-    default:
+      default:
+    }
   }
-};
+);
 
 export const init = () => (
   (dispatch) => {
