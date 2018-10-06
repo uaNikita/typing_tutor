@@ -1,7 +1,13 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import { getIdsFromCharacter, generateLesson, getFingersSet } from 'Utils';
+import {
+  getIdsFromCharacter,
+  generateLesson,
+  getFingersSet,
+  getDefaultFingersSetSize,
+  getDefaultFreeLetters,
+} from 'Utils';
 import tempCookie from 'Utils/tempCookie';
 import defaults from 'Constants/defaultState';
 
@@ -301,6 +307,22 @@ export const typeLearningMode = char => (
 
 export const initLessons = () => (
   (dispatch, getState) => {
+    const keys = getState().getIn(['main', 'keys']).toJS();
+
+    dispatch(processSetOptions({
+      mode: 'fingers',
+      options: {
+        setSize: getDefaultFingersSetSize(keys),
+      },
+    }));
+
+    dispatch(processSetOptions({
+      mode: 'free',
+      options: {
+        letters: ['set', getDefaultFreeLetters(keys)],
+      },
+    }));
+
     const fingersExample = dispatch(generateFingersLesson());
     dispatch(setFingersExample(fingersExample));
 

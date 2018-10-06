@@ -126,3 +126,28 @@ export const closestEl = (el, selector) => {
 
   return closest;
 };
+
+
+const defaultKeysType = {
+  row: 'middle',
+  type: 'letter',
+};
+
+export const getDefaultFingersSetSize = keys => (
+  _(keys)
+    .filter(defaultKeysType)
+    .map(o => ({
+      finger: o.finger,
+      hand: o.hand,
+    }))
+    .uniqWith(_.isEqual)
+    .value()
+    .length
+);
+
+export const getDefaultFreeLetters = keys => (
+  _(keys)
+    .filter(defaultKeysType)
+    .map(obj => obj.key)
+    .value()
+);
