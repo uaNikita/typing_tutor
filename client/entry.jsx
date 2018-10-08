@@ -13,7 +13,7 @@ import 'react-day-picker/lib/style.css';
 
 import 'Static/stylus/main.styl';
 
-import App from 'Blocks/App';
+import App from 'Blocks/App/container';
 
 import store from './store';
 

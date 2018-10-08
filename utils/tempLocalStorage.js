@@ -1,11 +1,18 @@
+/*
+* Util to keep temporary data which takes up big space for unauthorized users
+*/
+
+import LZString from 'lz-string';
 import _ from 'lodash';
 
-const varName = 'touchToType';
+const name = 'ttt';
 
 const get = () => {
-  let obj = window.localStorage.getItem(varName);
+  let obj = window.localStorage.getItem(name);
 
   if (obj) {
+    obj = LZString.decompressFromEncodedURIComponent(obj);
+
     obj = JSON.parse(obj);
   }
   else {
@@ -15,15 +22,32 @@ const get = () => {
   return obj;
 };
 
-const set = (path, val) => window.localStorage.setItem(varName, JSON.stringify(_.set(get(), path, val)));
+const set = (obj) => {
+  const data = JSON.stringify(obj);
+  const compresseddata = LZString.compressToEncodedURIComponent(data);
 
-const update = obj => window.localStorage.setItem(varName, JSON.stringify(_.merge(get(), obj)));
+  window.localStorage.setItem(name, compresseddata);
+};
 
-const clear = () => window.localStorage.removeItem(varName);
+
+const path = (pathToProp, val) => {
+  const obj = _.set(get(), pathToProp, val);
+
+  set(obj);
+};
+
+const assign = (objToExtend) => {
+  const obj = _.merge(get(), objToExtend);
+
+  set(obj);
+};
+
+const clear = () => window.localStorage.removeItem(name);
 
 export default {
   get,
   set,
-  update,
+  path,
+  assign,
   clear,
 };

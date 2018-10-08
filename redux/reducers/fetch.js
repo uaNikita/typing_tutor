@@ -3,6 +3,7 @@ import _ from 'lodash';
 import Cookies from 'js-cookie';
 
 import defaults from 'Constants/defaultState';
+import tempLocalStorage from 'Utils/tempLocalStorage';
 
 import { clearState as clearLearningState } from './modes/learning';
 import { clearState as clearTextState } from './modes/text';
@@ -65,6 +66,7 @@ export const logOut = () => (dispatch) => {
   Cookies.remove('tt_refresh');
   Cookies.remove('tt_access');
   Cookies.remove('tt_temp');
+  tempLocalStorage.clear();
 
   dispatch(clearState());
   dispatch(clearMainState());

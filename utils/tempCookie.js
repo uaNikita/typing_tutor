@@ -1,5 +1,5 @@
 /*
-* Util to keep temporary data for unauthorized users
+* Util to keep temporary data which takes up little space for unauthorized users
 */
 
 import Cookies from 'js-cookie';
@@ -24,11 +24,10 @@ const get = () => {
 };
 
 const set = (obj) => {
-  let cookie = JSON.stringify(obj);
+  const data = JSON.stringify(obj);
+  const compresseddata = LZString.compressToEncodedURIComponent(data);
 
-  cookie = LZString.compressToEncodedURIComponent(cookie);
-
-  Cookies.set(cookieName, cookie);
+  Cookies.set(cookieName, compresseddata);
 };
 
 
