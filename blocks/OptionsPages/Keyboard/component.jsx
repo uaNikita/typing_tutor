@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
-import _ from 'lodash';
 
 import { Field, reduxForm } from 'redux-form/immutable';
 import RenderField from 'Blocks/RenderField/component';
@@ -9,7 +8,6 @@ import Key from 'Blocks/Key/component';
 import keyboards from 'Constants/keyboards/index';
 
 import styles from './keyboard.module.styl';
-
 
 class Block extends Component {
   handleOnChange = (e) => {
@@ -25,11 +23,9 @@ class Block extends Component {
   render() {
     const {
       props: {
-        keyboard,
+        keys,
       },
     } = this;
-
-    const { keys } = _.find(keyboards, { name: keyboard });
 
     const keyNodes = keys.map((obj) => {
       const keyProps = {
