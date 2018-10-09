@@ -1,10 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {
-  withRouter,
-  Switch,
-  Route,
-  Redirect,
-} from 'react-router-dom';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import GlobalMessageTransitionGroup from 'Blocks/GlobalMessageTransitionGroup/container';
@@ -82,4 +77,4 @@ class Block extends Component {
   }
 }
 
-export default withRouter(Block);
+export default Block;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { hydrate } from 'react-dom';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
 import 'isomorphic-fetch';
@@ -25,7 +25,7 @@ if (!Element.prototype.matches) {
 hydrate(
   <Provider store={store}>
     <BrowserRouter>
-      <App />
+      <Route path="/" component={App} />
     </BrowserRouter>
   </Provider>,
   document.getElementById('root'),
