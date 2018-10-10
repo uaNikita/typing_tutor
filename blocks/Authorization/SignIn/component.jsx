@@ -3,6 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import classNames from 'classnames';
 
+import { clearUnauthorizedData } from 'Utils';
 import { validateEmail, validatePassword } from 'Utils/validation';
 import RenderField from 'Blocks/RenderField/component';
 import Button from 'Blocks/Button/component';
@@ -37,6 +38,8 @@ class Block extends Component {
             tokens,
             ...rest
           } = res.data;
+
+          clearUnauthorizedData();
 
           setTokens(tokens);
 

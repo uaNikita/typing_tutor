@@ -1,6 +1,14 @@
 import _ from 'lodash';
 
-export function getIdsFromCharacter(keys, сharacter) {
+import tempCookie from 'Utils/tempCookie';
+import tempLocalStorage from 'Utils/tempLocalStorage';
+
+export const clearUnauthorizedData = () => {
+  tempCookie.clear();
+  tempLocalStorage.clear();
+};
+
+export const getIdsFromCharacter = (keys, сharacter) => {
   const charsToType = [];
 
   keys.forEach((obj) => {
@@ -21,9 +29,9 @@ export function getIdsFromCharacter(keys, сharacter) {
   });
 
   return charsToType;
-}
+};
 
-export function sliceChar(chars, idChars) {
+export const sliceChar = (chars, idChars) => {
   let newChars = chars.slice();
 
   _.forEach(idChars, (id) => {
@@ -38,7 +46,7 @@ export function sliceChar(chars, idChars) {
   });
 
   return newChars;
-}
+};
 
 export const generateLesson = (() => {
   const minWordLength = 3;
@@ -77,7 +85,7 @@ export const generateLesson = (() => {
   };
 })();
 
-export function getFingersSet(keys) {
+export const getFingersSet = (keys) => {
   const fingers = ['index', 'middle', 'ring', 'pinky'];
   const rows = ['middle', 'top', 'bottom'];
   const hands = ['left', 'right'];
@@ -102,7 +110,7 @@ export function getFingersSet(keys) {
   });
 
   return lettersSet;
-}
+};
 
 export const normalizeString = (string) => {
   let result = encodeURIComponent(string);

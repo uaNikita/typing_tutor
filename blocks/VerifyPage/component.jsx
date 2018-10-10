@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import URLSearchParams from 'url-search-params';
 
+import { clearUnauthorizedData } from 'Utils';
+
 import Logo from 'Blocks/Logo/component';
 import Loader from 'Blocks/Loader/component';
 
@@ -40,6 +42,8 @@ class VerifyPage extends Component {
               tokens,
               ...rest
             } = res.data;
+
+            clearUnauthorizedData();
 
             setTokens(tokens);
 
