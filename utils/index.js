@@ -3,6 +3,8 @@ import _ from 'lodash';
 import tempCookie from 'Utils/tempCookie';
 import tempLocalStorage from 'Utils/tempLocalStorage';
 
+export { tempCookie, tempLocalStorage };
+
 export const clearUnauthorizedData = () => {
   tempCookie.clear();
   tempLocalStorage.clear();

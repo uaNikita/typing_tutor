@@ -1,8 +1,13 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import { getIdsFromCharacter, normalizeString } from 'Utils';
-import tempLocalStorage from 'Utils/tempLocalStorage';
+import {
+  tempCookie,
+  tempLocalStorage,
+  getIdsFromCharacter,
+  normalizeString,
+} from 'Utils';
+
 import defaults from 'Constants/defaultState';
 import { fetchJSON } from '../fetch';
 import {
@@ -136,22 +141,26 @@ export const processAddText = data => (
 
     dispatch(addText(text));
 
-    const textState = getState().get('text');
+    const entities = getState().getIn(['text', 'entities']);
 
-    const id = textState.get('entities').last().get('id');
+    const body = { text };
 
     if (select) {
+      const id = entities.last().get('id');
+
       dispatch(selectText(id));
+
+      body.id = id;
     }
 
-    const body = {
-      id,
-      text,
-      select,
-    };
-
     return dispatch(processAction(
-      () => tempLocalStorage.path('text', textState.toJS()),
+      () => {
+        if (body.id) {
+          tempCookie.path('text.selectedId', body.id);
+        }
+
+        tempLocalStorage.path('text.entities', entities.toJS());
+      },
       () => dispatch(fetchJSON('/text', { body })),
     ));
   }
@@ -162,7 +171,14 @@ export const processUpdateText = (id, { text, select }) => (
     const normalizedText = normalizeString(text);
 
     return dispatch(processAction(
-      () => tempLocalStorage.path('text', getState().get('text').toJS()),
+      () => {
+        if (select) {
+          tempCookie.path('text.selectedId', id);
+        }
+
+        const entities = getState().getIn(['text', 'entities']);
+        tempLocalStorage.path('text.entities', entities.toJS());
+      },
       () => dispatch(fetchJSON(`/text/${id}`, {
         method: 'PATCH',
         body: {
@@ -185,7 +201,7 @@ export const processSelectText = id => (
     const selectedId = parseInt(id, 10);
 
     return dispatch(processAction(
-      () => tempLocalStorage.path('text.selectedId', selectedId),
+      () => tempCookie.path('text.selectedId', selectedId),
       () => dispatch(fetchJSON(`/text/${id}/select`)),
     ))
       .then(() => dispatch(selectText(selectedId)));
@@ -197,8 +213,10 @@ export const processRefreshText = id => (
 
     const body = { id };
 
+    const entities = getState().getIn(['text', 'entities']);
+
     return dispatch(processAction(
-      () => tempLocalStorage.path('text.entities', getState().getIn(['text', 'entities']).toJS()),
+      () => tempLocalStorage.path('text.entities', entities.toJS()),
       () => dispatch(fetchJSON('/text/refresh', { body })),
     ));
   }
@@ -218,33 +236,32 @@ export const updateCharToType = () => (dispatch, getState) => {
   dispatch(setIdsCharToType(idsChar));
 };
 
-export const typeEntitiySaveToServer = _.throttle(
-  (dispatch, ...rest) => dispatch(fetchJSON('/text/type', ...rest)),
-  2000,
-  { leading: false },
-);
+export const processTypeEntitiy = (() => {
+  const deferredFetch = _.throttle(
+    (dispatch, ...rest) => dispatch(fetchJSON('/text/type', ...rest)),
+    2000,
+  );
 
-export const processTypeEntitiy = id => (
-  (dispatch, getState) => {
-    const textState = getState().get('text');
+  return id => (
+    (dispatch, getState) => {
+      dispatch(typeEntitie(id));
 
-    dispatch(typeEntitie(id));
+      const entities = getState().getIn(['text', 'entities']);
+      const text = entities.filter(obj => obj.get('id') === id).get(0);
 
-    const text = textState.get('entities')
-      .filter(obj => obj.get('id') === id)
-      .get(0);
+      const body = {
+        id,
+        typed: text.get('typed').length,
+      };
 
-    const body = {
-      id,
-      typed: text.get('typed').length,
-    };
+      return dispatch(processAction(
+        () => tempLocalStorage.path('text.entities', entities.toJS()),
+        () => deferredFetch(dispatch, { body }),
+      ));
+    }
+  );
+})();
 
-    return dispatch(processAction(
-      () => tempLocalStorage.path('text', textState.toJS()),
-      () => typeEntitiySaveToServer(dispatch, { body }),
-    ));
-  }
-);
 
 export const typeTextMode = char => (dispatch, getState) => {
   const state = getState();
