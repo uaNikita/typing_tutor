@@ -104,10 +104,14 @@ export const clearState = () => ({
   type: CLEAR_STATE,
 });
 
-export const setState = data => ({
-  type: SET_STATE,
-  data,
-});
+export const setState = data => {
+  console.log('setState');
+
+  return {
+    type: SET_STATE,
+    data,
+  }
+};
 
 export const addText = text => ({
   type: ADD_TEXT,

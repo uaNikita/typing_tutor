@@ -3,7 +3,7 @@ import _ from 'lodash';
 import Cookies from 'js-cookie';
 
 import defaults from 'Constants/defaultState';
-import tempLocalStorage from 'Utils/tempLocalStorage';
+import { tempLocalStorage } from 'Utils';
 
 import { clearState as clearLearningState } from './modes/learning';
 import { clearState as clearTextState } from './modes/text';

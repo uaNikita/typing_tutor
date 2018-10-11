@@ -2,13 +2,13 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 
 import {
+  tempCookie,
   getIdsFromCharacter,
   generateLesson,
   getFingersSet,
   getDefaultFingersSetSize,
   getDefaultFreeLetters,
 } from 'Utils';
-import tempCookie from 'Utils/tempCookie';
 import defaults from 'Constants/defaultState';
 
 import { fetchJSON } from '../fetch';

@@ -15,7 +15,7 @@ import Footer from 'Blocks/Footer/component';
 import NotFound from 'Blocks/NotFound/component';
 import Authorization from 'Blocks/Authorization/component';
 
-import tempLocalStorage from 'Utils/tempLocalStorage';
+import { tempLocalStorage } from 'Utils';
 
 class Block extends Component {
   componentDidMount() {
@@ -78,3 +78,5 @@ class Block extends Component {
 }
 
 export default Block;
+
+432

@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 
 import defaults from 'Constants/defaultState';
-import tempCookie from 'Utils/tempCookie';
+import { tempCookie } from 'Utils';
 
 import { processAction } from './main';
 import { fetchJSON } from './fetch';

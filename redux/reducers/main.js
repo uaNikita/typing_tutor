@@ -254,6 +254,8 @@ export const setData = data => (
   (dispatch) => {
     dispatch(setTextState(data.modes.text));
 
+    console.log('data', data);
+
     const { modes: { learning } } = data;
 
     learning.fingers = { options: learning.fingers };
