@@ -20,8 +20,9 @@ class Block extends Component {
       },
     } = this;
 
-    return updateText(id, values.toJS())
-      .then(() => push('/mode/text'));
+    updateText(id, values.toJS());
+
+    push('/mode/text');
   };
 
   render() {

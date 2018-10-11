@@ -170,9 +170,21 @@ export const processUpdateText = (id, { text, select }) => (
   (dispatch, getState) => {
     const normalizedText = normalizeString(text);
 
+    dispatch(updateText(id, normalizedText));
+
+    const body = {
+      text: normalizedText,
+    };
+
+    if (select) {
+      dispatch(selectText(id));
+
+      body.select = select;
+    }
+
     return dispatch(processAction(
       () => {
-        if (select) {
+        if (body.select) {
           tempCookie.path('text.selectedId', id);
         }
 
@@ -181,30 +193,21 @@ export const processUpdateText = (id, { text, select }) => (
       },
       () => dispatch(fetchJSON(`/text/${id}`, {
         method: 'PATCH',
-        body: {
-          text: normalizedText,
-          select,
-        },
+        body,
       })),
-    ))
-      .then(() => {
-        dispatch(updateText(id, normalizedText));
-
-        if (select) {
-          dispatch(selectText(id));
-        }
-      });
+    ));
   });
 
 export const processSelectText = id => (
   (dispatch) => {
     const selectedId = parseInt(id, 10);
 
+    dispatch(selectText(selectedId));
+
     return dispatch(processAction(
       () => tempCookie.path('text.selectedId', selectedId),
       () => dispatch(fetchJSON(`/text/${id}/select`)),
-    ))
-      .then(() => dispatch(selectText(selectedId)));
+    ));
   });
 
 export const processRefreshText = id => (
