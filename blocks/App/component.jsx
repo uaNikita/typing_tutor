@@ -78,5 +78,3 @@ class Block extends Component {
 }
 
 export default Block;
-
-432

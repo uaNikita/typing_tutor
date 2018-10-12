@@ -78,42 +78,49 @@ app.use(async (req, res) => {
     tt_temp: tempCookie,
   } = req.cookies;
 
-  // read info from tt_temp cookie and add it to store
-  let stateFromCookie = {};
 
+  let store;
+  let dispatch;
+
+  // non authorized users
   if (tempCookie) {
-    stateFromCookie = LZString.decompressFromEncodedURIComponent(tempCookie);
+    // read info from tt_temp cookie and add it to store
+    let stateFromCookie = LZString.decompressFromEncodedURIComponent(tempCookie);
 
     stateFromCookie = JSON.parse(stateFromCookie);
+
+    // if value is array then replace array with new
+    const mergedState = _.mergeWith({}, defaults, stateFromCookie, (objValue, srcValue) => {
+      if (_.isArray(objValue)) {
+        return srcValue;
+      }
+    });
+
+    // create store
+    store = createStore(reducer, Immutable.fromJS(mergedState), applyMiddleware(thunk));
+    dispatch = store.dispatch;
   }
+  // authorized users
+  else {
+    store = createStore(reducer, Immutable.fromJS(defaults), applyMiddleware(thunk));
+    dispatch = store.dispatch;
 
-  // if value is array then replace array with new
-  const mergedState =_.mergeWith({}, defaults, stateFromCookie, (objValue, srcValue) => {
-    if (_.isArray(objValue)) {
-      return srcValue;
+    if (accessCookie) {
+      dispatch(setAccessToken(accessCookie));
+      dispatch(setRefreshToken(refreshCookie));
+
+      await dispatch(getData({
+        responseFromServer: res,
+      }))
+        .then(({ ok }) => {
+          if (!ok) {
+            res.clearCookie('tt_refresh');
+            res.clearCookie('tt_access');
+            res.clearCookie('tt_temp');
+          }
+        })
+        .catch(() => {});
     }
-  });
-
-  // create store
-  const store = createStore(reducer, Immutable.fromJS(mergedState), applyMiddleware(thunk));
-  const { dispatch } = store;
-
-  // get all info for authorized users
-  if (accessCookie) {
-    dispatch(setAccessToken(accessCookie));
-    dispatch(setRefreshToken(refreshCookie));
-
-    await dispatch(getData({
-      responseFromServer: res,
-    }))
-      .then(({ ok }) => {
-        if (!ok) {
-          res.clearCookie('tt_refresh');
-          res.clearCookie('tt_access');
-          res.clearCookie('tt_temp');
-        }
-      })
-      .catch(() => {});
   }
 
   // initialize some parts of store, for example learning lessons
