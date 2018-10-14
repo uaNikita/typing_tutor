@@ -163,7 +163,7 @@ app.use(async (req, res) => {
   }
 });
 
-// Errors
+// errors
 require('./errors')(app);
 
 app.listen(config.get('port'));
