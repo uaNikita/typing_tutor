@@ -8,7 +8,7 @@ import {
   normalizeString,
 } from 'Utils';
 
-import defaults from 'Constants/defaultState';
+import { defaults } from 'Constants/defaultState';
 import { fetchJSON } from '../fetch';
 import {
   processAction,

@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 import Cookies from 'js-cookie';
 
-import defaults from 'Constants/defaultState';
+import { defaults } from 'Constants/defaultState';
 import { tempLocalStorage } from 'Utils';
 
 import { clearState as clearLearningState } from './modes/learning';

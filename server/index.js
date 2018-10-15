@@ -26,6 +26,7 @@ const {
   init,
   getData,
   defaults,
+  defaultsWhichCanBeOverwrittenByLS,
 } = require('../dist/compiledServer');
 
 mongoose.Promise = global.Promise;
@@ -76,51 +77,50 @@ app.use(async (req, res) => {
     tt_access: accessCookie,
     tt_refresh: refreshCookie,
     tt_temp: tempCookie,
+    tt_ls: ttLS,
   } = req.cookies;
 
+  // read info from tt_temp cookie and add it to store
+  let stateFromCookie = {};
+  const objectsToMerge = [{}, defaults];
 
-  let store;
-  let dispatch;
+  if (!ttLS) {
+    objectsToMerge.push(defaultsWhichCanBeOverwrittenByLS);
+  }
 
-  // non authorized users
   if (tempCookie) {
-    // read info from tt_temp cookie and add it to store
-    let stateFromCookie = LZString.decompressFromEncodedURIComponent(tempCookie);
+    stateFromCookie = LZString.decompressFromEncodedURIComponent(tempCookie);
 
     stateFromCookie = JSON.parse(stateFromCookie);
-
-    // if value is array then replace array with new
-    const mergedState = _.mergeWith({}, defaults, stateFromCookie, (objValue, srcValue) => {
-      if (_.isArray(objValue)) {
-        return srcValue;
-      }
-    });
-
-    // create store
-    store = createStore(reducer, Immutable.fromJS(mergedState), applyMiddleware(thunk));
-    dispatch = store.dispatch;
   }
-  // authorized users
-  else {
-    store = createStore(reducer, Immutable.fromJS(defaults), applyMiddleware(thunk));
-    dispatch = store.dispatch;
 
-    if (accessCookie) {
-      dispatch(setAccessToken(accessCookie));
-      dispatch(setRefreshToken(refreshCookie));
-
-      await dispatch(getData({
-        responseFromServer: res,
-      }))
-        .then(({ ok }) => {
-          if (!ok) {
-            res.clearCookie('tt_refresh');
-            res.clearCookie('tt_access');
-            res.clearCookie('tt_temp');
-          }
-        })
-        .catch(() => {});
+  // if value is array then replace array with new
+  const mergedState = _.mergeWith(...objectsToMerge, (objValue, srcValue) => {
+    if (_.isArray(objValue)) {
+      return srcValue;
     }
+  });
+
+  // create store
+  const store = createStore(reducer, Immutable.fromJS(mergedState), applyMiddleware(thunk));
+  const { dispatch } = store;
+
+  // get all info for authorized users
+  if (accessCookie) {
+    dispatch(setAccessToken(accessCookie));
+    dispatch(setRefreshToken(refreshCookie));
+
+    await dispatch(getData({
+      responseFromServer: res,
+    }))
+      .then(({ ok }) => {
+        if (!ok) {
+          res.clearCookie('tt_refresh');
+          res.clearCookie('tt_access');
+          res.clearCookie('tt_temp');
+        }
+      })
+      .catch(() => {});
   }
 
   // initialize some parts of store, for example learning lessons
