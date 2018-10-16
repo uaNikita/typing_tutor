@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
+import Loader from 'Blocks/Loader/component';
 import ContentToType from 'Blocks/ContentToType/component';
 import GeneralModeButton from '../../GeneralModeButton/container';
 
@@ -18,37 +19,40 @@ const Block = (props) => {
   } = props;
 
   let addTextLink;
+  let textEls = <Loader size="30" />;
 
-  if (texts.length < 10) {
-    addTextLink = (
-      <Link to={`${url}/add`}>
-        Add new text
-      </Link>
-    );
-  }
-  else {
-    addTextLink = (
-      <p>
-        Your can have maximum 10 texts
-      </p>
-    );
-  }
+  if (texts) {
+    textEls = texts.map(({ id, content }) => {
+      const className = classNames('text', {
+        text_selected: id === selectedId,
+      });
 
-  const textEls = texts.map(({ id, content }) => {
-    const className = classNames('text', {
-      text_selected: id === selectedId,
+      return (
+        <Link key={id} to={`${url}/${id}`} styleName={className}>
+          <p>
+            <ContentToType>
+              {content}
+            </ContentToType>
+          </p>
+        </Link>
+      );
     });
 
-    return (
-      <Link key={id} to={`${url}/${id}`} styleName={className}>
+    if (texts.length < 10) {
+      addTextLink = (
+        <Link to={`${url}/add`}>
+          Add new text
+        </Link>
+      );
+    }
+    else {
+      addTextLink = (
         <p>
-          <ContentToType>
-            {content}
-          </ContentToType>
+          Your can have maximum 10 texts
         </p>
-      </Link>
-    );
-  });
+      );
+    }
+  }
 
   return (
     <Fragment>
@@ -58,7 +62,9 @@ const Block = (props) => {
         {addTextLink}
       </div>
 
-      {textEls}
+      <div styleName="texts">
+        {textEls}
+      </div>
     </Fragment>
   );
 };

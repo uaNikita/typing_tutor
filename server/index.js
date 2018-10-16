@@ -77,21 +77,23 @@ app.use(async (req, res) => {
     tt_access: accessCookie,
     tt_refresh: refreshCookie,
     tt_temp: tempCookie,
-    tt_ls: ttLS,
+    tt_ls: lsCookie,
   } = req.cookies;
 
   // read info from tt_temp cookie and add it to store
   let stateFromCookie = {};
   const objectsToMerge = [{}, defaults];
 
-  if (!ttLS) {
-    objectsToMerge.push(defaultsWhichCanBeOverwrittenByLS);
-  }
-
   if (tempCookie) {
     stateFromCookie = LZString.decompressFromEncodedURIComponent(tempCookie);
 
     stateFromCookie = JSON.parse(stateFromCookie);
+
+    objectsToMerge.push(stateFromCookie);
+  }
+
+  if (!lsCookie) {
+    objectsToMerge.push(defaultsWhichCanBeOverwrittenByLS);
   }
 
   // if value is array then replace array with new
