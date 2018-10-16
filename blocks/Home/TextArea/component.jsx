@@ -3,6 +3,7 @@ import CSSModules from 'react-css-modules';
 import PerfectScrollbar from 'perfect-scrollbar';
 
 import ContentToType from 'Blocks/ContentToType/component';
+import Loader from 'Blocks/Loader/component';
 import ContentArea from '../ContentArea';
 
 import styles from './text-area.module.styl';
@@ -16,17 +17,37 @@ class Block extends ContentArea {
   }
 
   componentDidMount = () => {
+    const {
+      props: {
+        text,
+      },
+    } = this;
+
     document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandler);
 
-    // this.content.current.addEventListener('keydown', this.keyDownHandler);
-
     this.ps = new PerfectScrollbar(this.content.current);
 
-    this.update();
+    if (text) {
+      this.update();
+    }
   };
 
-  componentDidUpdate = () => this.update();
+  componentDidUpdate = (prevProps) => {
+    const {
+      props: {
+        text,
+      },
+      update,
+    } = this;
+
+    if (
+      (!prevProps.text && text)
+      || (prevProps.text && text && prevProps.text.last !== text.last)
+    ) {
+      update();
+    }
+  };
 
   componentWillUnmount() {
     const {
@@ -40,8 +61,6 @@ class Block extends ContentArea {
 
     zeroingStatic();
 
-    // this.content.current.removeEventListener('keydown', this.keyDownHandler);
-
     this.ps.destroy();
 
     // to make sure garbages are collected
@@ -52,7 +71,7 @@ class Block extends ContentArea {
     const {
       props: {
         updateCharToType,
-        last,
+        text,
       },
       cursor: {
         current: cursor,
@@ -65,7 +84,7 @@ class Block extends ContentArea {
 
     updateCharToType();
 
-    if (last) {
+    if (text.last) {
       content.scrollTop = cursor.offsetTop - content.offsetTop - 80;
     }
     else {
@@ -76,30 +95,32 @@ class Block extends ContentArea {
   render() {
     const {
       props: {
-        typed,
-        last,
+        text,
         hiddenChars,
       },
     } = this;
 
     return (
-      <div key="textarea" styleName="textarea">
+      <div styleName="textarea">
         <p styleName="content" ref={this.content}>
-          {typed && (
-            <span styleName="typed">
-              <ContentToType hidden={hiddenChars}>
-                {typed}
-              </ContentToType>
-            </span>
-          )}
-          {last && (
-            <Fragment>
-              <span className="cursor" ref={this.cursor} />
-              <ContentToType hidden={hiddenChars}>
-                {last}
-              </ContentToType>
-            </Fragment>
-          )}
+          {text
+            ? (
+              <Fragment>
+                <span styleName="typed">
+                  <ContentToType hidden={hiddenChars}>
+                    {text.typed}
+                  </ContentToType>
+                </span>
+                <Fragment>
+                  <span className="cursor" ref={this.cursor} />
+                  <ContentToType hidden={hiddenChars}>
+                    {text.last}
+                  </ContentToType>
+                </Fragment>
+              </Fragment>
+            )
+            : <Loader />
+          }
         </p>
       </div>
     );

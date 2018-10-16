@@ -10,14 +10,19 @@ import Component from './component';
 
 const mapStateToProps = (state) => {
   const stateText = state.get('text');
+  const entities = stateText.get('entities');
 
-  const text = stateText.get('entities')
-    .filter(obj => obj.get('id') === stateText.get('selectedId'))
-    .get(0);
+  let text;
+
+  if (entities) {
+    text = entities
+      .filter(obj => obj.get('id') === stateText.get('selectedId'))
+      .get(0)
+      .toJS();
+  }
 
   return {
-    typed: text.get('typed'),
-    last: text.get('last'),
+    text,
     hiddenChars: state.getIn(['user', 'hiddenChars']),
   };
 };
