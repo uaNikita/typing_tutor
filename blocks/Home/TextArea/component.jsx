@@ -1,4 +1,5 @@
 import React, { Fragment } from 'react';
+import _ from 'lodash';
 import CSSModules from 'react-css-modules';
 import PerfectScrollbar from 'perfect-scrollbar';
 
@@ -32,6 +33,18 @@ class Block extends ContentArea {
       this.update();
     }
   };
+
+  shouldComponentUpdate = (nextProps) => {
+    const propsToPick = ['text', 'hiddenChars'];
+    const pikedProps = _.pick(this.props, propsToPick);
+    const pikedNextProps = _.pick(nextProps, propsToPick);
+
+    if (_.isEqual(pikedProps, pikedNextProps)) {
+      return false;
+    }
+
+    return true;
+  }
 
   componentDidUpdate = (prevProps) => {
     const {
