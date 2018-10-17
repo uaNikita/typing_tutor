@@ -246,6 +246,8 @@ export const typeChar = char => (
 
 export const init = () => (
   (dispatch) => {
+    dispatch(getKeysFromKeyboard());
+
     dispatch(initLessons());
   }
 );

@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 
-import { setState } from 'ReduxUtils/reducers/user';
+import { processSetSettings } from 'ReduxUtils/reducers/user';
 import { getKeysFromKeyboard } from 'ReduxUtils/reducers/main';
 import { initLessons } from 'ReduxUtils/reducers/modes/learning';
 
@@ -8,11 +8,14 @@ import Keyboard from './component';
 
 const mapStateToProps = state => ({
   keys: state.getIn(['main', 'keys']).toJS(),
+  initialValues: {
+    keyboard: state.getIn(['user', 'keyboard']),
+  },
 });
 
 const mapDispatchToProps = dispatch => ({
   setKeyboard: (keyboard) => {
-    dispatch(setState({ keyboard }));
+    dispatch(processSetSettings({ keyboard }));
     dispatch(getKeysFromKeyboard());
     dispatch(initLessons());
   },

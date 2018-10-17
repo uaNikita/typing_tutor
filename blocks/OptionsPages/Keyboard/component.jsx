@@ -49,7 +49,7 @@ class Block extends Component {
         <Field
           styleName="field"
           onChange={this.handleOnChange}
-          name="email"
+          name="keyboard"
           component={RenderField}
           type="select"
           label="Layout"

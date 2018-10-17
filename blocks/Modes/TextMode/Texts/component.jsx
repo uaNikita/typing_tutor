@@ -19,7 +19,7 @@ const Block = (props) => {
   } = props;
 
   let addTextLink;
-  let textEls = <Loader size="30" />;
+  let textEls = <Loader styleName="loader" size="30" />;
 
   if (texts) {
     textEls = texts.map(({ id, content }) => {
@@ -62,9 +62,7 @@ const Block = (props) => {
         {addTextLink}
       </div>
 
-      <div styleName="texts">
-        {textEls}
-      </div>
+      {textEls}
     </Fragment>
   );
 };

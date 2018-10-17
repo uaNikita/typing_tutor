@@ -119,7 +119,7 @@ class Block extends ContentArea {
                 </Fragment>
               </Fragment>
             )
-            : <Loader />
+            : <Loader size="30" />
           }
         </p>
       </div>
