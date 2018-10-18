@@ -78,3 +78,4 @@ class Block extends Component {
 }
 
 export default Block;
+// todo: test reg flow
