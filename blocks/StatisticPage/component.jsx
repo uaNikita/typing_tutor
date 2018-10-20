@@ -105,10 +105,12 @@ class Block extends Component {
         if (state.from && state.from.getTime) {
           from = s.start > state.from.getTime();
         }
-
+        
         let to = true;
-        if (state.to && state.from.to) {
-          to = s.start < state.to.getTime();
+        if (state.to && state.to.getTime) {
+          const day = 24 * 60 * 60 * 1000;
+
+          to = s.end < (state.to.getTime() + day);
         }
 
         return mode && keyboard && from && to;
@@ -194,7 +196,7 @@ class Block extends Component {
 
   handleChangeKeyboard = (e, keyboard) => (
     this.setState({
-      mode: this.getOptimizedValue(keyboard),
+      keyboard: this.getOptimizedValue(keyboard),
     })
   );
 
@@ -206,7 +208,7 @@ class Block extends Component {
 
   handleChangeTo = day => (
     this.setState({
-      from: this.getOptimizedValue(day),
+      to: this.getOptimizedValue(day),
     })
   );
 
