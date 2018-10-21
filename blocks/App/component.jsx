@@ -21,11 +21,16 @@ class Block extends Component {
   componentDidMount() {
     const {
       props: {
+        setUserState,
         setTextState,
       },
     } = this;
 
     const state = tempLocalStorage.get();
+
+    if (state.user) {
+      setUserState(state.user);
+    }
 
     if (state.text) {
       setTextState(state.text);

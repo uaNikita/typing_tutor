@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 
 import { defaults } from 'Constants/defaultState';
-import { tempCookie } from 'Utils';
+import { tempCookie, tempLocalStorage } from 'Utils';
 
 import { processAction } from './main';
 import { fetchJSON } from './fetch';
@@ -106,8 +106,10 @@ export const processAddStatistic = (() => {
 
     dispatch(addStatistic(body));
 
+    const statistic = getState().getIn(['user', 'statistic']).toJS();
+
     return dispatch(processAction(
-      () => tempCookie.path('user.statistic', getState().getIn(['main', 'statistic'])),
+      () => tempLocalStorage.path('user.statistic', statistic),
       () => deferredFetch(dispatch, body),
     ));
   };

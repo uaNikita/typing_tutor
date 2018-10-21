@@ -42,7 +42,7 @@ const initialState = Immutable.fromJS(defaults.learning);
 export default (state = initialState, action = {}) => {
   switch (action.type) {
     case SET_STATE:
-      return state.merge(action.data);
+      return state.mergeDeep(action.data);
 
     case CLEAR_STATE:
       return state.merge(initialState);

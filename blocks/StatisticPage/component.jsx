@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
+import classNames from 'classnames';
 import _ from 'lodash';
 import { Field, reduxForm } from 'redux-form/immutable';
 import format from 'date-fns/format';
@@ -9,6 +10,7 @@ import modes from 'Constants/modes';
 
 import { validateDate } from 'Utils/validation';
 
+import Loader from 'Blocks/Loader/component';
 import RenderField from 'Blocks/RenderField/component';
 import DayPickerField from './DayPickerField/component';
 
@@ -105,7 +107,7 @@ class Block extends Component {
         if (state.from && state.from.getTime) {
           from = s.start > state.from.getTime();
         }
-        
+
         let to = true;
         if (state.to && state.to.getTime) {
           const day = 24 * 60 * 60 * 1000;
@@ -215,6 +217,7 @@ class Block extends Component {
   render() {
     const {
       props: {
+        statistic,
         change,
       },
     } = this;
@@ -234,6 +237,10 @@ class Block extends Component {
     ));
 
     keyboardsOptions.unshift(<option key="all" value="">All</option>);
+
+    const chartsClassName = classNames({
+      hide: !statistic,
+    });
 
     return (
       <Fragment>
@@ -273,17 +280,21 @@ class Block extends Component {
           />
         </div>
 
-        <h3 styleName="title">Hits and typos depend on characters</h3>
-        <div styleName="chart chart_characters" ref={this.chartCharactersEl} />
+        <div styleName={chartsClassName}>
+          <h3 styleName="title">Hits and typos depend on characters</h3>
+          <div styleName="chart chart_characters" ref={this.chartCharactersEl} />
 
-        <h3 styleName="title">Hits and typos depend on sessions</h3>
-        <div styleName="chart chart_hits-typos" ref={this.chartHitsTyposEl} />
+          <h3 styleName="title">Hits and typos depend on sessions</h3>
+          <div styleName="chart chart_hits-typos" ref={this.chartHitsTyposEl} />
 
-        <h3 styleName="title">Speed depends on sessions</h3>
-        <div styleName="chart chart_speed" ref={this.chartSpeedEl} />
+          <h3 styleName="title">Speed depends on sessions</h3>
+          <div styleName="chart chart_speed" ref={this.chartSpeedEl} />
 
-        <h3 styleName="title">Durability of sessions</h3>
-        <div styleName="chart chart_durability" ref={this.chartDurabilityEl} />
+          <h3 styleName="title">Durability of sessions</h3>
+          <div styleName="chart chart_durability" ref={this.chartDurabilityEl} />
+        </div>
+
+        {!statistic && <Loader styleName="loader" size="30" />}
       </Fragment>
     );
   }

@@ -1,3 +1,4 @@
+// if value null that's that data can be stored in localStorage
 export const defaults = {
   fetch: {
     refreshToken: false,
@@ -23,12 +24,11 @@ export const defaults = {
       interval: 1200,
     },
 
-    statistic: [],
+    statistic: null,
   },
   text: {
     selectedId: 1,
 
-    // this part can be stored in localStorage
     entities: null,
   },
   learning: {
