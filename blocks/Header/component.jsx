@@ -52,7 +52,7 @@ class Block extends Component {
       <div styleName="root">
         {pathname === '/'
           ? <Logo />
-          : <Link styleName="home" className="fa fa-keyboard-o" to="/" />}
+          : <Link styleName="home" className="far fa-keyboard" to="/" />}
 
         <div styleName="actions">
           <nav styleName="items">

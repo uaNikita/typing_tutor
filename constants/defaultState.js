@@ -61,6 +61,9 @@ export const defaults = {
 };
 
 export const defaultsWhichCanBeOverwrittenByLS = {
+  user: {
+    statistic: [],
+  },
   text: {
     entities: [
       {

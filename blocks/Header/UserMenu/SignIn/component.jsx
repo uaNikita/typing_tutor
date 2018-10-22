@@ -58,7 +58,7 @@ class Block extends Component {
       <div className="drop-down" styleName="root">
         <button
           type="button"
-          className="fa fa-user-circle-o drop-down__button"
+          className="fas fa-user-circle drop-down__button"
           styleName="button"
           onClick={this.hanldeClickMenu}
         />

@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 
 import 'isomorphic-fetch';
 
-import 'font-awesome/css/font-awesome.css';
+import 'Static/plugins/fontawesome-free-5.4.1-web/css/all.min.css';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
 import 'rc-slider/assets/index.css';
 import 'chartist/dist/chartist.css';
