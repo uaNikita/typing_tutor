@@ -106,7 +106,7 @@ class RenderField extends Component {
         control = <input {...controlProps} />;
 
         if (type === 'password') {
-          let eyeClassName = 'field__eye fa fa-eye';
+          let eyeClassName = 'field__eye fas fa-eye';
 
           if (showPassword) {
             controlProps.type = 'text';

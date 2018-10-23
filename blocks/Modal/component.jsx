@@ -15,7 +15,7 @@ const Modal = ({
 
   if (!nonCloseable) {
     props.onClick = onClose;
-    closeButton = <button type="button" className="modal__close fa fa-times" {...props} />;
+    closeButton = <button type="button" className="modal__close fas fa-times" {...props} />;
   }
 
   return (

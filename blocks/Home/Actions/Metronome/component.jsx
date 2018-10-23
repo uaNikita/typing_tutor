@@ -145,7 +145,7 @@ class Block extends Component {
       },
     } = this;
 
-    const btnClass = classNames('drop-down__button fa', on ? 'fa-pause' : 'fa-play');
+    const btnClass = classNames('drop-down__button fas', on ? 'fa-pause' : 'fa-play');
 
     return (
       <div

@@ -4,12 +4,13 @@ import { connect } from 'react-redux';
 import Component from './component';
 
 const mapStateToProps = (state) => {
-  const sessionStatistic = state.getIn(['main', 'sessionStatistic']).toJS();
+  const sessionStatistic = state.getIn(['main', 'sessionStatistic']);
+  const presses = sessionStatistic.get('presses').toJS();
 
   return {
-    startTypingTime: sessionStatistic.start,
-    hits: _.sumBy(sessionStatistic.hits, o => o.presses),
-    errors: _.sumBy(sessionStatistic.typos, o => o.presses),
+    startTypingTime: sessionStatistic.get('start'),
+    hits: _.sumBy(presses, o => o.hits) || 0,
+    typos: _.sumBy(presses, o => o.typos) || 0,
   };
 };
 

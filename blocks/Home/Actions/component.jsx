@@ -26,7 +26,7 @@ class Block extends Component {
       },
     } = this;
 
-    let eyeClassName = 'fa fa-eye';
+    let eyeClassName = 'fas fa-eye';
 
     if (hiddenChars) {
       eyeClassName += '-slash';

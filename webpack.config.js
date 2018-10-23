@@ -63,6 +63,10 @@ const getConfig = (() => {
         {
           from: path.resolve(__dirname, 'static/media'),
           to: path.resolve(__dirname, 'dist/media')
+        },
+        {
+          from: path.resolve(__dirname, 'static/plugins'),
+          to: path.resolve(__dirname, 'dist/plugins')
         }
       ]),
       new MiniCssExtractPlugin(),
