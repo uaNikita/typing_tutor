@@ -12,8 +12,6 @@ const KeyPad = (props) => {
   } = props;
 
   const keysNode = keys.map((obj) => {
-    // todo: pressedWrongKeys and idCharsToType,
-    // different names but all vars have array with chars ids
     const className = classNames('keypad__key', {
       keypad__pressed: pressedKeys.indexOf(obj.id) + 1,
       keypad__wrong: pressedWrongKeys.indexOf(obj.id) + 1,
