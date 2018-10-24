@@ -120,6 +120,13 @@ class Block extends Component {
   };
 
   getChartsData = () => {
+    const {
+      state: {
+        from,
+        to,
+      },
+    } = this;
+
     const statistic = this.getFilteredStatistic();
 
     const data = {
@@ -141,9 +148,25 @@ class Block extends Component {
       },
     };
 
+    let dateFormat = 'YYYY MMM DD, HH:mm';
+
+    if (from && to) {
+      dateFormat = 'HH:mm';
+
+      if (to.getYear() - from.getYear() > 0) {
+        dateFormat = 'YYYY MMM DD, HH:mm';
+      }
+      else if (to.getMonth() - from.getMonth() > 0) {
+        dateFormat = 'MMM DD, HH:mm';
+      }
+      else if (to.getDate() - from.getDate() > 0) {
+        dateFormat = 'DD, HH:mm';
+      }
+    }
+
     statistic
       .map(({ start, end, presses }) => {
-        const date = format(start, 'YYYY MMM DD, HH:mm');
+        const date = format(start, dateFormat);
         const totalMinutes = (end - start) / (1000 * 60);
         const totalHits = _.sumBy(presses, 'hits');
 
