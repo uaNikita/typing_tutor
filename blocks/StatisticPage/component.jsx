@@ -39,42 +39,60 @@ class Block extends Component {
     // eslint-disable-next-line global-require
     const Chartist = require('chartist');
 
-    const options = {
-      axisY: {
-        onlyInteger: true,
-      },
-      axisX: {
-        showGrid: false,
-      },
-    };
-
     this.chartCharacters = new Chartist.Bar(
       this.chartCharactersEl.current,
       data.characters,
-      options,
+      {
+        axisY: {
+          onlyInteger: true,
+        },
+        axisX: {
+          showGrid: false,
+        },
+      },
     );
 
     this.chartHitsTypos = new Chartist.Bar(
       this.chartHitsTyposEl.current,
       data.hitsTypos,
-      options,
+      {
+        axisY: {
+          onlyInteger: true,
+        },
+        axisX: {
+          showGrid: false,
+        },
+      },
     );
 
     this.chartSpeed = new Chartist.Bar(
       this.chartSpeedEl.current,
       data.speed,
-      options,
+      {
+        axisY: {
+          onlyInteger: true,
+        },
+        axisX: {
+          showGrid: false,
+        },
+      },
     );
 
     this.chartDurability = new Chartist.Bar(
       this.chartDurabilityEl.current,
       data.durability,
-      options,
+      {
+        axisX: {
+          showGrid: false,
+        },
+      },
     );
   }
 
   componentDidUpdate() {
     const data = this.getChartsData();
+
+    console.log('data.durability', data.durability);
 
     this.chartCharacters.update(data.characters);
     this.chartHitsTypos.update(data.hitsTypos);
