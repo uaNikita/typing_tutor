@@ -9,6 +9,8 @@ import {
   getDefaultFingersSetSize,
   getDefaultFreeLetters,
 } from 'Utils';
+import differenceInMinutes from 'date-fns/difference_in_minutes';
+
 import { defaults } from 'Constants/defaultState';
 
 import { fetchJSON } from '../fetch';
@@ -301,13 +303,19 @@ export const typeLearningMode = char => (
       dispatch(addTouch(false, char));
     }
 
-    dispatch(processAddStatistic());
+    const sessionStrat = state.getIn(['main', 'sessionStatistic', 'start']);
+
+    if (differenceInMinutes(Date.now(), sessionStrat)) {
+      dispatch(processAddStatistic());
+    }
   }
 );
 
 export const initLessons = () => (
   (dispatch, getState) => {
-    const keys = getState().getIn(['main', 'keys']).toJS();
+    const state = getState();
+
+    const keys = state.getIn(['main', 'keys']).toJS();
 
     dispatch(processSetOptions({
       mode: 'fingers',
@@ -331,7 +339,7 @@ export const initLessons = () => (
 
     let lesson;
 
-    switch (getState().getIn(['learning', 'mode'])) {
+    switch (state.getIn(['learning', 'mode'])) {
       case 'fingers':
         lesson = fingersExample;
         break;

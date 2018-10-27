@@ -18,6 +18,7 @@ import {
 } from '../main';
 
 import { processAddStatistic } from '../user';
+import differenceInMinutes from 'date-fns/difference_in_minutes';
 
 const SET_STATE = 'text/SET_STATE';
 const CLEAR_STATE = 'text/CLEAR_STATE';
@@ -290,6 +291,10 @@ export const typeTextMode = char => (dispatch, getState) => {
       dispatch(addTouch(false, char));
     }
 
-    dispatch(processAddStatistic());
+    const sessionStrat = state.getIn(['main', 'sessionStatistic', 'start']);
+
+    if (differenceInMinutes(Date.now(), sessionStrat)) {
+      dispatch(processAddStatistic());
+    }
   }
 };
