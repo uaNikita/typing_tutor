@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
+import differenceInMinutes from 'date-fns/difference_in_minutes';
 
 import {
   tempCookie,
@@ -9,7 +10,6 @@ import {
   getDefaultFingersSetSize,
   getDefaultFreeLetters,
 } from 'Utils';
-import differenceInMinutes from 'date-fns/difference_in_minutes';
 
 import { defaults } from 'Constants/defaultState';
 

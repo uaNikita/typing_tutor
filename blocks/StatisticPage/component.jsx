@@ -3,6 +3,7 @@ import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { Field, reduxForm } from 'redux-form/immutable';
+import distanceInWordsStrict from 'date-fns/distance_in_words_strict';
 import format from 'date-fns/format';
 
 import keyboards from 'Constants/keyboards';
@@ -85,14 +86,15 @@ class Block extends Component {
         axisX: {
           showGrid: false,
         },
+        axisY: {
+          labelInterpolationFnc: value => distanceInWordsStrict(value, 0)
+        },
       },
     );
   }
 
   componentDidUpdate() {
     const data = this.getChartsData();
-
-    console.log('data.durability', data.durability);
 
     this.chartCharacters.update(data.characters);
     this.chartHitsTypos.update(data.hitsTypos);
@@ -199,7 +201,7 @@ class Block extends Component {
 
         // durability
         data.durability.labels.push(date);
-        data.durability.series[0].push(totalMinutes);
+        data.durability.series[0].push(end - start);
 
         return presses;
       })

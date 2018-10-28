@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
+import differenceInMinutes from 'date-fns/difference_in_minutes';
 
 import {
   tempCookie,
@@ -18,7 +19,7 @@ import {
 } from '../main';
 
 import { processAddStatistic } from '../user';
-import differenceInMinutes from 'date-fns/difference_in_minutes';
+
 
 const SET_STATE = 'text/SET_STATE';
 const CLEAR_STATE = 'text/CLEAR_STATE';
