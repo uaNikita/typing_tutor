@@ -3,7 +3,6 @@ import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { Field, reduxForm } from 'redux-form/immutable';
-import distanceInWordsStrict from 'date-fns/distance_in_words_strict';
 import format from 'date-fns/format';
 
 import keyboards from 'Constants/keyboards';
@@ -28,6 +27,7 @@ class Block extends Component {
   }
 
   state = {
+    emptyCharts: false,
     mode: undefined,
     keyboard: undefined,
     from: undefined,
@@ -87,19 +87,22 @@ class Block extends Component {
           showGrid: false,
         },
         axisY: {
-          labelInterpolationFnc: value => distanceInWordsStrict(value, 0)
+          labelInterpolationFnc: value => format(value, 'm:ss'),
         },
       },
     );
   }
 
-  componentDidUpdate() {
-    const data = this.getChartsData();
+  componentDidUpdate(prevProps) {
+    const {
+      props: {
+        statistic,
+      },
+    } = this;
 
-    this.chartCharacters.update(data.characters);
-    this.chartHitsTypos.update(data.hitsTypos);
-    this.chartSpeed.update(data.speed);
-    this.chartDurability.update(data.durability);
+    if (!prevProps.statistic && statistic) {
+      this.updateCharts();
+    }
   }
 
   getFilteredStatistic = () => {
@@ -231,30 +234,55 @@ class Block extends Component {
     return data;
   };
 
+  updateCharts = () => {
+    const data = this.getChartsData();
+
+    if (data.characters.labels.length) {
+      this.setState(
+        { emptyCharts: false },
+        () => {
+          this.chartCharacters.update(data.characters);
+          this.chartHitsTypos.update(data.hitsTypos);
+          this.chartSpeed.update(data.speed);
+          this.chartDurability.update(data.durability);
+        },
+      );
+    }
+    else {
+      this.setState({
+        emptyCharts: true,
+      });
+    }
+  };
+
   getOptimizedValue = mode => mode || undefined;
 
   handleChangeMode = (e, mode) => (
-    this.setState({
-      mode: this.getOptimizedValue(mode),
-    })
+    this.setState(
+      { mode: this.getOptimizedValue(mode) },
+      this.updateCharts,
+    )
   );
 
   handleChangeKeyboard = (e, keyboard) => (
-    this.setState({
-      keyboard: this.getOptimizedValue(keyboard),
-    })
+    this.setState(
+      { keyboard: this.getOptimizedValue(keyboard) },
+      this.updateCharts,
+    )
   );
 
   handleChangeFrom = day => (
-    this.setState({
-      from: this.getOptimizedValue(day),
-    })
+    this.setState(
+      { from: this.getOptimizedValue(day) },
+      this.updateCharts,
+    )
   );
 
   handleChangeTo = day => (
-    this.setState({
-      to: this.getOptimizedValue(day),
-    })
+    this.setState(
+      { to: this.getOptimizedValue(day) },
+      this.updateCharts,
+    )
   );
 
   render() {
@@ -262,6 +290,9 @@ class Block extends Component {
       props: {
         statistic,
         change,
+      },
+      state: {
+        emptyCharts,
       },
     } = this;
 
@@ -282,7 +313,7 @@ class Block extends Component {
     keyboardsOptions.unshift(<option key="all" value="">All</option>);
 
     const chartsClassName = classNames({
-      hide: !statistic,
+      hide: !statistic || emptyCharts,
     });
 
     // TODO: add axis for charts
@@ -323,6 +354,8 @@ class Block extends Component {
             onChange={this.handleChangeTo}
           />
         </div>
+
+        {emptyCharts && <p styleName="no-data">No data</p>}
 
         <div styleName={chartsClassName}>
           <h3 styleName="title">Hits and typos depend on characters</h3>
