@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import _ from 'lodash';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
@@ -15,6 +16,7 @@ import Footer from 'Blocks/Footer/component';
 import NotFound from 'Blocks/NotFound/component';
 import Authorization from 'Blocks/Authorization/component';
 
+import { defaultsWhichCanBeOverwrittenByLS as defaultsFromLS } from 'Constants/defaultState';
 import { tempLocalStorage } from 'Utils';
 
 class Block extends Component {
@@ -28,12 +30,21 @@ class Block extends Component {
 
     const state = tempLocalStorage.get();
 
-    if (state.user) {
-      setUserState(state.user);
-    }
+    if (!_.isEmpty(state)) {
+      let {
+        user,
+        text,
+      } = defaultsFromLS;
 
-    if (state.text) {
-      setTextState(state.text);
+      if (state.user) {
+        user = _.assign(user, state.user);
+      }
+      setUserState(user);
+
+      if (state.user) {
+        text = _.assign(text, state.text);
+      }
+      setTextState(text);
     }
   }
 

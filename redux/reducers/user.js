@@ -95,13 +95,14 @@ export const processAddStatistic = (() => {
   );
 
   return () => (dispatch, getState) => {
-    const stateMain = getState().get('main');
+    const state = getState();
+    const stateUser = state.get('user');
 
     const body = {
-      keyboard: stateMain.get('keyboard'),
-      mode: stateMain.get('mode'),
+      keyboard: stateUser.get('keyboard'),
+      mode: stateUser.get('mode'),
       end: Date.now(),
-      ...stateMain.get('sessionStatistic').toJS(),
+      ...state.getIn(['main', 'sessionStatistic']).toJS(),
     };
 
     dispatch(addStatistic(body));

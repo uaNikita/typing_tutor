@@ -316,7 +316,6 @@ class Block extends Component {
       hide: !statistic || emptyCharts,
     });
 
-    // TODO: add axis for charts
     return (
       <Fragment>
         <div styleName="filters">

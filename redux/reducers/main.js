@@ -30,8 +30,6 @@ const ADD_TOUCH = 'main/ADD_TOUCH';
 const SET_GLOBAL_MESSAGE = 'main/SET_GLOBAL_MESSAGE';
 
 const initialState = Immutable.fromJS({
-  keyboard: 'english',
-
   keys: _.find(keyboards, { name: 'english' }).keys,
 
   pressedKeys: Immutable.Set([]),

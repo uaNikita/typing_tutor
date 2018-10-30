@@ -29,7 +29,7 @@ export const defaults = {
   text: {
     selectedId: 1,
 
-    entities: null,
+    entities: undefined,
   },
   learning: {
     // fingers, free,
