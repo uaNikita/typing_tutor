@@ -3,7 +3,7 @@ import _ from 'lodash';
 import Cookies from 'js-cookie';
 
 import { defaults } from 'Constants/defaultState';
-import { tempLocalStorage } from 'Utils';
+import { tempCookie, tempLocalStorage } from 'Utils';
 
 import { clearState as clearLearningState } from './modes/learning';
 import { clearState as clearTextState } from './modes/text';
@@ -62,10 +62,8 @@ export const setTokens = ({ refresh, access }) => (
 );
 
 
-export const logOut = () => (dispatch) => {
-  Cookies.remove('tt_refresh');
-  Cookies.remove('tt_access');
-  Cookies.remove('tt_temp');
+export const clearAppData = () => (dispatch) => {
+  tempCookie.clear();
   tempLocalStorage.clear();
 
   dispatch(clearState());
@@ -73,6 +71,13 @@ export const logOut = () => (dispatch) => {
   dispatch(clearUserState());
   dispatch(clearLearningState());
   dispatch(clearTextState());
+};
+
+export const logOut = () => (dispatch) => {
+  Cookies.remove('tt_refresh');
+  Cookies.remove('tt_access');
+
+  dispatch(clearAppData);
 };
 
 const requestJSON = (url, params, opts) => (

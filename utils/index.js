@@ -1,14 +1,10 @@
+import Immutable from 'immutable';
 import _ from 'lodash';
 
 import tempCookie from 'Utils/tempCookie';
 import tempLocalStorage from 'Utils/tempLocalStorage';
 
 export { tempCookie, tempLocalStorage };
-
-export const clearUnauthorizedData = () => {
-  tempCookie.clear();
-  tempLocalStorage.clear();
-};
 
 export const getIdsFromCharacter = (keys, сharacter) => {
   const charsToType = [];
@@ -161,3 +157,20 @@ export const getDefaultFreeLetters = keys => (
     .map(obj => obj.key)
     .value()
 );
+
+export const convertListsToSets = (() => {
+  const setsPath = [
+    ['main', 'pressedKeys'],
+    ['main', 'pressedWrongKeys'],
+    ['learning', 'free', 'options', 'letters'],
+  ];
+
+  return stateToConvert => (
+    setsPath.reduce(
+      (state, path) => (
+        state.setIn(path, Immutable.Set(state.getIn(path)))
+      ),
+      stateToConvert,
+    )
+  );
+})();

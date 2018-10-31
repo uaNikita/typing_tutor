@@ -21,14 +21,8 @@
         ]
       }
     ],
-    "react/prop-types": "off"
-  },
-  "settings": {
-    "import/resolver": {
-      "webpack": {
-        "config": "webpack.config.js"
-      }
-    }
+    "react/prop-types": "off",
+    "import/no-unresolved": "off"
   },
   "globals": {
     "BROWSER": true

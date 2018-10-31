@@ -226,7 +226,7 @@ const getConfig = (() => {
 
   return mode => {
     const options = {
-      watch: mode === 'production',
+      watch: mode === 'development',
     };
 
     return [
@@ -236,13 +236,5 @@ const getConfig = (() => {
   }
 })();
 
-
-module.exports = (env, argv) => {
-  let mode = 'development';
-
-  if (argv && argv.mode) {
-    mode = 'production';
-  }
-
-  return getConfig(mode);
-};
+// todo: investigate https://habr.com/post/422697/
+module.exports = (env, argv) => getConfig(argv.mode);

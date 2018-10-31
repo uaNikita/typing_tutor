@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { fetchJSON, setTokens } from 'ReduxUtils/reducers/fetch';
+import { fetchJSON, setTokens, clearAppData } from 'ReduxUtils/reducers/fetch';
 import { init, setData } from 'ReduxUtils/reducers/main';
 import { validateEmail } from 'Utils/validation';
 import Component from './component';
@@ -9,6 +9,7 @@ const mapDispatchToProps = dispatch => ({
   setTokens: (...args) => dispatch(setTokens(...args)),
   init: (...args) => dispatch(init(...args)),
   setData: (...args) => dispatch(setData(...args)),
+  clearAppData: (...args) => dispatch(clearAppData(...args)),
   asyncValidate: values => dispatch(fetchJSON('/auth/check-email', {
     body: {
       email: values.get('email'),
