@@ -15,6 +15,7 @@ import StatisticPage from 'Blocks/StatisticPage/container';
 import Footer from 'Blocks/Footer/component';
 import NotFound from 'Blocks/NotFound/component';
 import Authorization from 'Blocks/Authorization/component';
+import Help from 'Blocks/Help/component';
 
 import { defaultsWhichCanBeOverwrittenByLS as defaultsFromLS } from 'Constants/defaultState';
 import { tempLocalStorage } from 'Utils';
@@ -79,6 +80,7 @@ class Block extends Component {
                   <Route path="/mode" component={Modes} />
                   <Route path="/options" component={OptionsPages} />
                   <Route path="/statistic" component={StatisticPage} />
+                  <Route path="/help" component={Help} />
                   <PrivateRoute path="/settings" component={SettingsPages} />
                   <Redirect to="/404" />
                 </Switch>
