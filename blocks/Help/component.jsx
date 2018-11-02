@@ -12,7 +12,7 @@ const Block = () => (
 
     <h2>Modes</h2>
     The app has two modes.
-    <p><strong>Text</strong>. Text mode description</p>
+    <p><strong>Text</strong>. In this mode you can use already existed texts or add you own one.</p>
     <p><strong>Learning</strong>. Which has two different submodes for learning mode:</p>
     <ul>
       <li>
