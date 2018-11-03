@@ -73,13 +73,6 @@ export const clearAppData = () => (dispatch) => {
   dispatch(clearTextState());
 };
 
-export const logOut = () => (dispatch) => {
-  Cookies.remove('tt_refresh');
-  Cookies.remove('tt_access');
-
-  dispatch(clearAppData);
-};
-
 const requestJSON = (url, params, opts) => (
   (dispatch, getState) => {
     const headers = {
@@ -166,15 +159,36 @@ export const fetchJSON = (...args) => (
 
               if (status === 401) {
                 dispatch(setGlobalMessage('You are not authorized for this request'));
-              }
 
-              dispatch(logOut());
+                Cookies.remove('tt_refresh');
+                Cookies.remove('tt_access');
+
+                dispatch(clearAppData());
+              }
 
               return refreshTokenResponse;
             });
         }
 
         return response;
+      })
+  )
+);
+
+export const logOut = () => (
+  (dispatch, getState) => (
+    dispatch(fetchJSON('/auth/logout', {
+      body: {
+        token:'test',
+      },
+    }))
+      .then((res) => {
+        if (res.ok) {
+          Cookies.remove('tt_refresh');
+          Cookies.remove('tt_access');
+
+          dispatch(clearAppData());
+        }
       })
   )
 );

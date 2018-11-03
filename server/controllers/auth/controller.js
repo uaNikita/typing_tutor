@@ -53,18 +53,22 @@ const login = (req, res) => {
     });
 };
 
-const logout = (req, res, next) => {
-  const {
-    user: {
-      clientId,
-    },
-  } = req;
+const logout = (req, res, next) => (
+  Client
+    .deleteOne({ user: req.user.get('id') })
+    .exec()
+    .then(({ n }) => {
+      if (n) {
+        return res.json(httpStatus[200]);
+      }
 
-  Client.get(clientId)
-    .then(client => client.remove().exec())
-    .then(() => res.json(httpStatus[200]))
-    .catch(e => next(e));
-};
+      throw new APIError({
+        message: httpStatus['404'],
+        status: httpStatus.NOT_FOUND,
+      });
+    })
+    .catch(e => next(e))
+);
 
 const signUp = (req, res, next) => {
   const { email } = req.body;
@@ -90,7 +94,7 @@ const signUp = (req, res, next) => {
           const mailOptions = {
             from: config.get('mail.from'),
             to: email,
-            subject: 'Acoount registration',
+            subject: 'Account registration',
             html: emailTemplates.registration({
               origin: req.get('origin'),
               token: verif.get('token'),
@@ -261,41 +265,54 @@ const getUserData = (req, res, next) => (
 );
 
 const verifyToken = (req, res, next) => (
-  Verification.findByToken(req.body.token)
+  Verification
+    .findOne({
+      token: req.body.token,
+    })
+    .populate('user')
+    .exec()
     .then((verification) => {
-      const type = verification.get('type');
-      const user = verification.get('user');
+      if (verification) {
+        const type = verification.get('type');
+        const user = verification.get('user');
 
-      switch (type) {
-        case 'email':
-          user.set('active', true);
-          break;
+        switch (type) {
+          case 'email':
+            user.set('active', true);
+            break;
 
-        case 'password-reset':
-          user.set('password', user.get('newPassword'));
-          user.set('newPassword', undefined);
-          break;
+          case 'password-reset':
+            user.set('password', user.get('newPassword'));
+            user.set('newPassword', undefined);
+            break;
 
-        default:
+          default:
+        }
+
+        return Promise
+          .all([
+            createClient(user.get('id')),
+            user.save(),
+            verification.remove(),
+          ])
+          .then(([client], ...rest) =>
+            res.json({
+              type,
+              tokens: {
+                refresh: client.get('token'),
+                access: generateAccessToken({
+                  id: user.get('id'),
+                  clientId: client.get('id'),
+                }),
+              },
+              ...user.toObject(),
+            }));
       }
 
-      return Promise
-        .all([
-          createClient(user.get('id')),
-          user.save(),
-          // verification.remove().exec(),
-        ])
-        .then(([client]) => res.json({
-          type,
-          tokens: {
-            refresh: client.get('token'),
-            access: generateAccessToken({
-              id: user.get('id'),
-              clientId: client.get('id'),
-            }),
-          },
-          ...user.toObject(),
-        }));
+      throw new APIError({
+        message: httpStatus['404'],
+        status: httpStatus.NOT_FOUND,
+      });
     })
     .catch(e => next(e))
 );

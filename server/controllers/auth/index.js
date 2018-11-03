@@ -12,7 +12,7 @@ router.post('/verify-email', controller.verifyEmail);
 router.post('/restore-access', controller.restoreAccess);
 router.post('/verify-token', controller.verifyToken);
 router.post('/login', passport.authenticate('local'), controller.login);
-router.get('/logout', authenticate, controller.logout);
+router.post('/logout', authenticate, controller.logout);
 router.post('/tokens', controller.getTokens);
 
 module.exports = router;

@@ -15,13 +15,8 @@ class SignOut extends Component {
   render() {
     return (
       <div className="auth">
-        <p>
-          {' '}
-          SignOut
-        </p>
-        <Link to="/">
-          Continue
-        </Link>
+        <p>SignOut</p>
+        <Link to="/">Continue</Link>
       </div>
     );
   }

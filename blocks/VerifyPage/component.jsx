@@ -10,7 +10,7 @@ import styles from './verify-page.module.styl';
 
 class VerifyPage extends Component {
   state = {
-    verified: false,
+    response: undefined,
   };
 
   componentDidMount() {
@@ -36,6 +36,8 @@ class VerifyPage extends Component {
         },
       })
         .then((res) => {
+          let response = 'error';
+
           if (res.ok) {
             const {
               tokens,
@@ -50,10 +52,12 @@ class VerifyPage extends Component {
 
             init();
 
-            this.setState({
-              verified: res.data.type,
-            });
+            response = res.data.type;
           }
+
+          this.setState({
+            response,
+          });
         });
     }
   }
@@ -61,7 +65,7 @@ class VerifyPage extends Component {
   render() {
     const {
       state: {
-        verified,
+        response,
       },
     } = this;
 
@@ -69,14 +73,18 @@ class VerifyPage extends Component {
 
     let text;
 
-    if (verified) {
-      switch (verified) {
+    if (response) {
+      switch (response) {
         case 'email':
           text = 'your email was succesfully verified';
           break;
 
         case 'password-reset':
           text = 'you can use your new password from now';
+          break;
+
+        case 'error':
+          text = 'but it seems that your link already exprired';
           break;
 
         default:
