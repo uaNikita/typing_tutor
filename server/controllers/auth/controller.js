@@ -12,7 +12,11 @@ const User = require('../../models/user');
 const Verification = require('../../models/verification');
 const Client = require('../../models/client');
 
-const generateAccessToken = obj => jwt.sign(obj, config.get('secretKey'), { expiresIn: config.get('accessTokenLiveTime') });
+const generateAccessToken = obj => jwt.sign(
+  obj,
+  config.get('secretKey'),
+  { expiresIn: config.get('accessTokenLiveTime') },
+);
 
 const generateTokenWithId = clientId => clientId.toString() + crypto.randomBytes(40).toString('hex');
 
@@ -55,7 +59,7 @@ const login = (req, res) => {
 
 const logout = (req, res, next) => (
   Client
-    .deleteOne({ user: req.user.get('id') })
+    .deleteOne({ token: req.body.token })
     .exec()
     .then(({ n }) => {
       if (n) {

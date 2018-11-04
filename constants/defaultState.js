@@ -1,9 +1,9 @@
 // if value null that's that data can be stored in localStorage
 export const defaults = {
   fetch: {
-    refreshToken: false,
+    refreshToken: undefined,
 
-    accessToken: false,
+    accessToken: undefined,
   },
   user: {
     email: undefined,

@@ -175,11 +175,12 @@ export const fetchJSON = (...args) => (
   )
 );
 
+// todo: fix loader after logout
 export const logOut = () => (
   (dispatch, getState) => (
     dispatch(fetchJSON('/auth/logout', {
       body: {
-        token:'test',
+        token: getState().getIn(['fetch', 'refreshToken']),
       },
     }))
       .then((res) => {
