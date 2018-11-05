@@ -1,12 +1,8 @@
-'use strict';
-
 const path = require('path');
-const _ = require('lodash');
 const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const nodeExternals = require('webpack-node-externals');
 
 const restCssLoders = [
   {
@@ -20,7 +16,7 @@ const restCssLoders = [
   'stylus-loader'
 ];
 
-let clientConfig = {
+module.exports = {
   context: path.join(__dirname),
 
   entry: ['@babel/polyfill', path.join(__dirname, 'client', 'entry.jsx')],
@@ -153,82 +149,3 @@ let clientConfig = {
   }
 };
 
-let serverConfig = {
-  entry: path.join(__dirname, 'server', 'entry.jsx'),
-
-  output: {
-    path: path.join(__dirname, 'dist'),
-    filename: 'compiledServer.js',
-    libraryTarget: 'umd'
-  },
-
-  plugins: [
-    new webpack.DefinePlugin({
-      BROWSER: false,
-    }),
-  ],
-
-  target: 'node',
-
-  externals: [nodeExternals()],
-
-  module: {
-    rules: [
-      {
-        test: /\.jsx?$/,
-        use: 'babel-loader',
-        exclude: /node_modules/
-      },
-      {
-        test: /^((?!module).)+styl$/,
-        use: 'null-loader'
-      },
-      {
-        test: /module\.styl$/,
-        use: [
-          {
-            loader: 'css-loader/locals',
-            options: {
-              modules: true,
-              localIdentName: '[name]__[local]___[hash:base64:5]'
-            }
-          },
-          ...restCssLoders
-        ]
-      },
-      {
-        test: /\.(css|woff|woff2|ttf|eot|jpg|png|svg)$/,
-        use: 'null-loader'
-      },
-    ]
-  }
-};
-
-// todo: investigate https://habr.com/post/422697/
-module.exports = (env, argv) => {
-  const common = {
-    resolve: {
-      extensions: ['.js', '.json', '.jsx'],
-      alias: {
-        ReduxUtils: path.resolve(__dirname, 'redux/'),
-        Blocks: path.resolve(__dirname, 'blocks/'),
-        Static: path.resolve(__dirname, 'static/'),
-        Constants: path.resolve(__dirname, 'constants/'),
-        Utils: path.resolve(__dirname, 'utils/'),
-        Client: path.resolve(__dirname, 'client/'),
-        Server: path.resolve(__dirname, 'server/'),
-      }
-    },
-
-    watchOptions: {
-      aggregateTimeout: 100
-    },
-
-    watch: argv.mode === 'development',
-  }
-
-  return [
-    _.merge({}, common, clientConfig),
-    _.merge({}, common, serverConfig)
-  ];
-};
