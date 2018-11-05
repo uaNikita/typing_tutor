@@ -1,9 +1,8 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import { defaults } from 'Constants/defaultState';
+import { defaults, defaultsWhichCanBeOverwrittenByLS } from 'Constants/defaultState';
 import { tempCookie, tempLocalStorage } from 'Utils';
-
 import { processAction } from './main';
 import { fetchJSON } from './fetch';
 
@@ -12,12 +11,10 @@ const SET_STATE = 'user/SET_STATE';
 const ADD_STATISTIC = 'user/ADD_STATISTIC';
 const SET_HIDDEN_CHARS = 'user/SET_HIDDEN_CHARS';
 
-const initialState = Immutable.fromJS(defaults.user);
-
-export default (state = initialState, action = {}) => {
+export default (state = Immutable.fromJS(defaults.user), action = {}) => {
   switch (action.type) {
     case CLEAR_STATE:
-      return state.merge(initialState);
+      return state.merge(defaults.user, defaultsWhichCanBeOverwrittenByLS.user);
 
     case SET_STATE:
       return state.mergeDeep(action.data);

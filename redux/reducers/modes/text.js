@@ -9,7 +9,7 @@ import {
   normalizeString,
 } from 'Utils';
 
-import { defaults } from 'Constants/defaultState';
+import { defaults, defaultsWhichCanBeOverwrittenByLS } from 'Constants/defaultState';
 import { fetchJSON } from '../fetch';
 import {
   processAction,
@@ -30,15 +30,13 @@ const ADD_TEXT = 'text/ADD_TEXT';
 const UPDATE_TEXT = 'text/UPDATE_TEXT';
 const TYPE_ENTITIE = 'text/TYPE_ENTITIE';
 
-const initialState = Immutable.fromJS(defaults.text);
-
-export default (state = initialState, action = {}) => {
+export default (state = Immutable.fromJS(defaults.text), action = {}) => {
   switch (action.type) {
     case SET_STATE:
       return state.merge(action.data);
 
     case CLEAR_STATE:
-      return state.merge(initialState);
+      return state.merge(defaults.text, defaultsWhichCanBeOverwrittenByLS.text);
 
     case ADD_TEXT:
       return state.update('entities', ents => ents.push(Immutable.Map({
