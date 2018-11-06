@@ -1,15 +1,15 @@
-'use strict';
+const _ = require('lodash');
 
-const common = require('./webpack/common');
-const client = require('./webpack/client');
-const server = require('./webpack/server');
-const watch = require('./webpack/watch');
+const common = require('./common');
+const client = require('./client');
+const server = require('./server');
+const watch = require('./watch');
 
 module.exports = mode => {
-  const clientConfig = [common, client];
-  const serverConfig = [common, server];
+  const clientConfig = [{}, common, client];
+  const serverConfig = [{}, common, server];
 
-  if (mode === 'production') {
+  if (mode === 'development') {
     clientConfig.push(watch);
     serverConfig.push(watch);
   }

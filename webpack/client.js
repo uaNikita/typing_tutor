@@ -1,48 +1,37 @@
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
-const restCssLoders = [
-  {
-    loader: 'postcss-loader',
-    options: {
-      plugins: [
-        autoprefixer(),
-      ]
-    },
-  },
-  'stylus-loader'
-];
+const { root, restCssLoders } = require('./utils');
 
 module.exports = {
-  context: path.join(__dirname),
+  context: path.join(root),
 
-  entry: ['@babel/polyfill', path.join(__dirname, 'client', 'entry.jsx')],
+  entry: ['@babel/polyfill', path.join(root, 'client', 'entry.jsx')],
 
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(root, 'dist'),
     filename: 'main.js'
   },
 
   plugins: [
     new CopyWebpackPlugin([
       {
-        from: path.resolve(__dirname, 'static/favicon.png'),
-        to: path.resolve(__dirname, 'dist/favicon.png')
+        from: path.resolve(root, 'static/favicon.png'),
+        to: path.resolve(root, 'dist/favicon.png')
       },
       {
-        from: path.resolve(__dirname, 'static/robots.txt'),
-        to: path.resolve(__dirname, 'dist/robots.txt')
+        from: path.resolve(root, 'static/robots.txt'),
+        to: path.resolve(root, 'dist/robots.txt')
       },
       {
-        from: path.resolve(__dirname, 'static/media'),
-        to: path.resolve(__dirname, 'dist/media')
+        from: path.resolve(root, 'static/media'),
+        to: path.resolve(root, 'dist/media')
       },
       {
-        from: path.resolve(__dirname, 'static/plugins'),
-        to: path.resolve(__dirname, 'dist/plugins')
+        from: path.resolve(root, 'static/plugins'),
+        to: path.resolve(root, 'dist/plugins')
       }
     ]),
     new MiniCssExtractPlugin(),

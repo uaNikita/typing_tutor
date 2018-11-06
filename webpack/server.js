@@ -1,13 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
-const autoprefixer = require('autoprefixer');
 const nodeExternals = require('webpack-node-externals');
 
+const { root, restCssLoders } = require('./utils');
+
 module.exports = {
-  entry: path.join(__dirname, 'server', 'entry.jsx'),
+  entry: path.join(root, 'server', 'entry.jsx'),
 
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(root, 'dist'),
     filename: 'compiledServer.js',
     libraryTarget: 'umd'
   },
@@ -43,15 +44,7 @@ module.exports = {
               localIdentName: '[name]__[local]___[hash:base64:5]'
             }
           },
-          {
-            loader: 'postcss-loader',
-            options: {
-              plugins: [
-                autoprefixer(),
-              ]
-            },
-          },
-          'stylus-loader',
+          ...restCssLoders,
         ]
       },
       {
