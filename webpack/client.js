@@ -44,14 +44,18 @@ module.exports = {
   optimization: {
     splitChunks: {
       cacheGroups: {
+        commons: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          chunks: 'all'
+        },
         styles: {
-          name: 'main',
           test: /\.css$/,
+          name: 'main',
           chunks: 'all',
-          enforce: true
         }
-      }
-    }
+      },
+    },
   },
 
   // Options affecting the normal modules
