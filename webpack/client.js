@@ -40,6 +40,7 @@ module.exports = {
     }),
   ],
 
+  // todo: optimize chunks
   optimization: {
     splitChunks: {
       cacheGroups: {
