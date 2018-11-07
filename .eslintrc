@@ -22,7 +22,14 @@
       }
     ],
     "react/prop-types": "off",
-    "import/no-unresolved": "off"
+    "import/no-unresolved": "off",
+    "react/jsx-one-expression-per-line": "off",
+    "react/prefer-stateless-function": [
+      "error",
+      {
+        "ignorePureComponents": true
+      }
+    ]
   },
   "globals": {
     "BROWSER": true
