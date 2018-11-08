@@ -40,19 +40,18 @@ module.exports = {
     }),
   ],
 
-  // todo: optimize chunks
   optimization: {
     splitChunks: {
       cacheGroups: {
-        commons: {
+        vendors: {
           test: /[\\/]node_modules[\\/]/,
+          chunks: 'all',
           name: 'vendors',
-          chunks: 'all'
         },
         styles: {
           test: /\.css$/,
-          name: 'main',
           chunks: 'all',
+          name: 'main',
         }
       },
     },
