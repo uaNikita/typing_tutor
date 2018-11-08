@@ -3,8 +3,13 @@ import _ from 'lodash';
 
 import tempCookie from 'Utils/tempCookie';
 import tempLocalStorage from 'Utils/tempLocalStorage';
+import getHiddenCharacters from 'Utils/getHiddenCharacters';
 
-export { tempCookie, tempLocalStorage };
+export {
+  tempCookie,
+  tempLocalStorage,
+  getHiddenCharacters,
+};
 
 export const getIdsFromCharacter = (keys, сharacter) => {
   const charsToType = [];

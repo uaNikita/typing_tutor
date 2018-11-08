@@ -3,13 +3,20 @@ import _ from 'lodash';
 import CSSModules from 'react-css-modules';
 import PerfectScrollbar from 'perfect-scrollbar';
 
-import ContentToType from 'Blocks/ContentToType/component';
+import { getHiddenCharacters } from 'Utils';
+
 import Loader from 'Blocks/Loader/component';
 import ContentArea from '../ContentArea';
 
 import styles from './text-area.module.styl';
 
 class Block extends ContentArea {
+  state = {
+    prevPropsText: undefined,
+    typed: undefined,
+    last: undefined,
+  }
+
   constructor(props) {
     super(props);
 
@@ -80,6 +87,28 @@ class Block extends ContentArea {
     this.ps = null;
   }
 
+  static getDerivedStateFromProps(props, state) {
+    const { text } = props;
+    let result = null;
+
+    if (!_.isEqual(text, state.prevPropsText)) {
+      result = {
+        prevPropsText: text,
+      };
+
+      if (state.prevPropsText) {
+        result.typed = state.typed.concat(state.last[0]);
+        result.last = state.last.slice(1);
+      }
+      else {
+        result.typed = getHiddenCharacters(text.typed);
+        result.last = getHiddenCharacters(text.last);
+      }
+    }
+
+    return result;
+  }
+
   update = () => {
     const {
       props: {
@@ -111,6 +140,10 @@ class Block extends ContentArea {
         text,
         hiddenChars,
       },
+      state: {
+        typed,
+        last,
+      },
     } = this;
 
     return (
@@ -119,17 +152,9 @@ class Block extends ContentArea {
           {text
             ? (
               <Fragment>
-                <span styleName="typed">
-                  <ContentToType hidden={hiddenChars}>
-                    {text.typed}
-                  </ContentToType>
-                </span>
-                <Fragment>
-                  <span className="cursor" ref={this.cursor} />
-                  <ContentToType hidden={hiddenChars}>
-                    {text.last}
-                  </ContentToType>
-                </Fragment>
+                <span styleName="typed">{typed}</span>
+                <span className="cursor" ref={this.cursor} />
+                {last}
               </Fragment>
             )
             : <Loader size="30" />

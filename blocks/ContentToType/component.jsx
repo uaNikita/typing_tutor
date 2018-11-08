@@ -10,41 +10,34 @@ const Block = ({ children, hidden }) => {
     result = result
       .split('')
       .map((char, i) => {
-        let c = char;
+        const key = i;
+        const encodeChar = encodeURIComponent(char);
+        let transformedChar = char;
 
-        if (char === ' ') {
-          const key = i;
+        switch (encodeChar) {
+          // space
+          case '%20':
+            transformedChar = <span key={key} styleName="space">&middot;</span>;
 
-          if (hidden) {
-            c = (
-              <Fragment key={key}>
-                <span styleName="middot">
-                  &middot;
-                </span>
-                <span styleName="separator" />
-              </Fragment>
-            );
-          }
-          else {
-            c = <span key={key} styleName="space" />;
-          }
-        }
-        else if (hidden && encodeURIComponent(char) === '%0A') {
-          const key = i;
+            break;
 
-          c = hidden
-            ? (
+          // enter
+          case '%0A':
+            transformedChar = (
               <Fragment key={key}>
                 <span styleName="enter">
                   ↵
                 </span>
                 <br />
               </Fragment>
-            )
-            : <br key={key} />;
+            );
+
+            break;
+
+          default:
         }
 
-        return c;
+        return transformedChar;
       });
   }
 
