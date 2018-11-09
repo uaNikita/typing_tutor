@@ -17,15 +17,6 @@ import DayPickerField from './DayPickerField/component';
 import styles from './statistic.module.styl';
 
 class Block extends Component {
-  constructor(props) {
-    super(props);
-
-    this.chartCharactersEl = React.createRef();
-    this.chartHitsTyposEl = React.createRef();
-    this.chartSpeedEl = React.createRef();
-    this.chartDurabilityEl = React.createRef();
-  }
-
   state = {
     emptyCharts: false,
     mode: undefined,
@@ -33,6 +24,14 @@ class Block extends Component {
     from: undefined,
     to: undefined,
   };
+
+  chartCharactersEl = React.createRef()
+
+  chartHitsTyposEl = React.createRef()
+
+  chartSpeedEl = React.createRef()
+
+  chartDurabilityEl = React.createRef()
 
   componentDidMount() {
     const data = this.getChartsData();

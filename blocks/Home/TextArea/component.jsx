@@ -18,12 +18,9 @@ class Block extends ContentArea {
     last: undefined,
   }
 
-  constructor(props) {
-    super(props);
+  cursor = React.createRef()
 
-    this.cursor = React.createRef();
-    this.content = React.createRef();
-  }
+  content = React.createRef()
 
   componentDidMount = () => {
     const {
