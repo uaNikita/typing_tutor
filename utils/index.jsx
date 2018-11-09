@@ -3,12 +3,10 @@ import _ from 'lodash';
 
 import tempCookie from 'Utils/tempCookie';
 import tempLocalStorage from 'Utils/tempLocalStorage';
-import getHiddenCharacters from 'Utils/getHiddenCharacters';
 
 export {
   tempCookie,
   tempLocalStorage,
-  getHiddenCharacters,
 };
 
 export const getIdsFromCharacter = (keys, сharacter) => {
@@ -179,3 +177,29 @@ export const convertListsToSets = (() => {
     )
   );
 })();
+
+export const getHiddenCharacters = string => (
+  string
+    .split('')
+    .map((char) => {
+      let transformedChar = char;
+
+      switch (char) {
+        // space
+        case ' ':
+          transformedChar = '<span class="space">&middot;</span><span class="separator"></span>';
+
+          break;
+
+        // enter
+        case '\n':
+          transformedChar = '<span class="enter">↵</span><br />';
+
+          break;
+
+        default:
+      }
+
+      return transformedChar;
+    })
+);

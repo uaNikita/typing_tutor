@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import _ from 'lodash';
 import CSSModules from 'react-css-modules';
+import classNames from 'classnames';
 import PerfectScrollbar from 'perfect-scrollbar';
 
 import { getHiddenCharacters } from 'Utils';
@@ -91,6 +92,7 @@ class Block extends ContentArea {
     const { text } = props;
     let result = null;
 
+    // not equal can be only in one case when right character is typed
     if (!_.isEqual(text, state.prevPropsText)) {
       result = {
         prevPropsText: text,
@@ -146,15 +148,21 @@ class Block extends ContentArea {
       },
     } = this;
 
+    const className = classNames('hidden-characters', {
+      'hidden-characters_show': hiddenChars,
+    });
+
     return (
-      <div styleName="textarea">
+      <div className={className} styleName="textarea">
         <p styleName="content" ref={this.content}>
           {text
             ? (
               <Fragment>
-                <span styleName="typed">{typed}</span>
+                {/* eslint-disable-next-line react/no-danger */}
+                <span styleName="typed" dangerouslySetInnerHTML={{ __html: typed.join('') }} />
                 <span className="cursor" ref={this.cursor} />
-                {last}
+                {/* eslint-disable-next-line react/no-danger */}
+                <span dangerouslySetInnerHTML={{ __html: last.join('') }} />
               </Fragment>
             )
             : <Loader size="30" />
