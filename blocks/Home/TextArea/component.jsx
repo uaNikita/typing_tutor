@@ -22,6 +22,29 @@ class Block extends ContentArea {
 
   content = React.createRef()
 
+  static getDerivedStateFromProps(props, state) {
+    const { text } = props;
+    let result = null;
+
+    // not equal can be only in one case when right character is typed
+    if (!_.isEqual(text, state.prevPropsText)) {
+      result = {
+        prevPropsText: text,
+      };
+
+      if (state.prevPropsText) {
+        result.typed = state.typed.concat(state.last[0]);
+        result.last = state.last.slice(1);
+      }
+      else {
+        result.typed = getHiddenCharacters(text.typed);
+        result.last = getHiddenCharacters(text.last);
+      }
+    }
+
+    return result;
+  }
+
   componentDidMount = () => {
     const {
       props: {
@@ -83,29 +106,6 @@ class Block extends ContentArea {
 
     // to make sure garbages are collected
     this.ps = null;
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    const { text } = props;
-    let result = null;
-
-    // not equal can be only in one case when right character is typed
-    if (!_.isEqual(text, state.prevPropsText)) {
-      result = {
-        prevPropsText: text,
-      };
-
-      if (state.prevPropsText) {
-        result.typed = state.typed.concat(state.last[0]);
-        result.last = state.last.slice(1);
-      }
-      else {
-        result.typed = getHiddenCharacters(text.typed);
-        result.last = getHiddenCharacters(text.last);
-      }
-    }
-
-    return result;
   }
 
   update = () => {

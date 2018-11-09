@@ -203,3 +203,8 @@ export const getHiddenCharacters = string => (
       return transformedChar;
     })
 );
+
+export const convertTextToHtml = string => (
+  string
+    .replace(/\n/g, '<br />')
+);

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import ContentToType from 'Blocks/ContentToType/component';
+import { convertTextToHtml } from 'Utils';
 
 import styles from './text-view.module.styl';
 
@@ -48,11 +48,8 @@ const Block = (props) => {
         </Link>
       </div>
 
-      <p>
-        <ContentToType>
-          {text}
-        </ContentToType>
-      </p>
+      {/* eslint-disable-next-line react/no-danger */}
+      <p dangerouslySetInnerHTML={{ __html: convertTextToHtml(text) }} />
     </Fragment>
   );
 };

@@ -3,8 +3,9 @@ import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
+import { convertTextToHtml } from 'Utils';
+
 import Loader from 'Blocks/Loader/component';
-import ContentToType from 'Blocks/ContentToType/component';
 import GeneralModeButton from '../../GeneralModeButton/container';
 
 import styles from './texts.module.styl';
@@ -29,11 +30,8 @@ const Block = (props) => {
 
       return (
         <Link key={id} to={`${url}/${id}`} styleName={className}>
-          <p>
-            <ContentToType>
-              {content}
-            </ContentToType>
-          </p>
+          {/* eslint-disable-next-line react/no-danger */}
+          <p dangerouslySetInnerHTML={{ __html: convertTextToHtml(content) }} />
         </Link>
       );
     });

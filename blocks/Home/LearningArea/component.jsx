@@ -1,12 +1,44 @@
 import React from 'react';
+import _ from 'lodash';
 import CSSModules from 'react-css-modules';
+import classNames from 'classnames';
 
-import ContentToType from 'Blocks/ContentToType/component';
+import { getHiddenCharacters } from 'Utils';
+
 import ContentArea from '../ContentArea';
 
 import styles from './learning-area.module.styl';
 
 class Block extends ContentArea {
+  state = {
+    prevPropsLesson: undefined,
+    typed: undefined,
+    rest: undefined,
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    const { lesson } = props;
+    let result = null;
+
+    // not equal can be only in one case when right character is typed
+    if (!_.isEqual(lesson, state.prevPropsLesson)) {
+      result = {
+        prevPropsLesson: lesson,
+      };
+
+      if (state.prevPropsLesson) {
+        result.typed = state.typed.concat(state.rest[0]);
+        result.rest = state.rest.slice(1);
+      }
+      else {
+        result.typed = getHiddenCharacters(lesson.typed);
+        result.rest = getHiddenCharacters(lesson.rest);
+      }
+    }
+
+    return result;
+  }
+
   componentDidMount = () => {
     const {
       props: {
@@ -32,49 +64,28 @@ class Block extends ContentArea {
     zeroingStatic();
   }
 
-  getCharsMarkup = string => string.split('').map((char, i) => {
-    let c = char;
-
-    if (char === ' ') {
-      const key = char + i;
-
-      c = (
-        <span key={key} styleName="space">
-          ␣
-        </span>
-      );
-    }
-
-    return c;
-  });
-
   render() {
     const {
       props: {
-        lesson,
         hiddenChars,
+      },
+      state: {
+        typed,
+        rest,
       },
     } = this;
 
-    let typed = null;
-
-    if (lesson.typed.length) {
-      typed = (
-        <span styleName="typed">
-          <ContentToType hidden={hiddenChars}>
-            {lesson.typed}
-          </ContentToType>
-        </span>
-      );
-    }
+    const className = classNames('hidden-characters', {
+      'hidden-characters_show': hiddenChars,
+    });
 
     return (
-      <div styleName="learningarea">
-        {typed}
+      <div className={className} styleName="learningarea">
+        {/* eslint-disable-next-line react/no-danger */}
+        <span styleName="typed" dangerouslySetInnerHTML={{ __html: typed.join('') }} />
         <span styleName="cursor" />
-        <ContentToType hidden={hiddenChars}>
-          {lesson.rest}
-        </ContentToType>
+        {/* eslint-disable-next-line react/no-danger */}
+        <span dangerouslySetInnerHTML={{ __html: rest.join('') }} />
       </div>
     );
   }
