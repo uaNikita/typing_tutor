@@ -180,28 +180,8 @@ export const convertListsToSets = (() => {
 
 export const getHiddenCharacters = string => (
   string
-    .split('')
-    .map((char) => {
-      let transformedChar = char;
-
-      switch (char) {
-        // space
-        case ' ':
-          transformedChar = '<span class="space">&middot;</span><span class="separator"></span>';
-
-          break;
-
-        // enter
-        case '\n':
-          transformedChar = '<span class="enter">↵</span><br />';
-
-          break;
-
-        default:
-      }
-
-      return transformedChar;
-    })
+    .replace(/ /g, '<span class="space">&middot;</span><span class="separator"></span>')
+    .replace(/\n/g, '<span class="enter">↵</span><br />')
 );
 
 export const convertTextToHtml = string => (

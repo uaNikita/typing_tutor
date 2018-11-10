@@ -4,46 +4,16 @@ import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 import PerfectScrollbar from 'perfect-scrollbar';
 
-import { getHiddenCharacters } from 'Utils';
-
 import Loader from 'Blocks/Loader/component';
+import PureString from 'Blocks/PureString';
 import ContentArea from '../ContentArea';
 
 import styles from './text-area.module.styl';
 
 class Block extends ContentArea {
-  state = {
-    prevPropsText: undefined,
-    typed: undefined,
-    last: undefined,
-  }
+  cursor = React.createRef();
 
-  cursor = React.createRef()
-
-  content = React.createRef()
-
-  static getDerivedStateFromProps(props, state) {
-    const { text } = props;
-    let result = null;
-
-    // not equal can be only in one case when right character is typed
-    if (!_.isEqual(text, state.prevPropsText)) {
-      result = {
-        prevPropsText: text,
-      };
-
-      if (state.prevPropsText) {
-        result.typed = state.typed.concat(state.last[0]);
-        result.last = state.last.slice(1);
-      }
-      else {
-        result.typed = getHiddenCharacters(text.typed);
-        result.last = getHiddenCharacters(text.last);
-      }
-    }
-
-    return result;
-  }
+  content = React.createRef();
 
   componentDidMount = () => {
     const {
@@ -72,7 +42,7 @@ class Block extends ContentArea {
     }
 
     return true;
-  }
+  };
 
   componentDidUpdate = (prevProps) => {
     const {
@@ -139,10 +109,6 @@ class Block extends ContentArea {
         text,
         hiddenChars,
       },
-      state: {
-        typed,
-        last,
-      },
     } = this;
 
     const className = classNames('hidden-characters', {
@@ -155,11 +121,18 @@ class Block extends ContentArea {
           {text
             ? (
               <Fragment>
-                {/* eslint-disable-next-line react/no-danger */}
-                <span styleName="typed" dangerouslySetInnerHTML={{ __html: typed.join('') }} />
+                <PureString
+                  styleName="typed"
+                  string={text.typed}
+                  hiddenChars
+                />
+
                 <span className="cursor" ref={this.cursor} />
-                {/* eslint-disable-next-line react/no-danger */}
-                <span dangerouslySetInnerHTML={{ __html: last.join('') }} />
+
+                <PureString
+                  string={text.last}
+                  hiddenChars
+                />
               </Fragment>
             )
             : <Loader size="30" />

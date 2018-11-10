@@ -1,44 +1,13 @@
 import React from 'react';
-import _ from 'lodash';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
-import { getHiddenCharacters } from 'Utils';
-
+import PureString from 'Blocks/PureString';
 import ContentArea from '../ContentArea';
 
 import styles from './learning-area.module.styl';
 
 class Block extends ContentArea {
-  state = {
-    prevPropsLesson: undefined,
-    typed: undefined,
-    rest: undefined,
-  }
-
-  static getDerivedStateFromProps(props, state) {
-    const { lesson } = props;
-    let result = null;
-
-    // not equal can be only in one case when right character is typed
-    if (!_.isEqual(lesson, state.prevPropsLesson)) {
-      result = {
-        prevPropsLesson: lesson,
-      };
-
-      if (state.prevPropsLesson) {
-        result.typed = state.typed.concat(state.rest[0]);
-        result.rest = state.rest.slice(1);
-      }
-      else {
-        result.typed = getHiddenCharacters(lesson.typed);
-        result.rest = getHiddenCharacters(lesson.rest);
-      }
-    }
-
-    return result;
-  }
-
   componentDidMount = () => {
     const {
       props: {
@@ -67,11 +36,11 @@ class Block extends ContentArea {
   render() {
     const {
       props: {
+        lesson: {
+          typed,
+          rest,
+        },
         hiddenChars,
-      },
-      state: {
-        typed,
-        rest,
       },
     } = this;
 
@@ -81,11 +50,16 @@ class Block extends ContentArea {
 
     return (
       <div className={className} styleName="learningarea">
-        {/* eslint-disable-next-line react/no-danger */}
-        <span styleName="typed" dangerouslySetInnerHTML={{ __html: typed.join('') }} />
+        <PureString
+          styleName="typed"
+          string={typed}
+          hiddenChars
+        />
         <span styleName="cursor" />
-        {/* eslint-disable-next-line react/no-danger */}
-        <span dangerouslySetInnerHTML={{ __html: rest.join('') }} />
+        <PureString
+          string={rest}
+          hiddenChars
+        />
       </div>
     );
   }

@@ -3,9 +3,8 @@ import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
-import { convertTextToHtml } from 'Utils';
-
 import Loader from 'Blocks/Loader/component';
+import PureString from 'Blocks/PureString';
 import GeneralModeButton from '../../GeneralModeButton/container';
 
 import styles from './texts.module.styl';
@@ -45,8 +44,11 @@ class Block extends Component {
         // todo move convertTextToHtml to somewhere
         return (
           <Link key={id} to={`${url}/${id}`} styleName={className}>
-            {/* eslint-disable-next-line react/no-danger */}
-            <p dangerouslySetInnerHTML={{ __html: convertTextToHtml(content) }} />
+            <PureString
+              string={content}
+              tag="p"
+              html
+            />
           </Link>
         );
       });
