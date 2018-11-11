@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import _ from 'lodash';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 
@@ -10,16 +11,17 @@ import GeneralModeButton from '../../GeneralModeButton/container';
 import styles from './texts.module.styl';
 
 class Block extends Component {
-  constructor(props) {
-    super(props);
+  shouldComponentUpdate = (nextProps) => {
+    const propsToPick = ['texts', 'selectedId'];
+    const pikedProps = _.pick(this.props, propsToPick);
+    const pikedNextProps = _.pick(nextProps, propsToPick);
 
-    const {
-      typed,
-      last,
-    } = props;
+    if (_.isEqual(pikedProps, pikedNextProps)) {
+      return false;
+    }
 
-    this.text = typed + last;
-  }
+    return true;
+  };
 
   render() {
     const {
@@ -41,7 +43,6 @@ class Block extends Component {
           text_selected: id === selectedId,
         });
 
-        // todo move convertTextToHtml to somewhere
         return (
           <Link key={id} to={`${url}/${id}`} styleName={className}>
             <PureString
