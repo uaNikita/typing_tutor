@@ -54,6 +54,7 @@
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.2",
     "chartist": "^0.11.0",
+    "cheerio": "^1.0.0-rc.2",
     "classnames": "^2.2.5",
     "config": "^2.0.1",
     "cookie-parser": "^1.4.3",
