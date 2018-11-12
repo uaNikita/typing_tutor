@@ -1,10 +1,10 @@
-// todo: create service to get syllables frequency
 const _ = require('lodash');
+const fs = require('fs');
 const cheerio = require('cheerio');
 const fetch = require('isomorphic-fetch');
 
-const requestFinishDate = 10 * 60 * 1000 + Date.now(); // 5 min from now
-const requestDelay = 2 * 1000; // 5 sec
+const requestFinishDate = 10 * 60 * 1000 + Date.now(); // 10 min from now
+const requestDelay = 1 * 1000; // 5 sec
 const requestedUrls = [];
 const syllables = [];
 
@@ -12,14 +12,16 @@ console.time('duration');
 
 const get = () =>
   fetch('https://en.wikipedia.org/wiki/Special:Random')
-    .then(function (response) {
+    .then(function(response) {
       if (response.ok) {
-        console.log(`url - \'${response.url}\'`);
-
         if (requestedUrls.includes(response.url)) {
-          return get();
+          get();
+
+          throw new Error('URL already was requested');
         }
         else {
+          console.log(`url - \'${response.url}\'`);
+
           requestedUrls.push(response.url);
 
           return response.text();
@@ -53,19 +55,17 @@ const get = () =>
           }
         }
       });
-
-      console.log(syllables);
-      console.log('-----------------------------------------');
+      
+      console.log('parsed');
 
       if ((Date.now() + requestDelay) <= requestFinishDate) {
         setTimeout(get, requestDelay);
       }
       else {
-        console.timeEnd('duration');
-        // todo: save to js file
+        fs.writeFile('constants/syllables.json', JSON.stringify(syllables), 'utf8');
+        
+        console.log('result is saved in \'constants/myjsonfile.json\'');
       }
-
-      // console.log('syllables', syllables);
     });
 
 get();
