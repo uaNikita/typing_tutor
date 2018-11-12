@@ -10,7 +10,8 @@
     "dev": "webpack --mode=development",
     "eslint-fix": "eslint --ext .jsx --ext .js --fix blocks constants utils redux server",
     "server-eslint": "eslint server",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "get-syllables": "node server/getSyllables.js"
   },
   "keywords": [
     "touch",

@@ -1,47 +1,71 @@
 // todo: create service to get syllables frequency
 const _ = require('lodash');
 const cheerio = require('cheerio');
+const fetch = require('isomorphic-fetch');
 
-console.log('fetch');
+const requestFinishDate = 10 * 60 * 1000 + Date.now(); // 5 min from now
+const requestDelay = 2 * 1000; // 5 sec
+const requestedUrls = [];
+const syllables = [];
 
-fetch('https://en.wikipedia.org/wiki/Cost_of_electricity_by_source')
-  .then(function (response) {
-    if (response.ok) {
-      return response.text();
-    }
+console.time('duration');
 
-    throw new Error("Bad response from server");
-  })
-  .then(function (data) {
-    const $ = cheerio.load(data);
+const get = () =>
+  fetch('https://en.wikipedia.org/wiki/Special:Random')
+    .then(function (response) {
+      if (response.ok) {
+        console.log(`url - \'${response.url}\'`);
 
-    const characters = $('#mw-content-text p').text().split('');
+        if (requestedUrls.includes(response.url)) {
+          return get();
+        }
+        else {
+          requestedUrls.push(response.url);
 
-    const syllables = [];
-
-    characters.forEach((character, i) => {
-
-      const nextCharacter = characters[i + 1];
-
-      if (nextCharacter) {
-        const syllable = (character + nextCharacter).toLowerCase();
-
-
-        if (/^[a-z]{2}$/.test(syllable)) {
-          const obj = _.find(syllables, { syllable });
-
-          if (obj) {
-            obj.count += 1;
-          }
-          else {
-            syllables.push({
-              syllable,
-              count: 1,
-            });
-          }
+          return response.text();
         }
       }
+
+      throw new Error('Bad response from server');
+    })
+    .then(data => {
+      const $ = cheerio.load(data);
+      const characters = $('#mw-content-text p').text().split('');
+
+      characters.forEach((character, i) => {
+        const nextCharacter = characters[i + 1];
+
+        if (nextCharacter) {
+          const syllable = (character + nextCharacter).toLowerCase();
+
+          if (/^[a-z]{2}$/.test(syllable)) {
+            const obj = _.find(syllables, { syllable });
+
+            if (obj) {
+              obj.count += 1;
+            }
+            else {
+              syllables.push({
+                syllable,
+                count: 1,
+              });
+            }
+          }
+        }
+      });
+
+      console.log(syllables);
+      console.log('-----------------------------------------');
+
+      if ((Date.now() + requestDelay) <= requestFinishDate) {
+        setTimeout(get, requestDelay);
+      }
+      else {
+        console.timeEnd('duration');
+        // todo: save to js file
+      }
+
+      // console.log('syllables', syllables);
     });
 
-    console.log('syllables', syllables);
-  });
+get();
