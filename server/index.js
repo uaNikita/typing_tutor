@@ -165,8 +165,6 @@ app.use(async (req, res) => {
   }
 });
 
-require('./getSyllables');
-
 // errors
 require('./errors')(app);
 

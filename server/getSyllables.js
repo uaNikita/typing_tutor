@@ -36,11 +36,11 @@ const repeatIfNeeded = func => {
   }
 };
 
-const get = () => {
-  const requests = languages.map(({ subdomain }) => fetch(`https://${subdomain}.wikipedia.org/wiki/Special:Random`));
-
+const get = () => (
   Promise
-    .all(requests)
+    .all(languages.map(({ subdomain }) => (
+      fetch(`https://${subdomain}.wikipedia.org/wiki/Special:Random`)
+    )))
     .then(responses => (
       Promise.all(responses.map((response, i) => {
         if (response.ok) {
@@ -105,7 +105,7 @@ const get = () => {
       console.error(error);
 
       repeatIfNeeded(get);
-    });
-}
+    })
+)
 
 get();

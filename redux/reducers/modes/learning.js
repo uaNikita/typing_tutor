@@ -147,6 +147,7 @@ export const typeOnLesson = () => ({
   type: TYPE_ON_LESSON,
 });
 
+
 export const processSetOptions = (() => {
   const deferredFetch = _.throttle(
     (dispatch, mode, options) => dispatch(fetchJSON('/learning', {
@@ -190,21 +191,24 @@ const generateFingersLesson = () => (
 
     fingersSet = _.concat.apply(null, fingersSet);
 
-    return generateLesson(
-      state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']),
-      fingersSet,
-    );
+    return generateLesson({
+      keyboard: state.getIn(['user', 'keyboard']),
+      maxLettersInWord: state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']),
+      letters: fingersSet,
+    });
   }
 );
 
 const generateFreeLesson = () => (
   (dispatch, getState) => {
-    const learningState = getState().getIn(['learning', 'free', 'options']);
+    const state = getState();
+    const learningState = state.getIn(['learning', 'free', 'options']);
 
-    return generateLesson(
-      learningState.get('maxLettersInWord'),
-      learningState.get('letters').toJS(),
-    );
+    return generateLesson({
+      keyboard: state.getIn(['user', 'keyboard']),
+      maxLettersInWord: learningState.get('maxLettersInWord'),
+      letters: learningState.get('letters').toJS(),
+    });
   }
 );
 
