@@ -10,12 +10,12 @@ const requestDelay = 1 * 500; // 5 sec
 const languages = [
   {
     subdomain: 'en',
-    regex: '[a-z]'
+    regex: '[a-z]',
   },
   {
     subdomain: 'ru',
-    regex: '[ёа-я]'
-  }
+    regex: '[ёа-я]',
+  },
 ];
 const requestedUrls = {};
 const syllables = [];
@@ -30,14 +30,18 @@ _.each(languages, ({ subdomain }) => {
       4: {},
     },
   });
-})
+});
 
-const repeatIfNeeded = func => {
+const repeatIfNeeded = (func) => {
+  let result = false;
+
   if ((Date.now() + requestDelay) <= requestFinishDate) {
     setTimeout(func, requestDelay);
 
-    return true;
+    result = true;
   }
+
+  return result;
 };
 
 const get = () => (
@@ -48,34 +52,31 @@ const get = () => (
     .then(responses => (
       Promise.all(responses.map((response, i) => {
         if (response.ok) {
-          const requestedLanguageUrls = requestedUrls[languages[i].subdomain]
+          const requestedLanguageUrls = requestedUrls[languages[i].subdomain];
 
           if (requestedLanguageUrls.includes(response.url)) {
-            return Promise.reject('URL already was requested');
+            throw new Error('URL already was requested');
           }
-          else {
-            console.log(`url - '${response.url}'`);
 
-            requestedLanguageUrls.push(response.url);
+          console.log(`url - '${response.url}'`); // eslint-disable-line no-console
 
-            return response.text();
-          }
+          requestedLanguageUrls.push(response.url);
+
+          return response.text();
         }
 
-        return Promise.reject('Bad response from server');
+        throw new Error('Bad response from server');
       }))
     ))
-    .then(data => {
-      data.forEach((html, idx) => {
+    .then((htmls) => {
+      htmls.forEach((html, idx) => {
         const $ = cheerio.load(html);
         const characters = $('#mw-content-text p').text().split('');
-        const language = languages[idx];
+        const { regex, subdomain } = languages[idx];
 
         const obj = _.find(syllables, {
-          language: language.subdomain,
-        })
-
-        const { regex } = language;
+          language: subdomain,
+        });
 
         const saveSyllable = (index, lenght) => {
           const letters = characters.slice(index, index + lenght).join('');
@@ -88,35 +89,41 @@ const get = () => (
                 data[letters] += 1;
               }
               else {
-                data[letters] = 1
+                data[letters] = 1;
               }
             }
           }
-        }
+        };
 
         characters.forEach((character, i) => (
           [2, 3, 4].forEach(current => saveSyllable(i, current))
         ));
       });
 
-      console.log('parsed');
+      console.log('parsed'); // eslint-disable-line no-console
 
       if (!repeatIfNeeded(get)) {
-        const pathToJSON = path.join('constants/syllables.json')
+        const pathToJSON = path.join('constants/syllables.json');
 
         // todo: remove syllables with 1 iteration
-        const syllablesJSON = syllables.reduce((a, b) => (a[b.language] = b.data, a), {});
+        const syllablesJSON = syllables.reduce((a, b) => {
+          const result = a;
+
+          result[b.language] = b.data;
+
+          return result;
+        }, {});
 
         fs.writeFileSync(pathToJSON, JSON.stringify(syllablesJSON), 'utf8');
 
-        console.log(`result is saved in '${pathToJSON}'`);
+        console.log(`result is saved in '${pathToJSON}'`); // eslint-disable-line no-console
       }
     })
-    .catch(error => {
-      console.error(error);
+    .catch((error) => {
+      console.error(error); // eslint-disable-line no-console
 
       repeatIfNeeded(get);
     })
-)
+);
 
 get();

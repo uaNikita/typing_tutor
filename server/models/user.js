@@ -83,7 +83,7 @@ const UserSchema = new mongoose.Schema({
           type: Array,
           default: defaults.learning.free.options.letters,
         },
-      }
+      },
     },
   },
 });

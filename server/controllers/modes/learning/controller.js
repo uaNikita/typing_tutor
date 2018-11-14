@@ -9,7 +9,7 @@ const options = (req, res, next) => {
   user.set({
     modes: {
       learning,
-    }
+    },
   });
 
   user.save()

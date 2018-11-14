@@ -299,18 +299,17 @@ const verifyToken = (req, res, next) => (
             user.save(),
             verification.remove(),
           ])
-          .then(([client], ...rest) =>
-            res.json({
-              type,
-              tokens: {
-                refresh: client.get('token'),
-                access: generateAccessToken({
-                  id: user.get('id'),
-                  clientId: client.get('id'),
-                }),
-              },
-              ...user.toObject(),
-            }));
+          .then(([client]) => res.json({
+            type,
+            tokens: {
+              refresh: client.get('token'),
+              access: generateAccessToken({
+                id: user.get('id'),
+                clientId: client.get('id'),
+              }),
+            },
+            ...user.toObject(),
+          }));
       }
 
       throw new APIError({

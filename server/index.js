@@ -98,9 +98,13 @@ app.use(async (req, res) => {
 
   // if value is array then replace array with new
   const mergedState = _.mergeWith(...objectsToMerge, (objValue, srcValue) => {
+    let result;
+
     if (_.isArray(objValue)) {
-      return srcValue;
+      result = srcValue;
     }
+
+    return result;
   });
 
   // create store
