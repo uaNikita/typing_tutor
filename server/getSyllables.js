@@ -4,17 +4,17 @@ const path = require('path');
 const cheerio = require('cheerio');
 const fetch = require('isomorphic-fetch');
 
-const requestFinishDate = 10 * 60 * 1000 + Date.now(); // 10 min from now
+const requestFinishDate = 0.1 * 60 * 1000 + Date.now(); // 10 min from now
 const requestDelay = 1 * 500; // 5 sec
 
 const languages = [
   {
     subdomain: 'en',
-    regex: /^[a-z]{2}$/
+    regex: '[a-z]'
   },
   {
     subdomain: 'ru',
-    regex: /^[ёа-я]{2}$/
+    regex: '[ёа-я]'
   }
 ];
 const requestedUrls = {};
@@ -24,7 +24,11 @@ _.each(languages, ({ subdomain }) => {
 
   syllables.push({
     language: subdomain,
-    data: {},
+    data: {
+      2: {},
+      3: {},
+      4: {},
+    },
   });
 })
 
@@ -67,26 +71,32 @@ const get = () => (
         const characters = $('#mw-content-text p').text().split('');
         const language = languages[idx];
 
-        characters.forEach((character, i) => {
-          const nextCharacter = characters[i + 1];
+        const obj = _.find(syllables, {
+          language: language.subdomain,
+        })
 
-          if (nextCharacter) {
-            const syllable = (character + nextCharacter).toLowerCase();
+        const { regex } = language;
 
-            if (language.regex.test(syllable)) {
-              const obj = _.find(syllables, {
-                language: language.subdomain,
-              })
+        const saveSyllable = (index, lenght) => {
+          const letters = characters.slice(index, index + lenght).join('');
 
-              if (obj.data[syllable]) {
-                obj.data[syllable] += 1;
+          if (letters.length === lenght) {
+            const data = obj.data[lenght];
+
+            if (new RegExp(`^${regex}{${lenght}}$`).test(letters)) {
+              if (data[letters]) {
+                data[letters] += 1;
               }
               else {
-                obj.data[syllable] = 1
+                data[letters] = 1
               }
             }
           }
-        });
+        }
+
+        characters.forEach((character, i) => (
+          [2, 3, 4].forEach(current => saveSyllable(i, current))
+        ));
       });
 
       console.log('parsed');
@@ -94,6 +104,7 @@ const get = () => (
       if (!repeatIfNeeded(get)) {
         const pathToJSON = path.join('constants/syllables.json')
 
+        // todo: remove syllables with 1 iteration
         const syllablesJSON = syllables.reduce((a, b) => (a[b.language] = b.data, a), {});
 
         fs.writeFileSync(pathToJSON, JSON.stringify(syllablesJSON), 'utf8');

@@ -10,7 +10,7 @@ const getRandomWithPriority = obj => (
     .sample()
 );
 
-const getSyllablesSequence = (wordLength) => {
+const getSyllablesLenght = (wordLength) => {
   const sequence = [];
   let sum = 0;
 
@@ -52,6 +52,19 @@ const getSyllablesSequence = (wordLength) => {
   return sequence;
 };
 
+const getSyllables = (options) => {
+  const {
+    syllablesLenght,
+    keyboard,
+    letters,
+  } = options;
+
+
+
+
+
+}
+
 
 export default (() => {
   const minWordLength = 3;
@@ -86,9 +99,15 @@ export default (() => {
         }
       }
 
-      const syllables = getSyllablesSequence(wordLength);
+      const syllablesLenght = getSyllablesLenght(wordLength);
 
-      console.log('syllables', wordLength, syllables);
+      const syllables = getSyllables({
+        syllablesLenght,
+        keyboard,
+        letters,
+      });
+
+      console.log('syllables', wordLength, syllablesLenght);
 
       _.times(wordLength, addLetter);
     }
