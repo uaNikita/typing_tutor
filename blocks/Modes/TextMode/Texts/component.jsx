@@ -83,3 +83,11 @@ class Block extends Component {
 export default CSSModules(Block, styles, {
   allowMultiple: true,
 });
+
+
+Promise.resolve(()=>{
+  throw Error('qwer qwer qwre');
+})
+.catch((error) => {
+  console.log('error', error);
+});

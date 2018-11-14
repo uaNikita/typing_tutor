@@ -1,7 +1,7 @@
 import _ from 'lodash';
 
 import keyboards from 'Constants/keyboards';
-
+import syllables from 'Constants/syllables.json';
 
 const getRandomWithPriority = obj => (
   _(obj)
@@ -55,15 +55,14 @@ const getSyllablesLenght = (wordLength) => {
 const getSyllables = (options) => {
   const {
     syllablesLenght,
-    keyboard,
+    domain,
     letters,
   } = options;
 
+  const s = syllables[domain];
 
-
-
-
-}
+  console.log('s', s);
+};
 
 
 export default (() => {
@@ -78,8 +77,17 @@ export default (() => {
     } = options;
 
     let lesson = '';
-
+    
     const { domain } = _.find(keyboards, { name: keyboard });
+    const filteredSyllables = syllables[domain];
+
+    console.log('letters', letters);
+    
+    _.each(filteredSyllables, (v,k)=>{
+      filteredSyllables[k] = _.pickBy(v, s => s > 3000)
+    });
+
+    console.log(filteredSyllables);
 
     const lastIndex = letters.length - 1;
     const addLetter = () => {
@@ -100,14 +108,14 @@ export default (() => {
       }
 
       const syllablesLenght = getSyllablesLenght(wordLength);
+      
+      // const syllables = getSyllables({
+      //   syllablesLenght,
+      //   domain,
+      //   letters,
+      // });
 
-      const syllables = getSyllables({
-        syllablesLenght,
-        keyboard,
-        letters,
-      });
-
-      console.log('syllables', wordLength, syllablesLenght);
+      // console.log('syllables', wordLength, syllablesLenght);
 
       _.times(wordLength, addLetter);
     }
