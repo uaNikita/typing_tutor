@@ -91,8 +91,7 @@ const get = () => (
         };
 
         characters.forEach((character, i) => (
-          [2, 3, 4].forEach(current =>
-            saveSyllable(i, current))
+          [2, 3, 4].forEach(current => saveSyllable(i, current))
         ));
       });
 
@@ -101,9 +100,12 @@ const get = () => (
       if (!repeatIfNeeded(get)) {
         const pathToJSON = path.join('constants/syllables.json');
 
+        // pick only if sylables is met more then 2 times
         _.each(syllables, (domain) => {
           _.each(domain, (obj, l) => {
-            domain[l] = _.pickBy(obj, s => s > 2);
+            const domainRef = domain;
+
+            domainRef[l] = _.pickBy(obj, s => s > 2);
           });
         });
 

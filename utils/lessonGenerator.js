@@ -10,12 +10,12 @@ const getRandomWithPriority = obj => (
     .sample()
 );
 
-const getSyllablesLenght = (wordLength) => {
+const getWord = (wordLenght, slbls) => {
   const sequence = [];
   let sum = 0;
 
-  while (sum < wordLength) {
-    const remainder = wordLength - sum;
+  while (sum < wordLenght) {
+    const remainder = wordLenght - sum;
 
     let length;
 
@@ -49,19 +49,9 @@ const getSyllablesLenght = (wordLength) => {
     sum += length;
   }
 
-  return sequence;
-};
-
-const getSyllables = (options) => {
-  const {
-    syllablesLenght,
-    domain,
-    letters,
-  } = options;
-
-  const s = syllables[domain];
-
-  console.log('s', s);
+  return sequence
+    .map(l => _.sample(slbls[l]).syllable)
+    .join('');
 };
 
 
@@ -77,22 +67,21 @@ export default (() => {
     } = options;
 
     let lesson = '';
-    
+
     const { domain } = _.find(keyboards, { name: keyboard });
-    const filteredSyllables = syllables[domain];
+    const filteredSyllables = _.cloneDeep(syllables[domain]);
 
-    console.log('letters', letters);
-    
-    _.each(filteredSyllables, (v,k)=>{
-      filteredSyllables[k] = _.pickBy(v, s => s > 3000)
+    const regex = new RegExp(`^[${letters.join('')}]+$`);
+
+    _.each(filteredSyllables, (v, k) => {
+      filteredSyllables[k] = _(filteredSyllables[k])
+        .map((q, s) => ({
+          quantity: q,
+          syllable: s,
+        }))
+        .filter(({ syllable }) => regex.test(syllable))
+        .value();
     });
-
-    console.log(filteredSyllables);
-
-    const lastIndex = letters.length - 1;
-    const addLetter = () => {
-      lesson += letters[_.random(0, lastIndex)];
-    };
 
     while (lesson.length <= maxChars) {
       const { length } = lesson;
@@ -107,17 +96,9 @@ export default (() => {
         }
       }
 
-      const syllablesLenght = getSyllablesLenght(wordLength);
-      
-      // const syllables = getSyllables({
-      //   syllablesLenght,
-      //   domain,
-      //   letters,
-      // });
+      const word = getWord(wordLength, filteredSyllables);
 
-      // console.log('syllables', wordLength, syllablesLenght);
-
-      _.times(wordLength, addLetter);
+      lesson += `${word} `;
     }
 
     lesson = lesson.slice(0, -1);
