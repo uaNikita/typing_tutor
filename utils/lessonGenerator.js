@@ -49,6 +49,7 @@ const getWord = (wordLenght, slbls) => {
     sum += length;
   }
 
+  // todo: what if syllables with current letters does not exist
   return sequence
     .map(l => _.sample(slbls[l]).syllable)
     .join('');
