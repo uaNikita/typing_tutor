@@ -49,12 +49,11 @@ const getWord = (wordLenght, slbls) => {
     sum += length;
   }
 
-  // todo: what if syllables with current letters does not exist
+  // todo: if syllables with current letters does not exist generate word with other logic
   return sequence
     .map(l => _.sample(slbls[l]).syllable)
     .join('');
 };
-
 
 export default (() => {
   const minWordLength = 3;
