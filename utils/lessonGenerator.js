@@ -51,7 +51,14 @@ const getWord = (wordLenght, slbls) => {
 
   // todo: if syllables with current letters does not exist generate word with other logic
   return sequence
-    .map(l => _.sample(slbls[l]).syllable)
+    .map(l => {
+      if (_.size(slbls[l]) > 3) {
+        return _.sample(slbls[l]).syllable;
+      }
+      else {
+        return 'to-low';
+      }
+    })
     .join('');
 };
 
