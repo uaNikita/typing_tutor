@@ -49,7 +49,8 @@ const getWord = (wordLenght, slbls) => {
     sum += length;
   }
 
-  // todo: if syllables with current letters does not exist generate word with other logic
+  // todo: if syllables with current letters does
+  // not exist generate word with other logic
   return sequence
     .map(l => {
       if (_.size(slbls[l]) > 3) {
