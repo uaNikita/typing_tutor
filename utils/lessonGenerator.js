@@ -52,13 +52,20 @@ const getWord = (wordLenght, slbls) => {
   // todo: if syllables with current letters does
   // not exist generate word with other logic
   return sequence
-    .map(l => {
-      if (_.size(slbls[l]) > 3) {
-        return _.sample(slbls[l]).syllable;
+    .map((l) => {
+      const available = slbls[l].filter(o => !o.used);
+      let generatedSyllable;
+
+      if (available.length) {
+        const o = _.sample(available);
+        o.used = true;
+        generatedSyllable = o.syllable;
       }
       else {
-        return 'to-low';
+        generatedSyllable = 'to-low';
       }
+
+      return generatedSyllable;
     })
     .join('');
 };
