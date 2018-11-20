@@ -212,6 +212,7 @@ const generateFreeLesson = () => (
   }
 );
 
+// set options and update lessons
 export const processSetOptionsAndUpdate = ({ mode, options }) => (
   (dispatch, getState) => {
     dispatch(processSetOptions({
@@ -219,29 +220,22 @@ export const processSetOptionsAndUpdate = ({ mode, options }) => (
       options,
     }));
 
-    const fingersExample = dispatch(generateFingersLesson());
-    dispatch(setFingersExample(fingersExample));
+    let lesson;
 
-    const freeExample = dispatch(generateFreeLesson());
-    dispatch(setFreeExample(freeExample));
+    switch (mode) {
+      case 'fingers':
+        lesson = dispatch(generateFingersLesson());
+        dispatch(setFingersExample(lesson));
+        break;
+      case 'free':
+        lesson = dispatch(generateFreeLesson());
+        dispatch(setFreeExample(lesson));
+        break;
+      default:
+    }
 
     const currentMode = getState().getIn(['learning', 'mode']);
-
     if (mode === currentMode) {
-      let lesson = '';
-
-      switch (currentMode) {
-        case 'fingers':
-          lesson = fingersExample;
-          break;
-
-        case 'free':
-          lesson = freeExample;
-          break;
-
-        default:
-      }
-
       dispatch(setCurrentLesson(lesson));
     }
   });

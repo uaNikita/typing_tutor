@@ -3,7 +3,7 @@ import _ from 'lodash';
 
 import tempCookie from './tempCookie';
 import tempLocalStorage from './tempLocalStorage';
-import generateLesson from './lessonGenerator';
+import generateLesson from './generateLesson';
 
 export {
   tempCookie,

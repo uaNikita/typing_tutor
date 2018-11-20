@@ -10,12 +10,35 @@ const getRandomWithPriority = obj => (
     .sample()
 );
 
-const getWord = (wordLenght, slbls) => {
+const generateSyllableFromLetters = (length, letters) => (
+  _.times(length, _.sample(letters)).join('')
+);
+
+const getAvailableSyllable = (filteredSyllables, length) => {
+  const available = filteredSyllables[length].filter(o => !o.used);
+  let generatedSyllable = false;
+
+  if (available.length) {
+    const o = _.sample(available);
+    o.used = true;
+    generatedSyllable = o.syllable;
+  }
+
+  return generatedSyllable;
+};
+
+const getWord = (options) => {
+  const {
+    wordLength,
+    syllables: filteredSyllables,
+    letters,
+  } = options;
+
   const sequence = [];
   let sum = 0;
 
-  while (sum < wordLenght) {
-    const remainder = wordLenght - sum;
+  while (sum < wordLength) {
+    const remainder = wordLength - sum;
 
     let length;
 
@@ -49,20 +72,21 @@ const getWord = (wordLenght, slbls) => {
     sum += length;
   }
 
-  // todo: if syllables with current letters does
-  // not exist generate word with other logic
   return sequence
     .map((l) => {
-      const available = slbls[l].filter(o => !o.used);
-      let generatedSyllable;
+      let generatedSyllable = getAvailableSyllable(filteredSyllables, l);
 
-      if (available.length) {
-        const o = _.sample(available);
-        o.used = true;
-        generatedSyllable = o.syllable;
-      }
-      else {
-        generatedSyllable = 'to-low';
+      if (!generatedSyllable) {
+        if (l === 4) {
+          generatedSyllable = _
+            .times(2, () => (
+              getAvailableSyllable(filteredSyllables, 2) || generateSyllableFromLetters(letters)
+            ))
+            .join('');
+        }
+        else {
+          generatedSyllable = generateSyllableFromLetters(letters);
+        }
       }
 
       return generatedSyllable;
@@ -111,7 +135,11 @@ export default (() => {
         }
       }
 
-      const word = getWord(wordLength, filteredSyllables);
+      const word = getWord({
+        wordLength,
+        syllables: filteredSyllables,
+        letters,
+      });
 
       lesson += `${word} `;
     }
