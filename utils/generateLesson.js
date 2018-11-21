@@ -11,7 +11,7 @@ const getRandomWithPriority = obj => (
 );
 
 const generateSyllableFromLetters = (length, letters) => (
-  _.times(length, _.sample(letters)).join('')
+  _.times(length, () => _.sample(letters)).join('')
 );
 
 const getAvailableSyllable = (filteredSyllables, length) => {
@@ -78,14 +78,17 @@ const getWord = (options) => {
 
       if (!generatedSyllable) {
         if (l === 4) {
+          const syllableLength = 2;
+
           generatedSyllable = _
             .times(2, () => (
-              getAvailableSyllable(filteredSyllables, 2) || generateSyllableFromLetters(letters)
+              getAvailableSyllable(filteredSyllables, syllableLength)
+              || generateSyllableFromLetters(syllableLength, letters)
             ))
             .join('');
         }
         else {
-          generatedSyllable = generateSyllableFromLetters(letters);
+          generatedSyllable = generateSyllableFromLetters(l, letters);
         }
       }
 
