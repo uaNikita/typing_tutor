@@ -53,7 +53,7 @@ export const defaults = {
       options: {
         maxLettersInWord: 5,
         // will be updated after init()
-        letters: [],
+        letters: null,
       },
       example: '',
     },

@@ -314,20 +314,25 @@ export const initLessons = () => (
     const state = getState();
 
     const keys = state.getIn(['main', 'keys']).toJS();
+    const learningState = state.get('learning');
 
-    dispatch(processSetOptions({
-      mode: 'fingers',
-      options: {
-        setSize: getDefaultFingersSetSize(keys),
-      },
-    }));
+    if (!learningState.getIn(['fingers', 'options', 'setSize'])) {
+      dispatch(processSetOptions({
+        mode: 'fingers',
+        options: {
+          setSize: getDefaultFingersSetSize(keys),
+        },
+      }));
+    }
 
-    dispatch(processSetOptions({
-      mode: 'free',
-      options: {
-        letters: ['set', getDefaultFreeLetters(keys)],
-      },
-    }));
+    if (!learningState.getIn(['free', 'options', 'letters'])) {
+      dispatch(processSetOptions({
+        mode: 'free',
+        options: {
+          letters: ['set', getDefaultFreeLetters(keys)],
+        },
+      }));
+    }
 
     const fingersExample = dispatch(generateFingersLesson());
     dispatch(setFingersExample(fingersExample));
@@ -337,7 +342,7 @@ export const initLessons = () => (
 
     let lesson;
 
-    switch (state.getIn(['learning', 'mode'])) {
+    switch (learningState.get('mode')) {
       case 'fingers':
         lesson = fingersExample;
         break;

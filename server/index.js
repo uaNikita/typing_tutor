@@ -108,7 +108,11 @@ app.use(async (req, res) => {
   });
 
   // create store
-  const store = createStore(reducer, Immutable.fromJS(mergedState), applyMiddleware(thunk));
+  const store = createStore(
+    reducer,
+    Immutable.fromJS(mergedState),
+    applyMiddleware(thunk),
+  );
   const { dispatch } = store;
 
   // get all info for authorized users
