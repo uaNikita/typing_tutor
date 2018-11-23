@@ -1,6 +1,6 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
-import differenceInMinutes from 'date-fns/difference_in_minutes';
+import dayjs from 'dayjs';
 
 import {
   tempCookie,
@@ -303,7 +303,7 @@ export const typeLearningMode = char => (
 
     const sessionStrat = state.getIn(['main', 'sessionStatistic', 'start']);
 
-    if (differenceInMinutes(Date.now(), sessionStrat)) {
+    if (dayjs(Date.now()).diff(sessionStrat, 'minute')) {
       dispatch(processAddStatistic());
     }
   }

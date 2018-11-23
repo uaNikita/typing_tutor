@@ -4,7 +4,7 @@ const config = require('config');
 const httpStatus = require('http-status');
 const APIError = require('../utils/APIError');
 
-const { defaults } = require('../../dist/compiledServer');
+const { defaults, defaultsWhichCanBeOverwrittenByLS } = require('../../dist/compiledServer');
 
 const UserSchema = new mongoose.Schema({
   name: String,
@@ -56,7 +56,7 @@ const UserSchema = new mongoose.Schema({
       },
       entities: {
         type: Array,
-        default: defaults.text.entities,
+        default: defaultsWhichCanBeOverwrittenByLS.text.entities,
       },
     },
     learning: {

@@ -3,7 +3,7 @@ import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 import _ from 'lodash';
 import { Field, reduxForm } from 'redux-form/immutable';
-import format from 'date-fns/format';
+import dayjs from 'dayjs';
 
 import keyboards from 'Constants/keyboards';
 import modes from 'Constants/modes';
@@ -86,7 +86,7 @@ class Block extends Component {
           showGrid: false,
         },
         axisY: {
-          labelInterpolationFnc: value => format(value, 'm:ss'),
+          labelInterpolationFnc: value => dayjs(value).format('m:ss'),
         },
       },
     );
@@ -188,7 +188,7 @@ class Block extends Component {
 
     statistic
       .map(({ start, end, presses }) => {
-        const date = format(start, dateFormat);
+        const date = dayjs(start).format(dateFormat);
         const totalMinutes = (end - start) / (1000 * 60);
         const totalHits = _.sumBy(presses, 'hits');
 

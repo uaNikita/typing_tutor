@@ -24,6 +24,10 @@ const Block = () => (
     </ul>
 
     Right now <em>Touch to type</em> is free app. If you have question please send it to <a href="mailto:info@touchtotype.com">info@touchtotype.com </a>.
+
+    <h2>Statistic</h2>
+
+
   </section>
   /* eslint-enable max-len */
 );

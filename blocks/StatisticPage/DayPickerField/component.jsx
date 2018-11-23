@@ -3,8 +3,7 @@ import CSSModules from 'react-css-modules';
 import { Field } from 'redux-form/immutable';
 import { CSSTransition } from 'react-transition-group';
 import DayPicker from 'react-day-picker';
-import format from 'date-fns/format';
-import startOfDay from 'date-fns/start_of_day';
+import dayjs from 'dayjs';
 import classNames from 'classnames';
 
 import { closestEl } from 'Utils';
@@ -57,9 +56,9 @@ class Block extends Component {
       },
     } = this;
 
-    const day = startOfDay(selectedDay);
+    const day = dayjs(selectedDay).startOf('day');
 
-    change(name, format(day, 'YYYY-MM-DD'));
+    change(name, dayjs(day).format('YYYY-MM-DD'));
 
     onChange(day);
 
