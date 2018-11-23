@@ -46,7 +46,7 @@ module.exports = {
         vendors: {
           test: /[\\/]node_modules[\\/]/,
           chunks: 'all',
-          name: 'vendors',
+          filename: 'vendors.js',
         },
         styles: {
           test: /\.css$/,
