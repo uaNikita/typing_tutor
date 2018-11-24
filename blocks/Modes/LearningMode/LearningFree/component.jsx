@@ -54,7 +54,7 @@ class LearningFree extends Component {
     updateOptions({
       letters: [action, key],
     });
-  }
+  };
 
   render() {
     const {
@@ -105,9 +105,13 @@ class LearningFree extends Component {
       );
     });
 
-    const keyboardClassName = classNames('keyboard', 'options-learning__keyboard-free', {
-      'options-learning__keyboard-free_last': letters.length === 1,
-    });
+    const keyboardClassName = classNames(
+      'keyboard',
+      'options-learning__keyboard-free',
+      {
+        'options-learning__keyboard-free_last': letters.length === 1,
+      },
+    );
 
     return (
       <Fragment>
