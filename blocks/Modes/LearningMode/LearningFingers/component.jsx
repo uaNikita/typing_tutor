@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import Slider from 'rc-slider';
 
 import Key from 'Blocks/Key/component';
-import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFingers extends Component {
   constructor(props) {
@@ -54,6 +53,7 @@ class LearningFingers extends Component {
         keys,
         fingersSet,
         example,
+        start,
       },
       maxLettersInWordSliderProps,
     } = this;
@@ -113,17 +113,19 @@ class LearningFingers extends Component {
 
     return (
       <Fragment>
-        <h4 className="options-learning__title">
-          Example
-        </h4>
+        <button
+          type="button"
+          className="button"
+          onClick={start}
+        >
+          Start
+        </button>
+
+        <h4 className="options-learning__title">Example</h4>
 
         <p className="options-learning__view">{example}</p>
 
-        <h4 className="options-learning__title">
-          Settings
-        </h4>
-
-        <LearningModeButton toMode="fingers" />
+        <h4 className="options-learning__title">Settings</h4>
 
         <div className="options-learning__item">
           <p className="options-learning__label">
