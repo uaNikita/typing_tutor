@@ -4,8 +4,6 @@ import {
   processSetSettings as processSetLearningSettings,
   generateAndSetLessonForMode,
   setCurrentLessonFromCurrentMode,
-  setMode,
-  setCurrentLesson,
 } from 'ReduxUtils/reducers/modes/learning';
 
 import LearningFree from './component';
@@ -21,9 +19,6 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  setMode: mode => dispatch(processSetUserSettings({ mode })),
-  setLearningMode: (...args) => dispatch(setMode(...args)),
-  setCurrentLesson: (...args) => dispatch(setCurrentLesson(...args)),
   updateOptions: (options) => {
     dispatch(processSetLearningSettings({
       free: {

@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { processSetSettings } from 'ReduxUtils/reducers/user';
+import { processSetSettings as processSetUserSettings } from 'ReduxUtils/reducers/user';
 import {
-  processSetOptionsAndUpdate,
-  setMode,
-  setCurrentLesson,
+  processSetSettings as processSetLearningSettings,
+  generateAndSetLessonForMode,
+  setCurrentLessonFromCurrentMode,
 } from 'ReduxUtils/reducers/modes/learning';
 
 import { getFingersSet } from 'Utils';
@@ -22,34 +22,32 @@ const mapStateToProps = (state) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  setMode: mode => dispatch(processSetSettings({ mode })),
-  setLearningMode: (...args) => dispatch(setMode(...args)),
-  setCurrentLesson: (...args) => dispatch(setCurrentLesson(...args)),
-  updateOptions: options => dispatch(processSetOptionsAndUpdate({
-    mode: 'fingers',
-    options,
-  })),
-});
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  updateOptions: (options) => {
+    dispatch(processSetLearningSettings({
+      fingers: {
+        options,
+      },
+    }));
 
-const mergeProps = (stateProps, dispatchProps, ownProps) => ({
-  ...stateProps,
-  updateOptions: dispatchProps.updateOptions,
+    dispatch(generateAndSetLessonForMode('fingers'));
+  },
   start: () => {
-    dispatchProps.setMode('learning');
+    dispatch(processSetUserSettings({
+      mode: 'learning',
+    }));
 
-    dispatchProps.setLearningMode('fingers');
+    dispatch(processSetLearningSettings({
+      mode: 'fingers',
+    }));
 
-    dispatchProps.setCurrentLesson(stateProps.example);
+    dispatch(setCurrentLessonFromCurrentMode());
 
     ownProps.history.push('/');
   },
-  ...ownProps,
 });
-
 
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-  mergeProps,
 )(Component);

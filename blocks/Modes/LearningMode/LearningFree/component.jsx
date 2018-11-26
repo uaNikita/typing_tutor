@@ -4,7 +4,6 @@ import classNames from 'classnames';
 import Slider from 'rc-slider';
 
 import Key from 'Blocks/Key/component';
-import LearningModeButton from '../LearningModeButton/container';
 
 class LearningFree extends Component {
   constructor(props) {
@@ -124,8 +123,6 @@ class LearningFree extends Component {
         <h4 className="options-learning__title">
           Settings
         </h4>
-
-        <LearningModeButton toMode="free" />
 
         <div className="options-learning__item">
           <p className="options-learning__label">
