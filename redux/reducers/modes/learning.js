@@ -157,8 +157,6 @@ export const processSetSettings = (() => {
   );
 
   return settings => (dispatch, getState) => {
-    console.log('settings', settings);
-
     dispatch(setState(settings));
 
     return dispatch(processAction(
@@ -182,6 +180,8 @@ export const processSetSettings = (() => {
     ));
   };
 })();
+
+
 
 export const processSetOptions = (() => {
   const deferredFetch = _.throttle(
