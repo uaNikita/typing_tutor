@@ -3,14 +3,10 @@ const httpStatus = require('http-status');
 const options = (req, res, next) => {
   const {
     user,
-    body: learning,
+    body,
   } = req;
 
-  user.set({
-    modes: {
-      learning,
-    },
-  });
+  user.set(body);
 
   user.save()
     .then(() => res.json(httpStatus[200]))

@@ -147,6 +147,41 @@ export const typeOnLesson = () => ({
   type: TYPE_ON_LESSON,
 });
 
+export const processSetSettings = (() => {
+  const deferredFetch = _.throttle(
+    (dispatch, settings) => dispatch(fetchJSON('/learning', {
+      method: 'PATCH',
+      body: settings,
+    })),
+    1000,
+  );
+
+  return settings => (dispatch, getState) => {
+    console.log('settings', settings);
+
+    dispatch(setState(settings));
+
+    return dispatch(processAction(
+      () => {
+        console.log(getState().getIn('learning'));
+
+        tempCookie.path('learning', getState().getIn('learning'))},
+      () => {
+        const settingsToSave = settings;
+
+        if (settingsToSave.fingers && settingsToSave.fingers.options) {
+          settingsToSave.fingers = settingsToSave.fingers.options;
+        }
+
+        if (settingsToSave.free && settingsToSave.free.options) {
+          settingsToSave.free = settingsToSave.free.options;
+        }
+
+        return deferredFetch(dispatch, settingsToSave);
+      },
+    ));
+  };
+})();
 
 export const processSetOptions = (() => {
   const deferredFetch = _.throttle(
@@ -212,6 +247,42 @@ const generateFreeLesson = () => (
   }
 );
 
+export const setCurrentLessonFromCurrentMode = () => (
+  (dispatch, getState) => {
+    const learningState = getState().getIn('learning');
+
+    const mode = learningState.get('mode');
+    const example = learningState.get(mode);
+
+    dispatch(setCurrentLesson(example));
+  }
+);
+
+export const generateAndSetLessonForMode = mode => (
+  (dispatch, getState) => {
+    let lesson;
+
+    switch (mode) {
+      case 'fingers':
+        lesson = dispatch(generateFingersLesson());
+        dispatch(setFingersExample(lesson));
+        break;
+      case 'free':
+        lesson = dispatch(generateFreeLesson());
+        dispatch(setFreeExample(lesson));
+        break;
+      default:
+    }
+
+    // if current mode is active then we change lesson for typing also
+    const currentMode = getState().getIn(['learning', 'mode']);
+    if (mode === currentMode) {
+      dispatch(setCurrentLesson(lesson));
+    }
+  }
+);
+
+
 // set options and update lessons
 export const processSetOptionsAndUpdate = ({ mode, options }) => (
   (dispatch, getState) => {
@@ -240,23 +311,44 @@ export const processSetOptionsAndUpdate = ({ mode, options }) => (
     }
   });
 
+export const generateAndSetCurrentLessonFromCurrentMode = () => (
+  (dispatch, getState) => {
+    let lesson;
 
-export const updateCharToType = () => (dispatch, getState) => {
-  const state = getState();
+    switch (getState().getIn(['learning', 'mode'])) {
+      case 'fingers':
+        lesson = dispatch(generateFingersLesson());
+        dispatch(setFingersExample(lesson));
+        break;
+      case 'free':
+        lesson = dispatch(generateFreeLesson());
+        dispatch(setFreeExample(lesson));
+        break;
+      default:
+    }
 
-  let idsChar = '';
+    dispatch(setCurrentLesson(lesson));
+  });
 
-  const lessonRest = state.getIn(['learning', 'lesson', 'rest']);
 
-  if (lessonRest) {
-    idsChar = getIdsFromCharacter(
-      state.getIn(['main', 'keys']).toJS(),
-      lessonRest[0],
-    );
+export const updateCharToType = () => (
+  (dispatch, getState) => {
+    const state = getState();
+
+    let idsChar = '';
+
+    const lessonRest = state.getIn(['learning', 'lesson', 'rest']);
+
+    if (lessonRest) {
+      idsChar = getIdsFromCharacter(
+        state.getIn(['main', 'keys']).toJS(),
+        lessonRest[0],
+      );
+    }
+
+    dispatch(setIdsCharToType(idsChar));
   }
-
-  dispatch(setIdsCharToType(idsChar));
-};
+);
 
 export const typeLearningMode = char => (
   (dispatch, getState) => {
