@@ -157,31 +157,28 @@ export const processSetSettings = (() => {
   );
 
   return settings => (dispatch, getState) => {
-    dispatch(setState(settings));
+    const settingsToSave = settings;
+
+    if (settingsToSave.free && settingsToSave.free.options) {
+      dispatch(updateFreeOptions(settingsToSave.free.options));
+
+      settingsToSave.free = getState().getIn(['learning', 'free', 'options']).toJS();
+    }
+
+    if (settings.fingers && settings.fingers.options) {
+      dispatch(updateFingersOptions(settings.fingers.options));
+
+      settingsToSave.fingers = getState().getIn(['learning', 'fingers', 'options']).toJS();
+    }
+
+    dispatch(setState(settingsToSave));
 
     return dispatch(processAction(
-      () => {
-        console.log(getState().getIn('learning'));
-
-        tempCookie.path('learning', getState().getIn('learning'))},
-      () => {
-        const settingsToSave = settings;
-
-        if (settingsToSave.fingers && settingsToSave.fingers.options) {
-          settingsToSave.fingers = settingsToSave.fingers.options;
-        }
-
-        if (settingsToSave.free && settingsToSave.free.options) {
-          settingsToSave.free = settingsToSave.free.options;
-        }
-
-        return deferredFetch(dispatch, settingsToSave);
-      },
+      () => tempCookie.path('learning', getState().get('learning')),
+      () => deferredFetch(dispatch, settingsToSave),
     ));
   };
 })();
-
-
 
 export const processSetOptions = (() => {
   const deferredFetch = _.throttle(
