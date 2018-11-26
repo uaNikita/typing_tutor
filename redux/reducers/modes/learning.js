@@ -181,6 +181,8 @@ export const processSetSettings = (() => {
   };
 })();
 
+
+
 export const processSetOptions = (() => {
   const deferredFetch = _.throttle(
     (dispatch, mode, options) => dispatch(fetchJSON('/learning', {
