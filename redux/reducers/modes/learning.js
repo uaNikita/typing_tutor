@@ -246,10 +246,10 @@ const generateFreeLesson = () => (
 
 export const setCurrentLessonFromCurrentMode = () => (
   (dispatch, getState) => {
-    const learningState = getState().getIn('learning');
+    const learningState = getState().get('learning');
 
     const mode = learningState.get('mode');
-    const example = learningState.get(mode);
+    const example = learningState.getIn([mode, 'example']);
 
     dispatch(setCurrentLesson(example));
   }
@@ -264,6 +264,7 @@ export const generateAndSetLessonForMode = mode => (
         lesson = dispatch(generateFingersLesson());
         dispatch(setFingersExample(lesson));
         break;
+
       case 'free':
         lesson = dispatch(generateFreeLesson());
         dispatch(setFreeExample(lesson));
@@ -278,55 +279,6 @@ export const generateAndSetLessonForMode = mode => (
     }
   }
 );
-
-
-// set options and update lessons
-export const processSetOptionsAndUpdate = ({ mode, options }) => (
-  (dispatch, getState) => {
-    dispatch(processSetOptions({
-      mode,
-      options,
-    }));
-
-    let lesson;
-
-    switch (mode) {
-      case 'fingers':
-        lesson = dispatch(generateFingersLesson());
-        dispatch(setFingersExample(lesson));
-        break;
-      case 'free':
-        lesson = dispatch(generateFreeLesson());
-        dispatch(setFreeExample(lesson));
-        break;
-      default:
-    }
-
-    const currentMode = getState().getIn(['learning', 'mode']);
-    if (mode === currentMode) {
-      dispatch(setCurrentLesson(lesson));
-    }
-  });
-
-export const generateAndSetCurrentLessonFromCurrentMode = () => (
-  (dispatch, getState) => {
-    let lesson;
-
-    switch (getState().getIn(['learning', 'mode'])) {
-      case 'fingers':
-        lesson = dispatch(generateFingersLesson());
-        dispatch(setFingersExample(lesson));
-        break;
-      case 'free':
-        lesson = dispatch(generateFreeLesson());
-        dispatch(setFreeExample(lesson));
-        break;
-      default:
-    }
-
-    dispatch(setCurrentLesson(lesson));
-  });
-
 
 export const updateCharToType = () => (
   (dispatch, getState) => {

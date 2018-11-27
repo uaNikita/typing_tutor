@@ -7,7 +7,6 @@ import {
 } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import GeneralModeButton from '../GeneralModeButton/container';
 import LearningFingers from './LearningFingers/container';
 import LearningFree from './LearningFree/container';
 
@@ -45,8 +44,6 @@ const Block = (props) => {
 
   return (
     <Fragment>
-      <GeneralModeButton toMode="learning" />
-
       <div styleName="modes">
         <div styleName="menu">
           <h4 styleName="title">

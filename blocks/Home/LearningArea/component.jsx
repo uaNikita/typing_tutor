@@ -44,9 +44,12 @@ class Block extends ContentArea {
       },
     } = this;
 
-    const className = classNames('hidden-characters', {
-      'hidden-characters_show': hiddenChars,
-    });
+    const className = classNames(
+      'hidden-characters',
+      {
+        'hidden-characters_show': hiddenChars,
+      },
+    );
 
     return (
       <div className={className} styleName="learningarea">

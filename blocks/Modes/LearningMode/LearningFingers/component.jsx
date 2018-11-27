@@ -128,9 +128,7 @@ class LearningFingers extends Component {
         <h4 className="options-learning__title">Settings</h4>
 
         <div className="options-learning__item">
-          <p className="options-learning__label">
-            Max word length:
-          </p>
+          <p className="options-learning__label">Max word length:</p>
 
           <div className="options-learning__item-ctrl options-learning__item-ctrl-range">
             <Slider {...maxLettersInWordSliderProps} />
@@ -138,9 +136,8 @@ class LearningFingers extends Component {
         </div>
 
         <div className="options-learning__item">
-          <p className="options-learning__label">
-            Extend fingers set:
-          </p>
+          <p className="options-learning__label">Extend fingers set:</p>
+
           <div className="options-learning__item-ctrl options-learning__item-ctrl-range">
             <Slider {...setSizeSliderProps} />
           </div>

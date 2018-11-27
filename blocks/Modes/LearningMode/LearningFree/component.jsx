@@ -63,6 +63,7 @@ class LearningFree extends Component {
         },
         keys,
         example,
+        start,
       },
       maxLettersInWordSliderProps,
     } = this;
@@ -114,20 +115,22 @@ class LearningFree extends Component {
 
     return (
       <Fragment>
-        <h4 className="options-learning__title">
-          Example
-        </h4>
+        <button
+          type="button"
+          className="button"
+          onClick={start}
+        >
+          Start
+        </button>
+
+        <h4 className="options-learning__title">Example</h4>
 
         <p className="options-learning__view">{example}</p>
 
-        <h4 className="options-learning__title">
-          Settings
-        </h4>
+        <h4 className="options-learning__title">Settings</h4>
 
         <div className="options-learning__item">
-          <p className="options-learning__label">
-            Max word length:
-          </p>
+          <p className="options-learning__label">Max word length:</p>
           <div className="options-learning__item-ctrl options-learning__item-ctrl-range">
             <Slider {...maxLettersInWordSliderProps} />
           </div>
