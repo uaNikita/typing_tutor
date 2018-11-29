@@ -6,7 +6,6 @@ import classNames from 'classnames';
 
 import Loader from 'Blocks/Loader/component';
 import PureString from 'Blocks/PureString';
-import GeneralModeButton from '../../GeneralModeButton/container';
 
 import styles from './texts.module.styl';
 
@@ -56,9 +55,7 @@ class Block extends Component {
 
       if (texts.length < 10) {
         addTextLink = (
-          <Link to={`${url}/add`}>
-            Add new text
-          </Link>
+          <Link to={`${url}/add`}>Add new text</Link>
         );
       }
       else {
@@ -69,7 +66,12 @@ class Block extends Component {
     return (
       <Fragment>
         <div styleName="actions">
-          <GeneralModeButton toMode="text" />
+          <button
+            type="button"
+            className="button"
+          >
+            Start
+          </button>
 
           {addTextLink}
         </div>

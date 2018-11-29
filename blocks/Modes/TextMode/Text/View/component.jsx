@@ -8,9 +8,7 @@ import styles from './text-view.module.styl';
 
 const Block = (props) => {
   const {
-    id,
-    selectedId,
-    selectText,
+    start,
     typed,
     last,
     match: {
@@ -18,32 +16,18 @@ const Block = (props) => {
     },
   } = props;
 
-  let button = {
-    props: {
-      onClick: () => selectText(id),
-    },
-    text: 'Select',
-  };
-
-  if (id === selectedId) {
-    button = {
-      props: {
-        disabled: true,
-      },
-      text: 'Selected',
-    };
-  }
-
   return (
     <Fragment>
       <div styleName="actions">
-        <button type="button" className="button" {...button.props}>
-          {button.text}
+        <button
+          type="button"
+          className="button"
+          onClick={start}
+        >
+          Start
         </button>
 
-        <Link to={`${url}/edit`} className="button">
-          Edit
-        </Link>
+        <Link to={`${url}/edit`} className="button">Edit</Link>
       </div>
 
       <PureString

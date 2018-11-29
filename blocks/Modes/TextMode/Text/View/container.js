@@ -1,17 +1,22 @@
 import { connect } from 'react-redux';
-import { processSelectText, processRefreshText } from 'ReduxUtils/reducers/modes/text';
-import Text from './component';
 
-const mapStateToProps = state => ({
-  selectedId: state.getIn(['text', 'selectedId']),
-});
+import { processSetSettings } from 'ReduxUtils/reducers/user';
+import { processSelectText } from 'ReduxUtils/reducers/modes/text';
+import Component from './component';
 
-const mapDispatchToProps = dispatch => ({
-  selectText: (...args) => dispatch(processSelectText(...args)),
-  refreshText: (...args) => dispatch(processRefreshText(...args)),
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  start: () => {
+    dispatch(processSelectText(ownProps.id));
+
+    dispatch(processSetSettings({
+      mode: 'text',
+    }));
+
+    ownProps.history.push('/');
+  },
 });
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
-)(Text);
+)(Component);
