@@ -63,6 +63,7 @@ class Block extends Component {
       }
     }
 
+    // todo: should we have button here
     return (
       <Fragment>
         <div styleName="actions">
