@@ -67,12 +67,16 @@ class Block extends Component {
     return (
       <Fragment>
         <div styleName="actions">
-          <button
-            type="button"
-            className="button"
-          >
-            Start
-          </button>
+          <p>
+            <button
+              type="button"
+              className="button"
+              styleName="button"
+            >
+              Start
+            </button>
+            typing last selected text
+          </p>
 
           {addTextLink}
         </div>
