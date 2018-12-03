@@ -56,7 +56,7 @@ class Block extends Component {
 
         <div styleName="actions">
           <nav styleName="items">
-            {/* todo: what can I do with menu */}
+            {/* todo: what can I do with menu wrap with some bg */}
             <span styleName="modes-title">
               Modes:
             </span>
