@@ -57,13 +57,8 @@ class Block extends Component {
         <div styleName="actions">
           <nav styleName="items">
             {/* todo: what can I do with menu wrap with some bg */}
-            <span styleName="modes-title">
-              Modes:
-            </span>
-            {this.generateLinks(modes)}
-            {' '}
-            |
-            {this.generateLinks(other)}
+            <span styleName="modes-title">Modes:</span>
+            {this.generateLinks(modes)} |{this.generateLinks(other)}
           </nav>
 
           <Route path="/" component={UserMenu} />
