@@ -4,6 +4,7 @@ import CSSModules from 'react-css-modules';
 
 import { modes, other } from 'Constants/navigation';
 
+import NavLink from 'Blocks/NavLink';
 import Logo from 'Blocks/Logo/component';
 import UserMenu from './UserMenu/container';
 
@@ -23,19 +24,8 @@ class Block extends Component {
         text,
       } = link;
 
-      const re = new RegExp(`^${pathname}`);
 
-      return re.test(location.pathname) ? (
-        <span key={pathname} styleName="item item_selected">
-          {text}
-        </span>
-      ) : (
-        <span styleName="item" key={pathname}>
-          <Link to={pathname}>
-            {text}
-          </Link>
-        </span>
-      );
+      return <NavLink styleName="item" activeClassName={styles.item_selected} to={pathname}>{text}</NavLink>
     });
   };
 
@@ -58,7 +48,14 @@ class Block extends Component {
           <nav styleName="items">
             {/* todo: what can I do with menu wrap with some bg */}
             <span styleName="modes-title">Modes:</span>
-            {this.generateLinks(modes)} |{this.generateLinks(other)}
+
+            <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/learning">Learning</NavLink>
+            <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/text">Text</NavLink>
+            |
+            <NavLink styleName="item" activeClassName={styles.item_selected} to="/options">Options</NavLink>
+
+            ...................
+            <NavLink styleName="item" activeClassName={styles.item_selected} to="/statistic">Statistic</NavLink>
           </nav>
 
           <Route path="/" component={UserMenu} />
