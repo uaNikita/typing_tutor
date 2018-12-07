@@ -38,9 +38,13 @@ class Block extends Component {
 
     if (texts) {
       textEls = texts.map(({ id, content }) => {
-        const className = classNames('text', {
-          text_selected: id === selectedId,
-        });
+        let className = 'text';
+
+        if (selectedId) {
+          className = classNames(className, {
+            text_selected: id === selectedId,
+          });
+        }
 
         return (
           <Link key={id} to={`${url}/${id}`} styleName={className}>
@@ -63,19 +67,23 @@ class Block extends Component {
       }
     }
 
-    // todo: should we have button here
     return (
       <Fragment>
         <div styleName="actions">
           <p>
-            <button
-              type="button"
-              className="button"
-              styleName="button"
-            >
-              Start
-            </button>
-            typing last selected text
+            {selectedId && (
+              <Fragment>
+                <button
+                  type="button"
+                  className="button"
+                  styleName="button"
+                >
+                  Start
+                </button>
+                typing last selected text
+              </Fragment>
+            )}
+
           </p>
 
           {addTextLink}

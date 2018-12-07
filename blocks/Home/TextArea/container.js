@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import {
   setStartTypingTime,
   zeroingStatic,
@@ -11,12 +12,13 @@ import Component from './component';
 const mapStateToProps = (state) => {
   const stateText = state.get('text');
   const entities = stateText.get('entities');
+  const selectedId = stateText.get('selectedId');
 
   let text;
 
-  if (entities) {
+  if (entities && _.isNumber(selectedId)) {
     text = entities
-      .filter(obj => obj.get('id') === stateText.get('selectedId'))
+      .filter(obj => obj.get('id') === selectedId)
       .get(0)
       .toJS();
   }

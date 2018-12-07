@@ -1,29 +1,25 @@
 import React from 'react';
-import { withRouter, Link, Route } from 'react-router-dom';
+import { withRouter, Route } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import NavLink from 'Blocks/NavLink';
 import Logo from 'Blocks/Logo/component';
+import NavLink from 'Blocks/NavLink';
 import UserMenu from './UserMenu/container';
 
 import styles from './header.module.styl';
 
-const Block = ({ location: { pathname } }) => (
+const Block = () => (
   <div styleName="root">
-    <div styleName="left">
-      {pathname === '/'
-        ? <Logo />
-        : <Link styleName="home" className="far fa-keyboard" to="/" />}
+    <nav styleName="child">
+      <Logo />
 
-      <nav styleName="items">
-        <span styleName="modes-title">I type</span>
+      <span styleName="modes-title">Modes</span>
 
-        <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/learning">Learning</NavLink>
-        <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/text">Text</NavLink>
-      </nav>
-    </div>
+      <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/learning">Learning</NavLink>
+      <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/text">Text</NavLink>
+    </nav>
 
-    <div styleName="right">
+    <div styleName="child">
       <NavLink styleName="item" activeClassName={styles.item_selected} to="/options">Options</NavLink>
 
       <NavLink styleName="item" activeClassName={styles.item_selected} to="/statistic">Statistic</NavLink>

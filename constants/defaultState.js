@@ -27,7 +27,7 @@ export const defaults = {
     statistic: null,
   },
   text: {
-    selectedId: 1,
+    selectedId: undefined,
 
     entities: undefined,
   },
