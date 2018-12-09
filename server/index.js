@@ -133,7 +133,7 @@ app.use(async (req, res) => {
       .catch(() => {});
   }
 
-  // initialize some parts of store, for example learning lessons
+  // initialize some parts of store, for example syllable lessons
   dispatch(init());
 
   const context = {};

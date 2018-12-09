@@ -63,7 +63,7 @@ class Block extends Component {
         addTextLink = <p>Your can have maximum 10 texts</p>;
       }
     }
-    
+
     return (
       <Fragment>
         <div styleName="actions">

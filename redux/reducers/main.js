@@ -14,7 +14,7 @@ import {
   setState as setLearningState,
   typeLearningMode,
   initLessons,
-} from './modes/learning';
+} from './modes/syllable';
 
 const SET_STATE = 'main/SET_STATE';
 const CLEAR_STATE = 'main/CLEAR_STATE';
