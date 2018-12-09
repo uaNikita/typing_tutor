@@ -6,8 +6,8 @@ import TextMode from './TextMode/component';
 
 const Modes = ({ match: { url } }) => (
   <Switch>
-    <Redirect exact from={url} to={`${url}/learning`} />
-    <Route path={`${url}/learning`} component={LearningMode} />
+    <Redirect exact from={url} to={`${url}/syllable`} />
+    <Route path={`${url}/syllable`} component={LearningMode} />
     <Route path={`${url}/text`} component={TextMode} />
     <Redirect to="/404" />
   </Switch>

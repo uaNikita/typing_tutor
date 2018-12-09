@@ -149,7 +149,7 @@ export const typeOnLesson = () => ({
 
 export const processSetSettings = (() => {
   const deferredFetch = _.throttle(
-    (dispatch, settings) => dispatch(fetchJSON('/learning', {
+    (dispatch, settings) => dispatch(fetchJSON('/syllable', {
       method: 'PATCH',
       body: settings,
     })),
@@ -182,7 +182,7 @@ export const processSetSettings = (() => {
 
 export const processSetOptions = (() => {
   const deferredFetch = _.throttle(
-    (dispatch, mode, options) => dispatch(fetchJSON('/learning', {
+    (dispatch, mode, options) => dispatch(fetchJSON('/syllable', {
       body: {
         [mode]: options,
       },

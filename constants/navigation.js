@@ -1,6 +1,6 @@
 export const modes = [
   {
-    pathname: '/mode/learning',
+    pathname: '/mode/syllable',
     text: 'Learning',
   },
   {

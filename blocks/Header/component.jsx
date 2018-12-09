@@ -18,7 +18,7 @@ const Block = ({ location: { pathname } }) => (
       <nav styleName="items">
         <span styleName="modes-title">I type</span>
 
-        <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/learning">Learning</NavLink>
+        <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/syllable">Syllable</NavLink>
         <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/text">Text</NavLink>
       </nav>
     </div>
