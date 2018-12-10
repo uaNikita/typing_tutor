@@ -4,37 +4,41 @@ import {
   processSetSettings as processSetLearningSettings,
   generateAndSetLessonForMode,
   setCurrentLessonFromCurrentMode,
-} from 'ReduxUtils/reducers/modes/learning';
+} from 'ReduxUtils/reducers/modes/syllable';
 
-import LearningFree from './component';
+import { getFingersSet } from 'Utils';
+
+import Component from './component';
 
 const mapStateToProps = (state) => {
-  const stateFree = state.getIn(['learning', 'free']);
+  const keys = state.getIn(['main', 'keys']).toJS();
+  const stateFingers = state.getIn(['syllable', 'fingers']);
 
   return {
-    example: stateFree.get('example'),
-    options: stateFree.get('options').toJS(),
-    keys: state.getIn(['main', 'keys']).toJS(),
+    example: stateFingers.get('example'),
+    options: stateFingers.get('options').toJS(),
+    fingersSet: getFingersSet(keys),
+    keys,
   };
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   updateOptions: (options) => {
     dispatch(processSetLearningSettings({
-      free: {
+      fingers: {
         options,
       },
     }));
 
-    dispatch(generateAndSetLessonForMode('free'));
+    dispatch(generateAndSetLessonForMode('fingers'));
   },
   start: () => {
     dispatch(processSetUserSettings({
-      mode: 'learning',
+      mode: 'syllable',
     }));
 
     dispatch(processSetLearningSettings({
-      mode: 'free',
+      mode: 'fingers',
     }));
 
     dispatch(setCurrentLessonFromCurrentMode());
@@ -46,4 +50,4 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(LearningFree);
+)(Component);

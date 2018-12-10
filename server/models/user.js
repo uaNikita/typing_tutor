@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
   // current mode
   mode: {
     type: String,
-    default: 'learning',
+    default: 'syllable',
   },
   keyboard: {
     type: String,
@@ -59,7 +59,7 @@ const UserSchema = new mongoose.Schema({
         default: defaultsWhichCanBeOverwrittenByLS.text.entities,
       },
     },
-    learning: {
+    syllable: {
       mode: {
         type: String,
         default: 'fingers',
@@ -67,21 +67,21 @@ const UserSchema = new mongoose.Schema({
       fingers: {
         maxLettersInWord: {
           type: Number,
-          default: defaults.learning.fingers.options.maxLettersInWord,
+          default: defaults.syllable.fingers.options.maxLettersInWord,
         },
         setSize: {
           type: Number,
-          default: defaults.learning.fingers.options.setSize,
+          default: defaults.syllable.fingers.options.setSize,
         },
       },
       free: {
         maxLettersInWord: {
           type: Number,
-          default: defaults.learning.free.options.maxLettersInWord,
+          default: defaults.syllable.free.options.maxLettersInWord,
         },
         letters: {
           type: Array,
-          default: defaults.learning.free.options.letters,
+          default: defaults.syllable.free.options.letters,
         },
       },
     },

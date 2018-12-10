@@ -15,8 +15,8 @@ const Block = () => (
 
       <span styleName="modes-title">Modes</span>
 
-      <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/learning">Learning</NavLink>
-      <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/text">Text</NavLink>
+        <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/syllable">Syllable</NavLink>
+        <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/text">Text</NavLink>
     </nav>
 
     <div styleName="child">

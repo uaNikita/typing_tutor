@@ -14,7 +14,7 @@ const Block = ({ mode }) => {
       area = <TextArea />;
       break;
 
-    case 'learning':
+    case 'syllable':
       area = <LearningArea />;
       break;
 

@@ -10,6 +10,7 @@ import PureString from 'Blocks/PureString';
 import styles from './texts.module.styl';
 
 class Block extends Component {
+  // todo: remove this
   shouldComponentUpdate = (nextProps) => {
     const propsToPick = ['texts', 'selectedId'];
     const pikedProps = _.pick(this.props, propsToPick);

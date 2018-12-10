@@ -6,13 +6,13 @@ import {
 } from 'ReduxUtils/reducers/main';
 import {
   updateCharToType,
-} from 'ReduxUtils/reducers/modes/learning';
+} from 'ReduxUtils/reducers/modes/syllable';
 
 import Textarea from './component';
 
 const mapStateToProps = state => ({
   hiddenChars: state.getIn(['user', 'hiddenChars']),
-  lesson: state.getIn(['learning', 'lesson']).toJS(),
+  lesson: state.getIn(['syllable', 'lesson']).toJS(),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -5,6 +5,6 @@ const router = express.Router();
 router.use('/auth', require('./auth'));
 router.use('/user', require('./user'));
 router.use('/text', require('./modes/text'));
-router.use('/learning', require('./modes/learning'));
+router.use('/syllable', require('./modes/syllable'));
 
 module.exports = router;

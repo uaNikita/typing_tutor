@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 
 import { processSetSettings } from 'ReduxUtils/reducers/user';
 import { getKeysFromKeyboard } from 'ReduxUtils/reducers/main';
-import { initLessons } from 'ReduxUtils/reducers/modes/learning';
+import { initLessons } from 'ReduxUtils/reducers/modes/syllable';
 
 import Keyboard from './component';
 
