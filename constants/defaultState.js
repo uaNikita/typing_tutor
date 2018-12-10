@@ -14,7 +14,7 @@ export const defaults = {
 
     keyboard: 'english',
 
-    // text, learning
+    // text, syllable
     mode: 'text',
 
     hiddenChars: true,
@@ -31,7 +31,7 @@ export const defaults = {
 
     entities: undefined,
   },
-  learning: {
+  syllable: {
     // fingers, free,
     mode: 'fingers',
 

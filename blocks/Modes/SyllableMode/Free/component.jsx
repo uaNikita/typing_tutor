@@ -5,7 +5,7 @@ import Slider from 'rc-slider';
 
 import Key from 'Blocks/Key/component';
 
-class LearningFree extends Component {
+class Block extends Component {
   constructor(props) {
     super(props);
 
@@ -107,9 +107,9 @@ class LearningFree extends Component {
 
     const keyboardClassName = classNames(
       'keyboard',
-      'options-learning__keyboard-free',
+      'syllable__keyboard-free',
       {
-        'options-learning__keyboard-free_last': letters.length === 1,
+        'syllable__keyboard-free_last': letters.length === 1,
       },
     );
 
@@ -123,15 +123,15 @@ class LearningFree extends Component {
           Start
         </button>
 
-        <h4 className="options-learning__title">Example</h4>
+        <h4 className="syllable__title">Example</h4>
 
-        <p className="options-learning__view">{example}</p>
+        <p className="syllable__view">{example}</p>
 
-        <h4 className="options-learning__title">Settings</h4>
+        <h4 className="syllable__title">Settings</h4>
 
-        <div className="options-learning__item">
-          <p className="options-learning__label">Max word length:</p>
-          <div className="options-learning__item-ctrl options-learning__item-ctrl-range">
+        <div className="syllable__item">
+          <p className="syllable__label">Max word length:</p>
+          <div className="syllable__item-ctrl syllable__item-ctrl-range">
             <Slider {...maxLettersInWordSliderProps} />
           </div>
         </div>
@@ -144,4 +144,4 @@ class LearningFree extends Component {
   }
 }
 
-export default LearningFree;
+export default Block;

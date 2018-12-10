@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import PureString from 'Blocks/PureString';
 import ContentArea from '../ContentArea';
 
-import styles from './learning-area.module.styl';
+import styles from './syllable-area.module.styl';
 
 class Block extends ContentArea {
   componentDidMount = () => {
@@ -52,7 +52,7 @@ class Block extends ContentArea {
     );
 
     return (
-      <div className={className} styleName="learningarea">
+      <div className={className} styleName="area">
         <PureString
           styleName="typed"
           string={typed}

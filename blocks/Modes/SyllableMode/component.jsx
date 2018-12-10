@@ -7,11 +7,11 @@ import {
 } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
-import LearningFingers from './LearningFingers/container';
-import LearningFree from './LearningFree/container';
+import Fingers from './Fingers/container';
+import Free from './Free/container';
 
-import './options-learning.styl';
-import styles from './learning-mode.module.styl';
+import './syllable.styl';
+import styles from './syllable-mode.module.styl';
 
 const menuLinks = [
   {
@@ -55,8 +55,8 @@ const Block = (props) => {
         <div styleName="content">
           <Switch>
             <Redirect exact from={url} to={`${url}/fingers`} />
-            <Route path={`${url}/fingers`} component={LearningFingers} />
-            <Route path={`${url}/free`} component={LearningFree} />
+            <Route path={`${url}/fingers`} component={Fingers} />
+            <Route path={`${url}/free`} component={Free} />
             <Redirect to="/404" />
           </Switch>
         </div>

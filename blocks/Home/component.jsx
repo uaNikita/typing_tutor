@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 
 import Header from 'Blocks/Header/component';
 import Keypad from './Keypad/container';
-import LearningArea from './LearningArea/container';
+import SyllableArea from './SyllableArea/container';
 import TextArea from './TextArea/container';
 import Actions from './Actions/container';
 
@@ -15,7 +15,7 @@ const Block = ({ mode }) => {
       break;
 
     case 'syllable':
-      area = <LearningArea />;
+      area = <SyllableArea />;
       break;
 
     default:

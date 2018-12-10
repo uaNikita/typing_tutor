@@ -11,8 +11,8 @@ import {
   typeTextMode,
 } from './modes/text';
 import {
-  setState as setLearningState,
-  typeLearningMode,
+  setState as setSyllableState,
+  typeSyllableMode,
   initLessons,
 } from './modes/syllable';
 
@@ -233,8 +233,8 @@ export const typeChar = char => (
         dispatch(typeTextMode(normalizedChar));
         break;
 
-      case 'learning':
-        dispatch(typeLearningMode(normalizedChar));
+      case 'syllable':
+        dispatch(typeSyllableMode(normalizedChar));
         break;
 
       default:
@@ -254,12 +254,12 @@ export const setData = data => (
   (dispatch) => {
     dispatch(setTextState(data.modes.text));
 
-    const { modes: { learning } } = data;
+    const { modes: { syllable } } = data;
 
-    learning.fingers = { options: learning.fingers };
-    learning.free = { options: learning.free };
+    syllable.fingers = { options: syllable.fingers };
+    syllable.free = { options: syllable.free };
 
-    dispatch(setLearningState(learning));
+    dispatch(setSyllableState(syllable));
 
     const userData = data;
     delete userData.modes;

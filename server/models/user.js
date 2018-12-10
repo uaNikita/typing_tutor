@@ -130,8 +130,6 @@ UserSchema.methods.validPassword = function validPassword(candidatePassword) {
   return bcrypt.compare(candidatePassword, this.password);
 };
 
-// UserSchema.methods.getLearningMode = (candidatePassword, cb) => {};
-
 /**
  * Statics
  */

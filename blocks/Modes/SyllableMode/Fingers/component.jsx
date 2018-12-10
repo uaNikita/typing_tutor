@@ -5,7 +5,7 @@ import Slider from 'rc-slider';
 
 import Key from 'Blocks/Key/component';
 
-class LearningFingers extends Component {
+class Block extends Component {
   constructor(props) {
     super(props);
 
@@ -121,24 +121,24 @@ class LearningFingers extends Component {
           Start
         </button>
 
-        <h4 className="options-learning__title">Example</h4>
+        <h4 className="syllable__title">Example</h4>
 
-        <p className="options-learning__view">{example}</p>
+        <p className="syllable__view">{example}</p>
 
-        <h4 className="options-learning__title">Settings</h4>
+        <h4 className="syllable__title">Settings</h4>
 
-        <div className="options-learning__item">
-          <p className="options-learning__label">Max word length:</p>
+        <div className="syllable__item">
+          <p className="syllable__label">Max word length:</p>
 
-          <div className="options-learning__item-ctrl options-learning__item-ctrl-range">
+          <div className="syllable__item-ctrl syllable__item-ctrl-range">
             <Slider {...maxLettersInWordSliderProps} />
           </div>
         </div>
 
-        <div className="options-learning__item">
-          <p className="options-learning__label">Extend fingers set:</p>
+        <div className="syllable__item">
+          <p className="syllable__label">Extend fingers set:</p>
 
-          <div className="options-learning__item-ctrl options-learning__item-ctrl-range">
+          <div className="syllable__item-ctrl syllable__item-ctrl-range">
             <Slider {...setSizeSliderProps} />
           </div>
         </div>
@@ -152,4 +152,4 @@ class LearningFingers extends Component {
 }
 
 
-export default LearningFingers;
+export default Block;

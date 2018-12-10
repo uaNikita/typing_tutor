@@ -5,7 +5,7 @@ import Cookies from 'js-cookie';
 import { defaults } from 'Constants/defaultState';
 import { tempCookie, tempLocalStorage } from 'Utils';
 
-import { clearState as clearLearningState } from './modes/syllable';
+import { clearState as clearSyllableState } from './modes/syllable';
 import { clearState as clearTextState } from './modes/text';
 import { clearState as clearUserState } from './user';
 import { clearState as clearMainState, setGlobalMessage } from './main';
@@ -69,7 +69,7 @@ export const clearAppData = () => (dispatch) => {
   dispatch(clearState());
   dispatch(clearMainState());
   dispatch(clearUserState());
-  dispatch(clearLearningState());
+  dispatch(clearSyllableState());
   dispatch(clearTextState());
 };
 

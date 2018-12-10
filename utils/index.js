@@ -108,7 +108,7 @@ export const convertListsToSets = (() => {
   const setsPath = [
     ['main', 'pressedKeys'],
     ['main', 'pressedWrongKeys'],
-    ['learning', 'free', 'options', 'letters'],
+    ['syllable', 'free', 'options', 'letters'],
   ];
 
   return stateToConvert => (

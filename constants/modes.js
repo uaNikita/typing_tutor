@@ -1,1 +1,1 @@
-export default ['learning', 'text'];
+export default ['syllable', 'text'];

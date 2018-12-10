@@ -24,22 +24,22 @@ import {
 
 import { processAddStatistic } from '../user';
 
-const SET_STATE = 'learning/SET_STATE';
-const CLEAR_STATE = 'learning/CLEAR_STATE';
-const TYPE_ON_LESSON = 'learning/TYPE_ON_LESSON';
+const SET_STATE = 'syllable/SET_STATE';
+const CLEAR_STATE = 'syllable/CLEAR_STATE';
+const TYPE_ON_LESSON = 'syllable/TYPE_ON_LESSON';
 
-const SET_LEARNING_MODE = 'learning/SET_LEARNING_MODE';
-const SET_CURRENT_LESSON = 'learning/SET_CURRENT_LESSON';
+const SET_SYLLABLE_MODE = 'syllable/SET_SYLLABLE_MODE';
+const SET_CURRENT_LESSON = 'syllable/SET_CURRENT_LESSON';
 
-const UPDATE_FINGERS_OPTIONS = 'learning/UPDATE_FINGERS_OPTIONS';
-const SET_FINGERS_EXAMPLE = 'learning/SET_FINGERS_EXAMPLE';
+const UPDATE_FINGERS_OPTIONS = 'syllable/UPDATE_FINGERS_OPTIONS';
+const SET_FINGERS_EXAMPLE = 'syllable/SET_FINGERS_EXAMPLE';
 
-const UPDATE_FREE_OPTIONS = 'learning/UPDATE_FREE_OPTIONS';
-const SET_FREE_EXAMPLE = 'learning/SET_FREE_EXAMPLE';
+const UPDATE_FREE_OPTIONS = 'syllable/UPDATE_FREE_OPTIONS';
+const SET_FREE_EXAMPLE = 'syllable/SET_FREE_EXAMPLE';
 
-const SET_STATISTIC = 'learning/SET_STATISTIC';
+const SET_STATISTIC = 'syllable/SET_STATISTIC';
 
-const initialState = Immutable.fromJS(defaults.learning);
+const initialState = Immutable.fromJS(defaults.syllable);
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
@@ -60,7 +60,7 @@ export default (state = initialState, action = {}) => {
         });
       });
 
-    case SET_LEARNING_MODE:
+    case SET_SYLLABLE_MODE:
       return state.set('mode', action.mode);
 
     case SET_CURRENT_LESSON:
@@ -114,7 +114,7 @@ export const setState = data => ({
 });
 
 export const setMode = mode => ({
-  type: SET_LEARNING_MODE,
+  type: SET_SYLLABLE_MODE,
   mode,
 });
 
@@ -162,19 +162,19 @@ export const processSetSettings = (() => {
     if (settingsToSave.free && settingsToSave.free.options) {
       dispatch(updateFreeOptions(settingsToSave.free.options));
 
-      settingsToSave.free = getState().getIn(['learning', 'free', 'options']).toJS();
+      settingsToSave.free = getState().getIn(['syllable', 'free', 'options']).toJS();
     }
 
     if (settings.fingers && settings.fingers.options) {
       dispatch(updateFingersOptions(settings.fingers.options));
 
-      settingsToSave.fingers = getState().getIn(['learning', 'fingers', 'options']).toJS();
+      settingsToSave.fingers = getState().getIn(['syllable', 'fingers', 'options']).toJS();
     }
 
     dispatch(setState(settingsToSave));
 
     return dispatch(processAction(
-      () => tempCookie.path('learning', getState().get('learning')),
+      () => tempCookie.path('syllable', getState().get('syllable')),
       () => deferredFetch(dispatch, settingsToSave),
     ));
   };
@@ -203,8 +203,8 @@ export const processSetOptions = (() => {
 
     return dispatch(processAction(
       () => tempCookie.path(
-        `learning.${mode}.options`,
-        getState().getIn(['learning', mode, 'options']).toJS(),
+        `syllable.${mode}.options`,
+        getState().getIn(['syllable', mode, 'options']).toJS(),
       ),
       () => deferredFetch(dispatch, mode, options),
     ));
@@ -219,13 +219,13 @@ const generateFingersLesson = () => (
 
     let fingersSet = getFingersSet(keys);
 
-    fingersSet.splice(state.getIn(['learning', 'fingers', 'options', 'setSize']));
+    fingersSet.splice(state.getIn(['syllable', 'fingers', 'options', 'setSize']));
 
     fingersSet = _.concat.apply(null, fingersSet);
 
     return generateLesson({
       keyboard: state.getIn(['user', 'keyboard']),
-      maxLettersInWord: state.getIn(['learning', 'fingers', 'options', 'maxLettersInWord']),
+      maxLettersInWord: state.getIn(['syllable', 'fingers', 'options', 'maxLettersInWord']),
       letters: fingersSet,
     });
   }
@@ -234,22 +234,22 @@ const generateFingersLesson = () => (
 const generateFreeLesson = () => (
   (dispatch, getState) => {
     const state = getState();
-    const learningState = state.getIn(['learning', 'free', 'options']);
+    const syllableState = state.getIn(['syllable', 'free', 'options']);
 
     return generateLesson({
       keyboard: state.getIn(['user', 'keyboard']),
-      maxLettersInWord: learningState.get('maxLettersInWord'),
-      letters: learningState.get('letters').toJS(),
+      maxLettersInWord: syllableState.get('maxLettersInWord'),
+      letters: syllableState.get('letters').toJS(),
     });
   }
 );
 
 export const setCurrentLessonFromCurrentMode = () => (
   (dispatch, getState) => {
-    const learningState = getState().get('learning');
+    const syllableState = getState().get('syllable');
 
-    const mode = learningState.get('mode');
-    const example = learningState.getIn([mode, 'example']);
+    const mode = syllableState.get('mode');
+    const example = syllableState.getIn([mode, 'example']);
 
     dispatch(setCurrentLesson(example));
   }
@@ -273,7 +273,7 @@ export const generateAndSetLessonForMode = mode => (
     }
 
     // if current mode is active then we change lesson for typing also
-    const currentMode = getState().getIn(['learning', 'mode']);
+    const currentMode = getState().getIn(['syllable', 'mode']);
     if (mode === currentMode) {
       dispatch(setCurrentLesson(lesson));
     }
@@ -286,7 +286,7 @@ export const updateCharToType = () => (
 
     let idsChar = '';
 
-    const lessonRest = state.getIn(['learning', 'lesson', 'rest']);
+    const lessonRest = state.getIn(['syllable', 'lesson', 'rest']);
 
     if (lessonRest) {
       idsChar = getIdsFromCharacter(
@@ -299,12 +299,12 @@ export const updateCharToType = () => (
   }
 );
 
-export const typeLearningMode = char => (
+export const typeSyllableMode = char => (
   (dispatch, getState) => {
     const state = getState();
-    const learningState = state.get('learning');
+    const syllableState = state.get('syllable');
 
-    const lessonRest = learningState.getIn(['lesson', 'rest']);
+    const lessonRest = syllableState.getIn(['lesson', 'rest']);
 
     const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), char);
 
@@ -317,7 +317,7 @@ export const typeLearningMode = char => (
       if (lessonRest.length === 1) {
         let lesson = '';
 
-        switch (learningState.get('mode')) {
+        switch (syllableState.get('mode')) {
           case 'fingers':
             lesson = dispatch(generateFingersLesson());
             dispatch(setFingersExample(lesson));
@@ -355,9 +355,9 @@ export const initLessons = () => (
     const state = getState();
 
     const keys = state.getIn(['main', 'keys']).toJS();
-    const learningState = state.get('learning');
+    const syllableState = state.get('syllable');
 
-    if (!learningState.getIn(['fingers', 'options', 'setSize'])) {
+    if (!syllableState.getIn(['fingers', 'options', 'setSize'])) {
       dispatch(processSetOptions({
         mode: 'fingers',
         options: {
@@ -366,7 +366,7 @@ export const initLessons = () => (
       }));
     }
 
-    if (!learningState.getIn(['free', 'options', 'letters'])) {
+    if (!syllableState.getIn(['free', 'options', 'letters'])) {
       dispatch(processSetOptions({
         mode: 'free',
         options: {
@@ -383,7 +383,7 @@ export const initLessons = () => (
 
     let lesson;
 
-    switch (learningState.get('mode')) {
+    switch (syllableState.get('mode')) {
       case 'fingers':
         lesson = fingersExample;
         break;
