@@ -15,7 +15,7 @@ export const defaults = {
     keyboard: 'english',
 
     // text, syllable
-    mode: 'text',
+    mode: 'syllable',
 
     hiddenChars: true,
 

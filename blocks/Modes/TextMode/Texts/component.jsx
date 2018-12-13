@@ -2,6 +2,7 @@ import React, { Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
+import _ from 'lodash';
 
 import Loader from 'Blocks/Loader/component';
 import PureString from 'Blocks/PureString';
@@ -12,6 +13,7 @@ const Block = (props) => {
   const {
     texts,
     selectedId,
+    start,
     match: {
       url,
     },
@@ -24,7 +26,7 @@ const Block = (props) => {
     textEls = texts.map(({ id, content }) => {
       let className = 'text';
 
-      if (selectedId) {
+      if (_.isNumber(selectedId)) {
         className = classNames(className, {
           text_selected: id === selectedId,
         });
@@ -55,12 +57,13 @@ const Block = (props) => {
     <Fragment>
       <div styleName="actions">
         <p>
-          {selectedId && (
+          {_.isNumber(selectedId) && (
             <Fragment>
               <button
                 type="button"
                 className="button"
                 styleName="button"
+                onClick={start}
               >
                 Start
               </button>

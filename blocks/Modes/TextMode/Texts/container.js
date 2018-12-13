@@ -1,5 +1,8 @@
 import { connect } from 'react-redux';
-import Texts from './component';
+
+import { processSetSettings } from 'ReduxUtils/reducers/user';
+
+import Component from './component';
 
 const mapStateToProps = (state) => {
   const entities = state.getIn(['text', 'entities']);
@@ -18,7 +21,17 @@ const mapStateToProps = (state) => {
   });
 };
 
+const mapDispatchToProps = (dispatch, ownProps) => ({
+  start: () => {
+    dispatch(processSetSettings({
+      mode: 'text',
+    }));
+
+    ownProps.history.push('/');
+  },
+});
+
 export default connect(
   mapStateToProps,
-  null,
-)(Texts);
+  mapDispatchToProps,
+)(Component);
