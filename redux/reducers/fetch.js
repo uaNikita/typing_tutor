@@ -8,7 +8,7 @@ import { tempCookie, tempLocalStorage } from 'Utils';
 import { clearState as clearSyllableState } from './modes/syllable';
 import { clearState as clearTextState } from './modes/text';
 import { clearState as clearUserState } from './user';
-import { clearState as clearMainState, setGlobalMessage } from './main';
+import { clearState as clearMainState, setGlobalMessage, init } from './main';
 
 const CLEAR_STATE = 'tokens/CLEAR_STATE';
 const SET_REFRESH_TOKEN = 'fetch/SET_REFRESH_TOKEN';
@@ -188,6 +188,8 @@ export const logOut = () => (
           Cookies.remove('tt_access');
 
           dispatch(clearAppData());
+
+          dispatch(init());
         }
       })
   )

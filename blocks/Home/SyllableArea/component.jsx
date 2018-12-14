@@ -58,7 +58,7 @@ class Block extends ContentArea {
           string={typed}
           hiddenChars
         />
-        <span styleName="cursor" />
+        <span className="cursor" />
         <PureString
           string={rest}
           hiddenChars

@@ -28,6 +28,13 @@ class Block extends Component {
     this.audio = new Audio('media/metronome.mp3');
   };
 
+
+  componentWillUnmount = () => {
+    window.removeEventListener('blur', this.windowBlurHandler);
+
+    window.removeEventListener('focus', this.windowFocusHandler);
+  }
+
   onClickHandler = () => {
     const {
       props: {
