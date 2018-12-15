@@ -27,6 +27,8 @@ const Block = ({ match: { url } }) => {
     </NavLink>
   ));
 
+  // todo: add more options
+
   return (
     <div className="sub-layout">
       <nav className="sub-layout__menu">
