@@ -89,5 +89,4 @@ const validate = values => ({
 export default reduxForm({
   form: 'restore-access',
   validate,
-  asyncBlurFields: ['email'],
 })(RestoreAccess);

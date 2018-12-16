@@ -6,7 +6,6 @@ const controller = require('./controller');
 const router = express.Router();
 const authenticate = passport.authenticate('jwt', { session: false });
 
-router.post('/check-email', controller.checkEmail);
 router.post('/signup', controller.signUp);
 router.post('/verify-email', controller.verifyEmail);
 router.post('/restore-access', controller.restoreAccess);

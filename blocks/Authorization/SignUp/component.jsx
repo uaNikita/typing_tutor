@@ -55,9 +55,7 @@ class SignUp extends Component {
 
         {submitted ? (
           <p>
-            You’ve got mail,
-            {' '}
-            <br />
+            You’ve got mail, <br />
             Please click the link in the email we just sent you so we can verify your account.
           </p>
         ) : (
@@ -95,5 +93,4 @@ const validate = values => ({
 export default reduxForm({
   form: 'sign-up',
   validate,
-  asyncBlurFields: ['email'],
 })(SignUp);

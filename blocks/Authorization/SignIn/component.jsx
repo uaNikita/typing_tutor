@@ -168,6 +168,5 @@ export default withRouter(
   reduxForm({
     form: 'sign-in',
     validate,
-    asyncBlurFields: ['email'],
   })(Block),
 );

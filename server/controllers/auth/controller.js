@@ -77,8 +77,19 @@ const logout = (req, res, next) => (
 const signUp = (req, res, next) => {
   const { email } = req.body;
 
-  User.isNotExist(email)
-    .then(() => {
+  User
+    .findOne({ email })
+    .exec()
+    .then(existedUser => {
+      if (existedUser) {
+        throw new APIError({
+          errors: {
+            email: 'Email is already taken',
+          },
+          status: httpStatus.CONFLICT,
+        });
+      }
+
       const password = getRandomPassword();
 
       const user = new User({
@@ -247,25 +258,21 @@ const getTokens = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const checkEmail = (req, res, next) => (
-  User.findOne({ email: req.body.email })
+const getUserData = (req, res, next) => (
+  User
+    .findById(req.user.id)
+    .exec()
     .then((user) => {
       if (user) {
-        res.json(httpStatus[200]);
+        res.json(user.toObject());
       }
       else {
         throw new APIError({
-          status: httpStatus.NOT_FOUND,
+          message: 'No such user exists',
+          status: httpStatus.CONFLICT,
         });
       }
     })
-    .catch(e => next(e))
-);
-
-const getUserData = (req, res, next) => (
-  User.get(req.user.id)
-    .then(user => res.json(user.toObject()))
-    .catch(e => next(e))
 );
 
 const verifyToken = (req, res, next) => (
@@ -327,7 +334,6 @@ module.exports = {
   login,
   logout,
   getTokens,
-  checkEmail,
   getUserData,
   verifyToken,
 };

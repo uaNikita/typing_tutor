@@ -131,41 +131,6 @@ UserSchema.methods.validPassword = function validPassword(candidatePassword) {
 };
 
 /**
- * Statics
- */
-UserSchema.statics = {
-  isNotExist(email) {
-    return this.findOne({ profile: { email } })
-      .exec()
-      .then((user) => {
-        if (user) {
-          throw new APIError({
-            errors: {
-              email: 'Email is already taken',
-            },
-            status: httpStatus.CONFLICT,
-          });
-        }
-      });
-  },
-
-  get(id) {
-    return this.findById(id)
-      .exec()
-      .then((user) => {
-        if (user) {
-          return user;
-        }
-
-        throw new APIError({
-          message: 'No such user exists!',
-          status: httpStatus.CONFLICT,
-        });
-      });
-  },
-};
-
-/**
  * @typedef User
  */
 module.exports = mongoose.model('User', UserSchema);
