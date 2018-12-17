@@ -344,7 +344,7 @@ export const typeSyllableMode = char => (
 
     const sessionStrat = state.getIn(['main', 'sessionStatistic', 'start']);
 
-    if (dayjs(Date.now()).diff(sessionStrat, 'minute')) {
+    if (dayjs(Date.now()).diff(sessionStrat, 'second') > 30) {
       dispatch(processAddStatistic());
     }
   }

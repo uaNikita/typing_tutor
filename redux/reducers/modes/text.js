@@ -139,6 +139,7 @@ export const processAddText = data => (
   (dispatch, getState) => {
     const { text, select } = data;
 
+    // todo:fix adding text
     dispatch(addText(text));
 
     const entities = getState().getIn(['text', 'entities']);
@@ -292,7 +293,7 @@ export const typeTextMode = char => (dispatch, getState) => {
 
     const sessionStrat = state.getIn(['main', 'sessionStatistic', 'start']);
 
-    if (dayjs(Date.now()).diff(sessionStrat, 'minute')) {
+    if (dayjs(Date.now()).diff(sessionStrat, 'second') > 30) {
       dispatch(processAddStatistic());
     }
   }

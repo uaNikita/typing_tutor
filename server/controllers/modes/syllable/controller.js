@@ -5,8 +5,12 @@ const options = (req, res, next) => {
     user,
     body,
   } = req;
-
-  user.set(body);
+  
+  user.set({
+    modes:{
+      syllable:body
+    }
+  });
 
   user.save()
     .then(() => res.json(httpStatus[200]))
