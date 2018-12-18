@@ -135,30 +135,25 @@ export const typeEntitie = id => ({
   id,
 });
 
+// todo: add functionality to remove text
 export const processAddText = data => (
   (dispatch, getState) => {
     const { text, select } = data;
 
-    // todo:fix adding text
     dispatch(addText(text));
 
     const entities = getState().getIn(['text', 'entities']);
+    const id = entities.last().get('id');
 
-    const body = { text };
+    const body = { text, id };
 
     if (select) {
-      const id = entities.last().get('id');
-
       dispatch(selectText(id));
-
-      body.id = id;
     }
 
     return dispatch(processAction(
       () => {
-        if (body.id) {
-          tempCookie.path('text.selectedId', body.id);
-        }
+        tempCookie.path('text.selectedId', id);
 
         tempLocalStorage.path('text.entities', entities.toJS());
       },

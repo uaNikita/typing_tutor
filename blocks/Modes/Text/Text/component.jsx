@@ -14,19 +14,13 @@ const Block = (props) => {
       url,
     },
     entities,
-    id,
+    text,
   } = props;
 
   let content = <Loader styleName="loader" size="30" />;
 
   if (entities) {
-    let text = entities
-      .filter(obj => obj.get('id') === id)
-      .get(0);
-
     if (text) {
-      text = text.toJS();
-
       content = (
         <Switch>
           <Route
