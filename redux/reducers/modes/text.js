@@ -20,13 +20,13 @@ import {
 
 import { processAddStatistic } from '../user';
 
-
 const SET_STATE = 'text/SET_STATE';
 const CLEAR_STATE = 'text/CLEAR_STATE';
 const SELECT_TEXT = 'text/SELECT_TEXT';
 const SELECT_LAST_TEXT = 'text/SELECT_LAST_TEXT';
 const REFRESH_TEXT = 'text/REFRESH_TEXT';
 const ADD_TEXT = 'text/ADD_TEXT';
+const REMOVE_TEXT = 'text/REMOVE_TEXT';
 const UPDATE_TEXT = 'text/UPDATE_TEXT';
 const TYPE_ENTITIE = 'text/TYPE_ENTITIE';
 
@@ -47,6 +47,20 @@ export default (state = Immutable.fromJS(defaults.text), action = {}) => {
 
     case UPDATE_TEXT:
       return state.update('entities', ents => ents.map((text) => {
+        let t = text;
+
+        if (text.get('id') === action.id) {
+          t = text.merge({
+            typed: '',
+            last: action.text,
+          });
+        }
+
+        return t;
+      }));
+
+    case REMOVE_TEXT:
+      return state.update('entities', ents => ents.filter((text) => {
         let t = text;
 
         if (text.get('id') === action.id) {
@@ -111,6 +125,11 @@ export const setState = data => ({
 
 export const addText = text => ({
   type: ADD_TEXT,
+  text,
+});
+
+export const removeText = text => ({
+  type: REMOVE_TEXT,
   text,
 });
 
