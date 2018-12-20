@@ -30,6 +30,7 @@ const REMOVE_TEXT = 'text/REMOVE_TEXT';
 const UPDATE_TEXT = 'text/UPDATE_TEXT';
 const TYPE_ENTITIE = 'text/TYPE_ENTITIE';
 
+
 export default (state = Immutable.fromJS(defaults.text), action = {}) => {
   switch (action.type) {
     case SET_STATE:
@@ -60,18 +61,7 @@ export default (state = Immutable.fromJS(defaults.text), action = {}) => {
       }));
 
     case REMOVE_TEXT:
-      return state.update('entities', ents => ents.filter((text) => {
-        let t = text;
-
-        if (text.get('id') === action.id) {
-          t = text.merge({
-            typed: '',
-            last: action.text,
-          });
-        }
-
-        return t;
-      }));
+      return state.update('entities', ents => ents.filter(text => text.get('id') !== action.id));
 
     case SELECT_TEXT:
       return state.set('selectedId', action.id);
@@ -128,9 +118,9 @@ export const addText = text => ({
   text,
 });
 
-export const removeText = text => ({
+export const removeText = id => ({
   type: REMOVE_TEXT,
-  text,
+  id,
 });
 
 export const updateText = (id, text) => ({
@@ -171,12 +161,32 @@ export const processAddText = data => (
     }
 
     return dispatch(processAction(
-      () => {
-        tempCookie.path('text.selectedId', id);
-
-        tempLocalStorage.path('text.entities', entities.toJS());
-      },
+      () => tempLocalStorage.path('text', getState().get('text').toJS()),
       () => dispatch(fetchJSON('/text', { body })),
+    ));
+  }
+);
+
+export const processRemoveText = id => (
+  (dispatch, getState) => {
+    const textState = getState().get('text');
+
+    dispatch(removeText(id));
+
+    if (textState.get('selectedId') === id) {
+      const firstId = textState.get('entities').first().get('id');
+
+      dispatch(selectText(firstId));
+    }
+
+    return dispatch(processAction(
+      () => {
+        tempLocalStorage.path('text', getState().get('text').toJS());
+      },
+      () => dispatch(fetchJSON('/text', {
+        method: 'DELETE',
+        body: id,
+      })),
     ));
   }
 );

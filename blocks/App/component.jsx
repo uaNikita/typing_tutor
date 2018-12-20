@@ -42,9 +42,10 @@ class Block extends Component {
       }
       setUserState(user);
 
-      if (state.user) {
+      if (state.text) {
         text = _.assign(text, state.text);
       }
+
       setTextState(text);
     }
   }
