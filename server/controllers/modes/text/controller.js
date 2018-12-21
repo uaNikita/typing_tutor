@@ -44,15 +44,16 @@ const update = (req, res, next) => {
 
   const id = parseInt(params.id, 10);
 
-  const pathToEntites = 'modes.text.entities';
+  if (text) {
+    const pathToEntites = 'modes.text.entities';
+    const index = user.get(pathToEntites).findIndex(item => item.id === id);
 
-  const index = user.get(pathToEntites).findIndex(item => item.id === id);
-
-  user.set(`${pathToEntites}.${index}.typed`, '');
-  user.set(`${pathToEntites}.${index}.last`, text);
+    user.set(`${pathToEntites}.${index}.typed`, '');
+    user.set(`${pathToEntites}.${index}.last`, text);
+  }
 
   if (select) {
-    user.set(`${pathToEntites}.selectedId`, id);
+    user.set('modes.text.selectedId', id);
   }
 
   user.save()
@@ -60,15 +61,17 @@ const update = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const select = (req, res, next) => {
+const del = (req, res, next) => {
   const {
     user,
-    params: {
-      id,
-    },
+    params,
   } = req;
 
-  user.set('modes.text.selectedId', parseInt(id, 10));
+  const id = parseInt(params.id, 10);
+  const pathToEntites = 'modes.text.entities';
+  const entities = user.get(pathToEntites).filter(item => item.id !== id);
+
+  user.set(pathToEntites, entities);
 
   user.save()
     .then(() => res.json(httpStatus[200]))
@@ -129,7 +132,7 @@ const type = (req, res, next) => {
 module.exports = {
   add,
   update,
-  select,
+  del,
   refresh,
   type,
 };

@@ -8,7 +8,7 @@ const authenticate = passport.authenticate('jwt', { session: false });
 
 router.post('/', authenticate, controller.add);
 router.patch('/:id', authenticate, controller.update);
-router.post('/:id/select', authenticate, controller.select);
+router.delete('/:id', authenticate, controller.del);
 router.post('/refresh', authenticate, controller.refresh);
 router.post('/type', authenticate, controller.type);
 

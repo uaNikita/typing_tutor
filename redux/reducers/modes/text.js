@@ -180,12 +180,9 @@ export const processRemoveText = id => (
     }
 
     return dispatch(processAction(
-      () => {
-        tempLocalStorage.path('text', getState().get('text').toJS());
-      },
-      () => dispatch(fetchJSON('/text', {
+      () => tempLocalStorage.path('text', getState().get('text').toJS()),
+      () => dispatch(fetchJSON(`/text/${id}`, {
         method: 'DELETE',
-        body: id,
       })),
     ));
   }
@@ -231,7 +228,12 @@ export const processSelectText = id => (
 
     return dispatch(processAction(
       () => tempCookie.path('text.selectedId', selectedId),
-      () => dispatch(fetchJSON(`/text/${id}/select`)),
+      () => dispatch(fetchJSON(`/text/${id}`, {
+        method: 'PATCH',
+        body: {
+          select: true,
+        },
+      })),
     ));
   });
 
