@@ -144,7 +144,6 @@ export const typeEntitie = id => ({
   id,
 });
 
-// todo: add functionality to remove text
 export const processAddText = data => (
   (dispatch, getState) => {
     const { text, select } = data;
@@ -228,12 +227,7 @@ export const processSelectText = id => (
 
     return dispatch(processAction(
       () => tempCookie.path('text.selectedId', selectedId),
-      () => dispatch(fetchJSON(`/text/${id}`, {
-        method: 'PATCH',
-        body: {
-          select: true,
-        },
-      })),
+      () => dispatch(fetchJSON(`/text/select/${id}`)),
     ));
   });
 
@@ -241,13 +235,11 @@ export const processRefreshText = id => (
   (dispatch, getState) => {
     dispatch(refreshText(id));
 
-    const body = { id };
-
     const entities = getState().getIn(['text', 'entities']);
 
     return dispatch(processAction(
       () => tempLocalStorage.path('text.entities', entities.toJS()),
-      () => dispatch(fetchJSON('/text/refresh', { body })),
+      () => dispatch(fetchJSON(`/text/refresh/${id}`)),
     ));
   }
 );
