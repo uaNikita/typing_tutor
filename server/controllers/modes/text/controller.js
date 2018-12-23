@@ -32,48 +32,11 @@ const add = (req, res, next) => {
     .catch(e => next(e));
 };
 
-// todo: think about action in endpoint controllers
-// const update = (req, res, next) => {
-//   const {
-//     user,
-//     body: {
-//       action,
-//     },
-//     params,
-//   } = req;
-//
-//   const id = parseInt(params.id, 10);
-//
-//   switch (action) {
-//     case 'select':
-//       user.set('modes.text.selectedId', parseInt(id, 10));
-//       break;
-//     case 'refresh':
-//       const entityIndex = _.findIndex(user.modes.text.entities, { id });
-//
-//       const entityPath = `modes.text.entities.${entityIndex}`;
-//
-//       const entity = user.get(entityPath);
-//
-//       user.set(`${entityPath}.last`, entity.typed + entity.last);
-//
-//       user.set(`${entityPath}.typed`, '');
-//
-//       break;
-//     default:
-//       console.log('default');
-//       break;
-//   }
-//
-//   user.save()
-//     .then(() => res.json(httpStatus[200]))
-//     .catch(e => next(e));
-// };
-
 const update = (req, res, next) => {
   const {
     user,
     body: {
+      action,
       text,
       select,
     },
@@ -82,17 +45,34 @@ const update = (req, res, next) => {
 
   const id = parseInt(params.id, 10);
 
-  if (text) {
-    const pathToEntites = 'modes.text.entities';
-    const index = user.get(pathToEntites).findIndex(item => item.id === id);
+  const selectText = () => user.set('modes.text.selectedId', id);
+  const pathToEntites = 'modes.text.entities';
+  const index = user.get(pathToEntites).findIndex(item => item.id === id);
+  const entityPath = `modes.text.entities.${index}`;
+  const entity = user.get(entityPath);
 
-    user.set(`${pathToEntites}.${index}.typed`, '');
-    user.set(`${pathToEntites}.${index}.last`, text);
+  switch (action) {
+    case 'select':
+      selectText();
+      break;
+
+    case 'refresh':
+      user.set(`${entityPath}.last`, entity.typed + entity.last);
+      user.set(`${entityPath}.typed`, '');
+
+      break;
+
+    case 'change-text':
+      user.set(`${entityPath}.last`, text);
+      user.set(`${entityPath}.typed`, '');
+
+      if (select) {
+        selectText();
+      }
+
+    default:
   }
 
-  if (select) {
-    user.set('modes.text.selectedId', id);
-  }
 
   user.save()
     .then(() => res.json(httpStatus[200]))
@@ -110,44 +90,6 @@ const del = (req, res, next) => {
   const entities = user.get(pathToEntites).filter(item => item.id !== id);
 
   user.set(pathToEntites, entities);
-
-  user.save()
-    .then(() => res.json(httpStatus[200]))
-    .catch(e => next(e));
-};
-
-const select = (req, res, next) => {
-  const {
-    user,
-    params,
-  } = req;
-
-  const id = parseInt(params.id, 10);
-
-  user.set('modes.text.selectedId', parseInt(id, 10));
-
-  user.save()
-    .then(() => res.json(httpStatus[200]))
-    .catch(e => next(e));
-};
-
-const refresh = (req, res, next) => {
-  const {
-    user,
-    params,
-  } = req;
-
-  const id = parseInt(params.id, 10);
-
-  const entityIndex = _.findIndex(user.modes.text.entities, { id });
-
-  const entityPath = `modes.text.entities.${entityIndex}`;
-
-  const entity = user.get(entityPath);
-
-  user.set(`${entityPath}.last`, entity.typed + entity.last);
-
-  user.set(`${entityPath}.typed`, '');
 
   user.save()
     .then(() => res.json(httpStatus[200]))

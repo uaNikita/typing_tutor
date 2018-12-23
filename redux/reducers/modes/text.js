@@ -194,6 +194,7 @@ export const processUpdateText = (id, { text, select }) => (
     dispatch(updateText(id, normalizedText));
 
     const body = {
+      action: 'change-text',
       text: normalizedText,
     };
 
@@ -227,7 +228,12 @@ export const processSelectText = id => (
 
     return dispatch(processAction(
       () => tempCookie.path('text.selectedId', selectedId),
-      () => dispatch(fetchJSON(`/text/select/${id}`)),
+      () => dispatch(fetchJSON(`/text/${id}`, {
+        method: 'PATCH',
+        body: {
+          action: 'select',
+        },
+      })),
     ));
   });
 
@@ -239,7 +245,12 @@ export const processRefreshText = id => (
 
     return dispatch(processAction(
       () => tempLocalStorage.path('text.entities', entities.toJS()),
-      () => dispatch(fetchJSON(`/text/refresh/${id}`)),
+      () => dispatch(fetchJSON(`/text/${id}`, {
+        method: 'PATCH',
+        body: {
+          action: 'refresh',
+        },
+      })),
     ));
   }
 );
