@@ -74,7 +74,7 @@ const update = (req, res, next) => {
       user.set(`${entityPath}.last`, text.slice(slicePoint));
       break;
 
-    de¶fault:
+    default:
   }
 
   user.save()
