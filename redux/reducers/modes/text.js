@@ -271,7 +271,13 @@ export const updateCharToType = () => (dispatch, getState) => {
 
 export const processTypeEntitiy = (() => {
   const deferredFetch = _.throttle(
-    (dispatch, ...rest) => dispatch(fetchJSON('/text/type', ...rest)),
+    (dispatch, { id, typed }) => dispatch(fetchJSON(`/text/${id}`, {
+      method: 'PATCH',
+      body: {
+        action: 'type',
+        typed,
+      },
+    })),
     2000,
   );
 
@@ -282,14 +288,12 @@ export const processTypeEntitiy = (() => {
       const entities = getState().getIn(['text', 'entities']);
       const text = entities.filter(obj => obj.get('id') === id).get(0);
 
-      const body = {
-        id,
-        typed: text.get('typed').length,
-      };
-
       return dispatch(processAction(
         () => tempLocalStorage.path('text.entities', entities.toJS()),
-        () => deferredFetch(dispatch, { body }),
+        () => deferredFetch(dispatch, {
+          id,
+          typed: text.get('typed').length,
+        }),
       ));
     }
   );

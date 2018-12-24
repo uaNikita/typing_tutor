@@ -35,11 +35,7 @@ const add = (req, res, next) => {
 const update = (req, res, next) => {
   const {
     user,
-    body: {
-      action,
-      text,
-      select,
-    },
+    body,
     params,
   } = req;
 
@@ -51,7 +47,7 @@ const update = (req, res, next) => {
   const entityPath = `modes.text.entities.${index}`;
   const entity = user.get(entityPath);
 
-  switch (action) {
+  switch (body.action) {
     case 'select':
       selectText();
       break;
@@ -63,16 +59,21 @@ const update = (req, res, next) => {
       break;
 
     case 'change-text':
-      user.set(`${entityPath}.last`, text);
+      user.set(`${entityPath}.last`, body.text);
       user.set(`${entityPath}.typed`, '');
 
-      if (select) {
+      if (body.select) {
         selectText();
       }
+    case 'type':
+      const text = entity.typed + entity.last;
+      const slicePoint = body.typed;
+
+      user.set(`${entityPath}.typed`, text.slice(0, slicePoint));
+      user.set(`${entityPath}.last`, text.slice(slicePoint));
 
     default:
   }
-
 
   user.save()
     .then(() => res.json(httpStatus[200]))
@@ -96,39 +97,8 @@ const del = (req, res, next) => {
     .catch(e => next(e));
 };
 
-const type = (req, res, next) => {
-  const {
-    user,
-    body: {
-      id,
-      typed,
-    },
-  } = req;
-
-  const entityIndex = _.findIndex(user.modes.text.entities, { id });
-
-  const entityPath = `modes.text.entities.${entityIndex}`;
-
-  const entity = user.get(entityPath);
-
-  const text = entity.typed + entity.last;
-
-  const slicePoint = typed + 1;
-
-  user.set(`${entityPath}.typed`, text.slice(0, slicePoint));
-
-  user.set(`${entityPath}.last`, text.slice(slicePoint));
-
-  user.save()
-    .then(() => res.json(httpStatus[200]))
-    .catch(e => next(e));
-};
-
 module.exports = {
   add,
   update,
   del,
-  refresh,
-  select,
-  type,
 };
