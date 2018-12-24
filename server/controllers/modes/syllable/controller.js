@@ -5,11 +5,11 @@ const options = (req, res, next) => {
     user,
     body,
   } = req;
-  
+
   user.set({
-    modes:{
-      syllable:body
-    }
+    modes: {
+      syllable: body,
+    },
   });
 
   user.save()

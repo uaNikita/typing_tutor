@@ -80,7 +80,7 @@ const signUp = (req, res, next) => {
   User
     .findOne({ email })
     .exec()
-    .then(existedUser => {
+    .then((existedUser) => {
       if (existedUser) {
         throw new APIError({
           errors: {
@@ -129,7 +129,6 @@ const signUp = (req, res, next) => {
           });
         });
     })
-
     .catch(e => next(e));
 };
 
@@ -273,6 +272,7 @@ const getUserData = (req, res, next) => (
         });
       }
     })
+    .catch(e => next(e))
 );
 
 const verifyToken = (req, res, next) => (

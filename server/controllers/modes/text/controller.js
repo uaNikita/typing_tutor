@@ -1,4 +1,3 @@
-const _ = require('lodash');
 const httpStatus = require('http-status');
 
 const add = (req, res, next) => {
@@ -65,14 +64,17 @@ const update = (req, res, next) => {
       if (body.select) {
         selectText();
       }
+      break;
+
     case 'type':
       const text = entity.typed + entity.last;
       const slicePoint = body.typed;
 
       user.set(`${entityPath}.typed`, text.slice(0, slicePoint));
       user.set(`${entityPath}.last`, text.slice(slicePoint));
+      break;
 
-    default:
+    de¶fault:
   }
 
   user.save()

@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const config = require('config');
-const httpStatus = require('http-status');
-const APIError = require('../utils/APIError');
 
 const { defaults, defaultsWhichCanBeOverwrittenByLS } = require('../../dist/compiledServer');
 
