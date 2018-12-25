@@ -2,6 +2,8 @@ import React, { PureComponent } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
+import Email from '../Email/component';
+
 import styles from './footer.module.styl';
 
 class Block extends PureComponent {
@@ -12,7 +14,7 @@ class Block extends PureComponent {
       <footer styleName="footer">
         © 2016–{this.year} Touch to type
         <br />
-        <a href="mailto:info@touchtotype.com">info@touchtotype.com</a>
+        <Email />
         <br />
         <Link to="/help">Help</Link>
       </footer>

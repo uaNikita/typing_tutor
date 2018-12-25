@@ -326,7 +326,7 @@ export const typeTextMode = char => (dispatch, getState) => {
 
     const sessionStrat = state.getIn(['main', 'sessionStatistic', 'start']);
 
-    if (dayjs(Date.now()).diff(sessionStrat, 'second') > 30) {
+    if (dayjs(Date.now()).diff(sessionStrat, 'second') > 10) {
       dispatch(processAddStatistic());
     }
   }

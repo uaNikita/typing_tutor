@@ -47,9 +47,7 @@ class Block extends Component {
         />
 
         <div styleName="actions">
-          <Button type="submit" className="button" disabled={invalid} isLoader={submitting}>
-            Edit text
-          </Button>
+          <Button type="submit" className="button" disabled={invalid} isLoader={submitting}>Save</Button>
 
           {id !== selectedId && (
             <Fragment>

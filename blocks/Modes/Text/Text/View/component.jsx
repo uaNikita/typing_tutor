@@ -9,6 +9,7 @@ import styles from './text-view.module.styl';
 const Block = (props) => {
   const {
     start,
+    refresh,
     del,
     typed,
     last,
@@ -21,17 +22,25 @@ const Block = (props) => {
     <Fragment>
       <div styleName="actions">
         <button type="button" className="button" onClick={start}>Start</button>
-
         <Link to={`${url}/edit`} className="button">Edit</Link>
-
+        <button type="button" className="button" onClick={refresh}>Refresh</button>
         <button type="button" className="button" onClick={del}>Delete</button>
       </div>
 
-      <PureString
-        string={typed + last}
-        tag="p"
-        html
-      />
+      <p>
+        <PureString
+          styleName="typed"
+          tag="span"
+          string={typed}
+          html
+        />
+
+        <PureString
+          string={last}
+          tag="span"
+          html
+        />
+      </p>
     </Fragment>
   );
 };

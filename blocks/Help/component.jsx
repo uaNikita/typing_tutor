@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
+import Email from '../Email/component';
+
 import styles from './help.module.styl';
 
 const Block = () => (
@@ -9,7 +11,7 @@ const Block = () => (
   <section styleName="help">
     <h1>Help</h1>
     <em>Touch to type</em> is app which help you to typing text faster with smaller amount of typos. You can use it without registration, but in this case your progress will be kept in your browser. So if for example you
-    move to another browser or clear your browser data you lose all your statistic and choosed options. If you want to prevent this, please create your account here <Link to="/authorization/sign-up" />
+    move to another browser or clear your browser data you lose all your statistic and choosed options. If you want to prevent this, please create your account with registration <Link to="/authorization/sign-up">page</Link>.
 
     <h2>Modes</h2>
     <p>The app has two modes:</p>
@@ -27,17 +29,20 @@ const Block = () => (
         </ul>
       </li>
       <li>
-        <p><strong>Text</strong>. In this mode you can use already existed texts or add you own one.</p>
+        <p><strong>Text</strong>. This mode allow to type free text. You can use already existed texts or add you own one. Maximum amount of texsts is 10.</p>
       </li>
     </ul>
 
+    <h2>Options</h2>
+    {/* todo: write about options here */}
+
     <h2>Statistic</h2>
-    <p>App start to save statitic after one minute from start typing of any of modes.</p>
+    <p>App starts to save statitic after 10 seconds from start typing of any of modes. You can see your statistic in different charts on the corresponding page.</p>
 
-    <p>Your can find your statistic on a separate <Link to="/statistic">page</Link>.</p>
+    <h2>Other</h2>
+    Right now <em>Touch to type</em> is free app.
 
-    <br />
-    Right now <em>Touch to type</em> is free app. If you have question please send it to <a href="mailto:info@touchtotype.com">info@touchtotype.com </a>.
+    <p>Found bug? Have a question? Whan to help? Write to <Email />.</p>
   </section>
   /* eslint-enable max-len */
 );

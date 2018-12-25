@@ -129,7 +129,7 @@ class Block extends Component {
 
         <CSSTransition
           in={show}
-          timeout={10000}
+          timeout={150}
           classNames={{
             enter: styles.enter,
             enterActive: styles['enter-active'],
