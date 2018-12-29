@@ -2,15 +2,11 @@ import { connect } from 'react-redux';
 
 import Component from './component';
 
-const mapStateToProps = (state) => {
-  return ({
-    language: 'ru',
-  });
-};
-
 const mapDispatchToProps = (dispatch, ownProps) => ({
   start: () => {
     console.log('start');
+
+
   },
   finish: () => {
     console.log('finish');
@@ -18,6 +14,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(Component);

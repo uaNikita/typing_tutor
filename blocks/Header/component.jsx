@@ -17,11 +17,11 @@ const Block = () => (
 
       <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/syllable">Syllable</NavLink>
       <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/text">Text</NavLink>
+      <NavLink styleName="item" activeClassName={styles.item_selected} to="/mode/game">Game</NavLink>
     </nav>
 
     <div styleName="child">
       <NavLink styleName="item" activeClassName={styles.item_selected} to="/options">Options</NavLink>
-
       <NavLink styleName="item" activeClassName={styles.item_selected} to="/statistic">Statistic</NavLink>
 
       <Route path="/" component={UserMenu} />

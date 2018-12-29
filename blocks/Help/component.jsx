@@ -42,9 +42,14 @@ const Block = () => (
     <p>App starts to save statitic after 10 seconds from start typing of any of modes. You can see your statistic in different charts on the corresponding page.</p>
 
     <h2>Other</h2>
-    Right now <em>Touch to type</em> is free app.
+    Right now <em>Touch to type</em> is free app. Only one person works on it - me. In this case I can lose sight of some user expirience limitations or some critical bugs. I will be very apprisiate if you
+    write to my email.
 
-    <p>Found bug? Have a question? Whan to help? Write to <Email />.</p>
+    <p>
+      So generaly I want to say:
+      <br />
+      <em>Found bug? Have a question? Whan to help? Write to <Email /></em>.
+    </p>
   </section>
   /* eslint-enable max-len */
 );

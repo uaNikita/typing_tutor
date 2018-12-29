@@ -1,16 +1,24 @@
-import React from 'react';
+import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
-
-import styles from './texts.module.styl';
 
 class Block extends Component {
   render() {
+    const {
+      props: {
+        start,
+      },
+    } = this;
+
     return (
-      'game is here'
+      <button
+        type="button"
+        className="button"
+        onClick={start}
+      >
+        Start
+      </button>
     );
   }
 }
 
-export default CSSModules(Block, styles, {
-  allowMultiple: true,
-});
+export default CSSModules(Block);
