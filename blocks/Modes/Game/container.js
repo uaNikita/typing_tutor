@@ -1,15 +1,16 @@
 import { connect } from 'react-redux';
 
+import { processSetSettings } from 'ReduxUtils/reducers/user';
+
 import Component from './component';
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
   start: () => {
-    console.log('start');
+    dispatch(processSetSettings({
+      mode: 'game',
+    }));
 
-
-  },
-  finish: () => {
-    console.log('finish');
+    ownProps.history.push('/');
   },
 });
 

@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import Header from 'Blocks/Header/component';
 import Keypad from './Keypad/container';
 import SyllableArea from './SyllableArea/container';
+import GameArea from './GameArea/container';
 import TextArea from './TextArea/container';
 import Actions from './Actions/container';
 
@@ -16,6 +17,10 @@ const Block = ({ mode }) => {
 
     case 'syllable':
       area = <SyllableArea />;
+      break;
+
+    case 'game':
+      area = <GameArea />;
       break;
 
     default:
