@@ -7,6 +7,10 @@ import ContentArea from '../ContentArea';
 import styles from './game-area.module.styl';
 
 class Block extends ContentArea {
+  getWords = () => {
+
+  }
+
   componentDidMount = () => {
     const {
       props: {
