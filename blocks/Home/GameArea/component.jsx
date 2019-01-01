@@ -41,6 +41,7 @@ class Block extends ContentArea {
       <div styleName="root">
         <p styleName="area">
           <span styleName="moving-word">knowledge</span>
+          <span styleName="moving-word">knowledge2</span>
         </p>
         <p styleName="word">
           <PureString
