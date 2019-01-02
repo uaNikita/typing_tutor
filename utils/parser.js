@@ -14,12 +14,12 @@ const languages = [
   {
     language: 'english',
     subdomain: 'en',
-    regex: /^[a-z]$/,
+    regex: 'a-z',
   },
   {
     language: 'russian',
     subdomain: 'ru',
-    regex: /^[ёа-я]$/,
+    regex: 'ёа-я',
   },
 ];
 
@@ -31,6 +31,8 @@ languages.forEach(language => {
     3: {},
     4: {},
   };
+
+  language.nouns = {};
 });
 
 const repeatIfNeeded = (func) => {
@@ -70,7 +72,8 @@ const get = () => (
     .then((htmls) => {
       htmls.forEach((html, idx) => {
         const $ = cheerio.load(html);
-        const characters = $('#mw-content-text p').text().split('');
+        const text = $('#mw-content-text p').text().toLowerCase();
+        const characters = text.split('');
         const language = languages[idx];
 
         const saveSyllable = (index, lenght) => {
@@ -78,7 +81,7 @@ const get = () => (
 
           if (
             letters.length === lenght
-            && letters.every(c => language.regex.test(c))
+            && letters.every(c => new RegExp(`^[${language.regex}]$`).test(c))
           ) {
             const data = language.syllables[lenght];
             const key = letters.join('');
@@ -92,6 +95,19 @@ const get = () => (
           }
         };
 
+        text
+          .replace(new RegExp(`[^${language.regex} ]`, 'g'), '')
+          .split(' ')
+          .filter(w => w.length > 3)
+          .forEach(w => {
+            if (language.nouns[w]) {
+              language.nouns[w] += 1;
+            }
+            else {
+              language.nouns[w] = 1;
+            }
+          });
+
         characters.forEach((character, i) => (
           [2, 3, 4].forEach(current => saveSyllable(i, current))
         ));
@@ -100,20 +116,26 @@ const get = () => (
       console.log('parsed'); // eslint-disable-line no-console
 
       if (!repeatIfNeeded(get)) {
+        console.log('Results are saved for languages:'); // eslint-disable-line no-console
 
-        console.log('Results are saved:'); // eslint-disable-line no-console
-
-        languages.forEach(({ syllables, language }, i) => {
+        languages.forEach(({ syllables, nouns, language }, i) => {
           // pick only if sylables is met more then 2 times
-          _.each(syllables, (obj, l) => {
-            syllables[l] = _.pickBy(obj, s => s > 2);
-          });
+          _.each(syllables, (obj, l) => syllables[l] = _.pickBy(obj, s => s > 2));
+          nouns = _.pickBy(nouns, s => s > 3);
 
-          const pathToJSON = path.join(`constants/languages/${language}/syllables.json`);
+          const pathToLanguage = path.join(`constants/languages/${language}`);
 
-          fs.writeFileSync(pathToJSON, JSON.stringify(syllables), 'utf8');
+          fs.writeFileSync(
+            path.join(`${pathToLanguage}/nouns.json`),
+            JSON.stringify(nouns), 'utf8'
+          );
 
-          console.log(`${i + 1}. for '${language}' in '${pathToJSON}'`); // eslint-disable-line no-console
+          fs.writeFileSync(
+            path.join(`${pathToLanguage}/syllables.json`),
+            JSON.stringify(syllables), 'utf8'
+          );
+
+          console.log(`${i + 1}. ${language}`); // eslint-disable-line no-console
         });
       }
     })
