@@ -11,7 +11,7 @@
     "eslint-fix": "eslint --ext .jsx --ext .js --fix server",
     "server-eslint": "eslint server",
     "heroku-postbuild": "npm run build",
-    "get-syllables": "node server/getSyllables.js"
+    "parser": "node utils/parser.js"
   },
   "keywords": [
     "touch",
