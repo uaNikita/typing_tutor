@@ -2,7 +2,7 @@ import Immutable from 'immutable';
 import _ from 'lodash';
 
 import { getIdsFromCharacter, normalizeString } from 'Utils';
-import keyboards from 'Constants/keyboards/index';
+import { keyboards } from 'Constants/languages';
 
 import { fetchJSON } from './fetch';
 import { setState as setUserState } from './user';

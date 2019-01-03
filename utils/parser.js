@@ -4,8 +4,7 @@ const path = require('path');
 const cheerio = require('cheerio');
 const fetch = require('isomorphic-fetch');
 
-// const requestFinishDate = 10 * 60 * 1000 + Date.now(); // 10 min from now
-const requestFinishDate = 5 * 1000 + Date.now();
+const requestFinishDate = 10 * 60 * 1000 + Date.now(); // 10 min from now
 const requestDelay = 1 * 500; // 5 sec
 
 // todo: create parser for words also
@@ -118,24 +117,24 @@ const get = () => (
       if (!repeatIfNeeded(get)) {
         console.log('Results are saved for languages:'); // eslint-disable-line no-console
 
-        languages.forEach(({ syllables, nouns, language }, i) => {
-          // pick only if sylables is met more then 2 times
-          _.each(syllables, (obj, l) => syllables[l] = _.pickBy(obj, s => s > 2));
-          nouns = _.pickBy(nouns, s => s > 3);
+        languages.forEach((o, i) => {
+          const pathToLanguage = path.join(`constants/languages/${o.language}`);
 
-          const pathToLanguage = path.join(`constants/languages/${language}`);
-
+          // pick only if noun is met more then 3 times
+          o.nouns = _.pickBy(o.nouns, s => s > 3);
           fs.writeFileSync(
             path.join(`${pathToLanguage}/nouns.json`),
-            JSON.stringify(nouns), 'utf8'
+            JSON.stringify(o.nouns), 'utf8'
           );
 
+          // pick only if sylables is met more then 2 times
+          _.each(o.syllables, (obj, l) => o.syllables[l] = _.pickBy(obj, s => s > 2));
           fs.writeFileSync(
             path.join(`${pathToLanguage}/syllables.json`),
-            JSON.stringify(syllables), 'utf8'
+            JSON.stringify(o.syllables), 'utf8'
           );
 
-          console.log(`${i + 1}. ${language}`); // eslint-disable-line no-console
+          console.log(`${i + 1}. ${o.language}`); // eslint-disable-line no-console
         });
       }
     })

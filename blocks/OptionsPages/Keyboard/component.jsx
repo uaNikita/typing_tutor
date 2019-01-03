@@ -1,15 +1,18 @@
 import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
+import _ from 'lodash';
 
 import { Field, reduxForm } from 'redux-form/immutable';
 import RenderField from 'Blocks/RenderField/component';
 import Key from 'Blocks/Key/component';
 
-import keyboards from 'Constants/keyboards/index';
+import { keyboards } from 'Constants/languages';
 
 import styles from './keyboard.module.styl';
 
 class Block extends Component {
+  keyboardsNames = _.map(keyboards, ({ name }) => name)
+
   handleOnChange = (e) => {
     const {
       props: {
@@ -54,9 +57,9 @@ class Block extends Component {
           type="select"
           label="Layout"
         >
-          {keyboards.map(({ name }) => (
+          {this.keyboardsNames.map(name => (
             <option key={name} value={name}>
-              {name}
+              {_.lowerCase(name)}
             </option>
           ))}
         </Field>

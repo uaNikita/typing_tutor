@@ -5,7 +5,7 @@ import _ from 'lodash';
 import { Field, reduxForm } from 'redux-form/immutable';
 import dayjs from 'dayjs';
 
-import keyboards from 'Constants/keyboards';
+import { keyboards } from 'Constants/languages';
 import modes from 'Constants/modes';
 
 import { validateDate } from 'Utils/validation';
@@ -17,6 +17,8 @@ import DayPickerField from './DayPickerField/component';
 import styles from './statistic.module.styl';
 
 class Block extends Component {
+  keyboardsNames = _.map(keyboards, ({ name }) => name)
+
   state = {
     emptyCharts: false,
     mode: undefined,
@@ -303,9 +305,9 @@ class Block extends Component {
 
     modesOptions.unshift(<option key="all" value="">All</option>);
 
-    const keyboardsOptions = keyboards.map(({ name }) => (
+    const keyboardsOptions = this.keyboardsNames.map(name => (
       <option key={name} value={name}>
-        {name}
+        {_.lowerCase(name)}
       </option>
     ));
 
