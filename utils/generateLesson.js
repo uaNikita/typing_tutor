@@ -1,9 +1,6 @@
 import _ from 'lodash';
 
-import { keyboards } from 'Constants/languages';
-import syllables from 'Constants/syllables.json';
-
-console.log('keyboards', keyboards);
+import { languages, keyboards } from 'Constants/languages';
 
 const getRandomWithPriority = obj => (
   _(obj)
@@ -104,56 +101,55 @@ export default (() => {
   const maxChars = 50;
 
   return (options) => {
-    // const {
-    //   keyboard,
-    //   maxLettersInWord,
-    //   letters,
-    // } = options;
-    //
-    // let lesson = '';
-    //
-    // console.log('keyboard', keyboard);
-    //
-    // const { domain } = _.find(keyboards, { name: keyboard });
-    // const filteredSyllables = _.cloneDeep(syllables[domain]);
-    //
-    // const regex = new RegExp(`^[${letters.join('')}]+$`);
-    //
-    // _.each(filteredSyllables, (v, k) => {
-    //   filteredSyllables[k] = _(filteredSyllables[k])
-    //     .map((q, s) => ({
-    //       quantity: q,
-    //       syllable: s,
-    //     }))
-    //     .filter(({ syllable }) => regex.test(syllable))
-    //     .value();
-    // });
-    //
-    // while (lesson.length <= maxChars) {
-    //   const { length } = lesson;
-    //
-    //   let wordLength = _.random(minWordLength, maxLettersInWord);
-    //
-    //   if (length + wordLength > maxChars) {
-    //     wordLength = maxChars - length;
-    //
-    //     if (wordLength < 3) {
-    //       break;
-    //     }
-    //   }
-    //
-    //   const word = getWord({
-    //     wordLength,
-    //     syllables: filteredSyllables,
-    //     letters,
-    //   });
-    //
-    //   lesson += `${word} `;
-    // }
-    //
-    // lesson = lesson.slice(0, -1);
-    //
-    // return lesson;
-    return '';
+    const {
+      keyboard,
+      maxLettersInWord,
+      letters,
+    } = options;
+
+    let lesson = '';
+
+    const { language } = _.find(keyboards, { name: keyboard });
+    const { syllables } = _.find(languages, { name: language });
+
+    const filteredSyllables = _.cloneDeep(syllables);
+
+    const regex = new RegExp(`^[${letters.join('')}]+$`);
+
+    _.each(filteredSyllables, (v, k) => {
+      filteredSyllables[k] = _(filteredSyllables[k])
+        .map((q, s) => ({
+          quantity: q,
+          syllable: s,
+        }))
+        .filter(({ syllable }) => regex.test(syllable))
+        .value();
+    });
+
+    while (lesson.length <= maxChars) {
+      const { length } = lesson;
+
+      let wordLength = _.random(minWordLength, maxLettersInWord);
+
+      if (length + wordLength > maxChars) {
+        wordLength = maxChars - length;
+
+        if (wordLength < 3) {
+          break;
+        }
+      }
+
+      const word = getWord({
+        wordLength,
+        syllables: filteredSyllables,
+        letters,
+      });
+
+      lesson += `${word} `;
+    }
+
+    lesson = lesson.slice(0, -1);
+
+    return lesson;
   };
 })();
