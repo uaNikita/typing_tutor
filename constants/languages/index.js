@@ -15,14 +15,9 @@ export const languages = [
 ];
 
 export const keyboards = [
-  ...english.keyboards,
-  ...russian.keyboards,
+  ...english.keyboards.map(o => o.language = 'english'),
+  ...russian.keyboards.map(o => o.language = 'russian'),
 ];
-
-// export const keyboards = [
-//   ...english.keyboards.map(o => o.language = 'english'),
-//   ...russian.keyboards.map(o => o.language = 'russian'),
-// ];
 
 export default {
   languages,
