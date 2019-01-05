@@ -2,6 +2,10 @@ import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 
 class Block extends Component {
+  speedUp = () => {
+
+  };
+
   render() {
     const {
       props: {
