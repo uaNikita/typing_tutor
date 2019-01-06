@@ -8,9 +8,9 @@ import { updateCharToType } from 'ReduxUtils/reducers/modes/text';
 
 import Component from './component';
 
-const mapStateToProps = () => {
+const mapStateToProps = (state) => {
   return {
-    text:1,
+    keyboard: state.getIn(['user', 'keyboard']),
   };
 };
 
