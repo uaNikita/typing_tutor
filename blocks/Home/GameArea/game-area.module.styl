@@ -1,19 +1,44 @@
-.root
-   height: 200px;
-   position: relative
+.level
+   display: flex
+   justify-content center
+   align-items center
+   margin-bottom: 20px
+   font-size: 12px
+
+.level-line
+   width: 500px;
+   height: 10px
+   overflow: hidden
+   background-image: linear-gradient(to right, #008000, #ffef7e 50%, #f00);
+   border-radius: 3px;
+   margin-left: 5px;
+   margin-right: 5px;
+
+.level-pointer
+   height: 10px
+   border-right: 1px solid #000;
 
 .area
-   height: 160px
+   width: 900px;
+   height: 156px
    border-left: 1px dashed #000;
+   position: relative
+   overflow: hidden
+   margin: 0 auto 20px;
+   &:after
+      width: 20px;
+      position: absolute
+      top: 0
+      right: 0
+      bottom: 0
+      background-image: linear-gradient(to right, rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.6) 30%, #fff);
+      content ''
 
 .word
    position: absolute
    font-size: 20px;
 
 .type-word
-   position: absolute;
-   width: 100%;
-   bottom: 0;
    font-size: 30px
    text-align: center;
 
@@ -21,5 +46,5 @@
    color: #d9d9d9;
 
 .typed
-   opacity:0.2
+   opacity: 0.2
 
