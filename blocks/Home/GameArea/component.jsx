@@ -138,7 +138,6 @@ class Block extends ContentArea {
           Hard
         </div>
 
-
         <p styleName="area" ref={this.area}>
           {words.map(({ top, left, word }) => (
               <span
