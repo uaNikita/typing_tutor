@@ -1,6 +1,8 @@
 import React, { Fragment } from 'react';
 import _ from 'lodash';
+import classNames from 'classnames';
 import CSSModules from 'react-css-modules';
+
 
 import { keyboards, languages } from 'Constants/languages';
 
@@ -14,6 +16,7 @@ class Block extends ContentArea {
 
   state = {
     words: [],
+    result: undefined,
   };
 
   constructor(props) {
@@ -35,15 +38,36 @@ class Block extends ContentArea {
 
   start = () => {
     const go = () => {
-      this.setState(({ words }) => ({
-        words: words.map(word => {
-          word.left -= this.step;
+      this.setState(({ words, result }) => {
+        const state = {};
 
-          return word;
-        }),
-      }));
+        if (_.isUndefined(result)) {
+          let newResult;
 
-      setTimeout(go, 1000);
+          const shiftedWords = words.map(word => {
+            word.left -= this.step;
+
+            if (word.left <= 0) {
+              newResult = false;
+            }
+
+            return word;
+          });
+
+          state.words = shiftedWords;
+
+          if (_.isUndefined(newResult)) {
+            setTimeout(go, 1000);
+          }
+          else {
+            state.result = newResult;
+          }
+        }
+
+        return state;
+      });
+
+
     };
 
     go();
@@ -122,8 +146,20 @@ class Block extends ContentArea {
     const {
       state: {
         words,
+        result,
       },
     } = this;
+
+    let message;
+
+    if (_.isBoolean(result)) {
+      const messageStyleName = classNames(
+        'message',
+        `message_${result ? 'good' : 'bad'}`,
+      );
+
+      message = <p styleName={messageStyleName}>You win</p>;
+    }
 
     return (
       <Fragment>
@@ -137,6 +173,8 @@ class Block extends ContentArea {
           </div>
           Hard
         </div>
+
+        {message}
 
         <p styleName="area" ref={this.area}>
           {words.map(({ top, left, word }) => (
@@ -167,4 +205,6 @@ class Block extends ContentArea {
   }
 }
 
-export default CSSModules(Block, styles);
+export default CSSModules(Block, styles, {
+  allowMultiple: true,
+});
