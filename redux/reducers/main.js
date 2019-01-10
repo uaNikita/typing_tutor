@@ -239,6 +239,8 @@ export const typeChar = char => (
 
       default:
     }
+
+    return normalizedChar;
   }
 );
 

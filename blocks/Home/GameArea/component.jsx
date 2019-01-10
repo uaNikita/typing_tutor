@@ -17,6 +17,10 @@ class Block extends ContentArea {
   state = {
     words: [],
     result: undefined,
+    wordToType: {
+      typed: '',
+      last: '',
+    }
   };
 
   constructor(props) {
@@ -36,38 +40,31 @@ class Block extends ContentArea {
 
   wordHeight = 26;
 
+  score = 0;
+
   start = () => {
     const go = () => {
       this.setState(({ words, result }) => {
         const state = {};
 
         if (_.isUndefined(result)) {
-          let newResult;
-
-          const shiftedWords = words.map(word => {
+          state.words = words.map(word => {
             word.left -= this.step;
 
             if (word.left <= 0) {
-              newResult = false;
+              state.result = false;
             }
 
             return word;
           });
 
-          state.words = shiftedWords;
-
-          if (_.isUndefined(newResult)) {
-            setTimeout(go, 1000);
-          }
-          else {
-            state.result = newResult;
+          if (_.isUndefined(state.result)) {
+            setTimeout(go, 200);
           }
         }
 
         return state;
       });
-
-
     };
 
     go();
@@ -107,26 +104,35 @@ class Block extends ContentArea {
         word,
       });
 
-      return {
+      const state = {
         words,
       };
+
+      if (words.length === 1) {
+        state.wordToType = {
+          typed: '',
+          last: word,
+        };
+      }
+
+      return state;
     });
   };
 
+  keyPressHandlerModified = (...rest) => {
+    const char = this.keyPressHandler(...rest);
+
+    console.log('char', char);
+  };
+
+
   componentDidMount = () => {
-    const {
-      props: {
-        updateCharToType,
-      },
-    } = this;
     document.addEventListener('keydown', this.keyDownHandler);
-    document.addEventListener('keypress', this.keyPressHandler);
+    document.addEventListener('keypress', this.keyPressHandlerModified);
 
     this.start();
 
     setInterval(this.addWord, 5000);
-
-    // updateCharToType();
   };
 
   componentWillUnmount() {
@@ -137,7 +143,7 @@ class Block extends ContentArea {
     } = this;
 
     document.removeEventListener('keydown', this.keyDownHandler);
-    document.removeEventListener('keypress', this.keyPressHandler);
+    document.removeEventListener('keypress', this.keyPressHandlerModified);
 
     zeroingStatic();
   }
@@ -147,18 +153,19 @@ class Block extends ContentArea {
       state: {
         words,
         result,
+        wordToType,
       },
     } = this;
 
     let message;
 
     if (_.isBoolean(result)) {
-      const messageStyleName = classNames(
-        'message',
-        `message_${result ? 'good' : 'bad'}`,
-      );
-
-      message = <p styleName={messageStyleName}>You win</p>;
+      if (result) {
+        message = <p styleName="message message_good">You win</p>;
+      }
+      else {
+        message = <p styleName="message message_bad">Game over</p>;
+      }
     }
 
     return (
@@ -191,12 +198,12 @@ class Block extends ContentArea {
         <p styleName="type-word">
           <PureString
             styleName="typed"
-            string="kno"
+            string={wordToType.typed}
             hiddenChars
           />
           <span className="cursor" />
           <PureString
-            string="wledge"
+            string={wordToType.last}
             hiddenChars
           />
         </p>

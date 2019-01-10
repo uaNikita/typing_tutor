@@ -48,7 +48,7 @@ class Block extends Component {
     if (e.which !== 32) {
       this.setStartTypingTime();
 
-      typeChar(String.fromCharCode(e.which));
+      return typeChar(String.fromCharCode(e.which));
     }
   };
 }
