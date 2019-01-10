@@ -7,11 +7,9 @@ import {
 
 import Component from './component';
 
-const mapStateToProps = (state) => {
-  return {
-    keyboard: state.getIn(['user', 'keyboard']),
-  };
-};
+const mapStateToProps = state => ({
+  keyboard: state.getIn(['user', 'keyboard']),
+});
 
 const mapDispatchToProps = dispatch => ({
   setStartTypingTime: (...args) => dispatch(setStartTypingTime(...args)),

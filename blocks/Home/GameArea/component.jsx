@@ -1,8 +1,6 @@
 import React, { Fragment } from 'react';
 import _ from 'lodash';
-import classNames from 'classnames';
 import CSSModules from 'react-css-modules';
-
 
 import { keyboards, languages } from 'Constants/languages';
 
@@ -20,7 +18,7 @@ class Block extends ContentArea {
     wordToType: {
       typed: '',
       last: '',
-    }
+    },
   };
 
   constructor(props) {
@@ -42,32 +40,89 @@ class Block extends ContentArea {
 
   score = 0;
 
-  start = () => {
-    const go = () => {
-      this.setState(({ words, result }) => {
-        const state = {};
+  level = 1;
 
-        if (_.isUndefined(result)) {
-          state.words = words.map(word => {
-            word.left -= this.step;
+  move = () => {
+    const {
+      state: {
+        words,
+      },
+    } = this;
 
-            if (word.left <= 0) {
-              state.result = false;
-            }
+    const state = {};
 
-            return word;
-          });
+    state.words = words.map((word) => {
+      const modifiedWord = { ...word };
 
-          if (_.isUndefined(state.result)) {
-            setTimeout(go, 200);
-          }
-        }
+      modifiedWord.left -= this.step;
 
-        return state;
-      });
+      if (modifiedWord.left <= 0) {
+        state.result = false;
+
+        clearTimeout(this.timeouts.move);
+        clearTimeout(this.timeouts.addWord);
+      }
+
+      return modifiedWord;
+    });
+
+    this.setState(state);
+  }
+
+  addWord = () => {
+    const {
+      state: {
+        words,
+      },
+    } = this;
+
+    const allWords = Object.keys(this.nouns);
+    const index = _.random(0, allWords.length - 1);
+    const word = allWords[index];
+
+    delete this.nouns[word];
+
+    words.push({
+      top: this.getFreeRandomSlot() * this.wordHeight,
+      left: this.areaWidth,
+      word,
+    });
+
+    const state = {
+      words,
     };
 
-    go();
+    // if it is first word we need add it for typing
+    if (words.length === 1) {
+      state.wordToType = {
+        typed: '',
+        last: word,
+      };
+    }
+
+    this.setState(state);
+  }
+
+  start = () => {
+    const timeout = 1000;
+
+    this.timeouts = {};
+
+    const move = () => {
+      this.move();
+
+      this.timeouts.move = setTimeout(move, timeout);
+    };
+
+    move();
+
+    const addWord = () => {
+      this.addWord();
+
+      this.timeouts.addWord = setTimeout(addWord, timeout * 3);
+    };
+
+    addWord();
   };
 
   getFreeRandomSlot = () => {
@@ -76,7 +131,7 @@ class Block extends ContentArea {
     const slots = _.range(0, this.slots);
 
     if (words) {
-      Array.from(words).map(word => {
+      Array.from(words).forEach((word) => {
         const extremeRightEdge = word.offsetLeft + word.offsetWidth + this.step;
 
         if (extremeRightEdge > this.areaWidth) {
@@ -90,39 +145,47 @@ class Block extends ContentArea {
     return _.sample(slots);
   };
 
-  addWord = () => {
-    const allWords = Object.keys(this.nouns);
-    const index = _.random(0, allWords.length - 1);
-    const word = allWords[index];
-
-    delete this.nouns[word];
-
-    this.setState(({ words }) => {
-      words.push({
-        top: this.getFreeRandomSlot() * this.wordHeight,
-        left: this.areaWidth,
-        word,
-      });
-
-      const state = {
-        words,
-      };
-
-      if (words.length === 1) {
-        state.wordToType = {
-          typed: '',
-          last: word,
-        };
-      }
-
-      return state;
-    });
-  };
-
   keyPressHandlerModified = (...rest) => {
+    const {
+      state: {
+        words,
+        wordToType: {
+          typed,
+          last,
+        },
+      },
+    } = this;
+
     const char = this.keyPressHandler(...rest);
 
-    console.log('char', char);
+    if (char === last[0]) {
+      const state = {
+        wordToType: {
+          typed: typed + last[0],
+          last: last.substring(1),
+        },
+      };
+
+      if (!state.wordToType.last.length) {
+        if (words.length) {
+          state.words = words;
+          state.words.splice(0, 1);
+
+          state.wordToType = {
+            typed: '',
+            last: state.words[0].word,
+          };
+        }
+        else {
+          state.wordToType = {
+            typed: '',
+            last: '',
+          };
+        }
+      }
+
+      this.setState(state);
+    }
   };
 
 
@@ -131,8 +194,6 @@ class Block extends ContentArea {
     document.addEventListener('keypress', this.keyPressHandlerModified);
 
     this.start();
-
-    setInterval(this.addWord, 5000);
   };
 
   componentWillUnmount() {
@@ -170,13 +231,10 @@ class Block extends ContentArea {
 
     return (
       <Fragment>
-
         <div styleName="level">
           Easy
           <div styleName="level-line">
-            <div styleName="level-pointer" style={{
-              width: '0%',
-            }} />
+            <div styleName="level-pointer" style={{ width: '0%' }} />
           </div>
           Hard
         </div>
@@ -185,15 +243,14 @@ class Block extends ContentArea {
 
         <p styleName="area" ref={this.area}>
           {words.map(({ top, left, word }) => (
-              <span
-                key={word}
-                style={{ top, left }}
-                styleName="word"
-              >
-                {word}
-              </span>
-            )
-          )}
+            <span
+              key={word}
+              style={{ top, left }}
+              styleName="word"
+            >
+              {word}
+            </span>
+          ))}
         </p>
         <p styleName="type-word">
           <PureString

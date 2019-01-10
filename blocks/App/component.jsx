@@ -57,7 +57,7 @@ class Block extends Component {
           <meta charSet="utf-8" />
           <title>Typing tutor</title>
           <meta name="viewport" content="width=device-width,initial-scale=1" />
-          <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet" />
+          {/*<link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,700,700i&amp;subset=latin-ext" rel="stylesheet" />*/}
           <link href="/main.css" rel="stylesheet" />
           <link href="/vendors~main.css" rel="stylesheet" />
           <script type="text/javascript" defer src="/vendors.js" />
