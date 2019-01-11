@@ -1,9 +1,11 @@
+.start
+   display: flex
+
 .level
    display: flex
    justify-content center
    align-items center
    margin-bottom: 20px
-   font-size: 12px
 
 .level-line
    width: 500px;
@@ -11,8 +13,8 @@
    overflow: hidden
    background-image: linear-gradient(to right, #008000, #ffef7e 50%, #f00);
    border-radius: 3px;
-   margin-left: 5px;
-   margin-right: 5px;
+   margin-left: 10px;
+   margin-right: 10px;
 
 .level-pointer
    height: 10px
@@ -24,6 +26,9 @@
    border-left: 1px dashed #000;
    position: relative
    overflow: hidden
+   display: flex;
+   justify-content: center;
+   align-items: center;
    margin: 0 auto 20px;
    &:after
       width: 20px;
@@ -47,7 +52,6 @@
 
 .typed
    opacity: 0.2
-
 
 .message
    margin-top: 20px;

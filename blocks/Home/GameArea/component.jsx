@@ -19,6 +19,7 @@ class Block extends ContentArea {
       typed: '',
       last: '',
     },
+    score: 0,
   };
 
   constructor(props) {
@@ -38,9 +39,7 @@ class Block extends ContentArea {
 
   wordHeight = 26;
 
-  score = 0;
-
-  level = 1;
+  levels = [50, 60, 72, 86, 103, 124, 149, 179, 215, 258, 310, 372, 446, 535, 642, 770, 924, 1109, 1331, 1597];
 
   move = () => {
     const {
@@ -84,7 +83,7 @@ class Block extends ContentArea {
 
     words.push({
       top: this.getFreeRandomSlot() * this.wordHeight,
-      left: this.areaWidth,
+      left: this.areaWidth - this.step,
       word,
     });
 
@@ -153,6 +152,7 @@ class Block extends ContentArea {
           typed,
           last,
         },
+        score,
       },
     } = this;
 
@@ -165,6 +165,8 @@ class Block extends ContentArea {
           last: last.substring(1),
         },
       };
+
+      state.score = score + 1;
 
       if (!state.wordToType.last.length) {
         if (words.length) {
@@ -192,8 +194,6 @@ class Block extends ContentArea {
   componentDidMount = () => {
     document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandlerModified);
-
-    this.start();
   };
 
   componentWillUnmount() {
@@ -215,6 +215,7 @@ class Block extends ContentArea {
         words,
         result,
         wordToType,
+        score,
       },
     } = this;
 
@@ -232,26 +233,31 @@ class Block extends ContentArea {
     return (
       <Fragment>
         <div styleName="level">
-          Easy
+          Level: 1
           <div styleName="level-line">
             <div styleName="level-pointer" style={{ width: '0%' }} />
           </div>
-          Hard
+          {score}/100
         </div>
 
         {message}
 
         <p styleName="area" ref={this.area}>
-          {words.map(({ top, left, word }) => (
-            <span
-              key={word}
-              style={{ top, left }}
-              styleName="word"
-            >
-              {word}
-            </span>
-          ))}
+          {
+            this.timeouts
+              ? words.map(({ top, left, word }) => (
+                <span
+                  key={word}
+                  style={{ top, left }}
+                  styleName="word"
+                >
+                  {word}
+                </span>
+              ))
+              : <button className="button" styleName="start" onClick={this.start}>Start</button>
+          }
         </p>
+
         <p styleName="type-word">
           <PureString
             styleName="typed"
@@ -264,6 +270,7 @@ class Block extends ContentArea {
             hiddenChars
           />
         </p>
+
       </Fragment>
     );
   }
