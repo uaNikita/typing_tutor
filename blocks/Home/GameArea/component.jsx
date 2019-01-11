@@ -9,8 +9,28 @@ import ContentArea from '../ContentArea';
 
 import styles from './game-area.module.styl';
 
+const maxLevel = 20;
+
+const levelsLimits = [3];
+
+for (let i = 1; i < maxLevel; i += 1) {
+  levelsLimits.push(Math.round(levelsLimits[i - 1] * 1.2));
+}
+
 class Block extends ContentArea {
   area = React.createRef();
+
+  areaWidth = 900;
+
+  step = 20;
+
+  slots = 6;
+
+  wordHeight = 26;
+
+  maxLevel = maxLevel;
+
+  levelsLimits = levelsLimits;
 
   state = {
     words: [],
@@ -19,6 +39,8 @@ class Block extends ContentArea {
       typed: '',
       last: '',
     },
+    level: 1,
+    levelLimit: levelsLimits[0],
     score: 0,
   };
 
@@ -31,15 +53,15 @@ class Block extends ContentArea {
     this.nouns = _.cloneDeep(nouns);
   }
 
-  areaWidth = 900;
+  addListeners = () => {
+    document.addEventListener('keydown', this.keyDownHandler);
+    document.addEventListener('keypress', this.keyPressHandlerModified);
+  }
 
-  step = 20;
-
-  slots = 6;
-
-  wordHeight = 26;
-
-  levels = [50, 60, 72, 86, 103, 124, 149, 179, 215, 258, 310, 372, 446, 535, 642, 770, 924, 1109, 1331, 1597];
+  removeListeners = () => {
+    document.removeEventListener('keydown', this.keyDownHandler);
+    document.removeEventListener('keypress', this.keyPressHandlerModified);
+  }
 
   move = () => {
     const {
@@ -56,10 +78,7 @@ class Block extends ContentArea {
       modifiedWord.left -= this.step;
 
       if (modifiedWord.left <= 0) {
-        state.result = false;
-
-        clearTimeout(this.timeouts.move);
-        clearTimeout(this.timeouts.addWord);
+        this.finish(false);
       }
 
       return modifiedWord;
@@ -103,26 +122,39 @@ class Block extends ContentArea {
   }
 
   start = () => {
+    this.addListeners();
+
     const timeout = 1000;
 
     this.timeouts = {};
 
     const move = () => {
-      this.move();
-
       this.timeouts.move = setTimeout(move, timeout);
+
+      this.move();
     };
 
     move();
 
     const addWord = () => {
-      this.addWord();
-
       this.timeouts.addWord = setTimeout(addWord, timeout * 3);
+
+      this.addWord();
     };
 
     addWord();
   };
+
+  finish = (result) => {
+    this.removeListeners();
+
+    clearTimeout(this.timeouts.move);
+    clearTimeout(this.timeouts.addWord);
+
+    this.setState({
+      result,
+    });
+  }
 
   getFreeRandomSlot = () => {
     const words = this.area.current.querySelectorAll(`.${styles.word}`);
@@ -153,6 +185,7 @@ class Block extends ContentArea {
           last,
         },
         score,
+        level,
       },
     } = this;
 
@@ -167,6 +200,16 @@ class Block extends ContentArea {
       };
 
       state.score = score + 1;
+
+      if (state.score >= this.levelsLimits[level - 1]) {
+        if (state.score >= this.levelsLimits[this.maxLevel - 1]) {
+          this.finish(true);
+        }
+        else {
+          state.level = level + 1;
+          state.levelLimit = this.levelsLimits[level];
+        }
+      }
 
       if (!state.wordToType.last.length) {
         if (words.length) {
@@ -190,23 +233,8 @@ class Block extends ContentArea {
     }
   };
 
-
-  componentDidMount = () => {
-    document.addEventListener('keydown', this.keyDownHandler);
-    document.addEventListener('keypress', this.keyPressHandlerModified);
-  };
-
   componentWillUnmount() {
-    const {
-      props: {
-        zeroingStatic,
-      },
-    } = this;
-
-    document.removeEventListener('keydown', this.keyDownHandler);
-    document.removeEventListener('keypress', this.keyPressHandlerModified);
-
-    zeroingStatic();
+    this.removeListeners();
   }
 
   render() {
@@ -216,6 +244,8 @@ class Block extends ContentArea {
         result,
         wordToType,
         score,
+        level,
+        levelLimit,
       },
     } = this;
 
@@ -233,11 +263,11 @@ class Block extends ContentArea {
     return (
       <Fragment>
         <div styleName="level">
-          Level: 1
+          Level: {level}/{this.maxLevel}
           <div styleName="level-line">
             <div styleName="level-pointer" style={{ width: '0%' }} />
           </div>
-          {score}/100
+          {score}/{levelLimit}
         </div>
 
         {message}
@@ -254,7 +284,7 @@ class Block extends ContentArea {
                   {word}
                 </span>
               ))
-              : <button className="button" styleName="start" onClick={this.start}>Start</button>
+              : <button type="button" className="button" styleName="start" onClick={this.start}>Start</button>
           }
         </p>
 

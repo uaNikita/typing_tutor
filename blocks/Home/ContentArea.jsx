@@ -41,15 +41,15 @@ class Block extends Component {
       },
     } = this;
 
-    if (closestEl(e.target, '.drop-down')) {
-      return;
-    }
+    let result = false;
 
-    if (e.which !== 32) {
+    if (!closestEl(e.target, '.drop-down') && e.which !== 32) {
       this.setStartTypingTime();
 
-      return typeChar(String.fromCharCode(e.which));
+      result = typeChar(String.fromCharCode(e.which));
     }
+
+    return result;
   };
 }
 
