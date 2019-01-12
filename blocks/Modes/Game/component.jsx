@@ -1,28 +1,45 @@
-import React, { Component } from 'react';
-import CSSModules from 'react-css-modules';
+import React from 'react';
+import {
+  Switch,
+  Redirect,
+  Route,
+  NavLink,
+} from 'react-router-dom';
 
-class Block extends Component {
-  speedUp = () => {
+import Game1 from './Game1/container';
 
-  };
+const menuLinks = [
+  {
+    url: '/game1',
+    text: 'Game 1',
+  },
+];
 
-  render() {
-    const {
-      props: {
-        start,
-      },
-    } = this;
+const Block = ({ match: { url } }) => {
+  const links = menuLinks.map(({ url: linkUrl, text }) => (
+    <NavLink
+      key={linkUrl}
+      className="submenu-link"
+      activeClassName="submenu-link_selected"
+      to={url + linkUrl}
+    >
+      {text}
+    </NavLink>
+  ));
 
-    return (
-      <button
-        type="button"
-        className="button"
-        onClick={start}
-      >
-        Start
-      </button>
-    );
-  }
-}
+  return (
+    <div className="sub-layout">
+      <nav className="sub-layout__menu">
+        {links}
+      </nav>
+      <div className="sub-layout__content">
+        <Switch>
+          <Redirect exact from={url} to={`${url}/game1`} />
+          <Route path={`${url}/game1`} component={Game1} />
+        </Switch>
+      </div>
+    </div>
+  );
+};
 
-export default CSSModules(Block);
+export default Block;

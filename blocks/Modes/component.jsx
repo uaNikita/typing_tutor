@@ -3,7 +3,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 
 import Syllable from './Syllable/container';
 import Text from './Text/component';
-import Game from './Game/container';
+import Game from './Game/component';
 
 const Modes = ({ match: { url } }) => (
   <Switch>
