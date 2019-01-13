@@ -34,6 +34,7 @@ const Block = ({ match: { url } }) => {
       </nav>
       <div className="sub-layout__content">
         <Switch>
+          { /* change game name */ }
           <Redirect exact from={url} to={`${url}/game1`} />
           <Route path={`${url}/game1`} component={Game1} />
         </Switch>
