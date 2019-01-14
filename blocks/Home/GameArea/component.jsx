@@ -28,6 +28,8 @@ class Block extends ContentArea {
 
   wordHeight = 26;
 
+  timeout = 1000;
+
   maxLevel = maxLevel;
 
   levelsLimits = levelsLimits;
@@ -63,6 +65,24 @@ class Block extends ContentArea {
     document.removeEventListener('keypress', this.keyPressHandlerModified);
   }
 
+  getTimeout = () => {
+    const {
+      state: {
+        level,
+      },
+    } = this;
+
+    // todo add smart logic of levels here
+
+    const move = 1000;
+    const addWord = 1000 * 3;
+
+    return {
+      move,
+      addWord,
+    }
+  }
+
   move = () => {
     const {
       state: {
@@ -85,6 +105,8 @@ class Block extends ContentArea {
     });
 
     this.setState(state);
+
+    this.timeouts.move = setTimeout(this.move, this.getTimeout().move);
   }
 
   addWord = () => {
@@ -119,30 +141,18 @@ class Block extends ContentArea {
     }
 
     this.setState(state);
+
+    this.timeouts.addWord = setTimeout(this.addWord, this.getTimeout().addWord);
   }
 
   start = () => {
     this.addListeners();
 
-    const timeout = 1000;
-
     this.timeouts = {};
 
-    const move = () => {
-      this.timeouts.move = setTimeout(move, timeout);
+    this.move();
 
-      this.move();
-    };
-
-    move();
-
-    const addWord = () => {
-      this.timeouts.addWord = setTimeout(addWord, timeout * 3);
-
-      this.addWord();
-    };
-
-    addWord();
+    this.addWord();
   };
 
   finish = (result) => {
