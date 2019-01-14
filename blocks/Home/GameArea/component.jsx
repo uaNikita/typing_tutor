@@ -72,15 +72,17 @@ class Block extends ContentArea {
       },
     } = this;
 
-    // todo add smart logic of levels here
+    const min = 1600;
+    const max = 300;
 
-    const move = 1000;
-    const addWord = 1000 * 3;
+    const d = (min - max) / maxLevel;
+
+    const move = min - level * d;
 
     return {
       move,
-      addWord,
-    }
+      addWord: move * 3,
+    };
   }
 
   move = () => {
@@ -89,6 +91,11 @@ class Block extends ContentArea {
         words,
       },
     } = this;
+
+    this.timeouts.move = setTimeout(
+      this.move,
+      this.getTimeout().move,
+    );
 
     const state = {};
 
@@ -105,8 +112,6 @@ class Block extends ContentArea {
     });
 
     this.setState(state);
-
-    this.timeouts.move = setTimeout(this.move, this.getTimeout().move);
   }
 
   addWord = () => {
@@ -115,6 +120,11 @@ class Block extends ContentArea {
         words,
       },
     } = this;
+
+    this.timeouts.addWord = setTimeout(
+      this.addWord,
+      this.getTimeout().addWord,
+    );
 
     const allWords = Object.keys(this.nouns);
     const index = _.random(0, allWords.length - 1);
@@ -141,8 +151,6 @@ class Block extends ContentArea {
     }
 
     this.setState(state);
-
-    this.timeouts.addWord = setTimeout(this.addWord, this.getTimeout().addWord);
   }
 
   start = () => {
@@ -243,9 +251,10 @@ class Block extends ContentArea {
     }
   };
 
-  componentWillUnmount() {
-    this.removeListeners();
-  }
+  componentWillUnmount = () => (
+    this.removeListeners()
+  );
+
 
   render() {
     const {
