@@ -11,7 +11,7 @@ import styles from './game-area.module.styl';
 
 const maxLevel = 20;
 
-const levelsLimits = [3];
+const levelsLimits = [30];
 
 for (let i = 1; i < maxLevel; i += 1) {
   levelsLimits.push(Math.round(levelsLimits[i - 1] * 1.2));
@@ -73,7 +73,7 @@ class Block extends ContentArea {
     } = this;
 
     const min = 1600;
-    const max = 300;
+    const max = 400;
 
     const d = (min - max) / maxLevel;
 
@@ -81,7 +81,7 @@ class Block extends ContentArea {
 
     return {
       move,
-      addWord: move * 3,
+      addWord: move * 30,
     };
   }
 
@@ -217,6 +217,8 @@ class Block extends ContentArea {
         },
       };
 
+      // todo: change getIdsFromCharacter to set only char without keys
+
       state.score = score + 1;
 
       if (state.score >= this.levelsLimits[level - 1]) {
@@ -230,20 +232,18 @@ class Block extends ContentArea {
       }
 
       if (!state.wordToType.last.length) {
+        state.wordToType = {
+          typed: '',
+          last: '',
+        };
+
         if (words.length) {
           state.words = words;
           state.words.splice(0, 1);
 
-          state.wordToType = {
-            typed: '',
-            last: state.words[0].word,
-          };
-        }
-        else {
-          state.wordToType = {
-            typed: '',
-            last: '',
-          };
+          if (state.words.length) {
+            state.wordToType.last = state.words[0].word;
+          }
         }
       }
 
