@@ -211,6 +211,15 @@ export const processAction = (saveToClient, saveToServer) => (
   }
 );
 
+export const setCharToType = char => (
+  (dispatch, getState) => {
+    const keys = getState().getIn(['main', 'keys']).toJS();
+    const idsChar = getIdsFromCharacter(keys, char);
+
+    dispatch(setIdsCharToType(idsChar));
+  }
+);
+
 export const typeChar = char => (
   (dispatch, getState) => {
     const state = getState();

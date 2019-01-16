@@ -3,7 +3,7 @@ import {
   setStartTypingTime,
   zeroingStatic,
   typeChar,
-  setIdsCharToType,
+  setCharToType,
 } from 'ReduxUtils/reducers/main';
 
 import Component from './component';
@@ -16,7 +16,7 @@ const mapDispatchToProps = dispatch => ({
   setStartTypingTime: (...args) => dispatch(setStartTypingTime(...args)),
   zeroingStatic: (...args) => dispatch(zeroingStatic(...args)),
   typeChar: (...args) => dispatch(typeChar(...args)),
-  setIdsCharToType: (...args) => dispatch(setIdsCharToType(...args)),
+  setCharToType: (...args) => dispatch(setCharToType(...args)),
 });
 
 export default connect(

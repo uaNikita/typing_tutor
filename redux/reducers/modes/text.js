@@ -13,7 +13,7 @@ import { defaults, defaultsWhichCanBeOverwrittenByLS } from 'Constants/defaultSt
 import { fetchJSON } from '../fetch';
 import {
   processAction,
-  setIdsCharToType,
+  setCharToType,
   pressWrongKeys,
   addTouch,
 } from '../main';
@@ -258,15 +258,14 @@ export const processRefreshText = id => (
 export const updateCharToType = () => (dispatch, getState) => {
   const state = getState();
   const textId = state.getIn(['text', 'selectedId']);
-  const text = state.getIn(['text', 'entities']).filter(obj => obj.get('id') === textId).get(0);
+  const text = state
+    .getIn(['text', 'entities'])
+    .filter(obj => obj.get('id') === textId)
+    .get(0);
 
-  let idsChar = '';
+  const char = text.get('last') ? text.get('last')[0] : null;
 
-  if (text.get('last')) {
-    idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), text.get('last')[0]);
-  }
-
-  dispatch(setIdsCharToType(idsChar));
+  dispatch(setCharToType(char));
 };
 
 export const processTypeEntitiy = (() => {

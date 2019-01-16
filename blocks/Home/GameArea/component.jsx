@@ -58,12 +58,12 @@ class Block extends ContentArea {
   addListeners = () => {
     document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandlerModified);
-  }
+  };
 
   removeListeners = () => {
     document.removeEventListener('keydown', this.keyDownHandler);
     document.removeEventListener('keypress', this.keyPressHandlerModified);
-  }
+  };
 
   getTimeout = () => {
     const {
@@ -81,9 +81,9 @@ class Block extends ContentArea {
 
     return {
       move,
-      addWord: move * 30,
+      addWord: move * 3,
     };
-  }
+  };
 
   move = () => {
     const {
@@ -112,10 +112,13 @@ class Block extends ContentArea {
     });
 
     this.setState(state);
-  }
+  };
 
   addWord = () => {
     const {
+      props: {
+        setCharToType,
+      },
       state: {
         words,
       },
@@ -148,10 +151,12 @@ class Block extends ContentArea {
         typed: '',
         last: word,
       };
+
+      setCharToType(word[0]);
     }
 
     this.setState(state);
-  }
+  };
 
   start = () => {
     this.addListeners();
@@ -172,7 +177,7 @@ class Block extends ContentArea {
     this.setState({
       result,
     });
-  }
+  };
 
   getFreeRandomSlot = () => {
     const words = this.area.current.querySelectorAll(`.${styles.word}`);
@@ -196,6 +201,9 @@ class Block extends ContentArea {
 
   keyPressHandlerModified = (...rest) => {
     const {
+      props: {
+        setCharToType,
+      },
       state: {
         words,
         wordToType: {
@@ -216,8 +224,6 @@ class Block extends ContentArea {
           last: last.substring(1),
         },
       };
-
-      // todo: change getIdsFromCharacter to set only char without keys
 
       state.score = score + 1;
 
@@ -247,6 +253,8 @@ class Block extends ContentArea {
         }
       }
 
+      setCharToType(state.wordToType.last[0]);
+
       this.setState(state);
     }
   };
@@ -254,7 +262,6 @@ class Block extends ContentArea {
   componentWillUnmount = () => (
     this.removeListeners()
   );
-
 
   render() {
     const {

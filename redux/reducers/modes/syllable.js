@@ -16,10 +16,9 @@ import { defaults } from 'Constants/defaultState';
 import { fetchJSON } from '../fetch';
 
 import {
-  setIdsCharToType,
   pressWrongKeys,
   addTouch,
-  processAction,
+  processAction, setCharToType,
 } from '../main';
 
 import { processAddStatistic } from '../user';
@@ -282,20 +281,10 @@ export const generateAndSetLessonForMode = mode => (
 
 export const updateCharToType = () => (
   (dispatch, getState) => {
-    const state = getState();
+    const lessonRest = getState().getIn(['syllable', 'lesson', 'rest']);
+    const char = lessonRest ? lessonRest[0] : null;
 
-    let idsChar = '';
-
-    const lessonRest = state.getIn(['syllable', 'lesson', 'rest']);
-
-    if (lessonRest) {
-      idsChar = getIdsFromCharacter(
-        state.getIn(['main', 'keys']).toJS(),
-        lessonRest[0],
-      );
-    }
-
-    dispatch(setIdsCharToType(idsChar));
+    dispatch(setCharToType(char));
   }
 );
 
