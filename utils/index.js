@@ -14,21 +14,23 @@ export {
 export const getIdsFromCharacter = (keys, сharacter) => {
   const charsToType = [];
 
-  keys.forEach((obj) => {
-    if (obj.key === сharacter) {
-      charsToType.push(obj.id);
-    }
-    else if (obj.shiftKey === сharacter) {
-      charsToType.push(obj.id);
+  if (_.isString(сharacter)) {
+    keys.forEach((obj) => {
+      if (obj.key === сharacter) {
+        charsToType.push(obj.id);
+      }
+      else if (obj.shiftKey === сharacter) {
+        charsToType.push(obj.id);
 
-      if (obj.hand === 'left') {
-        charsToType.push('Right Shift');
+        if (obj.hand === 'left') {
+          charsToType.push('Right Shift');
+        }
+        else if (obj.hand === 'right') {
+          charsToType.push('Left Shift');
+        }
       }
-      else if (obj.hand === 'right') {
-        charsToType.push('Left Shift');
-      }
-    }
-  });
+    });
+  }
 
   return charsToType;
 };
