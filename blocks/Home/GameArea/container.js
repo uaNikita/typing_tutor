@@ -4,12 +4,16 @@ import {
   zeroingStatic,
   typeChar,
   setCharToType,
+  addTouch,
 } from 'ReduxUtils/reducers/main';
+
+import { processAddStatistic } from 'ReduxUtils/reducers/user';
 
 import Component from './component';
 
 const mapStateToProps = state => ({
   keyboard: state.getIn(['user', 'keyboard']),
+  sessionStart: state.getIn(['main', 'sessionStatistic', 'start']),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -17,6 +21,8 @@ const mapDispatchToProps = dispatch => ({
   zeroingStatic: (...args) => dispatch(zeroingStatic(...args)),
   typeChar: (...args) => dispatch(typeChar(...args)),
   setCharToType: (...args) => dispatch(setCharToType(...args)),
+  addTouch: (...args) => dispatch(addTouch(...args)),
+  processAddStatistic: (...args) => dispatch(processAddStatistic(...args)),
 });
 
 export default connect(

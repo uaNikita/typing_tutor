@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import _ from 'lodash';
 import CSSModules from 'react-css-modules';
+import dayjs from 'dayjs';
 
 import { keyboards, languages } from 'Constants/languages';
 
@@ -38,8 +39,8 @@ class Block extends ContentArea {
     words: [],
     result: undefined,
     wordToType: {
-      typed: '',
-      last: '',
+      typed: null,
+      last: null,
     },
     level: 1,
     levelLimit: levelsLimits[0],
@@ -148,7 +149,7 @@ class Block extends ContentArea {
     // if it is first word we need add it for typing
     if (words.length === 1) {
       state.wordToType = {
-        typed: '',
+        typed: null,
         last: word,
       };
 
@@ -199,10 +200,13 @@ class Block extends ContentArea {
     return _.sample(slots);
   };
 
-  keyPressHandlerModified = (...rest) => {
+  keyPressHandlerModified = (...args) => {
     const {
       props: {
         setCharToType,
+        sessionStart,
+        addTouch,
+        processAddStatistic,
       },
       state: {
         words,
@@ -215,47 +219,65 @@ class Block extends ContentArea {
       },
     } = this;
 
-    const char = this.keyPressHandler(...rest);
+    if (last) {
+      const char = this.keyPressHandler(...args);
 
-    if (char === last[0]) {
-      const state = {
-        wordToType: {
-          typed: typed + last[0],
-          last: last.substring(1),
-        },
-      };
+      if (char === last[0]) {
+        addTouch(true, last[0]);
 
-      state.score = score + 1;
-
-      if (state.score >= this.levelsLimits[level - 1]) {
-        if (state.score >= this.levelsLimits[this.maxLevel - 1]) {
-          this.finish(true);
-        }
-        else {
-          state.level = level + 1;
-          state.levelLimit = this.levelsLimits[level];
-        }
-      }
-
-      if (!state.wordToType.last.length) {
-        state.wordToType = {
-          typed: '',
-          last: '',
+        const state = {
+          wordToType: {
+            typed: (typed || '') + last[0],
+            last: last.substring(1),
+          },
         };
 
-        if (words.length) {
-          state.words = words;
-          state.words.splice(0, 1);
+        if (!state.wordToType.last) {
+          state.wordToType.last = null;
+        }
 
-          if (state.words.length) {
-            state.wordToType.last = state.words[0].word;
+        state.score = score + 1;
+
+        if (state.score >= this.levelsLimits[level - 1]) {
+          if (state.score >= this.levelsLimits[this.maxLevel - 1]) {
+            this.finish(true);
+          }
+          else {
+            state.level = level + 1;
+            state.levelLimit = this.levelsLimits[level];
           }
         }
+
+        if (!state.wordToType.last) {
+          state.wordToType = {
+            typed: null,
+            last: null,
+          };
+
+          if (words.length) {
+            state.words = words;
+            state.words.splice(0, 1);
+
+            if (state.words.length) {
+              state.wordToType.last = state.words[0].word;
+            }
+          }
+        }
+
+        const charToType = state.wordToType.last && state.wordToType.last[0];
+
+        setCharToType(charToType);
+
+        this.setState(state);
+      }
+      else {
+        addTouch(false, last[0]);
       }
 
-      setCharToType(state.wordToType.last[0]);
 
-      this.setState(state);
+      if (dayjs(Date.now()).diff(sessionStart, 'second') > 10) {
+        processAddStatistic();
+      }
     }
   };
 

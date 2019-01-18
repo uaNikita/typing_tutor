@@ -298,7 +298,6 @@ export const processTypeEntitiy = (() => {
   );
 })();
 
-
 export const typeTextMode = char => (dispatch, getState) => {
   const state = getState();
   const textId = state.getIn(['text', 'selectedId']);
@@ -323,9 +322,9 @@ export const typeTextMode = char => (dispatch, getState) => {
       dispatch(addTouch(false, char));
     }
 
-    const sessionStrat = state.getIn(['main', 'sessionStatistic', 'start']);
+    const sessionStart = state.getIn(['main', 'sessionStatistic', 'start']);
 
-    if (dayjs(Date.now()).diff(sessionStrat, 'second') > 10) {
+    if (dayjs(Date.now()).diff(sessionStart, 'second') > 10) {
       dispatch(processAddStatistic());
     }
   }

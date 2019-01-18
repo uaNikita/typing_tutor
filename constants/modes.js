@@ -1,1 +1,1 @@
-export default ['syllable', 'text'];
+export default ['syllable', 'text', 'game'];

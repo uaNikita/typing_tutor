@@ -15,20 +15,21 @@ class Block extends PureComponent {
     } = this;
 
     // eslint-disable-next-line no-underscore-dangle
-    let __html = string;
+    let __html = '';
 
-    if (hiddenChars) {
-      __html = getHiddenCharacters(string);
-    }
-    else if (html) {
-      __html = convertTextToHtml(string);
+    if (string) {
+      if (hiddenChars) {
+        __html = getHiddenCharacters(string);
+      }
+      else if (html) {
+        __html = convertTextToHtml(string);
+      }
+      else {
+        __html = string;
+      }
     }
 
-    let Tag = 'span';
-
-    if (tag) {
-      Tag = tag;
-    }
+    const Tag = tag || 'span';
 
     return <Tag dangerouslySetInnerHTML={{ __html }} {...rest} />;
   }
