@@ -12,7 +12,8 @@ import styles from './game-area.module.styl';
 
 const maxLevel = 20;
 
-const levelsLimits = [30];
+const levelsLimits = [3];
+// const levelsLimits = [30];
 
 for (let i = 1; i < maxLevel; i += 1) {
   levelsLimits.push(Math.round(levelsLimits[i - 1] * 1.2));
@@ -37,7 +38,7 @@ class Block extends ContentArea {
 
   state = {
     words: [],
-    result: undefined,
+    result: null,
     wordToType: {
       typed: null,
       last: null,
@@ -46,15 +47,6 @@ class Block extends ContentArea {
     levelLimit: levelsLimits[0],
     score: 0,
   };
-
-  constructor(props) {
-    super(props);
-
-    const { language } = _.find(keyboards, { name: props.keyboard });
-    const { nouns } = _.find(languages, { name: language });
-
-    this.nouns = _.cloneDeep(nouns);
-  }
 
   addListeners = () => {
     document.addEventListener('keydown', this.keyDownHandler);
@@ -73,7 +65,7 @@ class Block extends ContentArea {
       },
     } = this;
 
-    const min = 1600;
+    const min = 3600;
     const max = 400;
 
     const d = (min - max) / maxLevel;
@@ -160,6 +152,17 @@ class Block extends ContentArea {
   };
 
   start = () => {
+    const {
+      props: {
+        keyboard,
+      },
+    } = this;
+
+    const { language } = _.find(keyboards, { name: keyboard });
+    const { nouns } = _.find(languages, { name: language });
+
+    this.nouns = _.cloneDeep(nouns);
+
     this.addListeners();
 
     this.timeouts = {};
@@ -168,6 +171,22 @@ class Block extends ContentArea {
 
     this.addWord();
   };
+
+  restart = () => {
+    this.setState({
+      words: [],
+      result: null,
+      wordToType: {
+        typed: null,
+        last: null,
+      },
+      level: 1,
+      levelLimit: levelsLimits[0],
+      score: 0,
+    });
+
+    this.start();
+  }
 
   finish = (result) => {
     this.removeListeners();
@@ -274,11 +293,20 @@ class Block extends ContentArea {
         addTouch(false, last[0]);
       }
 
-
       if (dayjs(Date.now()).diff(sessionStart, 'second') > 10) {
         processAddStatistic();
       }
     }
+  };
+
+  componentDidMount = () => {
+    const {
+      props: {
+        setCharToType,
+      },
+    } = this;
+
+    setCharToType(null);
   };
 
   componentWillUnmount = () => (
@@ -300,12 +328,27 @@ class Block extends ContentArea {
     let message;
 
     if (_.isBoolean(result)) {
+      const dataMessage = {
+        ending: 'bad',
+        text: 'Game over',
+      };
+
       if (result) {
-        message = <p styleName="message message_good">You win</p>;
+        dataMessage.ending = 'good';
+        dataMessage.text = 'You win';
       }
-      else {
-        message = <p styleName="message message_bad">Game over</p>;
-      }
+
+      message = (
+        <p styleName={`message message_${dataMessage.ending}`}>
+          {dataMessage.text}
+          <button
+            type="button"
+            className="fas fa-redo-alt"
+            styleName="refresh"
+            onClick={this.restart}
+          />
+        </p>
+      );
     }
 
     return (
@@ -332,7 +375,16 @@ class Block extends ContentArea {
                   {word}
                 </span>
               ))
-              : <button type="button" className="button" styleName="start" onClick={this.start}>Start</button>
+              : (
+                <button
+                  type="button"
+                  className="button"
+                  styleName="start"
+                  onClick={this.start}
+                >
+                  Start
+                </button>
+              )
           }
         </p>
 
