@@ -5,6 +5,8 @@ import Syllable from './Syllable/container';
 import Text from './Text/component';
 import Game from './Game/component';
 
+// todo: add competitive mode
+
 const Modes = ({ match: { url } }) => (
   <Switch>
     <Redirect exact from={url} to={`${url}/syllable`} />
