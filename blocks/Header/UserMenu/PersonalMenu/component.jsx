@@ -1,10 +1,20 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
-import { personal } from 'Constants/navigation';
 
 import CSSModules from 'react-css-modules';
 
 import styles from './personal-menu.module.styl';
+
+const personal = [
+  {
+    pathname: '/settings',
+    text: 'Settings',
+  },
+  {
+    pathname: '/authorization/sign-out',
+    text: 'Sign out',
+  },
+];
 
 class Block extends Component {
   state = {

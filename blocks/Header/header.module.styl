@@ -4,11 +4,11 @@
    display: flex
    align-items center
    justify-content: space-between;
-   
+
 .child
    display: flex
    align-items: center
-   
+
 .modes-title
    margin-right: 5px;
    margin-left: 50px;
@@ -18,10 +18,12 @@
    margin-left: @margin-right;
    padding: 4px 6px
    border-bottom: none
+   border-radius: 3px;
    &_selected
       background-color: #1c88d4;
-      border-radius: 3px;
       color: #fff;
+   &_active
+      border-bottom: 1px solid #1c88d4;
    &:last-child
       margin-right: 0
 

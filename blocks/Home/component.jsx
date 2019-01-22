@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 
-import Header from 'Blocks/Header/component';
+import Header from 'Blocks/Header/container';
 import Keypad from './Keypad/container';
 import SyllableArea from './SyllableArea/container';
 import GameArea from './GameArea/container';
