@@ -6,12 +6,12 @@ import {
   NavLink,
 } from 'react-router-dom';
 
-import Game1 from './Game1/container';
+import FlyingWords from './FlyingWords/container';
 
 const menuLinks = [
   {
-    url: '/game1',
-    text: 'Game 1',
+    url: '/flying-words',
+    text: 'Flying words',
   },
 ];
 
@@ -34,9 +34,9 @@ const Block = ({ match: { url } }) => {
       </nav>
       <div className="sub-layout__content">
         <Switch>
-          {/* change game name */}
-          <Redirect exact from={url} to={`${url}/game1`} />
-          <Route path={`${url}/game1`} component={Game1} />
+          <Redirect exact from={url} to={`${url}/flying-words`} />
+          <Route path={`${url}/flying-words`} component={FlyingWords} />
+          <Redirect to="/404" />
         </Switch>
       </div>
     </div>
