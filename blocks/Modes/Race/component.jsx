@@ -6,12 +6,17 @@ import {
   NavLink,
 } from 'react-router-dom';
 
-import CurrentRace from './CurrentRace/container';
+import FastRace from './FastRace/container';
+import WaitingToStart from './WaitingToStart/container';
 
 const menuLinks = [
   {
-    url: '/current-race',
-    text: 'Current race',
+    url: '/fast-race',
+    text: 'Fast race',
+  },
+  {
+    url: '/waiting-to-start',
+    text: 'Waiting to start',
   },
 ];
 
@@ -34,8 +39,10 @@ const Block = ({ match: { url } }) => {
       </nav>
       <div className="sub-layout__content">
         <Switch>
-          <Redirect exact from={url} to={`${url}/current-race`} />
-          <Route path={`${url}/current-race`} component={CurrentRace} />
+          <Redirect exact from={url} to={`${url}/fast-race`} />
+          <Route path={`${url}/fast-race`} component={FastRace} />
+          <Route path={`${url}/waiting-to-start`} component={WaitingToStart} />
+          <Redirect to="/404" />
         </Switch>
       </div>
     </div>
