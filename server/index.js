@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const http = require('http');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -66,6 +67,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(favicon(path.join(__dirname, '../dist/favicon.png')));
 app.use(express.static(path.join(__dirname, '../dist')));
+
+// Sockets
+const server = http.createServer(app);
+require('./sockets')(server);
 
 // Passport
 require('./passport')(app);
