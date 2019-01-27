@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 
-import styles from './waiting-to-start.module.styl';
+import styles from './laps.module.styl';
 
 class Block extends Component {
   speedUp = () => {

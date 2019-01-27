@@ -6,7 +6,13 @@ module.exports = (server) => {
 
   io
     .of('/races')
-    .on('connection', (socket) => {
+    .on('connect', (socket) => {
+
+
+      socket.on('quick start', function(msg){
+        io.emit('chat message', msg);
+      });
+
       console.log(socket);
     });
 };
