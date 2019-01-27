@@ -1,18 +1,29 @@
 import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
+import io from 'socket.io-client';
 
 import styles from './fast-race.module.styl';
 
 class Block extends Component {
-  speedUp = () => {
+  socket = io('/races', {
+    query: {
+      token: 'token here'
+    }
+  });
 
+  componentDidMount() {
+    this.socket.on('disconnect', function(){
+      console.log('socket disconnected');
+    });
+  }
+
+  start = () => {
+    this.socket.emit('quick start', 'test');
   };
 
   render() {
     const {
-      props: {
-        start,
-      },
+      start
     } = this;
 
     return (

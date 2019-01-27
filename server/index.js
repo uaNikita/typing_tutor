@@ -61,6 +61,7 @@ mongoose.connection.on('error', () => {
 });
 
 const app = express();
+const server = http.createServer(app);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -69,7 +70,6 @@ app.use(favicon(path.join(__dirname, '../dist/favicon.png')));
 app.use(express.static(path.join(__dirname, '../dist')));
 
 // Sockets
-const server = http.createServer(app);
 require('./sockets')(server);
 
 // Passport
@@ -77,7 +77,9 @@ require('./passport')(app);
 
 app.use('/', require('./controllers'));
 
-app.use(async (req, res) => {
+app.get('*', async (req, res) => {
+  console.log(req.url);
+  
   const {
     tt_access: accessCookie,
     tt_refresh: refreshCookie,
@@ -181,4 +183,4 @@ app.use(async (req, res) => {
 // errors
 require('./errors')(app);
 
-app.listen(config.get('port'));
+server.listen(config.get('port'));
