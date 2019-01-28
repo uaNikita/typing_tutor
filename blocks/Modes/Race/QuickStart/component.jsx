@@ -3,6 +3,8 @@ import CSSModules from 'react-css-modules';
 import io from 'socket.io-client';
 
 import styles from './fast-race.module.styl';
+import { keyboards, languages } from "../../../../constants/languages";
+import _ from "lodash";
 
 class Block extends Component {
   socket = io('/races', {
@@ -12,13 +14,21 @@ class Block extends Component {
   });
 
   componentDidMount() {
-    this.socket.on('disconnect', function(){
+    this.socket.on('disconnect', function () {
       console.log('socket disconnected');
     });
   }
 
   start = () => {
-    this.socket.emit('quick start', 'test');
+    const {
+      props: {
+        keyboard,
+      },
+    } = this;
+
+    const { language } = _.find(keyboards, { name: keyboard });
+
+    this.socket.emit('quick start', language);
   };
 
   render() {

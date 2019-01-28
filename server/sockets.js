@@ -1,9 +1,43 @@
 const socketIo = require('socket.io');
-const http = require('http');
+const _ = require('lodash');
+
+const races = [
+  {
+    type: 'quick',
+    language: 'some',
+    text: 'some',
+    status: 'waiting for participants',
+    participants: []
+  }
+];
+
+class Race {
+  constructor(options) {
+    this.participants = [];
+    this.language = options.language;
+    this.type = options.type;
+    this.status = 'waiting for participants'
+
+    if (this.type === 'quick') {
+      // get some text here
+
+    }
+    else {
+      this.text = options.text;
+    }
+  }
+
+  start() {
+    this.startDate = Date.now();
+  }
+
+  finish() {
+    // save to statistic
+  }
+}
 
 // create races logic here
 module.exports = (server) => {
-  // const server = http.createServer(app);
   const io = socketIo(server);
 
   // middleware
@@ -15,13 +49,26 @@ module.exports = (server) => {
   //   return next(new Error('authentication error'));
   // });
 
-  io
-    // .of('/races')
-    .on('connect', (socket) => {
-      socket.on('quick start', function(msg){
-        io.emit('quick start', msg);
-      });
+  // todo: read about https://github.com/auth0-community/socketio-jwt
 
-      console.log('connect');
+  io
+    .of('/races')
+    .on('connect', (socket) => {
+      socket.on('quick start', (language) => {
+        // let race = _.find(races, {
+        //   language,
+        //   status: 'waiting for participants',
+        // });
+        //
+        // if (race) {
+        //
+        //
+        // }
+
+
+        console.log('quick start', language);
+
+        // io.emit('quick start', msg);
+      });
     });
 };

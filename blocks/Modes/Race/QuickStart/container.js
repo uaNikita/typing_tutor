@@ -4,6 +4,10 @@ import { processSetSettings } from 'ReduxUtils/reducers/user';
 
 import Component from './component';
 
+const mapStateToProps = state => ({
+  keyboard: state.getIn(['user', 'keyboard']),
+});
+
 const mapDispatchToProps = (dispatch, ownProps) => ({
   start: () => {
     dispatch(processSetSettings({
@@ -15,6 +19,6 @@ const mapDispatchToProps = (dispatch, ownProps) => ({
 });
 
 export default connect(
-  null,
+  mapStateToProps,
   mapDispatchToProps,
 )(Component);
