@@ -11,6 +11,32 @@ const races = [
   }
 ];
 
+class Racer {
+  constructor(options) {
+    this.typed = '';
+    this.last = 'some test here';
+
+    if (this.type === 'quick') {
+      // get some text here
+
+    }
+    else {
+      this.text = options.text;
+    }
+  }
+
+  type(string) {
+    //
+  }
+
+  get text () {
+    return {
+      typed: this.typed,
+      last: this.last,
+    };
+  }
+}
+
 class Race {
   constructor(options) {
     this.participants = [];
@@ -32,7 +58,17 @@ class Race {
   }
 
   finish() {
-    // save to statistic
+    this.finishDate = Date.now();
+  }
+
+  addParticipant(options) {
+    this.participants.add({
+
+    });
+  }
+
+  updateParticipant() {
+
   }
 }
 
@@ -64,6 +100,8 @@ module.exports = (server) => {
         //
         //
         // }
+
+
 
 
         console.log('quick start', language);
