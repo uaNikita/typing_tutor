@@ -1,4 +1,5 @@
 const socketIo = require('socket.io');
+const crypto = require('crypto');
 const _ = require('lodash');
 
 const races = [
@@ -13,27 +14,35 @@ const races = [
 
 class Racer {
   constructor(options) {
-    this.typed = '';
-    this.last = 'some test here';
+    this.last = options.text;
 
-    if (this.type === 'quick') {
-      // get some text here
-
-    }
-    else {
-      this.text = options.text;
-    }
+    this.ongoing = true;
   }
 
   type(string) {
-    //
+    if (this.ongoing && string === this.last[0]) {
+      this.last.shift();
+
+      if (!this.last.length) {
+        this.finish();
+      }
+    }
   }
 
-  get text () {
-    return {
-      typed: this.typed,
-      last: this.last,
-    };
+  finish() {
+    this.ongoing = false;
+  }
+
+  get last() {
+    return this.last;
+  }
+
+  set text(text) {
+    this.last = text;
+  }
+
+  set place(place) {
+    this.place = place;
   }
 }
 
@@ -43,6 +52,7 @@ class Race {
     this.language = options.language;
     this.type = options.type;
     this.status = 'waiting for participants'
+    this.id = crypto.randomBytes(15).toString('hex');
 
     if (this.type === 'quick') {
       // get some text here
@@ -55,20 +65,29 @@ class Race {
 
   start() {
     this.startDate = Date.now();
+
+    this.status = 'ongoing'
   }
 
   finish() {
     this.finishDate = Date.now();
+
+    this.status = 'finished'
   }
 
-  addParticipant(options) {
+  addParticipant(id) {
     this.participants.add({
-
-    });
+      id,
+      racer: new Racer({
+        text: this.text,
+      })
+    })
   }
 
-  updateParticipant() {
-
+  getParticipant(id) {
+    _.find(this.participants, {
+      id,
+    })
   }
 }
 
@@ -100,8 +119,6 @@ module.exports = (server) => {
         //
         //
         // }
-
-
 
 
         console.log('quick start', language);
