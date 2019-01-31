@@ -78,8 +78,6 @@ require('./passport')(app);
 app.use('/', require('./controllers'));
 
 app.get('*', async (req, res) => {
-  console.log(req.url);
-  
   const {
     tt_access: accessCookie,
     tt_refresh: refreshCookie,

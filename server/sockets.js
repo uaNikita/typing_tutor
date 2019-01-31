@@ -1,16 +1,10 @@
 const socketIo = require('socket.io');
+const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const _ = require('lodash');
+const config = require('config');
 
-const races = [
-  {
-    type: 'quick',
-    language: 'some',
-    text: 'some',
-    status: 'waiting for participants',
-    participants: []
-  }
-];
+const races = [];
 
 class Racer {
   constructor(options) {
@@ -33,10 +27,6 @@ class Racer {
     this.ongoing = false;
   }
 
-  get last() {
-    return this.last;
-  }
-
   set text(text) {
     this.last = text;
   }
@@ -46,6 +36,14 @@ class Racer {
   }
 }
 
+class Cat {
+  constructor() {
+    this.test = 1;
+  }
+}
+
+var c = new Cat()
+
 class Race {
   constructor(options) {
     this.participants = [];
@@ -54,12 +52,14 @@ class Race {
     this.status = 'waiting for participants'
     this.id = crypto.randomBytes(15).toString('hex');
 
+    this.text = 'options.text';
+
     if (this.type === 'quick') {
       // get some text here
 
     }
     else {
-      this.text = options.text;
+
     }
   }
 
@@ -75,11 +75,12 @@ class Race {
     this.status = 'finished'
   }
 
-  addParticipant(id) {
-    this.participants.add({
+  addParticipant(id, socket) {
+    this.participants.push({
       id,
       racer: new Racer({
         text: this.text,
+        socket,
       })
     })
   }
@@ -109,21 +110,27 @@ module.exports = (server) => {
   io
     .of('/races')
     .on('connect', (socket) => {
-      socket.on('quick start', (language) => {
-        // let race = _.find(races, {
-        //   language,
-        //   status: 'waiting for participants',
-        // });
-        //
-        // if (race) {
-        //
-        //
-        // }
 
+      socket.on('quick start', ({ token, language }, fn) => {
+        console.log('quick start', jwt.verify(token, config.get('secretKey')));
 
-        console.log('quick start', language);
+        fn('woot');
 
-        // io.emit('quick start', msg);
+        let race = _.find(races, {
+          language,
+          type: 'quick',
+          status: 'waiting for participants',
+        });
+
+        if (!race) {
+          race = new Race({
+            type: 'quick',
+            language,
+          });
+        }
+
+        race.addParticipant('test test test', socket);
       });
-    });
+    })
+
 };

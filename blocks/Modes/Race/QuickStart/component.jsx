@@ -7,11 +7,7 @@ import { keyboards, languages } from "../../../../constants/languages";
 import _ from "lodash";
 
 class Block extends Component {
-  socket = io('/races', {
-    query: {
-      token: 'token here'
-    }
-  });
+  socket = io('/races');
 
   componentDidMount() {
     this.socket.on('disconnect', function () {
@@ -23,12 +19,23 @@ class Block extends Component {
     const {
       props: {
         keyboard,
+        accessToken,
       },
     } = this;
 
     const { language } = _.find(keyboards, { name: keyboard });
 
-    this.socket.emit('quick start', language);
+    this.socket
+      .emit(
+        'quick start',
+        {
+          token: accessToken,
+          language,
+        },
+        data => {
+          console.log(data); // data will be 'woot'
+        }
+      );
   };
 
   render() {
