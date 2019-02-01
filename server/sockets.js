@@ -112,7 +112,11 @@ module.exports = (server) => {
     .on('connect', (socket) => {
 
       socket.on('quick start', ({ token, language }, fn) => {
-        console.log('quick start', jwt.verify(token, config.get('secretKey')));
+        const JWTData = jwt.verify(token, config.get('secretKey'));
+
+        if (JWTData.exp * 1000 < Date.now()) {
+          // sent refresh token or logout
+        }
 
         fn('woot');
 
