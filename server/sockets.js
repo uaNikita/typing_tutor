@@ -105,7 +105,7 @@ module.exports = (server) => {
   //   return next(new Error('authentication error'));
   // });
 
-  // todo: read about https://github.com/auth0-community/socketio-jwt
+  // todo: add good auth
 
   io
     .of('/races')
