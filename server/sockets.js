@@ -8,7 +8,9 @@ const races = [];
 
 class Racer {
   constructor(options) {
+    this.id = options.id;
     this.last = options.text;
+    this.socket = options.socket;
 
     this.ongoing = true;
   }
@@ -26,30 +28,14 @@ class Racer {
   finish() {
     this.ongoing = false;
   }
-
-  set text(text) {
-    this.last = text;
-  }
-
-  set place(place) {
-    this.place = place;
-  }
 }
-
-class Cat {
-  constructor() {
-    this.test = 1;
-  }
-}
-
-var c = new Cat()
 
 class Race {
   constructor(options) {
     this.participants = [];
     this.language = options.language;
     this.type = options.type;
-    this.status = 'waiting for participants'
+    this.status = 'waiting for participants';
     this.id = crypto.randomBytes(15).toString('hex');
 
     this.text = 'options.text';
@@ -66,29 +52,27 @@ class Race {
   start() {
     this.startDate = Date.now();
 
-    this.status = 'ongoing'
+    this.status = 'ongoing';
   }
 
   finish() {
     this.finishDate = Date.now();
 
-    this.status = 'finished'
+    this.status = 'finished';
   }
 
   addParticipant(id, socket) {
-    this.participants.push({
-      id,
-      racer: new Racer({
+    this.participants.push(
+      new Racer({
+        id,
         text: this.text,
         socket,
       })
-    })
+    );
   }
 
   getParticipant(id) {
-    _.find(this.participants, {
-      id,
-    })
+    return _.find(this.participants, { id });
   }
 }
 
@@ -110,15 +94,20 @@ module.exports = (server) => {
   io
     .of('/races')
     .on('connect', (socket) => {
-
       socket.on('quick start', ({ token, language }, fn) => {
-        const JWTData = jwt.verify(token, config.get('secretKey'));
+        let userId;
 
-        if (JWTData.exp * 1000 < Date.now()) {
-          // sent refresh token or logout
+        if (token) {
+          const JWTData = jwt.verify(token, config.get('secretKey'));
+
+          if (JWTData.exp * 1000 < Date.now()) {
+            fn('unauthorized');
+
+            return;
+          }
+
+          userId = JWTData.id;
         }
-
-        fn('woot');
 
         let race = _.find(races, {
           language,
@@ -133,8 +122,9 @@ module.exports = (server) => {
           });
         }
 
-        race.addParticipant('test test test', socket);
+        race.addParticipant(userId, socket);
       });
-    })
+    });
 
+    // todo: we should return user current game and refrech it if new participants join
 };
