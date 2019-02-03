@@ -1,11 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import CSSModules from 'react-css-modules';
 import io from 'socket.io-client';
-import _ from 'lodash';
 
-import { keyboards } from 'Constants/languages';
-
-import styles from './quick-start.module.styl';
+import styles from './race.module.styl';
 
 class Block extends Component {
   socket = io('/races');

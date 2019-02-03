@@ -13,6 +13,8 @@ class Racer {
     this.socket = options.socket;
 
     this.ongoing = true;
+
+    this.socket.emit('some action', )
   }
 
   type(string) {

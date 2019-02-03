@@ -9,39 +9,90 @@ import _ from 'lodash';
 
 import QuickStart from './QuickStart/container';
 import Laps from './Laps/container';
+import Race from './Race/container';
+import Text from '../Text/Text/container';
 
 const menuLinks = [
   'Quick start',
   'Laps',
 ];
 
-const Block = ({ match: { url } }) => {
-  const links = menuLinks.map(item => (
-    <NavLink
-      key={item}
-      className="submenu-link"
-      activeClassName="submenu-link_selected"
-      to={`${url}/${_.kebabCase(item)}`}
-    >
-      {item}
-    </NavLink>
-  ));
+class Block extends Component {
+  state = {
+    onGoingGame: null,
+  };
 
-  return (
-    <div className="sub-layout">
-      <nav className="sub-layout__menu">
-        {links}
-      </nav>
-      <div className="sub-layout__content">
-        <Switch>
-          <Redirect exact from={url} to={`${url}/quick-start`} />
-          <Route path={`${url}/quick-start`} component={QuickStart} />
-          <Route path={`${url}/laps`} component={Laps} />
-          <Redirect to="/404" />
-        </Switch>
-      </div>
-    </div>
-  );
-};
+  componentDidMount() {
+    const {
+      props: {
+        fetchJSON,
+      },
+    } = this;
+
+    fetchJSON('/races')
+      .then(({ ok, data, status }) => {
+        if (ok) {
+          this.setState({
+            onGoingGame: data,
+          });
+        }
+        else if (status === 400) {
+          this.setState({
+            onGoingGame: false,
+          });
+        }
+      });
+  }
+
+  render() {
+    const {
+      props: {
+        match: {
+          url,
+        },
+      },
+      state: {
+        onGoingGame,
+      }
+    } = this;
+
+    let content = <Loader styleName="loader" size="30" />;
+
+    if (onGoingGame === false) {
+      const links = menuLinks.map(item => (
+        <NavLink
+          key={item}
+          className="submenu-link"
+          activeClassName="submenu-link_selected"
+          to={`${url}/${_.kebabCase(item)}`}
+        >
+          {item}
+        </NavLink>
+      ));
+
+      content = (
+        <div className="sub-layout">
+          <nav className="sub-layout__menu">
+            {links}
+          </nav>
+          <div className="sub-layout__content">
+            <Switch>
+              <Redirect exact from={url} to={`${url}/quick-start`} />
+              <Route path={`${url}/quick-start`} component={QuickStart} />
+              <Route path={`${url}/laps`} component={Laps} />
+              <Route path={`${url}/:raceId(.+)`} component={Race} />
+              <Redirect to="/404" />
+            </Switch>
+          </div>
+        </div>
+      );
+    }
+    else if (_.isString(onGoingGame)) {
+      content = <Redirect to={`${url}/${onGoingGame}`} />;
+    }
+
+    return content;
+  }
+}
 
 export default Block;
