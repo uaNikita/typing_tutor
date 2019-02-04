@@ -4,6 +4,8 @@ const crypto = require('crypto');
 const _ = require('lodash');
 const config = require('config');
 
+const server = require('../../../server');
+
 const races = [];
 
 class Racer {
@@ -14,7 +16,7 @@ class Racer {
 
     this.ongoing = true;
 
-    this.socket.emit('some action', )
+    this.socket.emit('some action')
   }
 
   type(string) {
@@ -79,7 +81,6 @@ class Race {
 }
 
 // create races logic here
-module.exports = (server) => {
   const io = socketIo(server);
 
   // middleware
@@ -128,5 +129,5 @@ module.exports = (server) => {
       });
     });
 
-    // todo: we should return user current game and refrech it if new participants join
-};
+  // todo: we should return user current game and refrech it if new participants join
+

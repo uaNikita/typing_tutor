@@ -60,17 +60,13 @@ mongoose.connection.on('error', () => {
   throw new Error(`unable to connect to database: ${mongoURI}`);
 });
 
-const app = express();
-const server = http.createServer(app);
+const server = require('./server');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(favicon(path.join(__dirname, '../dist/favicon.png')));
 app.use(express.static(path.join(__dirname, '../dist')));
-
-// Sockets
-require('./sockets')(server);
 
 // Passport
 require('./passport')(app);

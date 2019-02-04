@@ -6,5 +6,6 @@ router.use('/auth', require('./auth'));
 router.use('/user', require('./user'));
 router.use('/text', require('./modes/text'));
 router.use('/syllable', require('./modes/syllable'));
+router.use('/race', require('./modes/race'));
 
 module.exports = router;

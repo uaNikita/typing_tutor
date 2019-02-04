@@ -29,7 +29,7 @@ class Block extends Component {
       },
     } = this;
 
-    fetchJSON('/races')
+    fetchJSON('/race')
       .then(({ ok, data, status }) => {
         if (ok) {
           this.setState({
