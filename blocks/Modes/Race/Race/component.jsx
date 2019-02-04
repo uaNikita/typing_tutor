@@ -1,58 +1,73 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import io from 'socket.io-client';
+
+import Loader from 'Blocks/Loader/component';
 
 import styles from './race.module.styl';
 
 class Block extends Component {
+  state = {
+    loaded: false,
+    typed: null,
+    last: null,
+    users: [],
+  }
+
   socket = io('/races');
 
   componentDidMount() {
-    this.socket.on('disconnect', function () {
-      console.log('socket disconnected');
-    });
-  }
-
-  start = () => {
     const {
       props: {
-        keyboard,
-        accessToken,
+        history: {
+          push,
+        },
+        match: {
+          url,
+        },
       },
     } = this;
 
-    const { language } = _.find(keyboards, { name: keyboard });
-
-    this.socket
-      .emit(
-        'quick start',
-        {
-          token: accessToken,
-          language,
-        },
-        data => {
-          console.log(data); // data will be 'woot'
-        }
-      );
-  };
+    this.socket.emit('game', 'id game', (({ ok, data }) => {
+      if (ok) {
+        this.setState(data);
+      }
+      else {
+        push(url);
+      }
+    }));
+  }
 
   render() {
     const {
-      start
+      state: {
+        loaded,
+        typed,
+        last,
+        users,
+      },
     } = this;
 
-    return (
-      <Fragment>
-        <p styleName="info">Here you can start fast races with random partners or bots</p>
+    let content = <Loader styleName="loader" size={20} />;
 
-        <button
-          type="button"
-          className="button"
-          onClick={start}
-        >
-          Start
-        </button>
-      </Fragment>
+    if (loaded) {
+      content = (
+        <div>
+          <span>{typed}</span>
+          <span>{last}</span>
+          {users.map(({ name, progress }) => (
+            <div>
+              {name} {progress}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    return (
+      <div>
+        {content}
+      </div>
     );
   }
 }

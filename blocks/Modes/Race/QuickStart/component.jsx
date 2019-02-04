@@ -11,7 +11,7 @@ class Block extends Component {
   socket = io('/races');
 
   componentDidMount() {
-    this.socket.on('disconnect', function () {
+    this.socket.on('disconnect', () => {
       console.log('socket disconnected');
     });
   }
@@ -33,15 +33,15 @@ class Block extends Component {
           token: accessToken,
           language,
         },
-        data => {
+        (data) => {
           console.log(data); // data will be 'woot'
-        }
+        },
       );
   };
 
   render() {
     const {
-      start
+      start,
     } = this;
 
     return (

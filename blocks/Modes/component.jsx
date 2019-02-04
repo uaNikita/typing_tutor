@@ -4,7 +4,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 import Syllable from './Syllable/container';
 import Text from './Text/component';
 import Game from './Game/component';
-import Race from './Race/component';
+import Race from './Race/container';
 
 const Component = ({ match: { url } }) => (
   <Switch>

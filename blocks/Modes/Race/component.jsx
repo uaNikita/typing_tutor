@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
   Switch,
   Redirect,
@@ -7,10 +7,10 @@ import {
 } from 'react-router-dom';
 import _ from 'lodash';
 
+import Loader from 'Blocks/Loader/component';
 import QuickStart from './QuickStart/container';
 import Laps from './Laps/container';
 import Race from './Race/container';
-import Text from '../Text/Text/container';
 
 const menuLinks = [
   'Quick start',
@@ -53,7 +53,7 @@ class Block extends Component {
       },
       state: {
         onGoingGame,
-      }
+      },
     } = this;
 
     let content = <Loader styleName="loader" size="30" />;
