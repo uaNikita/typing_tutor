@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {
   Switch,
   Redirect,
@@ -18,47 +18,53 @@ const menuLinks = [
 ];
 
 class Block extends Component {
-  state = {
-    onGoingGame: null,
-  };
-
   componentDidMount() {
     const {
       props: {
+        email,
         fetchJSON,
+        setRace,
       },
     } = this;
 
-    fetchJSON('/race')
-      .then(({ ok, data, status }) => {
-        if (ok) {
-          this.setState({
-            onGoingGame: data,
-          });
-        }
-        else if (status === 400) {
-          this.setState({
-            onGoingGame: false,
-          });
-        }
-      });
+    if (email) {
+      fetchJSON('/race', {
+        method: 'GET',
+      })
+        .then(({ ok, data, status }) => {
+          if (ok) {
+            console.log('data', data);
+
+            setRace(data);
+          }
+          else if (status === 400) {
+            setRace(false);
+          }
+        });
+    }
+    else {
+      setRace(false);
+    }
   }
 
   render() {
     const {
       props: {
+        location:{
+          pathname,
+        },
+        match,
         match: {
           url,
         },
-      },
-      state: {
-        onGoingGame,
+        activeRace,
       },
     } = this;
 
     let content = <Loader styleName="loader" size="30" />;
 
-    if (onGoingGame === false) {
+    // todo: find intelligent solution
+    if (activeRace === false) {
       const links = menuLinks.map(item => (
         <NavLink
           key={item}
@@ -71,7 +77,7 @@ class Block extends Component {
       ));
 
       content = (
-        <div className="sub-layout">
+        <Fragment>
           <nav className="sub-layout__menu">
             {links}
           </nav>
@@ -84,14 +90,22 @@ class Block extends Component {
               <Redirect to="/404" />
             </Switch>
           </div>
-        </div>
+        </Fragment>
       );
     }
-    else if (_.isString(onGoingGame)) {
-      content = <Redirect to={`${url}/${onGoingGame}`} />;
+    else {
+      const pathToRace = `${url}/${activeRace}`;
+
+      if (activeRace && pathname !== pathToRace) {
+        content = <Redirect to={pathToRace} />;
+      }
     }
 
-    return content;
+    return (
+      <div className="sub-layout">
+        {content}
+      </div>
+    );
   }
 }
 

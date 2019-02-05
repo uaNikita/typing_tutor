@@ -4,4 +4,7 @@ const express = require('express');
 const app = express();
 const server = http.createServer(app);
 
-module.exports = server;
+module.exports = {
+  app,
+  server,
+};

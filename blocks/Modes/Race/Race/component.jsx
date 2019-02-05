@@ -22,12 +22,13 @@ class Block extends Component {
         history: {
           push,
         },
+        match,
         match: {
           url,
         },
       },
     } = this;
-
+    console.log(match);
     this.socket.emit('game', 'id game', (({ ok, data }) => {
       if (ok) {
         this.setState(data);
@@ -66,7 +67,7 @@ class Block extends Component {
 
     return (
       <div>
-        {content}
+        test
       </div>
     );
   }

@@ -60,7 +60,7 @@ mongoose.connection.on('error', () => {
   throw new Error(`unable to connect to database: ${mongoURI}`);
 });
 
-const server = require('./server');
+const { app, server } = require('./server');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));

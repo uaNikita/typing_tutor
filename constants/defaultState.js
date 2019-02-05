@@ -58,6 +58,9 @@ export const defaults = {
       example: '',
     },
   },
+  race: {
+    active: null,
+  },
 };
 
 export const defaultsWhichCanBeOverwrittenByLS = {

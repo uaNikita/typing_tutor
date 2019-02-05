@@ -4,9 +4,9 @@ const crypto = require('crypto');
 const _ = require('lodash');
 const config = require('config');
 
-const server = require('../../../server');
+const { server } = require('../../../server');
 
-const races = [];
+const races = require('./races');
 
 class Racer {
   constructor(options) {
@@ -81,53 +81,50 @@ class Race {
 }
 
 // create races logic here
-  const io = socketIo(server);
+const io = socketIo(server);
 
-  // middleware
-  // io.use((socket, next) => {
-  //   if (socket.handshake.query.token) {
-  //     return next();
-  //   }
-  //
-  //   return next(new Error('authentication error'));
-  // });
+io
+  .of('/races')
+  .on('connect', (socket) => {
 
-  // todo: add good auth
 
-  io
-    .of('/races')
-    .on('connect', (socket) => {
-      socket.on('quick start', ({ token, language }, fn) => {
-        let userId;
 
-        if (token) {
-          const JWTData = jwt.verify(token, config.get('secretKey'));
 
-          if (JWTData.exp * 1000 < Date.now()) {
-            fn('unauthorized');
 
-            return;
-          }
 
-          userId = JWTData.id;
+
+
+    socket.on('quick start', ({ token, language }, fn) => {
+      let userId;
+
+      if (token) {
+        const JWTData = jwt.verify(token, config.get('secretKey'));
+
+        if (JWTData.exp * 1000 < Date.now()) {
+          fn('unauthorized');
+
+          return;
         }
 
-        let race = _.find(races, {
-          language,
-          type: 'quick',
-          status: 'waiting for participants',
-        });
+        userId = JWTData.id;
+      }
 
-        if (!race) {
-          race = new Race({
-            type: 'quick',
-            language,
-          });
-        }
-
-        race.addParticipant(userId, socket);
+      let race = _.find(races, {
+        language,
+        type: 'quick',
+        status: 'waiting for participants',
       });
-    });
 
-  // todo: we should return user current game and refrech it if new participants join
+      if (!race) {
+        race = new Race({
+          type: 'quick',
+          language,
+        });
+      }
+
+      race.addParticipant(userId, socket);
+    });
+  });
+
+// todo: we should return user current game and refrech it if new participants join
 
