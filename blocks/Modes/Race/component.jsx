@@ -1,21 +1,14 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import {
   Switch,
   Redirect,
   Route,
-  NavLink,
 } from 'react-router-dom';
 import _ from 'lodash';
 
 import Loader from 'Blocks/Loader/component';
-import QuickStart from './QuickStart/container';
-import Laps from './Laps/container';
+import Tabs from './Tabs/component';
 import Race from './Race/container';
-
-const menuLinks = [
-  'Quick start',
-  'Laps',
-];
 
 class Block extends Component {
   componentDidMount() {
@@ -33,8 +26,6 @@ class Block extends Component {
       })
         .then(({ ok, data, status }) => {
           if (ok) {
-            console.log('data', data);
-
             setRace(data);
           }
           else if (status === 400) {
@@ -50,10 +41,9 @@ class Block extends Component {
   render() {
     const {
       props: {
-        location:{
+        location: {
           pathname,
         },
-        match,
         match: {
           url,
         },
@@ -63,49 +53,33 @@ class Block extends Component {
 
     let content = <Loader styleName="loader" size="30" />;
 
-    // todo: find intelligent solution
-    if (activeRace === false) {
-      const links = menuLinks.map(item => (
-        <NavLink
-          key={item}
-          className="submenu-link"
-          activeClassName="submenu-link_selected"
-          to={`${url}/${_.kebabCase(item)}`}
-        >
-          {item}
-        </NavLink>
-      ));
+    if (!_.isNull(activeRace)) {
+      const routes = [
+        <Route key="race" path={`${url}/race-:raceId(.{15})`} component={Race} />,
+      ];
+
+      if (activeRace) {
+        const pathToRace = `${url}/race-${activeRace}`;
+
+        if (pathname === pathToRace) {
+          routes.push(<Redirect key="404" to="/404" />);
+        }
+        else {
+          routes.push(<Redirect key="race-redirect" to={pathToRace} />);
+        }
+      }
+      else if (activeRace === false) {
+        routes.push(<Route key="tabs" path="/" component={Tabs} />);
+      }
 
       content = (
-        <Fragment>
-          <nav className="sub-layout__menu">
-            {links}
-          </nav>
-          <div className="sub-layout__content">
-            <Switch>
-              <Redirect exact from={url} to={`${url}/quick-start`} />
-              <Route path={`${url}/quick-start`} component={QuickStart} />
-              <Route path={`${url}/laps`} component={Laps} />
-              <Route path={`${url}/:raceId(.+)`} component={Race} />
-              <Redirect to="/404" />
-            </Switch>
-          </div>
-        </Fragment>
+        <Switch>
+          {routes}
+        </Switch>
       );
     }
-    else {
-      const pathToRace = `${url}/${activeRace}`;
 
-      if (activeRace && pathname !== pathToRace) {
-        content = <Redirect to={pathToRace} />;
-      }
-    }
-
-    return (
-      <div className="sub-layout">
-        {content}
-      </div>
-    );
+    return content;
   }
 }
 
