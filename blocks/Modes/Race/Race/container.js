@@ -5,7 +5,7 @@ import { processSetSettings } from 'ReduxUtils/reducers/user';
 import Component from './component';
 
 const mapStateToProps = state => ({
-  accessToken: state.getIn(['fetch', 'accessToken']),
+  token: state.getIn(['fetch', 'accessToken']),
   keyboard: state.getIn(['user', 'keyboard']),
 });
 

@@ -1,4 +1,5 @@
 const socketIo = require('socket.io');
+const cookie = require('cookie');
 const jwt = require('jsonwebtoken');
 const crypto = require('crypto');
 const _ = require('lodash');
@@ -85,13 +86,31 @@ const io = socketIo(server);
 
 io
   .of('/races')
+  .use((socket, next) => {
+    let user;
+    const { tt_access: token } = cookie.parse(socket.request.headers.cookie);
+
+    if (token) {
+      // todo: decode
+      const parsedToken = jwt.verify(token, config.get('secretKey'))
+
+      user = parsedToken.id
+    }
+
+    console.log('user', user);
+
+    next();
+  })
   .on('connect', (socket) => {
 
 
+    socket.on('get', ({ raceId, token }, fn) => {
+
+      // console.log(raceId, token);
+      // console.log('token', jwt.verify(token, config.get('secretKey')));
 
 
-
-
+    });
 
 
     socket.on('quick start', ({ token, language }, fn) => {

@@ -22,20 +22,34 @@ class Block extends Component {
         history: {
           push,
         },
-        match,
         match: {
           url,
+          params: {
+            raceId,
+          }
         },
+        token,
       },
     } = this;
-    console.log(match);
-    this.socket.emit('game', 'id game', (({ ok, data }) => {
-      if (ok) {
-        this.setState(data);
-      }
-      else {
-        push(url);
-      }
+
+    this.socket.emit(
+      'get',
+      {
+        raceId,
+        token,
+      },
+      (({ ok, data }) => {
+        // if (ok) {
+        //   this.setState(data);
+        // }
+        // else {
+        //   push(url);
+        // }
+      }));
+
+    this.socket.emit('type', raceId);
+    this.socket.on('update', (data => {
+      console.log(data);
     }));
   }
 
