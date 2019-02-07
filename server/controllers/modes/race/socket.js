@@ -91,23 +91,37 @@ io
     const { tt_access: token } = cookie.parse(socket.request.headers.cookie);
 
     if (token) {
-      // todo: decode
-      const parsedToken = jwt.verify(token, config.get('secretKey'))
+      let parsedToken;
 
-      user = parsedToken.id
+      try {
+        parsedToken = jwt.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMTI3OGY1MWM4MjVkMjZlNDgyYTA1YiIsImNsaWVudElkIjoiNWM1NDcyYThhYWEyZTM3NGY4YTI3MDI3IiwiaWF0IjoxNTQ5NTM2NTgyLCJleHAiOjE1NDk1Mzc0ODJ9.NECUyrHmySoV2EQVcFc8XjbLHl1yUOD16el98OHU66k', config.get('secretKey'));
+
+        user = parsedToken.id;
+      } catch (e) {
+        console.log(e.name);
+        let error = 'Forbidden';
+
+        if (e.name === 'TokenExpiredError') {
+          error = 'Token expired';
+        }
+
+        return next(new Error(error));
+      }
     }
 
     console.log('user', user);
 
     next();
   })
+  .on('error', (error) => {
+    console.log(error);
+  })
   .on('connect', (socket) => {
-
+    console.log(234);
 
     socket.on('get', ({ raceId, token }, fn) => {
 
-      // console.log(raceId, token);
-      // console.log('token', jwt.verify(token, config.get('secretKey')));
+      console.log('get');
 
 
     });
@@ -115,18 +129,6 @@ io
 
     socket.on('quick start', ({ token, language }, fn) => {
       let userId;
-
-      if (token) {
-        const JWTData = jwt.verify(token, config.get('secretKey'));
-
-        if (JWTData.exp * 1000 < Date.now()) {
-          fn('unauthorized');
-
-          return;
-        }
-
-        userId = JWTData.id;
-      }
 
       let race = _.find(races, {
         language,

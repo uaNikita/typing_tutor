@@ -104,7 +104,7 @@ const requestJSON = (url, params, opts) => (
       .then((response) => {
         const contentType = response.headers.get('content-type');
 
-        if (contentType && contentType.indexOf('application/json') !== -1) {
+        if (contentType && contentType.includes('application/json')) {
           return response.json()
             .then(data => ({
               data,
@@ -140,6 +140,8 @@ export const fetchJSON = (...args) => (
                 data,
               } = refreshTokenResponse;
 
+              let result = refreshTokenResponse;
+
               if (ok) {
                 dispatch(setRefreshToken(data.refresh));
                 dispatch(setAccessToken(data.access));
@@ -154,10 +156,9 @@ export const fetchJSON = (...args) => (
                   }
                 }
 
-                return dispatch(fetchJSON(...args));
+                result = dispatch(fetchJSON(...args));
               }
-
-              if (status === 401) {
+              else if (status === 401) {
                 dispatch(setGlobalMessage('You are not authorized for this request'));
 
                 Cookies.remove('tt_refresh');
@@ -166,11 +167,43 @@ export const fetchJSON = (...args) => (
                 dispatch(clearAppData());
               }
 
-              return refreshTokenResponse;
+              return result;
             });
         }
 
         return response;
+      })
+  )
+);
+
+export const getNewTokens = () => (
+  (dispatch, getState) => (
+    dispatch(requestJSON('/auth/tokens', {
+      body: {
+        token: getState().getIn(['fetch', 'refreshToken']),
+      },
+    }))
+      .then((refreshTokenResponse) => {
+        const {
+          status,
+          ok,
+          data,
+        } = refreshTokenResponse;
+
+        if (ok) {
+          dispatch(setRefreshToken(data.refresh));
+          dispatch(setAccessToken(data.access));
+        }
+        else if (status === 401) {
+          dispatch(setGlobalMessage('You are not authorized for this request'));
+
+          Cookies.remove('tt_refresh');
+          Cookies.remove('tt_access');
+
+          dispatch(clearAppData());
+        }
+
+        return refreshTokenResponse;
       })
   )
 );

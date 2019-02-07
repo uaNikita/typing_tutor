@@ -14,43 +14,55 @@ class Block extends Component {
     users: [],
   }
 
-  socket = io('/races');
+  getData = () => {
+    const {
+      props: {
+        match: {
+          params: {
+            raceId,
+          },
+        },
+      },
+    } = this;
+
+    this.socket.emit('get', raceId, ((...args) => {
+      console.log('get', args);
+
+      // if (ok) {
+      //   this.setState(data);
+      // }
+      // else {
+      //   push(url);
+      // }
+    }));
+
+    this.socket.emit('type', raceId);
+    this.socket.on('update', (data => {
+
+    }));
+  }
 
   componentDidMount() {
     const {
       props: {
-        history: {
-          push,
-        },
-        match: {
-          url,
-          params: {
-            raceId,
-          }
-        },
-        token,
+        getNewTokens,
       },
     } = this;
 
-    this.socket.emit(
-      'get',
-      {
-        raceId,
-        token,
-      },
-      (({ ok, data }) => {
-        // if (ok) {
-        //   this.setState(data);
-        // }
-        // else {
-        //   push(url);
-        // }
-      }));
+    this.socket = io('/races')
+      .on('error', (error) => {
+        if (error === 'Token expired') {
+          getNewTokens()
+            .then(() => {
+              this.socket = io('/races');
 
-    this.socket.emit('type', raceId);
-    this.socket.on('update', (data => {
-      console.log(data);
-    }));
+              this.getData();
+            });
+        }
+        else {
+          this.getData();
+        }
+      });
   }
 
   render() {
@@ -81,7 +93,7 @@ class Block extends Component {
 
     return (
       <div>
-        test
+        {content}
       </div>
     );
   }

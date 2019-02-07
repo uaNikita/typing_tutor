@@ -253,7 +253,6 @@ const getTokens = (req, res, next) => {
         status: httpStatus.UNAUTHORIZED,
       });
     })
-
     .catch(e => next(e));
 };
 

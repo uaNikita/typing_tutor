@@ -1,15 +1,16 @@
 import { connect } from 'react-redux';
 
+import { getNewTokens } from 'ReduxUtils/reducers/fetch';
 import { processSetSettings } from 'ReduxUtils/reducers/user';
 
 import Component from './component';
 
 const mapStateToProps = state => ({
-  token: state.getIn(['fetch', 'accessToken']),
   keyboard: state.getIn(['user', 'keyboard']),
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
+  getNewTokens: (...args) => dispatch(getNewTokens(...args)),
   start: () => {
     dispatch(processSetSettings({
       mode: 'game',
