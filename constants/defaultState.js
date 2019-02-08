@@ -59,7 +59,7 @@ export const defaults = {
     },
   },
   race: {
-    active: null,
+    active: undefined,
   },
 };
 

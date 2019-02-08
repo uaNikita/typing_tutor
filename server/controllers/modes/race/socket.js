@@ -16,8 +16,6 @@ class Racer {
     this.socket = options.socket;
 
     this.ongoing = true;
-
-    this.socket.emit('some action')
   }
 
   type(string) {
@@ -87,18 +85,16 @@ const io = socketIo(server);
 io
   .of('/races')
   .use((socket, next) => {
-    let user;
     const { tt_access: token } = cookie.parse(socket.request.headers.cookie);
 
     if (token) {
       let parsedToken;
 
       try {
-        parsedToken = jwt.verify('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjVjMTI3OGY1MWM4MjVkMjZlNDgyYTA1YiIsImNsaWVudElkIjoiNWM1NDcyYThhYWEyZTM3NGY4YTI3MDI3IiwiaWF0IjoxNTQ5NTM2NTgyLCJleHAiOjE1NDk1Mzc0ODJ9.NECUyrHmySoV2EQVcFc8XjbLHl1yUOD16el98OHU66k', config.get('secretKey'));
+        parsedToken = jwt.verify(token, config.get('secretKey'));
 
-        user = parsedToken.id;
+        socket.userId = parsedToken.id;
       } catch (e) {
-        console.log(e.name);
         let error = 'Forbidden';
 
         if (e.name === 'TokenExpiredError') {
@@ -109,27 +105,23 @@ io
       }
     }
 
-    console.log('user', user);
-
     next();
   })
-  .on('error', (error) => {
-    console.log(error);
-  })
   .on('connect', (socket) => {
-    console.log(234);
+    socket.emit('registered');
 
-    socket.on('get', ({ raceId, token }, fn) => {
+    socket.on('get race', (fn) => {
+      const race = _.find(races, (race) => (
+        _.some(race.participants, ({ id }) =>
+          id === socket.userId
+        )
+      ));
 
-      console.log('get');
-
-
+      fn(race && race.id);
     });
 
 
     socket.on('quick start', ({ token, language }, fn) => {
-      let userId;
-
       let race = _.find(races, {
         language,
         type: 'quick',
@@ -143,7 +135,9 @@ io
         });
       }
 
-      race.addParticipant(userId, socket);
+      race.addParticipant(socket);
+
+      fn('done');
     });
   });
 

@@ -9,33 +9,44 @@ import _ from 'lodash';
 import Loader from 'Blocks/Loader/component';
 import Tabs from './Tabs/component';
 import Race from './Race/container';
+import io from "socket.io-client";
 
 class Block extends Component {
-  componentDidMount() {
+  getData = () => {
     const {
       props: {
-        email,
-        fetchJSON,
         setRace,
+        setSocket,
       },
     } = this;
 
-    if (email) {
-      fetchJSON('/race', {
-        method: 'GET',
+    setSocket(this.socket);
+
+    this.socket.emit('get race', (id => {
+      console.log('get', id);
+
+      setRace(id);
+    }));
+  }
+
+  componentDidMount() {
+    const {
+      props: {
+        getNewTokens,
+      },
+    } = this;
+
+    this.socket = io('/races')
+      .on('error', (error) => {
+        if (error === 'Token expired') {
+          getNewTokens()
+            .then(() => (
+              this.socket = io('/races')
+                .on('registered', this.getData)
+            ));
+        }
       })
-        .then(({ ok, data, status }) => {
-          if (ok) {
-            setRace(data);
-          }
-          else if (status === 400) {
-            setRace(false);
-          }
-        });
-    }
-    else {
-      setRace(false);
-    }
+      .on('registered', this.getData);
   }
 
   render() {
@@ -53,7 +64,7 @@ class Block extends Component {
 
     let content = <Loader styleName="loader" size="30" />;
 
-    if (!_.isNull(activeRace)) {
+    if (!_.isUndefined(activeRace)) {
       const routes = [
         <Route key="race" path={`${url}/race-:raceId(.{15})`} component={Race} />,
       ];
@@ -68,8 +79,8 @@ class Block extends Component {
           routes.push(<Redirect key="race-redirect" to={pathToRace} />);
         }
       }
-      else if (activeRace === false) {
-        routes.push(<Route key="tabs" path="/" component={Tabs} />);
+      else if (_.isNull(activeRace)) {
+        routes.push(<Route key="tabs" path={url} component={Tabs} />);
       }
 
       content = (
