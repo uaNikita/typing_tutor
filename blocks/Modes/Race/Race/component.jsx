@@ -28,6 +28,8 @@ class Block extends Component {
     this.socket.emit('get', raceId, ((...args) => {
       console.log('get', args);
 
+
+      // todo: if race is not exist then show message
       // if (ok) {
       //   this.setState(data);
       // }
