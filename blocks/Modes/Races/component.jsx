@@ -1,15 +1,14 @@
 import React, { Component } from 'react';
-import {
-  Switch,
-  Redirect,
-  Route,
-} from 'react-router-dom';
+import { Switch, Redirect, Route } from 'react-router-dom';
+import io from 'socket.io-client';
+import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 
 import Loader from 'Blocks/Loader/component';
 import Tabs from './Tabs/component';
 import Race from './Race/container';
-import io from "socket.io-client";
+
+import styles from './races.module.styl';
 
 class Block extends Component {
   getData = () => {
@@ -94,4 +93,4 @@ class Block extends Component {
   }
 }
 
-export default Block;
+export default CSSModules(Block, styles);

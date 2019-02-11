@@ -11,10 +11,10 @@ import UserMenu from './UserMenu/container';
 import styles from './header.module.styl';
 
 const modesNavigation = [
-  'syllable',
-  'text',
-  'game',
-  'race',
+  'Syllable',
+  'Text',
+  'Game',
+  'Races',
 ];
 
 const Block = ({ location: { pathname }, mode }) => {
@@ -23,7 +23,7 @@ const Block = ({ location: { pathname }, mode }) => {
       key: item,
       styleName: 'item',
       activeClassName: styles.item_selected,
-      to: `/mode/${item}`,
+      to: `/mode/${_.kebabCase(item)}`,
     };
 
     // only for home page
@@ -33,7 +33,7 @@ const Block = ({ location: { pathname }, mode }) => {
 
     return (
       <NavLink {...props}>
-        {_.upperFirst(item)}
+        {item}
       </NavLink>
     );
   });

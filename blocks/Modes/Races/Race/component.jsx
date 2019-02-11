@@ -8,7 +8,7 @@ import styles from './race.module.styl';
 
 class Block extends Component {
   state = {
-    loaded: false,
+    status: undefined,
     typed: null,
     last: null,
     users: [],
@@ -25,9 +25,18 @@ class Block extends Component {
       },
     } = this;
 
-    this.socket.emit('get', raceId, ((...args) => {
-      console.log('get', args);
+    this.socket.emit('get', raceId, (race => {
 
+      if (race) {
+
+      }
+      else {
+        this.setState({
+          status: null,
+        })
+      }
+
+      console.log('get', race);
 
       // todo: if race is not exist then show message
       // if (ok) {
@@ -51,33 +60,19 @@ class Block extends Component {
       },
     } = this;
 
-    this.socket = io('/races')
-      .on('error', (error) => {
-        if (error === 'Token expired') {
-          getNewTokens()
-            .then(() => {
-              this.socket = io('/races');
-
-              this.getData();
-            });
-        }
-        else {
-          this.getData();
-        }
-      });
   }
 
   render() {
     const {
       state: {
-        loaded,
+        status,
         typed,
         last,
         users,
       },
     } = this;
 
-    let content = <Loader styleName="loader" size={20} />;
+    let content = <Loader styleName="loader" size="30" />;
 
     if (loaded) {
       content = (
@@ -93,11 +88,7 @@ class Block extends Component {
       );
     }
 
-    return (
-      <div>
-        {content}
-      </div>
-    );
+    return content;
   }
 }
 
