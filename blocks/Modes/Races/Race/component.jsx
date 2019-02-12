@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
-import io from 'socket.io-client';
 
 import Loader from 'Blocks/Loader/component';
 
@@ -8,10 +8,22 @@ import styles from './race.module.styl';
 
 class Block extends Component {
   state = {
-    status: undefined,
+    race: undefined,
     typed: null,
     last: null,
     users: [],
+  }
+
+  constructor(props) {
+    super(props);
+
+    const {
+      match: {
+        url,
+      },
+    } = props
+
+    this.parentRoute = url.substring(0, url.lastIndexOf('/'));
   }
 
   getData = () => {
@@ -22,21 +34,26 @@ class Block extends Component {
             raceId,
           },
         },
+        socket,
       },
     } = this;
 
-    this.socket.emit('get', raceId, (race => {
+    socket.emit('get race', raceId, (race => {
+
+      console.log(978, race);
+
+      let state = {
+        race,
+      };
 
       if (race) {
-
-      }
-      else {
-        this.setState({
-          status: null,
-        })
+        _.assign(state, {
+          race,
+        });
       }
 
-      console.log('get', race);
+      this.setState(state);
+
 
       // todo: if race is not exist then show message
       // if (ok) {
@@ -47,34 +64,45 @@ class Block extends Component {
       // }
     }));
 
-    this.socket.emit('type', raceId);
-    this.socket.on('update', (data => {
-
-    }));
+    // this.socket.emit('type', raceId);
+    // this.socket.on('update', (data => {
+    //
+    // }));
   }
 
   componentDidMount() {
     const {
       props: {
-        getNewTokens,
+        url,
       },
     } = this;
 
+    this.getData();
   }
 
   render() {
     const {
       state: {
-        status,
+        race,
         typed,
         last,
         users,
       },
+      parentRoute,
     } = this;
 
     let content = <Loader styleName="loader" size="30" />;
 
-    if (loaded) {
+    if (_.isNull(race)) {
+      content = (
+        <p>
+          We did not find race.
+          <br />
+          <br />
+          Go back to <Link to={parentRoute}>races</Link>.
+        </p>)
+    }
+    else if (race) {
       content = (
         <div>
           <span>{typed}</span>

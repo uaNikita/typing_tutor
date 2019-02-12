@@ -7,20 +7,10 @@ import Component from './component';
 
 const mapStateToProps = state => ({
   keyboard: state.getIn(['user', 'keyboard']),
-});
-
-const mapDispatchToProps = (dispatch, ownProps) => ({
-  getNewTokens: (...args) => dispatch(getNewTokens(...args)),
-  start: () => {
-    dispatch(processSetSettings({
-      mode: 'game',
-    }));
-
-    ownProps.history.push('/');
-  },
+  socket: state.getIn(['race', 'socket']),
 });
 
 export default connect(
   mapStateToProps,
-  mapDispatchToProps,
+  null,
 )(Component);

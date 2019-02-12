@@ -110,7 +110,17 @@ io
   .on('connect', (socket) => {
     socket.emit('registered');
 
-    socket.on('get race', (fn) => {
+    socket.on('get active race', (fn) => {
+      const race = _.find(races, (race) => (
+        _.some(race.participants, ({ id }) =>
+          id === socket.userId
+        )
+      ));
+
+      fn(race && race.id);
+    });
+
+    socket.on('get race', (id, fn) => {
       const race = _.find(races, (race) => (
         _.some(race.participants, ({ id }) =>
           id === socket.userId

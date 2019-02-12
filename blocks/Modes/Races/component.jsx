@@ -21,7 +21,7 @@ class Block extends Component {
 
     setSocket(this.socket);
 
-    this.socket.emit('get race', (id => {
+    this.socket.emit('get active race', (id => {
       console.log('get', id);
 
       setRace(id);
