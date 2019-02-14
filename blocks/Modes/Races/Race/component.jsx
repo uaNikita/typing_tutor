@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
+import _ from 'lodash';
 
 import Loader from 'Blocks/Loader/component';
 
@@ -26,6 +27,10 @@ class Block extends Component {
     this.parentRoute = url.substring(0, url.lastIndexOf('/'));
   }
 
+  componentDidMount() {
+    this.getData();
+  }
+
   getData = () => {
     const {
       props: {
@@ -39,9 +44,6 @@ class Block extends Component {
     } = this;
 
     socket.emit('get race', raceId, (race => {
-
-      console.log(978, race);
-
       let state = {
         race,
       };
@@ -53,7 +55,6 @@ class Block extends Component {
       }
 
       this.setState(state);
-
 
       // todo: if race is not exist then show message
       // if (ok) {
@@ -68,16 +69,6 @@ class Block extends Component {
     // this.socket.on('update', (data => {
     //
     // }));
-  }
-
-  componentDidMount() {
-    const {
-      props: {
-        url,
-      },
-    } = this;
-
-    this.getData();
   }
 
   render() {
@@ -95,12 +86,11 @@ class Block extends Component {
 
     if (_.isNull(race)) {
       content = (
-        <p>
-          We did not find race.
-          <br />
-          <br />
-          Go back to <Link to={parentRoute}>races</Link>.
-        </p>)
+        <div styleName="message">
+          <p>We did not find race.</p>
+          <p>Go back to <Link to={parentRoute}>races</Link>.</p>
+        </div>
+      );
     }
     else if (race) {
       content = (

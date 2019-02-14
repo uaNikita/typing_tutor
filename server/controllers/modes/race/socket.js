@@ -52,6 +52,8 @@ class Race {
     }
   }
 
+  // todo: use room for broadcasting
+
   start() {
     this.startDate = Date.now();
 
@@ -65,6 +67,8 @@ class Race {
   }
 
   addParticipant(id, socket) {
+    this.addEvents(socket);
+
     this.participants.push(
       new Racer({
         id,
@@ -77,6 +81,18 @@ class Race {
   getParticipant(id) {
     return _.find(this.participants, { id });
   }
+
+  addEvents(socket) {
+
+    socket.on('type', {})
+
+  }
+}
+
+const findActiveRaceByUserId = (userId) => {
+  _.find(races, (race) => (
+    _.some(race.participants, ({ id }) => id === userId)
+  ));
 }
 
 // create races logic here
@@ -111,43 +127,40 @@ io
     socket.emit('registered');
 
     socket.on('get active race', (fn) => {
-      const race = _.find(races, (race) => (
-        _.some(race.participants, ({ id }) =>
-          id === socket.userId
-        )
-      ));
+      const race = findActiveRaceByUserId(socket.userId);
 
       fn(race && race.id);
     });
 
     socket.on('get race', (id, fn) => {
-      const race = _.find(races, (race) => (
-        _.some(race.participants, ({ id }) =>
-          id === socket.userId
-        )
-      ));
+      const race = findActiveRaceByUserId(socket.userId);
 
       fn(race && race.id);
     });
 
 
     socket.on('quick start', ({ token, language }, fn) => {
-      let race = _.find(races, {
-        language,
-        type: 'quick',
-        status: 'waiting for participants',
-      });
+      const activeRace = findActiveRaceByUserId(socket.userId);
 
-      if (!race) {
-        race = new Race({
-          type: 'quick',
-          language,
-        });
+      if (activeRace) {
+        fn('Already have active race');
       }
+      else {
+        let race = _.find(races, {
+          language,
+          type: 'quick',
+          status: 'waiting for participants',
+        });
 
-      race.addParticipant(socket);
+        if (!race) {
+          race = new Race({
+            type: 'quick',
+            language,
+          });
+        }
 
-      fn('done');
+        race.addParticipant(socket);
+      }
     });
   });
 

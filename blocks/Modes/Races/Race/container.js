@@ -1,8 +1,5 @@
 import { connect } from 'react-redux';
 
-import { getNewTokens } from 'ReduxUtils/reducers/fetch';
-import { processSetSettings } from 'ReduxUtils/reducers/user';
-
 import Component from './component';
 
 const mapStateToProps = state => ({

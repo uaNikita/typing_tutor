@@ -11,23 +11,6 @@ import Race from './Race/container';
 import styles from './races.module.styl';
 
 class Block extends Component {
-  getData = () => {
-    const {
-      props: {
-        setRace,
-        setSocket,
-      },
-    } = this;
-
-    setSocket(this.socket);
-
-    this.socket.emit('get active race', (id => {
-      console.log('get', id);
-
-      setRace(id);
-    }));
-  }
-
   componentDidMount() {
     const {
       props: {
@@ -39,13 +22,26 @@ class Block extends Component {
       .on('error', (error) => {
         if (error === 'Token expired') {
           getNewTokens()
-            .then(() => (
+            .then(() => {
               this.socket = io('/races')
-                .on('registered', this.getData)
-            ));
+                .on('registered', this.getData);
+            });
         }
       })
       .on('registered', this.getData);
+  }
+
+  getData = () => {
+    const {
+      props: {
+        setRace,
+        setSocket,
+      },
+    } = this;
+
+    setSocket(this.socket);
+
+    this.socket.emit('get active race', (id => setRace(id)));
   }
 
   render() {
@@ -64,22 +60,23 @@ class Block extends Component {
     let content = <Loader styleName="loader" size="30" />;
 
     if (!_.isUndefined(activeRace)) {
-      const routes = [
-        <Route key="race" path={`${url}/race-:raceId(.{15})`} component={Race} />,
-      ];
+      let routes;
 
       if (activeRace) {
         const pathToRace = `${url}/race-${activeRace}`;
 
         if (pathname === pathToRace) {
-          routes.push(<Redirect key="404" to="/404" />);
+          routes = <Route path={`${url}/race-:raceId(.{15})`} component={Race} />;
         }
         else {
-          routes.push(<Redirect key="race-redirect" to={pathToRace} />);
+          routes = <Redirect to={pathToRace} />;
         }
       }
       else if (_.isNull(activeRace)) {
-        routes.push(<Route key="tabs" path={url} component={Tabs} />);
+        routes = [
+          <Route key="race" path={`${url}/race-:raceId(.{15})`} component={Race} />,
+          <Route key="tabs" path={url} component={Tabs} />,
+        ];
       }
 
       content = (

@@ -21,8 +21,9 @@
         ]
       }
     ],
-    "react/prop-types": "off",
+    "linebreak-style": "off",
     "import/no-unresolved": "off",
+    "react/prop-types": "off",
     "react/jsx-one-expression-per-line": "off",
     "react/prefer-stateless-function": [
       "error",
