@@ -50,11 +50,23 @@ class Race {
     else {
 
     }
+
+
+    setTimeout(() => {
+
+
+
+
+      this.start()
+    }, 10000)
   }
 
   // todo: use room for broadcasting
 
   start() {
+    this.status = 'final countdown';
+
+
     this.startDate = Date.now();
 
     this.status = 'ongoing';
