@@ -51,24 +51,30 @@ class Race {
 
     }
 
+    this.startDate = Date.now();
 
     setTimeout(() => {
-
-
-
-
-      this.start()
-    }, 10000)
+      this.startFinalCountdown();
+    }, 10000);
   }
 
   // todo: use room for broadcasting
 
-  start() {
+  startFinalCountdown() {
+
+
     this.status = 'final countdown';
 
 
-    this.startDate = Date.now();
 
+    setTimeout(() => {
+
+
+      this.start();
+    }, 10000);
+  }
+
+  start() {
     this.status = 'ongoing';
   }
 
@@ -96,7 +102,7 @@ class Race {
 
   addEvents(socket) {
 
-    socket.on('type', {})
+    socket.on('type', {});
 
   }
 }
@@ -105,7 +111,7 @@ const findActiveRaceByUserId = (userId) => {
   _.find(races, (race) => (
     _.some(race.participants, ({ id }) => id === userId)
   ));
-}
+};
 
 // create races logic here
 const io = socketIo(server);
