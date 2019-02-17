@@ -9,6 +9,10 @@ const { server } = require('../../../server');
 
 const races = require('./races');
 
+// create races logic here
+const io = socketIo(server);
+const racesNamespace = io.of('/races');
+
 class Racer {
   constructor(options) {
     this.id = options.id;
@@ -40,6 +44,7 @@ class Race {
     this.type = options.type;
     this.status = 'waiting for participants';
     this.id = crypto.randomBytes(15).toString('hex');
+    this.room = racesNamespace.to(this.id);
 
     this.text = 'options.text';
 
@@ -61,17 +66,25 @@ class Race {
   // todo: use room for broadcasting
 
   startFinalCountdown() {
-
-
     this.status = 'final countdown';
 
+    let counter = 3;
 
+    const go = () => {
+      this.room.emit('change', {
+        status: this.status,
+        counter,
+      });
 
-    setTimeout(() => {
+      counter -= 1;
 
-
-      this.start();
-    }, 10000);
+      if (counter > -1) {
+        setTimeout(go, 1000);
+      }
+      else {
+        this.start();
+      }
+    };
   }
 
   start() {
@@ -113,11 +126,8 @@ const findActiveRaceByUserId = (userId) => {
   ));
 };
 
-// create races logic here
-const io = socketIo(server);
 
-io
-  .of('/races')
+racesNamespace
   .use((socket, next) => {
     const { tt_access: token } = cookie.parse(socket.request.headers.cookie);
 
