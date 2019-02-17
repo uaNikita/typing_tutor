@@ -16,8 +16,25 @@ const racesNamespace = io.of('/races');
 class Racer {
   constructor(options) {
     this.id = options.id;
-    this.last = options.text;
+    this.text = options.text;
+    this.last = this.text.split(' ');
     this.socket = options.socket;
+    this.status = 'ongoing';
+
+    this.socket.on('type', (word, callback) => {
+      if (word === this.last[0]) {
+        this.last.shift();
+
+        if (!this.last.length) {
+          this.status = 'finished';
+
+          this.endDate = Date.now();
+        }
+      }
+      else {
+        callback('Wrong')
+      }
+    });
 
     this.ongoing = true;
   }
@@ -63,18 +80,13 @@ class Race {
     }, 10000);
   }
 
-  // todo: use room for broadcasting
-
   startFinalCountdown() {
     this.status = 'final countdown';
 
     let counter = 3;
 
     const go = () => {
-      this.room.emit('change', {
-        status: this.status,
-        counter,
-      });
+      this.room.emit('countdown', counter);
 
       counter -= 1;
 
@@ -82,19 +94,40 @@ class Race {
         setTimeout(go, 1000);
       }
       else {
+        this.room.emit('start');
+
         this.start();
       }
     };
+
+    go();
   }
 
   start() {
     this.status = 'ongoing';
+
+    const go = () => {
+      // if all finished or disconected
+      if (false) {
+        this.end();
+      }
+      else if (true) {
+
+
+        this.room.emit('move', {});
+
+
+        setTimeout(go, 1000);
+      }
+    };
+
+    go();
   }
 
   finish() {
-    this.finishDate = Date.now();
 
-    this.status = 'finished';
+
+
   }
 
   addParticipant(id, socket) {
