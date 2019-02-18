@@ -15,21 +15,14 @@ const racesNamespace = io.of('/races');
 
 class Racer {
   constructor(options) {
-    this.id = options.id;
-    this.text = options.text;
-    this.last = this.text.split(' ');
-    this.socket = options.socket;
+    _.defaults(this, options);
+    this.lastText = this.text;
+    this.lastTextArray = this.text.split(' ');
     this.status = 'ongoing';
 
-    this.socket.on('type', (word, callback) => {
-      if (word === this.last[0]) {
-        this.last.shift();
-
-        if (!this.last.length) {
-          this.status = 'finished';
-
-          this.endDate = Date.now();
-        }
+    this.socket.on('type', (string, callback) => {
+      if (this.status === 'ongoing' && string === this.last[0]) {
+        this.type();
       }
       else {
         callback('Wrong')
@@ -39,18 +32,20 @@ class Racer {
     this.ongoing = true;
   }
 
-  type(string) {
-    if (this.ongoing && string === this.last[0]) {
-      this.last.shift();
+  type() {
+    this.last.shift();
 
-      if (!this.last.length) {
-        this.finish();
-      }
+    this.lastTextArray = this.last.join('');
+
+    if (!this.last.length) {
+      this.finish();
     }
   }
 
   finish() {
-    this.ongoing = false;
+    this.endDate = Date.now();
+
+    this.status = 'finished';
   }
 }
 
@@ -63,21 +58,32 @@ class Race {
     this.id = crypto.randomBytes(15).toString('hex');
     this.room = racesNamespace.to(this.id);
 
-    this.text = 'options.text';
-
     if (this.type === 'quick') {
       // get some text here
 
     }
     else {
-
+      this.text = options.text;
     }
 
     this.startDate = Date.now();
 
-    setTimeout(() => {
-      this.startFinalCountdown();
-    }, 10000);
+    let waitingCounter = 0
+
+    const go = () => {
+      this.room.emit('waiting for participants', waitingCounter);
+
+      if (waitingCounter < 10) {
+        waitingCounter += 1;
+
+        setTimeout(go, 1000);
+      }
+      else {
+        this.startFinalCountdown();
+      }
+    };
+
+    go();
   }
 
   startFinalCountdown() {
@@ -103,21 +109,39 @@ class Race {
     go();
   }
 
+  getProgress() {
+    return this.participants.map(({ id, lastText }) => {
+      const index = this.text.indexOf(lastText);
+      const progress = index / this.text.length;
+
+      return {
+        id,
+        progress,
+      }
+    })
+  }
+
   start() {
     this.status = 'ongoing';
+    this.progress = this.getProgress();
+
 
     const go = () => {
-      // if all finished or disconected
-      if (false) {
+      const allDone = this.participants.every(({ status }) => ['finished', 'disconnected'].includes(status));
+
+      if (allDone) {
         this.end();
       }
-      else if (true) {
+      else {
+        const newProgress = this.getProgress();
 
+        if (!_.isEqual(this.progress, newProgress)) {
+          this.progress = newProgress;
 
-        this.room.emit('move', {});
+          this.room.emit('move', this.progress);
 
-
-        setTimeout(go, 1000);
+          setTimeout(go, 1000);
+        }
       }
     };
 
@@ -127,12 +151,9 @@ class Race {
   finish() {
 
 
-
   }
 
   addParticipant(id, socket) {
-    this.addEvents(socket);
-
     this.participants.push(
       new Racer({
         id,
@@ -144,12 +165,6 @@ class Race {
 
   getParticipant(id) {
     return _.find(this.participants, { id });
-  }
-
-  addEvents(socket) {
-
-    socket.on('type', {});
-
   }
 }
 
