@@ -125,11 +125,16 @@ class Race {
     this.status = 'ongoing';
     this.progress = this.getProgress();
 
-
     const go = () => {
       const allDone = this.participants.every(({ status }) => ['finished', 'disconnected'].includes(status));
 
+      const newProgress = this.getProgress();
+
       if (allDone) {
+        this.progress = newProgress;
+
+        this.room.emit('move', this.progress);
+
         this.end();
       }
       else {
@@ -148,9 +153,10 @@ class Race {
     go();
   }
 
-  finish() {
+  end() {
+    this.status = 'endend';
 
-
+    this.room.emit('end');
   }
 
   addParticipant(id, socket) {
