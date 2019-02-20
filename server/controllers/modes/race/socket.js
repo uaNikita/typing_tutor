@@ -9,7 +9,6 @@ const { server } = require('../../../server');
 
 const races = require('./races');
 
-// create races logic here
 const io = socketIo(server);
 const racesNamespace = io.of('/races');
 
