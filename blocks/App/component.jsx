@@ -8,7 +8,10 @@ import VerifyPage from 'Blocks/VerifyPage/container';
 import PrivateRoute from 'Blocks/PrivateRoute/container';
 import Home from 'Blocks/Home/container';
 import Header from 'Blocks/Header/component';
-import Modes from 'Blocks/Modes/component';
+import Game from 'Blocks/modes/Game/component';
+import Races from 'Blocks/modes/Races/container';
+import Syllable from 'Blocks/modes/Syllable/container';
+import Text from 'Blocks/modes/Text/component';
 import SettingsPages from 'Blocks/SettingsPages/component';
 import OptionsPages from 'Blocks/OptionsPages/component';
 import StatisticPage from 'Blocks/StatisticPage/container';
@@ -78,7 +81,11 @@ class Block extends Component {
                 <Header />
                 <Switch>
                   <Route exact path="/404" component={NotFound} />
-                  <Route path="/mode" component={Modes} />
+                  <Route path="/syllable" component={Syllable} />
+                  <Route path="/text" component={Text} />
+                  <Route path="/game" component={Game} />
+                  <Route path="/races" component={Races} />
+                  <Route path="/options" component={OptionsPages} />
                   <Route path="/options" component={OptionsPages} />
                   <Route path="/statistic" component={StatisticPage} />
                   <Route path="/help" component={Help} />

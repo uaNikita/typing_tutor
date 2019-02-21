@@ -23,7 +23,7 @@ const Block = ({ location: { pathname }, mode }) => {
       key: item,
       styleName: 'item',
       activeClassName: styles.item_selected,
-      to: `/mode/${_.kebabCase(item)}`,
+      to: `/${_.kebabCase(item)}`,
     };
 
     // only for home page
