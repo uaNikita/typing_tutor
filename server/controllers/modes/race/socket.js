@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const _ = require('lodash');
 const config = require('config');
 
+const { languages } = require('../../../../dist/compiledServer');
 const { server } = require('../../../server');
 
 const races = require('./races');
@@ -15,6 +16,7 @@ const racesNamespace = io.of('/races');
 class Racer {
   constructor(options) {
     _.defaults(this, options);
+
     this.lastText = this.text;
     this.lastTextArray = this.text.split(' ');
     this.status = 'ongoing';
@@ -50,9 +52,9 @@ class Racer {
 
 class Race {
   constructor(options) {
+    _.defaults(this, options);
+
     this.participants = [];
-    this.language = options.language;
-    this.type = options.type;
     this.status = 'waiting for participants';
     this.id = crypto.randomBytes(15).toString('hex');
     this.room = racesNamespace.to(this.id);
@@ -219,8 +221,7 @@ racesNamespace
       fn(race && race.id);
     });
 
-
-    socket.on('quick start', ({ token, language }, fn) => {
+    socket.on('quick start', (language, fn) => {
       const activeRace = findActiveRaceByUserId(socket.userId);
 
       if (activeRace) {
@@ -234,16 +235,24 @@ racesNamespace
         });
 
         if (!race) {
+          const texts = _.find(languages.languages, { name: language }).racesTexts;
+
           race = new Race({
             type: 'quick',
             language,
+            text: _.sample(texts),
           });
+
+          races.push(race);
         }
 
-        race.addParticipant(socket);
+        const id = socket.userId || `anonymous-${race.participants.length}`;
+
+        race.addParticipant(id, socket);
+
+        console.log(race.id);
+
+        fn(race.id);
       }
     });
   });
-
-// todo: we should return user current game and refrech it if new participants join
-

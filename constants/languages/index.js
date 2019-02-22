@@ -6,11 +6,11 @@ import russian from './russian/index';
 export const languages = [
   {
     name: 'english',
-    ..._.pick(english, ['nouns', 'syllables']),
+    ..._.pick(english, ['nouns', 'syllables', 'racesTexts']),
   },
   {
     name: 'russian',
-    ..._.pick(russian, ['nouns', 'syllables']),
+    ..._.pick(russian, ['nouns', 'syllables', 'racesTexts']),
   },
 ];
 

@@ -3,6 +3,7 @@ import reducer from 'ReduxUtils/reducer';
 import { Provider } from 'react-redux';
 import { StaticRouter, Route } from 'react-router-dom';
 import { defaults, defaultsWhichCanBeOverwrittenByLS } from 'Constants/defaultState';
+import languages from 'Constants/languages';
 import { setRefreshToken, setAccessToken } from 'ReduxUtils/reducers/fetch';
 import { init, getData } from 'ReduxUtils/reducers/main';
 
@@ -21,6 +22,7 @@ export {
   reducer,
   defaults,
   defaultsWhichCanBeOverwrittenByLS,
+  languages,
   setRefreshToken,
   setAccessToken,
   init,

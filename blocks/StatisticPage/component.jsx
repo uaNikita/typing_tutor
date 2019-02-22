@@ -6,7 +6,6 @@ import { Field, reduxForm } from 'redux-form/immutable';
 import dayjs from 'dayjs';
 
 import { keyboards } from 'Constants/languages';
-import modes from 'Constants/modes';
 
 import { validateDate } from 'Utils/validation';
 
@@ -297,7 +296,7 @@ class Block extends Component {
       },
     } = this;
 
-    const modesOptions = modes.map(name => (
+    const modesOptions = ['syllable', 'text', 'game'].map(name => (
       <option key={name} value={name}>
         {name}
       </option>
