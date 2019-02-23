@@ -26,7 +26,7 @@ class Racer {
         this.type();
       }
       else {
-        callback('Wrong')
+        callback('Wrong');
       }
     });
 
@@ -56,20 +56,13 @@ class Race {
 
     this.participants = [];
     this.status = 'waiting for participants';
-    this.id = crypto.randomBytes(15).toString('hex');
+    this.id = crypto.randomBytes(8).toString('hex');
+
     this.room = racesNamespace.to(this.id);
-
-    if (this.type === 'quick') {
-      // get some text here
-
-    }
-    else {
-      this.text = options.text;
-    }
 
     this.startDate = Date.now();
 
-    let waitingCounter = 0
+    let waitingCounter = 0;
 
     const go = () => {
       this.room.emit('waiting for participants', waitingCounter);
@@ -118,8 +111,8 @@ class Race {
       return {
         id,
         progress,
-      }
-    })
+      };
+    });
   }
 
   start() {
@@ -216,9 +209,28 @@ racesNamespace
     });
 
     socket.on('get race', (id, fn) => {
-      const race = findActiveRaceByUserId(socket.userId);
+      console.log(races);
 
-      fn(race && race.id);
+      var a = _.find(races, (race) => (
+        _.some(race.participants, (p) => p.socket === socket)
+      ));
+
+      console.log('a', a);
+
+      // if (socket.userId) {
+      //  
+      // }
+
+      // const race = findActiveRaceByUserId(socket.userId);
+      //
+      // let id = null;
+      //
+      // if (race) {
+      //   ({ id }) = race;
+      // }
+
+
+      fn(id);
     });
 
     socket.on('quick start', (language, fn) => {

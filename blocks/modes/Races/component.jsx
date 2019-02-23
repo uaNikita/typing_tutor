@@ -66,15 +66,16 @@ class Block extends Component {
         const pathToRace = `${url}/race-${activeRace}`;
 
         if (pathname === pathToRace) {
-          routes = <Route path={`${url}/race-:raceId(.{15})`} component={Race} />;
+          routes = <Route path={`${url}/race-:raceId(.{16})`} component={Race} />;
         }
         else {
           routes = <Redirect to={pathToRace} />;
         }
       }
       else if (_.isNull(activeRace)) {
+        console.log(1323);
         routes = [
-          <Route key="race" path={`${url}/race-:raceId(.{15})`} component={Race} />,
+          <Route key="race" path={`${url}/race-:raceId(.{16})`} component={Race} />,
           <Route key="tabs" path={url} component={Tabs} />,
         ];
       }
