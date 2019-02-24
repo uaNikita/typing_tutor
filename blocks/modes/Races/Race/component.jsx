@@ -81,7 +81,7 @@ class Block extends Component {
       },
       parentRoute,
     } = this;
-console.log(2323);
+
     let content = <Loader styleName="loader" size="30" />;
 
     if (_.isNull(race)) {

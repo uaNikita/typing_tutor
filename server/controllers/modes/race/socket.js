@@ -161,6 +161,8 @@ class Race {
         socket,
       })
     );
+
+    socket.join(this.id);
   }
 
   getParticipant(id) {
@@ -174,6 +176,11 @@ const findActiveRaceByUserId = (userId) => {
   ));
 };
 
+const findActiveRaceByUserSocket = (socket) => {
+  _.find(races, (race) => (
+    _.some(race.participants, (p) => p.socket === socket)
+  ));
+};
 
 racesNamespace
   .use((socket, next) => {
@@ -200,8 +207,6 @@ racesNamespace
     next();
   })
   .on('connect', (socket) => {
-    socket.emit('registered');
-
     socket.on('get active race', (fn) => {
       const race = findActiveRaceByUserId(socket.userId);
 
@@ -209,28 +214,23 @@ racesNamespace
     });
 
     socket.on('get race', (id, fn) => {
-      console.log(races);
+      const race = _.find(races, { id });
 
-      var a = _.find(races, (race) => (
-        _.some(race.participants, (p) => p.socket === socket)
-      ));
+      if (race) {
+        const racer = socket.userId
+          ? _.some(race.participants, (p) => p.id === socket.userId)
+          : _.some(race.participants, (p) => p.socket === socket);
 
-      console.log('a', a);
-
-      // if (socket.userId) {
-      //  
-      // }
-
-      // const race = findActiveRaceByUserId(socket.userId);
-      //
-      // let id = null;
-      //
-      // if (race) {
-      //   ({ id }) = race;
-      // }
-
-
-      fn(id);
+        if (racer) {
+          fn('Data');
+        }
+        else {
+          fn('Race is not available for you');
+        }
+      }
+      else {
+        fn('Race is not exist');
+      }
     });
 
     socket.on('quick start', (language, fn) => {
@@ -261,8 +261,6 @@ racesNamespace
         const id = socket.userId || `anonymous-${race.participants.length}`;
 
         race.addParticipant(id, socket);
-
-        console.log(race.id);
 
         fn(race.id);
       }
