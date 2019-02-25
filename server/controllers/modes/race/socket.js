@@ -17,8 +17,8 @@ class Racer {
   constructor(options) {
     _.defaults(this, options);
 
-    this.lastText = this.text;
-    this.lastTextArray = this.text.split(' ');
+    this.typed = '';
+    this.lastArray = this.text.split(' ');
     this.status = 'ongoing';
 
     this.socket.on('type', (string, callback) => {
@@ -34,11 +34,18 @@ class Racer {
   }
 
   type() {
-    this.last.shift();
+    const shifted = this.last.shift();
 
-    this.lastTextArray = this.last.join('');
+    this.typed += shifted;
 
     if (!this.last.length) {
+      this.finish();
+    }
+
+    if (this.last.length) {
+      this.typed += ' ';
+    }
+    else {
       this.finish();
     }
   }
@@ -104,15 +111,10 @@ class Race {
   }
 
   getProgress() {
-    return this.participants.map(({ id, lastText }) => {
-      const index = this.text.indexOf(lastText);
-      const progress = index / this.text.length;
-
-      return {
-        id,
-        progress,
-      };
-    });
+    return this.participants.map(({ id, typed }) => ({
+      id,
+      progress: typed.length / this.text.length,
+    }));
   }
 
   start() {
@@ -170,17 +172,17 @@ class Race {
   }
 }
 
-const findActiveRaceByUserId = (userId) => {
+const findActiveRaceByUserId = (userId) => (
   _.find(races, (race) => (
     _.some(race.participants, ({ id }) => id === userId)
-  ));
-};
+  ))
+);
 
-const findActiveRaceByUserSocket = (socket) => {
+const findActiveRaceByUserSocket = (socket) => (
   _.find(races, (race) => (
     _.some(race.participants, (p) => p.socket === socket)
-  ));
-};
+  ))
+);
 
 racesNamespace
   .use((socket, next) => {
@@ -222,7 +224,11 @@ racesNamespace
           : _.some(race.participants, (p) => p.socket === socket);
 
         if (racer) {
-          fn('Data');
+          fn({
+            typed:racer.typed,
+            lastArray:racer.lastArray,
+            progress: race.getProgress(),
+          });
         }
         else {
           fn('Race is not available for you');
