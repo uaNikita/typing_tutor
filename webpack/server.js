@@ -38,9 +38,10 @@ module.exports = {
         test: /module\.styl$/,
         use: [
           {
-            loader: 'css-loader/locals',
+            loader: 'css-loader',
             options: {
               modules: true,
+              exportOnlyLocals: true,
               localIdentName: '[name]__[local]___[hash:base64:5]'
             }
           },
