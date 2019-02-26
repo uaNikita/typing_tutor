@@ -22,7 +22,7 @@ class Racer {
     this.status = 'ongoing';
 
     this.socket.on('type', (string, callback) => {
-      if (this.status === 'ongoing' && string === this.last[0]) {
+      if (this.status === 'ongoing' && string === this.lastArray[0]) {
         this.type();
       }
       else {
@@ -34,15 +34,11 @@ class Racer {
   }
 
   type() {
-    const shifted = this.last.shift();
+    const shifted = this.lastArray.shift();
 
     this.typed += shifted;
 
-    if (!this.last.length) {
-      this.finish();
-    }
-
-    if (this.last.length) {
+    if (this.lastArray.length) {
       this.typed += ' ';
     }
     else {

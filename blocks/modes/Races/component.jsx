@@ -73,7 +73,6 @@ class Block extends Component {
         }
       }
       else if (_.isNull(activeRace)) {
-        console.log(1323);
         routes = [
           <Route key="race" path={`${url}/race-:raceId(.{16})`} component={Race} />,
           <Route key="tabs" path={url} component={Tabs} />,
