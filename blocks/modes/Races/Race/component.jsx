@@ -38,7 +38,9 @@ class Block extends Component {
       },
     } = this;
 
-    socket.emit('get race', raceId, (obj => {
+    socket.emit('get race', raceId, ((obj) => {
+      console.log('obj', obj);
+
       const state = {
         ...obj,
         last: obj.lastArray.join(' '),
@@ -47,7 +49,7 @@ class Block extends Component {
       this.setState(state);
     }));
 
-    socket.on('move', ((users) => (
+    socket.on('move', (users => (
       this.setState(users)
     )));
   }

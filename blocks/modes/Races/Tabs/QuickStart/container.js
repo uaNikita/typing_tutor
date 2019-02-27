@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 
+import { setRace } from 'ReduxUtils/reducers/modes/race';
 import { processSetSettings } from 'ReduxUtils/reducers/user';
 
 import Component from './component';
@@ -10,6 +11,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
+  setRace: (...args) => dispatch(setRace(...args)),
   start: () => {
     dispatch(processSetSettings({
       mode: 'game',

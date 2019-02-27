@@ -185,10 +185,8 @@ racesNamespace
     const { tt_access: token } = cookie.parse(socket.request.headers.cookie);
 
     if (token) {
-      let parsedToken;
-
       try {
-        parsedToken = jwt.verify(token, config.get('secretKey'));
+        const parsedToken = jwt.verify(token, config.get('secretKey'));
 
         socket.userId = parsedToken.id;
       } catch (e) {
@@ -205,8 +203,34 @@ racesNamespace
     next();
   })
   .on('connect', (socket) => {
+    const { tt_access: token } = cookie.parse(socket.request.headers.cookie);
+
+    if (token) {
+      try {
+        const parsedToken = jwt.verify(token, config.get('secretKey'));
+
+        socket.userId = parsedToken.id;
+      } catch (e) {
+        let error = 'Forbidden';
+
+        if (e.name === 'TokenExpiredError') {
+          error = 'Token expired';
+        }
+
+        socket.emit('error', error);
+
+        socket.disconnect(true);
+
+        return;
+      }
+    }
+
+    socket.emit('registered');
+
     socket.on('get active race', (fn) => {
       const race = findActiveRaceByUserId(socket.userId);
+
+      console.log(race && race.id);
 
       fn(race && race.id);
     });
@@ -221,8 +245,8 @@ racesNamespace
 
         if (racer) {
           fn({
-            typed:racer.typed,
-            lastArray:racer.lastArray,
+            typed: racer.typed,
+            lastArray: racer.lastArray,
             progress: race.getProgress(),
           });
         }

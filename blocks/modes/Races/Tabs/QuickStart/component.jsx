@@ -10,15 +10,30 @@ class Block extends Component {
   start = () => {
     const {
       props: {
+        history: {
+          push,
+        },
+        match: {
+          url,
+        },
         keyboard,
         socket,
+        setRace,
       },
     } = this;
 
     const { language } = _.find(keyboards, { name: keyboard });
 
     socket.emit('quick start', language, (data) => {
-      console.log(111, data);
+      if (data === 'Already have active race') {
+        return;
+      }
+
+      setRace(data);
+
+      const raceUrl = `${url.substring(0, url.lastIndexOf('/'))}/race-${data}`;
+
+      push(raceUrl);
     });
   };
 
