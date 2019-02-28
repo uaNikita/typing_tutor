@@ -106,7 +106,7 @@ class Race {
     go();
   }
 
-  getProgress() {
+  getUsersProgress() {
     return this.participants.map(({ id, typed }) => ({
       id,
       progress: typed.length / this.text.length,
@@ -115,12 +115,12 @@ class Race {
 
   start() {
     this.status = 'ongoing';
-    this.progress = this.getProgress();
+    this.progress = this.getUsersProgress();
 
     const go = () => {
       const allDone = this.participants.every(({ status }) => ['finished', 'disconnected'].includes(status));
 
-      const newProgress = this.getProgress();
+      const newProgress = this.getUsersProgress();
 
       if (allDone) {
         this.progress = newProgress;
@@ -130,7 +130,7 @@ class Race {
         this.end();
       }
       else {
-        const newProgress = this.getProgress();
+        const newProgress = this.getUsersProgress();
 
         if (!_.isEqual(this.progress, newProgress)) {
           this.progress = newProgress;
@@ -230,8 +230,6 @@ racesNamespace
     socket.on('get active race', (fn) => {
       const race = findActiveRaceByUserId(socket.userId);
 
-      console.log(race && race.id);
-
       fn(race && race.id);
     });
 
@@ -240,14 +238,14 @@ racesNamespace
 
       if (race) {
         const racer = socket.userId
-          ? _.some(race.participants, (p) => p.id === socket.userId)
-          : _.some(race.participants, (p) => p.socket === socket);
+          ? _.find(race.participants, (p) => p.id === socket.userId)
+          : _.find(race.participants, (p) => p.socket === socket);
 
         if (racer) {
           fn({
             typed: racer.typed,
             lastArray: racer.lastArray,
-            progress: race.getProgress(),
+            users: race.getUsersProgress(),
           });
         }
         else {

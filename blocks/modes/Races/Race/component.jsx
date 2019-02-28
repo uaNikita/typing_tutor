@@ -39,8 +39,6 @@ class Block extends Component {
     } = this;
 
     socket.emit('get race', raceId, ((obj) => {
-      console.log('obj', obj);
-
       const state = {
         ...obj,
         last: obj.lastArray.join(' '),
@@ -79,9 +77,9 @@ class Block extends Component {
         <div>
           <span>{typed}</span>
           <span>{last}</span>
-          {users.map(({ name, progress }) => (
-            <div>
-              {name} {progress}
+          {users.map(({ id, progress }) => (
+            <div key={id}>
+              {id} {progress}
             </div>
           ))}
         </div>
