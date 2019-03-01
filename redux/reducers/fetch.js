@@ -10,7 +10,8 @@ import { clearState as clearTextState } from './modes/text';
 import { clearState as clearUserState } from './user';
 import { clearState as clearMainState, setGlobalMessage, init } from './main';
 
-const CLEAR_STATE = 'tokens/CLEAR_STATE';
+const CLEAR_STATE = 'fetch/CLEAR_STATE';
+const SET_ANONYMOUS_TOKEN = 'fetch/SET_ANONYMOUS_TOKEN';
 const SET_REFRESH_TOKEN = 'fetch/SET_REFRESH_TOKEN';
 const SET_ACCESS_TOKEN = 'fetch/SET_ACCESS_TOKEN';
 
@@ -26,6 +27,9 @@ export default (state = initialState, action = {}) => {
 
     case SET_ACCESS_TOKEN:
       return state.set('accessToken', action.token);
+
+    case SET_ANONYMOUS_TOKEN:
+      return state.set('anonymousToken', action.token);
 
     default:
       return state;
@@ -54,8 +58,23 @@ export const setAccessToken = (token) => {
   };
 };
 
+export const setAnonymousToken = (token) => {
+  if (token) {
+    Cookies.set('tt_anonymous', token);
+  }
+  else {
+    Cookies.remove('tt_anonymous');
+  }
+
+  return {
+    type: SET_ANONYMOUS_TOKEN,
+    token,
+  };
+};
+
 export const setTokens = ({ refresh, access }) => (
   (dispatch) => {
+    dispatch(setAnonymousToken(null));
     dispatch(setRefreshToken(refresh));
     dispatch(setAccessToken(access));
   }

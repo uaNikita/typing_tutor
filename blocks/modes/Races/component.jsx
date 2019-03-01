@@ -49,6 +49,7 @@ class Block extends Component {
   getData = () => {
     const {
       props: {
+        refreshToken,
         setRace,
         setSocket,
       },

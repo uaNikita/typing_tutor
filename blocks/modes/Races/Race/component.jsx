@@ -78,9 +78,10 @@ class Block extends Component {
           <span>{typed}</span>
           <span>{last}</span>
           {users.map(({ id, progress }) => (
-            <div key={id}>
-              {id} {progress}
-            </div>
+            <p key={id} styleName="user">
+              <span className="name">{id}</span>
+              <span styleName="progress" style={{ width: `${progress * 100}%` }} />
+            </p>
           ))}
         </div>
       );

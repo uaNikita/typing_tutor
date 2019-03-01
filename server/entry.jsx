@@ -4,7 +4,7 @@ import { Provider } from 'react-redux';
 import { StaticRouter, Route } from 'react-router-dom';
 import { defaults, defaultsWhichCanBeOverwrittenByLS } from 'Constants/defaultState';
 import languages from 'Constants/languages';
-import { setRefreshToken, setAccessToken } from 'ReduxUtils/reducers/fetch';
+import { setRefreshToken, setAccessToken, setAnonymousToken } from 'ReduxUtils/reducers/fetch';
 import { init, getData } from 'ReduxUtils/reducers/main';
 
 import App from 'Blocks/App/container';
@@ -25,6 +25,7 @@ export {
   languages,
   setRefreshToken,
   setAccessToken,
+  setAnonymousToken,
   init,
   getData,
 };

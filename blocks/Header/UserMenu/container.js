@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import Component from './component';
 
 const mapStateToProps = state => ({
-  email: state.getIn(['user', 'email']),
+  refreshToken: state.getIn(['fetch', 'refreshToken']),
 });
 
 export default connect(

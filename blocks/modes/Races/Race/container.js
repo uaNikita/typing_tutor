@@ -5,6 +5,7 @@ import Component from './component';
 const mapStateToProps = state => ({
   keyboard: state.getIn(['user', 'keyboard']),
   socket: state.getIn(['race', 'socket']),
+  socket: state.getIn(['race', 'socket']),
 });
 
 export default connect(

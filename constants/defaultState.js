@@ -1,16 +1,18 @@
 // if value null that's that data can be stored in localStorage
 export const defaults = {
   fetch: {
-    refreshToken: undefined,
+    refreshToken: null,
 
-    accessToken: undefined,
+    accessToken: null,
+
+    anonymousToken: null,
   },
   user: {
-    email: undefined,
+    email: null,
 
-    name: undefined,
+    name: null,
 
-    bio: undefined,
+    bio: null,
 
     keyboard: 'english',
 
@@ -27,9 +29,9 @@ export const defaults = {
     statistic: null,
   },
   text: {
-    selectedId: undefined,
+    selectedId: null,
 
-    entities: undefined,
+    entities: null,
   },
   syllable: {
     // fingers, free,
@@ -59,7 +61,7 @@ export const defaults = {
     },
   },
   race: {
-    active: undefined,
+    active: null,
   },
 };
 

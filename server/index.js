@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const http = require('http');
+const crypto = require('crypto');
 const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
@@ -24,6 +24,7 @@ const {
   reducer,
   setRefreshToken,
   setAccessToken,
+  setAnonymousToken,
   init,
   getData,
   defaults,
@@ -77,6 +78,7 @@ app.get('*', async (req, res) => {
   const {
     tt_access: accessCookie,
     tt_refresh: refreshCookie,
+    tt_anonymous: anonymousCookie,
     tt_temp: tempCookie,
     tt_ls: lsCookie,
   } = req.cookies;
@@ -117,7 +119,7 @@ app.get('*', async (req, res) => {
   const { dispatch } = store;
 
   // get all info for authorized users
-  if (accessCookie) {
+  if (refreshCookie) {
     dispatch(setAccessToken(accessCookie));
     dispatch(setRefreshToken(refreshCookie));
 
@@ -132,6 +134,20 @@ app.get('*', async (req, res) => {
         }
       })
       .catch(() => {});
+  }
+  else {
+    let token;
+
+    if (anonymousCookie) {
+      token = anonymousCookie;
+    }
+    else {
+      token = crypto.randomBytes(8).toString('hex');
+
+      res.cookie('tt_anonymous', token);
+    }
+
+    dispatch(setAnonymousToken(token));
   }
 
   // initialize some parts of store, for example syllable lessons
