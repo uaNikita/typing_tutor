@@ -11,7 +11,7 @@ class Block extends Component {
   state = {
     typed: null,
     last: null,
-    users: null,
+    users: undefined,
   };
 
   constructor(props) {
@@ -38,13 +38,20 @@ class Block extends Component {
       },
     } = this;
 
-    socket.emit('get race', raceId, ((obj) => {
-      const state = {
-        ...obj,
-        last: obj.lastArray.join(' '),
-      };
+    socket.emit('get race', raceId, ((res) => {
+      if (res === 'Race is not exist') {
+        this.setState({
+          users: null,
+        });
+      }
+      else {
+        const state = {
+          ...res,
+          last: res.lastArray.join(' '),
+        };
 
-      this.setState(state);
+        this.setState(state);
+      }
     }));
 
     socket.on('move', (users => (
@@ -63,6 +70,8 @@ class Block extends Component {
     } = this;
 
     let content = <Loader styleName="loader" size="30" />;
+
+    console.log('users', users);
 
     if (_.isNull(users)) {
       content = (

@@ -8,7 +8,7 @@ const config = require('config');
 const { languages } = require('../../../../dist/compiledServer');
 const { server } = require('../../../server');
 
-const races = require('./races');
+const races = [];
 
 const io = socketIo(server);
 const racesNamespace = io.of('/races');
@@ -151,16 +151,15 @@ class Race {
     this.room.emit('end');
   }
 
-  addParticipant(id, socket) {
-    this.participants.push(
-      new Racer({
-        id,
-        text: this.text,
-        socket,
-      })
-    );
+  addParticipant(socket) {
+    const racer = new Racer({
+      id: socket.participant,
+      type: socket.type,
+      socket,
+      text: this.text,
+    });
 
-    socket.join(this.id);
+    this.participants.push(racer);
   }
 
   getParticipant(id) {
@@ -168,48 +167,28 @@ class Race {
   }
 }
 
-const findActiveRaceByUserId = (userId) => (
+const findActiveRace = (participant) => (
   _.find(races, (race) => (
-    _.some(race.participants, ({ id }) => id === userId)
-  ))
-);
-
-const findActiveRaceByUserSocket = (socket) => (
-  _.find(races, (race) => (
-    _.some(race.participants, (p) => p.socket === socket)
+    _.some(race.participants, ({ id }) => id === participant)
   ))
 );
 
 racesNamespace
-  .use((socket, next) => {
-    const { tt_access: token } = cookie.parse(socket.request.headers.cookie);
-
-    if (token) {
-      try {
-        const parsedToken = jwt.verify(token, config.get('secretKey'));
-
-        socket.userId = parsedToken.id;
-      } catch (e) {
-        let error = 'Forbidden';
-
-        if (e.name === 'TokenExpiredError') {
-          error = 'Token expired';
-        }
-
-        return next(new Error(error));
-      }
-    }
-
-    next();
-  })
   .on('connect', (socket) => {
-    const { tt_access: token } = cookie.parse(socket.request.headers.cookie);
+    const {
+      tt_access: accessToken,
+      tt_anonymous: anonymousToken,
+    } = cookie.parse(socket.request.headers.cookie);
 
-    if (token) {
+    if (accessToken) {
       try {
-        const parsedToken = jwt.verify(token, config.get('secretKey'));
+        const parsedToken = jwt.verify(accessToken, config.get('secretKey'));
 
-        socket.userId = parsedToken.id;
+        socket.participant = parsedToken.id;
+
+        socket.type = 'user';
+
+        socket.emit('registered');
       } catch (e) {
         let error = 'Forbidden';
 
@@ -224,11 +203,19 @@ racesNamespace
         return;
       }
     }
+    else if (anonymousToken) {
+      socket.participant = anonymousToken;
 
-    socket.emit('registered');
+      socket.type = 'anonymous';
+
+      socket.emit('registered');
+    }
+    else {
+      socket.disconnect(true);
+    }
 
     socket.on('get active race', (fn) => {
-      const race = findActiveRaceByUserId(socket.userId);
+      const race = findActiveRace(socket.participant);
 
       fn(race && race.id);
     });
@@ -237,9 +224,10 @@ racesNamespace
       const race = _.find(races, { id });
 
       if (race) {
-        const racer = socket.userId
-          ? _.find(race.participants, (p) => p.id === socket.userId)
-          : _.find(race.participants, (p) => p.socket === socket);
+        const racer = _.find(race.participants, ({ id }) => id === socket.participant);
+
+        console.log('racer', socket.participant);
+        console.log('racer', racer);
 
         if (racer) {
           fn({
@@ -258,7 +246,7 @@ racesNamespace
     });
 
     socket.on('quick start', (language, fn) => {
-      const activeRace = findActiveRaceByUserId(socket.userId);
+      const activeRace = findActiveRace(socket.participant);
 
       if (activeRace) {
         fn('Already have active race');
@@ -282,9 +270,7 @@ racesNamespace
           races.push(race);
         }
 
-        const id = socket.userId || `anonymous-${race.participants.length}`;
-
-        race.addParticipant(id, socket);
+        race.addParticipant(socket);
 
         fn(race.id);
       }
