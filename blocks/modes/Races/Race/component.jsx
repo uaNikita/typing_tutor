@@ -9,9 +9,10 @@ import styles from './race.module.styl';
 
 class Block extends Component {
   state = {
+    error: null,
     typed: null,
     last: null,
-    users: undefined,
+    users: null,
   };
 
   constructor(props) {
@@ -39,9 +40,11 @@ class Block extends Component {
     } = this;
 
     socket.emit('get race', raceId, ((res) => {
-      if (res === 'Race is not exist') {
+      console.log('res', res);
+
+      if (_.isString(res)) {
         this.setState({
-          users: null,
+          error: res,
         });
       }
       else {
@@ -54,9 +57,9 @@ class Block extends Component {
       }
     }));
 
-    socket.on('move', (users => (
-      this.setState(users)
-    )));
+    socket.on('move', (obj) => {
+      console.log(obj.status);
+    });
   }
 
   render() {
@@ -65,18 +68,17 @@ class Block extends Component {
         typed,
         last,
         users,
+        error,
       },
       parentRoute,
     } = this;
 
     let content = <Loader styleName="loader" size="30" />;
 
-    console.log('users', users);
-
-    if (_.isNull(users)) {
+    if (error) {
       content = (
         <div styleName="message">
-          <p>We did not find race.</p>
+          <p>{error}.</p>
           <p>Go back to <Link to={parentRoute}>races</Link>.</p>
         </div>
       );

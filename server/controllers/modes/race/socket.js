@@ -5,6 +5,7 @@ const crypto = require('crypto');
 const _ = require('lodash');
 const config = require('config');
 
+const { Racer, Race } = require('../../../../dist/compiledServer');
 const { languages } = require('../../../../dist/compiledServer');
 const { server } = require('../../../server');
 
@@ -12,160 +13,6 @@ const races = [];
 
 const io = socketIo(server);
 const racesNamespace = io.of('/races');
-
-class Racer {
-  constructor(options) {
-    _.defaults(this, options);
-
-    this.typed = '';
-    this.lastArray = this.text.split(' ');
-    this.status = 'ongoing';
-
-    this.socket.on('type', (string, callback) => {
-      if (this.status === 'ongoing' && string === this.lastArray[0]) {
-        this.type();
-      }
-      else {
-        callback('Wrong');
-      }
-    });
-
-    this.ongoing = true;
-  }
-
-  type() {
-    const shifted = this.lastArray.shift();
-
-    this.typed += shifted;
-
-    if (this.lastArray.length) {
-      this.typed += ' ';
-    }
-    else {
-      this.finish();
-    }
-  }
-
-  finish() {
-    this.endDate = Date.now();
-
-    this.status = 'finished';
-  }
-}
-
-class Race {
-  constructor(options) {
-    _.defaults(this, options);
-
-    this.participants = [];
-    this.status = 'waiting for participants';
-    this.id = crypto.randomBytes(8).toString('hex');
-
-    this.room = racesNamespace.to(this.id);
-
-    this.startDate = Date.now();
-
-    let waitingCounter = 0;
-
-    const go = () => {
-      this.room.emit('waiting for participants', waitingCounter);
-
-      if (waitingCounter < 10) {
-        waitingCounter += 1;
-
-        setTimeout(go, 1000);
-      }
-      else {
-        this.startFinalCountdown();
-      }
-    };
-
-    go();
-  }
-
-  startFinalCountdown() {
-    this.status = 'final countdown';
-
-    let counter = 3;
-
-    const go = () => {
-      this.room.emit('countdown', counter);
-
-      counter -= 1;
-
-      if (counter > -1) {
-        setTimeout(go, 1000);
-      }
-      else {
-        this.room.emit('start');
-
-        this.start();
-      }
-    };
-
-    go();
-  }
-
-  getUsersProgress() {
-    return this.participants.map(({ id, typed }) => ({
-      id,
-      progress: typed.length / this.text.length,
-    }));
-  }
-
-  start() {
-    this.status = 'ongoing';
-    this.progress = this.getUsersProgress();
-
-    const go = () => {
-      const allDone = this.participants.every(({ status }) => ['finished', 'disconnected'].includes(status));
-
-      const newProgress = this.getUsersProgress();
-
-      if (allDone) {
-        this.progress = newProgress;
-
-        this.room.emit('move', this.progress);
-
-        this.end();
-      }
-      else {
-        const newProgress = this.getUsersProgress();
-
-        if (!_.isEqual(this.progress, newProgress)) {
-          this.progress = newProgress;
-
-          this.room.emit('move', this.progress);
-
-          setTimeout(go, 1000);
-        }
-      }
-    };
-
-    go();
-  }
-
-  end() {
-    this.status = 'endend';
-
-    this.room.emit('end');
-  }
-
-  addParticipant(socket) {
-    const racer = new Racer({
-      id: socket.participant,
-      type: socket.type,
-      socket,
-      text: this.text,
-    });
-
-    this.participants.push(racer);
-  }
-
-  getParticipant(id) {
-    return _.find(this.participants, { id });
-  }
-}
 
 const findActiveRace = (participant) => (
   _.find(races, (race) => (
@@ -261,7 +108,11 @@ racesNamespace
         if (!race) {
           const texts = _.find(languages.languages, { name: language }).racesTexts;
 
+          const id = crypto.randomBytes(8).toString('hex');
+
           race = new Race({
+            id,
+            room: racesNamespace.to(id),
             type: 'quick',
             language,
             text: _.sample(texts),
