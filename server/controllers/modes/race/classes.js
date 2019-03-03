@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-export class Racer {
+class Racer {
   constructor(options) {
     _.defaults(this, options);
 
@@ -40,7 +40,7 @@ export class Racer {
   }
 }
 
-export class Race {
+class Race {
   constructor(options) {
     _.defaults(this, options);
 
@@ -48,9 +48,14 @@ export class Race {
     this.status = 'waiting two or more';
 
     this.startDate = Date.now();
+    
+    console.log('options', options);
+    console.log('socket', this.socket);
   }
 
   move(opt) {
+    console.log('move');
+    
     this.room.emit('move', {
       status: this.status,
       ...opt,
@@ -168,3 +173,9 @@ export class Race {
     return _.find(this.participants, { id });
   }
 }
+
+
+module.exports = {
+  Racer,
+  Race,
+};

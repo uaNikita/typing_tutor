@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const _ = require('lodash');
 const config = require('config');
 
-const { Racer, Race } = require('../../../../dist/compiledServer');
+const { Racer, Race } = require('./classes');
 const { languages } = require('../../../../dist/compiledServer');
 const { server } = require('../../../server');
 
@@ -73,11 +73,9 @@ racesNamespace
       if (race) {
         const racer = _.find(race.participants, ({ id }) => id === socket.participant);
 
-        console.log('racer', socket.participant);
-        console.log('racer', racer);
-
         if (racer) {
           fn({
+            status: race.status,
             typed: racer.typed,
             lastArray: racer.lastArray,
             users: race.getUsersProgress(),

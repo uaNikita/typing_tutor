@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
@@ -9,6 +9,7 @@ import styles from './race.module.styl';
 
 class Block extends Component {
   state = {
+    status: null,
     error: null,
     typed: null,
     last: null,
@@ -58,7 +59,9 @@ class Block extends Component {
     }));
 
     socket.on('move', (obj) => {
-      console.log(obj.status);
+      console.log('move');
+
+      this.setState(obj);
     });
   }
 
@@ -69,6 +72,8 @@ class Block extends Component {
         last,
         users,
         error,
+        status,
+        counter,
       },
       parentRoute,
     } = this;
@@ -83,18 +88,37 @@ class Block extends Component {
         </div>
       );
     }
-    else if (users) {
+    else if (status) {
+      let statusContent;
+
+      switch (status) {
+        case 'waiting two or more':
+          statusContent = <p>Please start</p>;
+          break;
+        case 'waiting for participants':
+          statusContent = <p>Time to start: {counter}</p>;
+          break;
+        case 'final countdown':
+          statusContent = <p>Final countdown: {counter}</p>;
+          break;
+        case 'ongoing':
+        default:
+      }
+
       content = (
-        <div>
-          <span>{typed}</span>
-          <span>{last}</span>
+        <Fragment>
+          {statusContent}
+          <p>
+            <span>{typed}</span>
+            <span>{last}</span>
+          </p>
           {users.map(({ id, progress }) => (
             <p key={id} styleName="user">
               <span className="name">{id}</span>
               <span styleName="progress" style={{ width: `${progress * 100}%` }} />
             </p>
           ))}
-        </div>
+        </Fragment>
       );
     }
 
