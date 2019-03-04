@@ -48,9 +48,6 @@ class Race {
     this.status = 'waiting two or more';
 
     this.startDate = Date.now();
-    
-    console.log('options', options);
-    console.log('socket', this.socket);
   }
 
   move(opt) {
@@ -173,7 +170,6 @@ class Race {
     return _.find(this.participants, { id });
   }
 }
-
 
 module.exports = {
   Racer,
