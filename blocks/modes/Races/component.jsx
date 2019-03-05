@@ -24,26 +24,11 @@ class Block extends Component {
           getNewTokens()
             .then(() => {
               this.socket = io('/races')
-                .on('connect', () => {
-                  console.log('connect', 1);
-                })
-                .on('registered', () => {
-                  console.log('registered', 1);
-
-                  this.getData();
-                });
+                .on('registered', this.getData);
             });
         }
       })
-      .on('connect', () => {
-        console.log('connect', 2);
-      })
-      .on('registered', () => {
-        console.log('registered', 2);
-
-        this.getData();
-
-      });
+      .on('registered', this.getData);
   }
 
   getData = () => {
@@ -54,10 +39,8 @@ class Block extends Component {
       },
     } = this;
 
-
-
     setSocket(this.socket);
-    console.log(2323);
+
     this.socket.emit('get active race', (id => setRace(id)));
   };
 
