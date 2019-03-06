@@ -52,7 +52,7 @@ class Race {
 
   move(opt) {
     console.log('move');
-    
+
     this.room.emit('move', {
       status: this.status,
       ...opt,

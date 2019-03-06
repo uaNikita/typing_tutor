@@ -14,8 +14,8 @@ const races = [];
 const io = socketIo(server);
 const racesNamespace = io.of('/races');
 
-const findActiveRace = (participant) => (
-  _.find(races, (race) => (
+const findActiveRace = participant => (
+  _.find(races, race => (
     _.some(race.participants, ({ id }) => id === participant)
   ))
 );
@@ -36,7 +36,8 @@ racesNamespace
         socket.type = 'user';
 
         socket.emit('registered');
-      } catch (e) {
+      }
+      catch (e) {
         let error = 'Forbidden';
 
         if (e.name === 'TokenExpiredError') {
