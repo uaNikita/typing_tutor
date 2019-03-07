@@ -62,67 +62,66 @@ racesNamespace
       socket.disconnect(true);
     }
 
-    socket.on('get active race', (fn) => {
-      const race = findActiveRace(socket.participant);
+    socket
+      .on('get active race', (fn) => {
+        const race = findActiveRace(socket.participant);
 
-      fn(race && race.id);
-    });
+        fn(race && race.id);
+      })
+      .on('get race', (id, fn) => {
+        const race = _.find(races, { id });
 
-    socket.on('get race', (id, fn) => {
-      const race = _.find(races, { id });
+        if (race) {
+          const racer = _.find(race.participants, ({ id }) => id === socket.participant);
 
-      if (race) {
-        const racer = _.find(race.participants, ({ id }) => id === socket.participant);
-
-        if (racer) {
-          fn({
-            status: race.status,
-            typed: racer.typed,
-            lastArray: racer.lastArray,
-            users: race.getUsersProgress(),
-          });
+          if (racer) {
+            fn({
+              status: race.status,
+              typed: racer.typed,
+              lastArray: racer.lastArray,
+              users: race.getUsersProgress(),
+            });
+          }
+          else {
+            fn('Race is not available for you');
+          }
         }
         else {
-          fn('Race is not available for you');
+          fn('Race is not exist');
         }
-      }
-      else {
-        fn('Race is not exist');
-      }
-    });
+      })
+      .on('quick start', (language, fn) => {
+        const activeRace = findActiveRace(socket.participant);
 
-    socket.on('quick start', (language, fn) => {
-      const activeRace = findActiveRace(socket.participant);
-
-      if (activeRace) {
-        fn('Already have active race');
-      }
-      else {
-        let race = _.find(races, {
-          language,
-          type: 'quick',
-          status: 'waiting for participants',
-        });
-
-        if (!race) {
-          const texts = _.find(languages.languages, { name: language }).racesTexts;
-
-          const id = crypto.randomBytes(8).toString('hex');
-
-          race = new Race({
-            id,
-            room: racesNamespace.to(id),
-            type: 'quick',
+        if (activeRace) {
+          fn('Already have active race');
+        }
+        else {
+          let race = _.find(races, {
             language,
-            text: _.sample(texts),
+            type: 'quick',
+            status: 'waiting for participants',
           });
 
-          races.push(race);
+          if (!race) {
+            const texts = _.find(languages.languages, { name: language }).racesTexts;
+
+            const id = crypto.randomBytes(8).toString('hex');
+
+            race = new Race({
+              id,
+              room: racesNamespace.to(id),
+              type: 'quick',
+              language,
+              text: _.sample(texts),
+            });
+
+            races.push(race);
+          }
+
+          race.addParticipant(socket);
+
+          fn(race.id);
         }
-
-        race.addParticipant(socket);
-
-        fn(race.id);
-      }
-    });
+      });
   });

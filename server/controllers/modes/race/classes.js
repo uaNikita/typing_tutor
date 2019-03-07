@@ -48,6 +48,11 @@ class Race {
     this.status = 'waiting two or more';
 
     this.startDate = Date.now();
+
+    this.socket.on('start', (language, fn) => {
+
+
+    });
   }
 
   move(opt) {

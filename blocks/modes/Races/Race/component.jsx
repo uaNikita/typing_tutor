@@ -65,6 +65,16 @@ class Block extends Component {
     });
   }
 
+  startGame = () => {
+    const {
+      props: {
+        socket,
+      },
+    } = this;
+
+    socket.emit('start');
+  };
+
   render() {
     const {
       state: {
@@ -93,37 +103,37 @@ class Block extends Component {
 
       switch (status) {
         case 'waiting two or more':
-          statusContent = <p>Please start</p>;
-          break;
-        case 'waiting for participants':
-          statusContent = <p>Time to start: {counter}</p>;
-          break;
-        case 'final countdown':
-          statusContent = <p>Final countdown: {counter}</p>;
-          break;
-        case 'ongoing':
-        default:
-      }
+          statusContent = <p>Waiting for other players… <button onClick={this.startGame}>Start game</button>/p>;
+            break;
+            case 'waiting for participants':
+            statusContent = <p>Time to start: {counter}</p>;
+            break;
+            case 'final countdown':
+            statusContent = <p>Final countdown: {counter}</p>;
+            break;
+            case 'ongoing':
+            default:
+            }
 
-      content = (
-        <Fragment>
-          {statusContent}
-          <p>
-            <span>{typed}</span>
-            <span>{last}</span>
-          </p>
-          {users.map(({ id, progress }) => (
-            <p key={id} styleName="user">
-              <span className="name">{id}</span>
-              <span styleName="progress" style={{ width: `${progress * 100}%` }} />
-            </p>
-          ))}
-        </Fragment>
-      );
-    }
+            content = (
+            <Fragment>
+              {statusContent}
+              <p>
+                <span>{typed}</span>
+                <span>{last}</span>
+              </p>
+              {users.map(({ id, progress }) => (
+                <p key={id} styleName="user">
+                  <span className="name">{id}</span>
+                  <span styleName="progress" style={{ width: `${progress * 100}%` }} />
+                </p>
+              ))}
+            </Fragment>
+            );
+            }
 
-    return content;
-  }
-}
+            return content;
+            }
+            }
 
-export default CSSModules(Block, styles);
+            export default CSSModules(Block, styles);;;
