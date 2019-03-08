@@ -14,6 +14,7 @@ class Block extends Component {
     typed: null,
     last: null,
     users: null,
+    counter: null,
   };
 
   constructor(props) {
@@ -40,29 +41,29 @@ class Block extends Component {
       },
     } = this;
 
-    socket.emit('get race', raceId, ((res) => {
-      console.log('res', res);
+    socket
+      .emit('get race', raceId, ((res) => {
+        console.log('res', res);
 
-      if (_.isString(res)) {
-        this.setState({
-          error: res,
-        });
-      }
-      else {
-        const state = {
-          ...res,
-          last: res.lastArray.join(' '),
-        };
+        if (_.isString(res)) {
+          this.setState({
+            error: res,
+          });
+        }
+        else {
+          const state = {
+            ...res,
+            last: res.lastArray.join(' '),
+          };
 
-        this.setState(state);
-      }
-    }));
-
-    socket.on('move', (obj) => {
-      console.log('move');
-
-      this.setState(obj);
-    });
+          this.setState(state);
+        }
+      }))
+      .on('move', (obj) => {
+        console.log('move', obj);
+        
+        this.setState(obj);
+      });
   }
 
   startGame = () => {
@@ -89,6 +90,7 @@ class Block extends Component {
     } = this;
 
     let content = <Loader styleName="loader" size="30" />;
+    console.log(111);
 
     if (error) {
       content = (
@@ -103,37 +105,37 @@ class Block extends Component {
 
       switch (status) {
         case 'waiting two or more':
-          statusContent = <p>Waiting for other players… <button onClick={this.startGame}>Start game</button>/p>;
-            break;
-            case 'waiting for participants':
-            statusContent = <p>Time to start: {counter}</p>;
-            break;
-            case 'final countdown':
-            statusContent = <p>Final countdown: {counter}</p>;
-            break;
-            case 'ongoing':
-            default:
-            }
+          statusContent = <p>Waiting for other players… <button onClick={this.startGame}>Start game</button></p>;
+          break;
+        case 'waiting for participants':
+          statusContent = <p>Time to start: {counter}</p>;
+          break;
+        case 'final countdown':
+          statusContent = <p>Final countdown: {counter}</p>;
+          break;
+        case 'ongoing':
+        default:
+      }
 
-            content = (
-            <Fragment>
-              {statusContent}
-              <p>
-                <span>{typed}</span>
-                <span>{last}</span>
-              </p>
-              {users.map(({ id, progress }) => (
-                <p key={id} styleName="user">
-                  <span className="name">{id}</span>
-                  <span styleName="progress" style={{ width: `${progress * 100}%` }} />
-                </p>
-              ))}
-            </Fragment>
-            );
-            }
+      content = (
+        <Fragment>
+          {statusContent}
+          <p>
+            <span>{typed}</span>
+            <span>{last}</span>
+          </p>
+          {users.map(({ id, progress }) => (
+            <p key={id} styleName="user">
+              <span className="name">{id}</span>
+              <span styleName="progress" style={{ width: `${progress * 100}%` }} />
+            </p>
+          ))}
+        </Fragment>
+      );
+    }
 
-            return content;
-            }
-            }
+    return content;
+  }
+}
 
-            export default CSSModules(Block, styles);;;
+export default CSSModules(Block, styles);

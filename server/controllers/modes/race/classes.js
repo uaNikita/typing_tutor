@@ -8,14 +8,16 @@ class Racer {
     this.lastArray = this.text.split(' ');
     this.status = 'ongoing';
 
-    this.socket.on('type', (string, callback) => {
-      if (this.status === 'ongoing' && string === this.lastArray[0]) {
-        this.type();
-      }
-      else {
-        callback('Wrong');
-      }
-    });
+    this.socket
+      .on('start', () => this.race.startWaitingParticipants())
+      .on('type', (string, callback) => {
+        if (this.status === 'ongoing' && string === this.lastArray[0]) {
+          this.type();
+        }
+        else {
+          callback('Wrong');
+        }
+      });
 
     this.ongoing = true;
   }
@@ -49,15 +51,11 @@ class Race {
 
     this.startDate = Date.now();
 
-    this.socket.on('start', (language, fn) => {
-
-
-    });
+    // strange fix to prevent not caught first emit
+    this.room.emit('first room emit');
   }
 
   move(opt) {
-    console.log('move');
-
     this.room.emit('move', {
       status: this.status,
       ...opt,
@@ -65,24 +63,29 @@ class Race {
   }
 
   startWaitingParticipants() {
-    this.status = 'waiting for participants';
+    console.log('startWaitingParticipants', this.status);
+    if (this.status === 'waiting two or more') {
+      this.status = 'waiting for participants';
 
-    let counter = 0;
+      let counter = 30;
 
-    const go = () => {
-      this.move({ counter });
+      const go = () => {
+        console.log('move', counter);
 
-      if (counter < 10) {
-        counter += 1;
+        this.move({ counter });
 
-        setTimeout(go, 1000);
-      }
-      else {
-        this.startFinalCountdown();
-      }
-    };
+        if (counter > 0) {
+          counter -= 1;
 
-    go();
+          setTimeout(go, 1000);
+        }
+        else {
+          this.startFinalCountdown();
+        }
+      };
+
+      go();
+    }
   }
 
   startFinalCountdown() {
@@ -161,6 +164,7 @@ class Race {
       type: socket.type,
       socket,
       text: this.text,
+      race: this,
     });
 
     this.participants.push(racer);

@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const _ = require('lodash');
 const config = require('config');
 
-const { Racer, Race } = require('./classes');
+const { Race } = require('./classes');
 const { languages } = require('../../../../dist/compiledServer');
 const { server } = require('../../../server');
 
@@ -25,7 +25,7 @@ racesNamespace
     const {
       tt_access: accessToken,
       tt_anonymous: anonymousToken,
-    } = cookie.parse(socket.request.headers.cookie);
+    } = cookie.parse(socket.request.headers.cookie || '');
 
     if (accessToken) {
       try {
