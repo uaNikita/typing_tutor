@@ -61,8 +61,8 @@ class Block extends Component {
       }))
       .on('move', (obj) => {
         console.log('move', obj);
-        
-        this.setState(obj);
+
+        // this.setState(obj);
       });
   }
 
@@ -90,7 +90,6 @@ class Block extends Component {
     } = this;
 
     let content = <Loader styleName="loader" size="30" />;
-    console.log(111);
 
     if (error) {
       content = (
@@ -105,13 +104,24 @@ class Block extends Component {
 
       switch (status) {
         case 'waiting two or more':
-          statusContent = <p>Waiting for other players… <button onClick={this.startGame}>Start game</button></p>;
+          statusContent = (
+            <p>
+              Waiting for other players…
+              {' '}
+              <button
+                type="button"
+                onClick={this.startGame}
+              >
+                Start game
+              </button>
+            </p>
+          );
           break;
         case 'waiting for participants':
           statusContent = <p>Time to start: {counter}</p>;
           break;
         case 'final countdown':
-          statusContent = <p>Final countdown: {counter}</p>;
+          statusContent = <p styleName="countdown">{counter === 0 ? 'Start' : counter}</p>;
           break;
         case 'ongoing':
         default:

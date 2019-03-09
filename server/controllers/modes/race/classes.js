@@ -67,7 +67,7 @@ class Race {
     if (this.status === 'waiting two or more') {
       this.status = 'waiting for participants';
 
-      let counter = 30;
+      let counter = 5;
 
       const go = () => {
         console.log('move', counter);
