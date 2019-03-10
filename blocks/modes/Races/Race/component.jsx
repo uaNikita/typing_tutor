@@ -29,6 +29,12 @@ class Block extends Component {
     this.parentRoute = url.substring(0, url.lastIndexOf('/'));
   }
 
+  handleMove = (obj) => {
+    console.log('move', obj);
+
+    this.setState(obj);
+  };
+
   componentDidMount() {
     const {
       props: {
@@ -43,8 +49,6 @@ class Block extends Component {
 
     socket
       .emit('get race', raceId, ((res) => {
-        console.log('res', res);
-
         if (_.isString(res)) {
           this.setState({
             error: res,
@@ -57,14 +61,21 @@ class Block extends Component {
           };
 
           this.setState(state);
-        }
-      }))
-      .on('move', (obj) => {
-        console.log('move', obj);
 
-        // this.setState(obj);
-      });
+          socket.on('move', this.handleMove);
+        }
+      }));
   }
+
+  componentWillUnmount = () => {
+    const {
+      props: {
+        socket,
+      },
+    } = this;
+
+    socket.off('move', this.handleMove);
+  };
 
   startGame = () => {
     const {

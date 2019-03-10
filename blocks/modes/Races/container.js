@@ -5,6 +5,7 @@ import { setRace, setSocket } from 'ReduxUtils/reducers/modes/race';
 import Component from './component';
 
 const mapStateToProps = state => ({
+  socket: state.getIn(['race', 'socket']),
   activeRace: state.getIn(['race', 'active']),
 });
 

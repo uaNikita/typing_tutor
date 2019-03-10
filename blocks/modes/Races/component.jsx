@@ -14,35 +14,36 @@ class Block extends Component {
   componentDidMount() {
     const {
       props: {
+        socket,
+        setRace,
+        setSocket,
         getNewTokens,
       },
     } = this;
 
-    this.socket = io('/races')
-      .on('error', (error) => {
-        if (error === 'Token expired') {
-          getNewTokens()
-            .then(() => {
-              this.socket = io('/races')
-                .on('registered', this.getData);
-            });
-        }
-      })
-      .on('registered', this.getData);
+    if (socket) {
+      socket.emit('get active race', (id => setRace(id)));
+    }
+    else {
+      const getData = () => {
+        setSocket(this.socket);
+
+        this.socket.emit('get active race', (id => setRace(id)));
+      };
+
+      this.socket = io('/races')
+        .on('error', (error) => {
+          if (error === 'Token expired') {
+            getNewTokens()
+              .then(() => {
+                this.socket = io('/races')
+                  .on('registered', getData);
+              });
+          }
+        })
+        .on('registered', getData);
+    }
   }
-
-  getData = () => {
-    const {
-      props: {
-        setRace,
-        setSocket,
-      },
-    } = this;
-
-    setSocket(this.socket);
-
-    this.socket.emit('get active race', (id => setRace(id)));
-  };
 
   render() {
     const {
