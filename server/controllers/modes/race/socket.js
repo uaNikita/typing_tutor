@@ -72,15 +72,10 @@ racesNamespace
         const race = _.find(races, { id });
 
         if (race) {
-          const racer = _.find(race.participants, ({ id }) => id === socket.participant);
+          const data = race.getDataForRacer(socket.participant);
 
-          if (racer) {
-            fn({
-              status: race.status,
-              typed: racer.typed,
-              lastArray: racer.lastArray,
-              users: race.getUsersProgress(),
-            });
+          if (data) {
+            fn(data);
           }
           else {
             fn('Race is not available for you');

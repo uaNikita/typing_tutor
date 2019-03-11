@@ -55,6 +55,22 @@ class Race {
     this.room.emit('first room emit');
   }
 
+  getDataForRacer = (id) => {
+    const racer = _.find(this.participants, (p) => p.id === id);
+    let result = null;
+
+    if (racer) {
+      result = {
+        status: this.status,
+        typed: racer.typed,
+        lastArray: racer.lastArray,
+        users: this.getUsersProgress(),
+      };
+    }
+
+    return result;
+  };
+
   move(opt) {
     this.room.emit('move', {
       status: this.status,
