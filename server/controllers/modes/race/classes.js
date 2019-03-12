@@ -66,6 +66,10 @@ class Race {
         lastArray: racer.lastArray,
         users: this.getUsersProgress(),
       };
+
+      if (['waiting for participants', 'final countdown'].includes(this.status)) {
+        result.counter = this.counter;
+      }
     }
 
     return result;
@@ -88,15 +92,13 @@ class Race {
     if (this.status === 'waiting two or more') {
       this.status = 'waiting for participants';
 
-      let counter = 30;
+      this.counter = 30;
 
       const go = () => {
-        console.log('move', counter);
+        this.move({ counter: this.counter });
 
-        this.move({ counter });
-
-        if (counter > 0) {
-          counter -= 1;
+        if (this.counter > 0) {
+          this.counter -= 1;
 
           setTimeout(go, 1000);
         }
@@ -112,14 +114,14 @@ class Race {
   startFinalCountdown() {
     this.status = 'final countdown';
 
-    let counter = 3;
+    this.counter = 3;
 
     const go = () => {
-      this.move({ counter });
+      this.move({ counter: this.counter });
 
-      counter -= 1;
+      this.counter -= 1;
 
-      if (counter > -1) {
+      if (this.counter > -1) {
         setTimeout(go, 1000);
       }
       else {
