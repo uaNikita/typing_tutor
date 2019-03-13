@@ -55,7 +55,7 @@ class Race {
     this.room.emit('first room emit');
   }
 
-  getDataForRacer = (id) => {
+  getDataForRacer(id) {
     const racer = _.find(this.participants, (p) => p.id === id);
     let result = null;
 
@@ -80,19 +80,13 @@ class Race {
       status: this.status,
       ...opt,
     });
-
-    console.log('move', {
-      status: this.status,
-      ...opt,
-    });
   }
 
   startWaitingParticipants() {
-    console.log('startWaitingParticipants', this.status);
     if (this.status === 'waiting two or more') {
       this.status = 'waiting for participants';
 
-      this.counter = 30;
+      this.counter = 5;
 
       const go = () => {
         this.move({ counter: this.counter });
