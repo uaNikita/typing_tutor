@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 
 import Header from 'Blocks/Header/container';
-import Keypad from './Keypad/container';
+import Keypad from 'Blocks/Modes/Keypad/container';
 import SyllableArea from './SyllableArea/container';
 import GameArea from './GameArea/container';
 import TextArea from './TextArea/container';

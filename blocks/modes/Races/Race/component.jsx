@@ -4,19 +4,12 @@ import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 
 import Loader from 'Blocks/Loader/component';
+import Keypad from '../../Keypad/container';
 
 import styles from './race.module.styl';
+import { closestEl } from "../../../../utils";
 
 class Block extends Component {
-  state = {
-    status: null,
-    error: null,
-    typed: null,
-    last: null,
-    users: null,
-    counter: null,
-  };
-
   constructor(props) {
     super(props);
 
@@ -29,10 +22,81 @@ class Block extends Component {
     this.parentRoute = url.substring(0, url.lastIndexOf('/'));
   }
 
+  state = {
+    status: null,
+    error: null,
+    typed: null,
+    last: null,
+    users: null,
+    counter: null,
+  };
+
+  keyDownHandler = (e) => {
+    const {
+      props: {
+        typeChar,
+      },
+    } = this;
+
+    if (closestEl(e.target, '.drop-down')) {
+      return;
+    }
+
+    if (e.which === 32) {
+      e.preventDefault();
+
+      typeChar(String.fromCharCode(e.which));
+    }
+  };
+
+  keyPressHandler = (e) => {
+    const {
+      props: {
+        typeChar,
+      },
+    } = this;
+
+    let result = false;
+
+    if (!closestEl(e.target, '.drop-down') && e.which !== 32) {
+      result = typeChar(String.fromCharCode(e.which));
+    }
+
+    return result;
+  };
+
+  addListeners = () => {
+    document.addEventListener('keydown', this.keyDownHandler);
+    document.addEventListener('keypress', this.keyPressHandlerModified);
+  };
+
+  removeListeners = () => {
+    document.removeEventListener('keydown', this.keyDownHandler);
+    document.removeEventListener('keypress', this.keyPressHandlerModified);
+  };
+
+
   handleMove = (obj) => {
     console.log('move', obj);
 
     this.setState(obj);
+
+
+    const startObj = {
+      status: 'final countdown',
+      counter: 0,
+    };
+
+    const endObj = {
+      status: 'endend',
+    };
+
+    if (_.isEqual(obj, startObj)) {
+      this.start();
+    }
+    else if (_.isEqual(obj, endObj)) {
+      this.end();
+    }
   };
 
   componentDidMount() {
@@ -75,6 +139,8 @@ class Block extends Component {
     } = this;
 
     socket.off('move', this.handleMove);
+
+    this.removeListeners();
   };
 
   startGame = () => {
@@ -145,10 +211,15 @@ class Block extends Component {
             <span>{typed}</span>
             <span>{last}</span>
           </p>
+
+          <Keypad styleName="keypad" />
+
           {users.map(({ id, progress }) => (
             <p key={id} styleName="user">
-              <span className="name">{id}</span>
-              <span styleName="progress" style={{ width: `${progress * 100}%` }} />
+              <span styleName="name">{id}</span>
+              <span styleName="progress-bar">
+                <span styleName="progress" style={{ width: `${progress * 100}%` }} />
+              </span>
             </p>
           ))}
         </Fragment>
