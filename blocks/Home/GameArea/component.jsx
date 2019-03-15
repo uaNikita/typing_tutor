@@ -49,8 +49,8 @@ class Block extends ContentArea {
   };
 
   addListeners = () => {
-    document.addEventListener('keydown', this.keyDownHandler);
-    document.addEventListener('keypress', this.keyPressHandlerModified);
+    window.addEventListener('keydown', this.keyDownHandler);
+    window.addEventListener('keypress', this.keyPressHandlerModified);
   };
 
   removeListeners = () => {

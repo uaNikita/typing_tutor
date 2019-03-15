@@ -11,12 +11,6 @@
    p
       margin: 10px 0;
 
-.user
-   margin: 5px 0
-   display: flex
-
-.name
-
 .countdown
    position: absolute;
    top: 50%;
@@ -25,6 +19,37 @@
    color: #008000;
    text-shadow: 0 0 120px #008000;
    transform: translate(-50%, calc(-50% - 80px));
+   
+.user
+   margin: 5px 60px
+   display: flex
+   align-items: center;
 
+.name
+   width: 200px;
+   margin-right: 20px;
+   text-align: right;
+   font-style: italic;
+
+.progress-bar
+   position: relative
+   flex-basis: calc(100% - 220px);
+   border-bottom: 1px dashed #dadada;
+   
+   &:after
+      width: 1px
+      height: 13px;
+      position: absolute
+      top: -6px;
+      right: 0;
+      border-right: 1px dashed #dadada;
+      content ''
+   
 .progress
+   width: 50% !important;
    height: 1px
+   display: block
+   
+.keypad
+   margin-top: 50px;
+   margin-bottom: 50px;

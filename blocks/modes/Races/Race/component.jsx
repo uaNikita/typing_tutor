@@ -3,11 +3,13 @@ import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 
+import { closestEl } from 'Utils';
+
 import Loader from 'Blocks/Loader/component';
+// import Keypad from 'Blocks/Modes/Keypad/container';
 import Keypad from '../../Keypad/container';
 
 import styles from './race.module.styl';
-import { closestEl } from "../../../../utils";
 
 class Block extends Component {
   constructor(props) {
@@ -26,77 +28,9 @@ class Block extends Component {
     status: null,
     error: null,
     typed: null,
-    last: null,
+    rest: null,
     users: null,
     counter: null,
-  };
-
-  keyDownHandler = (e) => {
-    const {
-      props: {
-        typeChar,
-      },
-    } = this;
-
-    if (closestEl(e.target, '.drop-down')) {
-      return;
-    }
-
-    if (e.which === 32) {
-      e.preventDefault();
-
-      typeChar(String.fromCharCode(e.which));
-    }
-  };
-
-  keyPressHandler = (e) => {
-    const {
-      props: {
-        typeChar,
-      },
-    } = this;
-
-    let result = false;
-
-    if (!closestEl(e.target, '.drop-down') && e.which !== 32) {
-      result = typeChar(String.fromCharCode(e.which));
-    }
-
-    return result;
-  };
-
-  addListeners = () => {
-    document.addEventListener('keydown', this.keyDownHandler);
-    document.addEventListener('keypress', this.keyPressHandlerModified);
-  };
-
-  removeListeners = () => {
-    document.removeEventListener('keydown', this.keyDownHandler);
-    document.removeEventListener('keypress', this.keyPressHandlerModified);
-  };
-
-
-  handleMove = (obj) => {
-    console.log('move', obj);
-
-    this.setState(obj);
-
-
-    const startObj = {
-      status: 'final countdown',
-      counter: 0,
-    };
-
-    const endObj = {
-      status: 'endend',
-    };
-
-    if (_.isEqual(obj, startObj)) {
-      this.start();
-    }
-    else if (_.isEqual(obj, endObj)) {
-      this.end();
-    }
   };
 
   componentDidMount() {
@@ -124,6 +58,10 @@ class Block extends Component {
             last: res.lastArray.join(' '),
           };
 
+          if (res.status === 'ongoing') {
+            this.addListeners();
+          }
+
           this.setState(state);
 
           socket.on('move', this.handleMove);
@@ -143,7 +81,73 @@ class Block extends Component {
     this.removeListeners();
   };
 
-  startGame = () => {
+  keyDownHandler = (e) => {
+    if (!closestEl(e.target, '.drop-down') && e.which === 32) {
+      this.typeChar(String.fromCharCode(e.which));
+    }
+  };
+
+  keyPressHandler = (e) => {
+    if (!closestEl(e.target, '.drop-down') && e.which !== 32) {
+      this.typeChar(String.fromCharCode(e.which));
+    }
+  };
+
+  addListeners = () => {
+    document.addEventListener('keydown', this.keyDownHandler);
+    document.addEventListener('keypress', this.keyPressHandler);
+  };
+
+  removeListeners = () => {
+    document.removeEventListener('keydown', this.keyDownHandler);
+    document.removeEventListener('keypress', this.keyPressHandler);
+  };
+
+  handleMove = (obj) => {
+    console.log('move', obj);
+
+    this.setState(obj);
+
+    const startObj = {
+      status: 'final countdown',
+      counter: 0,
+    };
+
+    const endObj = {
+      status: 'endend',
+    };
+
+    if (_.isEqual(obj, startObj)) {
+      this.start();
+    }
+    else if (_.isEqual(obj, endObj)) {
+      this.end();
+    }
+  };
+
+
+  typeChar = (code) => {
+    const {
+      props: {
+        typeChar,
+      },
+      state: {
+        typed,
+        rest,
+      },
+    } = this;
+
+    typeChar(String.fromCharCode(code));
+
+    if (this.last[0] === code) {
+      this.setState({
+        typed: typed + rest[0],
+        rest: rest.substring(1),
+      });
+    }
+  }
+
+  handleStart = () => {
     const {
       props: {
         socket,
@@ -152,6 +156,14 @@ class Block extends Component {
 
     socket.emit('start');
   };
+
+  start = () => {
+    this.addListeners();
+  }
+
+  end = () => {
+    this.removeListeners();
+  }
 
   render() {
     const {
@@ -187,7 +199,7 @@ class Block extends Component {
               {' '}
               <button
                 type="button"
-                onClick={this.startGame}
+                onClick={this.handleStart}
               >
                 Start game
               </button>

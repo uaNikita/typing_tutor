@@ -42,6 +42,14 @@ class Racer {
   }
 }
 
+/**
+ Posible race statuses:
+ 1. waiting two or more
+ 2. waiting for participants
+ 3. final countdown
+ 4. ongoing
+ 5. endend
+ */
 class Race {
   constructor(options) {
     _.defaults(this, options);
