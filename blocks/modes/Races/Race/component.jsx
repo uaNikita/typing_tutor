@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { closestEl } from 'Utils';
 
 import Loader from 'Blocks/Loader/component';
-// import Keypad from 'Blocks/Modes/Keypad/container';
+
 import Keypad from '../../Keypad/container';
 
 import styles from './race.module.styl';
