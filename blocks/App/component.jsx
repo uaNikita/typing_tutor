@@ -10,7 +10,7 @@ import Home from 'Blocks/Home/container';
 import Header from 'Blocks/Header/component';
 import Game from 'Blocks/modes/Game/component';
 import Races from 'Blocks/modes/Races/container';
-import Syllable from 'Blocks/modes/Syllable/container';
+import Syllable from 'Blocks/modes/Syllable/component';
 import Text from 'Blocks/modes/Text/component';
 import SettingsPages from 'Blocks/SettingsPages/component';
 import OptionsPages from 'Blocks/OptionsPages/component';

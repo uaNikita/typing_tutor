@@ -1,68 +1,14 @@
-import React, { Fragment } from 'react';
-import {
-  Switch,
-  Route,
-  Redirect,
-  NavLink,
-} from 'react-router-dom';
-import CSSModules from 'react-css-modules';
+import React from 'react';
+import { Switch, Route } from 'react-router-dom';
 
-import Fingers from './Fingers/container';
-import Free from './Free/container';
+import Index from './Index/container';
+import Settings from './Settings/component';
 
-import './syllable.styl';
-import styles from './syllable-mode.module.styl';
+const Block = ({ match: { url } }) => (
+  <Switch>
+    <Route exact from={url} component={Index} />
+    <Route path={url} component={Settings} />
+  </Switch>
+);
 
-const menuLinks = [
-  {
-    url: '/fingers',
-    text: 'By fingers',
-  },
-  {
-    url: '/free',
-    text: 'Free',
-  },
-];
-
-const Block = (props) => {
-  const {
-    match: {
-      url,
-    },
-  } = props;
-
-  const links = menuLinks.map(({ url: linkUrl, text }) => (
-    <NavLink
-      key={linkUrl}
-      className="submenu-link"
-      activeClassName="submenu-link_selected"
-      to={url + linkUrl}
-    >
-      {text}
-    </NavLink>
-  ));
-
-  return (
-    <Fragment>
-      <div styleName="modes">
-        <div styleName="menu">
-          <h4 styleName="title">
-            Sets
-          </h4>
-          {links}
-        </div>
-
-        <div styleName="content">
-          <Switch>
-            <Redirect exact from={url} to={`${url}/fingers`} />
-            <Route path={`${url}/fingers`} component={Fingers} />
-            <Route path={`${url}/free`} component={Free} />
-            <Redirect to="/404" />
-          </Switch>
-        </div>
-      </div>
-    </Fragment>
-  );
-};
-
-export default CSSModules(Block, styles);
+export default Block;
