@@ -1,39 +1,31 @@
 import React, { Fragment } from 'react';
+import { Link } from 'react-router-dom';
+import CSSModules from 'react-css-modules';
 
 import Header from 'Blocks/Header/container';
-import Keypad from '../modes/Keypad/container';
-import SyllableArea from './SyllableArea/container';
-import GameArea from './GameArea/container';
-import TextArea from './TextArea/container';
-import Actions from './Actions/container';
 
-const Block = ({ mode }) => {
-  let area;
+import styles from './home.module.styl';
 
-  switch (mode) {
-    case 'text':
-      area = <TextArea />;
-      break;
+const Block = () => (
+  <Fragment>
+    <Header />
+    <br />
+    <br />
+    <br />
+    <Link to="/syllable">Help</Link>
+    <br />
+    <br />
+    <br />
+    <Link to="/text">Text</Link>
+    <br />
+    <br />
+    <br />
+    <Link to="/game">Game</Link>
+    <br />
+    <br />
+    <br />
+    <Link to="/races">Race</Link>
+  </Fragment>
+);
 
-    case 'syllable':
-      area = <SyllableArea />;
-      break;
-
-    case 'game':
-      area = <GameArea />;
-      break;
-
-    default:
-  }
-
-  return (
-    <Fragment>
-      <Header />
-      <Actions />
-      {area}
-      <Keypad />
-    </Fragment>
-  );
-};
-
-export default Block;
+export default CSSModules(Block, styles);

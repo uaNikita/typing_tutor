@@ -6,7 +6,7 @@ import dayjs from 'dayjs';
 import { keyboards, languages } from 'Constants/languages';
 
 import PureString from 'Blocks/PureString';
-import ContentArea from '../ContentArea';
+import ContentArea from '../../ContentArea';
 
 import styles from './game-area.module.styl';
 

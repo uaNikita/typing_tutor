@@ -14,7 +14,7 @@ const modesNavigation = [
   'Syllable',
   'Text',
   'Game',
-  'Races',
+  'Race',
 ];
 
 const Block = ({ location: { pathname }, mode }) => {

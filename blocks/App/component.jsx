@@ -1,17 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import _ from 'lodash';
-import { Switch, Route, Redirect } from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import GlobalMessageTransitionGroup from 'Blocks/GlobalMessageTransitionGroup/container';
 import VerifyPage from 'Blocks/VerifyPage/container';
 import PrivateRoute from 'Blocks/PrivateRoute/container';
-import Home from 'Blocks/Home/container';
+import Home from 'Blocks/Home/component';
 import Header from 'Blocks/Header/component';
-import Game from 'Blocks/modes/Game/component';
-import Races from 'Blocks/modes/Races/container';
-import Syllable from 'Blocks/modes/Syllable/component';
-import Text from 'Blocks/modes/Text/component';
+import Modes from 'Blocks/Modes/component';
 import SettingsPages from 'Blocks/SettingsPages/component';
 import OptionsPages from 'Blocks/OptionsPages/component';
 import StatisticPage from 'Blocks/StatisticPage/container';
@@ -80,17 +77,12 @@ class Block extends Component {
               <Fragment>
                 <Header />
                 <Switch>
-                  <Route exact path="/404" component={NotFound} />
-                  <Route path="/syllable" component={Syllable} />
-                  <Route path="/text" component={Text} />
-                  <Route path="/game" component={Game} />
-                  <Route path="/races" component={Races} />
-                  <Route path="/options" component={OptionsPages} />
+                  <Route path="/404" component={NotFound} />
                   <Route path="/options" component={OptionsPages} />
                   <Route path="/statistic" component={StatisticPage} />
                   <Route path="/help" component={Help} />
                   <PrivateRoute path="/settings" component={SettingsPages} />
-                  <Redirect to="/404" />
+                  <Route component={Modes} />
                 </Switch>
               </Fragment>
             )}

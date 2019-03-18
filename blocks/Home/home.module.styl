@@ -1,0 +1,22 @@
+.root
+   display: flex
+   justify-content center
+   align-items center
+   position: absolute;
+   top: 0;
+   right: 0;
+   bottom: 0;
+   left: 0;
+.loader
+   width: 16px;
+   height: 16px;
+   border-radius: 50%;
+   border: 2px solid transparent;
+   border-top-color: #000;
+   border-bottom-color: @border-top-color;
+   animation: loader 1s infinite linear
+@keyframes loader
+   from
+      transform: rotate(0);
+   to
+      transform: rotate(360deg);

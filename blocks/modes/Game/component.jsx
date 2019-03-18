@@ -1,46 +1,14 @@
 import React from 'react';
-import {
-  Switch,
-  Redirect,
-  Route,
-  NavLink,
-} from 'react-router-dom';
+import { Switch, Route } from 'react-router-dom';
 
-import FlyingWords from './FlyingWords/container';
+import Index from './Index/container';
+import Settings from './Settings/component';
 
-const menuLinks = [
-  {
-    url: '/flying-words',
-    text: 'Flying words',
-  },
-];
-
-const Block = ({ match: { url } }) => {
-  const links = menuLinks.map(({ url: linkUrl, text }) => (
-    <NavLink
-      key={linkUrl}
-      className="submenu-link"
-      activeClassName="submenu-link_selected"
-      to={url + linkUrl}
-    >
-      {text}
-    </NavLink>
-  ));
-
-  return (
-    <div className="sub-layout">
-      <nav className="sub-layout__menu">
-        {links}
-      </nav>
-      <div className="sub-layout__content">
-        <Switch>
-          <Redirect exact from={url} to={`${url}/flying-words`} />
-          <Route path={`${url}/flying-words`} component={FlyingWords} />
-          <Redirect to="/404" />
-        </Switch>
-      </div>
-    </div>
-  );
-};
+const Block = ({ match: { url } }) => (
+  <Switch>
+    <Route exact from={url} component={Index} />
+    <Route path={url} component={Settings} />
+  </Switch>
+);
 
 export default Block;
