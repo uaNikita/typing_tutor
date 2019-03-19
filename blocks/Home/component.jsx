@@ -9,22 +9,13 @@ import styles from './home.module.styl';
 const Block = () => (
   <Fragment>
     <Header />
-    <br />
-    <br />
-    <br />
-    <Link to="/syllable">Help</Link>
-    <br />
-    <br />
-    <br />
-    <Link to="/text">Text</Link>
-    <br />
-    <br />
-    <br />
-    <Link to="/game">Game</Link>
-    <br />
-    <br />
-    <br />
-    <Link to="/races">Race</Link>
+
+    <div styleName="activities">
+      <Link styleName="activity" to="/syllable">Syllable</Link>
+      <Link styleName="activity" to="/text">Text</Link>
+      <Link styleName="activity" to="/game">Game</Link>
+      <Link styleName="activity" to="/race">Race</Link>
+    </div>
   </Fragment>
 );
 
