@@ -194,7 +194,7 @@ class Block extends Component {
       switch (status) {
         case 'waiting two or more':
           statusContent = (
-            <p>
+            <p styleName="details">
               Waiting for other players…
               {' '}
               <button
@@ -207,7 +207,7 @@ class Block extends Component {
           );
           break;
         case 'waiting for participants':
-          statusContent = <p>Time to start: {counter}</p>;
+          statusContent = <p styleName="details">Time to start: {counter}</p>;
           break;
         case 'final countdown':
           statusContent = <p styleName="countdown">{counter === 0 ? 'Start' : counter}</p>;
@@ -219,7 +219,7 @@ class Block extends Component {
       content = (
         <Fragment>
           {statusContent}
-          <p>
+          <p styleName="text">
             <span>{typed}</span>
             <span>{last}</span>
           </p>
