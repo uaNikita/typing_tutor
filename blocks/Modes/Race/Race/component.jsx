@@ -191,8 +191,10 @@ class Block extends Component {
     else if (status) {
       let statusContent;
 
+      console.log('status', status);
+
       switch (status) {
-        case 'waiting two or more':
+        case 'created':
           statusContent = (
             <p styleName="details">
               Waiting for other players…
@@ -206,11 +208,15 @@ class Block extends Component {
             </p>
           );
           break;
+        case 'waiting at least one more participant':
+          statusContent = <p styleName="details">Waiting at least one more player</p>;
+          break;
         case 'waiting for participants':
           statusContent = <p styleName="details">Time to start: {counter}</p>;
           break;
         case 'final countdown':
-          statusContent = <p styleName="countdown">{counter === 0 ? 'Start' : counter}</p>;
+          statusContent = <p styleName=
+            "countdown">{counter === 0 ? 'Start' : counter}</p>;
           break;
         case 'ongoing':
         default:

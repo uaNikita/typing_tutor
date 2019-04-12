@@ -44,7 +44,8 @@ class Racer {
 
 /**
  Posible race statuses:
- 1. waiting two or more
+ 1. created
+ 1. waiting at least one more participant
  2. waiting for participants
  3. final countdown
  4. ongoing
@@ -55,7 +56,7 @@ class Race {
     _.defaults(this, options);
 
     this.participants = [];
-    this.status = 'waiting two or more';
+    this.status = 'created';
 
     this.startDate = Date.now();
 
@@ -63,21 +64,23 @@ class Race {
     this.room.emit('first room emit');
   }
 
-  getDataForRacer(id) {
-    const racer = _.find(this.participants, (p) => p.id === id);
-    let result = null;
 
-    if (racer) {
-      result = {
-        status: this.status,
-        typed: racer.typed,
-        lastArray: racer.lastArray,
-        users: this.getUsersProgress(),
-      };
+  getRacer({ participant }) {
+    const racer = _.find(this.participants, (p) => p.id === participant);
 
-      if (['waiting for participants', 'final countdown'].includes(this.status)) {
-        result.counter = this.counter;
-      }
+    return racer ? racer : null;
+  };
+
+  getRacerData(racer) {
+    const result = {
+      status: this.status,
+      typed: racer.typed,
+      lastArray: racer.lastArray,
+      users: this.getUsersProgress(),
+    };
+
+    if (['waiting for participants', 'final countdown'].includes(this.status)) {
+      result.counter = this.counter;
     }
 
     return result;
@@ -91,9 +94,18 @@ class Race {
   }
 
   startWaitingParticipants() {
-    if (this.status === 'waiting two or more') {
-      this.status = 'waiting for participants';
+    console.log('startWaitingParticipants', this.status);
 
+    if (this.status !== 'created') {
+      return;
+    }
+
+    if (this.participants.length < 2) {
+      this.status = 'waiting at least one more participant';
+
+      this.move();
+    }
+    else {
       this.counter = 5;
 
       const go = () => {
@@ -183,7 +195,7 @@ class Race {
     this.room.emit('end');
   }
 
-  addParticipant(socket) {
+  addRacer(socket) {
     const racer = new Racer({
       id: socket.participant,
       type: socket.type,
@@ -195,9 +207,11 @@ class Race {
     this.participants.push(racer);
 
     if (this.participants.length > 1
-      && this.status === 'waiting two or more') {
+      && this.status === 'waiting at least one more participant') {
       this.startWaitingParticipants();
     }
+
+    return racer;
   }
 
   getParticipant(id) {

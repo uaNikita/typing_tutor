@@ -72,14 +72,13 @@ racesNamespace
         const race = _.find(races, { id });
 
         if (race) {
-          const data = race.getDataForRacer(socket.participant);
+          let racer = race.getRacer(socket);
 
-          if (data) {
-            fn(data);
+          if (!racer) {
+            racer = race.addRacer(socket);
           }
-          else {
-            fn('Race is not available for you');
-          }
+
+          fn(race.getRacerData(racer));
         }
         else {
           fn('Race is not exist');
@@ -114,7 +113,7 @@ racesNamespace
             races.push(race);
           }
 
-          race.addParticipant(socket);
+          race.addRacer(socket);
 
           fn(race.id);
         }
