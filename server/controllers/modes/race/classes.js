@@ -9,7 +9,19 @@ class Racer {
     this.status = 'ongoing';
 
     this.socket
-      .on('start', () => this.race.startWaitingParticipants())
+      .on('start', () => {
+        if (this.status !== 'created') {
+          return;
+        }
+        else if (this.participants.length < 2) {
+          this.status = 'waiting at least one more participant';
+
+          this.move();
+        }
+        else {
+          this.race.waitRacers();
+        }
+      })
       .on('type', (string, callback) => {
         if (this.status === 'ongoing' && string === this.lastArray[0]) {
           this.type();
@@ -64,11 +76,10 @@ class Race {
     this.room.emit('first room emit');
   }
 
-
   getRacer({ participant }) {
     const racer = _.find(this.participants, (p) => p.id === participant);
 
-    return racer ? racer : null;
+    return racer || null;
   };
 
   getRacerData(racer) {
@@ -93,36 +104,23 @@ class Race {
     });
   }
 
-  startWaitingParticipants() {
-    console.log('startWaitingParticipants', this.status);
+  waitRacers() {
+    this.counter = 5;
 
-    if (this.status !== 'created') {
-      return;
-    }
+    const go = () => {
+      this.move({ counter: this.counter });
 
-    if (this.participants.length < 2) {
-      this.status = 'waiting at least one more participant';
+      if (this.counter > 0) {
+        this.counter -= 1;
 
-      this.move();
-    }
-    else {
-      this.counter = 5;
+        setTimeout(go, 1000);
+      }
+      else {
+        this.startFinalCountdown();
+      }
+    };
 
-      const go = () => {
-        this.move({ counter: this.counter });
-
-        if (this.counter > 0) {
-          this.counter -= 1;
-
-          setTimeout(go, 1000);
-        }
-        else {
-          this.startFinalCountdown();
-        }
-      };
-
-      go();
-    }
+    go();
   }
 
   startFinalCountdown() {
@@ -208,7 +206,7 @@ class Race {
 
     if (this.participants.length > 1
       && this.status === 'waiting at least one more participant') {
-      this.startWaitingParticipants();
+      this.waitRacers();
     }
 
     return racer;
