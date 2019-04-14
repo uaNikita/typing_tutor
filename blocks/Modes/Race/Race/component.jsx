@@ -104,8 +104,7 @@ class Block extends Component {
   };
 
   handleMove = (obj) => {
-    console.log('move', obj);
-
+    console.log(374523);
     this.setState(obj);
 
     const startObj = {
@@ -124,7 +123,6 @@ class Block extends Component {
       this.end();
     }
   };
-
 
   typeChar = (code) => {
     const {
@@ -192,6 +190,7 @@ class Block extends Component {
       let statusContent;
 
       console.log('status', status);
+      console.log('status', status === 'waiting at least one more racer');
 
       switch (status) {
         case 'created':
@@ -208,15 +207,16 @@ class Block extends Component {
             </p>
           );
           break;
-        case 'waiting at least one more participant':
-          statusContent = <p styleName="details">Waiting at least one more player</p>;
+        case 'waiting at least one more racer':
+          statusContent = <p styleName="details">Waiting at least one more player...</p>;
           break;
-        case 'waiting for participants':
+        case 'waiting for racers':
+          console.log(111);
+          
           statusContent = <p styleName="details">Time to start: {counter}</p>;
           break;
         case 'final countdown':
-          statusContent = <p styleName=
-            "countdown">{counter === 0 ? 'Start' : counter}</p>;
+          statusContent = <p styleName="countdown">{counter === 0 ? 'Start' : counter}</p>;
           break;
         case 'ongoing':
         default:

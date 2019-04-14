@@ -8,18 +8,20 @@ class Racer {
     this.lastArray = this.text.split(' ');
     this.status = 'ongoing';
 
+    const { race } = this;
+
     this.socket
       .on('start', () => {
-        if (this.status !== 'created') {
+        if (race.status !== 'created') {
           return;
         }
-        else if (this.participants.length < 2) {
-          this.status = 'waiting at least one more participant';
+        else if (race.participants.length < 2) {
+          race.status = 'waiting at least one more racer';
 
-          this.move();
+          race.move();
         }
         else {
-          this.race.waitRacers();
+          race.waitRacers();
         }
       })
       .on('type', (string, callback) => {
@@ -57,8 +59,8 @@ class Racer {
 /**
  Posible race statuses:
  1. created
- 1. waiting at least one more participant
- 2. waiting for participants
+ 1. waiting at least one more racer
+ 2. waiting for racers
  3. final countdown
  4. ongoing
  5. endend
@@ -90,7 +92,7 @@ class Race {
       users: this.getUsersProgress(),
     };
 
-    if (['waiting for participants', 'final countdown'].includes(this.status)) {
+    if (['waiting for racers', 'final countdown'].includes(this.status)) {
       result.counter = this.counter;
     }
 
@@ -105,7 +107,9 @@ class Race {
   }
 
   waitRacers() {
-    this.counter = 5;
+    this.status = 'waiting for racers';
+
+    this.counter = 10;
 
     const go = () => {
       this.move({ counter: this.counter });
@@ -205,7 +209,7 @@ class Race {
     this.participants.push(racer);
 
     if (this.participants.length > 1
-      && this.status === 'waiting at least one more participant') {
+      && this.status === 'waiting at least one more racer') {
       this.waitRacers();
     }
 
