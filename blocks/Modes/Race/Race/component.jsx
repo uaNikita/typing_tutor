@@ -104,7 +104,6 @@ class Block extends Component {
   };
 
   handleMove = (obj) => {
-    console.log(374523);
     this.setState(obj);
 
     const startObj = {
