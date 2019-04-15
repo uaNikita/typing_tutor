@@ -89,7 +89,7 @@ class Race {
       status: this.status,
       typed: racer.typed,
       lastArray: racer.lastArray,
-      users: this.getUsersProgress(),
+      users: this.usersProgress,
     };
 
     if (['waiting for racers', 'final countdown'].includes(this.status)) {
@@ -133,36 +133,36 @@ class Race {
     this.counter = 3;
 
     const go = () => {
-      this.move({ counter: this.counter });
-
-      this.counter -= 1;
-
       if (this.counter > -1) {
+        this.move({ counter: this.counter });
+
         setTimeout(go, 1000);
       }
       else {
         this.start();
       }
+
+
+      this.counter -= 1;
     };
 
     go();
   }
 
-  getUsersProgress() {
-    return this.participants.map(({ id, typed }) => ({
-      id,
-      progress: typed.length / this.text.length,
-    }));
-  }
-
   start() {
+    this.status = 'start';
+
+    this.move();
+
     this.status = 'ongoing';
-    this.progress = this.getUsersProgress();
+    this.progress = this.usersProgress;
+
+    this.move();
 
     const go = () => {
       const allDone = this.participants.every(({ status }) => ['finished', 'disconnected'].includes(status));
 
-      const newProgress = this.getUsersProgress();
+      const newProgress = this.usersProgress;
 
       if (allDone) {
         this.progress = newProgress;
@@ -174,7 +174,7 @@ class Race {
         this.end();
       }
       else {
-        const newProgress = this.getUsersProgress();
+        const newProgress = this.usersProgress;
 
         if (!_.isEqual(this.progress, newProgress)) {
           this.progress = newProgress;
@@ -218,6 +218,13 @@ class Race {
 
   getParticipant(id) {
     return _.find(this.participants, { id });
+  }
+
+  get usersProgress() {
+    return this.participants.map(({ id, typed }) => ({
+      id,
+      progress: typed.length / this.text.length,
+    }));
   }
 }
 

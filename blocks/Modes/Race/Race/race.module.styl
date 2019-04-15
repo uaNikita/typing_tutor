@@ -65,3 +65,15 @@
 .text
    margin: 50px 0
    font-size: 30px
+
+.animation
+   &-enter, &-exit
+      transition opacity .15s linear
+   &-enter
+      opacity: 0;
+      &_active
+         opacity: 1;
+   &-exit
+      opacity: 1;
+      &_active
+         opacity: 0;

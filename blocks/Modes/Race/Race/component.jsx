@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom';
+import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 
@@ -106,20 +107,16 @@ class Block extends Component {
   handleMove = (obj) => {
     this.setState(obj);
 
-    const startObj = {
-      status: 'final countdown',
-      counter: 0,
-    };
+    switch (obj.status) {
+      case 'start':
+        this.start();
+        break;
 
-    const endObj = {
-      status: 'endend',
-    };
+      case 'endend':
+        this.end();
+        break;
 
-    if (_.isEqual(obj, startObj)) {
-      this.start();
-    }
-    else if (_.isEqual(obj, endObj)) {
-      this.end();
+      default:
     }
   };
 
@@ -188,9 +185,6 @@ class Block extends Component {
     else if (status) {
       let statusContent;
 
-      console.log('status', status);
-      console.log('status', status === 'waiting at least one more racer');
-
       switch (status) {
         case 'created':
           statusContent = (
@@ -210,8 +204,6 @@ class Block extends Component {
           statusContent = <p styleName="details">Waiting at least one more player...</p>;
           break;
         case 'waiting for racers':
-          console.log(111);
-          
           statusContent = <p styleName="details">Time to start: {counter}</p>;
           break;
         case 'final countdown':
@@ -223,7 +215,25 @@ class Block extends Component {
 
       content = (
         <Fragment>
-          {statusContent}
+          <TransitionGroup>
+            {statusContent
+              ? (
+                <CSSTransition
+                  key={status}
+                  timeout={150}
+                  classNames={{
+                    enter: styles['animation-enter'],
+                    enterActive: styles['animation-enter_active'],
+                    exit: styles['animation-exit'],
+                    exitActive: styles['animation-exit_active'],
+                  }}
+                >
+                  {statusContent}
+                </CSSTransition>
+              )
+              : null}
+          </TransitionGroup>
+
           <p styleName="text">
             <span>{typed}</span>
             <span>{last}</span>

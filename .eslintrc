@@ -23,6 +23,7 @@
     ],
     "linebreak-style": "off",
     "import/no-unresolved": "off",
+    "import/no-cycle": "off",
     "react/prop-types": "off",
     "react/jsx-one-expression-per-line": "off",
     "react/prefer-stateless-function": [
