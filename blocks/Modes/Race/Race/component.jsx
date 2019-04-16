@@ -139,7 +139,7 @@ class Block extends Component {
         rest: rest.substring(1),
       });
     }
-  }
+  };
 
   handleStart = () => {
     const {
@@ -153,11 +153,11 @@ class Block extends Component {
 
   start = () => {
     this.addListeners();
-  }
+  };
 
   end = () => {
     this.removeListeners();
-  }
+  };
 
   render() {
     const {
@@ -236,6 +236,7 @@ class Block extends Component {
 
           <p styleName="text">
             <span>{typed}</span>
+            <span className="cursor" />
             <span>{last}</span>
           </p>
 
