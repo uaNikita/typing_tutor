@@ -209,7 +209,6 @@ class Block extends Component {
         case 'final countdown':
           statusContent = <p styleName="countdown">{counter === 0 ? 'Start' : counter}</p>;
           break;
-        case 'ongoing':
         default:
       }
 
