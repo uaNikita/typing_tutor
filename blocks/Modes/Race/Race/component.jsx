@@ -120,10 +120,11 @@ class Block extends Component {
     }
   };
 
-  typeChar = (code) => {
+  typeChar = (char) => {
     const {
       props: {
         typeChar,
+        socket,
       },
       state: {
         typed,
@@ -131,7 +132,7 @@ class Block extends Component {
       },
     } = this;
 
-    typeChar(String.fromCharCode(code));
+    typeChar(char);
 
     if (this.last[0] === code) {
       this.setState({
@@ -139,6 +140,11 @@ class Block extends Component {
         rest: rest.substring(1),
       });
     }
+
+    // todo: find way to send values to server
+    const obj = 'some text';
+
+    socket.emit('type', obj);
   };
 
   handleStart = () => {
