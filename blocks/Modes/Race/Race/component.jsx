@@ -56,7 +56,7 @@ class Block extends Component {
         else {
           const state = {
             ...res,
-            last: res.lastArray.join(' '),
+            rest: res.lastArray.join(' '),
           };
 
           if (res.status === 'ongoing') {
@@ -134,18 +134,43 @@ class Block extends Component {
 
     typeChar(char);
 
-    if (this.last[0] === code) {
+    if (rest[0] === char) {
       this.setState({
         typed: typed + rest[0],
         rest: rest.substring(1),
       });
+
+      // todo: find way to send values to server
+      this.debounceSocketEmitType();
     }
-
-    // todo: find way to send values to server
-    const obj = 'some text';
-
-    socket.emit('type', obj);
   };
+
+  sentText = ''
+
+  debounceSocketEmitType = _.throttle(() => {
+    const {
+      props: {
+        socket,
+      },
+      state: {
+        typed,
+      },
+    } = this;
+
+    console.log('typed', typed);
+    console.log('this.sentText', this.sentText);
+    console.log('slice', typed.slice(this.sentText.length, typed.length));
+
+    const forServer = typed.slice(this.sentText.length, typed.length);
+
+    this.sentText += forServer;
+
+    console.log('forServer', forServer);
+
+    socket.emit('type', forServer, (error) => {
+      console.log('error', error);
+    });
+  }, 300, { leading: false });
 
   handleStart = () => {
     const {
@@ -169,7 +194,7 @@ class Block extends Component {
     const {
       state: {
         typed,
-        last,
+        rest,
         users,
         error,
         status,
@@ -241,8 +266,8 @@ class Block extends Component {
 
           <p styleName="text">
             <span>{typed}</span>
-            <span className="cursor" />
-            <span>{last}</span>
+            {status === 'ongoing' && <span className="cursor" />}
+            <span>{rest}</span>
           </p>
 
           <Keypad styleName="keypad" />

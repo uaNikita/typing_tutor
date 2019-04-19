@@ -25,8 +25,10 @@ class Racer {
         }
       })
       .on('type', (string, callback) => {
+        console.log('string', string);
+
         if (this.status === 'ongoing' && string === this.lastArray[0]) {
-          this.type();
+          // this.type();
         }
         else {
           callback('Wrong');
