@@ -25,7 +25,7 @@ class Racer {
         }
       })
       .on('type', (string, callback) => {
-        console.log('string', string);
+        // TODO: write type handler
 
         if (this.status === 'ongoing' && string === this.lastArray[0]) {
           // this.type();

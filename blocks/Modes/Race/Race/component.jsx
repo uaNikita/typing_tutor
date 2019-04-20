@@ -13,6 +13,27 @@ import Keypad from '../../Keypad/container';
 import styles from './race.module.styl';
 
 class Block extends Component {
+  sentText = '';
+
+  debounceSocketEmitType = _.throttle(() => {
+    const {
+      props: {
+        socket,
+      },
+      state: {
+        typed,
+      },
+    } = this;
+
+    const forServer = typed.slice(this.sentText.length, typed.length);
+
+    this.sentText += forServer;
+
+    socket.emit('type', forServer, (error) => {
+      console.error('error', error);
+    });
+  }, 300, { leading: false });
+
   constructor(props) {
     super(props);
 
@@ -124,7 +145,6 @@ class Block extends Component {
     const {
       props: {
         typeChar,
-        socket,
       },
       state: {
         typed,
@@ -144,33 +164,6 @@ class Block extends Component {
       this.debounceSocketEmitType();
     }
   };
-
-  sentText = ''
-
-  debounceSocketEmitType = _.throttle(() => {
-    const {
-      props: {
-        socket,
-      },
-      state: {
-        typed,
-      },
-    } = this;
-
-    console.log('typed', typed);
-    console.log('this.sentText', this.sentText);
-    console.log('slice', typed.slice(this.sentText.length, typed.length));
-
-    const forServer = typed.slice(this.sentText.length, typed.length);
-
-    this.sentText += forServer;
-
-    console.log('forServer', forServer);
-
-    socket.emit('type', forServer, (error) => {
-      console.log('error', error);
-    });
-  }, 300, { leading: false });
 
   handleStart = () => {
     const {
