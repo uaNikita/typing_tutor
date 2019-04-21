@@ -47,7 +47,8 @@ class Block extends Component {
   }
 
   state = {
-    status: null,
+    raceStatus: null,
+    racerStatus: null,
     error: null,
     typed: null,
     rest: null,
@@ -80,7 +81,7 @@ class Block extends Component {
             rest: res.lastArray.join(' '),
           };
 
-          if (res.status === 'ongoing') {
+          if (res.raceStatus === 'ongoing') {
             this.addListeners();
           }
 
@@ -126,9 +127,11 @@ class Block extends Component {
   };
 
   handleMove = (obj) => {
+    console.log('obj', obj);
+
     this.setState(obj);
 
-    switch (obj.status) {
+    switch (obj.raceStatus) {
       case 'start':
         this.start();
         break;
@@ -186,15 +189,18 @@ class Block extends Component {
   render() {
     const {
       state: {
+        raceStatus,
+        racerStatus,
         typed,
         rest,
         users,
         error,
-        status,
         counter,
       },
       parentRoute,
     } = this;
+
+    console.log('racerStatus', racerStatus);
 
     let content = <Loader styleName="loader" size="30" />;
 
@@ -206,10 +212,10 @@ class Block extends Component {
         </div>
       );
     }
-    else if (status) {
+    else if (raceStatus) {
       let statusContent;
 
-      switch (status) {
+      switch (raceStatus) {
         case 'created':
           statusContent = (
             <p styleName="details">
@@ -242,7 +248,7 @@ class Block extends Component {
             {statusContent
               ? (
                 <CSSTransition
-                  key={status}
+                  key={raceStatus}
                   timeout={150}
                   classNames={{
                     enter: styles['animation-enter'],
@@ -259,7 +265,7 @@ class Block extends Component {
 
           <p styleName="text">
             <span>{typed}</span>
-            {status === 'ongoing' && <span className="cursor" />}
+            {raceStatus === 'ongoing' && <span className="cursor" />}
             <span>{rest}</span>
           </p>
 

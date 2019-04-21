@@ -104,7 +104,6 @@ racesNamespace
 
             race = new Race({
               id,
-              room: racesNamespace.to(id),
               type: 'quick',
               language,
               text: _.sample(texts),

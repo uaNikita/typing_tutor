@@ -1,7 +1,17 @@
 const _ = require('lodash');
 
+
 class Racer {
   constructor(options) {
+    /*
+    Options list:
+    • id
+    • type
+    • socket
+    • text
+    • race
+     */
+
     _.defaults(this, options);
 
     this.typed = '';
@@ -15,7 +25,7 @@ class Racer {
         if (race.status !== 'created') {
           return;
         }
-        else if (race.participants.length < 2) {
+        else if (race.racers.length < 2) {
           race.status = 'waiting at least one more racer';
 
           race.move();
@@ -71,24 +81,22 @@ class Race {
   constructor(options) {
     _.defaults(this, options);
 
-    this.participants = [];
+    this.racers = [];
     this.status = 'created';
 
     this.startDate = Date.now();
-
-    // strange fix to prevent not caught first emit
-    this.room.emit('first room emit');
   }
 
   getRacer({ participant }) {
-    const racer = _.find(this.participants, (p) => p.id === participant);
+    const racer = _.find(this.racers, (p) => p.id === participant);
 
     return racer || null;
   };
 
   getRacerData(racer) {
     const result = {
-      status: this.status,
+      raceStatus: this.status,
+      racerStatus: racer.status,
       typed: racer.typed,
       lastArray: racer.lastArray,
       users: this.usersProgress,
@@ -102,9 +110,12 @@ class Race {
   };
 
   move(opt) {
-    this.room.emit('move', {
-      status: this.status,
-      ...opt,
+    this.racers.forEach(racer => {
+      racer.socket.emit('move', {
+        racestatus: this.status,
+        racerStatus: racer.status,
+        ...opt,
+      });
     });
   }
 
@@ -162,7 +173,9 @@ class Race {
     this.move();
 
     const go = () => {
-      const allDone = this.participants.every(({ status }) => ['finished', 'disconnected'].includes(status));
+      const allDone = this.racers.every(({ status }) => (
+        ['finished', 'disconnected'].includes(status)
+      ));
 
       const newProgress = this.usersProgress;
 
@@ -196,7 +209,7 @@ class Race {
   end() {
     this.status = 'endend';
 
-    this.room.emit('end');
+    // TODO: add logic race end
   }
 
   addRacer(socket) {
@@ -208,9 +221,9 @@ class Race {
       race: this,
     });
 
-    this.participants.push(racer);
+    this.racers.push(racer);
 
-    if (this.participants.length > 1
+    if (this.racers.length > 1
       && this.status === 'waiting at least one more racer') {
       this.waitRacers();
     }
@@ -219,11 +232,11 @@ class Race {
   }
 
   getParticipant(id) {
-    return _.find(this.participants, { id });
+    return _.find(this.racers, { id });
   }
 
   get usersProgress() {
-    return this.participants.map(({ id, typed }) => ({
+    return this.racers.map(({ id, typed }) => ({
       id,
       progress: typed.length / this.text.length,
     }));
