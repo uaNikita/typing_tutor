@@ -15,7 +15,7 @@ class Racer {
     _.defaults(this, options);
 
     this.typed = '';
-    this.lastArray = this.text.split(' ');
+    this.rest = this.text;
     this.status = 'ongoing';
 
     const { race } = this;
@@ -35,30 +35,28 @@ class Racer {
         }
       })
       .on('type', (string, callback) => {
-        // TODO: write type handler
-
-        if (this.status === 'ongoing' && string === this.lastArray[0]) {
-          // this.type();
+        if (this.status === 'ongoing' && this.rest.indexOf(string) === 0) {
+          console.log(1);
+          this.type(string);
         }
         else {
-          callback('Wrong');
+          console.log(2);
+          callback('Error');
         }
+
+        console.log('typed', this.typed);
+        console.log('rest', this.typed);
       });
 
     this.ongoing = true;
   }
 
-  type() {
-    const shifted = this.lastArray.shift();
+  type(string) {
+    const shifted = this.rest.slice(0, string.length);
 
     this.typed += shifted;
 
-    if (this.lastArray.length) {
-      this.typed += ' ';
-    }
-    else {
-      this.finish();
-    }
+    this.rest = this.rest.slice(string.length);
   }
 
   finish() {
@@ -98,7 +96,7 @@ class Race {
       raceStatus: this.status,
       racerStatus: racer.status,
       typed: racer.typed,
-      lastArray: racer.lastArray,
+      rest: racer.rest,
       users: this.usersProgress,
     };
 
@@ -112,7 +110,7 @@ class Race {
   move(opt) {
     this.racers.forEach(racer => {
       racer.socket.emit('move', {
-        racestatus: this.status,
+        raceStatus: this.status,
         racerStatus: racer.status,
         ...opt,
       });

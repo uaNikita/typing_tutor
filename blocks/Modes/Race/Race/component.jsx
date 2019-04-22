@@ -76,16 +76,11 @@ class Block extends Component {
           });
         }
         else {
-          const state = {
-            ...res,
-            rest: res.lastArray.join(' '),
-          };
-
           if (res.raceStatus === 'ongoing') {
             this.addListeners();
           }
 
-          this.setState(state);
+          this.setState(res);
 
           socket.on('move', this.handleMove);
         }
@@ -163,7 +158,6 @@ class Block extends Component {
         rest: rest.substring(1),
       });
 
-      // todo: find way to send values to server
       this.debounceSocketEmitType();
     }
   };
