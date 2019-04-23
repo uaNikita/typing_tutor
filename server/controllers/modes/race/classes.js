@@ -36,16 +36,11 @@ class Racer {
       })
       .on('type', (string, callback) => {
         if (this.status === 'ongoing' && this.rest.indexOf(string) === 0) {
-          console.log(1);
           this.type(string);
         }
         else {
-          console.log(2);
           callback('Error');
         }
-
-        console.log('typed', this.typed);
-        console.log('rest', this.typed);
       });
 
     this.ongoing = true;
@@ -57,6 +52,10 @@ class Racer {
     this.typed += shifted;
 
     this.rest = this.rest.slice(string.length);
+
+    if (!this.rest) {
+      this.finish();
+    }
   }
 
   finish() {
