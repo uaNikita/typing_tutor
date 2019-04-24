@@ -1,6 +1,10 @@
 const _ = require('lodash');
 
-
+/**
+ Posible racer statuses:
+ 1. ongoing
+ 2. finished
+ */
 class Racer {
   constructor(options) {
     /*
@@ -25,14 +29,8 @@ class Racer {
         if (race.status !== 'created') {
           return;
         }
-        else if (race.racers.length < 2) {
-          race.status = 'waiting at least one more racer';
 
-          race.move();
-        }
-        else {
-          race.waitRacers();
-        }
+        race.waitMinimumRacers();
       })
       .on('type', (string, callback) => {
         if (this.status === 'ongoing' && this.rest.indexOf(string) === 0) {
@@ -116,7 +114,25 @@ class Race {
     });
   }
 
+  waitMinimumRacers() {
+    if (this.status !== 'created') {
+      return;
+    }
+    else if (this.racers.length < 2) {
+      this.status = 'waiting at least one more racer';
+
+      this.move();
+    }
+    else {
+      this.waitRacers();
+    }
+  }
+
   waitRacers() {
+    if (this.status !== 'waiting at least one more racer') {
+      return;
+    }
+
     this.status = 'waiting for racers';
 
     this.counter = 10;
@@ -130,14 +146,18 @@ class Race {
         setTimeout(go, 1000);
       }
       else {
-        this.startFinalCountdown();
+        this.finalCountdown();
       }
     };
 
     go();
   }
 
-  startFinalCountdown() {
+  finalCountdown() {
+    if (this.status !== 'waiting for racers') {
+      return;
+    }
+
     this.status = 'final countdown';
 
     this.counter = 3;
@@ -152,7 +172,6 @@ class Race {
         this.start();
       }
 
-
       this.counter -= 1;
     };
 
@@ -160,6 +179,10 @@ class Race {
   }
 
   start() {
+    if (this.status !== 'final countdown') {
+      return;
+    }
+
     this.status = 'start';
 
     this.move();
@@ -206,7 +229,7 @@ class Race {
   end() {
     this.status = 'endend';
 
-    // TODO: add logic race end
+    // TODO: add logic race end, two conditions if all finished or timeout
   }
 
   addRacer(socket) {
