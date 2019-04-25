@@ -80,6 +80,16 @@ class Race {
     this.status = 'created';
 
     this.startDate = Date.now();
+
+    this.updatelastActionDate();
+  }
+
+  updatelastActionDate() {
+    clearTimeout(this.lastActionDateTimeout);
+
+    this.lastActionDateTimeout = setTimeout(() => {
+      this.end();
+    }, 1000 * 60 * 60);
   }
 
   getRacer({ participant }) {
@@ -105,6 +115,8 @@ class Race {
   };
 
   move(opt) {
+    this.updatelastActionDate();
+
     this.racers.forEach(racer => {
       racer.socket.emit('move', {
         raceStatus: this.status,
@@ -218,7 +230,7 @@ class Race {
             progress: this.progress,
           });
 
-          setTimeout(go, 1000);
+          setTimeout(go, 500);
         }
       }
     };
@@ -227,7 +239,13 @@ class Race {
   }
 
   end() {
+    if (this.status === 'endend') {
+      return;
+    }
+
     this.status = 'endend';
+
+    this.move();
 
     // TODO: add logic race end, two conditions if all finished or timeout
   }
