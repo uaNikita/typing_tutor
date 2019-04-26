@@ -194,8 +194,6 @@ class Block extends Component {
       parentRoute,
     } = this;
 
-    console.log('racerStatus', racerStatus);
-
     let content = <Loader styleName="loader" size="30" />;
 
     if (error) {
