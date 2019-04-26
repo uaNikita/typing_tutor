@@ -2,25 +2,17 @@ const _ = require('lodash');
 
 /**
  Posible racer statuses:
- 1. ongoing
+ 1. active
  2. finished
  */
 class Racer {
   constructor(options) {
-    /*
-    Options list:
-    • id
-    • type
-    • socket
-    • text
-    • race
-     */
-
+    // Options: id, type, socket, text, race
     _.defaults(this, options);
 
     this.typed = '';
     this.rest = this.text;
-    this.status = 'ongoing';
+    this.status = 'active';
 
     const { race } = this;
 
@@ -33,12 +25,26 @@ class Racer {
         race.waitMinimumRacers();
       })
       .on('type', (string, callback) => {
-        if (this.status === 'ongoing' && this.rest.indexOf(string) === 0) {
-          this.type(string);
+        let error;
+
+        if (this.status !== 'active') {
+          error = 'Not active';
         }
-        else {
+        else if (this.rest.indexOf(string) !== 0) {
+          error = 'Wrong string';
+        }
+
+        if (error) {
           callback('Error');
         }
+        else {
+          this.type(string);
+        }
+      })
+      .on('disconnect', () => {
+        this.status = 'ended';
+
+        race.move();
       });
 
     this.ongoing = true;
@@ -57,9 +63,9 @@ class Racer {
   }
 
   finish() {
-    this.endDate = Date.now();
-
     this.status = 'finished';
+
+    race.move();
   }
 }
 
@@ -243,11 +249,14 @@ class Race {
       return;
     }
 
+    // if all users finish race we should clear timeout because of idle
+    clearTimeout(this.lastActionDateTimeout);
+
     this.status = 'endend';
 
-    this.move();
+    // save it to data base
 
-    // TODO: add logic race end, two conditions if all finished or timeout
+    this.move();
   }
 
   addRacer(socket) {
@@ -261,8 +270,8 @@ class Race {
 
     this.racers.push(racer);
 
-    if (this.racers.length > 1
-      && this.status === 'waiting at least one more racer') {
+    if (this.status === 'waiting at least one more racer'
+      && this.racers.length > 1) {
       this.waitRacers();
     }
 
