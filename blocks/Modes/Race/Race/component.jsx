@@ -47,8 +47,7 @@ class Block extends Component {
   }
 
   state = {
-    raceStatus: null,
-    racerStatus: null,
+    status: null,
     error: null,
     typed: null,
     rest: null,
@@ -76,7 +75,7 @@ class Block extends Component {
           });
         }
         else {
-          if (res.raceStatus === 'ongoing') {
+          if (res.status === 'ongoing') {
             this.addListeners();
           }
 
@@ -126,7 +125,7 @@ class Block extends Component {
 
     this.setState(obj);
 
-    switch (obj.raceStatus) {
+    switch (obj.status) {
       case 'start':
         this.start();
         break;
@@ -183,8 +182,7 @@ class Block extends Component {
   render() {
     const {
       state: {
-        raceStatus,
-        racerStatus,
+        status,
         typed,
         rest,
         users,
@@ -204,10 +202,10 @@ class Block extends Component {
         </div>
       );
     }
-    else if (raceStatus) {
+    else if (status) {
       let statusContent;
 
-      switch (raceStatus) {
+      switch (status) {
         case 'created':
           statusContent = (
             <p styleName="details">
@@ -240,7 +238,7 @@ class Block extends Component {
             {statusContent
               ? (
                 <CSSTransition
-                  key={raceStatus}
+                  key={status}
                   timeout={150}
                   classNames={{
                     enter: styles['animation-enter'],
@@ -257,7 +255,7 @@ class Block extends Component {
 
           <p styleName="text">
             <span>{typed}</span>
-            {raceStatus === 'ongoing' && <span className="cursor" />}
+            {status === 'ongoing' && <span className="cursor" />}
             <span>{rest}</span>
           </p>
 
