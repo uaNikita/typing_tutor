@@ -131,8 +131,6 @@ class Block extends Component {
   };
 
   handleMove = (obj) => {
-    console.log('obj', obj);
-
     this.setState(obj);
 
     switch (obj.status) {
