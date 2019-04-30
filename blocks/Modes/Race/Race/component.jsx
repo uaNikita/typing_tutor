@@ -75,8 +75,17 @@ class Block extends Component {
           });
         }
         else {
+          // todo: get user id in race
+          const id = '124';
+
           if (res.status === 'ongoing') {
-            this.addListeners();
+            const progress = _.find(res.users, {
+              id,
+            });
+
+            if (progress !== 1) {
+              this.addListeners();
+            }
           }
 
           this.setState(res);
