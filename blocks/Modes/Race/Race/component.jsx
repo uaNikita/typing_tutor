@@ -30,6 +30,7 @@ class Block extends Component {
     this.sentText += forServer;
 
     socket.emit('type', forServer, (error) => {
+      // for debugging only
       console.error('error', error);
     });
   }, 300, { leading: false });
