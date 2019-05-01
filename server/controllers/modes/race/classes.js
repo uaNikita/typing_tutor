@@ -16,13 +16,13 @@ class Racer {
     const { race } = this;
 
     this.socket
-      .on('start', race.waitMinimumRacers)
-      .on('type', this.type);
+      .on('start', race.waitMinimumRacers.bind(race))
+      .on('type', this.type.bind(this));
   }
 
   type(string, callback) {
     const { race } = this;
-
+    
     if (race.status !== 'ongoing') {
       callback('Race is not ongoing');
     }
@@ -71,8 +71,6 @@ class Race {
 
   updateLastActionDate() {
     clearTimeout(this.lastActionDateTimeout);
-
-    console.log('setTimeout');
 
     this.lastActionDateTimeout = setTimeout(() => {
       this.end();
@@ -132,7 +130,7 @@ class Race {
 
     this.status = 'waiting for racers';
 
-    this.counter = 10;
+    this.counter = 2;
 
     const go = () => {
       this.move({ counter: this.counter });

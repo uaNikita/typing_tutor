@@ -108,25 +108,23 @@ class Block extends Component {
     this.removeListeners();
   };
 
-  keyDownHandler = (e) => {
-    if (!closestEl(e.target, '.drop-down') && e.which === 32) {
-      this.typeChar(String.fromCharCode(e.which));
-    }
-  };
-
+  // todo: test this solution in IE
   keyPressHandler = (e) => {
-    if (!closestEl(e.target, '.drop-down') && e.which !== 32) {
-      this.typeChar(String.fromCharCode(e.which));
+    if (!closestEl(e.target, '.drop-down')) {
+      this.typeChar(e.key);
+
+      // stop scrolling on space
+      if (e.which === 32) {
+        e.preventDefault();
+      }
     }
   };
 
   addListeners = () => {
-    document.addEventListener('keydown', this.keyDownHandler);
     document.addEventListener('keypress', this.keyPressHandler);
   };
 
   removeListeners = () => {
-    document.removeEventListener('keydown', this.keyDownHandler);
     document.removeEventListener('keypress', this.keyPressHandler);
   };
 
@@ -262,7 +260,7 @@ class Block extends Component {
           </TransitionGroup>
 
           <p styleName="text">
-            <span>{typed}</span>
+            <span styleName="typed">{typed}</span>
             {status === 'ongoing' && <span className="cursor" />}
             <span>{rest}</span>
           </p>
