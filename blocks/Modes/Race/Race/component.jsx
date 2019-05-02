@@ -65,8 +65,14 @@ class Block extends Component {
           },
         },
         socket,
+        accessToken,
+        anonymousToken,
       },
     } = this;
+
+
+    // todo: to not populate users access tokens or email find way to get their ids
+    const id = accessToken || anonymousToken;
 
     socket
       .emit('get race', raceId, ((res) => {
@@ -76,11 +82,8 @@ class Block extends Component {
           });
         }
         else {
-          // todo: get user id in race
-          const id = '124';
-
           if (res.status === 'ongoing') {
-            const progress = _.find(res.users, {
+            const { progress } = _.find(res.users, {
               id,
             });
 
@@ -108,13 +111,12 @@ class Block extends Component {
     this.removeListeners();
   };
 
-  // todo: test this solution in IE
   keyPressHandler = (e) => {
     if (!closestEl(e.target, '.drop-down')) {
       this.typeChar(e.key);
 
       // stop scrolling on space
-      if (e.which === 32) {
+      if (e.key === ' ') {
         e.preventDefault();
       }
     }
