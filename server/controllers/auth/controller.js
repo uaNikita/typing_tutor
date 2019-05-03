@@ -45,13 +45,11 @@ const login = (req, res) => {
   return createClient(user.get('id'))
     .then((client) => {
       res.json({
-        tokens: {
-          refresh: client.get('token'),
-          access: generateAccessToken({
-            id: user.get('id'),
-            clientId: client.get('id'),
-          }),
-        },
+        refreshToken: client.get('token'),
+        accessToken: generateAccessToken({
+          id: user.get('id'),
+          clientId: client.get('id'),
+        }),
         ...user.toObject(),
       });
     });

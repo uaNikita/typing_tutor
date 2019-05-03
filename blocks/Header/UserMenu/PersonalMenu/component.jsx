@@ -73,7 +73,7 @@ class Block extends Component {
     } = this;
 
     const nickname = name || email;
-
+    
     const links = personal.map(({ pathname, text }) => {
       const re = new RegExp(`^${pathname}`);
 

@@ -35,16 +35,20 @@ class Block extends Component {
       .then((res) => {
         if (res.ok) {
           const {
-            tokens,
+            refreshToken,
+            accessToken,
             ...rest
           } = res.data;
 
           clearAppData();
 
-          setTokens(tokens);
-
-          // todo: update rest with current actions
           setData(rest);
+
+          setTokens({
+            refreshToken,
+            accessToken,
+            anonymousToken:null,
+          });
 
           init();
 

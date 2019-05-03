@@ -10,6 +10,7 @@ import { clearState as clearTextState } from './modes/text';
 import { clearState as clearUserState } from './user';
 import { clearState as clearMainState, setGlobalMessage, init } from './main';
 
+const SET_STATE = 'fetch/SET_STATE';
 const CLEAR_STATE = 'fetch/CLEAR_STATE';
 const SET_ANONYMOUS_TOKEN = 'fetch/SET_ANONYMOUS_TOKEN';
 const SET_REFRESH_TOKEN = 'fetch/SET_REFRESH_TOKEN';
@@ -19,6 +20,9 @@ const initialState = Immutable.Map(defaults.fetch);
 
 export default (state = initialState, action = {}) => {
   switch (action.type) {
+    case SET_STATE:
+      return state.merge(action.state);
+
     case CLEAR_STATE:
       return state.merge(initialState);
 
@@ -34,6 +38,28 @@ export default (state = initialState, action = {}) => {
     default:
       return state;
   }
+};
+
+export const setState = (state) => {
+  if (state.refreshToken) {
+    Cookies.set('tt_refresh', state.refreshToken);
+  }
+
+  if (state.accessToken) {
+    Cookies.set('tt_access', state.accessToken);
+  }
+
+  if (state.anonymousToken) {
+    Cookies.set('tt_anonymous', state.anonymousToken);
+  }
+  else if (_.isNull(state.anonymousToken)) {
+    Cookies.remove('tt_anonymous');
+  }
+
+  return {
+    type: SET_STATE,
+    state,
+  };
 };
 
 export const clearState = () => ({
