@@ -43,6 +43,7 @@ class Block extends Component {
 
           setTokens(tokens);
 
+          // todo: update rest with current actions
           setData(rest);
 
           init();
