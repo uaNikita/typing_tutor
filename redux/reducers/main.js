@@ -263,8 +263,6 @@ export const init = () => (
 
 export const setData = data => (
   (dispatch) => {
-    console.log(data);
-    
     dispatch(setTextState(data.modes.text));
 
     const { modes: { syllable } } = data;

@@ -89,7 +89,7 @@ const UserSchema = new mongoose.Schema({
 UserSchema.set('toObject', {
   transform(doc, ret) {
     const retParam = ret;
-
+    
     delete retParam._id;
     delete retParam.__v;
     delete retParam.password;

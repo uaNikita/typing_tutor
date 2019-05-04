@@ -8,6 +8,8 @@ export const defaults = {
     anonymousToken: null,
   },
   user: {
+    id: null,
+
     email: null,
 
     name: null,

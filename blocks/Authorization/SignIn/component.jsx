@@ -47,7 +47,7 @@ class Block extends Component {
           setTokens({
             refreshToken,
             accessToken,
-            anonymousToken:null,
+            anonymousToken: null,
           });
 
           init();

@@ -12,9 +12,6 @@ import { clearState as clearMainState, setGlobalMessage, init } from './main';
 
 const SET_STATE = 'fetch/SET_STATE';
 const CLEAR_STATE = 'fetch/CLEAR_STATE';
-const SET_ANONYMOUS_TOKEN = 'fetch/SET_ANONYMOUS_TOKEN';
-const SET_REFRESH_TOKEN = 'fetch/SET_REFRESH_TOKEN';
-const SET_ACCESS_TOKEN = 'fetch/SET_ACCESS_TOKEN';
 
 const initialState = Immutable.Map(defaults.fetch);
 
@@ -25,15 +22,6 @@ export default (state = initialState, action = {}) => {
 
     case CLEAR_STATE:
       return state.merge(initialState);
-
-    case SET_REFRESH_TOKEN:
-      return state.set('refreshToken', action.token);
-
-    case SET_ACCESS_TOKEN:
-      return state.set('accessToken', action.token);
-
-    case SET_ANONYMOUS_TOKEN:
-      return state.set('anonymousToken', action.token);
 
     default:
       return state;
@@ -66,48 +54,11 @@ export const clearState = () => ({
   type: CLEAR_STATE,
 });
 
-export const setRefreshToken = (token) => {
-  Cookies.set('tt_refresh', token);
-
-  return {
-    type: SET_REFRESH_TOKEN,
-    token,
-  };
-};
-
-export const setAccessToken = (token) => {
-  Cookies.set('tt_access', token);
-
-  return {
-    type: SET_ACCESS_TOKEN,
-    token,
-  };
-};
-
-export const setAnonymousToken = (token) => {
-  if (token) {
-    Cookies.set('tt_anonymous', token);
-  }
-  else {
-    Cookies.remove('tt_anonymous');
-  }
-
-  return {
-    type: SET_ANONYMOUS_TOKEN,
-    token,
-  };
-};
-
-export const setTokens = ({ refresh, access }) => (
-  (dispatch) => {
-    dispatch(setAnonymousToken(null));
-    dispatch(setRefreshToken(refresh));
-    dispatch(setAccessToken(access));
-  }
-);
-
-
 export const clearAppData = () => (dispatch) => {
+  Cookies.remove('tt_refresh');
+  Cookies.remove('tt_access');
+  Cookies.remove('tt_anonymous');
+
   tempCookie.clear();
   tempLocalStorage.clear();
 
@@ -188,8 +139,10 @@ export const fetchJSON = (...args) => (
               let result = refreshTokenResponse;
 
               if (ok) {
-                dispatch(setRefreshToken(data.refresh));
-                dispatch(setAccessToken(data.access));
+                dispatch(setState({
+                  refreshToken: data.refresh,
+                  accessToken: data.access,
+                }));
 
                 // check for responseFromServer in options argument
                 if (args[2]) {
@@ -205,9 +158,6 @@ export const fetchJSON = (...args) => (
               }
               else if (status === 401) {
                 dispatch(setGlobalMessage('You are not authorized for this request'));
-
-                Cookies.remove('tt_refresh');
-                Cookies.remove('tt_access');
 
                 dispatch(clearAppData());
               }
@@ -236,14 +186,13 @@ export const getNewTokens = () => (
         } = refreshTokenResponse;
 
         if (ok) {
-          dispatch(setRefreshToken(data.refresh));
-          dispatch(setAccessToken(data.access));
+          dispatch(setState({
+            refreshToken: data.refresh,
+            accessToken: data.access,
+          }));
         }
         else if (status === 401) {
           dispatch(setGlobalMessage('You are not authorized for this request'));
-
-          Cookies.remove('tt_refresh');
-          Cookies.remove('tt_access');
 
           dispatch(clearAppData());
         }
@@ -262,9 +211,6 @@ export const logOut = () => (
     }))
       .then((res) => {
         if (res.ok) {
-          Cookies.remove('tt_refresh');
-          Cookies.remove('tt_access');
-
           dispatch(clearAppData());
 
           dispatch(init());

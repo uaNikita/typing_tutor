@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import { init, setData } from 'ReduxUtils/reducers/main';
-import { fetchJSON, setTokens, logOut } from 'ReduxUtils/reducers/fetch';
+import { fetchJSON, setState, logOut } from 'ReduxUtils/reducers/fetch';
 import Component from './component';
 
 const mapDispatchToProps = dispatch => ({
-  setTokens: (...args) => dispatch(setTokens(...args)),
+  setTokens: (...args) => dispatch(setState(...args)),
   setData: (...args) => dispatch(setData(...args)),
   logOut: (...args) => dispatch(logOut(...args)),
   init: (...args) => dispatch(init(...args)),

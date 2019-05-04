@@ -40,19 +40,25 @@ class VerifyPage extends Component {
 
           if (res.ok) {
             const {
-              tokens,
+              type,
+              refreshToken,
+              accessToken,
               ...rest
             } = res.data;
 
             logOut();
 
-            setTokens(tokens);
+            setTokens({
+              refreshToken,
+              accessToken,
+              anonymousToken: null,
+            });
 
             setData(rest);
 
             init();
 
-            response = res.data.type;
+            response = type;
           }
 
           this.setState({

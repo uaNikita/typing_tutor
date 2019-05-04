@@ -50,6 +50,7 @@ const login = (req, res) => {
           id: user.get('id'),
           clientId: client.get('id'),
         }),
+        id: user.get('id'),
         ...user.toObject(),
       });
     });
@@ -305,13 +306,11 @@ const verifyToken = (req, res, next) => (
           ])
           .then(([client]) => res.json({
             type,
-            tokens: {
-              refresh: client.get('token'),
-              access: generateAccessToken({
-                id: user.get('id'),
-                clientId: client.get('id'),
-              }),
-            },
+            refreshToken: client.get('token'),
+            accessToken: generateAccessToken({
+              id: user.get('id'),
+              clientId: client.get('id'),
+            }),
             ...user.toObject(),
           }));
       }

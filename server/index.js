@@ -22,9 +22,7 @@ const config = require('config');
 const {
   app: compiledApp,
   reducer,
-  setRefreshToken,
-  setAccessToken,
-  setAnonymousToken,
+  setFetchState,
   init,
   getData,
   defaults,
@@ -120,8 +118,10 @@ app.get('*', async (req, res) => {
 
   // get all info for authorized users
   if (refreshCookie) {
-    dispatch(setAccessToken(accessCookie));
-    dispatch(setRefreshToken(refreshCookie));
+    dispatch(setFetchState({
+      refreshToken: refreshCookie,
+      accessToken: accessCookie,
+    }));
 
     await dispatch(getData({
       responseFromServer: res,
@@ -147,7 +147,9 @@ app.get('*', async (req, res) => {
       res.cookie('tt_anonymous', token);
     }
 
-    dispatch(setAnonymousToken(token));
+    dispatch(setFetchState({
+      anonymousToken: token,
+    }));
   }
 
   // initialize some parts of store, for example syllable lessons
