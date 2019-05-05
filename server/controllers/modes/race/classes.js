@@ -22,7 +22,7 @@ class Racer {
 
   type(string, callback) {
     const { race } = this;
-    
+
     if (race.status !== 'ongoing') {
       callback('Race is not ongoing');
     }
@@ -88,7 +88,7 @@ class Race {
       status: this.status,
       typed: racer.typed,
       rest: racer.rest,
-      users: this.usersProgress,
+      progress: this.usersProgress,
     };
 
     if (['waiting for racers', 'final countdown'].includes(this.status)) {
@@ -110,16 +110,20 @@ class Race {
   }
 
   waitMinimumRacers() {
+    console.log(this.status, this.racers.length);
+
     if (this.status !== 'created') {
       return;
     }
-    else if (this.racers.length < 2) {
+    else {
       this.status = 'waiting at least one more racer';
 
-      this.move();
-    }
-    else {
-      this.waitRacers();
+      if (this.racers.length < 2) {
+        this.move();
+      }
+      else {
+        this.waitRacers();
+      }
     }
   }
 
@@ -188,33 +192,22 @@ class Race {
     this.move();
 
     const go = () => {
-      const allDone = this.racers.every(({ status }) => (
-        ['finished', 'disconnected'].includes(status)
-      ));
-
       const newProgress = this.usersProgress;
+      const allDone = newProgress.every(({ progress }) => progress === 1);
 
-      if (allDone) {
+      if (allDone || !_.isEqual(this.progress, newProgress)) {
         this.progress = newProgress;
 
         this.move({
           progress: this.progress,
         });
+      }
 
+      if (allDone) {
         this.end();
       }
       else {
-        const newProgress = this.usersProgress;
-
-        if (!_.isEqual(this.progress, newProgress)) {
-          this.progress = newProgress;
-
-          this.move({
-            progress: this.progress,
-          });
-
-          setTimeout(go, 500);
-        }
+        setTimeout(go, 500);
       }
     };
 

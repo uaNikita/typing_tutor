@@ -4,7 +4,7 @@ import { typeChar } from 'ReduxUtils/reducers/main';
 import Component from './component';
 
 const mapStateToProps = state => ({
-  accessToken: state.getIn(['fetch', 'accessToken']),
+  id: state.getIn(['user', 'id']),
   anonymousToken: state.getIn(['fetch', 'anonymousToken']),
   keyboard: state.getIn(['user', 'keyboard']),
   socket: state.getIn(['race', 'socket']),

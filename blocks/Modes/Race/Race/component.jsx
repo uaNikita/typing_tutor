@@ -13,7 +13,7 @@ import Keypad from '../../Keypad/container';
 import styles from './race.module.styl';
 
 class Block extends Component {
-  sentText = '';
+    sentText = '';
 
   debounceSocketEmitType = _.throttle(() => {
     const {
@@ -52,7 +52,7 @@ class Block extends Component {
     error: null,
     typed: null,
     rest: null,
-    users: null,
+    progress: null,
     counter: null,
   };
 
@@ -65,14 +65,12 @@ class Block extends Component {
           },
         },
         socket,
-        accessToken,
+        id,
         anonymousToken,
       },
     } = this;
 
-
-    // todo: to not populate users access tokens or email find way to get their ids
-    const id = accessToken || anonymousToken;
+    const userId = id || anonymousToken;
 
     socket
       .emit('get race', raceId, ((res) => {
@@ -83,8 +81,8 @@ class Block extends Component {
         }
         else {
           if (res.status === 'ongoing') {
-            const { progress } = _.find(res.users, {
-              id,
+            const { progress } = _.find(res.progress, {
+              id: userId,
             });
 
             if (progress !== 1) {
@@ -131,6 +129,8 @@ class Block extends Component {
   };
 
   handleMove = (obj) => {
+    console.log('res', obj);
+
     this.setState(obj);
 
     switch (obj.status) {
@@ -193,7 +193,7 @@ class Block extends Component {
         status,
         typed,
         rest,
-        users,
+        progress,
         error,
         counter,
       },
@@ -269,7 +269,7 @@ class Block extends Component {
 
           <Keypad styleName="keypad" />
 
-          {users.map(({ id, progress }) => (
+          {progress.map(({ id, progress }) => (
             <p key={id} styleName="user">
               <span styleName="name">{id}</span>
               <span styleName="progress-bar">

@@ -50,7 +50,6 @@ const login = (req, res) => {
           id: user.get('id'),
           clientId: client.get('id'),
         }),
-        id: user.get('id'),
         ...user.toObject(),
       });
     });
