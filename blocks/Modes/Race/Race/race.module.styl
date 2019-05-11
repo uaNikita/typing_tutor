@@ -1,7 +1,7 @@
 .loader
    min-height: 300px
    position: relative
-   
+
 .message
    min-height: 300px
    display: flex;
@@ -20,7 +20,7 @@
    text-shadow: 0 0 120px #008000;
    transform: translate(-50%, calc(-50% - 80px));
    z-index: 1;
-   
+
 .user
    margin: 5px 60px
    display: flex
@@ -32,11 +32,11 @@
    text-align: right;
    font-style: italic;
 
-.progress-bar
+.transport-road
    position: relative
    flex-basis: calc(100% - 220px);
    border-bottom: 1px dashed #dadada;
-   
+
    &:after
       width: 1px
       height: 13px;
@@ -45,12 +45,19 @@
       right: 0;
       border-right: 1px dashed #dadada;
       content ''
-   
-.progress
+
+.transport-path
    width: 50% !important;
    height: 1px
    display: block
-   
+
+.transport
+   width: 100px;
+   height: 90px;
+   display: block;
+   background-size: cover;
+   background: no-repeat url(../../../../static/media/transport/airplanes.svg);
+
 .keypad
    margin-top: 50px;
    margin-bottom: 50px;
@@ -61,7 +68,7 @@
    left: 50%;
    transform: translateX(-50%);
    text-align: center;
-   
+
 .text
    margin: 50px 0
    font-size: 30px

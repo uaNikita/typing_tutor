@@ -13,7 +13,7 @@ import Keypad from '../../Keypad/container';
 import styles from './race.module.styl';
 
 class Block extends Component {
-    sentText = '';
+  sentText = '';
 
   debounceSocketEmitType = _.throttle(() => {
     const {
@@ -269,11 +269,13 @@ class Block extends Component {
 
           <Keypad styleName="keypad" />
 
-          {progress.map(({ id, progress }) => (
+          {progress.map(({ id, progress: p }) => (
             <p key={id} styleName="user">
               <span styleName="name">{id}</span>
-              <span styleName="progress-bar">
-                <span styleName="progress" style={{ width: `${progress * 100}%` }} />
+              <span styleName="transport-road">
+                <span styleName="transport-path" style={{ width: `${p * 100}%` }}>
+                  <span styleName="transport"/>
+                </span>
               </span>
             </p>
           ))}
