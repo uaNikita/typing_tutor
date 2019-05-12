@@ -76,13 +76,7 @@ module.exports = {
         test: /^((?!module).)+styl/,
         use: [
           MiniCssExtractPlugin.loader,
-          {
-            loader: 'css-loader',
-            options: {
-              url: true,
-              import: true
-            }
-          },
+          'css-loader',
           ...restCssLoders
         ]
       },
@@ -139,6 +133,6 @@ module.exports = {
         ]
       }
     ]
-  }
+  },
 };
 
