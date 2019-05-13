@@ -31,10 +31,11 @@
    margin-right: 20px;
    text-align: right;
    font-style: italic;
+   text-overflow ellipsis
 
-.transport-road
-   position: relative
-   flex-basis: calc(100% - 220px);
+.road
+   display: block
+   flex-basis: calc(100% - 200px);
    border-bottom: 1px dashed #dadada;
 
    &:after
@@ -45,18 +46,84 @@
       right: 0;
       border-right: 1px dashed #dadada;
       content ''
-
-.transport-path
-   width: 50% !important;
-   height: 1px
+   
+.track
+   height: 50px;
+   position: relative
    display: block
-
+   margin-left: 100px
+   
 .transport
-   display: block;
-   background-size: cover;
    width: 100px;
-   height: 90px;
-   background: no-repeat url('~Static/images/transport/cycle.svg');
+   height: 50px;
+   position: absolute;
+   bottom: 0;
+   background-repeat: no-repeat;
+   background-size: contain;
+   background-position: center right;
+   transform: translateX(-100%);
+   
+   &_
+      &airplanes
+         background-image: url('~Static/images/transport/airplanes.svg');
+      &automobile
+         background-image: url('~Static/images/transport/automobile.svg');
+      &automobile-1
+         background-image: url('~Static/images/transport/automobile-1.svg');
+      &buses
+         background-image: url('~Static/images/transport/buses.svg');
+      &chopper
+         background-image: url('~Static/images/transport/chopper.svg');
+      &cycle
+         background-image: url('~Static/images/transport/cycle.svg');
+      &delivery-truck
+         background-image: url('~Static/images/transport/delivery-truck.svg');
+      &delivery-truck-1
+         background-image: url('~Static/images/transport/delivery-truck-1.svg');
+      &delivery-truck-2
+         background-image: url('~Static/images/transport/delivery-truck-2.svg');
+      &derrick
+         background-image: url('~Static/images/transport/derrick.svg');
+      &excavate
+         background-image: url('~Static/images/transport/excavate.svg');
+      &excavators
+         background-image: url('~Static/images/transport/excavators.svg');
+      &freight
+         background-image: url('~Static/images/transport/freight.svg');
+      &hot-air-balloon
+         background-image: url('~Static/images/transport/hot-air-balloon.svg');
+      &leisure
+         background-image: url('~Static/images/transport/leisure.svg');
+      &leisure-1
+         background-image: url('~Static/images/transport/leisure-1.svg');
+      &motor-sports
+         background-image: url('~Static/images/transport/motor-sports.svg');
+      &motorbiking
+         background-image: url('~Static/images/transport/motorbiking.svg');
+      &navigate
+         background-image: url('~Static/images/transport/navigate.svg');
+      &public-transport
+         background-image: url('~Static/images/transport/public-transport.svg');
+      &recreational
+         background-image: url('~Static/images/transport/recreational.svg');
+      &sailing-boat
+         background-image: url('~Static/images/transport/sailing-boat.svg');
+      &suv
+         background-image: url('~Static/images/transport/suv.svg');
+      &tourist
+         background-image: url('~Static/images/transport/tourist.svg');
+      &touristic
+         background-image: url('~Static/images/transport/touristic.svg');
+      &train-station
+         background-image: url('~Static/images/transport/train-station.svg');
+      &tramway
+         background-image: url('~Static/images/transport/tramway.svg');
+      &transportation
+         background-image: url('~Static/images/transport/transportation.svg');
+      &transportation-1
+         background-image: url('~Static/images/transport/transportation-1.svg');
+      &zeppelins
+         background-image: url('~Static/images/transport/zeppelins.svg');
 
 .keypad
    margin-top: 50px;

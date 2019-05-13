@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const transports = require('../../../utils/transports');
 
 /**
  Posible racer statuses:
@@ -88,7 +89,7 @@ class Race {
       status: this.status,
       typed: racer.typed,
       rest: racer.rest,
-      progress: this.usersProgress,
+      users: this.users,
     };
 
     if (['waiting for racers', 'final countdown'].includes(this.status)) {
@@ -110,8 +111,6 @@ class Race {
   }
 
   waitMinimumRacers() {
-    console.log(this.status, this.racers.length);
-
     if (this.status !== 'created') {
       return;
     }
@@ -193,15 +192,15 @@ class Race {
 
     const go = () => {
       const newProgress = this.usersProgress;
-      const allDone = newProgress.every(({ progress }) => progress === 1);
 
-      if (allDone || !_.isEqual(this.progress, newProgress)) {
+      if (!_.isEqual(this.progress, newProgress)) {
         this.progress = newProgress;
 
         this.move({
-          progress: this.progress,
+          users: this.users,
         });
       }
+      const allDone = newProgress.every(({ progress }) => progress === 1);
 
       if (allDone) {
         this.end();
@@ -230,12 +229,17 @@ class Race {
   }
 
   addRacer(socket) {
+    const availableTransports = transports.filter(transport => (
+      !_.find(this.racers, { transport })
+    ));
+
     const racer = new Racer({
       id: socket.participant,
       type: socket.type,
       socket,
       text: this.text,
       race: this,
+      transport: _.sample(availableTransports),
     });
 
     this.racers.push(racer);
@@ -245,6 +249,10 @@ class Race {
       this.waitRacers();
     }
 
+    this.move({
+      users: this.users,
+    });
+
     return racer;
   }
 
@@ -252,11 +260,18 @@ class Race {
     return _.find(this.racers, { id });
   }
 
-  get usersProgress() {
-    return this.racers.map(({ id, typed }) => ({
+  get users() {
+    return this.racers.map(({ id, typed, transport }) => ({
       id,
       progress: typed.length / this.text.length,
+      transport,
     }));
+  }
+
+  get usersProgress() {
+    return this.racers.map(({ typed }) => (
+      typed.length / this.text.length
+    ));
   }
 }
 

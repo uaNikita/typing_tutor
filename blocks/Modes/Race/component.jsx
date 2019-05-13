@@ -33,6 +33,8 @@ class Block extends Component {
 
       this.socket = io('/races')
         .on('error', (error) => {
+          console.log(error);
+
           if (error === 'Token expired') {
             getNewTokens()
               .then(() => {

@@ -52,7 +52,7 @@ class Block extends Component {
     error: null,
     typed: null,
     rest: null,
-    progress: null,
+    users: null,
     counter: null,
   };
 
@@ -81,7 +81,7 @@ class Block extends Component {
         }
         else {
           if (res.status === 'ongoing') {
-            const { progress } = _.find(res.progress, {
+            const { progress } = _.find(res.users, {
               id: userId,
             });
 
@@ -129,8 +129,6 @@ class Block extends Component {
   };
 
   handleMove = (obj) => {
-    console.log('res', obj);
-
     this.setState(obj);
 
     switch (obj.status) {
@@ -193,7 +191,7 @@ class Block extends Component {
         status,
         typed,
         rest,
-        progress,
+        users,
         error,
         counter,
       },
@@ -269,12 +267,15 @@ class Block extends Component {
 
           <Keypad styleName="keypad" />
 
-          {progress.map(({ id, progress: p }) => (
+          {users.map(({ id, progress, transport }) => (
             <p key={id} styleName="user">
               <span styleName="name">{id}</span>
-              <span styleName="transport-road">
-                <span styleName="transport-path" style={{ width: `${p * 100}%` }}>
-                  <span styleName="transport"/>
+              <span styleName="road">
+                <span styleName="track">
+                  <span
+                    styleName={`transport transport_${transport}`}
+                    style={{ left: `${progress * 100}%` }}
+                  />
                 </span>
               </span>
             </p>
@@ -287,4 +288,6 @@ class Block extends Component {
   }
 }
 
-export default CSSModules(Block, styles);
+export default CSSModules(Block, styles, {
+  allowMultiple: true,
+});
