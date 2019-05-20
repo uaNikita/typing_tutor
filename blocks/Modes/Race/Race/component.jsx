@@ -148,6 +148,7 @@ class Block extends Component {
     const {
       props: {
         typeChar,
+        setCharToType,
       },
       state: {
         typed,
@@ -162,6 +163,16 @@ class Block extends Component {
         typed: typed + rest[0],
         rest: rest.substring(1),
       });
+
+      let charToType = null;
+
+      if (this.state.rest[0]) {
+        charToType = this.state.rest[0];
+      }
+
+      console.log(this.state.rest);
+
+      // setCharToType();
 
       this.debounceSocketEmitType();
     }

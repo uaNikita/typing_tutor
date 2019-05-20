@@ -32,12 +32,13 @@
    text-align: right;
    font-style: italic;
    text-overflow ellipsis
+   overflow: hidden;
 
 .road
    display: block
    flex-basis: calc(100% - 200px);
    border-bottom: 1px dashed #dadada;
-
+   
    &:after
       width: 1px
       height: 13px;
@@ -46,13 +47,27 @@
       right: 0;
       border-right: 1px dashed #dadada;
       content ''
-   
+
 .track
    height: 50px;
    position: relative
    display: block
    margin-left: 100px
-   
+   &:before, &:after
+      position: absolute;
+      bottom: -1px;
+      background-color: #fff;
+      background-image: linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000), linear-gradient(45deg, #000 25%, transparent 25%, transparent 75%, #000 75%, #000);
+      background-size: 8px 8px;
+      background-position: 0 0, 4px 4px;
+      content: '';
+      height: 56px;
+      width: 12px;
+   &:before
+      left 0
+   &:after
+      right -12px
+      
 .transport
    width: 100px;
    height: 50px;
@@ -60,8 +75,9 @@
    bottom: 0;
    background-repeat: no-repeat;
    background-size: contain;
-   background-position: center right;
+   background-position: bottom right;
    transform: translateX(-100%);
+   transition: left .15s ease-in-out;
    
    &_
       &airplanes
