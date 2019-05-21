@@ -249,6 +249,8 @@ class Race {
       this.waitRacers();
     }
 
+    console.log('move');
+
     this.move({
       users: this.users,
     });

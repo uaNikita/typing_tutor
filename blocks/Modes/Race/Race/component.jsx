@@ -170,9 +170,7 @@ class Block extends Component {
         charToType = this.state.rest[0];
       }
 
-      console.log(this.state.rest);
-
-      // setCharToType();
+      setCharToType(charToType);
 
       this.debounceSocketEmitType();
     }
