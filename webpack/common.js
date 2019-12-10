@@ -12,6 +12,6 @@ module.exports = {
       Utils: path.resolve(root, 'utils/'),
       Client: path.resolve(root, 'client/'),
       Server: path.resolve(root, 'server/'),
-    }
+    },
   },
 };

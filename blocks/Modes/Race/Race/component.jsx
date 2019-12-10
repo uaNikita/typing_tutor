@@ -30,7 +30,7 @@ class Block extends Component {
     this.sentText += forServer;
 
     socket.emit('type', forServer, (error) => {
-      // for debugging only
+      // eslint-disable-next-line no-console
       console.error('error', error);
     });
   }, 300, { leading: false });
@@ -166,8 +166,8 @@ class Block extends Component {
 
       let charToType = null;
 
-      if (this.state.rest[0]) {
-        charToType = this.state.rest[0];
+      if (rest[0]) {
+        [charToType] = rest;
       }
 
       setCharToType(charToType);

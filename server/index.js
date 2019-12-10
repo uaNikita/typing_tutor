@@ -51,6 +51,7 @@ const mongoURI = (() => {
 
 mongoose.connect(mongoURI, {
   useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
 mongoose.set('useCreateIndex', true);

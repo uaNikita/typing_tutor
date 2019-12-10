@@ -22,6 +22,7 @@
       }
     ],
     "linebreak-style": "off",
+    "import/extensions": "off",
     "import/no-unresolved": "off",
     "import/no-cycle": "off",
     "react/prop-types": "off",
