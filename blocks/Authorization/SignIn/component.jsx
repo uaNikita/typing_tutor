@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { Field, reduxForm, SubmissionError } from 'redux-form/immutable';
 import classNames from 'classnames';
@@ -13,7 +13,7 @@ class Block extends Component {
     submittedVerifyLink: false,
   };
 
-  handleSubmit = (values) => {
+  handleSubmit = values => {
     const {
       props: {
         history: {
@@ -32,7 +32,7 @@ class Block extends Component {
     return fetchJSON('/auth/login', {
       body: values.toJS(),
     })
-      .then((res) => {
+      .then(res => {
         if (res.ok) {
           const {
             refreshToken,
@@ -139,7 +139,7 @@ class Block extends Component {
     }
     else if (accountIsNotActive) {
       content = (
-        <Fragment>
+        <>
           <p>
             Your account email is not verified,
             <br />
@@ -148,7 +148,7 @@ class Block extends Component {
           <button type="button" className="button" onClick={this.handleSendVerifyLink}>
             Send verify link
           </button>
-        </Fragment>
+        </>
       );
     }
 

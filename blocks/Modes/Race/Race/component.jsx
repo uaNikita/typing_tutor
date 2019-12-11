@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import CSSModules from 'react-css-modules';
@@ -29,7 +29,7 @@ class Block extends Component {
 
     this.sentText += forServer;
 
-    socket.emit('type', forServer, (error) => {
+    socket.emit('type', forServer, error => {
       // eslint-disable-next-line no-console
       console.error('error', error);
     });
@@ -73,7 +73,7 @@ class Block extends Component {
     const userId = id || anonymousToken;
 
     socket
-      .emit('get race', raceId, ((res) => {
+      .emit('get race', raceId, (res => {
         if (_.isString(res)) {
           this.setState({
             error: res,
@@ -109,7 +109,7 @@ class Block extends Component {
     this.removeListeners();
   };
 
-  keyPressHandler = (e) => {
+  keyPressHandler = e => {
     if (!closestEl(e.target, '.drop-down')) {
       this.typeChar(e.key);
 
@@ -128,7 +128,7 @@ class Block extends Component {
     document.removeEventListener('keypress', this.keyPressHandler);
   };
 
-  handleMove = (obj) => {
+  handleMove = obj => {
     this.setState(obj);
 
     switch (obj.status) {
@@ -144,7 +144,7 @@ class Block extends Component {
     }
   };
 
-  typeChar = (char) => {
+  typeChar = char => {
     const {
       props: {
         typeChar,
@@ -248,7 +248,7 @@ class Block extends Component {
       }
 
       content = (
-        <Fragment>
+        <>
           <TransitionGroup>
             {statusContent
               ? (
@@ -289,7 +289,7 @@ class Block extends Component {
               </span>
             </p>
           ))}
-        </Fragment>
+        </>
       );
     }
 

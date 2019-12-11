@@ -11,7 +11,7 @@ import { validateField, validatePassword } from 'Utils/validation';
 import styles from './delete-account.module.styl';
 
 class DeleteAccountModal extends Component {
-  handleSubmit = (values) => {
+  handleSubmit = values => {
     const {
       props: {
         history: {
@@ -28,7 +28,7 @@ class DeleteAccountModal extends Component {
     delete body.deleteMyAccount;
 
     return fetchJSON('/user/delete', { body })
-      .then((res) => {
+      .then(res => {
         if (res.ok) {
           logOut();
 
@@ -78,7 +78,7 @@ class DeleteAccountModal extends Component {
 }
 
 
-const validate = (values) => {
+const validate = values => {
   const deleteMyAccountValue = values.get('deleteMyAccount');
 
   const errors = {

@@ -34,7 +34,7 @@ languages.forEach(language => {
   language.nouns = {};
 });
 
-const repeatIfNeeded = (func) => {
+const repeatIfNeeded = func => {
   let result = false;
 
   if ((Date.now() + requestDelay) <= requestFinishDate) {
@@ -68,7 +68,7 @@ const get = () => (
         throw new Error('Bad response from server');
       }))
     ))
-    .then((htmls) => {
+    .then(htmls => {
       htmls.forEach((html, idx) => {
         const $ = cheerio.load(html);
         const text = $('#mw-content-text p').text().toLowerCase();
@@ -124,21 +124,21 @@ const get = () => (
           o.nouns = _.pickBy(o.nouns, s => s > 3);
           fs.writeFileSync(
             path.join(`${pathToLanguage}/nouns.json`),
-            JSON.stringify(o.nouns), 'utf8'
+            JSON.stringify(o.nouns), 'utf8',
           );
 
           // pick only if sylables is met more then 2 times
           _.each(o.syllables, (obj, l) => o.syllables[l] = _.pickBy(obj, s => s > 2));
           fs.writeFileSync(
             path.join(`${pathToLanguage}/syllables.json`),
-            JSON.stringify(o.syllables), 'utf8'
+            JSON.stringify(o.syllables), 'utf8',
           );
 
           console.log(`${i + 1}. ${o.language}`); // eslint-disable-line no-console
         });
       }
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error.message); // eslint-disable-line no-console
 
       repeatIfNeeded(get);

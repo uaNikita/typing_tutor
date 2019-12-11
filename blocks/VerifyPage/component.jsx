@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import URLSearchParams from 'url-search-params';
@@ -35,7 +35,7 @@ class VerifyPage extends Component {
           token,
         },
       })
-        .then((res) => {
+        .then(res => {
           let response = 'error';
 
           if (res.ok) {
@@ -111,13 +111,13 @@ class VerifyPage extends Component {
     }
 
     return (
-      <Fragment>
+      <>
         <div styleName="header">
           <Logo />
         </div>
 
         {content}
-      </Fragment>
+      </>
     );
   }
 }

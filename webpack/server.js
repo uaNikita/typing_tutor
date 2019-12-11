@@ -10,7 +10,7 @@ module.exports = {
   output: {
     path: path.join(root, 'dist'),
     filename: 'compiledServer.js',
-    libraryTarget: 'umd'
+    libraryTarget: 'umd',
   },
 
   plugins: [
@@ -28,11 +28,11 @@ module.exports = {
       {
         test: /\.jsx?$/,
         use: 'babel-loader',
-        exclude: /node_modules/
+        exclude: /node_modules/,
       },
       {
         test: /^((?!module).)+styl$/,
-        use: 'null-loader'
+        use: 'null-loader',
       },
       {
         test: /module\.styl$/,
@@ -40,18 +40,19 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
-              exportOnlyLocals: true,
-              localIdentName: '[name]__[local]___[hash:base64:5]'
-            }
+              onlyLocals: true,
+              modules: {
+                localIdentName: '[name]__[local]___[hash:base64:5]',
+              },
+            },
           },
           ...restCssLoders,
-        ]
+        ],
       },
       {
         test: /\.(css|woff|woff2|ttf|eot|jpg|png|svg)$/,
-        use: 'null-loader'
+        use: 'null-loader',
       },
-    ]
-  }
+    ],
+  },
 };

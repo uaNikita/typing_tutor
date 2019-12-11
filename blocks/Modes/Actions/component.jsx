@@ -43,6 +43,7 @@ class Block extends Component {
             styleName="eye"
             onClick={this.handleHiddenChars}
             title="Hidden characters"
+            aria-label="Hidden characters"
           />
 
           <Metronome />

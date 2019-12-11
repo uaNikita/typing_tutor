@@ -3,7 +3,7 @@ import classNames from 'classnames';
 
 import Key from 'Blocks/Key/component';
 
-const KeyPad = (props) => {
+const KeyPad = props => {
   const {
     keys,
     pressedKeys,
@@ -11,7 +11,7 @@ const KeyPad = (props) => {
     idCharsToType,
   } = props;
 
-  const keysNode = keys.map((obj) => {
+  const keysNode = keys.map(obj => {
     const className = classNames('keypad__key', {
       keypad__pressed: pressedKeys.indexOf(obj.id) + 1,
       keypad__wrong: pressedWrongKeys.indexOf(obj.id) + 1,

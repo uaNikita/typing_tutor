@@ -4,7 +4,6 @@ const get = (n, queries) => {
   const result = [];
 
   queries.forEach(([nq, x, y]) => {
-
     if (nq === 1) {
       console.log(x, lastAnswer, y);
 
@@ -22,7 +21,7 @@ const get = (n, queries) => {
   console.log(seqList);
 
   return result;
-}
+};
 
 const n = 100;
 

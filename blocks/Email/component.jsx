@@ -22,6 +22,7 @@ class Block extends PureComponent {
         data-domain="touchtotype"
         data-tld="com"
         onClick={this.handleClick}
+        aria-label="Write email"
       />
     );
   }

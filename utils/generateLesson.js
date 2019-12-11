@@ -26,7 +26,7 @@ const getAvailableSyllable = (filteredSyllables, length) => {
   return generatedSyllable;
 };
 
-const getWord = (options) => {
+const getWord = options => {
   const {
     wordLength,
     syllables: filteredSyllables,
@@ -72,7 +72,7 @@ const getWord = (options) => {
   }
 
   return sequence
-    .map((l) => {
+    .map(l => {
       let generatedSyllable = getAvailableSyllable(filteredSyllables, l);
 
       if (!generatedSyllable) {
@@ -100,7 +100,7 @@ export default (() => {
   const minWordLength = 3;
   const maxChars = 50;
 
-  return (options) => {
+  return options => {
     const {
       keyboard,
       maxLettersInWord,

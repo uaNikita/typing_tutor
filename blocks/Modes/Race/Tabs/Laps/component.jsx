@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 
 import styles from './laps.module.styl';
@@ -16,14 +16,14 @@ class Block extends Component {
     } = this;
 
     return (
-      <Fragment>
+      <>
         <p><strong>Available races</strong></p>
         <ul>
           <li styleName="item">First race</li>
           <li styleName="item">
             test test test test test
 
-            <button type="button" className="fas fa-flag-checkered" />
+            <button type="button" className="fas fa-flag-checkered" aria-label="Some text" />
           </li>
         </ul>
 
@@ -35,7 +35,7 @@ class Block extends Component {
         >
           Add new race
         </button>
-      </Fragment>
+      </>
     );
   }
 }

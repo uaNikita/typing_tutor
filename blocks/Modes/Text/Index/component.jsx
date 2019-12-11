@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import _ from 'lodash';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
@@ -34,7 +34,7 @@ class Block extends ContentArea {
     }
   };
 
-  shouldComponentUpdate = (nextProps) => {
+  shouldComponentUpdate = nextProps => {
     const propsToPick = ['text', 'hiddenChars'];
     const pikedProps = _.pick(this.props, propsToPick);
     const pikedNextProps = _.pick(nextProps, propsToPick);
@@ -46,7 +46,7 @@ class Block extends ContentArea {
     return true;
   };
 
-  componentDidUpdate = (prevProps) => {
+  componentDidUpdate = prevProps => {
     const {
       props: {
         text,
@@ -118,13 +118,13 @@ class Block extends ContentArea {
     });
 
     return (
-      <Fragment>
+      <>
         <Actions />
         <div className={className} styleName="textarea">
           <p styleName="content" ref={this.content}>
             {text
               ? (
-                <Fragment>
+                <>
                   <PureString
                     styleName="typed"
                     string={text.typed}
@@ -137,14 +137,13 @@ class Block extends ContentArea {
                     string={text.last}
                     hiddenChars
                   />
-                </Fragment>
+                </>
               )
-              : <Loader size="30" />
-            }
+              : <Loader size="30" />}
           </p>
         </div>
         <Keypad />
-      </Fragment>
+      </>
     );
   }
 }

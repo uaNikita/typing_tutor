@@ -14,7 +14,7 @@ class Block extends Component {
     return _.once(() => setStartTypingTime(Date.now()));
   })();
 
-  keyDownHandler = (e) => {
+  keyDownHandler = e => {
     const {
       props: {
         typeChar,
@@ -34,7 +34,7 @@ class Block extends Component {
     }
   };
 
-  keyPressHandler = (e) => {
+  keyPressHandler = e => {
     const {
       props: {
         typeChar,

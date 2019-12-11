@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Field, reduxForm } from 'redux-form/immutable';
 import CSSModules from 'react-css-modules';
 
@@ -9,7 +9,7 @@ import { validateField } from 'Utils/validation';
 import styles from './edit-text.module.styl';
 
 class Block extends Component {
-  handleSubmit = (values) => {
+  handleSubmit = values => {
     const {
       props: {
         id,
@@ -50,7 +50,7 @@ class Block extends Component {
           <Button type="submit" className="button" disabled={invalid} isLoader={submitting}>Save</Button>
 
           {id !== selectedId && (
-            <Fragment>
+            <>
               {/* eslint-disable-next-line */}
               <label styleName="select" htmlFor="select">
                 <Field
@@ -62,7 +62,7 @@ class Block extends Component {
                 />
                 and select
               </label>
-            </Fragment>
+            </>
           )}
         </div>
       </form>

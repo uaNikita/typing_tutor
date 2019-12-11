@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import classNames from 'classnames';
 import Slider from 'rc-slider';
@@ -33,7 +33,7 @@ class Block extends Component {
     .fromPairs()
     .value();
 
-  handleChangeMaxLettersInWord = (maxLettersInWord) => {
+  handleChangeMaxLettersInWord = maxLettersInWord => {
     const {
       props: {
         updateOptions,
@@ -68,7 +68,7 @@ class Block extends Component {
       maxLettersInWordSliderProps,
     } = this;
 
-    const keyNodes = keys.map((obj) => {
+    const keyNodes = keys.map(obj => {
       let className = 'keyboard__key';
 
       const keyProps = {
@@ -114,7 +114,7 @@ class Block extends Component {
     );
 
     return (
-      <Fragment>
+      <>
         <button
           type="button"
           className="button"
@@ -139,7 +139,7 @@ class Block extends Component {
         <div className={keyboardClassName}>
           {keyNodes}
         </div>
-      </Fragment>
+      </>
     );
   }
 }

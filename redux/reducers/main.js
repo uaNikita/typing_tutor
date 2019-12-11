@@ -80,7 +80,7 @@ export default (state = initialState, action = {}) => {
       return state.set('idCharsToType', action.id);
 
     case ADD_TOUCH:
-      return state.updateIn(['sessionStatistic', 'presses'], (presses) => {
+      return state.updateIn(['sessionStatistic', 'presses'], presses => {
         let type = 'typos';
 
         if (action.hit) {
@@ -98,7 +98,7 @@ export default (state = initialState, action = {}) => {
           }));
         }
         else {
-          updatedPresses = presses.updateIn([index], (character) => {
+          updatedPresses = presses.updateIn([index], character => {
             let updatedCharacter;
 
             if (character.get(type)) {
@@ -254,7 +254,7 @@ export const typeChar = char => (
 );
 
 export const init = () => (
-  (dispatch) => {
+  dispatch => {
     dispatch(getKeysFromKeyboard());
 
     dispatch(initLessons());
@@ -262,7 +262,7 @@ export const init = () => (
 );
 
 export const setData = data => (
-  (dispatch) => {
+  dispatch => {
     dispatch(setTextState(data.modes.text));
 
     const { modes: { syllable } } = data;
@@ -283,7 +283,7 @@ export const setData = data => (
 export const getData = options => (
   dispatch => (
     dispatch(fetchJSON('/user', { method: 'GET' }, options))
-      .then((res) => {
+      .then(res => {
         if (res.ok) {
           dispatch(setData(res.data));
         }

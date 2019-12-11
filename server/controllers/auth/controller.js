@@ -20,7 +20,7 @@ const generateAccessToken = obj => jwt.sign(
 
 const generateTokenWithId = clientId => clientId.toString() + crypto.randomBytes(40).toString('hex');
 
-const createClient = (userId) => {
+const createClient = userId => {
   const client = new Client({
     user: userId,
   });
@@ -43,7 +43,7 @@ const login = (req, res) => {
   }
 
   return createClient(user.get('id'))
-    .then((client) => {
+    .then(client => {
       res.json({
         refreshToken: client.get('token'),
         accessToken: generateAccessToken({
@@ -78,7 +78,7 @@ const signUp = (req, res, next) => {
   User
     .findOne({ email })
     .exec()
-    .then((existedUser) => {
+    .then(existedUser => {
       if (existedUser) {
         throw new APIError({
           errors: {
@@ -115,7 +115,7 @@ const signUp = (req, res, next) => {
             }),
           };
 
-          transporter.sendMail(mailOptions, (error) => {
+          transporter.sendMail(mailOptions, error => {
             if (error) {
               throw new APIError({
                 message: 'We can not verify your email now. Please try again later.',
@@ -134,7 +134,7 @@ const verifyEmail = (req, res, next) => {
   const { email } = req.body;
 
   User.findOne({ email }).exec()
-    .then((user) => {
+    .then(user => {
       if (user) {
         const verification = new Verification({
           user,
@@ -144,7 +144,7 @@ const verifyEmail = (req, res, next) => {
         verification.set('token', verification.get('id') + crypto.randomBytes(40).toString('hex'));
 
         return verification.save()
-          .then((verif) => {
+          .then(verif => {
             const mailOptions = {
               from: config.get('mail.from'),
               to: email,
@@ -155,7 +155,7 @@ const verifyEmail = (req, res, next) => {
               }),
             };
 
-            transporter.sendMail(mailOptions, (error) => {
+            transporter.sendMail(mailOptions, error => {
               if (error) {
                 throw new APIError({
                   message: 'We can not verify your email now. Please try again later.',
@@ -180,7 +180,7 @@ const restoreAccess = (req, res, next) => {
   const { email } = req.body;
 
   User.findOne({ email }).exec()
-    .then((user) => {
+    .then(user => {
       if (user) {
         const password = getRandomPassword();
 
@@ -206,7 +206,7 @@ const restoreAccess = (req, res, next) => {
               }),
             };
 
-            transporter.sendMail(mailOptions, (error) => {
+            transporter.sendMail(mailOptions, error => {
               if (error) {
                 throw new APIError({
                   message: 'We can not verify your email now. Please try again later.',
@@ -232,7 +232,7 @@ const getTokens = (req, res, next) => {
 
   Client.findOne({ token })
     .exec()
-    .then((client) => {
+    .then(client => {
       if (client) {
         client.set('token', generateTokenWithId(client.get('id')));
 
@@ -258,7 +258,7 @@ const getUserData = (req, res, next) => (
   User
     .findById(req.user.id)
     .exec()
-    .then((user) => {
+    .then(user => {
       if (user) {
         res.json(user.toObject());
       }
@@ -279,7 +279,7 @@ const verifyToken = (req, res, next) => (
     })
     .populate('user')
     .exec()
-    .then((verification) => {
+    .then(verification => {
       if (verification) {
         const type = verification.get('type');
         const user = verification.get('user');

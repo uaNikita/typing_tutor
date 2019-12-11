@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Switch, Redirect, Route } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 
@@ -12,7 +12,7 @@ import styles from './authorization.module.styl';
 import './auth.styl';
 
 const Block = ({ match: { url } }) => (
-  <Fragment>
+  <>
     <div styleName="header">
       <Logo />
     </div>
@@ -25,7 +25,7 @@ const Block = ({ match: { url } }) => (
       <Route path={`${url}/restore-access`} component={RestoreAccess} />
       <Redirect to="/404" />
     </Switch>
-  </Fragment>
+  </>
 );
 
 export default CSSModules(Block, styles);

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 
@@ -13,7 +13,7 @@ import styles from './keyboard.module.styl';
 class Block extends Component {
   keyboardsNames = _.map(keyboards, ({ name }) => name)
 
-  handleOnChange = (e) => {
+  handleOnChange = e => {
     const {
       props: {
         setKeyboard,
@@ -30,7 +30,7 @@ class Block extends Component {
       },
     } = this;
 
-    const keyNodes = keys.map((obj) => {
+    const keyNodes = keys.map(obj => {
       const keyProps = {
         className: 'keyboard__key',
         'data-key': obj.id,
@@ -48,7 +48,7 @@ class Block extends Component {
     });
 
     return (
-      <Fragment>
+      <>
         <Field
           styleName="field"
           onChange={this.handleOnChange}
@@ -67,7 +67,7 @@ class Block extends Component {
         <div className="keyboard">
           {keyNodes}
         </div>
-      </Fragment>
+      </>
     );
   }
 }

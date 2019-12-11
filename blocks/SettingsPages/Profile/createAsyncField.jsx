@@ -11,7 +11,7 @@ import { validateField } from 'Utils/validation';
 
 export default ({ name, ...rest }) => {
   class Block extends Component {
-    submit = (values) => {
+    submit = values => {
       const {
         props: {
           setSettings,
@@ -27,7 +27,7 @@ export default ({ name, ...rest }) => {
 
       if (initialValues.get(name) !== settings[name]) {
         result = setSettings(settings)
-          .then((res) => {
+          .then(res => {
             if (res.data && res.data.errors) {
               throw new SubmissionError(res.data.errors);
             }
@@ -69,7 +69,7 @@ export default ({ name, ...rest }) => {
     ...validateField(name, values.get(name)),
   });
 
-  const mapStateToProps = (state) => {
+  const mapStateToProps = state => {
     const result = {
       initialValues: {},
     };

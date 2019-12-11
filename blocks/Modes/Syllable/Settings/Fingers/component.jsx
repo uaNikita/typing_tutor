@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import classNames from 'classnames';
 import Slider from 'rc-slider';
@@ -34,7 +34,7 @@ class Block extends Component {
     .fromPairs()
     .value();
 
-  handleChangeSetSize = (setSize) => {
+  handleChangeSetSize = setSize => {
     const {
       props: {
         updateOptions,
@@ -64,7 +64,7 @@ class Block extends Component {
 
     selectedLetters = _.concat(...selectedLetters);
 
-    const keyNodes = keys.map((obj) => {
+    const keyNodes = keys.map(obj => {
       let className = 'keyboard__key';
 
       if (obj.type === 'letter') {
@@ -112,7 +112,7 @@ class Block extends Component {
     };
 
     return (
-      <Fragment>
+      <>
         <button
           type="button"
           className="button"
@@ -146,7 +146,7 @@ class Block extends Component {
         <div className="keyboard">
           {keyNodes}
         </div>
-      </Fragment>
+      </>
     );
   }
 }

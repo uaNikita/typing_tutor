@@ -10,9 +10,9 @@ module.exports = {
       options: {
         plugins: [
           autoprefixer(),
-        ]
+        ],
       },
     },
-    'stylus-loader'
+    'stylus-loader',
   ],
 };

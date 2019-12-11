@@ -29,7 +29,7 @@ _.each(languages, ({ subdomain }) => {
   };
 });
 
-const repeatIfNeeded = (func) => {
+const repeatIfNeeded = func => {
   let result = false;
 
   if ((Date.now() + requestDelay) <= requestFinishDate) {
@@ -65,7 +65,7 @@ const get = () => (
         throw new Error('Bad response from server');
       }))
     ))
-    .then((htmls) => {
+    .then(htmls => {
       htmls.forEach((html, idx) => {
         const $ = cheerio.load(html);
         const characters = $('#mw-content-text p').text().split('');
@@ -101,7 +101,7 @@ const get = () => (
         const pathToJSON = path.join('constants/syllables.json');
 
         // pick only if sylables is met more then 2 times
-        _.each(syllables, (domain) => {
+        _.each(syllables, domain => {
           _.each(domain, (obj, l) => {
             const domainRef = domain;
 
@@ -114,7 +114,7 @@ const get = () => (
         console.log(`result is saved in '${pathToJSON}'`); // eslint-disable-line no-console
       }
     })
-    .catch((error) => {
+    .catch(error => {
       console.error(error.message); // eslint-disable-line no-console
 
       repeatIfNeeded(get);

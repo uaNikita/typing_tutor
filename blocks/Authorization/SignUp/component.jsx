@@ -11,7 +11,7 @@ class SignUp extends Component {
     submitted: false,
   };
 
-  handleSubmit = (values) => {
+  handleSubmit = values => {
     const {
       props: {
         fetchJSON,
@@ -23,7 +23,7 @@ class SignUp extends Component {
       { body: values.toJS() },
       { withoutAuthorization: true },
     )
-      .then((res) => {
+      .then(res => {
         if (res.ok) {
           this.setState({
             submitted: true,

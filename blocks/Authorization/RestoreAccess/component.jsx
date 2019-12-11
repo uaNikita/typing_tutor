@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import { Field, reduxForm } from 'redux-form/immutable';
 
@@ -11,7 +11,7 @@ class RestoreAccess extends Component {
     submitted: false,
   };
 
-  handleSubmit = (values) => {
+  handleSubmit = values => {
     const {
       props: {
         fetchJSON,
@@ -21,7 +21,7 @@ class RestoreAccess extends Component {
     return fetchJSON('/auth/restore-access', {
       body: values.toJS(),
     })
-      .then((res) => {
+      .then(res => {
         if (res.ok) {
           this.setState({
             submitted: true,
@@ -57,7 +57,7 @@ class RestoreAccess extends Component {
             </p>
           )
           : (
-            <Fragment>
+            <>
               <Field
                 className="auth__row"
                 name="email"
@@ -75,7 +75,7 @@ class RestoreAccess extends Component {
                   Log in now
                 </Link>
               </p>
-            </Fragment>
+            </>
           )}
       </form>
     );

@@ -2,7 +2,7 @@ import React from 'react';
 import { Link, withRouter } from 'react-router-dom';
 import classNames from 'classnames';
 
-const Block = (props) => {
+const Block = props => {
   const {
     children,
     location: {

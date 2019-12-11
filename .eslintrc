@@ -22,11 +22,20 @@
       }
     ],
     "linebreak-style": "off",
+    "arrow-parens": [
+      "error",
+      "as-needed",
+      {
+        "requireForBlockBody": false
+      }
+    ],
     "import/extensions": "off",
     "import/no-unresolved": "off",
     "import/no-cycle": "off",
     "react/prop-types": "off",
     "react/jsx-one-expression-per-line": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/state-in-constructor": "off",
     "react/prefer-stateless-function": [
       "error",
       {

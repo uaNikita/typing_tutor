@@ -73,7 +73,7 @@ class Block extends Component {
     });
   };
 
-  onChangeHandler = (value) => {
+  onChangeHandler = value => {
     const {
       props: {
         setMetronomeOptions,
@@ -167,6 +167,7 @@ class Block extends Component {
           styleName="btn"
           onClick={this.onClickHandler}
           title="Metronome"
+          aria-label="Metronome"
         />
 
         <CSSTransition

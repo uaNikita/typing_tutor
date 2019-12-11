@@ -7,7 +7,7 @@ const httpStatus = require('http-status');
 const User = require('./models/user');
 const APIError = require('./utils/APIError');
 
-module.exports = (app) => {
+module.exports = app => {
   app.use(passport.initialize());
 
   passport.serializeUser((user, done) => {
@@ -27,10 +27,10 @@ module.exports = (app) => {
   }, (email, password, done) => {
     User.findOne({ email })
       .exec()
-      .then((user) => {
+      .then(user => {
         if (user) {
           user.validPassword(password)
-            .then((valid) => {
+            .then(valid => {
               if (valid) {
                 done(null, user);
               }
@@ -61,7 +61,7 @@ module.exports = (app) => {
   }, (payload, cb) => {
     User.findById(payload.id)
       .exec()
-      .then((user) => {
+      .then(user => {
         if (user) {
           cb(null, user);
         }

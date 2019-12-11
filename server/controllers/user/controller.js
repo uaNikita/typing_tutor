@@ -11,7 +11,7 @@ const getData = (req, res, next) => {
   } = req;
 
   Statistic.find({ user: user.get('id') }).exec()
-    .then((statistic) => {
+    .then(statistic => {
       const data = user.toObject();
 
       if (statistic) {
@@ -33,7 +33,7 @@ const changePassword = (req, res, next) => {
   } = req;
 
   user.validPassword(oldPassword)
-    .then((valid) => {
+    .then(valid => {
       if (valid) {
         user.set('password', newPassword);
 
@@ -64,7 +64,7 @@ const statistic = (req, res, next) => {
       start: body.start,
     })
     .exec()
-    .then((stats) => {
+    .then(stats => {
       if (stats) {
         stats.set({
           ...body,
@@ -94,7 +94,7 @@ const deleteAccount = (req, res, next) => {
   } = req;
 
   user.validPassword(confirmNewPassword)
-    .then((valid) => {
+    .then(valid => {
       if (valid) {
         const userId = user.get('id');
 

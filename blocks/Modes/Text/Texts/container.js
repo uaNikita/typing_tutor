@@ -4,7 +4,7 @@ import { processSetSettings } from 'ReduxUtils/reducers/user';
 
 import Component from './component';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const entities = state.getIn(['text', 'entities']);
   let texts;
 

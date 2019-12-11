@@ -8,7 +8,7 @@ import {
 
 import Component from './component';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const stateFree = state.getIn(['syllable', 'free']);
 
   return {
@@ -19,7 +19,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateOptions: (options) => {
+  updateOptions: options => {
     dispatch(processSetSyllableSettings({
       free: {
         options,

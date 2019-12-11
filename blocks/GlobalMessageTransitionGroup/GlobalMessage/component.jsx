@@ -41,7 +41,13 @@ class GlobalMessage extends Component {
         <div styleName={classNames('content', { entered })}>
           <i styleName="icon" className="fas fa-bullhorn" />
           {message}
-          <button type="button" onClick={close} className="fas fa-times" styleName="close" />
+          <button
+            type="button"
+            onClick={close}
+            className="fas fa-times"
+            styleName="close"
+            aria-label="Close"
+          />
         </div>
         <div styleName={classNames('progress', { entered })} />
       </div>

@@ -10,7 +10,7 @@ import { validatePassword } from 'Utils/validation';
 import styles from './change-password.module.styl';
 
 class Block extends Component {
-  handleSubmit = (values) => {
+  handleSubmit = values => {
     const {
       props: {
         fetchJSON,
@@ -24,7 +24,7 @@ class Block extends Component {
     delete body.confirmNewPassword;
 
     return fetchJSON('/user/change-password', { body })
-      .then((res) => {
+      .then(res => {
         if (res.ok) {
           setGlobalMessage('Password was changed');
 
@@ -88,7 +88,7 @@ class Block extends Component {
   }
 }
 
-const validate = (values) => {
+const validate = values => {
   const errors = {};
 
   const newPassword = values.get('new_password');

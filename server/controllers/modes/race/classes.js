@@ -31,7 +31,7 @@ class Racer {
       callback('All typed');
     }
     else {
-      let neededString = string.length > this.rest.length
+      const neededString = string.length > this.rest.length
         ? string.slice(0, this.rest.length)
         : string;
 
@@ -79,10 +79,10 @@ class Race {
   }
 
   getRacer({ participant }) {
-    const racer = _.find(this.racers, (p) => p.id === participant);
+    const racer = _.find(this.racers, p => p.id === participant);
 
     return racer || null;
-  };
+  }
 
   getRacerData(racer) {
     const result = {
@@ -97,7 +97,7 @@ class Race {
     }
 
     return result;
-  };
+  }
 
   move(opt) {
     this.updateLastActionDate();
@@ -112,7 +112,7 @@ class Race {
 
   waitMinimumRacers() {
     if (this.status !== 'created') {
-      return;
+
     }
     else {
       this.status = 'waiting at least one more racer';

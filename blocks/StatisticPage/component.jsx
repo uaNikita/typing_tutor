@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
 import _ from 'lodash';
@@ -115,7 +115,7 @@ class Block extends Component {
 
     // returns LodashWrapper
     return _(statistic)
-      .filter((s) => {
+      .filter(s => {
         let mode = true;
         if (state.mode) {
           mode = s.mode === state.mode;
@@ -209,7 +209,7 @@ class Block extends Component {
         return presses;
       })
       .flatten()
-      .each((c) => {
+      .each(c => {
         // characters
         const { character } = c;
         let { hits, typos } = c;
@@ -317,7 +317,7 @@ class Block extends Component {
     });
 
     return (
-      <Fragment>
+      <>
         <div styleName="filters">
           <Field
             onChange={this.handleChangeMode}
@@ -371,7 +371,7 @@ class Block extends Component {
         </div>
 
         {!statistic && <Loader styleName="loader" size="30" />}
-      </Fragment>
+      </>
     );
   }
 }

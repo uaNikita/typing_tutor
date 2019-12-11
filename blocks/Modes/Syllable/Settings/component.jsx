@@ -24,7 +24,7 @@ const menuLinks = [
   },
 ];
 
-const Block = (props) => {
+const Block = props => {
   const {
     match: {
       url,

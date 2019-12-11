@@ -21,7 +21,7 @@ const findActiveRace = participant => (
 );
 
 racesNamespace
-  .on('connect', (socket) => {
+  .on('connect', socket => {
     const {
       tt_access: accessToken,
       tt_anonymous: anonymousToken,
@@ -63,7 +63,7 @@ racesNamespace
     }
 
     socket
-      .on('get active race', (fn) => {
+      .on('get active race', fn => {
         const race = findActiveRace(socket.participant);
 
         fn(race && race.id);

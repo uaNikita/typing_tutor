@@ -20,7 +20,7 @@ export default (state = Immutable.fromJS(defaults.user), action = {}) => {
       return state.mergeDeep(action.data);
 
     case ADD_STATISTIC:
-      return state.updateIn(['statistic'], (statistic) => {
+      return state.updateIn(['statistic'], statistic => {
         const index = statistic.findIndex(c => c.get('start') === action.statistic.start);
 
         let updatedstatistic;
@@ -68,7 +68,7 @@ export const processSetSettings = (() => {
     1000,
   );
 
-  return settings => (dispatch) => {
+  return settings => dispatch => {
     dispatch(setState(settings));
 
     return dispatch(processAction(

@@ -18,7 +18,7 @@ class Block extends Component {
     document.removeEventListener('click', this.closeIfNeeded);
   }
 
-  closeIfNeeded = (e) => {
+  closeIfNeeded = e => {
     let el = e.target;
 
     // traverse parents
@@ -61,6 +61,7 @@ class Block extends Component {
           className="far fa-user-circle drop-down__button"
           styleName="button"
           onClick={this.hanldeClickMenu}
+          aria-label="Drop down"
         />
         {menuOpened && <SignIn className="drop-down__dd" styleName="drop-down" />}
       </div>

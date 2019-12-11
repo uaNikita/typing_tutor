@@ -28,7 +28,7 @@ export default (state = initialState, action = {}) => {
   }
 };
 
-export const setState = (state) => {
+export const setState = state => {
   if (state.refreshToken) {
     Cookies.set('tt_refresh', state.refreshToken);
   }
@@ -54,7 +54,7 @@ export const clearState = () => ({
   type: CLEAR_STATE,
 });
 
-export const clearAppData = () => (dispatch) => {
+export const clearAppData = () => dispatch => {
   Cookies.remove('tt_refresh');
   Cookies.remove('tt_access');
   Cookies.remove('tt_anonymous');
@@ -97,7 +97,7 @@ const requestJSON = (url, params, opts) => (
     }
 
     return fetch(reformedUrl, newParams)
-      .then((response) => {
+      .then(response => {
         const contentType = response.headers.get('content-type');
 
         if (contentType && contentType.includes('application/json')) {
@@ -111,7 +111,7 @@ const requestJSON = (url, params, opts) => (
 
         return response;
       })
-      .catch((error) => {
+      .catch(error => {
         dispatch(setGlobalMessage('Oops... something went wrong'));
 
         throw error;
@@ -122,14 +122,14 @@ const requestJSON = (url, params, opts) => (
 export const fetchJSON = (...args) => (
   (dispatch, getState) => (
     dispatch(requestJSON(...args))
-      .then((response) => {
+      .then(response => {
         if (response.status === 401) {
           return dispatch(requestJSON('/auth/tokens', {
             body: {
               token: getState().getIn(['fetch', 'refreshToken']),
             },
           }))
-            .then((refreshTokenResponse) => {
+            .then(refreshTokenResponse => {
               const {
                 status,
                 ok,
@@ -178,7 +178,7 @@ export const getNewTokens = () => (
         token: getState().getIn(['fetch', 'refreshToken']),
       },
     }))
-      .then((refreshTokenResponse) => {
+      .then(refreshTokenResponse => {
         const {
           status,
           ok,
@@ -209,7 +209,7 @@ export const logOut = () => (
         token: getState().getIn(['fetch', 'refreshToken']),
       },
     }))
-      .then((res) => {
+      .then(res => {
         if (res.ok) {
           dispatch(clearAppData());
 

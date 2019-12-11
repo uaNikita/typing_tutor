@@ -9,7 +9,7 @@ import { validateField } from 'Utils/validation';
 import styles from './add-text.module.styl';
 
 class Block extends Component {
-  handleSubmit = (values) => {
+  handleSubmit = values => {
     const {
       processAddText,
       history: {

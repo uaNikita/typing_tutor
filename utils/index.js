@@ -15,7 +15,7 @@ export const getIdsFromCharacter = (keys, сharacter) => {
   const charsToType = [];
 
   if (_.isString(сharacter)) {
-    keys.forEach((obj) => {
+    keys.forEach(obj => {
       if (obj.key === сharacter) {
         charsToType.push(obj.id);
       }
@@ -35,16 +35,16 @@ export const getIdsFromCharacter = (keys, сharacter) => {
   return charsToType;
 };
 
-export const getFingersSet = (keys) => {
+export const getFingersSet = keys => {
   const fingers = ['index', 'middle', 'ring', 'pinky'];
   const rows = ['middle', 'top', 'bottom'];
   const hands = ['left', 'right'];
 
   const lettersSet = [];
 
-  rows.forEach((row) => {
-    fingers.forEach((finger) => {
-      hands.forEach((hand) => {
+  rows.forEach(row => {
+    fingers.forEach(finger => {
+      hands.forEach(hand => {
         const keysArr = _.filter(keys, {
           row,
           finger,

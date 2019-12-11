@@ -27,7 +27,7 @@ class Block extends Component {
     document.removeEventListener('click', this.closeIfNeeded);
   }
 
-  closeIfNeeded = (e) => {
+  closeIfNeeded = e => {
     const {
       props: {
         name,
@@ -47,7 +47,7 @@ class Block extends Component {
     })
   );
 
-  handleDayClick = (selectedDay) => {
+  handleDayClick = selectedDay => {
     const {
       props: {
         name,
@@ -113,7 +113,7 @@ class Block extends Component {
           onFocus={this.handleFocus}
           onChange={this.handleChange}
           onUpdate={this.handleUpdate}
-          normalize={(value) => {
+          normalize={value => {
             let formattedDate = value.replace(/\D/g, '');
 
             if (formattedDate.length > 4 && formattedDate.length <= 6) {

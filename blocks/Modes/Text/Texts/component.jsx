@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import CSSModules from 'react-css-modules';
 import classNames from 'classnames';
@@ -9,7 +9,7 @@ import PureString from 'Blocks/PureString';
 
 import styles from './texts.module.styl';
 
-const Block = (props) => {
+const Block = props => {
   const {
     texts,
     selectedId,
@@ -54,11 +54,11 @@ const Block = (props) => {
   }
 
   return (
-    <Fragment>
+    <>
       <div styleName="actions">
         <p>
           {_.isNumber(selectedId) && (
-            <Fragment>
+            <>
               <button
                 type="button"
                 className="button"
@@ -68,7 +68,7 @@ const Block = (props) => {
                 Start
               </button>
               typing last selected text
-            </Fragment>
+            </>
           )}
 
         </p>
@@ -77,7 +77,7 @@ const Block = (props) => {
       </div>
 
       {textEls}
-    </Fragment>
+    </>
   );
 };
 

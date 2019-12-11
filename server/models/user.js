@@ -109,7 +109,7 @@ UserSchema.pre('save', function save(next) {
   // only hash the password if it has been modified (or is new)
   if (this.isModified('password')) {
     this.generateHash(this.password)
-      .then((hash) => {
+      .then(hash => {
         this.password = hash;
         next();
       })

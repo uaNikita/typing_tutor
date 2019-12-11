@@ -18,7 +18,7 @@ const modesNavigation = [
 ];
 
 const Block = ({ location: { pathname }, mode }) => {
-  const modes = modesNavigation.map((item) => {
+  const modes = modesNavigation.map(item => {
     const props = {
       key: item,
       styleName: 'item',

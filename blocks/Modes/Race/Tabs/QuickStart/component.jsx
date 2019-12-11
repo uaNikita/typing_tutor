@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import CSSModules from 'react-css-modules';
 import _ from 'lodash';
 
@@ -24,7 +24,7 @@ class Block extends Component {
 
     const { language } = _.find(keyboards, { name: keyboard });
 
-    socket.emit('quick start', language, (data) => {
+    socket.emit('quick start', language, data => {
       if (data === 'Already have active race') {
         return;
       }
@@ -43,7 +43,7 @@ class Block extends Component {
     } = this;
 
     return (
-      <Fragment>
+      <>
         <p styleName="info">Here you can start fast races with random partners or bots</p>
 
         <button
@@ -53,7 +53,7 @@ class Block extends Component {
         >
           Start
         </button>
-      </Fragment>
+      </>
     );
   }
 }

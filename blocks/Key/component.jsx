@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Key = (props) => {
+const Key = props => {
   const {
     type,
     char,

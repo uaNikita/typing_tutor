@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import _ from 'lodash';
 import CSSModules from 'react-css-modules';
 import dayjs from 'dayjs';
@@ -92,7 +92,7 @@ class Block extends ContentArea {
 
     const state = {};
 
-    state.words = words.map((word) => {
+    state.words = words.map(word => {
       const modifiedWord = { ...word };
 
       modifiedWord.left -= this.step;
@@ -188,7 +188,7 @@ class Block extends ContentArea {
     this.start();
   }
 
-  finish = (result) => {
+  finish = result => {
     this.removeListeners();
 
     clearTimeout(this.timeouts.move);
@@ -205,7 +205,7 @@ class Block extends ContentArea {
     const slots = _.range(0, this.slots);
 
     if (words) {
-      Array.from(words).forEach((word) => {
+      Array.from(words).forEach(word => {
         const extremeRightEdge = word.offsetLeft + word.offsetWidth + this.step;
 
         if (extremeRightEdge > this.areaWidth) {
@@ -346,13 +346,14 @@ class Block extends ContentArea {
             className="fas fa-redo-alt"
             styleName="refresh"
             onClick={this.restart}
+            aria-label="Restart"
           />
         </p>
       );
     }
 
     return (
-      <Fragment>
+      <>
         <div styleName="level">
           Level: {level}/{this.maxLevel}
           <div styleName="level-line">
@@ -401,7 +402,7 @@ class Block extends ContentArea {
           />
         </p>
 
-      </Fragment>
+      </>
     );
   }
 }

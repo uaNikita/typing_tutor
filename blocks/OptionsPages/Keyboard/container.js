@@ -14,7 +14,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  setKeyboard: (keyboard) => {
+  setKeyboard: keyboard => {
     dispatch(processSetSettings({ keyboard }));
     dispatch(getKeysFromKeyboard());
     dispatch(initLessons());

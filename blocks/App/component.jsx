@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import _ from 'lodash';
 import { Switch, Route } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
@@ -52,7 +52,7 @@ class Block extends Component {
 
   render() {
     return (
-      <Fragment>
+      <>
         <Helmet>
           <meta charSet="utf-8" />
           <title>Typing tutor</title>
@@ -74,7 +74,7 @@ class Block extends Component {
           <Route
             path="/"
             render={() => (
-              <Fragment>
+              <>
                 <Header />
                 <Switch>
                   <Route path="/404" component={NotFound} />
@@ -84,13 +84,13 @@ class Block extends Component {
                   <PrivateRoute path="/settings" component={SettingsPages} />
                   <Route component={Modes} />
                 </Switch>
-              </Fragment>
+              </>
             )}
           />
         </Switch>
 
         <Footer />
-      </Fragment>
+      </>
     );
   }
 }

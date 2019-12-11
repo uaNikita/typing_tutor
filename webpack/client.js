@@ -12,27 +12,27 @@ module.exports = {
 
   output: {
     path: path.join(root, 'dist'),
-    filename: 'main.js'
+    filename: 'main.js',
   },
 
   plugins: [
     new CopyWebpackPlugin([
       {
         from: path.resolve(root, 'static/favicon.png'),
-        to: path.resolve(root, 'dist/favicon.png')
+        to: path.resolve(root, 'dist/favicon.png'),
       },
       {
         from: path.resolve(root, 'static/robots.txt'),
-        to: path.resolve(root, 'dist/robots.txt')
+        to: path.resolve(root, 'dist/robots.txt'),
       },
       {
         from: path.resolve(root, 'static/media'),
-        to: path.resolve(root, 'dist/media')
+        to: path.resolve(root, 'dist/media'),
       },
       {
         from: path.resolve(root, 'static/plugins'),
-        to: path.resolve(root, 'dist/plugins')
-      }
+        to: path.resolve(root, 'dist/plugins'),
+      },
     ]),
     new MiniCssExtractPlugin(),
     new webpack.DefinePlugin({
@@ -52,7 +52,7 @@ module.exports = {
           test: /\.css$/,
           chunks: 'all',
           name: 'main',
-        }
+        },
       },
     },
   },
@@ -65,7 +65,7 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         enforce: 'pre',
-        use: 'eslint-loader'
+        use: 'eslint-loader',
       },
       {
         test: /\.jsx?$/,
@@ -77,8 +77,8 @@ module.exports = {
         use: [
           MiniCssExtractPlugin.loader,
           'css-loader',
-          ...restCssLoders
-        ]
+          ...restCssLoders,
+        ],
       },
       {
         test: /module\.styl$/,
@@ -87,12 +87,13 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              modules: true,
               importLoaders: 1,
-              localIdentName: '[name]__[local]___[hash:base64:5]'
-            }
+              modules: {
+                localIdentName: '[name]__[local]___[hash:base64:5]',
+              },
+            },
           },
-          ...restCssLoders
+          ...restCssLoders,
         ],
       },
       {
@@ -107,8 +108,8 @@ module.exports = {
         loader: 'file-loader',
         options: {
           outputPath: './fonts/',
-          name: '[name].[ext]'
-        }
+          name: '[name].[ext]',
+        },
       },
       {
         test: /\.(jpg|png|svg)$/,
@@ -117,8 +118,8 @@ module.exports = {
             loader: 'file-loader',
             options: {
               outputPath: './images/',
-              name: '[name].[ext]'
-            }
+              name: '[name].[ext]',
+            },
           },
           {
             loader: 'image-webpack-loader',
@@ -127,12 +128,11 @@ module.exports = {
                 mozjpeg: {
                   progressive: true,
                 },
-              }
-            }
-          }
-        ]
-      }
-    ]
+              },
+            },
+          },
+        ],
+      },
+    ],
   },
 };
-

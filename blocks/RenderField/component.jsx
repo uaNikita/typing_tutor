@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 
 import SaveLoader from './SaveLoader/component';
@@ -24,7 +24,7 @@ class RenderField extends Component {
     }
   }
 
-  passwordHandleClick = (e) => {
+  passwordHandleClick = e => {
     e.preventDefault();
 
     this.setState(prevState => ({
@@ -114,10 +114,15 @@ class RenderField extends Component {
           }
 
           control = (
-            <Fragment>
+            <>
               <input {...controlProps} />
-              <button type="button" className={eyeClassName} onClick={this.passwordHandleClick} />
-            </Fragment>
+              <button
+                type="button"
+                className={eyeClassName}
+                onClick={this.passwordHandleClick}
+                aria-label="Show/hide password"
+              />
+            </>
           );
         }
         else {
@@ -145,7 +150,7 @@ class RenderField extends Component {
     }
 
     return (
-      <Fragment>
+      <>
         {/* eslint-disable-next-line jsx-a11y/label-has-for */}
         <label className={classNames('field', className)} htmlFor={id}>
           {label && (
@@ -159,7 +164,7 @@ class RenderField extends Component {
             {errorText}
           </div>
         </label>
-      </Fragment>
+      </>
     );
   }
 }

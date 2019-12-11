@@ -10,7 +10,7 @@ import { getFingersSet } from 'Utils';
 
 import Component from './component';
 
-const mapStateToProps = (state) => {
+const mapStateToProps = state => {
   const keys = state.getIn(['main', 'keys']).toJS();
   const stateFingers = state.getIn(['syllable', 'fingers']);
 
@@ -23,7 +23,7 @@ const mapStateToProps = (state) => {
 };
 
 const mapDispatchToProps = (dispatch, ownProps) => ({
-  updateOptions: (options) => {
+  updateOptions: options => {
     dispatch(processSetSyllableSettings({
       fingers: {
         options,

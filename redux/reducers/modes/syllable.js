@@ -49,7 +49,7 @@ export default (state = initialState, action = {}) => {
       return state.merge(initialState);
 
     case TYPE_ON_LESSON:
-      return state.update('lesson', (lesson) => {
+      return state.update('lesson', lesson => {
         const typed = lesson.get('typed');
         const rest = lesson.get('rest');
 
@@ -75,7 +75,7 @@ export default (state = initialState, action = {}) => {
       return state.setIn(['fingers', 'example'], action.example);
 
     case UPDATE_FREE_OPTIONS:
-      return state.updateIn(['free', 'options'], (opts) => {
+      return state.updateIn(['free', 'options'], opts => {
         const { options } = action;
 
         // type can be add, delete, set

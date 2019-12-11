@@ -8,7 +8,7 @@ import Edit from './Edit/container';
 
 import styles from './text.module.styl';
 
-const Block = (props) => {
+const Block = props => {
   const {
     match: {
       url,
