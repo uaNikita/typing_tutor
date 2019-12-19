@@ -116,6 +116,8 @@ const signUp = (req, res, next) => {
           };
 
           transporter.sendMail(mailOptions, error => {
+            console.log(error);
+
             if (error) {
               throw new APIError({
                 message: 'We can not verify your email now. Please try again later.',
