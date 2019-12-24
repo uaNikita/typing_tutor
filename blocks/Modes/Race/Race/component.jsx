@@ -35,18 +35,6 @@ class Block extends Component {
     });
   }, 300, { leading: false });
 
-  constructor(props) {
-    super(props);
-
-    const {
-      match: {
-        url,
-      },
-    } = props;
-
-    this.parentRoute = url.substring(0, url.lastIndexOf('/'));
-  }
-
   state = {
     status: null,
     error: null,
@@ -196,6 +184,9 @@ class Block extends Component {
 
   render() {
     const {
+      props: {
+        parentUrl,
+      },
       state: {
         status,
         typed,
@@ -204,7 +195,6 @@ class Block extends Component {
         error,
         counter,
       },
-      parentRoute,
     } = this;
 
     let content = <Loader styleName="loader" size="30" />;
@@ -213,7 +203,7 @@ class Block extends Component {
       content = (
         <div styleName="message">
           <p>{error}.</p>
-          <p>Go back to <Link to={parentRoute}>races</Link>.</p>
+          <p>Go back to <Link to={parentUrl}>races</Link>.</p>
         </div>
       );
     }

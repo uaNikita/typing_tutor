@@ -22,6 +22,7 @@
       }
     ],
     "linebreak-style": "off",
+    "no-param-reassign": "off",
     "arrow-parens": [
       "error",
       "as-needed",

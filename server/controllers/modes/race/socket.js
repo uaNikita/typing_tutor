@@ -5,7 +5,7 @@ const crypto = require('crypto');
 const _ = require('lodash');
 const config = require('config');
 
-const { Race } = require('./classes');
+const Race = require('./Race');
 const { languages } = require('../../../../dist/compiledServer');
 const { server } = require('../../../server');
 
@@ -32,7 +32,6 @@ racesNamespace
         const parsedToken = jwt.verify(accessToken, config.get('secretKey'));
 
         socket.participant = parsedToken.id;
-
         socket.type = 'user';
 
         socket.emit('registered');

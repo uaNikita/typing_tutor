@@ -58,36 +58,42 @@ class Block extends Component {
       },
     } = this;
 
-    let content = <Loader styleName="loader" size="30" />;
-
-    if (!_.isUndefined(activeRace)) {
-      let routes;
-
-      if (activeRace) {
-        const pathToRace = `${url}/race-${activeRace}`;
-
-        if (pathname === pathToRace) {
-          routes = <Route path={`${url}/race-:raceId(.{16})`} component={Race} />;
-        }
-        else {
-          routes = <Redirect to={pathToRace} />;
-        }
-      }
-      else if (_.isNull(activeRace)) {
-        routes = [
-          <Route key="race" path={`${url}/race-:raceId(.{16})`} component={Race} />,
-          <Route key="tabs" path={url} component={Tabs} />,
-        ];
-      }
-
-      content = (
-        <Switch>
-          {routes}
-        </Switch>
-      );
+    if (_.isUndefined(activeRace)) {
+      return <Loader styleName="loader" size="30" />;
     }
 
-    return content;
+    let routes;
+
+    const raceRoute = (
+      <Route
+        key="race"
+        path={`${url}/race-:raceId(.{16})`}
+        render={props => <Race {...props} parentUrl={url} />}
+      />
+    );
+
+    if (activeRace) {
+      const pathToRace = `${url}/race-${activeRace}`;
+
+      if (pathname === pathToRace) {
+        routes = raceRoute;
+      }
+      else {
+        routes = <Redirect to={pathToRace} />;
+      }
+    }
+    else if (_.isNull(activeRace)) {
+      routes = [
+        raceRoute,
+        <Route key="tabs" path={url} component={Tabs} />,
+      ];
+    }
+
+    return (
+      <Switch>
+        {routes}
+      </Switch>
+    );
   }
 }
 
