@@ -1,18 +1,16 @@
 import Immutable from 'immutable';
 import _ from 'lodash';
 
-import { getIdsFromCharacter, normalizeString } from 'Utils';
+import { getIdsFromCharacter } from 'Utils';
 import { keyboards } from 'Constants/languages';
 
 import { fetchJSON } from './fetch';
 import { setState as setUserState } from './user';
 import {
   setState as setTextState,
-  typeTextMode,
 } from './modes/text';
 import {
   setState as setSyllableState,
-  typeSyllableMode,
   initLessons,
 } from './modes/syllable';
 
@@ -220,36 +218,40 @@ export const setCharToType = char => (
   }
 );
 
-export const typeChar = char => (
+export const typeChar = (char, wrong) => (
   (dispatch, getState) => {
-    const state = getState();
+    const characterIds = getIdsFromCharacter(getState()
+      .getIn(['main', 'keys'])
+      .toJS(), char);
 
-    const normalizedChar = normalizeString(char);
+    dispatch(pressKeys(characterIds));
 
-    const idsChar = getIdsFromCharacter(state.getIn(['main', 'keys']).toJS(), normalizedChar);
-
-    dispatch(pressKeys(idsChar));
+    if (wrong) {
+      dispatch(pressWrongKeys(characterIds));
+    }
 
     // unpress keys
     setTimeout(() => {
-      dispatch(unPressKeys(idsChar));
+      dispatch(unPressKeys(characterIds));
 
-      dispatch(unPressWrongKeys(idsChar));
+      if (wrong) {
+        dispatch(unPressWrongKeys(characterIds));
+      }
     }, 100);
 
-    switch (state.getIn(['user', 'mode'])) {
-      case 'text':
-        dispatch(typeTextMode(normalizedChar));
-        break;
+    // switch (state.getIn(['user', 'mode'])) {
+    //   case 'text':
+    //     dispatch(typeTextMode(normalizedChar));
+    //     break;
+    //
+    //   case 'syllable':
+    //     dispatch(typeSyllableMode(normalizedChar));
+    //     break;
+    //
+    //   default:
+    // }
 
-      case 'syllable':
-        dispatch(typeSyllableMode(normalizedChar));
-        break;
-
-      default:
-    }
-
-    return normalizedChar;
+    return characterIds;
   }
 );
 

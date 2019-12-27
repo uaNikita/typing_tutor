@@ -4,7 +4,7 @@
   "description": "Typing tutor",
   "main": "",
   "scripts": {
-    "test": "concurrently \"npm run start\" \"npm run dev\"",
+    "all": "concurrently \"npm run start\" \"npm run dev\"",
     "start": "nodemon server/index.js",
     "start-prod": "node server/index.js",
     "build": "webpack --mode=production",

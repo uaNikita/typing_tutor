@@ -1,5 +1,8 @@
 import { connect } from 'react-redux';
-import { typeChar, setCharToType } from 'ReduxUtils/reducers/main';
+import {
+  typeChar,
+  setCharToType,
+} from 'ReduxUtils/reducers/main';
 
 import Component from './component';
 

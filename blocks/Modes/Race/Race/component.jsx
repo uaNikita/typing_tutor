@@ -117,6 +117,22 @@ class Block extends Component {
   };
 
   handleMove = obj => {
+    const {
+      props: {
+        setCharToType,
+      },
+      state: {
+        status,
+        rest,
+      },
+    } = this;
+
+    if (status !== 'ongoing'
+      && obj.status === 'ongoing'
+      && rest[0]) {
+      setCharToType(rest[0]);
+    }
+
     this.setState(obj);
 
     switch (obj.status) {
@@ -144,24 +160,30 @@ class Block extends Component {
       },
     } = this;
 
-    typeChar(char);
+    let wrong = true;
 
     if (rest[0] === char) {
-      this.setState({
+      const newStrings = {
         typed: typed + rest[0],
         rest: rest.substring(1),
-      });
+      };
+
+      this.setState(newStrings);
 
       let charToType = null;
 
-      if (rest[0]) {
-        [charToType] = rest;
+      if (newStrings.rest[0]) {
+        [charToType] = newStrings.rest;
       }
 
       setCharToType(charToType);
 
+      wrong = false;
+
       this.debounceSocketEmitType();
     }
+
+    typeChar(char, wrong);
   };
 
   handleStart = () => {

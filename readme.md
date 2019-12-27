@@ -1,6 +1,7 @@
 character - символ, например 'Q', 'f', ''
 
 key - клавиша на клавиатуре, например 'Shift', 'Space', 'a', 't'
+id - уникальный key id, например 'Right Shift' or 'Left Shift' оба имеют key 'Shift'
 
 Поэтому везде в constants/keyboards поля обозначены через key и shiftKey, это логично. 
 'Shift' например это не character.
