@@ -20,6 +20,18 @@ class Racer {
       .on('type', this.type.bind(this));
   }
 
+  setSocket(socket) {
+    this.socket = socket;
+
+    const { race } = this;
+
+    console.log('setSocket', this.typed);
+
+    this.socket
+      .on('start', race.waitMinimumRacers.bind(race))
+      .on('type', this.type.bind(this));
+  }
+
   type(string, callback) {
     const { race } = this;
 
@@ -33,6 +45,8 @@ class Racer {
       const neededString = string.length > this.rest.length
         ? string.slice(0, this.rest.length)
         : string;
+
+      console.log(neededString, this.rest);
 
       if (this.rest.indexOf(neededString) === 0) {
         const shifted = this.rest.slice(0, string.length);

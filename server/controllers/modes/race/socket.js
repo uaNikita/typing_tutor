@@ -16,7 +16,7 @@ const racesNamespace = io.of('/races');
 
 const findActiveRace = participant => (
   _.find(races, race => (
-    _.some(race.participants, ({ id }) => id === participant)
+    _.some(race.racers, ({ id }) => id === participant)
   ))
 );
 
@@ -35,8 +35,7 @@ racesNamespace
         socket.type = 'user';
 
         socket.emit('registered');
-      }
-      catch (e) {
+      } catch (e) {
         let error = 'Forbidden';
 
         if (e.name === 'TokenExpiredError') {
@@ -63,14 +62,33 @@ racesNamespace
 
     socket
       .on('get active race', fn => {
-        const race = findActiveRace(socket.participant);
+        let raceId;
 
-        fn(race && race.id);
+        _.each(races, r => {
+          const p = _.find(r.racers, { id: socket.participant });
+
+          if (p) {
+            raceId = r.id;
+
+            if (p.socket !== socket) {
+              console.log('setSocket');
+
+              p.setSocket(socket);
+            }
+
+            return false;
+          }
+        });
+
+        console.log('raceId', raceId);
+
+        fn(raceId);
       })
       .on('get race', (id, fn) => {
         const race = _.find(races, { id });
 
         if (race) {
+          console.log('get race', race.id);
           let racer = race.getRacer(socket);
 
           if (!racer) {
@@ -99,7 +117,8 @@ racesNamespace
           if (!race) {
             const texts = _.find(languages.languages, { name: language }).racesTexts;
 
-            const id = crypto.randomBytes(8).toString('hex');
+            const id = crypto.randomBytes(8)
+              .toString('hex');
 
             race = new Race({
               id,

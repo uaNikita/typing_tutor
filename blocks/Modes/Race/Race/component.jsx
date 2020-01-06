@@ -84,6 +84,8 @@ class Block extends Component {
 
           this.setState(res);
 
+          this.sentText = res.typed || '';
+
           socket.on('move', this.handleMove);
         }
       }));

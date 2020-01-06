@@ -22,13 +22,17 @@ class Block extends Component {
     } = this;
 
     if (socket) {
-      socket.emit('get active race', (id => setRace(id)));
+      socket.emit('get active race', id => setRace(id));
     }
     else {
       const getData = () => {
         setSocket(this.socket);
 
-        this.socket.emit('get active race', (id => setRace(id)));
+        this.socket.emit('get active race', id => {
+          console.log('test', id);
+
+          setRace(id);
+        });
       };
 
       this.socket = io('/races')
