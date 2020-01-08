@@ -216,11 +216,20 @@ class Race {
   }
 
   get users() {
-    return this.racers.map(({ id, typed, transport }) => ({
-      id,
-      progress: typed.length / this.text.length,
-      transport,
-    }));
+    return this.racers.map(
+      racer => {
+        const extendedRacer = _.pick(racer, [
+          'id',
+          'transport',
+          'start',
+          'end',
+        ]);
+
+        extendedRacer.progress = racer.typed.length / this.text.length;
+
+        return extendedRacer;
+      },
+    );
   }
 
   get usersProgress() {

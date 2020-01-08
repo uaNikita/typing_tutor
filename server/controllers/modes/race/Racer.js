@@ -12,6 +12,7 @@ class Racer {
 
     this.typed = '';
     this.rest = this.text;
+    this.start = Date.now();
 
     const { race } = this;
 
@@ -24,8 +25,6 @@ class Racer {
     this.socket = socket;
 
     const { race } = this;
-
-    console.log('setSocket', this.typed);
 
     this.socket
       .on('start', race.waitMinimumRacers.bind(race))
@@ -46,14 +45,16 @@ class Racer {
         ? string.slice(0, this.rest.length)
         : string;
 
-      console.log(neededString, this.rest);
-
       if (this.rest.indexOf(neededString) === 0) {
         const shifted = this.rest.slice(0, string.length);
 
         this.typed += shifted;
 
         this.rest = this.rest.slice(string.length);
+
+        if (!this.rest.length) {
+          this.end = Date.now();
+        }
       }
       else {
         callback('Wrong string');

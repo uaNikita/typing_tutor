@@ -39,6 +39,7 @@ racesNamespace
         let error = 'Forbidden';
 
         if (e.name === 'TokenExpiredError') {
+          console.log(11);
           error = 'Token expired';
         }
 
@@ -134,5 +135,8 @@ racesNamespace
 
           fn(race.id);
         }
+      })
+      .on('error', (e) => {
+        console.error(e);
       });
   });

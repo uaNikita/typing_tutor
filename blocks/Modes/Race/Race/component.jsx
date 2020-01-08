@@ -301,6 +301,9 @@ class Block extends Component {
               <span styleName="name">{id}</span>
               <span styleName="road">
                 <span styleName="track">
+                  <span className="place">1</span>
+                  <span className="time">00:18:12</span>
+                  <span className="speed">158 chars/min</span>
                   <span
                     styleName={`transport transport_${transport}`}
                     style={{ left: `${progress * 100}%` }}
