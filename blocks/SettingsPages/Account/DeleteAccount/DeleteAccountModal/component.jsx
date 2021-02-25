@@ -77,7 +77,6 @@ class DeleteAccountModal extends Component {
   }
 }
 
-
 const validate = values => {
   const deleteMyAccountValue = values.get('deleteMyAccount');
 

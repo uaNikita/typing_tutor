@@ -45,5 +45,4 @@ const Block = props => {
   return content;
 };
 
-
 export default CSSModules(Block, styles);

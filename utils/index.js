@@ -81,7 +81,6 @@ export const closestEl = (el, selector) => {
   return closest;
 };
 
-
 const defaultKeysType = {
   row: 'middle',
   type: 'letter',

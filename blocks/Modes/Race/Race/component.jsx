@@ -29,8 +29,6 @@ class Block extends Component {
 
     this.sentText += forServer;
 
-    console.log('forServer', forServer);
-
     socket.emit('type', forServer, error => {
       // eslint-disable-next-line no-console
       console.error('error', error);
@@ -64,8 +62,6 @@ class Block extends Component {
 
     socket
       .emit('get race', raceId, (res => {
-        console.log('res', res);
-
         if (_.isString(res)) {
           this.setState({
             error: res,
@@ -132,8 +128,6 @@ class Block extends Component {
         rest,
       },
     } = this;
-
-    console.log('handleMove', obj);
 
     if (status !== 'ongoing'
       && obj.status === 'ongoing'

@@ -64,5 +64,4 @@ class DeleteAccount extends Component {
   }
 }
 
-
 export default CSSModules(DeleteAccount, styles);

@@ -10,7 +10,6 @@ export const validateField = (name, val) => {
   return errors;
 };
 
-
 export const validateEmail = (name, val) => {
   const errors = {
     ...validateField(name, val),

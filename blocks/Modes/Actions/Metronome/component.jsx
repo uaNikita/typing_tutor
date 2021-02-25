@@ -28,7 +28,6 @@ class Block extends Component {
     this.audio = new Audio('media/metronome.mp3');
   };
 
-
   componentWillUnmount = () => {
     window.removeEventListener('blur', this.windowBlurHandler);
 
@@ -96,7 +95,6 @@ class Block extends Component {
         },
       },
     } = this;
-
 
     if (on) {
       clearTimeout(this.timeout);

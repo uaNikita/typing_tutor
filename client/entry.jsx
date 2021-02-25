@@ -7,7 +7,7 @@ import 'isomorphic-fetch';
 
 import 'Static/plugins/fontawesome-free-5.4.1-web/css/all.min.css';
 import 'perfect-scrollbar/css/perfect-scrollbar.css';
-import 'rc-slider/dist/rc-slider.css';
+import 'rc-slider/assets/index.css';
 import 'chartist/dist/chartist.css';
 import 'react-day-picker/lib/style.css';
 

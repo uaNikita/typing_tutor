@@ -30,7 +30,6 @@ const REMOVE_TEXT = 'text/REMOVE_TEXT';
 const UPDATE_TEXT = 'text/UPDATE_TEXT';
 const TYPE_ENTITIE = 'text/TYPE_ENTITIE';
 
-
 export default (state = Immutable.fromJS(defaults.text), action = {}) => {
   switch (action.type) {
     case SET_STATE:

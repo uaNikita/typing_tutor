@@ -30,7 +30,6 @@ const set = obj => {
   Cookies.set(cookieName, compresseddata);
 };
 
-
 const path = (pathToProp, val) => {
   const obj = _.set(get(), pathToProp, val);
 

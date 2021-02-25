@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const nodeExternals = require('webpack-node-externals');
 
-const { root, restCssLoders } = require('./utils');
+const { root, restCssLoaders } = require('./utils');
 
 module.exports = {
   entry: path.join(root, 'server', 'entry.jsx'),
@@ -40,13 +40,13 @@ module.exports = {
           {
             loader: 'css-loader',
             options: {
-              onlyLocals: true,
               modules: {
+                exportOnlyLocals: true,
                 localIdentName: '[name]__[local]___[hash:base64:5]',
               },
             },
           },
-          ...restCssLoders,
+          ...restCssLoaders,
         ],
       },
       {

@@ -381,7 +381,6 @@ const validate = values => ({
   ...validateDate('to', values.get('to')),
 });
 
-
 export default reduxForm({
   form: 'statistic',
   validate,

@@ -1,16 +1,15 @@
 const path = require('path');
-const autoprefixer = require('autoprefixer');
 
 module.exports = {
   root: path.join(__dirname, '..'),
 
-  restCssLoders: [
+  restCssLoaders: [
     {
       loader: 'postcss-loader',
       options: {
-        plugins: [
-          autoprefixer(),
-        ],
+        postcssOptions: {
+          plugins: ['autoprefixer'],
+        },
       },
     },
     'stylus-loader',

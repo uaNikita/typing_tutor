@@ -131,7 +131,6 @@ class RenderField extends Component {
       }
     }
 
-
     let errorText = null;
 
     if (showHint) {
@@ -168,6 +167,5 @@ class RenderField extends Component {
     );
   }
 }
-
 
 export default RenderField;

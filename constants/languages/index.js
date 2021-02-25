@@ -25,7 +25,6 @@ export const keyboards = [
   })),
 ];
 
-
 export default {
   languages,
   keyboards,
